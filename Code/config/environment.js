@@ -1,3 +1,4 @@
 module.exports = {
-    port: 3737
+    port: 3737,
+    uploadPath: './modules/Admin/files/'
 };
