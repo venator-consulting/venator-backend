@@ -2,10 +2,7 @@ const Excel = require('exceljs');
 const Workbook = new Excel.Workbook();
 const fs = require("fs");
 
-module.exports.readCsvFile = async function(excelFilePath){
-    
-const stream = fs.createReadStream(excelFilePath);
-console.log('file path is: ' + excelFilePath);
+
 const options = {
     // map(value, index) {
     //   switch(index) {
@@ -25,16 +22,23 @@ const options = {
     // },
     dateFormats: ['DD.MM.YYYY'],
     parserOptions: {
-      delimiter: ';',
-      quote: false,
+        delimiter: ';',
+        quote: false,
     },
-  };
-const sheet = await Workbook.csv.read(stream, options);
-console.log(sheet.actualRowCount);
-let col1 = sheet.getRow(1).getCell(1).value;
-//  for (let i = 1; i <= sheet.rowCount; i++) {
-//   console.log(sheet.getRow(i).getCell(1).value);
-//   console.log(sheet.getRow(i).getCell(2).value);
-//  }
+};
+
+
+module.exports.readCsvFile = async function (excelFilePath) {
+
+    const stream = fs.createReadStream(excelFilePath);
+    console.log('file path is: ' + excelFilePath);
+    
+    const sheet = await Workbook.csv.read(stream, options);
+    console.log(sheet.actualRowCount);
+    let col1 = sheet.getRow(1).getCell(1).value;
+    //  for (let i = 1; i <= sheet.rowCount; i++) {
+    //   console.log(sheet.getRow(i).getCell(1).value);
+    //   console.log(sheet.getRow(i).getCell(2).value);
+    //  }
 
 }

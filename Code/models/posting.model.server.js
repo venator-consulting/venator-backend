@@ -9,7 +9,9 @@ const sequelizer = sequelize.getSequelize();
 const Posting = sequelizer.define('Posting', {
     id: {
         type: DataTypes.BIGINT(11),
-        allowNull: false
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true
     },
     procedureId: {
         type: DataTypes.BIGINT(11)
@@ -258,5 +260,11 @@ const Posting = sequelizer.define('Posting', {
     tableName: 'Posting'
 });
 
+module.exports.getPosting = function() {
+    return Posting;
+};
 
-// await User.sync({ force: true });
+
+module.exports.syncPosting = async function() {
+    await this.getPosting().sync({ force: true });
+};
