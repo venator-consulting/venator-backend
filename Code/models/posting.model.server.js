@@ -24,7 +24,7 @@ const Posting = sequelizer.define('Posting', {
         type: DataTypes.BIGINT(11)
     },
     documentNumber: {
-        type: DataTypes.STRING(50)
+        type: DataTypes.STRING(25)
     },
     documentNumber2: {
         type: DataTypes.STRING(25)
@@ -69,25 +69,25 @@ const Posting = sequelizer.define('Posting', {
         type: DataTypes.STRING(10)
     },
     accountNumber: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(25)
     },
     accountName: {
         type: DataTypes.STRING(25)
     },
     GLAccountNumber: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(25)
     },
     GLAccountName: {
         type: DataTypes.STRING(25)
     },
     debtorNumber: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(25)
     },
     debtorName: {
         type: DataTypes.STRING(25)
     },
     creditorNumber: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(25)
     },
     creditorName: {
         type: DataTypes.STRING(25)
@@ -96,25 +96,25 @@ const Posting = sequelizer.define('Posting', {
         type: DataTypes.BIGINT(11)
     },
     contraAccountNumber: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(25)
     },
     contraAccountName: {
         type: DataTypes.STRING(25)
     },
     contraAccountGLAccountNo: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(25)
     },
     contraAccountGLAccountName: {
         type: DataTypes.STRING(25)
     },
     contraAccountDebtorNo: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(25)
     },
     contraAccountDebtorName: {
         type: DataTypes.STRING(25)
     },
     contraAccountCreditorNo: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(25)
     },
     contraAccountCreditorName: {
         type: DataTypes.STRING(25)
@@ -195,7 +195,7 @@ const Posting = sequelizer.define('Posting', {
         type: DataTypes.DATE
     },
     identifierBalanceCarryforward: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.INTEGER
     },
     generalReversal: {
         type: DataTypes.STRING(25)

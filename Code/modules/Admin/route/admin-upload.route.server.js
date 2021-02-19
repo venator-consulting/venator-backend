@@ -13,4 +13,7 @@ router
     .post(uploadfiles.single('excel'), uploadCtrl.uploadExcel);
 
 
+    router
+        .route('/csv')
+        .post(uploadfiles.single('excel'), uploadCtrl.uploadCsv);
 module.exports = router;
