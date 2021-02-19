@@ -1,4 +1,5 @@
 const excelHelper = require('../../../helpers/excel.helper.server');
+const csvHelper = require('../../../helpers/csv.helper.server');
 
 module.exports.uploadExcel = function (req, res, next) {
     const excelFile = req.file;
@@ -30,7 +31,7 @@ module.exports.uploadCsv = function(req, res, next) {
     // get the path to open the stream from the server
     const filePath = csvFile.path;
     console.log('uploaded files: ' + JSON.stringify(req.file, null, 2));
-    excelHelper
+    csvHelper
         .readCsvFile(filePath)
         .then(done => {
             res
