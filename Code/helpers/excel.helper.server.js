@@ -3,6 +3,13 @@ const Workbook = new Excel.Workbook();
 const fs = require("fs");
 const PostingModel = require('../models/posting.model.server');
 const Standardtemplate = require('../models/templates/standard');
+const sequelize = require('../config/sequelize.config');
+
+const chrono = require('chrono-node');
+
+
+const sequelizer = sequelize.getSequelize();
+
 
 
 
@@ -29,18 +36,18 @@ module.exports.readHeader = async function (excelFilePath) {
 _getHeaderIndex = function (template, fileHeaders, header) {
     // get name of file header
     const fileHeader = template[header];
-    let index = -1;
+    let index = -2;
     // get index of header in file
     // should throw a custom exception
     // but for now return nothing
-    if (!Array.isArray(fileHeader)) return;
+    if (!Array.isArray(fileHeaders)) return;
     for (let i = 0; i < fileHeaders.length; i++) {
-        if (fileHeaders[i] == header) {
+        if (fileHeaders[i] == fileHeader) {
             index = i;
             break;
         }
     }
-    return index;
+    return (index + 1);
 }
 
 
@@ -51,10 +58,10 @@ module.exports.readExcelFile = async function (excelFilePath) {
     const streamWorkBook = await Workbook.xlsx.read(stream);
     const sheet = streamWorkBook.getWorksheet(1);
 
-    for (let i = 1; i <= sheet.rowCount; i++) {
-        console.log(sheet.getRow(i).getCell(1).value);
-        console.log(sheet.getRow(i).getCell(2).value);
-    }
+    // for (let i = 1; i <= sheet.rowCount; i++) {
+    //     console.log(sheet.getRow(i).getCell(1).value);
+    //     console.log(sheet.getRow(i).getCell(2).value);
+    // }
 
     const actualColumnCount = sheet.actualColumnCount;
     const actualRowCount = sheet.actualRowCount;
@@ -70,55 +77,81 @@ module.exports.readExcelFile = async function (excelFilePath) {
 
     let rowsToInsert = [];
 
+    const assignmentIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'assignment');
+    const documentNumberIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'documentNumber');
+    const documentTypeIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'documentType');
+    const documentDateIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'documentDate');
+    const recordNumberIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'recordNumber');
+    const creditAmountIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'creditAmount');
+    const transactionCurrencyIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'transactionCurrency');
+    const applicationDocumentIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'applicationDocument');
+    const textPostingIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'textPosting');
+    const applicationDateIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'applicationDate');
+    const postingDateIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'postingDate');
+    const companyCodeIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'companyCode');
+    const fiscalYearIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'fiscalYear');
+    const postingPeriodIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'postingPeriod');
+    const accountTypeIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'accountType');
+    const accountNumberIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'accountNumber');
+    const debitCreditIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'debitCredit');
+    const referenceIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'reference');
+    const GLAccountNumberIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'GLAccountNumber');
+    const contraAccountTypeIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountType');
+    const contraAccountNumberIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountNumber');
+    const contraAccountGLAccountNoIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountGLAccountNo');
+    const contraAccountCreditorNoIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountCreditorNo');
+    const contraAccountDebtorNoIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountDebtorNo');
+    const dueDateIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'dueDate');
+    const textHeaderIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'textHeader');
+    const accountNameIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'accountName');
+
     for (let i = 2; i < actualRowCount; i++) {
         rowsToInsert.push({
-            assignment: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'assignment')).value,
-            documentNumber: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'documentNumber')).value,
-            documentType: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'documentType')).value,
-            documentDate: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'documentDate')).value,
-            recordNumber: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'recordNumber')).value,
-            creditAmount: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'creditAmount')).value,
-            transactionCurrency: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'transactionCurrency')).value,
-            applicationDocument: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'applicationDocument')).value,
-            textPosting: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'textPosting')).value,
-            applicationDate: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'applicationDate')).value,
-            postingDate: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'postingDate')).value,
-            companyCode: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'companyCode')).value,
-            fiscalYear: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'fiscalYear')).value,
-            postingPeriod: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'postingPeriod')).value,
-            accountType: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'accountType')).value,
-            accountNumber: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'accountNumber')).value,
-            debitCredit: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'debitCredit')).value,
-            reference: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'reference')).value,
-            GLAccountNumber: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'GLAccountNumber')).value,
-            contraAccountType: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountType')).value,
-            contraAccountNumber: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountNumber')).value,
-            contraAccountGLAccountNo: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountGLAccountNo')).value,
-            contraAccountCreditorNo: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountCreditorNo')).value,
-            contraAccountDebtorNo: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountDebtorNo')).value,
-            dueDate: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'dueDate')).value,
-            textHeader: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'textHeader')).value,
-            accountName: sheet.getRow(i).getCell(this._getHeaderIndex(Standardtemplate, fileHeaders, 'accountName')).value,
+            assignment: assignmentIndex > 0 ? sheet.getRow(i).getCell(assignmentIndex).value : null,
+            documentNumber: documentNumberIndex > 0 ? sheet.getRow(i).getCell(documentNumberIndex).value : null,
+            documentType: documentTypeIndex > 0 ? sheet.getRow(i).getCell(documentTypeIndex).value : null,
+            documentDate: documentDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(documentDateIndex).value) : null,
+            recordNumber: recordNumberIndex > 0 ? sheet.getRow(i).getCell(recordNumberIndex).value : null,
+            creditAmount: creditAmountIndex > 0 ? sheet.getRow(i).getCell(creditAmountIndex).value : null,
+            transactionCurrency: transactionCurrencyIndex > 0 ? sheet.getRow(i).getCell(transactionCurrencyIndex).value : null,
+            applicationDocument: applicationDocumentIndex > 0 ? sheet.getRow(i).getCell(applicationDocumentIndex).value : null,
+            textPosting: textPostingIndex > 0 ? sheet.getRow(i).getCell(textPostingIndex).value : null,
+            applicationDate: applicationDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(applicationDateIndex).value) : null,
+            postingDate: postingDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(postingDateIndex).value) : null,
+            companyCode: companyCodeIndex > 0 ? sheet.getRow(i).getCell(companyCodeIndex).value : null,
+            fiscalYear: fiscalYearIndex > 0 ? sheet.getRow(i).getCell(fiscalYearIndex).value : null,
+            postingPeriod: postingPeriodIndex > 0 ? sheet.getRow(i).getCell(postingPeriodIndex).value : null,
+            accountType: accountTypeIndex > 0 ? sheet.getRow(i).getCell(accountTypeIndex).value : null,
+            accountNumber: accountNumberIndex > 0 ? sheet.getRow(i).getCell(accountNumberIndex).value : null,
+            debitCredit: debitCreditIndex > 0 ? sheet.getRow(i).getCell(debitCreditIndex).value : null,
+            reference: referenceIndex > 0 ? sheet.getRow(i).getCell(referenceIndex).value : null,
+            GLAccountNumber: GLAccountNumberIndex > 0 ? sheet.getRow(i).getCell(GLAccountNumberIndex).value : null,
+            contraAccountType: contraAccountTypeIndex > 0 ? sheet.getRow(i).getCell(contraAccountTypeIndex).value : null,
+            contraAccountNumber: contraAccountNumberIndex > 0 ? sheet.getRow(i).getCell(contraAccountNumberIndex).value : null,
+            contraAccountGLAccountNo: contraAccountGLAccountNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountGLAccountNoIndex).value : null,
+            contraAccountCreditorNo: contraAccountCreditorNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountCreditorNoIndex).value : null,
+            contraAccountDebtorNo: contraAccountDebtorNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountDebtorNoIndex).value : null,
+            dueDate: dueDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(dueDateIndex).value) : null,
+            textHeader: textHeaderIndex > 0 ? sheet.getRow(i).getCell(textHeaderIndex).value : null,
+            accountName: accountNameIndex > 0 ? sheet.getRow(i).getCell(accountNameIndex).value : null,
         });
     }
 
-
+    const t = await sequelizer.transaction();
 
     try {
-        const result = await sequelize.transaction({
-            isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE
-        }, transaction => {
-            for (let i = 2; i < actualRowCount; i++) {
-                PostingModel
-                    .getPosting()
-                    .bulkCreate(rowsToInsert)
-                    .then(() => {}).then(users => {})
-            }
 
-        });
-        // transaction has been committed.
+        for (let i = 2; i < actualRowCount; i++) {
+            PostingModel
+                .getPosting()
+                .bulkCreate(rowsToInsert)
+                .then(() => {}).then(users => {});
+        }
+        await t.commit();
+
     } catch (err) {
-
+        console.log(err);
+        await t.rollback();
     }
 
 
