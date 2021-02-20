@@ -1,6 +1,25 @@
 const excelHelper = require('../../../helpers/excel.helper.server');
 const csvHelper = require('../../../helpers/csv.helper.server');
 
+
+module.exports.getHeaderExcel = function(req, res, next) {
+    const csvFile = req.file;
+    const filePath = csvFile.path;
+    excelHelper
+        .readHeader(filePath)
+        .then(header => {
+            res
+                .status(200)
+                .json({
+                    fileName: csvFile.filename,
+                    orginalName: csvFile.originalname,
+                    headers: header
+                });
+
+        });
+};
+
+
 module.exports.uploadExcel = function (req, res, next) {
     const excelFile = req.file;
     // first of all check if the file uploaded successfully!

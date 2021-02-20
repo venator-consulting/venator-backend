@@ -9,8 +9,14 @@ const uploadfiles = multer({
     dest: env.uploadPath
 });
 
+
 router
-    .route('/upload')
+    .route('/excel-header')
+    .post(uploadfiles.single('excel'), uploadCtrl.getHeaderExcel);
+
+
+router
+    .route('/excel')
     .post(uploadfiles.single('excel'), uploadCtrl.uploadExcel);
 
 
@@ -25,5 +31,7 @@ router
 
 router
     .route('/sync-db')
-    .get(dataSyncCtrl.buildDatabaseSchema)
+    .get(dataSyncCtrl.buildDatabaseSchema);
+
+
 module.exports = router;
