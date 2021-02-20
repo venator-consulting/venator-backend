@@ -22,6 +22,24 @@ module.exports.uploadExcel = function (req, res, next) {
 };
 
 
+module.exports.getHeaderCsv = function(req, res, next) {
+    const csvFile = req.file;
+    const filePath = csvFile.path;
+    csvHelper
+        .readHeader(filePath)
+        .then(header => {
+            res
+                .status(200)
+                .json({
+                    fileName: csvFile.filename,
+                    orginalName: csvFile.originalname,
+                    headers: header
+                });
+
+        });
+};
+
+
 module.exports.uploadCsv = function(req, res, next) {
     const csvFile = req.file;
     // first of all check if the file uploaded successfully!

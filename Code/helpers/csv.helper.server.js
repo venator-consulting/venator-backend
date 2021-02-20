@@ -27,12 +27,27 @@ const options = {
     },
 };
 
+module.exports.readHeader = async function (excelFilePath) {
+    const stream = fs.createReadStream(excelFilePath);
+    const sheet = await Workbook.csv.read(stream, options);
+    const actualColumnCount = sheet.actualColumnCount;
+    const actualRowCount = sheet.actualRowCount;
+    // if no rows return an error response.
+    if (actualRowCount <= 0) return;
+    if (actualColumnCount <= 0) return;
+    let fileHeaders = [];
+    for(let i =1; i < actualColumnCount; i++) {
+        fileHeaders.push(sheet.getRow(1).getCell(i).value);
+    }
+    return fileHeaders;
+}
+
 
 module.exports.readCsvFile = async function (excelFilePath) {
 
     const stream = fs.createReadStream(excelFilePath);
     console.log('file path is: ' + excelFilePath);
-    
+
     const sheet = await Workbook.csv.read(stream, options);
     console.log(sheet.actualRowCount);
     let col1 = sheet.getRow(1).getCell(1).value;

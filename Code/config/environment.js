@@ -1,5 +1,5 @@
 module.exports = {
-    port: 3737,
+    port: 8000,
     uploadPath: './modules/Admin/files/',
     databaseName: 'accountant',
     databaseUsername: 'root',

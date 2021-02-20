@@ -15,6 +15,10 @@ router
 
 
 router
+    .route('/csv-header')
+    .post(uploadfiles.single('excel'), uploadCtrl.getHeaderCsv)
+
+router
     .route('/csv')
     .post(uploadfiles.single('excel'), uploadCtrl.uploadCsv);
 
