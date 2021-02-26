@@ -38,7 +38,7 @@ const Posting = sequelizer.define('Posting', {
         type: DataTypes.STRING(25)
     },
     documentTypeNumber: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(11)
     },
     documentTypeName: {
         type: DataTypes.STRING(25)
@@ -95,7 +95,7 @@ const Posting = sequelizer.define('Posting', {
         type: DataTypes.STRING(25)
     },
     contraAccountType: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(25)
     },
     contraAccountNumber: {
         type: DataTypes.STRING(25)

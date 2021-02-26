@@ -5,7 +5,13 @@ const env = require('./environment');
 
 const sequelize = new Sequelize(env.databaseName, env.databaseUsername, env.databasePassword, {
     host: env.databaseHost,
-    dialect: env.databaseDialect
+    dialect: env.databaseDialect,
+    pool: {
+        max: 5,
+        min: 1,
+        idle: 10000,
+        evict: 10000,
+    }
 });
 
 

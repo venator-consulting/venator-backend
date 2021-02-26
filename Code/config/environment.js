@@ -5,5 +5,6 @@ module.exports = {
     databaseUsername: 'root',
     databasePassword: 'Asama56ab',
     databaseHost: 'localhost',
-    databaseDialect: 'mysql' /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
+    databaseDialect: 'mysql', /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
+    bulkInsertSize: 500
 };

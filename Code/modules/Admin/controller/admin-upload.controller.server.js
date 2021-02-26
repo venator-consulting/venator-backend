@@ -19,6 +19,12 @@ module.exports.getHeaderExcel = function(req, res, next) {
         });
 };
 
+module.exports.getTemplateTypes = function(req, res){
+    const templateTypes = require('../../../models/enums/template.type');
+    res
+        .status(200)
+        .json(templateTypes);
+};
 
 module.exports.uploadExcel = function (req, res, next) {
     const excelFile = req.file;

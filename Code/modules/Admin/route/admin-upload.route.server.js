@@ -9,6 +9,9 @@ const uploadfiles = multer({
     dest: env.uploadPath
 });
 
+router
+    .route('/template-types')
+    .get(uploadCtrl.getTemplateTypes);
 
 router
     .route('/excel-header')

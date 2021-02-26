@@ -2,10 +2,14 @@ const Excel = require('exceljs');
 const Workbook = new Excel.Workbook();
 const fs = require("fs");
 const PostingModel = require('../models/posting.model.server');
-const Standardtemplate = require('../models/templates/standard');
+const SapWmobel = require('../models/templates/sap.wmobel.template');
+const SapCinram = require('../models/templates/sap.cinram.template');
 const sequelize = require('../config/sequelize.config');
+const templatesType = require('../models/enums/template.type');
 
 const chrono = require('chrono-node');
+
+const env = require('../config/environment');
 
 
 const sequelizer = sequelize.getSequelize();
@@ -13,7 +17,17 @@ const sequelizer = sequelize.getSequelize();
 
 
 
-module.exports.readHeader = async function (excelFilePath) {
+module.exports.readHeader = async function (excelFilePath, templateType = 1, template = null) {
+
+    if (templateType == templatesType.SAP_WMOBEL) {
+        Standardtemplate = SapWmobel;
+    } else if (templateType == templatesType.SAP_CINRAM) {
+        Standardtemplate = SapCinram.posting;
+    } else {
+        Standardtemplate = template;
+    }
+
+    
     const stream = fs.createReadStream(excelFilePath);
     const streamWorkBook = await Workbook.xlsx.read(stream);
     const sheet = streamWorkBook.getWorksheet(1);
@@ -58,11 +72,6 @@ module.exports.readExcelFile = async function (excelFilePath) {
     const streamWorkBook = await Workbook.xlsx.read(stream);
     const sheet = streamWorkBook.getWorksheet(1);
 
-    // for (let i = 1; i <= sheet.rowCount; i++) {
-    //     console.log(sheet.getRow(i).getCell(1).value);
-    //     console.log(sheet.getRow(i).getCell(2).value);
-    // }
-
     const actualColumnCount = sheet.actualColumnCount;
     const actualRowCount = sheet.actualRowCount;
 
@@ -105,7 +114,14 @@ module.exports.readExcelFile = async function (excelFilePath) {
     const textHeaderIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'textHeader');
     const accountNameIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'accountName');
 
-    for (let i = 2; i < actualRowCount; i++) {
+    const roundsNo = Math.floor(actualRowCount / env.bulkInsertSize);
+
+    const roundsRest = actualRowCount % env.bulkInsertSize;
+
+    const t = await sequelizer.transaction();
+
+
+    for (let i = 2; i < roundsRest; i++) {
         rowsToInsert.push({
             assignment: assignmentIndex > 0 ? sheet.getRow(i).getCell(assignmentIndex).value : null,
             documentNumber: documentNumberIndex > 0 ? sheet.getRow(i).getCell(documentNumberIndex).value : null,
@@ -137,23 +153,67 @@ module.exports.readExcelFile = async function (excelFilePath) {
         });
     }
 
-    const t = await sequelizer.transaction();
-
     try {
+        await PostingModel
+            .getPosting()
+            .bulkCreate(rowsToInsert, {
+                transaction: t
+            })
 
-        for (let i = 2; i < actualRowCount; i++) {
-            PostingModel
+
+        let rowsToInsert2 = [];
+
+        for (let iterator = 0; iterator < roundsNo; iterator++) {
+            rowsToInsert2 = [];
+            for (let i = ((iterator * env.bulkInsertSize) + roundsRest); i < ((iterator * env.bulkInsertSize) + (env.bulkInsertSize + roundsRest)); i++) {
+                rowsToInsert2.push({
+                    assignment: assignmentIndex > 0 ? sheet.getRow(i).getCell(assignmentIndex).value : null,
+                    documentNumber: documentNumberIndex > 0 ? sheet.getRow(i).getCell(documentNumberIndex).value : null,
+                    documentType: documentTypeIndex > 0 ? sheet.getRow(i).getCell(documentTypeIndex).value : null,
+                    documentDate: documentDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(documentDateIndex).value) : null,
+                    recordNumber: recordNumberIndex > 0 ? sheet.getRow(i).getCell(recordNumberIndex).value : null,
+                    creditAmount: creditAmountIndex > 0 ? sheet.getRow(i).getCell(creditAmountIndex).value : null,
+                    transactionCurrency: transactionCurrencyIndex > 0 ? sheet.getRow(i).getCell(transactionCurrencyIndex).value : null,
+                    applicationDocument: applicationDocumentIndex > 0 ? sheet.getRow(i).getCell(applicationDocumentIndex).value : null,
+                    textPosting: textPostingIndex > 0 ? sheet.getRow(i).getCell(textPostingIndex).value : null,
+                    applicationDate: applicationDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(applicationDateIndex).value) : null,
+                    postingDate: postingDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(postingDateIndex).value) : null,
+                    companyCode: companyCodeIndex > 0 ? sheet.getRow(i).getCell(companyCodeIndex).value : null,
+                    fiscalYear: fiscalYearIndex > 0 ? sheet.getRow(i).getCell(fiscalYearIndex).value : null,
+                    postingPeriod: postingPeriodIndex > 0 ? sheet.getRow(i).getCell(postingPeriodIndex).value : null,
+                    accountType: accountTypeIndex > 0 ? sheet.getRow(i).getCell(accountTypeIndex).value : null,
+                    accountNumber: accountNumberIndex > 0 ? sheet.getRow(i).getCell(accountNumberIndex).value : null,
+                    debitCredit: debitCreditIndex > 0 ? sheet.getRow(i).getCell(debitCreditIndex).value : null,
+                    reference: referenceIndex > 0 ? sheet.getRow(i).getCell(referenceIndex).value : null,
+                    GLAccountNumber: GLAccountNumberIndex > 0 ? sheet.getRow(i).getCell(GLAccountNumberIndex).value : null,
+                    contraAccountType: contraAccountTypeIndex > 0 ? sheet.getRow(i).getCell(contraAccountTypeIndex).value : null,
+                    contraAccountNumber: contraAccountNumberIndex > 0 ? sheet.getRow(i).getCell(contraAccountNumberIndex).value : null,
+                    contraAccountGLAccountNo: contraAccountGLAccountNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountGLAccountNoIndex).value : null,
+                    contraAccountCreditorNo: contraAccountCreditorNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountCreditorNoIndex).value : null,
+                    contraAccountDebtorNo: contraAccountDebtorNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountDebtorNoIndex).value : null,
+                    dueDate: dueDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(dueDateIndex).value) : null,
+                    textHeader: textHeaderIndex > 0 ? sheet.getRow(i).getCell(textHeaderIndex).value : null,
+                    accountName: accountNameIndex > 0 ? sheet.getRow(i).getCell(accountNameIndex).value : null,
+                });
+            }
+
+
+
+
+            await PostingModel
                 .getPosting()
-                .bulkCreate(rowsToInsert)
-                .then(() => {}).then(users => {});
+                .bulkCreate(rowsToInsert2, {
+                    transaction: t
+                })
+
         }
+
         await t.commit();
 
     } catch (err) {
         console.log(err);
         await t.rollback();
     }
-
 
 
 }
