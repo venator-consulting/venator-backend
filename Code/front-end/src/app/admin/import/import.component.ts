@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { any } from 'sequelize/types/lib/operators';
+import { TemplateTypes } from "../../model/template-types.model";
+import { ImportService } from "../service/import.service";
 
 @Component({
   selector: 'app-import',
@@ -12,8 +15,11 @@ export class ImportComponent implements OnInit {
   items: MenuItem[] = [];
   activeIndex: number = 0;
   uploadedFiles: any[] = [];
+  templates: TemplateTypes[] = TemplateTypes.getTemplates();
+  selectedTemplate: any;
 
-  constructor(private _messageService: MessageService) { }
+  
+  constructor(private _messageService: MessageService, private _importService: ImportService) { }
 
   ngOnInit(): void {
 
@@ -46,16 +52,65 @@ export class ImportComponent implements OnInit {
     ];
 
 
-  }
+  } // end of ngOnInit
 
 
-  onUpload(event: { files: any; }) {
-    for(let file of event.files) {
-        this.uploadedFiles.push(file);
+  UploadPostingFile(event) {
+
+    const selectedFiles: FileList = event.files;
+    // let files = event.files;
+    const formData: FormData = new FormData();
+    let currentFileUpload: File = selectedFiles[0];
+
+    if (!!selectedFiles) {
+      formData.append('excel', currentFileUpload);
+      // files.forEach((file : File) => {
+      //   formData.append('excel', file, file.name);
+      // });
+    } else {
+      this._messageService.add({
+        severity: 'warning',
+        summary: 'Please choose a file',
+        detail: 'You should chose a posting file!'
+      });
+      return;
+    }
+    
+    debugger;
+
+    if (!this.selectedTemplate || isNaN(this.selectedTemplate.value)) {
+      this._messageService.add({
+        severity: 'warning',
+        summary: 'Please select a template',
+        detail: 'You should select a template to map the file to the database!'
+      });
+      return;
     }
 
-    this._messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
-}
+    formData.append('data', JSON.stringify({
+      template: this.selectedTemplate.value
+    }));
+
+    this._importService
+      .uploadPosting(formData)
+      .subscribe(res => {
+        console.dir('done: ' + res);
+        this._messageService.add({
+          severity: 'success',
+          summary: 'Posting uploaded!',
+          detail: 'the file uploaded successfuly!'
+        });
+      }, err => {
+        console.log('error: ' + err);
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR!',
+          detail: 'There is an error occured, please try again!'
+        });
+      });
+
+
+  } // end of uploading post file function
 
 
 }

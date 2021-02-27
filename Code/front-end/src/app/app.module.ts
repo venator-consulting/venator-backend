@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import {ToastModule} from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import {FileUploadModule} from 'primeng/fileupload';
 import {HttpClientModule} from '@angular/common/http';
+import {DropdownModule} from 'primeng/dropdown';
 
 
 @NgModule({
@@ -33,11 +35,14 @@ import {HttpClientModule} from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     MenubarModule,
     StepsModule,
     ToastModule,
     FileUploadModule,
-    HttpClientModule
+    HttpClientModule,
+    DropdownModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

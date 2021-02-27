@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const config = require('./config/environment');
 const adminRoutes = require('./modules/Admin/route/admin-upload.route.server');
+const path = require('path');
 
 
 const cors = require('cors');
@@ -21,8 +22,10 @@ app.use(bodyParser.urlencoded({
 
 app.use('/api/admin', adminRoutes);
 
+app.use(express.static('front-end/dist/front-end/'));
+
 app.get('*', (req, res) => {
-    res.json("Hello world");
+    res.sendFile(path.join(__dirname, 'front-end/dist/front-end/index.html'));
 });
 
 app.listen(app.get('port'), () => {

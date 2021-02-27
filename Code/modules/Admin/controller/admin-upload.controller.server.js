@@ -48,6 +48,7 @@ module.exports.uploadExcel = function (req, res, next) {
 
 
 module.exports.getHeaderCsv = function(req, res, next) {
+    console.log("csv header requested");
     const csvFile = req.file;
     const filePath = csvFile.path;
     csvHelper
