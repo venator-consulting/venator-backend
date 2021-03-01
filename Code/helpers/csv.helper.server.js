@@ -3,6 +3,7 @@ const Workbook = new Excel.Workbook();
 const fs = require("fs");
 
 const PostingModel = require('../models/posting.model.server');
+const AccountModel = require('../models/accounts.model.server');
 const SapWmobel = require('../models/templates/sap.wmobel.template');
 const SapCinram = require('../models/templates/sap.cinram.template');
 const sequelize = require('../config/sequelize.config');
@@ -281,8 +282,8 @@ module.exports.importAccountCsvFile = async function (excelFilePath, accountType
     }
 
     try {
-        await PostingModel
-            .getPosting()
+        await AccountModel
+            .getAccounts()
             .bulkCreate(rowsToInsert, {
                 transaction: t
             })
@@ -303,8 +304,8 @@ module.exports.importAccountCsvFile = async function (excelFilePath, accountType
 
 
 
-            await PostingModel
-                .getPosting()
+            await AccountModel
+                .getAccounts()
                 .bulkCreate(rowsToInsert2, {
                     transaction: t
                 })
@@ -312,10 +313,14 @@ module.exports.importAccountCsvFile = async function (excelFilePath, accountType
         }
 
         await t.commit();
+        return true
 
     } catch (err) {
         console.log(err);
         await t.rollback();
+        return {
+            error: err
+        }
     }
 
 

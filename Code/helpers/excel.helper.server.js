@@ -2,6 +2,7 @@ const Excel = require('exceljs');
 const Workbook = new Excel.Workbook();
 const fs = require("fs");
 const PostingModel = require('../models/posting.model.server');
+const AccountModel = require('../models/accounts.model.server');
 const SapWmobel = require('../models/templates/sap.wmobel.template');
 const SapCinram = require('../models/templates/sap.cinram.template');
 const sequelize = require('../config/sequelize.config');
@@ -258,8 +259,8 @@ module.exports.importAccountExcelFile = async function (excelFilePath, accountTy
     }
 
     try {
-        await PostingModel
-            .getPosting()
+        await AccountModel
+            .getAccounts()
             .bulkCreate(rowsToInsert, {
                 transaction: t
             })
@@ -280,8 +281,8 @@ module.exports.importAccountExcelFile = async function (excelFilePath, accountTy
 
 
 
-            await PostingModel
-                .getPosting()
+            await AccountModel
+                .getAccounts()
                 .bulkCreate(rowsToInsert2, {
                     transaction: t
                 })

@@ -113,10 +113,20 @@ module.exports.uploadAccountCsv = function (req, res, next) {
     csvHelper
         .importAccountCsvFile(filePath, accountType)
         .then(done => {
+            if (!!done.error) {
+                res
+                    .status(500)
+                    .json(done.error);
+            } else {
+                res
+                    .status(200)
+                    .json('done');
+            }
+        })
+        .catch(er => {
             res
-                .status(200)
-                .json('done');
-
+                .status(500)
+                .json(er);
         });
 };
 
