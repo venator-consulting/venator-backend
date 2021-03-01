@@ -54,6 +54,13 @@ export class ImportComponent implements OnInit {
 
   } // end of ngOnInit
 
+  goNext(index) {
+    this.activeIndex = ++index;
+  }
+
+  goPrev(index) {
+    this.activeIndex = --index;
+  }
 
   UploadPostingFile(event) {
 

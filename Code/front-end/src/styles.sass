@@ -4,9 +4,26 @@
 $primaryColor: #e75113
 $secondary: #58585a
 
+body
+    background-color: #f0f0f0f0
 
-span
-    font-family:'primeicons' !important
+.p-menubar, .p-submenu-list
+    background-color: $secondary !important
+
+.p-menubar
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+
+.p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link:not(.p-disabled):hover,
+.p-menubar .p-menuitem.p-menuitem-active > .p-menuitem-link
+    background-color: #474749 !important 
+
+.p-menuitem span
+    color: #ffffff !important
 
 
 
+.p-menuitem-link-active span
+    color: $primaryColor !important

@@ -1,38 +1,78 @@
 <br /><br>
-<div class="card">
+<p-card class="card">
   <p-toast></p-toast>
   <p-steps [model]="items" [(activeIndex)]="activeIndex" [readonly]="false"></p-steps>
-</div>
-<div class="p-grid">
-  <div class="p-col-1">
+</p-card>
+<br/>
+
+<p-card>
+  <!-- ********************** Step 1 satrts ******************** -->
+  <div class="p-grid">
+    <div class="p-col-1">
+    </div>
+    <div [hidden]="activeIndex != 0" class="p-col-11">
+      <h2>upload posting file</h2>
+      <br>
+      <br><br>
+      <label for="">Template </label>
+      <p-dropdown [options]="templates" [(ngModel)]="selectedTemplate" placeholder="Select a Template"
+        optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
+      <br />
+      <br><br>
+      <!-- #fileInput name="posting.file" showUploadButton="false" -->
+      <p-fileUpload name="excel" customUpload="true" (uploadHandler)="UploadPostingFile($event)">
+        <ng-template pTemplate="content">
+          <ul *ngIf="uploadedFiles.length">
+            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+
+      <br><br>
+      <button pButton type="button" label="Next" class="p-button-raised p-button-rounded" (click)="goNext(0)"></button>
+
+    </div>
   </div>
-  <div [hidden]="activeIndex != 0" class="p-col-11">
-    <h2>upload posting file</h2>
-    <br>
-    <br><br>
-    <p-dropdown [options]="templates" [(ngModel)]="selectedTemplate" placeholder="Select a Template" optionLabel="name"
-      [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
-    <br />
-    <br><br>
-    <!-- #fileInput name="posting.file" showUploadButton="false" -->
-    <p-fileUpload name="excel" customUpload="true" (uploadHandler)="UploadPostingFile($event)">
-      <ng-template pTemplate="content">
-        <ul *ngIf="uploadedFiles.length">
-          <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-        </ul>
-      </ng-template>
-    </p-fileUpload>
 
+
+  <!-- ********************** Step 2 satrts ******************** -->
+  <div [hidden]="activeIndex != 1" class="card">
+    upload helper files
+
+    <br><br>
+    <span class="p-buttonset">
+      <button pButton type="button" label="Previous" class="p-button-raised p-button-rounded"
+        (click)="goPrev(1)"></button>
+      <button pButton type="button" label="Next" class="p-button-raised p-button-rounded" (click)="goNext(1)"></button>
+    </span>
   </div>
-</div>
-<div [hidden]="activeIndex != 1" class="card">
-  upload helper files
-</div>
 
-<div [hidden]="activeIndex != 2" class="card">
-  Mapping fields
-</div>
 
-<div [hidden]="activeIndex != 3" class="card">
-  import
-</div>
+  <!-- ********************** Step 3 satrts ******************** -->
+  <div [hidden]="activeIndex != 2" class="card">
+    Mapping fields
+
+
+    <br><br>
+    <span class="p-buttonset">
+      <button pButton type="button" label="Previous" class="p-button-raised p-button-rounded"
+        (click)="goPrev(2)"></button>
+      <button pButton type="button" label="Next" class="p-button-raised p-button-rounded" (click)="goNext(2)"></button>
+    </span>
+  </div>
+
+
+
+  <!-- ********************** Step 4 satrts ******************** -->
+  <div [hidden]="activeIndex != 3" class="card">
+    import
+
+
+    <br><br>
+    <span class="p-buttonset">
+      <button pButton type="button" label="Previous" class="p-button-raised p-button-rounded"
+        (click)="goPrev(3)"></button>
+      <button pButton type="button" label="Import" class="p-button-raised p-button-rounded"></button>
+    </span>
+  </div>
+</p-card>

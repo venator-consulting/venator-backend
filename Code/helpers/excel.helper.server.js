@@ -5,7 +5,8 @@ const PostingModel = require('../models/posting.model.server');
 const SapWmobel = require('../models/templates/sap.wmobel.template');
 const SapCinram = require('../models/templates/sap.cinram.template');
 const sequelize = require('../config/sequelize.config');
-const templatesType = require('../models/enums/template.type');
+const templatesTypeEnum = require('../models/enums/template.type');
+const AccountTypeEnum = require('../models/enums/account.type');
 
 const chrono = require('chrono-node');
 
@@ -19,15 +20,15 @@ const sequelizer = sequelize.getSequelize();
 
 module.exports.readHeader = async function (excelFilePath, templateType = 1, template = null) {
 
-    if (templateType == templatesType.SAP_WMOBEL) {
+    if (templateType == templatesTypeEnum.SAP_WMOBEL) {
         Standardtemplate = SapWmobel;
-    } else if (templateType == templatesType.SAP_CINRAM) {
+    } else if (templateType == templatesTypeEnum.SAP_CINRAM) {
         Standardtemplate = SapCinram.posting;
     } else {
         Standardtemplate = template;
     }
 
-    
+
     const stream = fs.createReadStream(excelFilePath);
     const streamWorkBook = await Workbook.xlsx.read(stream);
     const sheet = streamWorkBook.getWorksheet(1);
@@ -216,4 +217,83 @@ module.exports.readExcelFile = async function (excelFilePath) {
     }
 
 
-}
+} // end of reading posting file function
+
+
+// to-do: procedureId as parameter
+module.exports.importAccountExcelFile = async function (excelFilePath, accountType = 1) {
+
+    const stream = fs.createReadStream(excelFilePath);
+
+    const streamWorkBook = await Workbook.xlsx.read(stream);
+    const sheet = streamWorkBook.getWorksheet(1);
+
+    const actualColumnCount = sheet.actualColumnCount;
+    const actualRowCount = sheet.actualRowCount;
+
+    if (actualRowCount <= 0) return;
+    if (actualColumnCount <= 0) return;
+
+    // get headers
+    let fileHeaders = [];
+    for (let i = 1; i < actualColumnCount; i++) {
+        fileHeaders.push(sheet.getRow(1).getCell(i).value);
+    }
+
+    let rowsToInsert = [];
+
+    const roundsNo = Math.floor(actualRowCount / env.bulkInsertSize);
+
+    const roundsRest = actualRowCount % env.bulkInsertSize;
+
+    const t = await sequelizer.transaction();
+
+
+    for (let i = 2; i < roundsRest; i++) {
+        rowsToInsert.push({
+            accountNumber: sheet.getRow(i).getCell(1).value,
+            accountName: sheet.getRow(i).getCell(3).value,
+            accountType: AccountTypeEnum[accountType]
+        });
+    }
+
+    try {
+        await PostingModel
+            .getPosting()
+            .bulkCreate(rowsToInsert, {
+                transaction: t
+            })
+
+
+        let rowsToInsert2 = [];
+
+        for (let iterator = 0; iterator < roundsNo; iterator++) {
+            rowsToInsert2 = [];
+            for (let i = ((iterator * env.bulkInsertSize) + roundsRest); i < ((iterator * env.bulkInsertSize) + (env.bulkInsertSize + roundsRest)); i++) {
+                rowsToInsert2.push({
+                    accountNumber: sheet.getRow(i).getCell(1).value,
+                    accountName: sheet.getRow(i).getCell(3).value,
+                    accountType: AccountTypeEnum[accountType]
+                });
+            }
+
+
+
+
+            await PostingModel
+                .getPosting()
+                .bulkCreate(rowsToInsert2, {
+                    transaction: t
+                })
+
+        }
+
+        await t.commit();
+
+    } catch (err) {
+        console.log(err);
+        await t.rollback();
+    }
+
+
+} // end of reading account file function

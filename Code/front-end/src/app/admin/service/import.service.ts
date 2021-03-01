@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ImportService {
 
-  _thisURL = environment.baseUrl + 'admin/csv-header';
+  _thisURL = environment.baseUrl + 'admin/csv';
 
   constructor(private _http: HttpClient) { }
 

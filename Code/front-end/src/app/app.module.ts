@@ -19,6 +19,8 @@ import { MessageService } from 'primeng/api';
 import {FileUploadModule} from 'primeng/fileupload';
 import {HttpClientModule} from '@angular/common/http';
 import {DropdownModule} from 'primeng/dropdown';
+import {ButtonModule} from 'primeng/button';
+import {CardModule} from 'primeng/card';
 
 
 @NgModule({
@@ -42,7 +44,9 @@ import {DropdownModule} from 'primeng/dropdown';
     ToastModule,
     FileUploadModule,
     HttpClientModule,
-    DropdownModule
+    DropdownModule,
+    ButtonModule,
+    CardModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

@@ -31,6 +31,14 @@ router
     .route('/csv')
     .post(uploadfiles.single('excel'), uploadCtrl.uploadCsv);
 
+router
+    .route('/account-csv')
+    .post(uploadfiles.single('excel'), uploadCtrl.uploadAccountCsv);
+
+router
+    .route('/account-excel')
+    .post(uploadfiles.single('excel'), uploadCtrl.uploadAccountExcel);
+
 
 router
     .route('/sync-db')

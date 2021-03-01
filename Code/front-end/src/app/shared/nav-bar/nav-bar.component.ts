@@ -19,10 +19,12 @@ export class NavBarComponent implements OnInit {
       {
         label: 'upload',
         icon: 'pi pi-file',
-        command: () => {
-          // got to admin/import
-          this._router.navigate(['/admin/import']);
-        }
+        routerLink: ['/admin/import'],
+        routerLinkActiveOptions: { exact: true },
+        // command: () => {
+        //   // got to admin/import
+        //   this._router.navigate(['/admin/import']);
+        // }
       },
       {
         label: 'Edit',

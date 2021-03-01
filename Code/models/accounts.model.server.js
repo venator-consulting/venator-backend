@@ -30,7 +30,7 @@ const Accounts = sequelizer.define('Accounts', {
         type: DataTypes.BIGINT(11)
     },
     accountName: {
-        type: DataTypes.STRING(25)
+        type: DataTypes.STRING(100)
     },
     nameAffix1: {
         type: DataTypes.STRING(25)
