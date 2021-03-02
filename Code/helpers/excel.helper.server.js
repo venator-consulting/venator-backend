@@ -53,21 +53,32 @@ _getHeaderIndex = function (template, fileHeaders, header) {
     // get name of file header
     const fileHeader = template[header];
     let index = -2;
+    let found = false;
     // get index of header in file
     // should throw a custom exception
     // but for now return nothing
-    if (!Array.isArray(fileHeaders)) return;
+    if (!Array.isArray(fileHeaders)) return -1;
     for (let i = 0; i < fileHeaders.length; i++) {
         if (fileHeaders[i] == fileHeader) {
             index = i;
+            found = true;
             break;
         }
     }
-    return (index + 1);
+    return found? (index + 1) : -1;
 }
 
 
-module.exports.readExcelFile = async function (excelFilePath) {
+module.exports.readExcelFile = async function (excelFilePath, templateType = 1, template = null) {
+
+    if (templateType == templatesTypeEnum.SAP_WMOBEL) {
+        Standardtemplate = SapWmobel;
+    } else if (templateType == templatesTypeEnum.SAP_CINRAM) {
+        Standardtemplate = SapCinram.posting;
+    } else {
+        Standardtemplate = template;
+    }
+
 
     const stream = fs.createReadStream(excelFilePath);
 
@@ -115,6 +126,8 @@ module.exports.readExcelFile = async function (excelFilePath) {
     const dueDateIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'dueDate');
     const textHeaderIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'textHeader');
     const accountNameIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'accountName');
+    const debtorNumberIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'debtorNumber');
+    const creditorNumberIndex = _getHeaderIndex(Standardtemplate, fileHeaders, 'creditorNumber');
 
     const roundsNo = Math.floor(actualRowCount / env.bulkInsertSize);
 
@@ -124,6 +137,56 @@ module.exports.readExcelFile = async function (excelFilePath) {
 
 
     for (let i = 2; i < roundsRest; i++) {
+
+        // don't forget procedure id in accounts
+        // don't forget if procedure id not exist don't go to DB
+        // don't forget to get account type
+
+        // GlaAccount
+        const GLAccountNumber = GLAccountNumberIndex > 0 ? sheet.getRow(i).getCell(GLAccountNumberIndex).value : null;
+        let GLAccountName = null;
+        if(GLAccountNumber) {
+            let temp =  await AccountModel.getAccounts().findAll({
+                where: {
+                    accountNumber: GLAccountNumber,
+                    accountType: AccountTypeEnum[3]
+                },
+                attributes: ['accountName'],
+                limit: 1
+            });
+            GLAccountName = temp.length > 0 ? temp[0].accountName : null;
+        }
+
+        // Debitor Account
+        const debtorNumber = debtorNumberIndex > 0 ? sheet.getRow(i).getCell(debtorNumberIndex).value : null;
+        let debtorName = null;
+        if(debtorNumber) {
+            let temp =  await AccountModel.getAccounts().findAll({
+                where: {
+                    accountNumber: debtorNumber,
+                    accountType: AccountTypeEnum[1]
+                },
+                attributes: ['accountName'],
+                limit: 1
+            });
+            debtorName = temp.length > 0 ? temp[0].accountName : null;
+        }
+
+        // Credito Account
+        const creditorNumber = creditorNumberIndex > 0 ? sheet.getRow(i).getCell(creditorNumberIndex).value : null;
+        let creditorName = null;
+        if(creditorNumber) {
+            let temp =  await AccountModel.getAccounts().findAll({
+                where: {
+                    accountNumber: creditorNumber,
+                    accountType: AccountTypeEnum[2]
+                },
+                attributes: ['accountName'],
+                limit: 1
+            });
+            creditorName = temp.length > 0 ? temp[0].accountName : null;
+        }
+        
         rowsToInsert.push({
             assignment: assignmentIndex > 0 ? sheet.getRow(i).getCell(assignmentIndex).value : null,
             documentNumber: documentNumberIndex > 0 ? sheet.getRow(i).getCell(documentNumberIndex).value : null,
@@ -143,7 +206,12 @@ module.exports.readExcelFile = async function (excelFilePath) {
             accountNumber: accountNumberIndex > 0 ? sheet.getRow(i).getCell(accountNumberIndex).value : null,
             debitCredit: debitCreditIndex > 0 ? sheet.getRow(i).getCell(debitCreditIndex).value : null,
             reference: referenceIndex > 0 ? sheet.getRow(i).getCell(referenceIndex).value : null,
-            GLAccountNumber: GLAccountNumberIndex > 0 ? sheet.getRow(i).getCell(GLAccountNumberIndex).value : null,
+            GLAccountNumber: GLAccountNumber,
+            GLAccountName: GLAccountName,
+            debtorNumber: debtorNumber,
+            debtorName: debtorName,
+            creditorNumber: creditorNumber,
+            creditorName: creditorName,
             contraAccountType: contraAccountTypeIndex > 0 ? sheet.getRow(i).getCell(contraAccountTypeIndex).value : null,
             contraAccountNumber: contraAccountNumberIndex > 0 ? sheet.getRow(i).getCell(contraAccountNumberIndex).value : null,
             contraAccountGLAccountNo: contraAccountGLAccountNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountGLAccountNoIndex).value : null,
