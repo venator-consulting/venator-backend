@@ -13,7 +13,7 @@ const chrono = require('chrono-node');
 
 const env = require('../config/environment');
 
-const AccountTypeEnum = require('../models/enums/account.type');
+const AccountTypeEnum = require('../models/enums/account.internal.type');
 
 
 const sequelizer = sequelize.getSequelize();

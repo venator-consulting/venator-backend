@@ -17,6 +17,7 @@ export class ImportComponent implements OnInit {
   uploadedFiles: any[] = [];
   templates: TemplateTypes[] = TemplateTypes.getTemplates();
   selectedTemplate: any;
+  waiting: boolean = false;
 
   
   constructor(private _messageService: MessageService, private _importService: ImportService) { }
@@ -64,6 +65,8 @@ export class ImportComponent implements OnInit {
 
   UploadPostingFile(event) {
 
+    this.waiting = true;
+
     const selectedFiles: FileList = event.files;
     // let files = event.files;
     const formData: FormData = new FormData();
@@ -91,6 +94,7 @@ export class ImportComponent implements OnInit {
         summary: 'Please select a template',
         detail: 'You should select a template to map the file to the database!'
       });
+      this.waiting = false;
       return;
     }
 
@@ -102,6 +106,7 @@ export class ImportComponent implements OnInit {
       .uploadPosting(formData)
       .subscribe(res => {
         console.dir('done: ' + res);
+        this.waiting = false;
         this._messageService.add({
           severity: 'success',
           summary: 'Posting uploaded!',
@@ -109,6 +114,7 @@ export class ImportComponent implements OnInit {
         });
       }, err => {
         console.log('error: ' + err);
+        this.waiting = false;
         this._messageService.add({
           severity: 'error',
           summary: 'ERROR!',

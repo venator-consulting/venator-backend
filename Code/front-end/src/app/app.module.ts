@@ -21,6 +21,8 @@ import {HttpClientModule} from '@angular/common/http';
 import {DropdownModule} from 'primeng/dropdown';
 import {ButtonModule} from 'primeng/button';
 import {CardModule} from 'primeng/card';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {DialogModule} from 'primeng/dialog';
 
 
 @NgModule({
@@ -46,7 +48,9 @@ import {CardModule} from 'primeng/card';
     HttpClientModule,
     DropdownModule,
     ButtonModule,
-    CardModule
+    CardModule,
+    ProgressSpinnerModule,
+    DialogModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

@@ -1,17 +1,26 @@
 <br /><br>
 <p-card class="card">
   <p-toast></p-toast>
-  <p-steps [model]="items" [(activeIndex)]="activeIndex" [readonly]="false"></p-steps>
+  <p-steps [model]="items" [(activeIndex)]="activeIndex" [readonly]="true"></p-steps>
+
 </p-card>
-<br/>
+<br />
 
 <p-card>
   <!-- ********************** Step 1 satrts ******************** -->
   <div class="p-grid">
+
     <div class="p-col-1">
     </div>
     <div [hidden]="activeIndex != 0" class="p-col-11">
-      <h2>upload posting file</h2>
+      <div class="p-grid">
+        <div class="p-col-4">
+          <h2>upload posting file</h2>
+        </div>
+        <div class="p-col-8">
+          <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
+        </div>
+      </div>
       <br>
       <br><br>
       <label for="">Template </label>

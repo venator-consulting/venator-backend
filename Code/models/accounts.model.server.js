@@ -38,6 +38,9 @@ const Accounts = sequelizer.define('Accounts', {
     accountName: {
         type: DataTypes.STRING(50)
     },
+    companyCode: {
+        type: DataTypes.STRING(10)
+    },
     nameAffix1: {
         type: DataTypes.STRING(25)
     },
