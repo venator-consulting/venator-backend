@@ -2,6 +2,60 @@ const {
     DataTypes
 } = require('sequelize');
 const sequelize = require('../config/sequelize.config');
+const { posting } = require('./templates/sap.cinram.template');
+
+
+// account name
+    // accountType from posting(kontoart) to accounttype from accounts
+    //  bukr = bukr
+    // accountnumber == accountnumber
+    // procedureid = procedureid
+
+    
+// glaaccount name
+    // accounttype = s
+    // procedureid = procedureid
+    // glaaccountnumber = accountnumber
+    // bukr = bukr
+
+
+// contra glaaccount name
+    // accounttype = s
+    // procedureid = procedureid
+    // contraAccountGLAccountNo = accountnumber
+    // bukr = bukr
+
+
+// creditor name
+    // accounttype = k
+    // procedureid = procedureid
+    // contraAccountCrieditorNo = accountnumber
+    // bukr = bukr
+
+
+
+// contra creditor name
+    // accounttype = k
+    // procedureid = procedureid
+    // contraAccountCrieditorNo = accountnumber
+    // bukr = bukr
+
+
+// debitor name
+    // accounttype = d
+    // procedureid = procedureid
+    // contraAccountCrieditorNo = accountnumber
+    // bukr = bukr
+
+    
+// contra debitor name 
+    // accounttype = d
+    // procedureid = procedureid
+    // contraAccountCrieditorNo = accountnumber
+    // bukr = bukr
+
+
+
 
 
 const sequelizer = sequelize.getSequelize();
@@ -67,9 +121,11 @@ const Posting = sequelizer.define('Posting', {
     executionDate: {
         type: DataTypes.DATE
     },
+    // kontoart
     accountType: {
         type: DataTypes.STRING(10)
     },
+    // Kontoart
     accountNumber: {
         type: DataTypes.STRING(25)
     },
@@ -103,6 +159,7 @@ const Posting = sequelizer.define('Posting', {
     contraAccountName: {
         type: DataTypes.STRING(25)
     },
+    // from accounts 
     contraAccountGLAccountNo: {
         type: DataTypes.STRING(25)
     },

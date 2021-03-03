@@ -17,18 +17,24 @@ const Accounts = sequelizer.define('Accounts', {
     procedureId: {
         type: DataTypes.BIGINT(11)
     },
+    // etry later by user not in import process
+    // my account
     accountTypeId: {
         type: DataTypes.BIGINT(11),
     },
+    // from import ex: kontroat
     accountType: {
         type: DataTypes.STRING(10)
     },
+    // not in import process
     accountTypeIdInternal: {
         type: DataTypes.STRING(10)
     },
+    // Kontra
     accountNumber: {
         type: DataTypes.BIGINT(11)
     },
+    // 
     accountName: {
         type: DataTypes.STRING(50)
     },

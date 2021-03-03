@@ -149,6 +149,7 @@ module.exports.readExcelFile = async function (excelFilePath, templateType = 1, 
             let temp =  await AccountModel.getAccounts().findAll({
                 where: {
                     accountNumber: GLAccountNumber,
+                    // companyCode: companyCode,
                     accountType: AccountTypeEnum[3]
                 },
                 attributes: ['accountName'],
