@@ -7,13 +7,17 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ImportService {
 
-  _thisURL = environment.baseUrl + 'admin/csv';
+  _thisURL = environment.baseUrl + 'admin';
 
   constructor(private _http: HttpClient) { }
 
 
-  uploadPosting(formdata) {
-    return this._http.post<any>(this._thisURL, formdata);
+  uploadFile(formdata) {
+    return this._http.post<any>(this._thisURL + '/header', formdata);
+  }
+
+  importFile(formData) {
+    return this._http.post<any>(this._thisURL + '/import', formData);
   }
 
 }

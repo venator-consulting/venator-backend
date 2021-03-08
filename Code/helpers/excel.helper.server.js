@@ -19,16 +19,7 @@ const sequelizer = sequelize.getSequelize();
 
 
 
-module.exports.readHeader = async function (excelFilePath, templateType = 1, template = null) {
-
-    if (templateType == templatesTypeEnum.SAP_WMOBEL) {
-        Standardtemplate = SapWmobel;
-    } else if (templateType == templatesTypeEnum.SAP_CINRAM) {
-        Standardtemplate = SapCinram.posting;
-    } else {
-        Standardtemplate = template;
-    }
-
+module.exports.readHeader = async function (excelFilePath) {
 
     const stream = fs.createReadStream(excelFilePath);
     const streamWorkBook = await Workbook.xlsx.read(stream);
@@ -69,7 +60,7 @@ _getHeaderIndex = function (template, fileHeaders, header) {
 }
 
 
-module.exports.readExcelFile = async function (excelFilePath, templateType = 1, template = null) {
+module.exports.readExcelFile = async function (excelFilePath, template = null, templateType = 1) {
 
     if (templateType == templatesTypeEnum.SAP_WMOBEL) {
         Standardtemplate = SapWmobel;
@@ -362,10 +353,13 @@ module.exports.readExcelFile = async function (excelFilePath, templateType = 1, 
         }
 
         await t.commit();
-
+        return true;
     } catch (err) {
         console.log(err);
         await t.rollback();
+        return {
+            error: err
+        };
     }
 
 

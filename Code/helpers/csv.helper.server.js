@@ -82,7 +82,7 @@ _getHeaderIndex = function (template, fileHeaders, header) {
 }
 
 
-module.exports.readCsvFile = async function (excelFilePath, templateType = 1, template = null) {
+module.exports.readCsvFile = async function (excelFilePath, template = null, templateType = 1) {
 
     if (templateType == templatesType.SAP_WMOBEL) {
         Standardtemplate = SapWmobel;

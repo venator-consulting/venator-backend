@@ -14,6 +14,16 @@ router
     .get(uploadCtrl.getTemplateTypes);
 
 router
+    .route('/header')
+    .post(uploadfiles.single('excel'), uploadCtrl.headerFile);
+
+
+router
+    .route('/import')
+    .post(uploadCtrl.importFile);
+
+
+router
     .route('/excel-header')
     .post(uploadfiles.single('excel'), uploadCtrl.getHeaderExcel);
 
@@ -30,6 +40,10 @@ router
 router
     .route('/csv')
     .post(uploadfiles.single('excel'), uploadCtrl.uploadCsv);
+
+router
+    .route('/csv-stream')
+    .post(uploadfiles.single('excel'), uploadCtrl.uploadCsvStream);
 
 router
     .route('/account-csv')
