@@ -8,6 +8,8 @@ const SapCinram = require('../models/templates/sap.cinram.template');
 const sequelize = require('../config/sequelize.config');
 const templatesTypeEnum = require('../models/enums/template.type');
 const AccountTypeEnum = require('../models/enums/account.type');
+const parseDecimalNumber = require('parse-decimal-number');
+const cldr = require('cldr');
 
 const chrono = require('chrono-node');
 
@@ -60,7 +62,7 @@ _getHeaderIndex = function (template, fileHeaders, header) {
 }
 
 
-module.exports.readExcelFile = async function (excelFilePath, template = null, templateType = 1) {
+module.exports.readExcelFile = async function (excelFilePath, template = null, templateType = 1, local = 'de_DE') {
 
     if (templateType == templatesTypeEnum.SAP_WMOBEL) {
         Standardtemplate = SapWmobel;
@@ -70,7 +72,9 @@ module.exports.readExcelFile = async function (excelFilePath, template = null, t
         Standardtemplate = template;
     }
 
-
+    const options = cldr.extractNumberSymbols(local);
+    const decimalParser = parseDecimalNumber.withOptions(options);
+    console.log(decimalParser('12.345.678,90'));
     const stream = fs.createReadStream(excelFilePath);
 
     const streamWorkBook = await Workbook.xlsx.read(stream);
@@ -258,6 +262,11 @@ module.exports.readExcelFile = async function (excelFilePath, template = null, t
             contraAccountCreditorName = temp.length > 0 ? temp[0].accountName : null;
         }
 
+        const creditAmount = creditAmountIndex > 0 ? sheet.getRow(i).getCell(creditAmountIndex).value : null;
+        // creditAmount = creditAmount ? decimalParser(creditAmount) : null;
+        const debitCredit = debitCreditIndex > 0 ? sheet.getRow(i).getCell(debitCreditIndex).value : null;
+        // debitCredit = debitCredit ? decimalParser(debitCredit) : null;
+
         rowsToInsert.push({
             accountType: accountType,
             accountNumber: accountNumber,
@@ -279,7 +288,7 @@ module.exports.readExcelFile = async function (excelFilePath, template = null, t
             documentType: documentTypeIndex > 0 ? sheet.getRow(i).getCell(documentTypeIndex).value : null,
             documentDate: documentDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(documentDateIndex).value) : null,
             recordNumber: recordNumberIndex > 0 ? sheet.getRow(i).getCell(recordNumberIndex).value : null,
-            creditAmount: creditAmountIndex > 0 ? sheet.getRow(i).getCell(creditAmountIndex).value : null,
+            creditAmount: creditAmount,
             transactionCurrency: transactionCurrencyIndex > 0 ? sheet.getRow(i).getCell(transactionCurrencyIndex).value : null,
             applicationDocument: applicationDocumentIndex > 0 ? sheet.getRow(i).getCell(applicationDocumentIndex).value : null,
             textPosting: textPostingIndex > 0 ? sheet.getRow(i).getCell(textPostingIndex).value : null,
@@ -288,7 +297,7 @@ module.exports.readExcelFile = async function (excelFilePath, template = null, t
             companyCode: companyCode,
             fiscalYear: fiscalYearIndex > 0 ? sheet.getRow(i).getCell(fiscalYearIndex).value : null,
             postingPeriod: postingPeriodIndex > 0 ? sheet.getRow(i).getCell(postingPeriodIndex).value : null,
-            debitCredit: debitCreditIndex > 0 ? sheet.getRow(i).getCell(debitCreditIndex).value : null,
+            debitCredit: debitCredit,
             reference: referenceIndex > 0 ? sheet.getRow(i).getCell(referenceIndex).value : null,
             contraAccountType: contraAccountTypeIndex > 0 ? sheet.getRow(i).getCell(contraAccountTypeIndex).value : null,
             contraAccountNumber: contraAccountNumberIndex > 0 ? sheet.getRow(i).getCell(contraAccountNumberIndex).value : null,
@@ -309,35 +318,177 @@ module.exports.readExcelFile = async function (excelFilePath, template = null, t
 
         for (let iterator = 0; iterator < roundsNo; iterator++) {
             rowsToInsert2 = [];
+
+
+
             for (let i = ((iterator * env.bulkInsertSize) + roundsRest); i < ((iterator * env.bulkInsertSize) + (env.bulkInsertSize + roundsRest)); i++) {
+
+                const companyCode = companyCodeIndex > 0 ? sheet.getRow(i).getCell(companyCodeIndex).value : null;
+
+                // account
+                const accountType = accountTypeIndex > 0 ? sheet.getRow(i).getCell(accountTypeIndex).value : null;
+                const accountNumber = accountNumberIndex > 0 ? sheet.getRow(i).getCell(accountNumberIndex).value : null;
+                let accountName = accountNameIndex > 0 ? sheet.getRow(i).getCell(accountNameIndex).value : null;
+                if (accountNumber) {
+                    let temp = await AccountModel.getAccounts().findAll({
+                        where: {
+                            accountNumber: accountNumber,
+                            companyCode: companyCode,
+                            // procedureId: procedureId
+                            accountType: accountType
+                        },
+                        attributes: ['accountName'],
+                        limit: 1
+                    });
+                    accountName = temp.length > 0 ? temp[0].accountName : null;
+                }
+
+
+                // GlaAccount
+                const GLAccountNumber = GLAccountNumberIndex > 0 ? sheet.getRow(i).getCell(GLAccountNumberIndex).value : null;
+                let GLAccountName = null;
+                if (GLAccountNumber) {
+                    let temp = await AccountModel.getAccounts().findAll({
+                        where: {
+                            accountNumber: GLAccountNumber,
+                            companyCode: companyCode,
+                            // procedureId: procedureId
+                            accountType: AccountTypeEnum[3]
+                        },
+                        attributes: ['accountName'],
+                        limit: 1
+                    });
+                    GLAccountName = temp.length > 0 ? temp[0].accountName : null;
+                }
+
+                // contra gla account 
+                const contraAccountGLAccountNo = contraAccountGLAccountNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountGLAccountNoIndex).value : null;
+                let contraAccountGLAccountName = null;
+                if (contraAccountGLAccountNo) {
+                    let temp = await AccountModel.getAccounts().findAll({
+                        where: {
+                            accountNumber: contraAccountGLAccountNo,
+                            companyCode: companyCode,
+                            // procedureId: procedureId
+                            accountType: AccountTypeEnum[3]
+                        },
+                        attributes: ['accountName'],
+                        limit: 1
+                    });
+                    contraAccountGLAccountName = temp.length > 0 ? temp[0].accountName : null;
+                }
+
+
+                // Debitor Account
+                const debtorNumber = debtorNumberIndex > 0 ? sheet.getRow(i).getCell(debtorNumberIndex).value : null;
+                let debtorName = null;
+                if (debtorNumber) {
+                    let temp = await AccountModel.getAccounts().findAll({
+                        where: {
+                            accountNumber: debtorNumber,
+                            companyCode: companyCode,
+                            // procedureId: procedureId
+                            accountType: AccountTypeEnum[1]
+                        },
+                        attributes: ['accountName'],
+                        limit: 1
+                    });
+                    debtorName = temp.length > 0 ? temp[0].accountName : null;
+                }
+
+                // contra Debitor Account
+                const contraAccountDebtorNo = contraAccountDebtorNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountDebtorNoIndex).value : null;
+                let contraAccountDebtorName = null;
+                if (contraAccountDebtorNo) {
+                    let temp = await AccountModel.getAccounts().findAll({
+                        where: {
+                            accountNumber: contraAccountDebtorNo,
+                            companyCode: companyCode,
+                            // procedureId: procedureId
+                            accountType: AccountTypeEnum[1]
+                        },
+                        attributes: ['accountName'],
+                        limit: 1
+                    });
+                    contraAccountDebtorName = temp.length > 0 ? temp[0].accountName : null;
+                }
+
+
+                // Credito Account
+                const creditorNumber = creditorNumberIndex > 0 ? sheet.getRow(i).getCell(creditorNumberIndex).value : null;
+                let creditorName = null;
+                if (creditorNumber) {
+                    let temp = await AccountModel.getAccounts().findAll({
+                        where: {
+                            accountNumber: creditorNumber,
+                            companyCode: companyCode,
+                            // procedureId: procedureId
+                            accountType: AccountTypeEnum[2]
+                        },
+                        attributes: ['accountName'],
+                        limit: 1
+                    });
+                    creditorName = temp.length > 0 ? temp[0].accountName : null;
+                }
+
+                // contra creditor account
+                const contraAccountCreditorNo = contraAccountCreditorNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountCreditorNoIndex).value : null;
+                let contraAccountCreditorName = null;
+                if (contraAccountCreditorNo) {
+                    let temp = await AccountModel.getAccounts().findAll({
+                        where: {
+                            accountNumber: contraAccountCreditorNo,
+                            companyCode: companyCode,
+                            // procedureId: procedureId
+                            accountType: AccountTypeEnum[2]
+                        },
+                        attributes: ['accountName'],
+                        limit: 1
+                    });
+                    contraAccountCreditorName = temp.length > 0 ? temp[0].accountName : null;
+                }
+                const creditAmount = creditAmountIndex > 0 ? sheet.getRow(i).getCell(creditAmountIndex).value : null;
+                // creditAmount = creditAmount ? decimalParser(creditAmount) : null;
+                const debitCredit = debitCreditIndex > 0 ? sheet.getRow(i).getCell(debitCreditIndex).value : null;
+                // debitCredit = debitCredit ? decimalParser(debitCredit) : null;
+
+
                 rowsToInsert2.push({
+                    accountType: accountType,
+                    accountNumber: accountNumber,
+                    accountName: accountName,
+                    GLAccountNumber: GLAccountNumber,
+                    GLAccountName: GLAccountName,
+                    contraAccountGLAccountNo: contraAccountGLAccountNo,
+                    contraAccountGLAccountName: contraAccountGLAccountName,
+                    debtorNumber: debtorNumber,
+                    debtorName: debtorName,
+                    contraAccountDebtorNo: contraAccountDebtorNo,
+                    contraAccountDebtorName: contraAccountDebtorName,
+                    creditorNumber: creditorNumber,
+                    creditorName: creditorName,
+                    contraAccountCreditorNo: contraAccountCreditorNo,
+                    contraAccountCreditorName: contraAccountCreditorName,
                     assignment: assignmentIndex > 0 ? sheet.getRow(i).getCell(assignmentIndex).value : null,
                     documentNumber: documentNumberIndex > 0 ? sheet.getRow(i).getCell(documentNumberIndex).value : null,
                     documentType: documentTypeIndex > 0 ? sheet.getRow(i).getCell(documentTypeIndex).value : null,
                     documentDate: documentDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(documentDateIndex).value) : null,
                     recordNumber: recordNumberIndex > 0 ? sheet.getRow(i).getCell(recordNumberIndex).value : null,
-                    creditAmount: creditAmountIndex > 0 ? sheet.getRow(i).getCell(creditAmountIndex).value : null,
+                    creditAmount: creditAmount,
                     transactionCurrency: transactionCurrencyIndex > 0 ? sheet.getRow(i).getCell(transactionCurrencyIndex).value : null,
                     applicationDocument: applicationDocumentIndex > 0 ? sheet.getRow(i).getCell(applicationDocumentIndex).value : null,
                     textPosting: textPostingIndex > 0 ? sheet.getRow(i).getCell(textPostingIndex).value : null,
                     applicationDate: applicationDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(applicationDateIndex).value) : null,
                     postingDate: postingDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(postingDateIndex).value) : null,
-                    companyCode: companyCodeIndex > 0 ? sheet.getRow(i).getCell(companyCodeIndex).value : null,
+                    companyCode: companyCode,
                     fiscalYear: fiscalYearIndex > 0 ? sheet.getRow(i).getCell(fiscalYearIndex).value : null,
                     postingPeriod: postingPeriodIndex > 0 ? sheet.getRow(i).getCell(postingPeriodIndex).value : null,
-                    accountType: accountTypeIndex > 0 ? sheet.getRow(i).getCell(accountTypeIndex).value : null,
-                    accountNumber: accountNumberIndex > 0 ? sheet.getRow(i).getCell(accountNumberIndex).value : null,
-                    debitCredit: debitCreditIndex > 0 ? sheet.getRow(i).getCell(debitCreditIndex).value : null,
+                    debitCredit: debitCredit,
                     reference: referenceIndex > 0 ? sheet.getRow(i).getCell(referenceIndex).value : null,
-                    GLAccountNumber: GLAccountNumberIndex > 0 ? sheet.getRow(i).getCell(GLAccountNumberIndex).value : null,
                     contraAccountType: contraAccountTypeIndex > 0 ? sheet.getRow(i).getCell(contraAccountTypeIndex).value : null,
                     contraAccountNumber: contraAccountNumberIndex > 0 ? sheet.getRow(i).getCell(contraAccountNumberIndex).value : null,
-                    contraAccountGLAccountNo: contraAccountGLAccountNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountGLAccountNoIndex).value : null,
-                    contraAccountCreditorNo: contraAccountCreditorNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountCreditorNoIndex).value : null,
-                    contraAccountDebtorNo: contraAccountDebtorNoIndex > 0 ? sheet.getRow(i).getCell(contraAccountDebtorNoIndex).value : null,
                     dueDate: dueDateIndex > 0 ? chrono.parseDate(sheet.getRow(i).getCell(dueDateIndex).value) : null,
                     textHeader: textHeaderIndex > 0 ? sheet.getRow(i).getCell(textHeaderIndex).value : null,
-                    accountName: accountNameIndex > 0 ? sheet.getRow(i).getCell(accountNameIndex).value : null,
                 });
             }
 

@@ -57,20 +57,20 @@
             <p-dropdown [options]="fileClass" [(ngModel)]="f.fileClass" placeholder="Select file class"
               optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
           </div>
-          <div class="p-col-2">
+          <div class="p-col-2" *ngIf="f.fileClass?.value==1">
             <p-dropdown [options]="accountTypes" [(ngModel)]="f.accountType" placeholder="Select account type"
               optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
           </div>
-          <div class="p-col-2">
+          <div class="p-col-2" *ngIf="f.fileClass?.value==2">
             <p-dropdown [options]="locals" [(ngModel)]="f.local" placeholder="Select Localization" optionLabel="name"
               [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
           </div>
           <div class="p-col-2">
             <span class="p-buttonset">
             <button pButton type="button" icon="pi pi-upload" iconPos="left" label="Upload"
-            (click)="uploadFirstStep(f, i)" [disabled]="!f.file || !f.fileType || !f.fileClass" class="p-button-raised p-button-rounded"></button>
+            (click)="uploadFirstStep(f, i)" [disabled]="!f.file || !f.fileType || !f.fileClass || f.uploaded" class="p-button-raised p-button-rounded"></button>
             <button pButton type="button" label="Next" class="p-button-raised p-button-rounded" (click)="goToImport(0, i)"
-            [disabled]="!f.file || !f.fileType || !f.fileClass || !f.uploaded"></button>
+            [disabled]="!f.file || !f.fileType || !f.fileClass || !f.uploaded || f.imported"></button>
           </span>
           </div>
         </div>
@@ -440,6 +440,8 @@
       <button pButton type="button" label="Previous" class="p-button-raised p-button-rounded"
         (click)="goPrev(3)"></button>
       <button pButton type="button" label="Import" class="p-button-raised p-button-rounded" (click)="importThisFile()"></button>
+      <button pButton type="button" label="Continue" class="p-button-raised p-button-rounded"
+        [disabled]="!filesList[currentFileIndex]?.imported" (click)="goPrev(1)"></button>
     </span>
   </div>
 </p-card>
