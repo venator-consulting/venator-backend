@@ -6,5 +6,5 @@ module.exports = {
     databasePassword: 'Asama56ab',
     databaseHost: 'localhost',
     databaseDialect: 'mysql', /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
-    bulkInsertSize: 500
+    bulkInsertSize: 2000
 };

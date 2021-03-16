@@ -2,6 +2,7 @@
 // @import '~assets/bootstrap-theme.min.css'
 
 $primaryColor: #e75113
+$primaryHover: #f75123
 $secondary: #58585a
 
 body
@@ -20,6 +21,13 @@ body
 .p-menubar .p-menuitem.p-menuitem-active > .p-menuitem-link
     background-color: #474749 !important
 
+@media screen and (max-width: 960px)
+.p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link
+    background-color: $secondary !important
+
+.p-menubar .p-menuitem-link:not(.p-disabled):hover
+    background-color: #474749 !important
+
 .p-menuitem span
     color: #ffffff !important
 
@@ -30,3 +38,15 @@ body
     background-color: $primaryColor
     color: #212529
     border: 1px solid $primaryColor
+
+.p-button:hover
+    background-color: $primaryHover !important
+    color: #212529
+    border: 1px solid $primaryColor !important
+
+
+.custom-select
+    -webkit-appearance: auto
+    -moz-appearance: auto
+    appearance: auto
+    padding-right: 15px

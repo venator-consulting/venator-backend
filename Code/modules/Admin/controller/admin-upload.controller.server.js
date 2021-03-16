@@ -241,7 +241,7 @@ module.exports.headerFile = function (req, res, next) {
 
     } else if (fileType == 2) {
         // it's a csv file
-        csvHelper
+        csvStreamHelper
             .readHeader(filePath)
             .then(header => {
                 res
@@ -291,7 +291,7 @@ module.exports.importFile = function (req, res, next) {
     const filePath = reqData.filePath;
     const fileType = reqData.fileType;
     const fileClass = reqData.fileClass;
-    const local = reqData.local;
+    const local = reqData.local === 2 ? 'de_DE' : 'en_US';
     const accountType = reqData.accountType;
     const template = reqData.template;
     // if file type === 1 then is it an excel file
@@ -299,7 +299,7 @@ module.exports.importFile = function (req, res, next) {
         // excel posting file
         if (fileClass == 2) {
             excelHelper
-                .readExcelFile(filePath, template, -1)
+                .importStreamExcelFile(filePath, template, -1)
                 .then(header => {
                     res
                         .status(200)
@@ -319,7 +319,7 @@ module.exports.importFile = function (req, res, next) {
         } else if (fileClass == 1) {
             // it's an accounts file
             excelHelper
-                .importAccountExcelFile(filePath, accountType)
+                .importStreamAccountsExcel(filePath, accountType)
                 .then(header => {
                     res
                         .status(200)
@@ -355,8 +355,8 @@ module.exports.importFile = function (req, res, next) {
     } else if (fileType == 2) {
         // accounts file
         if (fileClass == 1) {
-            csvHelper
-                .importAccountCsvFile(filePath, accountType)
+            csvStreamHelper
+                .importAccountCsvFile(filePath, accountType, template)
                 .then(header => {
                     res
                         .status(200)
@@ -373,8 +373,8 @@ module.exports.importFile = function (req, res, next) {
                 });
         } else if (fileClass == 2) {
             // it's a posting file
-            csvHelper
-                .readCsvFile(filePath, template, -1)
+            csvStreamHelper
+                .readCsvStream(filePath, template, -1, local)
                 .then(header => {
                     res
                         .status(200)
