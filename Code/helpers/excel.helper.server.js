@@ -16,6 +16,7 @@ const chrono = require('chrono-node');
 
 const env = require('../config/environment');
 
+const logger = require('../config/logger.config').logger;
 
 const sequelizer = sequelize.getSequelize();
 
@@ -75,335 +76,338 @@ _getColumnIndex = function (index) {
  * @param {string} local localization, not used for excel till now 
  */
 module.exports.importStreamExcelFile = async function (excelFilePath, template = null, templateType = 1, local = 'de_DE') {
+    const t = await sequelizer.transaction();
+    let index = 1;
+    let bulkCount = 0;
 
-    try {
+    let benchmark = process.hrtime();
 
-        if (templateType == templatesTypeEnum.SAP_WMOBEL) {
-            Standardtemplate = SapWmobel;
-        } else if (templateType == templatesTypeEnum.SAP_CINRAM) {
-            Standardtemplate = SapCinram.posting;
-        } else {
-            Standardtemplate = template;
-        }
+    return new Promise(async (resolve, reject) => {
 
+        try {
 
+            if (templateType == templatesTypeEnum.SAP_WMOBEL) {
+                Standardtemplate = SapWmobel;
+            } else if (templateType == templatesTypeEnum.SAP_CINRAM) {
+                Standardtemplate = SapCinram.posting;
+            } else {
+                Standardtemplate = template;
+            }
 
-        const t = await sequelizer.transaction();
-
-        let index = 1;
-        let assignmentIndex = -1;
-        let documentNumberIndex = -1;
-        let documentTypeIndex = -1;
-        let documentDateIndex = -1;
-        let recordNumberIndex = -1;
-        let creditAmountIndex = -1;
-        let transactionCurrencyIndex = -1;
-        let applicationDocumentIndex = -1;
-        let textPostingIndex = -1;
-        let applicationDateIndex = -1;
-        let postingDateIndex = -1;
-        let companyCodeIndex = -1;
-        let fiscalYearIndex = -1;
-        let postingPeriodIndex = -1;
-        let accountTypeIndex = -1;
-        let accountNumberIndex = -1;
-        let debitCreditIndex = -1;
-        let referenceIndex = -1;
-        let GLAccountNumberIndex = -1;
-        let contraAccountTypeIndex = -1;
-        let contraAccountNumberIndex = -1;
-        let contraAccountGLAccountNoIndex = -1;
-        let contraAccountCreditorNoIndex = -1;
-        let contraAccountDebtorNoIndex = -1;
-        let dueDateIndex = -1;
-        let textHeaderIndex = -1;
-        let accountNameIndex = -1;
-        let debtorNumberIndex = -1;
-        let creditorNumberIndex = -1;
-
-        let rowsToInsert = [];
-        let fileHeaders = [];
-
-        const workbookReader = new Excel.stream.xlsx.WorkbookReader(excelFilePath, {
-            includeEmpty: true
-        });
-
-        for await (const worksheetReader of workbookReader) {
-            for await (const row of worksheetReader) {
-
-                row.eachCell({
-                    includeEmpty: true
-                }, (cell, colNo) => {
-
-                    console.dir(cell.model);
-                });
-
-                if (index === 1) {
-
-                    for (let i = 0; i < row.model.cells.length; i++) {
-                        fileHeaders.push(row.model.cells[i].value);
-                    }
-                    assignmentIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'assignment');
-                    documentNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'documentNumber');
-                    documentTypeIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'documentType');
-                    documentDateIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'documentDate');
-                    recordNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'recordNumber');
-                    creditAmountIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'creditAmount');
-                    transactionCurrencyIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'transactionCurrency');
-                    applicationDocumentIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'applicationDocument');
-                    textPostingIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'textPosting');
-                    applicationDateIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'applicationDate');
-                    postingDateIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'postingDate');
-                    companyCodeIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'companyCode');
-                    fiscalYearIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'fiscalYear');
-                    postingPeriodIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'postingPeriod');
-                    accountTypeIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'accountType');
-                    accountNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'accountNumber');
-                    debitCreditIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'debitCredit');
-                    referenceIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'reference');
-                    GLAccountNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'GLAccountNumber');
-                    contraAccountTypeIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountType');
-                    contraAccountNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountNumber');
-                    contraAccountGLAccountNoIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountGLAccountNo');
-                    contraAccountCreditorNoIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountCreditorNo');
-                    contraAccountDebtorNoIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountDebtorNo');
-                    dueDateIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'dueDate');
-                    textHeaderIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'textHeader');
-                    accountNameIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'accountName');
-                    debtorNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'debtorNumber');
-                    creditorNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'creditorNumber');
-                } else {
-
-                    // push the row to the bulk insert array
-                    // don't forget procedure id in accounts
-                    // don't forget if procedure id not exist don't go to DB
-                    // don't forget to get account type
-
-                    const companyCode = companyCodeIndex >= 0 ? row.model.cells[companyCodeIndex].value : null;
-
-                    // account
-                    const accountType = accountTypeIndex >= 0 ? row.model.cells[accountTypeIndex].value : null;
-                    const accountNumber = accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null;
-                    let accountName = accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null;
-                    if (accountNumber) {
-                        let temp = await AccountModel.getAccounts().findAll({
-                            where: {
-                                accountNumber: accountNumber,
-                                companyCode: companyCode,
-                                // procedureId: procedureId
-                                accountType: accountType
-                            },
-                            attributes: ['accountName'],
-                            limit: 1
-                        });
-                        accountName = temp.length > 0 ? temp[0].accountName : null;
-                    }
+            let rolledBack = false;
 
 
-                    // GlaAccount
-                    const GLAccountNumber = GLAccountNumberIndex >= 0 ? row.model.cells[GLAccountNumberIndex].value : null;
-                    let GLAccountName = null;
-                    if (GLAccountNumber) {
-                        let temp = await AccountModel.getAccounts().findAll({
-                            where: {
-                                accountNumber: GLAccountNumber,
-                                companyCode: companyCode,
-                                // procedureId: procedureId
-                                accountType: AccountTypeEnum[3]
-                            },
-                            attributes: ['accountName'],
-                            limit: 1
-                        });
-                        GLAccountName = temp.length > 0 ? temp[0].accountName : null;
-                    }
+            let assignmentIndex = -1;
+            let documentNumberIndex = -1;
+            let documentTypeIndex = -1;
+            let documentDateIndex = -1;
+            let recordNumberIndex = -1;
+            let creditAmountIndex = -1;
+            let transactionCurrencyIndex = -1;
+            let applicationDocumentIndex = -1;
+            let textPostingIndex = -1;
+            let applicationDateIndex = -1;
+            let postingDateIndex = -1;
+            let companyCodeIndex = -1;
+            let fiscalYearIndex = -1;
+            let postingPeriodIndex = -1;
+            let accountTypeIndex = -1;
+            let accountNumberIndex = -1;
+            let debitCreditIndex = -1;
+            let referenceIndex = -1;
+            let GLAccountNumberIndex = -1;
+            let contraAccountTypeIndex = -1;
+            let contraAccountNumberIndex = -1;
+            let contraAccountGLAccountNoIndex = -1;
+            let contraAccountCreditorNoIndex = -1;
+            let contraAccountDebtorNoIndex = -1;
+            let dueDateIndex = -1;
+            let textHeaderIndex = -1;
+            let accountNameIndex = -1;
+            let debtorNumberIndex = -1;
+            let creditorNumberIndex = -1;
 
-                    // contra gla account 
-                    const contraAccountGLAccountNo = contraAccountGLAccountNoIndex >= 0 ? row.model.cells[contraAccountGLAccountNoIndex].value : null;
-                    let contraAccountGLAccountName = null;
-                    if (contraAccountGLAccountNo) {
-                        let temp = await AccountModel.getAccounts().findAll({
-                            where: {
-                                accountNumber: contraAccountGLAccountNo,
-                                companyCode: companyCode,
-                                // procedureId: procedureId
-                                accountType: AccountTypeEnum[3]
-                            },
-                            attributes: ['accountName'],
-                            limit: 1
-                        });
-                        contraAccountGLAccountName = temp.length > 0 ? temp[0].accountName : null;
-                    }
+            let rowsToInsert = [];
+            let fileHeaders = [];
 
+            const workbookReader = new Excel.stream.xlsx.WorkbookReader(excelFilePath, {
+                includeEmpty: true
+            });
 
-                    // Debitor Account
-                    const debtorNumber = debtorNumberIndex >= 0 ? row.model.cells[debtorNumberIndex].value : null;
-                    let debtorName = null;
-                    if (debtorNumber) {
-                        let temp = await AccountModel.getAccounts().findAll({
-                            where: {
-                                accountNumber: debtorNumber,
-                                companyCode: companyCode,
-                                // procedureId: procedureId
-                                accountType: AccountTypeEnum[1]
-                            },
-                            attributes: ['accountName'],
-                            limit: 1
-                        });
-                        debtorName = temp.length > 0 ? temp[0].accountName : null;
-                    }
+            for await (const worksheetReader of workbookReader) {
+                for await (const row of worksheetReader) {
 
-                    // contra Debitor Account
-                    const contraAccountDebtorNo = contraAccountDebtorNoIndex >= 0 ? row.model.cells[contraAccountDebtorNoIndex].value : null;
-                    let contraAccountDebtorName = null;
-                    if (contraAccountDebtorNo) {
-                        let temp = await AccountModel.getAccounts().findAll({
-                            where: {
-                                accountNumber: contraAccountDebtorNo,
-                                companyCode: companyCode,
-                                // procedureId: procedureId
-                                accountType: AccountTypeEnum[1]
-                            },
-                            attributes: ['accountName'],
-                            limit: 1
-                        });
-                        contraAccountDebtorName = temp.length > 0 ? temp[0].accountName : null;
-                    }
-
-
-                    // Credito Account
-                    const creditorNumber = creditorNumberIndex >= 0 ? row.model.cells[creditorNumberIndex].value : null;
-                    let creditorName = null;
-                    if (creditorNumber) {
-                        let temp = await AccountModel.getAccounts().findAll({
-                            where: {
-                                accountNumber: creditorNumber,
-                                companyCode: companyCode,
-                                // procedureId: procedureId
-                                accountType: AccountTypeEnum[2]
-                            },
-                            attributes: ['accountName'],
-                            limit: 1
-                        });
-                        creditorName = temp.length > 0 ? temp[0].accountName : null;
-                    }
-
-                    // contra creditor account
-                    const contraAccountCreditorNo = contraAccountCreditorNoIndex >= 0 ? row.model.cells[contraAccountCreditorNoIndex].value : null;
-                    let contraAccountCreditorName = null;
-                    if (contraAccountCreditorNo) {
-                        let temp = await AccountModel.getAccounts().findAll({
-                            where: {
-                                accountNumber: contraAccountCreditorNo,
-                                companyCode: companyCode,
-                                // procedureId: procedureId
-                                accountType: AccountTypeEnum[2]
-                            },
-                            attributes: ['accountName'],
-                            limit: 1
-                        });
-                        contraAccountCreditorName = temp.length > 0 ? temp[0].accountName : null;
-                    }
-
-                    const creditAmount = creditAmountIndex >= 0 ? row.model.cells[creditAmountIndex].value : null;
-                    // creditAmount = creditAmount ? decimalParser(creditAmount) : null;
-                    const debitCredit = debitCreditIndex >= 0 ? row.model.cells[debitCreditIndex].value : null;
-                    // debitCredit = debitCredit ? decimalParser(debitCredit) : null;
-
-                    rowsToInsert.push({
-                        accountType: accountType,
-                        accountNumber: accountNumber,
-                        accountName: accountName,
-                        GLAccountNumber: GLAccountNumber,
-                        GLAccountName: GLAccountName,
-                        contraAccountGLAccountNo: contraAccountGLAccountNo,
-                        contraAccountGLAccountName: contraAccountGLAccountName,
-                        debtorNumber: debtorNumber,
-                        debtorName: debtorName,
-                        contraAccountDebtorNo: contraAccountDebtorNo,
-                        contraAccountDebtorName: contraAccountDebtorName,
-                        creditorNumber: creditorNumber,
-                        creditorName: creditorName,
-                        contraAccountCreditorNo: contraAccountCreditorNo,
-                        contraAccountCreditorName: contraAccountCreditorName,
-                        assignment: assignmentIndex >= 0 ? row.model.cells[assignmentIndex].value : null,
-                        documentNumber: documentNumberIndex >= 0 ? row.model.cells[documentNumberIndex].value : null,
-                        documentType: documentTypeIndex >= 0 ? row.model.cells[documentTypeIndex].value : null,
-                        documentDate: documentDateIndex >= 0 ? chrono.parseDate(row.model.cells[documentDateIndex].value) : null,
-                        recordNumber: recordNumberIndex >= 0 ? row.model.cells[recordNumberIndex].value : null,
-                        creditAmount: creditAmount,
-                        transactionCurrency: transactionCurrencyIndex >= 0 ? row.model.cells[transactionCurrencyIndex].value : null,
-                        applicationDocument: applicationDocumentIndex >= 0 ? row.model.cells[applicationDocumentIndex].value : null,
-                        textPosting: textPostingIndex >= 0 ? row.model.cells[textPostingIndex].value : null,
-                        applicationDate: applicationDateIndex >= 0 ? chrono.parseDate(row.model.cells[applicationDateIndex].value) : null,
-                        postingDate: postingDateIndex >= 0 ? chrono.parseDate(row.model.cells[postingDateIndex].value) : null,
-                        companyCode: companyCode,
-                        fiscalYear: fiscalYearIndex >= 0 ? row.model.cells[fiscalYearIndex].value : null,
-                        postingPeriod: postingPeriodIndex >= 0 ? row.model.cells[postingPeriodIndex].value : null,
-                        debitCredit: debitCredit,
-                        reference: referenceIndex >= 0 ? row.model.cells[referenceIndex].value : null,
-                        contraAccountType: contraAccountTypeIndex >= 0 ? row.model.cells[contraAccountTypeIndex].value : null,
-                        contraAccountNumber: contraAccountNumberIndex >= 0 ? row.model.cells[contraAccountNumberIndex].value : null,
-                        dueDate: dueDateIndex >= 0 ? chrono.parseDate(row.model.cells[dueDateIndex].value) : null,
-                        textHeader: textHeaderIndex >= 0 ? row.model.cells[textHeaderIndex].value : null,
+                    row.eachCell({
+                        includeEmpty: true
+                    }, (cell, colNo) => {
+                        // console.dir(cell.model);
                     });
 
+                    if (index === 1) {
 
-                    // if array.length >= env.bulkSize
-                    if (rowsToInsert.length >= env.bulkInsertSize) {
-                        // then bulk insert and empty the array
-                        try {
+                        for (let i = 0; i < row.model.cells.length; i++) {
+                            fileHeaders.push(row.model.cells[i].value);
+                        }
+                        assignmentIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'assignment');
+                        documentNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'documentNumber');
+                        documentTypeIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'documentType');
+                        documentDateIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'documentDate');
+                        recordNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'recordNumber');
+                        creditAmountIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'creditAmount');
+                        transactionCurrencyIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'transactionCurrency');
+                        applicationDocumentIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'applicationDocument');
+                        textPostingIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'textPosting');
+                        applicationDateIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'applicationDate');
+                        postingDateIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'postingDate');
+                        companyCodeIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'companyCode');
+                        fiscalYearIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'fiscalYear');
+                        postingPeriodIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'postingPeriod');
+                        accountTypeIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'accountType');
+                        accountNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'accountNumber');
+                        debitCreditIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'debitCredit');
+                        referenceIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'reference');
+                        GLAccountNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'GLAccountNumber');
+                        contraAccountTypeIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountType');
+                        contraAccountNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountNumber');
+                        contraAccountGLAccountNoIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountGLAccountNo');
+                        contraAccountCreditorNoIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountCreditorNo');
+                        contraAccountDebtorNoIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountDebtorNo');
+                        dueDateIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'dueDate');
+                        textHeaderIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'textHeader');
+                        accountNameIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'accountName');
+                        debtorNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'debtorNumber');
+                        creditorNumberIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'creditorNumber');
+                    } else {
+
+                        // push the row to the bulk insert array
+                        // don't forget procedure id in accounts
+                        // don't forget if procedure id not exist don't go to DB
+                        // don't forget to get account type
+
+                        const companyCode = companyCodeIndex >= 0 ? row.model.cells[companyCodeIndex].value : null;
+
+                        // account
+                        const accountType = accountTypeIndex >= 0 ? row.model.cells[accountTypeIndex].value : null;
+                        const accountNumber = accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null;
+                        let accountName = accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null;
+                        if (accountNumber) {
+                            let temp = await AccountModel.getAccounts().findAll({
+                                where: {
+                                    accountNumber: accountNumber,
+                                    companyCode: companyCode,
+                                    // procedureId: procedureId
+                                    accountType: accountType
+                                },
+                                attributes: ['accountName'],
+                                limit: 1
+                            });
+                            accountName = temp.length > 0 ? temp[0].accountName : null;
+                        }
+
+
+                        // GlaAccount
+                        const GLAccountNumber = GLAccountNumberIndex >= 0 ? row.model.cells[GLAccountNumberIndex].value : null;
+                        let GLAccountName = null;
+                        if (GLAccountNumber) {
+                            let temp = await AccountModel.getAccounts().findAll({
+                                where: {
+                                    accountNumber: GLAccountNumber,
+                                    companyCode: companyCode,
+                                    // procedureId: procedureId
+                                    accountType: AccountTypeEnum[3]
+                                },
+                                attributes: ['accountName'],
+                                limit: 1
+                            });
+                            GLAccountName = temp.length > 0 ? temp[0].accountName : null;
+                        }
+
+                        // contra gla account 
+                        const contraAccountGLAccountNo = contraAccountGLAccountNoIndex >= 0 ? row.model.cells[contraAccountGLAccountNoIndex].value : null;
+                        let contraAccountGLAccountName = null;
+                        if (contraAccountGLAccountNo) {
+                            let temp = await AccountModel.getAccounts().findAll({
+                                where: {
+                                    accountNumber: contraAccountGLAccountNo,
+                                    companyCode: companyCode,
+                                    // procedureId: procedureId
+                                    accountType: AccountTypeEnum[3]
+                                },
+                                attributes: ['accountName'],
+                                limit: 1
+                            });
+                            contraAccountGLAccountName = temp.length > 0 ? temp[0].accountName : null;
+                        }
+
+
+                        // Debitor Account
+                        const debtorNumber = debtorNumberIndex >= 0 ? row.model.cells[debtorNumberIndex].value : null;
+                        let debtorName = null;
+                        if (debtorNumber) {
+                            let temp = await AccountModel.getAccounts().findAll({
+                                where: {
+                                    accountNumber: debtorNumber,
+                                    companyCode: companyCode,
+                                    // procedureId: procedureId
+                                    accountType: AccountTypeEnum[1]
+                                },
+                                attributes: ['accountName'],
+                                limit: 1
+                            });
+                            debtorName = temp.length > 0 ? temp[0].accountName : null;
+                        }
+
+                        // contra Debitor Account
+                        const contraAccountDebtorNo = contraAccountDebtorNoIndex >= 0 ? row.model.cells[contraAccountDebtorNoIndex].value : null;
+                        let contraAccountDebtorName = null;
+                        if (contraAccountDebtorNo) {
+                            let temp = await AccountModel.getAccounts().findAll({
+                                where: {
+                                    accountNumber: contraAccountDebtorNo,
+                                    companyCode: companyCode,
+                                    // procedureId: procedureId
+                                    accountType: AccountTypeEnum[1]
+                                },
+                                attributes: ['accountName'],
+                                limit: 1
+                            });
+                            contraAccountDebtorName = temp.length > 0 ? temp[0].accountName : null;
+                        }
+
+
+                        // Credito Account
+                        const creditorNumber = creditorNumberIndex >= 0 ? row.model.cells[creditorNumberIndex].value : null;
+                        let creditorName = null;
+                        if (creditorNumber) {
+                            let temp = await AccountModel.getAccounts().findAll({
+                                where: {
+                                    accountNumber: creditorNumber,
+                                    companyCode: companyCode,
+                                    // procedureId: procedureId
+                                    accountType: AccountTypeEnum[2]
+                                },
+                                attributes: ['accountName'],
+                                limit: 1
+                            });
+                            creditorName = temp.length > 0 ? temp[0].accountName : null;
+                        }
+
+                        // contra creditor account
+                        const contraAccountCreditorNo = contraAccountCreditorNoIndex >= 0 ? row.model.cells[contraAccountCreditorNoIndex].value : null;
+                        let contraAccountCreditorName = null;
+                        if (contraAccountCreditorNo) {
+                            let temp = await AccountModel.getAccounts().findAll({
+                                where: {
+                                    accountNumber: contraAccountCreditorNo,
+                                    companyCode: companyCode,
+                                    // procedureId: procedureId
+                                    accountType: AccountTypeEnum[2]
+                                },
+                                attributes: ['accountName'],
+                                limit: 1
+                            });
+                            contraAccountCreditorName = temp.length > 0 ? temp[0].accountName : null;
+                        }
+
+                        const creditAmount = creditAmountIndex >= 0 ? row.model.cells[creditAmountIndex].value : null;
+                        // creditAmount = creditAmount ? decimalParser(creditAmount) : null;
+                        const debitCredit = debitCreditIndex >= 0 ? row.model.cells[debitCreditIndex].value : null;
+                        // debitCredit = debitCredit ? decimalParser(debitCredit) : null;
+
+                        rowsToInsert.push({
+                            accountType: accountType,
+                            accountNumber: accountNumber,
+                            accountName: accountName,
+                            GLAccountNumber: GLAccountNumber,
+                            GLAccountName: GLAccountName,
+                            contraAccountGLAccountNo: contraAccountGLAccountNo,
+                            contraAccountGLAccountName: contraAccountGLAccountName,
+                            debtorNumber: debtorNumber,
+                            debtorName: debtorName,
+                            contraAccountDebtorNo: contraAccountDebtorNo,
+                            contraAccountDebtorName: contraAccountDebtorName,
+                            creditorNumber: creditorNumber,
+                            creditorName: creditorName,
+                            contraAccountCreditorNo: contraAccountCreditorNo,
+                            contraAccountCreditorName: contraAccountCreditorName,
+                            assignment: assignmentIndex >= 0 ? row.model.cells[assignmentIndex].value : null,
+                            documentNumber: documentNumberIndex >= 0 ? row.model.cells[documentNumberIndex].value : null,
+                            documentType: documentTypeIndex >= 0 ? row.model.cells[documentTypeIndex].value : null,
+                            documentDate: documentDateIndex >= 0 ? chrono.parseDate(row.model.cells[documentDateIndex].value) : null,
+                            recordNumber: recordNumberIndex >= 0 ? row.model.cells[recordNumberIndex].value : null,
+                            creditAmount: creditAmount,
+                            transactionCurrency: transactionCurrencyIndex >= 0 ? row.model.cells[transactionCurrencyIndex].value : null,
+                            applicationDocument: applicationDocumentIndex >= 0 ? row.model.cells[applicationDocumentIndex].value : null,
+                            textPosting: textPostingIndex >= 0 ? row.model.cells[textPostingIndex].value : null,
+                            applicationDate: applicationDateIndex >= 0 ? chrono.parseDate(row.model.cells[applicationDateIndex].value) : null,
+                            postingDate: postingDateIndex >= 0 ? chrono.parseDate(row.model.cells[postingDateIndex].value) : null,
+                            companyCode: companyCode,
+                            fiscalYear: fiscalYearIndex >= 0 ? row.model.cells[fiscalYearIndex].value : null,
+                            postingPeriod: postingPeriodIndex >= 0 ? row.model.cells[postingPeriodIndex].value : null,
+                            debitCredit: debitCredit,
+                            reference: referenceIndex >= 0 ? row.model.cells[referenceIndex].value : null,
+                            contraAccountType: contraAccountTypeIndex >= 0 ? row.model.cells[contraAccountTypeIndex].value : null,
+                            contraAccountNumber: contraAccountNumberIndex >= 0 ? row.model.cells[contraAccountNumberIndex].value : null,
+                            dueDate: dueDateIndex >= 0 ? chrono.parseDate(row.model.cells[dueDateIndex].value) : null,
+                            textHeader: textHeaderIndex >= 0 ? row.model.cells[textHeaderIndex].value : null,
+                        });
+
+
+                        // if array.length >= env.bulkSize
+                        if (rowsToInsert.length >= env.bulkInsertSize) {
+                            // then bulk insert and empty the array
                             await PostingModel
                                 .getPosting()
                                 .bulkCreate(rowsToInsert, {
                                     transaction: t
                                 });
-                        } catch (err) {
-                            console.log(err);
-                            await t.rollback();
-                            return {
-                                error: err
-                            };
-                        }
+                            bulkCount++;
+                            const used = process.memoryUsage().heapUsed / 1024 / 1024;
+                            console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
+                            logger.info(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
+                            rowsToInsert = [];
+                        } // end of bulk insert batch
 
-                        rowsToInsert = [];
-                    } // end of bulk insert batch
-
+                    }
+                    index++;
                 }
-                index++;
-
-
-            }
-            // if the array not empty: bulk insert it then empty it.
-            if (rowsToInsert.length > 0) {
-                try {
+                // if the array not empty: bulk insert it then empty it.
+                if (rowsToInsert.length > 0) {
+                    // try {
                     await PostingModel
                         .getPosting()
                         .bulkCreate(rowsToInsert, {
                             transaction: t
                         });
-                } catch (err) {
-                    console.log(err);
-                    await t.rollback();
-                    return {
-                        error: err
-                    };
+                    const used = process.memoryUsage().heapUsed / 1024 / 1024;
+                    console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
+                    logger.info(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
+                    rowsToInsert = [];
                 }
-                rowsToInsert = [];
+                if (!rolledBack) {
+                    await t.commit();
+
+                    console.log("the transaction commited successfully :)");
+                    logger.info(`${new Date()}:transaction commited successfully for file`);
+                    benchmark = process.hrtime(benchmark);
+                    console.log('benchmark took %d seconds and %d nanoseconds', benchmark[0], benchmark[1]);
+                    logger.info(`${new Date()}:benchmark for import took: ${benchmark[0]} seconds and ${benchmark[1]} nanoseconds for ${index} records`);
+
+                    resolve(true);
+                }
             }
 
-            await t.commit();
-            return true;
-            // just first sheet
-            break;
+        } catch (err) {
+            console.log("ERROR, the transaction will Rollback");
+            console.log("ERROR on row number: " + index);
+            logger.error(`${new Date()}: ${err.message} in bulk insert number: ${bulkCount}`);
+            reject(err.message);
         }
-        await t.commit();
-        return true;
-    } catch (err) {
-        console.log(err);
-        return {
-            error: err
-        };
-    }
+
+
+    });
+
+
 
 };
 
@@ -416,115 +420,117 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
  */
 module.exports.importStreamAccountsExcel = async function (excelFilePath, accountType = 1, template = null) {
 
-    try {
+    let benchmark = process.hrtime();
+    let index = 1;
+    let bulkCount = 0;
 
-        if (template == null) {
-            template = {
-                accountNumber: 'KONTO',
-                companyCode: 'BUKR',
-                accountName: 'NAME'
-            };
-        }
+    return new Promise(async (resolve, reject) => {
 
-        const t = await sequelizer.transaction();
+        try {
 
-        let index = 1;
-        let accountNumberIndex = -1;
-        let companyCodeIndex = -1;
-        let accountNameIndex = -1;
+            if (template == null) {
+                template = {
+                    accountNumber: 'KONTO',
+                    companyCode: 'BUKR',
+                    accountName: 'NAME'
+                };
+            }
+
+            const t = await sequelizer.transaction();
 
 
-        let rowsToInsert = [];
-        let fileHeaders = [];
+            let accountNumberIndex = -1;
+            let companyCodeIndex = -1;
+            let accountNameIndex = -1;
 
-        const workbookReader = new Excel.stream.xlsx.WorkbookReader(excelFilePath, {
-            includeEmpty: true
-        });
 
-        for await (const worksheetReader of workbookReader) {
-            for await (const row of worksheetReader) {
+            let rowsToInsert = [];
+            let fileHeaders = [];
 
-                row.eachCell({
-                    includeEmpty: true
-                }, (cell, colNo) => {
+            const workbookReader = new Excel.stream.xlsx.WorkbookReader(excelFilePath, {
+                includeEmpty: true
+            });
 
-                    console.dir(cell.model);
-                });
+            for await (const worksheetReader of workbookReader) {
+                for await (const row of worksheetReader) {
 
-                if (index === 1) {
-
-                    for (let i = 0; i < row.model.cells.length; i++) {
-                        fileHeaders.push(row.model.cells[i].value);
-                    }
-                    accountNumberIndex = getHeaderIndex(template, fileHeaders, 'accountNumber');
-                    companyCodeIndex = getHeaderIndex(template, fileHeaders, 'companyCode');
-                    accountNameIndex = getHeaderIndex(template, fileHeaders, 'accountName');
-                } else {
-
-                    rowsToInsert.push({
-                        accountNumber: accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null,
-                        companyCode: companyCodeIndex >= 0 ? row.model.cells[companyCodeIndex].value : null,
-                        accountName: accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null,
-                        accountType: AccountTypeEnum[accountType]
+                    row.eachCell({
+                        includeEmpty: true
+                    }, (cell, colNo) => {
+                        // console.dir(cell.model);
                     });
 
+                    if (index === 1) {
 
-                    // if array.length >= env.bulkSize
-                    if (rowsToInsert.length >= env.bulkInsertSize) {
-                        // then bulk insert and empty the array
-                        try {
+                        for (let i = 0; i < row.model.cells.length; i++) {
+                            fileHeaders.push(row.model.cells[i].value);
+                        }
+                        accountNumberIndex = getHeaderIndex(template, fileHeaders, 'accountNumber');
+                        companyCodeIndex = getHeaderIndex(template, fileHeaders, 'companyCode');
+                        accountNameIndex = getHeaderIndex(template, fileHeaders, 'accountName');
+                    } else {
+
+                        rowsToInsert.push({
+                            accountNumber: accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null,
+                            companyCode: companyCodeIndex >= 0 ? row.model.cells[companyCodeIndex].value : null,
+                            accountName: accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null,
+                            accountType: AccountTypeEnum[accountType]
+                        });
+
+
+                        // if array.length >= env.bulkSize
+                        if (rowsToInsert.length >= env.bulkInsertSize) {
+                            // then bulk insert and empty the array
                             await AccountModel
                                 .getAccounts()
                                 .bulkCreate(rowsToInsert, {
                                     transaction: t
                                 });
-                        } catch (err) {
-                            console.log(err);
-                            await t.rollback();
-                            return {
-                                error: err
-                            };
-                        }
+                            bulkCount++;
+                            const used = process.memoryUsage().heapUsed / 1024 / 1024;
+                            console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
+                            logger.info(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
 
-                        rowsToInsert = [];
-                    } // end of bulk insert batch
+                            rowsToInsert = [];
+                        } // end of bulk insert batch
 
-                }
-                index++;
+                    }
+                    index++;
 
 
-            } // end of for each row
-            // if the array not empty: bulk insert it then empty it.
-            if (rowsToInsert.length > 0) {
-                try {
+                } // end of for each row
+                // if the array not empty: bulk insert it then empty it.
+                if (rowsToInsert.length > 0) {
                     await AccountModel
                         .getAccounts()
                         .bulkCreate(rowsToInsert, {
                             transaction: t
                         });
-                } catch (err) {
-                    console.log(err);
-                    await t.rollback();
-                    return {
-                        error: err
-                    };
-                }
-                rowsToInsert = [];
-            } /// end of rest data condition if (rowsToInsert.length > 0)
+                    const used = process.memoryUsage().heapUsed / 1024 / 1024;
+                    console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
+                    logger.info(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
+                    rowsToInsert = [];
+                } /// end of rest data condition if (rowsToInsert.length > 0)
 
-            await t.commit();
-            return true;
-            // just first sheet
-            break;
+                await t.commit();
+                console.log(`${new Date()}:transaction commited successfully for file`);
+                logger.info(`${new Date()}:transaction commited successfully for file`);
 
-        } // end of main for each sheet
-        await t.commit();
-        return true;
+                benchmark = process.hrtime(benchmark);
+                console.log('benchmark took %d seconds and %d nanoseconds', benchmark[0], benchmark[1]);
+                logger.info(`${new Date()}:benchmark for import took: ${benchmark[0]} seconds and ${benchmark[1]} nanoseconds for ${index} records`);
 
-    } catch (err) {
-        console.error(err);
-        throw err;
-    }
+                resolve(true);
+            } // end of main for each sheet
+
+        } catch (err) {
+            console.log("ERROR, the transaction will Rollback");
+            console.log("ERROR on row number: " + index);
+            logger.error(`${new Date()}: ${err.message} in bulk insert number: ${bulkCount}`);
+            reject(err.message);
+        }
+    });
+
 
 };
 

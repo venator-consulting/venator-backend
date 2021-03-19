@@ -6,6 +6,7 @@ const env = require('./environment');
 const sequelize = new Sequelize(env.databaseName, env.databaseUsername, env.databasePassword, {
     host: env.databaseHost,
     dialect: env.databaseDialect,
+    logging: false,
     pool: {
         max: 5,
         min: 1,
@@ -28,6 +29,13 @@ module.exports.testDBConnection = async () => {
 module.exports.getSequelize = () => {
     return new Sequelize(env.databaseName, env.databaseUsername, env.databasePassword, {
         host: env.databaseHost,
-        dialect: env.databaseDialect
+        dialect: env.databaseDialect,
+        logging: false,
+        pool: {
+            max: 5,
+            min: 1,
+            idle: 10000,
+            evict: 10000,
+        }
     });
 };

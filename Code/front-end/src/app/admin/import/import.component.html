@@ -2,7 +2,7 @@
 <p-card class="card">
   <p-toast></p-toast>
   <p-steps [model]="items" [(activeIndex)]="activeIndex" [readonly]="true"></p-steps>
-  {{filesList[currentFileIndex]?.orginalName}}
+  <!-- {{filesList[currentFileIndex]?.orginalName}} -->
 </p-card>
 <br />
 
@@ -17,13 +17,17 @@
       <div class="p-col-4">
         <h2>upload files</h2>
       </div>
-      <div class="p-col-8">
+      <div class="p-col-4" *ngIf="waiting">
         <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
+      </div>
+      <div class="p-col-4">
+        <h3>{{filesList[currentFileIndex]?.orginalName}}</h3>
       </div>
     </div>
     <br>
     
     <div class="p-grid">
+      
       <div class="p-col-10">
         <label for="">Template </label>
         <p-dropdown [options]="templates" [(ngModel)]="selectedTemplate" placeholder="Select a Template"
@@ -37,18 +41,19 @@
         <!-- {{f | json}} -->
         <br><br>
         <div class="p-grid">
-          <div class="p-col-2">
+          <div class="p-col-3">
             <!-- maxFileSize="100000000" -->
-            <p-fileUpload name="excel" [showUploadButton]="false" customUpload="true"
+            <p-fileUpload name="excel" mode="advanced" [showUploadButton]="false" customUpload="true"
               (uploadHandler)="UploadHandler($event, f, i)" 
               uploadLabel="Set File" chooseLabel="Search" [auto]="true"
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .csv, text/plain">
-              <ng-template pTemplate="content">
+              <!-- <ng-template pTemplate="content">
                 <ul *ngIf="uploadedFiles.length">
                   <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
                 </ul>
-              </ng-template>
+              </ng-template> -->
             </p-fileUpload>
+              <!-- <span *ngIf="f.file">{{f?.file?.name}} - {{f?.file?.size / 1024}} KB</span> -->
           </div>
           <div class="p-col-2">
             <p-dropdown [options]="fileTypes" [(ngModel)]="f.fileType" placeholder="Select file type" optionLabel="name"
@@ -92,6 +97,14 @@
 
   <!-- ********************** Step 2 satrts ******************** -->
   <div [hidden]="activeIndex != 1" class="card">
+    <div class="p-grid">
+      <div class="p-col-4"></div>
+      <div class="p-col-4">
+        <h3>For file: {{filesList[currentFileIndex]?.orginalName}}</h3>
+        <br><br>
+      </div>
+      <div class="p-col-4"></div>
+    </div>
     upload helper files
 
     <br><br>
@@ -105,6 +118,14 @@
 
   <!-- ********************** Step 3 satrts ******************** -->
   <div [hidden]="activeIndex != 2" class="card">
+    <div class="p-grid">
+      <div class="p-col-4"></div>
+      <div class="p-col-4">
+        <h3>For file: {{filesList[currentFileIndex]?.orginalName}}</h3>
+        <br><br>
+      </div>
+      <div class="p-col-4"></div>
+    </div>
     Mapping fields
     <br>
     <p-accordion *ngIf="filesList[currentFileIndex]">
@@ -118,7 +139,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="mdt" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['client']"  class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['client']">{{filesList[currentFileIndex]?.defaultTemplate['client']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['client']">{{filesList[currentFileIndex]?.defaultTemplate['client']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -127,7 +148,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="mdt" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['companyCode']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['companyCode']">{{filesList[currentFileIndex]?.defaultTemplate['companyCode']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['companyCode']">{{filesList[currentFileIndex]?.defaultTemplate['companyCode']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -136,7 +157,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="mdt" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountType']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['accountType']">{{filesList[currentFileIndex]?.defaultTemplate['accountType']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['accountType']">{{filesList[currentFileIndex]?.defaultTemplate['accountType']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -145,7 +166,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="mdt" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountNumber']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['accountNumber']">{{filesList[currentFileIndex]?.defaultTemplate['accountNumber']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['accountNumber']">{{filesList[currentFileIndex]?.defaultTemplate['accountNumber']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -154,7 +175,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="mdt" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountName']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['accountName']">{{filesList[currentFileIndex]?.defaultTemplate['accountName']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['accountName']">{{filesList[currentFileIndex]?.defaultTemplate['accountName']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -171,7 +192,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="assignment" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['assignment']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['assignment']">{{filesList[currentFileIndex]?.defaultTemplate['assignment']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['assignment']">{{filesList[currentFileIndex]?.defaultTemplate['assignment']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -180,7 +201,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="documentNumber" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentNumber']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['documentNumber']">{{filesList[currentFileIndex]?.defaultTemplate['documentNumber']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['documentNumber']">{{filesList[currentFileIndex]?.defaultTemplate['documentNumber']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -189,7 +210,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="documentType" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentType']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['documentType']">{{filesList[currentFileIndex]?.defaultTemplate['documentType']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['documentType']">{{filesList[currentFileIndex]?.defaultTemplate['documentType']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -198,7 +219,7 @@
           <div class="p-col-3">Datum</div>
           <div class="p-col-6">
             <select name="documentDate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentDate']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['documentDate']">{{filesList[currentFileIndex]?.defaultTemplate['documentDate']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['documentDate']">{{filesList[currentFileIndex]?.defaultTemplate['documentDate']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -207,7 +228,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="recordNumber" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['recordNumber']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['recordNumber']">{{filesList[currentFileIndex]?.defaultTemplate['recordNumber']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['recordNumber']">{{filesList[currentFileIndex]?.defaultTemplate['recordNumber']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -216,7 +237,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="creditAmount" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['creditAmount']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['creditAmount']">{{filesList[currentFileIndex]?.defaultTemplate['creditAmount']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['creditAmount']">{{filesList[currentFileIndex]?.defaultTemplate['creditAmount']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -225,7 +246,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="transactionCurrency" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['transactionCurrency']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['transactionCurrency']">{{filesList[currentFileIndex]?.defaultTemplate['transactionCurrency']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['transactionCurrency']">{{filesList[currentFileIndex]?.defaultTemplate['transactionCurrency']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -234,7 +255,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="applicationDocument" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['applicationDocument']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['applicationDocument']">{{filesList[currentFileIndex]?.defaultTemplate['applicationDocument']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['applicationDocument']">{{filesList[currentFileIndex]?.defaultTemplate['applicationDocument']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -243,7 +264,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="textPosting" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['textPosting']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['textPosting']">{{filesList[currentFileIndex]?.defaultTemplate['textPosting']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['textPosting']">{{filesList[currentFileIndex]?.defaultTemplate['textPosting']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -252,7 +273,7 @@
           <div class="p-col-3">Datum</div>
           <div class="p-col-6">
             <select name="applicationDate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['applicationDate']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['applicationDate']">{{filesList[currentFileIndex]?.defaultTemplate['applicationDate']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['applicationDate']">{{filesList[currentFileIndex]?.defaultTemplate['applicationDate']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -261,7 +282,7 @@
           <div class="p-col-3">Datum</div>
           <div class="p-col-6">
             <select name="postingDate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['postingDate']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['postingDate']">{{filesList[currentFileIndex]?.defaultTemplate['postingDate']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['postingDate']">{{filesList[currentFileIndex]?.defaultTemplate['postingDate']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -270,7 +291,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="companyCode" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['companyCode']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['companyCode']">{{filesList[currentFileIndex]?.defaultTemplate['companyCode']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['companyCode']">{{filesList[currentFileIndex]?.defaultTemplate['companyCode']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -279,7 +300,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="fiscalYear" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['fiscalYear']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['fiscalYear']">{{filesList[currentFileIndex]?.defaultTemplate['fiscalYear']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['fiscalYear']">{{filesList[currentFileIndex]?.defaultTemplate['fiscalYear']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -288,7 +309,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="postingPeriod" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['postingPeriod']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['postingPeriod']">{{filesList[currentFileIndex]?.defaultTemplate['postingPeriod']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['postingPeriod']">{{filesList[currentFileIndex]?.defaultTemplate['postingPeriod']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -297,7 +318,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="accountType" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountType']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['accountType']">{{filesList[currentFileIndex]?.defaultTemplate['accountType']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['accountType']">{{filesList[currentFileIndex]?.defaultTemplate['accountType']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -306,7 +327,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="accountNumber" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountNumber']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['accountNumber']">{{filesList[currentFileIndex]?.defaultTemplate['accountNumber']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['accountNumber']">{{filesList[currentFileIndex]?.defaultTemplate['accountNumber']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -315,7 +336,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="debitCredit" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['debitCredit']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['debitCredit']">{{filesList[currentFileIndex]?.defaultTemplate['debitCredit']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['debitCredit']">{{filesList[currentFileIndex]?.defaultTemplate['debitCredit']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -324,7 +345,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="reference" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['reference']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['reference']">{{filesList[currentFileIndex]?.defaultTemplate['reference']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['reference']">{{filesList[currentFileIndex]?.defaultTemplate['reference']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -333,7 +354,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="GLAccountNumber" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['GLAccountNumber']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['GLAccountNumber']">{{filesList[currentFileIndex]?.defaultTemplate['GLAccountNumber']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['GLAccountNumber']">{{filesList[currentFileIndex]?.defaultTemplate['GLAccountNumber']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -343,7 +364,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="contraAccountType" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountType']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['contraAccountType']">{{filesList[currentFileIndex]?.defaultTemplate['contraAccountType']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['contraAccountType']">{{filesList[currentFileIndex]?.defaultTemplate['contraAccountType']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -352,7 +373,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="contraAccountNumber" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountNumber']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['contraAccountNumber']">{{filesList[currentFileIndex]?.defaultTemplate['contraAccountNumber']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['contraAccountNumber']">{{filesList[currentFileIndex]?.defaultTemplate['contraAccountNumber']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -361,7 +382,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="contraAccountGLAccountNo" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountGLAccountNo']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['contraAccountGLAccountNo']">{{filesList[currentFileIndex]?.defaultTemplate['contraAccountGLAccountNo']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['contraAccountGLAccountNo']">{{filesList[currentFileIndex]?.defaultTemplate['contraAccountGLAccountNo']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -370,7 +391,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="contraAccountCreditorNo" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountCreditorNo']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['contraAccountCreditorNo']">{{filesList[currentFileIndex]?.defaultTemplate['contraAccountCreditorNo']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['contraAccountCreditorNo']">{{filesList[currentFileIndex]?.defaultTemplate['contraAccountCreditorNo']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -379,7 +400,7 @@
           <div class="p-col-3">Zahl</div>
           <div class="p-col-6">
             <select name="contraAccountDebtorNo" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountDebtorNo']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['contraAccountDebtorNo']">{{filesList[currentFileIndex]?.defaultTemplate['contraAccountDebtorNo']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['contraAccountDebtorNo']">{{filesList[currentFileIndex]?.defaultTemplate['contraAccountDebtorNo']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -388,7 +409,7 @@
           <div class="p-col-3">Datum</div>
           <div class="p-col-6">
             <select name="dueDate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['dueDate']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['dueDate']">{{filesList[currentFileIndex]?.defaultTemplate['dueDate']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['dueDate']">{{filesList[currentFileIndex]?.defaultTemplate['dueDate']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -397,7 +418,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="textHeader" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['textHeader']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['textHeader']">{{filesList[currentFileIndex]?.defaultTemplate['textHeader']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['textHeader']">{{filesList[currentFileIndex]?.defaultTemplate['textHeader']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -406,7 +427,7 @@
           <div class="p-col-3">Text</div>
           <div class="p-col-6">
             <select name="accountName" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountName']" class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="filesList[currentFileIndex]?.defaultTemplate['accountName']">{{filesList[currentFileIndex]?.defaultTemplate['accountName']}}</option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['accountName']">{{filesList[currentFileIndex]?.defaultTemplate['accountName']}}</option> -->
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}</option>
             </select>
           </div>
@@ -430,6 +451,15 @@
 
   <!-- ********************** Step 4 satrts ******************** -->
   <div [hidden]="activeIndex != 3" class="card">
+    <div class="p-grid">
+      <div class="p-col-4"></div>
+      <div class="p-col-4">
+        <h3>For file: {{filesList[currentFileIndex]?.orginalName}}</h3>
+        <br><br>
+      </div>
+      <div class="p-col-4"></div>
+    </div>
+
     import 
     <div class="p-col-8">
       <p-progressSpinner *ngIf="waiting"></p-progressSpinner>

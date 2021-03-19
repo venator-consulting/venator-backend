@@ -19,6 +19,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+// const logger = require('./config/logger.config').errorlog;
+// logger.error('Hello World!');
 
 app.use('/api/admin', adminRoutes);
 

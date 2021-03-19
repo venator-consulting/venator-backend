@@ -2,6 +2,7 @@ const excelHelper = require('../../../helpers/excel.helper.server');
 const csvHelper = require('../../../helpers/csv.helper.server');
 const csvStreamHelper = require('../../../helpers/csv.stream.helper.server');
 const wMobelTemplate = require('../../../models/templates/sap.wmobel.template');
+const defaultAccountTemplate = require('../../../models/templates/accounts.default.template');
 
 
 module.exports.getHeaderExcel = function (req, res, next) {
@@ -204,13 +205,17 @@ module.exports.headerFile = function (req, res, next) {
     const accountType = reqData.accountType;
     const template = reqData.template;
     let defaultTemplate = {};
-    if(!template || template == 1) {
+    // posting default template
+    if ((!template || template == 1) && fileClass == 2) {
         defaultTemplate = wMobelTemplate;
+    }
+    // accounts set template
+    if ((!template || template == 1) && fileClass == 1) {
+        defaultTemplate = defaultAccountTemplate;
     }
     // if file type === 1 then is it an excel file
     if (fileType == 1) {
-        // excel accounts file
-        // if (fileClass == 1) {
+        // excel file
         excelHelper
             .readHeader(filePath)
             .then(header => {
@@ -231,13 +236,6 @@ module.exports.headerFile = function (req, res, next) {
                         error: er
                     });
             });
-        // } else if (fileClass == 2) {
-        //     // it's a posting file
-        // } else if (fileClass == 3) {
-        //     // it's a head file
-        // } else {
-        //     // return error file class
-        // }
 
     } else if (fileType == 2) {
         // it's a csv file
@@ -261,16 +259,6 @@ module.exports.headerFile = function (req, res, next) {
                         error: er
                     });
             })
-        // accounts file
-        // if (fileClass == 1) {
-
-        // } else if (fileClass == 2) {
-        //     // it's a posting file
-        // } else if (fileClass == 3) {
-        //     // it's a head file
-        // } else {
-        //     // return error file class
-        // }
     } else {
         // return error file type
         res
@@ -315,7 +303,7 @@ module.exports.importFile = function (req, res, next) {
                             error: er
                         });
                 });
-                // excel accounts file
+            // excel accounts file
         } else if (fileClass == 1) {
             // it's an accounts file
             excelHelper
@@ -335,7 +323,7 @@ module.exports.importFile = function (req, res, next) {
                             error: er
                         });
                 });
-                // excel head file
+            // excel head file
         } else if (fileClass == 3) {
             // it's a head file
             res

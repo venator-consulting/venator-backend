@@ -1,0 +1,22 @@
+{"message":"Fri Mar 19 2021 20:01:00 GMT+0200 (Eastern European Standard Time):The script uses approximately: 59.49 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:01:00 GMT+0200 (Eastern European Standard Time):The script uses approximately: 63.04 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:01:00 GMT+0200 (Eastern European Standard Time):The script uses approximately: 66.11 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:01:02 GMT+0200 (Eastern European Standard Time):transaction commited successfully for file","level":"info"}
+{"message":"Fri Mar 19 2021 20:01:02 GMT+0200 (Eastern European Standard Time):benchmark for import took: 2 seconds and 255190975 nanoseconds for 5509 records","level":"info"}
+{"message":"Fri Mar 19 2021 20:25:47 GMT+0200 (Eastern European Standard Time):The script uses approximately: 66.18 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:25:47 GMT+0200 (Eastern European Standard Time):The script uses approximately: 65.84 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:25:48 GMT+0200 (Eastern European Standard Time):The script uses approximately: 68.47 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:25:48 GMT+0200 (Eastern European Standard Time):transaction commited successfully for file","level":"info"}
+{"message":"Fri Mar 19 2021 20:25:48 GMT+0200 (Eastern European Standard Time):benchmark for import took: 1 seconds and 56315843 nanoseconds for 5509 records","level":"info"}
+{"message":"Fri Mar 19 2021 20:26:55 GMT+0200 (Eastern European Standard Time): Data too long for column 'accountName' at row 1 in bulk insert number: 0","level":"error"}
+{"message":"Fri Mar 19 2021 20:30:42 GMT+0200 (Eastern European Standard Time): Data too long for column 'accountName' at row 1 in bulk insert number: 0","level":"error"}
+{"message":"Fri Mar 19 2021 20:37:07 GMT+0200 (Eastern European Standard Time): Table 'accountant.Posting' doesn't exist in bulk insert number: 0","level":"error"}
+{"message":"Fri Mar 19 2021 20:39:21 GMT+0200 (Eastern European Standard Time): Table 'accountant.Posting' doesn't exist in bulk insert number: 0","level":"error"}
+{"message":"Fri Mar 19 2021 20:43:17 GMT+0200 (Eastern European Standard Time):The script uses approximately: 77.07 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:43:30 GMT+0200 (Eastern European Standard Time):The script uses approximately: 67.81 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:43:38 GMT+0200 (Eastern European Standard Time):The script uses approximately: 69.84 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:43:46 GMT+0200 (Eastern European Standard Time):The script uses approximately: 67.97 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:43:54 GMT+0200 (Eastern European Standard Time):The script uses approximately: 70.85 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:43:55 GMT+0200 (Eastern European Standard Time):The script uses approximately: 80.13 MB","level":"info"}
+{"message":"Fri Mar 19 2021 20:43:55 GMT+0200 (Eastern European Standard Time):transaction commited successfully for file","level":"info"}
+{"message":"Fri Mar 19 2021 20:43:55 GMT+0200 (Eastern European Standard Time):benchmark for import took: 54 seconds and 437885407 nanoseconds for 10103 records","level":"info"}

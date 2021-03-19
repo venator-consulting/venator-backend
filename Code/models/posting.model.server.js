@@ -130,7 +130,7 @@ const Posting = sequelizer.define('Posting', {
         type: DataTypes.STRING(25)
     },
     accountName: {
-        type: DataTypes.STRING(25)
+        type: DataTypes.STRING(50)
     },
     GLAccountNumber: {
         type: DataTypes.STRING(25)
