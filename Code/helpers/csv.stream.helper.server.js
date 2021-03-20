@@ -24,10 +24,17 @@ module.exports.readHeader = async function (filePath) {
     try {
         return new Promise((resolve, reject) => {
             let fileHeaders = [];
-            fs.createReadStream(filePath)
+            const readable = fs.createReadStream(filePath, {
+                encoding: 'latin1'
+            });
+            // readable.setEncoding('ucs2');
+
+            readable
                 .pipe(csv({
                     separator: ';',
-                    encoding: 'latin1',
+                    encoding: "latin1",
+                    // encoding: null
+                    bom: true
                 }))
                 .on('headers', (headers) => {
                     // console.log(`First header: ${headers[0]}`);
@@ -79,9 +86,12 @@ module.exports.importAccountCsvFile = async function (filePath, accountType = 1,
 
             let rowsToInsert = [];
 
-            const parser = fs.createReadStream(filePath)
+            const parser = fs.createReadStream(filePath, {
+                    encoding: 'latin1'
+                })
                 .pipe(csv({
-                    separator: ';'
+                    separator: ';',
+                    encoding: "latin1"
                 }));
 
             for await (const row of parser) {
@@ -136,9 +146,22 @@ module.exports.importAccountCsvFile = async function (filePath, accountType = 1,
 
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
-            console.log("ERROR on row number: " + index);
-            logger.error(`${new Date()}: ${err.message} in bulk insert number: ${bulkCount}`);
-            reject(err.message);
+            
+            // const rgx = / at row (.*)/g;
+            // const arr = rgx.exec(err.message);
+            const splitedMsg = err.message.split(" at row ");
+            if(splitedMsg.length > 1 ) {
+                const rowNum = splitedMsg[1];
+                const theRealRowNum = rowNum > 0?  parseInt(rowNum) + 1 + (bulkCount * env.bulkInsertSize) : index;
+                const errorMsg = splitedMsg[0] + ' at row ' + theRealRowNum;
+                logger.error(`${new Date()}: ${splitedMsg[0]} at row ${theRealRowNum}`);
+                console.log("ERROR on row number: " + theRealRowNum);
+                reject(errorMsg);
+            } else {
+                console.log("ERROR on row number: " + index);
+                reject(err.message);
+            }
+            
         }
     });
 };
@@ -169,9 +192,12 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
 
             let rowsToInsert = [];
 
-            const parser = fs.createReadStream(filePath)
+            const parser = fs.createReadStream(filePath, {
+                    encoding: 'latin1'
+                })
                 .pipe(csv({
-                    separator: ';'
+                    separator: ';',
+                    encoding: "latin1"
                 }));
 
             for await (const row of parser) {
@@ -401,9 +427,19 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
             resolve(true);
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
-            console.log("ERROR on row number: " + index);
-            logger.error(`${new Date()}: ${err.message} in bulk insert number: ${bulkCount}`);
-            reject(err.message);
+
+            const splitedMsg = err.message.split(" at row ");
+            if(splitedMsg.length > 1 ) {
+                const rowNum = splitedMsg[1];
+                const theRealRowNum = rowNum > 0?  parseInt(rowNum) + 1 + (bulkCount * env.bulkInsertSize) : index;
+                const errorMsg = splitedMsg[0] + ' at row ' + theRealRowNum;
+                logger.error(`${new Date()}: ${splitedMsg[0]} at row ${theRealRowNum}`);
+                console.log("ERROR on row number: " + theRealRowNum);
+                reject(errorMsg);
+            } else {
+                console.log("ERROR on row number: " + index);
+                reject(err.message);
+            }
         }
 
     });

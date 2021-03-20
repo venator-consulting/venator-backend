@@ -399,9 +399,19 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
 
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
-            console.log("ERROR on row number: " + index);
-            logger.error(`${new Date()}: ${err.message} in bulk insert number: ${bulkCount}`);
-            reject(err.message);
+            
+            const splitedMsg = err.message.split(" at row ");
+            if(splitedMsg.length > 1 ) {
+                const rowNum = splitedMsg[1];
+                const theRealRowNum = rowNum > 0?  parseInt(rowNum) + 1 + (bulkCount * env.bulkInsertSize) : index;
+                const errorMsg = splitedMsg[0] + ' at row ' + theRealRowNum;
+                logger.error(`${new Date()}: ${splitedMsg[0]} at row ${theRealRowNum}`);
+                console.log("ERROR on row number: " + theRealRowNum);
+                reject(errorMsg);
+            } else {
+                console.log("ERROR on row number: " + index);
+                reject(err.message);
+            }
         }
 
 
@@ -525,9 +535,19 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, accoun
 
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
-            console.log("ERROR on row number: " + index);
-            logger.error(`${new Date()}: ${err.message} in bulk insert number: ${bulkCount}`);
-            reject(err.message);
+            
+            const splitedMsg = err.message.split(" at row ");
+            if(splitedMsg.length > 1 ) {
+                const rowNum = splitedMsg[1];
+                const theRealRowNum = rowNum > 0?  parseInt(rowNum) + 1 + (bulkCount * env.bulkInsertSize) : index;
+                const errorMsg = splitedMsg[0] + ' at row ' + theRealRowNum;
+                logger.error(`${new Date()}: ${splitedMsg[0]} at row ${theRealRowNum}`);
+                console.log("ERROR on row number: " + theRealRowNum);
+                reject(errorMsg);
+            } else {
+                console.log("ERROR on row number: " + index);
+                reject(err.message);
+            }
         }
     });
 

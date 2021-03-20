@@ -221,12 +221,13 @@ export class ImportComponent implements OnInit {
           detail: 'the file ' + this.filesList[this.currentFileIndex].orginalName + ' imported successfuly! you can import another file now'
         });
       }, err => {
-        console.log('error: ' + err);
+        debugger;
+        console.log('error: ' + err.error.error);
         this.waiting = false;
         this._messageService.add({
           severity: 'error',
           summary: 'ERROR!',
-          detail: 'There is an error occured, please try again!'
+          detail: err.error.error
         });
       });
 
