@@ -4,6 +4,8 @@ const helmet = require('helmet');
 const config = require('./config/environment');
 const adminRoutes = require('./modules/Admin/route/admin-upload.route.server');
 const path = require('path');
+require('./config/passport.config');
+const bearerToken = require('express-bearer-token');
 
 
 const cors = require('cors');
@@ -18,9 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
-// const logger = require('./config/logger.config').errorlog;
-// logger.error('Hello World!');
+app.use(bearerToken());
 
 app.use('/api/admin', adminRoutes);
 
