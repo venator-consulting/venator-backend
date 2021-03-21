@@ -4,7 +4,7 @@ const passportjwt = require('passport-jwt');
 const JWTStrategy = passportjwt.Strategy;
 const ExtractJWT = passportjwt.ExtractJwt;
 const bcrypt = require('bcryptjs');
-const config = require('./env/development');
+const config = require('./environment');
 const userRepo = require('../repositories/user.repo.server');
 
 

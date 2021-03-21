@@ -1,8 +1,11 @@
 const Role = require('../models/role.model.server');
 
 
+module.exports.fetchAll = function() {
+    return new Pro
+};
 
-module.exports.getAll = function (search = '_', orderBy = 'name', order = 'DESC', limit = 50, offset = 0) {
+module.exports.fetch = function (search = '_', orderBy = 'name', order = 'DESC', limit = 50, offset = 0) {
     // if(!order) order = 'DESC';
     // if(!orderBy) orderBy = 'name';
     // if(!search) search = '_';
