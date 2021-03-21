@@ -1,0 +1,4 @@
+{"message":"Sun Mar 21 2021 13:21:55 GMT+0200 (Eastern European Standard Time): There is an ERROR on row 1, creditAmount/BETRAGHW should be number!","level":"error"}
+{"message":"Sun Mar 21 2021 13:25:26 GMT+0200 (Eastern European Standard Time): There is an ERROR on row 1, creditAmount/BETRAGHW should be number!","level":"error"}
+{"message":"Sun Mar 21 2021 13:26:35 GMT+0200 (Eastern European Standard Time):The script uses approximately: 93.32 MB","level":"info"}
+{"message":"Sun Mar 21 2021 13:26:43 GMT+0200 (Eastern European Standard Time): There is an ERROR on row 3980, accountNumber/KONTO should be number!","level":"error"}

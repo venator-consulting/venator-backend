@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -31,5 +31,8 @@
     "strip-bom-stream": "^4.0.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
