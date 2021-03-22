@@ -2,7 +2,7 @@ const {
     DataTypes
 } = require('sequelize');
 const sequelize = require('../config/sequelize.config');
-
+const User = require('./user.model.server').getUser();
 const sequelizer = sequelize.getSequelize();
 
 
@@ -16,20 +16,23 @@ const Role = sequelizer.define('Role', {
     name: {
         type: DataTypes.STRING(25),
     },
-    role_description    : {
+    role_description: {
         type: DataTypes.STRING(150)
     }
 }, {
     tableName: 'roles'
 });
 
-module.exports.getRole = function () {
-    return  Role;
-};
 
+Role.hasMany(User);
+User.belongsTo(Role);
+
+module.exports.getRole = function () {
+    return Role;
+};
 
 module.exports.syncRole = async function () {
     await this.getRole().sync({
-        force: true
+        alter: true
     });
 };

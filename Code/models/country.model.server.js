@@ -30,6 +30,6 @@ module.exports.getCountry = function () {
 
 module.exports.syncCountry = async function () {
     await this.getCountry().sync({
-        force: true
+        alter: true
     });
 };

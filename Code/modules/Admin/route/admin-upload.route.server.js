@@ -3,6 +3,8 @@ const router = express.Router();
 const uploadCtrl = require('../controller/admin-upload.controller.server');
 const env = require('../../../config/environment');
 const dataSyncCtrl = require('../controller/data-migration.controller.server');
+const roleCtrl = require('../controller/roles.controller.server');
+const userCtrl = require('../controller/user.controller.server');
 
 const multer = require('multer');
 const uploadfiles = multer({
@@ -12,6 +14,7 @@ const uploadfiles = multer({
 router
     .route('/template-types')
     .get(uploadCtrl.getTemplateTypes);
+
 
 router
     .route('/header')
@@ -24,39 +27,17 @@ router
 
 
 router
-    .route('/excel-header')
-    .post(uploadfiles.single('excel'), uploadCtrl.getHeaderExcel);
-
-
-router
-    .route('/excel')
-    .post(uploadfiles.single('excel'), uploadCtrl.uploadExcel);
-
-
-router
-    .route('/csv-header')
-    .post(uploadfiles.single('excel'), uploadCtrl.getHeaderCsv)
-
-router
-    .route('/csv')
-    .post(uploadfiles.single('excel'), uploadCtrl.uploadCsv);
-
-router
-    .route('/csv-stream')
-    .post(uploadfiles.single('excel'), uploadCtrl.uploadCsvStream);
-
-router
-    .route('/account-csv')
-    .post(uploadfiles.single('excel'), uploadCtrl.uploadAccountCsv);
-
-router
-    .route('/account-excel')
-    .post(uploadfiles.single('excel'), uploadCtrl.uploadAccountExcel);
+    .route('/roles')
+    .get(roleCtrl.fetchAll)
 
 
 router
     .route('/sync-db')
     .get(dataSyncCtrl.buildDatabaseSchema);
+
+router
+    .route('/create-admin')
+    .get(userCtrl.createDefaultAdmin)
 
 
 module.exports = router;

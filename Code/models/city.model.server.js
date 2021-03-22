@@ -30,6 +30,6 @@ module.exports.getCity = function () {
 
 module.exports.syncCity = async function () {
     await this.getCity().sync({
-        force: true
+        alter: true
     });
 };

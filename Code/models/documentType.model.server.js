@@ -32,6 +32,6 @@ module.exports.getDocumentType = function () {
 
 module.exports.syncDocumentType = async function () {
     await this.getDocumentType().sync({
-        force: true
+        alter: true
     });
 };

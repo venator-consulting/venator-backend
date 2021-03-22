@@ -1,7 +1,26 @@
 const User = require('../models/user.model.server');
+const env = require('../config/environment');
+const bcrypt = require('bcryptjs');
+
+module.exports.fetchAll = function () {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const users = await User
+                .getUser()
+                .findAll({
+                    where: {
+                        deleted: false
+                    }
+                });
+            resolve(users);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
 
 
-module.exports.getAll = function (search = '_', orderBy = 'username', order = 'DESC', limit = 50, offset = 0) {
+module.exports.fetch = function (search = '_', orderBy = 'username', order = 'DESC', limit = 50, offset = 0) {
 
     return new Promise(async (resolve, reject) => {
         try {
@@ -48,6 +67,7 @@ module.exports.getAll = function (search = '_', orderBy = 'username', order = 'D
 
 /**
  * check if user exist based on username for authentication
+ * the user must be not delted nor expired
  * @param {String} username
  */
 module.exports.existUser = function (username) {
@@ -57,7 +77,11 @@ module.exports.existUser = function (username) {
                 .getUser()
                 .findOne({
                     where: {
-                        username: username
+                        username: username,
+                        deleted: false,
+                        expireDate: {
+                            [Op.gt]: new Date()
+                        }
                     }
                 });
             resolve(user);
@@ -71,6 +95,10 @@ module.exports.existUser = function (username) {
 module.exports.insert = function (user) {
     return new Promise(async (resolve, reject) => {
         try {
+            // const password = randomstring.generate(10);
+            const salt = bcrypt.genSaltSync(10);
+            const hashedPassword = bcrypt.hashSync(user.password, salt);
+            user.password = hashedPassword;
             const result = await User
                 .getUser()
                 .create(user);
@@ -80,6 +108,34 @@ module.exports.insert = function (user) {
         }
     }); // end of promise
 }; // end of create/ register new user
+
+
+
+module.exports.createDefaultAdmin = function (role) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // const password = randomstring.generate(10);
+            const salt = bcrypt.genSaltSync(10);
+            const hashedPassword = bcrypt.hashSync(env.defaultAdminPassword, salt);
+            const user = User.getUser();
+            const createdUser = await user
+                .create({
+                    username: env.defaultAdminUsername,
+                    password: hashedPassword,
+                    firstname: 'Admin',
+                    lastname: 'Admin',
+                    RoleId: role.id
+                });
+            // const result = await createdUser.addRole(role);
+            resolve(createdUser);
+        } catch (err) {
+            reject(err.message);
+        }
+    }); // end of promise
+};
+
+
+
 
 /**
  * update user object, you can use for update basic info or change passowrd,
@@ -101,8 +157,28 @@ module.exports.update = function (user, userId) {
         } catch (err) {
             reject(err);
         }
-    })
+    });
 }; // end of update user
+
+
+module.exports.softDelete = function (userId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const result = await User
+                .getUser()
+                .update({
+                    deleted: true
+                }, {
+                    where: {
+                        id: userId
+                    }
+                });
+            resolve(result);
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
 
 // TO-DO prefer to use soft delete and expire date instead
 /**

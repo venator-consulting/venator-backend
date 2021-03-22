@@ -2,57 +2,59 @@ const {
     DataTypes
 } = require('sequelize');
 const sequelize = require('../config/sequelize.config');
-const { posting } = require('./templates/sap.cinram.template');
+const {
+    posting
+} = require('./templates/sap.cinram.template');
 
 
 // account name
-    // accountType from posting(kontoart) to accounttype from accounts
-    //  bukr = bukr
-    // accountnumber == accountnumber
-    // procedureid = procedureid
+// accountType from posting(kontoart) to accounttype from accounts
+//  bukr = bukr
+// accountnumber == accountnumber
+// procedureid = procedureid
 
-    
+
 // glaaccount name
-    // accounttype = s
-    // procedureid = procedureid
-    // glaaccountnumber = accountnumber
-    // bukr = bukr
+// accounttype = s
+// procedureid = procedureid
+// glaaccountnumber = accountnumber
+// bukr = bukr
 
 
 // contra glaaccount name
-    // accounttype = s
-    // procedureid = procedureid
-    // contraAccountGLAccountNo = accountnumber
-    // bukr = bukr
+// accounttype = s
+// procedureid = procedureid
+// contraAccountGLAccountNo = accountnumber
+// bukr = bukr
 
 
 // creditor name
-    // accounttype = k
-    // procedureid = procedureid
-    // contraAccountCrieditorNo = accountnumber
-    // bukr = bukr
+// accounttype = k
+// procedureid = procedureid
+// contraAccountCrieditorNo = accountnumber
+// bukr = bukr
 
 
 
 // contra creditor name
-    // accounttype = k
-    // procedureid = procedureid
-    // contraAccountCrieditorNo = accountnumber
-    // bukr = bukr
+// accounttype = k
+// procedureid = procedureid
+// contraAccountCrieditorNo = accountnumber
+// bukr = bukr
 
 
 // debitor name
-    // accounttype = d
-    // procedureid = procedureid
-    // contraAccountCrieditorNo = accountnumber
-    // bukr = bukr
+// accounttype = d
+// procedureid = procedureid
+// contraAccountCrieditorNo = accountnumber
+// bukr = bukr
 
-    
+
 // contra debitor name 
-    // accounttype = d
-    // procedureid = procedureid
-    // contraAccountCrieditorNo = accountnumber
-    // bukr = bukr
+// accounttype = d
+// procedureid = procedureid
+// contraAccountCrieditorNo = accountnumber
+// bukr = bukr
 
 
 
@@ -317,11 +319,13 @@ const Posting = sequelizer.define('Posting', {
     tableName: 'Posting'
 });
 
-module.exports.getPosting = function() {
+module.exports.getPosting = function () {
     return Posting;
 };
 
 
-module.exports.syncPosting = async function() {
-    await this.getPosting().sync({ force: true });
+module.exports.syncPosting = async function () {
+    await this.getPosting().sync({
+        alter: true
+    });
 };

@@ -7,5 +7,7 @@ module.exports = {
     databasePassword: 'Asama56ab',
     databaseHost: 'localhost',
     databaseDialect: 'mysql', /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
-    bulkInsertSize: 2000
+    bulkInsertSize: 2000,
+    defaultAdminUsername: 'admin',
+    defaultAdminPassword: 'admin',
 };

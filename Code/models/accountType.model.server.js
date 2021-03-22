@@ -30,6 +30,6 @@ module.exports.getAccountType = function () {
 
 module.exports.syncAccountType = async function () {
     await this.getAccountType().sync({
-        force: true
+        alter: true
     });
 };

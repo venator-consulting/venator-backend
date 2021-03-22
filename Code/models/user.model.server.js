@@ -13,7 +13,7 @@ const User = sequelizer.define('User', {
         primaryKey: true,
         autoIncrement: true
     },
-    managerId : {
+    managerId: {
         type: DataTypes.BIGINT(11),
     },
     firstname: {
@@ -25,9 +25,6 @@ const User = sequelizer.define('User', {
     email: {
         type: DataTypes.STRING(50),
     },
-    role: {
-        type: DataTypes.STRING(15),
-    },
     title: {
         type: DataTypes.STRING(10),
     },
@@ -38,7 +35,7 @@ const User = sequelizer.define('User', {
         type: DataTypes.STRING(25),
     },
     password: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(60),
     },
     city: {
         type: DataTypes.STRING(25),
@@ -58,17 +55,27 @@ const User = sequelizer.define('User', {
     note: {
         type: DataTypes.STRING(50),
     },
+    expireDate: {
+        type: DataTypes.DATE
+    },
+    deleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    }
 }, {
     tableName: 'users'
 });
 
+// let role = Role.getRole();
+// User.hasOne(Role);
+
 module.exports.getUser = function () {
-    return  User;
+    return User;
 };
 
 
 module.exports.syncUser = async function () {
     await this.getUser().sync({
-        force: true
+        alter: true
     });
 };

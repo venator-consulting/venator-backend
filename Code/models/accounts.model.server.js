@@ -153,6 +153,6 @@ module.exports.getAccounts = function () {
 
 module.exports.syncAccounts = async function () {
     await this.getAccounts().sync({
-        force: true
+        alter: true
     });
 };

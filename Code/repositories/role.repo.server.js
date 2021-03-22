@@ -1,9 +1,20 @@
 const Role = require('../models/role.model.server');
 
 
-module.exports.fetchAll = function() {
-    return new Pro
+module.exports.fetchAll = function () {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const roles = await Role
+                .getRole()
+                .findAll();
+            resolve(roles);
+        } catch (err) {
+            reject(err);
+        }
+    });
 };
+
+
 
 module.exports.fetch = function (search = '_', orderBy = 'name', order = 'DESC', limit = 50, offset = 0) {
     // if(!order) order = 'DESC';
@@ -96,4 +107,13 @@ module.exports.deleteUser = function (roleId) {
             reject(err);
         }
     });
+};
+
+module.exports.createDefaultAdminRole = function () {
+    return Role
+        .getRole()
+        .create({
+            name: 'ADMIN',
+            role_description: 'the ADMIN Can Do any thing'
+        });
 };

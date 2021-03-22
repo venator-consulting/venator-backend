@@ -30,6 +30,6 @@ module.exports.getStreet = function () {
 
 module.exports.syncStreet = async function () {
     await this.getStreet().sync({
-        force: true
+        alter: true
     });
 };

@@ -49,6 +49,6 @@ module.exports.getProcedures = function () {
 
 module.exports.syncProcedures = async function () {
     await this.getProcedures().sync({
-        force: true
+        alter: true
     });
 };
