@@ -1,5 +1,5 @@
 const Role = require('../models/role.model.server');
-
+const { Op } = require("sequelize");
 
 module.exports.fetchAll = function () {
     return new Promise(async (resolve, reject) => {

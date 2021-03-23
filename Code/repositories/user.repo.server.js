@@ -1,6 +1,8 @@
 const User = require('../models/user.model.server');
 const env = require('../config/environment');
 const bcrypt = require('bcryptjs');
+const { Op } = require("sequelize");
+const Role = require('../models/role.model.server').getRole();
 
 module.exports.fetchAll = function () {
     return new Promise(async (resolve, reject) => {
@@ -79,12 +81,20 @@ module.exports.existUser = function (username) {
                     where: {
                         username: username,
                         deleted: false,
-                        expireDate: {
-                            [Op.gt]: new Date()
+                        [Op.or]: [{
+                            expireDate: {
+                                [Op.gt]: new Date()
+                            }
+                        },
+                        {
+                            expireDate: null
                         }
-                    }
+                    ]
+                        
+                    },
+                    include: Role 
                 });
-            resolve(user);
+            resolve(user.dataValues);
         } catch (err) {
             reject(err);
         } // end of try-catch

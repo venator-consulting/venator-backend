@@ -96,18 +96,18 @@ module.exports.importAccountCsvFile = async function (filePath, accountType = 1,
 
             for await (const row of parser) {
 
-                const accountNumber = decimalParser(row[template.accountNumber]);
-                if (isNaN(accountNumber)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, accountNumber/${Standardtemplate.accountNumber} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, accountNumber/${Standardtemplate.accountNumber} should be number!`);
+                // const accountNumber = decimalParser(row[template.accountNumber]);
+                // if (isNaN(accountNumber)) {
+                //     console.log(`${new Date()}: There is an ERROR on row ${index+1}, accountNumber/${template.accountNumber} should be number!`);
+                //     logger.error(`${new Date()}: There is an ERROR on row ${index+1}, accountNumber/${template.accountNumber} should be number!`);
                     
-                    reject(`There is an ERROR on row ${index+1}, accountNumber/${Standardtemplate.accountNumber} should be number!`);
-                    return;
-                }
+                //     reject(`There is an ERROR on row ${index+1}, accountNumber/${template.accountNumber} should be number!`);
+                //     return;
+                // }
                 
 
                 rowsToInsert.push({
-                    accountNumber: accountNumber,
+                    accountNumber: row[template.accountNumber],
                     companyCode: row[template.companyCode],
                     accountName: row[template.accountName],
                     accountType: AccountTypeEnum[accountType]
@@ -212,10 +212,10 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
 
             for await (const row of parser) {
 
-                const companyCode = row[Standardtemplate.companyCode];
-                const accountType = row[Standardtemplate.accountType];
+                const companyCode = row[Standardtemplate.companyCode]? row[Standardtemplate.companyCode] : null;
+                const accountType = row[Standardtemplate.accountType]? row[Standardtemplate.accountType] : null;
                 let accountNumber = null;
-                let accountName = row[Standardtemplate.accountName];
+                let accountName = row[Standardtemplate.accountName]? row[Standardtemplate.accountName] : null;
                 if (Standardtemplate.accountNumber && row[Standardtemplate.accountNumber]) {
                     accountNumber = decimalParser(row[Standardtemplate.accountNumber]);
                     if (isNaN(accountNumber)) {

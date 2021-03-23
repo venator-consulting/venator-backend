@@ -32,7 +32,7 @@ const Accounts = sequelizer.define('Accounts', {
     },
     // Kontra
     accountNumber: {
-        type: DataTypes.BIGINT(11)
+        type: DataTypes.STRING(25)
     },
     // 
     accountName: {

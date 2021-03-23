@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const config = require('../../../config/environment');
 
 
 module.exports.loginAuthenticate = function (req, res, next) {

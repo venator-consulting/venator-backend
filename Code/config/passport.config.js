@@ -16,17 +16,17 @@ passport.use(new LocalStrategy({
         data = {};
         userRepo.existUser(username)
             .then(rows => {
-                if (rows.length != 1 || !bcrypt.compareSync(password, rows[0].password)) {
+                if (!rows || !bcrypt.compareSync(password, rows.password)) {
                     return cb(null, false, {
                         message: 'Incorrect username or password.'
                     });
                 }
-                rows[0].password = 'deleted for security purpose';
+                rows.password = 'deleted for security purpose';
                 //get roles then return th object
                 // Users.getRoles(username)
                 //     .then(roles => {
-                        data.userinfo = rows[0];
-                        data.roles = rows[0].role;
+                        data.userinfo = rows;
+                        data.userinfo.Role = rows.Role? rows.Role.dataValues : {};
                         return cb(null, data, {
                             message: 'Logged In Successfully'
                         });
