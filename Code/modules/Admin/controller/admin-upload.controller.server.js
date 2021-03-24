@@ -279,7 +279,7 @@ module.exports.importFile = function (req, res, next) {
     const filePath = reqData.filePath;
     const fileType = reqData.fileType;
     const fileClass = reqData.fileClass;
-    const local = reqData.local === 2 ? 'de_DE' : 'en_US';
+    const local = reqData.local == 1 ? 'en_US' : 'de_DE';
     const accountType = reqData.accountType;
     const template = reqData.template;
     // if file type === 1 then is it an excel file

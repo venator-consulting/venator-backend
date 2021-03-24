@@ -1,3 +1,4 @@
 **/node_modules
 **/files
-/config/environment.js
+**/environment.js
+**/log

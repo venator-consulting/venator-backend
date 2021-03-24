@@ -36,8 +36,8 @@ export class Choices {
     static getLocalization() : Choices[] {
         let result: Choices[] = [];
 
-        result.push(new Choices("Dollar", 1));
-        result.push(new Choices("Euro", 2));
+        result.push(new Choices("en_US", 1));
+        result.push(new Choices("de_DE", 2));
         return result;
     }
 
