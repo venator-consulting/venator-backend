@@ -1,8 +1,0 @@
-{"message":"Tue Mar 23 2021 19:46:01 GMT+0200 (Eastern European Standard Time):The script uses approximately: 69 MB","level":"info"}
-{"message":"Tue Mar 23 2021 19:46:04 GMT+0200 (Eastern European Standard Time):The script uses approximately: 77.89 MB","level":"info"}
-{"message":"Tue Mar 23 2021 19:46:06 GMT+0200 (Eastern European Standard Time):The script uses approximately: 85.12 MB","level":"info"}
-{"message":"Tue Mar 23 2021 19:46:09 GMT+0200 (Eastern European Standard Time):The script uses approximately: 92.74 MB","level":"info"}
-{"message":"Tue Mar 23 2021 19:46:09 GMT+0200 (Eastern European Standard Time):The script uses approximately: 102.21 MB","level":"info"}
-{"message":"Tue Mar 23 2021 19:46:09 GMT+0200 (Eastern European Standard Time):The script uses approximately: 68.47 MB","level":"info"}
-{"message":"Tue Mar 23 2021 19:46:10 GMT+0200 (Eastern European Standard Time):transaction commited successfully for file","level":"info"}
-{"message":"Tue Mar 23 2021 19:46:10 GMT+0200 (Eastern European Standard Time):benchmark for import took: 11 seconds and 381031900 nanoseconds for 11590 records","level":"info"}
