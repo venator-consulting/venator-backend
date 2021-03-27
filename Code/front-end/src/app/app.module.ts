@@ -26,6 +26,7 @@ import { DialogModule } from 'primeng/dialog';
 import { AccordionModule } from 'primeng/accordion';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
+import { LoginComponent } from './shared/login/login.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import {MessageModule} from 'primeng/message';
     BreadCrumbComponent,
     ImportComponent,
     UnauthComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
