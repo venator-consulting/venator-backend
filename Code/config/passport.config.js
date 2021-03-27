@@ -26,7 +26,7 @@ passport.use(new LocalStrategy({
                 // Users.getRoles(username)
                 //     .then(roles => {
                         data.userinfo = rows;
-                        data.userinfo.Role = rows.Role? rows.Role.dataValues : {};
+                        data.userinfo.Role = (rows.Role && rows.Role.dataValues)? rows.Role.dataValues.name : null;
                         return cb(null, data, {
                             message: 'Logged In Successfully'
                         });

@@ -33,6 +33,10 @@ const Procedures = sequelizer.define('Procedures', {
     },
     dataSource: {
         type: DataTypes.STRING(50)
+    },
+    deleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 }, {
     tableName: 'Procedures'

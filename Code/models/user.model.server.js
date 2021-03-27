@@ -24,6 +24,7 @@ const User = sequelizer.define('User', {
     },
     email: {
         type: DataTypes.STRING(50),
+        unique: true
     },
     title: {
         type: DataTypes.STRING(10),
