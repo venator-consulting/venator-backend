@@ -5,6 +5,8 @@ const env = require('../../../config/environment');
 const dataSyncCtrl = require('../controller/data-migration.controller.server');
 const roleCtrl = require('../controller/roles.controller.server');
 const userCtrl = require('../controller/user.controller.server');
+const passport = require('passport');
+const authorization = require('../../../config/authorization.config');
 
 const multer = require('multer');
 const uploadfiles = multer({
@@ -28,7 +30,13 @@ router
 
 router
     .route('/roles')
-    .get(roleCtrl.fetchAll)
+    .get(passport.authenticate('jwt', { session: false }), authorization.authorize('ADMIN'), roleCtrl.fetchAll)
+    .post(passport.authenticate('jwt', { session: false }), authorization.authorize('ADMIN'), roleCtrl.insert)
+
+router
+    .route('/roles/:id')
+    .put(passport.authenticate('jwt', { session: false }), authorization.authorize('ADMIN'), roleCtrl.update)
+    .delete(passport.authenticate('jwt', { session: false }), authorization.authorize('ADMIN'), roleCtrl.delete)
 
 
 router

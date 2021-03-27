@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const config = require('./config/environment');
-const adminRoutes = require('./modules/Admin/route/admin-upload.route.server');
+const adminRoutes = require('./modules/Admin/route/admin.route.server');
 const path = require('path');
 require('./config/passport.config');
 const bearerToken = require('express-bearer-token');
