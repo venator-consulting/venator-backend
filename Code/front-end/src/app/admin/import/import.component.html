@@ -32,17 +32,16 @@
         <p-dropdown [options]="templates" [(ngModel)]="selectedTemplate" placeholder="Select a Template"
           optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
       </div>
-      <div class="p-col-2">
-        <button pButton type="button" icon="pi pi-plus" iconPos="left" label="Another File"
-          (click)="addFormData()"></button>
+      
+
+      <div class="p-grid">
+        <p-messages></p-messages>
       </div>
 
       <div class="p-col-12" *ngFor="let f of filesList; let i = index;">
         <!-- {{f | json}} -->
         <br><br>
-        <div class="p-grid" [hidden]="f.imported!==true">
-          <p-messages [hidden]="f.imported!==true"></p-messages>
-        </div>
+        
         <div class="p-grid" *ngIf="f.imported!==true">
           <div class="p-col-3">
             <!-- maxFileSize="100000000" -->
@@ -92,6 +91,13 @@
       <br />
     </div>
 
+    <div class="p-grid">
+      <div class="p-col-10"></div>
+      <div class="p-col-2">
+        <button pButton type="button" icon="pi pi-plus" iconPos="left" label="Another File"
+          (click)="addFormData()"></button>
+      </div>
+    </div>
 
 
     <br><br>
@@ -569,13 +575,13 @@
       <div class="p-col-4"></div>
     </div>
 
-    import
-    <div class="p-col-8">
-      <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
-    </div>
+    
     <p-messages></p-messages>
 
     <br><br>
+    <div class="p-col-8">
+      <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
+    </div>
     <span class="p-buttonset">
       <button pButton type="button" label="Previous" class="p-button-raised p-button-rounded"
         (click)="goPrev(3)"></button>

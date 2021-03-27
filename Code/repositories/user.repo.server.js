@@ -79,7 +79,14 @@ module.exports.existUser = function (username) {
                 .getUser()
                 .findOne({
                     where: {
-                        username: username,
+                        [Op.or]: [
+                            {
+                                username: username,
+                            },
+                            {
+                                email: username,
+                            }
+                        ],
                         deleted: false,
                         [Op.or]: [{
                             expireDate: {
@@ -134,6 +141,7 @@ module.exports.createDefaultAdmin = function (role) {
                     password: hashedPassword,
                     firstname: 'Admin',
                     lastname: 'Admin',
+                    email: env.defaultAdminEmail,
                     RoleId: role.id
                 });
             // const result = await createdUser.addRole(role);

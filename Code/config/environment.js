@@ -9,5 +9,6 @@ module.exports = {
     databaseDialect: 'mysql', /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
     bulkInsertSize: 2000,
     defaultAdminUsername: 'admin',
+    defaultAdminEmail: 'admin@domain.com',
     defaultAdminPassword: 'admin',
 };

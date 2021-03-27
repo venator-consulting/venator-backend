@@ -6,7 +6,7 @@ const adminRoutes = require('./modules/Admin/route/admin-upload.route.server');
 const path = require('path');
 require('./config/passport.config');
 const bearerToken = require('express-bearer-token');
-const sharedRotes = require('./modules/shared/route/shared.route.server');
+const sharedRoutes = require('./modules/shared/route/shared.route.server');
 
 
 const cors = require('cors');
@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bearerToken());
 
-app.use('/api/shared', sharedRotes);
+app.use('/api/shared', sharedRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.use(express.static('front-end/dist/front-end/'));
