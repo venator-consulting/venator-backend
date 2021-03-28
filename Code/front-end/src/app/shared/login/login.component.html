@@ -19,7 +19,7 @@
                                     <i class="pi pi-envelope"></i>
                                 </span>
                                 <span class="p-float-label">
-                                    <input id="email" type="text" pInputText  class="p-inputtext p-component" >   
+                                    <input id="email" type="text" pInputText [(ngModel)]="username" class="p-inputtext p-component" >   
                                     <label for="email"> Email </label>   
 
                                 </span>
@@ -29,12 +29,13 @@
                                     <i class="pi pi-lock"></i>
                                 </span>
                                 <span class="p-float-label">
-                                    <input id="password" type="password" pInputText  class="p-inputtext p-component" >   
+                                    <input id="password" type="password" pInputText [(ngModel)]="password" class="p-inputtext p-component" >   
                                     <label for="password"> Password </label>   
 
                                 </span>
                             </div>
-                            <button pButton type="button" label="Login" class="p-button-raised p-button-rounded buttonCss p-mb-4 p-px-3 p-button p-component p-ripple login-button"  ></button>
+                            <button pButton type="button" label="Login" class="p-button-raised p-button-rounded buttonCss p-mb-4 p-px-3 p-button p-component p-ripple login-button"  
+                            (click)="login()"></button>
 
                         </div>
                         <a  class="linkCss p-mb-4"  > forget Password ? </a>
@@ -46,7 +47,7 @@
         </div>
 
 
-        <div class="p-col-4 "></div>
+        <div class="p-col-3 "></div>
 
     </div>
 

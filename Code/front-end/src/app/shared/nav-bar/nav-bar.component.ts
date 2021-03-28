@@ -33,6 +33,14 @@ export class NavBarComponent implements OnInit {
           { label: 'Delete', icon: 'pi pi-fw pi-trash' },
           { label: 'Refresh', icon: 'pi pi-fw pi-refresh' }
         ]
+      },
+      {
+        label: 'Logout',
+        icon: 'pi pi-fw pi-refresh',
+        command: () => {
+          localStorage.clear();
+          this._router.navigate(['/']);
+        }
       }
     ];
 
