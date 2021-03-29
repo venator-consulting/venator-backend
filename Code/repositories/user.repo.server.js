@@ -1,7 +1,9 @@
 const User = require('../models/user.model.server');
 const env = require('../config/environment');
 const bcrypt = require('bcryptjs');
-const { Op } = require("sequelize");
+const {
+    Op
+} = require("sequelize");
 const Role = require('../models/role.model.server').getRole();
 
 module.exports.fetchAll = function () {
@@ -79,29 +81,36 @@ module.exports.existUser = function (username) {
                 .getUser()
                 .findOne({
                     where: {
-                        [Op.or]: [
-                            {
-                                username: username,
+                        [Op.and]: [{
+                                [Op.or]: [{
+                                        username: username,
+                                    },
+                                    {
+                                        email: username,
+                                    }
+                                ],
                             },
                             {
-                                email: username,
+                                deleted: false,
+                            },
+                            {
+                                [Op.or]: [{
+                                        expireDate: {
+                                            [Op.gt]: new Date()
+                                        }
+                                    },
+                                    {
+                                        expireDate: null
+                                    }
+                                ]
                             }
-                        ],
-                        deleted: false,
-                        [Op.or]: [{
-                            expireDate: {
-                                [Op.gt]: new Date()
-                            }
-                        },
-                        {
-                            expireDate: null
-                        }
-                    ]
-                        
+
+                        ]
                     },
-                    include: Role 
+                    include: Role
                 });
-            resolve(user.dataValues);
+
+            resolve((user && user.dataValues) ? user.dataValues : null);
         } catch (err) {
             reject(err);
         } // end of try-catch

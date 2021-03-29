@@ -62,6 +62,10 @@ const User = sequelizer.define('User', {
     deleted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+    reseted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 }, {
     tableName: 'users'
