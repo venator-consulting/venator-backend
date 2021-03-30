@@ -27,6 +27,7 @@ import { AccordionModule } from 'primeng/accordion';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import { LoginComponent } from './shared/login/login.component';
+import { AdminRegistrationComponent } from './admin/admin-registration/admin-registration.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { LoginComponent } from './shared/login/login.component';
     ImportComponent,
     UnauthComponent,
     NotfoundComponent,
-    LoginComponent
+    LoginComponent,
+    AdminRegistrationComponent
   ],
   imports: [
     BrowserModule,
