@@ -36,7 +36,7 @@ export class NavBarComponent implements OnInit {
       },
       {
         label: 'Logout',
-        icon: 'pi pi-fw pi-refresh',
+        icon: 'pi pi-fw pi-power-off',
         command: () => {
           localStorage.clear();
           this._router.navigate(['/']);
