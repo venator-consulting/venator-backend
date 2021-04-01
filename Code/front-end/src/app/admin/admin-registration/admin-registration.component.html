@@ -8,13 +8,25 @@
             <div class="p-field p-grid">
                 <label for="firstname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Title </label>
                 <div class="p-col-12 p-md-10">
-                    <p-dropdown placeholder="Select a Title"  [(ngModel)]="title" [options]="titles"  optionLabel="name" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true" defaultLabel="Select a Title" >
+                    <p-dropdown placeholder="select a title"  [(ngModel)]="title" [options]="titles"  optionLabel="name" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true" defaultLabel="Select a Title" >
                         <div class="ng-tns-c42-167 p-dropdown p-component">
                             <span class="ng-tns-c42-167 p-dropdown-label p-inputtext p-placeholder p-dropdown-label-empty ng-star-inserted"> </span>
                         </div>
                     </p-dropdown>   
                 </div>
             </div>
+
+            <div class="p-fluid">
+                <div class="p-field p-grid">
+                    <label for="firstname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Role </label>
+                    <div class="p-col-12 p-md-10">
+                        <p-dropdown placeholder="select a role"  [(ngModel)]="role" [options]="roles"  optionLabel="name" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true" defaultLabel="Select a Title" >
+                            <div class="ng-tns-c42-167 p-dropdown p-component">
+                                <span class="ng-tns-c42-167 p-dropdown-label p-inputtext p-placeholder p-dropdown-label-empty ng-star-inserted"> </span>
+                            </div>
+                        </p-dropdown>   
+                    </div>
+                </div>
 
             <div class="p-field p-grid">
                 <label for="firstname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Firstname </label>

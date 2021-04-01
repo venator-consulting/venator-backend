@@ -28,6 +28,8 @@ import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import { LoginComponent } from './shared/login/login.component';
 import { AdminRegistrationComponent } from './admin/admin-registration/admin-registration.component';
+import { ResetPasswordComponent } from './shared/reset-password/reset-password.component';
+import {PasswordModule} from 'primeng/password';
 
 
 @NgModule({
@@ -40,7 +42,8 @@ import { AdminRegistrationComponent } from './admin/admin-registration/admin-reg
     UnauthComponent,
     NotfoundComponent,
     LoginComponent,
-    AdminRegistrationComponent
+    AdminRegistrationComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +63,9 @@ import { AdminRegistrationComponent } from './admin/admin-registration/admin-reg
     DialogModule,
     AccordionModule,
     MessagesModule,
-    MessageModule
+    MessageModule,
+    PasswordModule,
+
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

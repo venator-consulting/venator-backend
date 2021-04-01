@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { Roles } from "../../model/roles";
+import { Titles } from "../../model/titles";
 
 @Component({
   selector: 'app-admin-registration',
@@ -10,7 +12,10 @@ export class AdminRegistrationComponent implements OnInit {
 
   constructor(private _messageService: MessageService) { }
 
-  title = {name:""};
+  title :any ;
+  titles: Titles[] = Titles.getTitles();
+  roles: Roles[] = Roles.getRoles();
+  role : any ;
   firstname: string; 
   lastname: string; 
   username: string; 
@@ -22,15 +27,12 @@ export class AdminRegistrationComponent implements OnInit {
   city: string; 
   country: string; 
 
+/*   selectedRole = this.role.name ;
+ */
 
-  titles = [] = [
-    {
-      name: "Frau"
-    },
-    {
-      name: "Herr"
-    }
-  ] 
+
+
+
   titleErroMsg : string = ' Please enter the title ' ;
   firstnameErroMsg : string = ' Please enter the firstname ';
   lastnameErroMsg : string = ' Please enter the lastname ';
@@ -48,10 +50,11 @@ export class AdminRegistrationComponent implements OnInit {
   }
   submitHandler() {
     const data = {
-      title : this.title.name ? this.title.name : "",
+      title : this.title?.name,
       firstname: this.firstname,
       lastname: this.lastname,
       username: this.username,
+      role: this.role?.name,
       email: this.email,
       mobileNr : this.mobileNr,
       contactPerson: this.contactPerson,
