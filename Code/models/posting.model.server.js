@@ -2,9 +2,6 @@ const {
     DataTypes
 } = require('sequelize');
 const sequelize = require('../config/sequelize.config');
-const {
-    posting
-} = require('./templates/sap.cinram.template');
 
 
 // account name

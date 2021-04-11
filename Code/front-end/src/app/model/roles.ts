@@ -10,6 +10,7 @@ export class Roles {
     static getRoles(): Roles[] {
         let result: Roles[] = [];
 
+        result.push(new Roles("Admin"));
         result.push(new Roles("Manager"));
         result.push(new Roles("User"));
         return result;

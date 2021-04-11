@@ -22,7 +22,7 @@ const Accounts = sequelizer.define('Accounts', {
     accountTypeId: {
         type: DataTypes.BIGINT(11),
     },
-    // from import ex: kontroat
+    // from import ex: kontraart
     accountType: {
         type: DataTypes.STRING(10)
     },

@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('token', res.token);
         }
 
-        this._router.navigate(['/admin/import']);
+        this._router.navigate(['/dashboard']);
 
       }, err => {
         this._messageService.add({

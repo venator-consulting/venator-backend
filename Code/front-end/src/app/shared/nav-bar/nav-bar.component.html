@@ -1,4 +1,25 @@
-<p-menubar [model]="items"> 
-        <img src="assets/logo.jpg" height="40" class="p-mr-2">
-</p-menubar>
-<br><br><br>
+<div>
+        <div>
+            <p-menubar [model]="menuItems">
+        
+            <ng-template pTemplate="start">
+                <img src="assets/logo.jpg" height="50" width="75" class="p-mr-6" >
+            </ng-template>
+            <div >
+               <a pripple class="layout-topbar-action p-d-flex p-dir-row p-jc-center p-ai-center p-px-2 rounded-circle ng-tns-c186-0 p-ripple">
+                    <img src="assets/profile.png" style="width: 50px; height: 50px; background-color: none ; color: none "class="p-mr-2" (click)="menu.toggle($event)">
+                    <span class="p-link"></span>
+                    
+                </a>
+                <p-menu #menu [popup]="true" [model]="userPages"></p-menu>
+            </div>
+        </p-menubar>
+        
+        </div>
+        <div>
+            <p-sidebar [(visible)]="sideBarShow" class="sideBarWidth" [showCloseIcon]="false" >
+                <h2 style="font-weight:lighter " class="p-text-center">Mohamad Hamad</h2>
+                <p-menu  [model]="sidebarItems" [style]="{'width':'300px'}"></p-menu >        
+            </p-sidebar>
+        </div>
+    </div>

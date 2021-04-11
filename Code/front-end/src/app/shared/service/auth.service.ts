@@ -14,5 +14,13 @@ export class AuthService {
   login(data: any) {
     return this._http.post<any>(this._thisURL + '/login', data);
   }
+
+  resetPassword(data: any) {
+    return this._http.post<any>(this._thisURL + '/resetPassword', data);
+  }
+
+  adminRegistration(data: any) {
+    return this._http.post<any>(this._thisURL + '/adminRegistration', data);
+  }
   
 }

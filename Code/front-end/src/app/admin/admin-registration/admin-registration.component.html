@@ -1,5 +1,5 @@
-
-<div class="p-col-12 p-md-6">
+<!--  
+<div class="p-xs-10 p-xs-offset-1 p-md-6 p-md-offset-3">
     <div class="card">
         <p-toast></p-toast>
 
@@ -18,7 +18,7 @@
 
             <div class="p-fluid">
                 <div class="p-field p-grid">
-                    <label for="firstname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Role </label>
+                    <label for="role" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Role </label>
                     <div class="p-col-12 p-md-10">
                         <p-dropdown placeholder="select a role"  [(ngModel)]="role" [options]="roles"  optionLabel="name" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true" defaultLabel="Select a Title" >
                             <div class="ng-tns-c42-167 p-dropdown p-component">
@@ -109,3 +109,125 @@
         </div>
     </div>
 </div>
+ -->
+
+ <div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
+    <div class="card">
+        <h5 class="p-text-center"> Admin Registration </h5>
+        <form class="p-fluid"  (ngSubmit)="submitHandler()">
+
+
+            <div class="p-fluid">
+
+                <div class="p-field p-grid">
+                    <label  class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Role </label>
+                    <div class="p-col-12 p-md-10">
+                        <p-dropdown placeholder="select a role" name="role"  #role="ngModel" [options]="roles" optionValue="name" optionLabel="name" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true"  [(ngModel)]="userModel.role" >
+                            <div class="ng-tns-c42-167 p-dropdown p-component">
+                                <span class="ng-tns-c42-167 p-dropdown-label p-inputtext p-placeholder p-dropdown-label-empty ng-star-inserted"> </span>
+                            </div>
+                        </p-dropdown>  
+                        <small *ngIf="role.invalid && role.touched " class="spanCss"> role is required </small> 
+
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <label  class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Title </label>
+                    <div class="p-col-12 p-md-10">
+                        <p-dropdown placeholder="select a title" name="title"  #title1="ngModel" [options]="titles" optionValue="name" optionLabel="name" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true"  [(ngModel)]="userModel.title" >
+                            <div class="ng-tns-c42-167 p-dropdown p-component">
+                                <span class="ng-tns-c42-167 p-dropdown-label p-inputtext p-placeholder p-dropdown-label-empty ng-star-inserted"> </span>
+                            </div>
+                        </p-dropdown>  
+                        <small *ngIf="title1.invalid && title1.touched " class="spanCss"> title is required </small> 
+
+                    </div>
+                </div>
+            <div class="p-field p-grid">
+                <label for="firstname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Firstname</label>
+                <div class="p-col-12 p-md-10">
+                    <input required #firstname="ngModel"  name="firstname" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.firstname" > 
+                    <small *ngIf="firstname.invalid && firstname.touched " class="spanCss ">firstname is required</small>
+                </div>
+            </div>
+
+            <div class="p-field p-grid">
+                <label for="lastname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Lastname </label>
+                <div class="p-col-12 p-md-10">
+                    <input required #lastname="ngModel"  name="lastname" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.lastname" > 
+                    <small *ngIf="lastname.invalid && lastname.touched" class="spanCss ">lastname is required</small>
+                </div>
+            </div>
+
+            <div class="p-field p-grid">
+                <label for="email" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Email </label>
+                <div class="p-col-12 p-md-10">
+                    <input required #email="ngModel"  name="email" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.email" pattern="^(\D)+(\w)*((\.(\w)+)?)+@(\D)+(\w)*((\.(\D)+(\w)*)+)?(\.)[a-z]{2,}$" > 
+                    <small *ngIf="email.invalid && email.touched " class="spanCss "> email is required</small>
+                    
+                </div>
+            </div>
+
+            <div class="p-field p-grid">
+                <label for="username" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Username </label>
+                <div class="p-col-12 p-md-10">
+                    <input required #username="ngModel"  name="username" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.username" > 
+                    <small *ngIf="username.invalid && username.touched " class="spanCss ">username is required</small>
+                </div>
+            </div>
+
+            <div class="p-field p-grid">
+                <label for="mobileNr" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> MobileNr </label>
+                <div class="p-col-12 p-md-10">
+                    <input required #mobileNr="ngModel"  name="mobileNr" type="number" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.mobileNr" > 
+                    <small *ngIf="mobileNr.invalid && mobileNr.touched" class="spanCss ">mobileNr is required</small>
+                </div>
+            </div>
+
+            <div class="p-field p-grid">
+                <label for="contactPerson" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> ContactPerson </label>
+                <div class="p-col-12 p-md-10">
+                    <input required #contactPerson="ngModel"  name="contactPerson" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.contactPerson" > 
+                    <small *ngIf="contactPerson.invalid && contactPerson.touched" class="spanCss ">contactPerson is required</small>
+                </div>
+            </div>
+
+            <div class="p-field p-grid">
+                <label for="street" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Street </label>
+                <div class="p-col-12 p-md-10">
+                    <input required #street="ngModel"  name="street" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.street" > 
+                    <small *ngIf="street.invalid && street.touched" class="spanCss ">Street is required</small>
+                </div>
+            </div>
+            <div class="p-field p-grid">
+                <label for="houseNr" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> HouseNr </label>
+                <div class="p-col-12 p-md-10">
+                    <input required #houseNr="ngModel"  name="houseNr" type="number" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.houseNr" > 
+                    <small *ngIf="houseNr.invalid && houseNr.touched" class="spanCss ">houseNr is required</small>
+                </div>
+            </div>
+            <div class="p-field p-grid">
+                <label for="city" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> City </label>
+                <div class="p-col-12 p-md-10">
+                    <input required #city="ngModel"  name="city" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.city" > 
+                    <small *ngIf="city.invalid && city.touched" class="spanCss ">city is required</small>
+                </div>
+            </div>
+            <div class="p-field p-grid">
+                <label for="country" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Country </label>
+                <div class="p-col-12 p-md-10">
+                    <input required #country="ngModel"  name="country" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.country" > 
+                    <small *ngIf="country.invalid && country.touched" class="spanCss ">Country is required</small>
+                </div>
+            </div>
+
+            <div class="p-field p-grid">
+                <button pbutton pripple type="submit" label="Submit" class="p-mt-4  p-ripple p-button p-component buttonCss" >
+                    <span class="p-button-label"> Submit </span>
+                </button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+

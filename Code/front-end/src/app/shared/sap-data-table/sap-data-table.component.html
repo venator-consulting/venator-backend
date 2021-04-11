@@ -1,0 +1,121 @@
+<div class="card">
+    <h5>Filter Menu</h5>
+    <p-table #dt1  [value]="postings" dataKey="id"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"  styleClass="p-datatable-customers p-datatable-gridlines"
+        [paginator]="true"
+        >
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" ></button>
+                <span class="p-input-icon-left p-ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" placeholder="Search keyword" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" >
+            <tr>
+                <th pSortableColumn="companyCode">
+
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        <p-columnFilter type="text" field="companyCode" display="menu"></p-columnFilter>
+                        companyCode 
+                        <p-sortIcon field="companyCode"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="recordNumber">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        <p-columnFilter type="text" field="recordNumber" display="menu"></p-columnFilter>
+                        recordNumber 
+                        <p-sortIcon field="recordNumber"></p-sortIcon>
+
+                    </div>
+                </th>
+                <th pSortableColumn="documentNumber">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        <p-columnFilter type="text" field="documentNumber" display="menu"></p-columnFilter>
+                        documentNumber 
+                        <p-sortIcon field="documentNumber"></p-sortIcon>
+
+                    </div>
+                </th>
+                <th pSortableColumn="accountNumber">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        <p-columnFilter type="text" field="accountNumber" display="menu"></p-columnFilter>
+                        accountNumber 
+                        <p-sortIcon field="accountNumber"></p-sortIcon>
+
+                    </div>
+                </th>
+                <th pSortableColumn="accountName">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        <p-columnFilter type="text" field="accountName" display="menu"></p-columnFilter>
+                        accountName 
+                        <p-sortIcon field="accountName"></p-sortIcon>
+
+                    </div>
+                </th>
+                <th pSortableColumn="GLAccountNumber">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        <p-columnFilter type="text" field="GLAccountNumber" display="menu"></p-columnFilter>
+                        GLAccountNumber 
+                        <p-sortIcon field="GLAccountNumber"></p-sortIcon>
+
+                    </div>
+                </th>
+                <th pSortableColumn="GLAccountName">
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        <p-columnFilter type="text" field="GLAccountName" display="menu"></p-columnFilter>
+                        GLAccountName 
+                        <p-sortIcon field="GLAccountName"></p-sortIcon>
+
+                    </div>
+                </th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body"  >
+            <tr *ngFor="let elem of postings">
+                <td>
+                    {{elem.companyCode}}
+
+                </td>
+                <td>
+                    <span >{{elem.recordNumber}}</span>
+
+
+                </td>
+                <td>
+                    <span class="image-text">{{elem.documentNumber}}</span>
+
+                </td>
+                <td>
+                    {{elem.accountNumber}}
+
+                </td>
+                <td>
+                    {{elem.accountName }}
+
+                </td>
+                <td>
+                    <span >{{elem.GLAccountNumber}}</span>
+
+                </td>
+                <td>
+                    <span >{{elem.GLAccountName}}</span>
+
+                </td>
+                
+  <!--               <td>
+                    <p-progressBar [value]="customer.activity" [showValue]="false"></p-progressBar>
+                </td> -->
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="7">No customers found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
