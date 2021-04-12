@@ -1,14 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
-// @import '~assets/bootstrap-theme.min.css'
 
 $primaryColor: #e75113
 $primaryHover: #f75123
 $secondary: #58585a
 
 body
-    background-color: #f0f0f0f0
-
-.p-menubar, .p-submenu-list
+    background-color: #ffffff
+.p-menubar
     background-color: $secondary !important
 
 .p-menubar
@@ -27,13 +25,11 @@ body
 
 .p-menubar .p-menuitem-link:not(.p-disabled):hover
     background-color: #474749 !important
-
 .p-menuitem span
-    color: #ffffff !important
+    color: #e75113 !important
 
 .p-menuitem-link-active span
     color: $primaryColor !important
-
 .p-button
     background-color: $primaryColor
     color: #212529
@@ -50,14 +46,3 @@ body
     -moz-appearance: auto
     appearance: auto
     padding-right: 15px
-
-
-.p-fileupload, .p-fileupload-buttonbar
-    background: none !important
-    border: none !important
-    padding-top: 0px !important
-
-.p-fileupload-content
-    display: none !important
-    background: none !important
-    border: none !important

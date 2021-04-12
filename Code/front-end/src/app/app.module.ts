@@ -28,8 +28,23 @@ import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import { LoginComponent } from './shared/login/login.component';
 import { AdminRegistrationComponent } from './admin/admin-registration/admin-registration.component';
-
-
+import { ResetPasswordComponent } from './shared/reset-password/reset-password.component';
+import {PasswordModule} from 'primeng/password';
+import {MenuModule} from 'primeng/menu';
+import { LayoutComponent } from './shared/layout/layout.component'
+import {MegaMenuModule} from 'primeng/megamenu';
+import {ContextMenuModule} from 'primeng/contextmenu';
+import {PanelMenuModule} from 'primeng/panelmenu';
+import {SidebarModule} from 'primeng/sidebar';
+import {ListboxModule} from 'primeng/listbox';
+import {TreeModule} from 'primeng/tree';
+import {DividerModule} from 'primeng/divider';
+import {TableModule} from 'primeng/table';
+import {CalendarModule} from 'primeng/calendar';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {ProgressBarModule} from 'primeng/progressbar';
+import {InputTextModule} from 'primeng/inputtext';
+import { SAPDataTableComponent } from './shared/sap-data-table/sap-data-table.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +55,10 @@ import { AdminRegistrationComponent } from './admin/admin-registration/admin-reg
     UnauthComponent,
     NotfoundComponent,
     LoginComponent,
-    AdminRegistrationComponent
+    AdminRegistrationComponent,
+    ResetPasswordComponent,
+    LayoutComponent,
+    SAPDataTableComponent
   ],
   imports: [
     BrowserModule,
@@ -49,18 +67,33 @@ import { AdminRegistrationComponent } from './admin/admin-registration/admin-reg
     FormsModule,
     ReactiveFormsModule,
     MenubarModule,
+    DividerModule,
     StepsModule,
     ToastModule,
+    MenubarModule,
+    TableModule,
     FileUploadModule,
-    HttpClientModule,
+    CalendarModule,
+    MultiSelectModule,
+    TreeModule,
+    InputTextModule,
+    ProgressBarModule,
     DropdownModule,
+    HttpClientModule,
+    SidebarModule,
+    ListboxModule,
+    PanelMenuModule,
+    MenuModule,
     ButtonModule,
     CardModule,
     ProgressSpinnerModule,
     DialogModule,
+    ContextMenuModule,
     AccordionModule,
     MessagesModule,
-    MessageModule
+    MessageModule,
+    PasswordModule,
+    MegaMenuModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
