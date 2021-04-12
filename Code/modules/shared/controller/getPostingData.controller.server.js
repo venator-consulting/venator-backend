@@ -7,8 +7,8 @@ module.exports.getData = function (req, res, next) {
         companyCode = req.params.companyCode
         postngRepo.fetchAll(companyCode)
         .then(result=> {
-            return res.json({
-                data: result
+            return res.send({
+                results: result
             });
         })
 
