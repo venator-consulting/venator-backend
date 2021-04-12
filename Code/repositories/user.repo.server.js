@@ -1,6 +1,8 @@
 const User = require('../models/user.model.server');
 const env = require('../config/environment');
 const bcrypt = require('bcryptjs');
+const sendMail = require('../config/mailer.config').sendMail;
+const jwt = require('jsonwebtoken');
 const {
     Op
 } = require("sequelize");
@@ -121,13 +123,34 @@ module.exports.existUser = function (username) {
 module.exports.insert = function (user) {
     return new Promise(async (resolve, reject) => {
         try {
-            // const password = randomstring.generate(10);
+            const password = randomstring.generate(10);
             const salt = bcrypt.genSaltSync(10);
-            const hashedPassword = bcrypt.hashSync(user.password, salt);
+            const hashedPassword = bcrypt.hashSync(password, salt);
             user.password = hashedPassword;
+
+            // generate a signed son web token with the contents of user object and return it in the response
+            const tokenPayload = {
+
+            };
+            const token = jwt.sign(tokenPayload, env.jwtSecret);
+
+            const mail = {
+                from: 'Venator, No Reply mail',
+                to: req.body.data.email,
+                subject: 'Confirmation Mail',
+                text: 'Dear ' + req.body.data.firstname + ' ' + req.body.data.lastname + ' please click the next link and set ' +
+                    'your password to login to your account: ' + env.resetPassLink + token
+            };
+
             const result = await User
                 .getUser()
                 .create(user);
+
+            sendMail(mail)
+                .then(info => {});
+
+            // if manager create schema
+
             resolve(result);
         } catch (err) {
             reject(err);
