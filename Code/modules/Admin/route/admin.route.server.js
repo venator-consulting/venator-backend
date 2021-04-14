@@ -29,6 +29,10 @@ router
 
 
 router
+    .route('/user')
+    .post(userCtrl.register);
+
+router
     .route('/roles')
     .get(passport.authenticate('jwt', { session: false }), authorization.authorize('ADMIN'), roleCtrl.fetchAll)
     .post(passport.authenticate('jwt', { session: false }), authorization.authorize('ADMIN'), roleCtrl.insert)

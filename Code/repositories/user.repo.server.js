@@ -1,8 +1,11 @@
 const User = require('../models/user.model.server');
+const Posting = require('../models/posting.model.server');
+const Accounts = require('../models/accounts.model.server');
 const env = require('../config/environment');
 const bcrypt = require('bcryptjs');
 const sendMail = require('../config/mailer.config').sendMail;
 const jwt = require('jsonwebtoken');
+const randomstring = require('randomstring');
 const {
     Op
 } = require("sequelize");
@@ -129,16 +132,19 @@ module.exports.insert = function (user) {
             user.password = hashedPassword;
 
             // generate a signed son web token with the contents of user object and return it in the response
+            let d = new Date();
+            d.setHours(d.getHours() + 6);
             const tokenPayload = {
-
+                email: user.email,
+                expire: d
             };
             const token = jwt.sign(tokenPayload, env.jwtSecret);
 
             const mail = {
                 from: 'Venator, No Reply mail',
-                to: req.body.data.email,
+                to: user.email,
                 subject: 'Confirmation Mail',
-                text: 'Dear ' + req.body.data.firstname + ' ' + req.body.data.lastname + ' please click the next link and set ' +
+                text: 'Dear ' + user.firstname + ' ' + user.lastname + ' please click the next link and set ' +
                     'your password to login to your account: ' + env.resetPassLink + token
             };
 
@@ -146,10 +152,13 @@ module.exports.insert = function (user) {
                 .getUser()
                 .create(user);
 
-            sendMail(mail)
-                .then(info => {});
+            const mailRes = await sendMail(mail);
 
             // if manager create schema
+            if (!user.managerId) {
+                Posting.syncPosting('posting_' + result.dataValues.id);
+                Accounts.syncAccounts('accounts_' + result.dataValues.id);
+            }
 
             resolve(result);
         } catch (err) {
