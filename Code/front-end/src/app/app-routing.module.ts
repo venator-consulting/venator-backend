@@ -16,14 +16,14 @@ const routes: Routes = [
   //   path: 'admin', component: AdminComponent, canActivate: [AuthGuard], children: [
   //     { path: 'import', component: ImportComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   //   ]
-  // },dashboard
+  // },
   { path: 'admin/registration', component: AdminRegistrationComponent },
   { path: 'dashboard', component: LayoutComponent },
   { path: 'admin/import', component: ImportComponent },
   { path: 'data', component: SAPDataTableComponent },
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },
-
+  { path: 'reset/:token=', component: ResetPasswordComponent },
   { path: '**', component: NotfoundComponent },
 
 ];
