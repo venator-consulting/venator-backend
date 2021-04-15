@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../service/auth.service";
 import { MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
+import { Router ,ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-reset-password-new-user',
@@ -15,10 +15,14 @@ export class ResetPasswordNewUserComponent implements OnInit {
     confirmedPassword: "",
   }
   pass :string;
-
-  constructor(private _messageService: MessageService, private _authService: AuthService, private _router: Router) { }
-
+  token:any ; 
+  constructor(private _messageService: MessageService, private _authService: AuthService, private _router: Router,  private _route: ActivatedRoute) { }
+  debugger;
   ngOnInit(): void {
+    debugger;
+    this.token = this._route.snapshot.paramMap.get('token');
+    console.log(this.token)
+    debugger;
   }
 
   submitHandle() {

@@ -8,6 +8,7 @@ import { LayoutComponent } from './shared/layout/layout.component';
 import { ResetPasswordComponent } from './shared/reset-password/reset-password.component';
 import { AdminRegistrationComponent } from './admin/admin-registration/admin-registration.component';
 import { SAPDataTableComponent } from './shared/sap-data-table/sap-data-table.component';
+import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/reset-password-new-user.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -23,7 +24,7 @@ const routes: Routes = [
   { path: 'data', component: SAPDataTableComponent },
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },
-  { path: 'reset/:token=', component: ResetPasswordComponent },
+  { path: 'reset/:token', component: ResetPasswordNewUserComponent },
   { path: '**', component: NotfoundComponent },
 
 ];
