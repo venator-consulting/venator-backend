@@ -1,20 +1,5 @@
  <div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
     <div class="card">
-<<<<<<< HEAD
-        <p-toast></p-toast>
-<form ngSu></form>
-        <h5 class="p-text-center"> Admin Registration </h5>
-        <div class="p-fluid">
-            <div class="p-field p-grid">
-                <label for="firstname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Title </label>
-                <div class="p-col-12 p-md-10">
-                    <p-dropdown placeholder="Select a Title"  [(ngModel)]="title" [options]="titles"  optionLabel="name" 
-                    class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true" defaultLabel="Select a Title" required>
-                        <div class="ng-tns-c42-167 p-dropdown p-component">
-                            <span class="ng-tns-c42-167 p-dropdown-label p-inputtext p-placeholder p-dropdown-label-empty ng-star-inserted"> </span>
-                        </div>
-                    </p-dropdown>   
-=======
         <h5 class="p-text-center"> Admin Registration </h5>
         <form class="p-fluid"  (ngSubmit)="submitHandler()">
 
@@ -32,7 +17,6 @@
                         <small *ngIf="role.invalid && role.touched " class="spanCss"> role is required </small> 
 
                     </div>
->>>>>>> ac518a68a8eac1263fc500ca63a4c95738506fe2
                 </div>
                 <div class="p-field p-grid">
                     <label  class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Title </label>
@@ -49,24 +33,16 @@
             <div class="p-field p-grid">
                 <label for="firstname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Firstname</label>
                 <div class="p-col-12 p-md-10">
-<<<<<<< HEAD
-                    <input [(ngModel)]="firstname"  id="firstname" type="text" pinputtext class="p-inputtext p-component" required> 
-=======
                     <input required #firstname="ngModel"  name="firstname" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.firstname" > 
                     <small *ngIf="firstname.invalid && firstname.touched " class="spanCss ">firstname is required</small>
->>>>>>> ac518a68a8eac1263fc500ca63a4c95738506fe2
                 </div>
             </div>
 
             <div class="p-field p-grid">
                 <label for="lastname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Lastname </label>
                 <div class="p-col-12 p-md-10">
-<<<<<<< HEAD
-                    <input [(ngModel)]="lastname" id="lastname" type="text" pinputtext class="p-inputtext p-component" required> 
-=======
                     <input required #lastname="ngModel"  name="lastname" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.lastname" > 
                     <small *ngIf="lastname.invalid && lastname.touched" class="spanCss ">lastname is required</small>
->>>>>>> ac518a68a8eac1263fc500ca63a4c95738506fe2
                 </div>
             </div>
 

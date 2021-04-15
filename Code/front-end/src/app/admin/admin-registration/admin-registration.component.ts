@@ -11,36 +11,53 @@ import { AdminRegistrationService } from "../service/admin-registration.service"
 })
 export class AdminRegistrationComponent implements OnInit {
 
-  constructor(private _messageService: MessageService, private _adminRegistrationService: AdminRegistrationService ) { }
+  constructor(private _messageService: MessageService, private _adminRegistrationService: AdminRegistrationService) { }
 
 
 
   titles: Titles[] = Titles.getTitles();
   roles: Roles[] = Roles.getRoles();
 
-  
-   userModel : Users  = {
+
+  userModel: Users = {
     title: "",
     email: '',
     role: '',
     firstname: '',
     lastname: '',
     username: '',
-    mobileNr:  null,
+    mobileNr: null,
     contactPerson: '',
     street: '',
     houseNr: null,
     city: '',
     country: '',
-   } ;
+  };
 
 
 
   ngOnInit(): void {
   }
+
   submitHandler() {
-    
+    debugger;
     this._adminRegistrationService.addUser(this.userModel)
+      .subscribe(res => {
+        console.dir('done: ' + res);
+        this._messageService.add({
+          severity: 'success',
+          summary: 'Registered successfully!',
+          detail: 'Registered successfully'
+        });
+      }, err => {
+        debugger;
+        console.log('error: ' + err.error);
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR!',
+          detail: err.error
+        });
+      });
   }
 
 }

@@ -14,7 +14,7 @@ export class AdminRegistrationService {
 
   addUser(user) {
     console.log(user)
-     return this._http.post<any>(this._thisURL + '/registration', user);
+     return this._http.post<any>(this._thisURL + '/user', user);
   }
 
 }
