@@ -131,12 +131,17 @@ module.exports.insert = function (user) {
             const hashedPassword = bcrypt.hashSync(password, salt);
             user.password = hashedPassword;
 
+            const result = await User
+                .getUser()
+                .create(user);
+
             // generate a signed son web token with the contents of user object and return it in the response
             let d = new Date();
             d.setHours(d.getHours() + 6);
             const tokenPayload = {
                 email: user.email,
-                expire: d
+                expire: d,
+                id: result.dataValues.id
             };
             const token = jwt.sign(tokenPayload, env.jwtSecret);
 
@@ -148,14 +153,10 @@ module.exports.insert = function (user) {
                     'your password to login to your account: ' + env.resetPassLink + token
             };
 
-            const result = await User
-                .getUser()
-                .create(user);
-
             const mailRes = await sendMail(mail);
 
             // if manager create schema
-            if (!user.managerId) {
+            if (user.role === 'Manager') {
                 Posting.syncPosting('posting_' + result.dataValues.id);
                 Accounts.syncAccounts('accounts_' + result.dataValues.id);
             }
@@ -166,6 +167,41 @@ module.exports.insert = function (user) {
         }
     }); // end of promise
 }; // end of create/ register new user
+
+
+module.exports.resetPassword = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            jwt.verify(data.token, env.jwtSecret, async function (err, decoded) {
+                if (err) reject(err);
+                const email = decoded.email;
+                const expire = decoded.expire;
+                const now = new Date();
+                if (now.getTime() > Date.parse(expire)) reject('registeration expired');
+
+                const salt = bcrypt.genSaltSync(10);
+                const hashedPassword = bcrypt.hashSync(data.password, salt);
+
+
+                const result = await User
+                    .getUser()
+                    .update({
+                        password: hashedPassword,
+                        reseted: true
+                    }, {
+                        where: {
+                            email: email
+                        }
+                    });
+                    resolve('updated successfully');
+            });
+        } catch (error) {
+            reject(error);
+        }
+
+    });
+
+};
 
 
 

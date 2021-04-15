@@ -33,14 +33,26 @@ router
     .post(userCtrl.register);
 
 router
+    .route('/reset')
+    .post(userCtrl.resetPass);
+
+router
     .route('/roles')
-    .get(passport.authenticate('jwt', { session: false }), authorization.authorize('ADMIN'), roleCtrl.fetchAll)
-    .post(passport.authenticate('jwt', { session: false }), authorization.authorize('ADMIN'), roleCtrl.insert)
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('ADMIN'), roleCtrl.fetchAll)
+    .post(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('ADMIN'), roleCtrl.insert)
 
 router
     .route('/roles/:id')
-    .put(passport.authenticate('jwt', { session: false }), authorization.authorize('ADMIN'), roleCtrl.update)
-    .delete(passport.authenticate('jwt', { session: false }), authorization.authorize('ADMIN'), roleCtrl.delete)
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('ADMIN'), roleCtrl.update)
+    .delete(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('ADMIN'), roleCtrl.delete)
 
 
 router
