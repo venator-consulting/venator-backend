@@ -8,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 export class LayoutComponent implements OnInit {
 
   username: string = localStorage.getItem('username'); 
+
+
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
 }

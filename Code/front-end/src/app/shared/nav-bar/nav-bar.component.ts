@@ -29,6 +29,11 @@ export class NavBarComponent implements OnInit {
               }
             
         },
+        {
+            label: 'resetPass',
+            routerLink: ['/reset/:token']
+            
+        }
 /*         {
             label: 'Files',
             items: [{
@@ -67,7 +72,7 @@ export class NavBarComponent implements OnInit {
     {
         label: 'Data',
         items: [
-            {label: 'Table', icon: 'pi pi-table', routerLink: ['data'] },
+            {label: 'Table', icon: 'pi pi-table', routerLink: ['/data'] },
         ]
     },
     {
@@ -87,7 +92,7 @@ export class NavBarComponent implements OnInit {
         
         {label: 'Setting', icon: 'pi pi-globe' , routerLink: ['/admin/import']},
         {label: 'Reset password', icon: 'pi pi-user-edit' , routerLink: ['/resetPassword']},
-        {label: 'Add admin', icon: 'pi pi-user-plus' , routerLink: ['/admin/registration']},
+        {label: 'Add admin', icon: 'pi pi-user-plus' , routerLink: ['/admin/registration']}, 
         {label: 'Logout', icon: 'pi pi-fw pi-power-off' , routerLink: ['/']}
     ]
 }

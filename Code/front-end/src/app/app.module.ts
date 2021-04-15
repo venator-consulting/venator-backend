@@ -45,6 +45,9 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import {ProgressBarModule} from 'primeng/progressbar';
 import {InputTextModule} from 'primeng/inputtext';
 import { SAPDataTableComponent } from './shared/sap-data-table/sap-data-table.component';
+import {TooltipModule} from 'primeng/tooltip';
+import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/reset-password-new-user.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,7 +61,8 @@ import { SAPDataTableComponent } from './shared/sap-data-table/sap-data-table.co
     AdminRegistrationComponent,
     ResetPasswordComponent,
     LayoutComponent,
-    SAPDataTableComponent
+    SAPDataTableComponent,
+    ResetPasswordNewUserComponent
   ],
   imports: [
     BrowserModule,
@@ -75,6 +79,7 @@ import { SAPDataTableComponent } from './shared/sap-data-table/sap-data-table.co
     FileUploadModule,
     CalendarModule,
     MultiSelectModule,
+    TooltipModule,
     TreeModule,
     InputTextModule,
     ProgressBarModule,

@@ -1,379 +1,43 @@
 <div class="card">
     <h5>Filter Menu</h5>
-    <p-table #dt1  [value]="postings"  [columns]="cols"
-        [rows]="10" [showCurrentPageReport]="true"   styleClass="p-datatable-customers p-datatable-gridlines" 
-        [paginator]="true" [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true" [style]="{width:'100%'}" scrollHeight="600px"
+    <p-table #dt  [value]="postings"  [columns]="cols"  [lazy]="true" [loading]="loading"
+        [rows]="10"  styleClass="p-datatable-sm p-datatable-gridlines" 
+        [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true" [style]="{width:'100%'}" scrollHeight="600px"
         >
         <ng-template pTemplate="caption">
-            <div class="p-d-flex">
-                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" ></button>
-                <span class="p-input-icon-left p-ml-auto">
-                    <i class="pi pi-search"></i>
-                    <input pInputText type="text" placeholder="Search keyword" />
-                </span>
+            <div class="p-d-flex p-mb-4">
+                <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-double-left" (click)="firstPage()" class="p-mr-2" pTooltip="first page" tooltipPosition="bottom"></button>
+                <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-left"  (click)="previousPage()" class=" p-mr-2"  pTooltip="previous" tooltipPosition="bottom"></button>
+                <input  pInputText  type="number" min="1" class="pageNrInput p-mr-2" (change)="pageNrChange($any($event.target).value)"  [value]="pageNr" [placeholder]="pageNr" />
+                <button type="button" [disabled]="endId && lastId && endId === lastId " pButton pRipple icon="pi pi-angle-right" (click)="nextPage()" class="p-mr-2" pTooltip="next" tooltipPosition="bottom"></button>
+                <button type="button"  [disabled]="filterNr > 0 || selectLastPage"  pButton pRipple icon="pi pi-angle-double-right"  (click)="lastPage()" class="p-mr-2" pTooltip="last page" tooltipPosition="bottom"></button>
+                <button type="button" *ngIf="filterClearShow && filterNr>0" pButton pRipple icon="pi pi-filter-slash"  (click)="clearFilter()" class="p-ml-auto clearFilter" pTooltip="clear filter" tooltipPosition="bottom"></button>
+
             </div>
         </ng-template>
         <ng-template pTemplate="colgroup" let-columns>
-            <colgroup>
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-                <col style="width:170px" >
-
+            <colgroup *ngFor="let col of cols">
+                <col style="width: 150px" >
             </colgroup>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
-            <tr >
-                <th pReorderableColumn pResizableColumn pSortableColumn="companyCode" *ngFor="let col of cols">
-
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="companyCode" display="menu"></p-columnFilter>
-                        {{col.header}} 
-                        <p-sortIcon field="companyCode"></p-sortIcon>
-                    </div>
+            <tr>
+                <th pReorderableColumn pResizableColumn pSortableColumn="col.header" *ngFor="let col of cols">                
+                       <span class="p-text-center"> {{col.header}} </span>   
                 </th>
-<!--                 <th pReorderableColumn pResizableColumn pSortableColumn="recordNumber">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="recordNumber" display="menu"></p-columnFilter>
-                        recordNumber 
-                        <p-sortIcon field="recordNumber"></p-sortIcon>
-
-                    </div>
+            </tr>
+            <tr>
+                <th *ngFor="let col of cols " pResizableColumn>
+                        <input  pInputText  type="text" (change)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
+                        <i class="pi pi-filter p-ml-2 iconColor" (click) = "submitFilter()" pTooltip="Filter" tooltipPosition="bottom" ></i>
                 </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="documentNumber">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="documentNumber" display="menu"></p-columnFilter>
-                        documentNumber 
-                        <p-sortIcon field="documentNumber"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="accountNumber">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="accountNumber" display="menu"></p-columnFilter>
-                        accountNumber 
-                        <p-sortIcon field="accountNumber"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="accountName">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="accountName" display="menu"></p-columnFilter>
-                        accountName 
-                        <p-sortIcon field="accountName"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="GLAccountNumber">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="GLAccountNumber" display="menu"></p-columnFilter>
-                        GLAccountNumber 
-                        <p-sortIcon field="GLAccountNumber"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="GLAccountName">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="GLAccountName" display="menu"></p-columnFilter>
-                        GLAccountName 
-                        <p-sortIcon field="GLAccountName"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="debtorNumber">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="debtorNumber" display="menu"></p-columnFilter>
-                        debtorNumber 
-                        <p-sortIcon field="debtorNumber"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="debtorName">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="debtorName" display="menu"></p-columnFilter>
-                        debtorName 
-                        <p-sortIcon field="debtorName"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="creditorNumber">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="creditorNumber" display="menu"></p-columnFilter>
-                        creditorNumber 
-                        <p-sortIcon field="creditorNumber"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="creditorName">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="creditorName" display="menu"></p-columnFilter>
-                        creditorName 
-                        <p-sortIcon field="creditorName"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="accountType">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="accountType" display="menu"></p-columnFilter>
-                        accountType 
-                        <p-sortIcon field="accountType"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="contraAccountType">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="contraAccountType" display="menu"></p-columnFilter>
-                        contraAccountType 
-                        <p-sortIcon field="contraAccountType"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="contraAccountNumber">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="contraAccountNumber" display="menu"></p-columnFilter>
-                        contraAccountNumber 
-                        <p-sortIcon field="contraAccountNumber"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="contraAccountName">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="contraAccountName" display="menu"></p-columnFilter>
-                        contraAccountName 
-                        <p-sortIcon field="contraAccountName"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="balance">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="balance" display="menu"></p-columnFilter>
-                        balance 
-                        <p-sortIcon field="balance"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="	documentDate">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="	documentDate" display="menu"></p-columnFilter>
-                        documentDate 
-                        <p-sortIcon field="documentDate"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="salesTaxKey">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="salesTaxKey" display="menu"></p-columnFilter>
-                        salesTaxKey 
-                        <p-sortIcon field="salesTaxKey"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="textPosting">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="textPosting" display="menu"></p-columnFilter>
-                        textPosting 
-                        <p-sortIcon field="textPosting"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="taxRate">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="taxRate" display="menu"></p-columnFilter>
-                        taxRate 
-                        <p-sortIcon field="taxRate"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="euTaxRate">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="euTaxRate" display="menu"></p-columnFilter>
-                        euTaxRate 
-                        <p-sortIcon field="euTaxRate"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="documentNumber">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="documentNumber" display="menu"></p-columnFilter>
-                        documentNumber 
-                        <p-sortIcon field="documentNumber"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="debitAmount">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="debitAmount" display="menu"></p-columnFilter>
-                        debitAmount 
-                        <p-sortIcon field="debitAmount"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="creditAmount">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="creditAmount" display="menu"></p-columnFilter>
-                        creditAmount 
-                        <p-sortIcon field="creditAmount"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="currencyIndicator">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="currencyIndicator" display="menu"></p-columnFilter>
-                        currencyIndicator 
-                        <p-sortIcon field="currencyIndicator"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="stackNumber">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="stackNumber" display="menu"></p-columnFilter>
-                        stackNumber 
-                        <p-sortIcon field="stackNumber"></p-sortIcon>
-
-                    </div>
-                </th>
-                <th pReorderableColumn pResizableColumn pSortableColumn="fiscalYear">
-                    <div class="p-d-flex p-jc-between p-ai-center">
-                        <p-columnFilter type="text" field="fiscalYear" display="menu"></p-columnFilter>
-                        fiscalYear 
-                        <p-sortIcon field="fiscalYear"></p-sortIcon>
-
-                    </div>
-                </th> -->
             </tr>
         </ng-template>
         <ng-template pTemplate="body"   let-index="rowIndex" let-columns="columns" let-rowData >
             <tr [pReorderableRow]="index">
                 <td pReorderableRowHandle *ngFor="let col of cols"> 
                     {{rowData[col.field]}}
-
                 </td>
- <!--               <td pReorderableRowHandle> 
-                    <span >{{elem.recordNumber}}</span>
-
-
-                </td>
-                 <td pReorderableRowHandle> 
-                    <span class="image-text">{{elem.documentNumber}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    {{elem.accountNumber}}
-
-                </td>
-                <td pReorderableRowHandle> 
-                    {{elem.accountName }}
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.GLAccountNumber}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.debtorNumber}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.debtorName}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.creditorNumber}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.creditorName}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.accountType}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.contraAccountType}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.contraAccountNumber}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.contraAccountName}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.balance}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.documentDate}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.salesTaxKey}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.textPosting}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.taxRate}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.euTaxRate}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.documentNumber}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.debitAmount}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.creditAmount}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.currencyIndicator}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.stackNumber}}</span>
-
-                </td>
-                <td pReorderableRowHandle> 
-                    <span >{{elem.fiscalYear}}</span>
-                </td> -->
-
-
-
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
