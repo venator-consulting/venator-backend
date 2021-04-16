@@ -1,9 +1,9 @@
-<div class="card">
+<div class="card" style="overflow: scroll;">
     <h5>Filter Menu</h5>
     <p-table #dt  [value]="postings"  [columns]="cols"  [lazy]="true" [loading]="loading"
         [rows]="10"  styleClass="p-datatable-sm p-datatable-gridlines"  
-        [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true" [autoLayout]="true"
-        >
+        [resizableColumns]="true" [reorderableColumns]="true" 
+        [style]="{width:'10000px'}">
         <ng-template pTemplate="caption">
             <div class="p-d-flex p-mb-4">
                 <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-double-left" (click)="firstPage()" class="p-mr-2" pTooltip="first page" tooltipPosition="bottom"></button>
@@ -17,7 +17,7 @@
         </ng-template>
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup *ngFor="let col of cols">
-                <col style="min-width:250px" pResizableColumn  >
+                <col pResizableColumn  >
             </colgroup>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -27,7 +27,7 @@
                 </th>
             </tr>
             <tr>
-                <th *ngFor="let col of cols " >
+                <th pResizableColumn *ngFor="let col of cols " >
                         <input  pInputText  type="text" (change)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
                         <i class="pi pi-filter p-ml-2 iconColor" (click) = "submitFilter()" pTooltip="Filter" tooltipPosition="bottom" ></i>
                 </th>
@@ -35,7 +35,7 @@
         </ng-template>
         <ng-template pTemplate="body"   let-index="rowIndex" let-columns="columns" let-rowData >
             <tr [pReorderableRow]="index">
-                <td pReorderableRowHandle *ngFor="let col of cols" > 
+                <td pReorderableRowHandle pResizableColumn *ngFor="let col of cols" class="ui-resizable-column"> 
                     {{rowData[col.field]}}
                 </td>
             </tr>
