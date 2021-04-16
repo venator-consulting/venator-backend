@@ -30,17 +30,17 @@ export class ResetPasswordNewUserComponent implements OnInit {
     if (this.passwordObj.selectedPassword === this.passwordObj.confirmedPassword) {
         let password = this.passwordObj.selectedPassword
         this._authService
-        .resetPassword(password)
+        .resetPassword({password: password, token: this.token})
         .subscribe(res => {
-          if(res.message === "successfully"){
+          // if(res.message === "successfully"){
             this._router.navigate(['/']);
-          } else {
-            this._messageService.add({
-              severity: 'error',
-              summary: 'ERROR!',
-              detail: "password could not be reset"
-            });
-          }
+          // } else {
+          //   this._messageService.add({
+          //     severity: 'error',
+          //     summary: 'ERROR!',
+          //     detail: "password could not be reset"
+          //   });
+          // }
   
         }, err => {
           this._messageService.add({
