@@ -28,11 +28,6 @@ export class NavBarComponent implements OnInit {
                 this.sideBarShow = true 
               }
             
-        },
-        {
-            label: 'resetPass',
-            routerLink: ['/reset/:token']
-            
         }
 /*         {
             label: 'Files',

@@ -17,4 +17,5 @@ module.exports = {
     mailerUser: 'elza.tillman13@ethereal.email',
     mailerPassword: 'JdRqgGeAb5HeDqp3Ny',
     resetPassLink: 'http://localhost:8000/reset/', 
+    
 };

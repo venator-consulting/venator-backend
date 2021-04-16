@@ -10,8 +10,8 @@ export class DataFilterService {
   _thisURL = environment.baseUrl + 'shared';
   constructor(private _http: HttpClient) { }
 
-  getFilteredData(filterValue, filterField, offset) {
-    return this._http.get(this._thisURL + '/getFilteredData/' + filterValue + "/" + filterField + "/" + offset);
+  getFirstFilteredData(filterValue, filterField, offset) {
+    return this._http.get(this._thisURL + '/getFirstFilteredData/' + filterValue + "/" + filterField + "/" + offset);
 
  }
  getSecondFilteredData(filterValue1, filterField1,filterValue2, filterField2, offset) {

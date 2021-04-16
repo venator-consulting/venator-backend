@@ -19,8 +19,6 @@ module.exports.fetchAll = function (companyCode, offset) {
                     ]
                 });
             resolve(postings);
-            console.log(offset)
-            console.log(postings[0].documentNumber)
         } catch (err) {
             reject(err);
         }
@@ -32,7 +30,7 @@ module.exports.fetchLastData = function (companyCode) {
         try {
             const postings = await Posting
                 .getPosting()
-                .findAll({
+                .findAndCountAll({
                     where: {
                         companyCode: companyCode
                     },
@@ -41,8 +39,13 @@ module.exports.fetchLastData = function (companyCode) {
                     order: [
                         ['id', 'DESC'],
                     ]
-                });
-            resolve(postings);
+                })
+                .then(result => {
+                    console.log(result.count);
+                    let data = {rows: result.rows, count: result.count}
+                    resolve(data);
+                  });
+
         } catch (err) {
             reject(err);
         }
@@ -81,14 +84,16 @@ module.exports.fetchFirstFilteredData = function (filterValue, filterField, offs
         try {
             const postings = await Posting
                 .getPosting()
-                .findAll({
+                .findAndCountAll({
                     where: criteria,
                     offset: offset,
                     limit: 10,
-                });
-            resolve(postings);
-            console.log(offset)
-            console.log(postings[0].documentNumber)
+                })
+                .then(result => {
+                    let data = {rows: result.rows, count: result.count}
+                    resolve(data);
+                  });
+
         } catch (err) {
             reject(err);
         }
@@ -107,15 +112,18 @@ module.exports.fetchSecondFilteredData = function (filterValue1, filterField1,fi
         try {
             const postings = await Posting
                 .getPosting()
-                .findAll({
+                .findAndCountAll({
                     where: criteria,
                     offset: offset,
                     limit: 10,
                     order: [
                         ['id', 'DESC'],
                     ]
-                });
-            resolve(postings);
+                })
+                .then(result => {
+                    let data = {rows: result.rows, count: result.count}
+                    resolve(data);
+                  });
             console.log(offset)
             console.log(postings[0].documentNumber)
         } catch (err) {

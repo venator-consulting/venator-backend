@@ -19,8 +19,8 @@ router
     .get( getDataCtrl.getLastDataPrevious );
     
 router
-    .route('/getFilteredData/:filterValue/:filterField/:offset')
-    .get( getDataCtrl.getFilteredData );
+    .route('/getFirstFilteredData/:filterValue/:filterField/:offset')
+    .get( getDataCtrl.getFirstFilteredData );
 
 router
     .route('/getSecondFilteredData/:filterValue1/:filterField1/:filterValue2/:filterField2/:offset')

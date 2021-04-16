@@ -21,7 +21,8 @@ module.exports.getLastData = function (req, res, next) {
     postngRepo.fetchLastData(companyCode)
     .then(result=> {
         return res.send({
-            results: result
+            rows: result.rows,
+            count: result.count
         });
     })
 
@@ -43,14 +44,15 @@ module.exports.getLastDataPrevious = function (req, res, next) {
 
 };
 
-module.exports.getFilteredData = function (req, res, next) {
+module.exports.getFirstFilteredData = function (req, res, next) {
     filterValue = req.params.filterValue
     filterField = req.params.filterField
     offset      = parseInt(req.params.offset)
     postngRepo.fetchFirstFilteredData(filterValue, filterField, offset)
     .then(result=> {
         return res.send({
-            results: result
+            rows: result.rows,
+            count: result.count
         });
     })
 

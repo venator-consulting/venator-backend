@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PostingDataService } from  '../service/posting-data.service';
 import { DataFilterService } from  '../service/data-filter.service';
 import { dataTableColumns } from "../../model/dataTableColumns";
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-sap-data-table',
@@ -10,7 +11,7 @@ import { dataTableColumns } from "../../model/dataTableColumns";
 })
 export class SAPDataTableComponent implements OnInit {
 
-  constructor(private _postingDataService: PostingDataService, private _dataFilterService: DataFilterService) {}
+  constructor(private _messageService: MessageService, private _postingDataService: PostingDataService, private _dataFilterService: DataFilterService) {}
 
   filterClearShow :boolean = false;
   loading: boolean = false ;
@@ -45,7 +46,6 @@ export class SAPDataTableComponent implements OnInit {
         this.postings = this.data.results ; 
         this.loading = false
         this.firstId = this.data.results[0].id
-        console.log(this.firstId)
         },
       (error) => console.log(error),
       () => {  }
@@ -86,12 +86,13 @@ export class SAPDataTableComponent implements OnInit {
   getFirstFilterData() {
 
     this._dataFilterService
-    .getFilteredData(this.filterValue1, this.filterField1, this.offset)
+    .getFirstFilteredData(this.filterValue1, this.filterField1, this.offset)
     .subscribe(
       (data) => { 
         this.data = data ;
-        this.postings = this.data.results ; 
+        this.postings = this.data.rows ; 
         this.loading = false
+        console.log(this.data.count)
 
         },
       (error) => console.log(error),
@@ -114,22 +115,37 @@ export class SAPDataTableComponent implements OnInit {
     );
   }
   submitFilter(){
-    this.offset = 0;
-    this.loading = true
-    this.pageNr = 1
-    this.selectLastPage = false 
-    this.lastId = 0
-    this.firstId = 0
-    this.startId = 0 
-    this.endId = 0 
+
 
     if(this.filterNr ===0 &&  this.filterValue1 && this.filterField1 && !this.filterValue2 && !this.filterField2) {
       this.filterNr = 1
+      this.offset = 0;
+      this.loading = true
+      this.pageNr = 1
+      this.selectLastPage = false 
+      this.lastId = 0
+      this.firstId = 0
+      this.startId = 0 
+      this.endId = 0 
       this.getFirstFilterData()
     }
      else if(this.filterNr===1 && this.filterValue1 && this.filterField1 && this.filterValue2 && this.filterField2) {
       this.filterNr = 2
+      this.offset = 0;
+      this.loading = true
+      this.pageNr = 1
+      this.selectLastPage = false 
+      this.lastId = 0
+      this.firstId = 0
+      this.startId = 0 
+      this.endId = 0 
       this.getSecondFilterData()
+    } else {
+      this._messageService.add({
+        severity: 'error',
+        summary: 'ERROR!',
+        detail: "no filter"
+      });
     }
 
   }
@@ -137,7 +153,11 @@ export class SAPDataTableComponent implements OnInit {
     this.loading = true
     this.pageNr = 1
     this.offset = 0
-
+    this.selectLastPage = false
+    this.lastId = 0
+    this.firstId = 0
+    this.startId = 0 
+    this.endId = 0 
     if(this.filterNr === 0) {
       this.getData()
     }
@@ -238,22 +258,15 @@ export class SAPDataTableComponent implements OnInit {
       .subscribe(
         (data) => { 
           this.data = data ;
-          this.postings = this.data.results ; 
+          this.postings = this.data.rows ; 
           this.loading = false
-          this.lastId = this.data.results[0].id
+          
+          this.lastId = this.data.rows[0].id
           this.pageNr = Math.ceil((this.lastId - this.firstId) / 10)
           this.endId   = this.lastId 
           this.startId = this.endId - 10
           this.selectLastPage = true
-          console.log(this.postings)
-
-
-/*           this.offset = this.lastId -10
-          this.pageNr = Math.ceil((this.lastId - this.firstId) / 10)
-          console.log(this.lastId)
-          console.log(this.firstId)
-          console.log(this.pageNr)
-          console.log(this.offset) */
+          console.log(this.postings) 
 
           },
         (error) => console.log(error),
