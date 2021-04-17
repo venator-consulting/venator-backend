@@ -28,24 +28,30 @@ export class ProcedureRegistrationComponent implements OnInit {
   constructor(private _messageService: MessageService, private _roleServiceService : RoleServiceService, private _usersService: UsersService) { }
   ngOnInit(): void {
     
-    this._roleServiceService.getmanagerRoleId()
-    .subscribe(
-      (data) => { 
-        this.managerRoleId = data.id ;
+    // this._roleServiceService.getmanagerRoleId()
+    // .subscribe(
+    //   (data) => { 
+    //     this.managerRoleId = data.id ;
 
-        },
-      (error) => console.log(error),
-      () => {
-        this._usersService.getManagers(this.managerRoleId)
+    //     },
+    //   (error) => console.log(error),
+    //   () => {
+        this._usersService.getManagers()
         .subscribe(
           (data) => { 
-            this.managers = data ;
-            console.log(this.managers)
+            const temp = data.results;
+            temp.forEach(manager => {
+              manager.fullName = manager.firstname + ' ' + manager.lastname;
+              // delete manager.Role;
+            });
+            this.managers = temp;
+            // debugger;
+            // console.log(this.managers)
             },
           (error) => console.log(error)
         );
-      }
-    );
+      // }
+    // );
 
   }
   submitHandler(){

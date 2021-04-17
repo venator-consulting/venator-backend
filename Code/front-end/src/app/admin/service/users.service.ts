@@ -12,8 +12,8 @@ export class UsersService {
 
   constructor(private _http: HttpClient) { }
 
-  getManagers(managerRoleId) {
-    return this._http.get<any>(this._thisURL + '/getManagers/' + managerRoleId);
+  getManagers() {
+    return this._http.get<any>(this._thisURL + '/getManagers');
  }
 
 }
