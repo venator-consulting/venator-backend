@@ -9,6 +9,7 @@ import { ResetPasswordComponent } from './shared/reset-password/reset-password.c
 import { AdminRegistrationComponent } from './admin/admin-registration/admin-registration.component';
 import { SAPDataTableComponent } from './shared/sap-data-table/sap-data-table.component';
 import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/reset-password-new-user.component';
+import { ProcedureRegistrationComponent } from './admin/procedure-registration/procedure-registration.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   //   ]
   // },
   { path: 'admin/registration', component: AdminRegistrationComponent },
+  { path: 'admin/procedure/add', component: ProcedureRegistrationComponent },
   { path: 'dashboard', component: LayoutComponent },
   { path: 'admin/import', component: ImportComponent },
   { path: 'data', component: SAPDataTableComponent },

@@ -108,7 +108,7 @@ export class SAPDataTableComponent implements OnInit {
         this.data = data ;
         this.postings = this.data.results ; 
         this.loading = false
-
+        console.log(this.postings)
         },
       (error) => console.log(error),
       () => {  }

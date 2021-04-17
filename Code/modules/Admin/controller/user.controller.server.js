@@ -34,3 +34,18 @@ module.exports.resetPass = async (req, res) => {
         res.status(500).json(error);
     }
 };
+
+module.exports.fetchAllManagers = function (req, res, next) {
+    managerRoleId = req.params.managerRoleId
+
+    userRepo.fetchAllManagers(managerRoleId)
+    .then(result=> {
+        console.log(result)
+        return res.send({
+            results: result
+        });
+    })
+
+
+};
+

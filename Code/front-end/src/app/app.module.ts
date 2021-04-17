@@ -47,6 +47,8 @@ import {InputTextModule} from 'primeng/inputtext';
 import { SAPDataTableComponent } from './shared/sap-data-table/sap-data-table.component';
 import {TooltipModule} from 'primeng/tooltip';
 import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/reset-password-new-user.component';
+import { ProcedureRegistrationComponent } from './admin/procedure-registration/procedure-registration.component';
+import {CheckboxModule} from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,8 @@ import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/
     ResetPasswordComponent,
     LayoutComponent,
     SAPDataTableComponent,
-    ResetPasswordNewUserComponent
+    ResetPasswordNewUserComponent,
+    ProcedureRegistrationComponent
   ],
   imports: [
     BrowserModule,
@@ -73,6 +76,7 @@ import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/
     MenubarModule,
     DividerModule,
     StepsModule,
+    CheckboxModule,
     ToastModule,
     MenubarModule,
     TableModule,

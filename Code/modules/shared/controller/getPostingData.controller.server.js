@@ -65,6 +65,7 @@ module.exports.getSecondFilteredData = function (req, res, next) {
     filterValue2 = req.params.filterValue2
     filterField2 = req.params.filterField2
     offset      = parseInt(req.params.offset)
+    console.log(filterField1)
     postngRepo.fetchSecondFilteredData(filterValue1, filterField1,filterValue2, filterField2, offset)
     .then(result=> {
         return res.send({

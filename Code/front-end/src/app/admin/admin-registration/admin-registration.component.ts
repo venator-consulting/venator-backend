@@ -40,7 +40,6 @@ export class AdminRegistrationComponent implements OnInit {
   }
 
   submitHandler() {
-    debugger;
     this._adminRegistrationService.addUser(this.userModel)
       .subscribe(res => {
         console.dir('done: ' + res);
@@ -50,7 +49,6 @@ export class AdminRegistrationComponent implements OnInit {
           detail: 'Registered successfully'
         });
       }, err => {
-        debugger;
         console.log('error: ' + err.error);
         this._messageService.add({
           severity: 'error',

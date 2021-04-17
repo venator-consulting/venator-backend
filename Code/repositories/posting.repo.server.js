@@ -101,14 +101,14 @@ module.exports.fetchFirstFilteredData = function (filterValue, filterField, offs
 
 };
 
-module.exports.fetchSecondFilteredData = function (filterValue1, filterField1,filterValue2, filterField2, offset) {
+module.exports.fetchSecondFilteredData = async function (filterValue1, filterField1,filterValue2, filterField2, offset) {
 
 
     const criteria = {};
     criteria[filterField1] = filterValue1;
     criteria[filterField2] = filterValue2;
 
-    return new Promise(async (resolve, reject) => {
+    //return new Promise(async (resolve, reject) => {
         try {
             const postings = await Posting
                 .getPosting()
@@ -120,16 +120,14 @@ module.exports.fetchSecondFilteredData = function (filterValue1, filterField1,fi
                         ['id', 'DESC'],
                     ]
                 })
-                .then(result => {
-                    let data = {rows: result.rows, count: result.count}
-                    resolve(data);
-                  });
-            console.log(offset)
-            console.log(postings[0].documentNumber)
+                let data = {rows: postings.rows, count: postings.count}
+                //resolve(data);
+                return data;
+
         } catch (err) {
-            reject(err);
+            //throw(err);
+            throw new Error('there_is_an_error_in_db_connection');
         }
-    });
+    //});
 
 };
-

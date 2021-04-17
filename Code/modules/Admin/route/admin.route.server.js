@@ -31,6 +31,14 @@ router
 router
     .route('/user')
     .post(userCtrl.register);
+    
+router
+    .route('/getManagers/:managerRoleId')
+    .get(userCtrl.fetchAllManagers);
+
+router
+    .route('/roles/getManagerId')
+    .get(roleCtrl.getManagerId);
 
 router
     .route('/reset')

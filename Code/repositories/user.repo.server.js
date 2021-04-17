@@ -73,6 +73,27 @@ module.exports.fetch = function (search = '_', orderBy = 'username', order = 'DE
     }); // end of promise
 };
 
+module.exports.fetchAllManagers = async function (managerRoleId) {
+
+        try {
+            const managers = await User
+                .getManagers()
+                .findAll({
+                    where: criteria,
+                    offset: offset,
+                    limit: 10,
+                    where: {
+                            roleId: managerRoleId
+                        }
+                })
+
+                return managers;
+
+        } catch (err) {
+            throw new Error('there_is_an_error_in_db_connection');
+        }
+
+}; 
 
 /**
  * check if user exist based on username for authentication

@@ -88,6 +88,7 @@ export class NavBarComponent implements OnInit {
         {label: 'Setting', icon: 'pi pi-globe' , routerLink: ['/admin/import']},
         {label: 'Reset password', icon: 'pi pi-user-edit' , routerLink: ['/resetPassword']},
         {label: 'Add admin', icon: 'pi pi-user-plus' , routerLink: ['/admin/registration']}, 
+        {label: 'Add procedure', icon: 'pi pi-user-plus' , routerLink: ['admin/procedure/add']}, 
         {label: 'Logout', icon: 'pi pi-fw pi-power-off' , routerLink: ['/']}
     ]
 }

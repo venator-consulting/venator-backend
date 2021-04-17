@@ -50,5 +50,12 @@ export class Choices {
         result.push(new Choices("Other", 4));
         return result;
     }
+    static getDataSources() : Choices[] {
+        let result: Choices[] = [];
 
+        result.push(new Choices("SAP", 1));
+        result.push(new Choices("Datev", 2));
+        result.push(new Choices("Lexware", 3));
+        return result;
+    }
 }

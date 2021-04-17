@@ -7,13 +7,27 @@ module.exports.fetchAll = function () {
             const roles = await Role
                 .getRole()
                 .findAll();
+            console.log(roles)
             resolve(roles);
         } catch (err) {
             reject(err);
         }
     });
 };
+module.exports.getManagerId = async function () {
 
+    try {
+        const managerData = await Role
+            .getRole()
+            .findOne({ where: { name: 'User' } })
+        console.log(ManagerData)
+        return managerData;
+
+    } catch (err) {
+        throw new Error('there_is_an_error_in_db_connection');
+    }
+
+};
 
 
 module.exports.fetch = function (search = '_', orderBy = 'name', order = 'DESC', limit = 50, offset = 0) {
