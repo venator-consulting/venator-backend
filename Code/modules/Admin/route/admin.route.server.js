@@ -33,7 +33,7 @@ router
     .post(userCtrl.register);
     
 router
-    .route('/getManagers/:managerRoleId')
+    .route('/getManagers')
     .get(userCtrl.fetchAllManagers);
 
 router

@@ -36,11 +36,11 @@ module.exports.resetPass = async (req, res) => {
 };
 
 module.exports.fetchAllManagers = function (req, res, next) {
-    managerRoleId = req.params.managerRoleId
+    // managerRoleId = req.params.managerRoleId
 
-    userRepo.fetchAllManagers(managerRoleId)
+    userRepo.fetchAllManagers()
     .then(result=> {
-        console.log(result)
+        // console.log(result)
         return res.send({
             results: result
         });

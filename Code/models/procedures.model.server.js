@@ -22,9 +22,9 @@ const Procedures = sequelizer.define('Procedures', {
     procedureDate: {
         type: DataTypes.DATE
     },
-    email: {
-        type: DataTypes.STRING(50),
-    },
+    // email: {
+    //     type: DataTypes.STRING(50),
+    // },
     data: {
         type: DataTypes.BOOLEAN
     },
