@@ -88,7 +88,7 @@ module.exports.fetchAllManagers = async function () {
                         name: 'Manager',
                     }
                 }]
-            })
+            });
 
         return managers;
 
