@@ -7,6 +7,7 @@ const roleCtrl = require('../controller/roles.controller.server');
 const userCtrl = require('../controller/user.controller.server');
 const passport = require('passport');
 const authorization = require('../../../config/authorization.config');
+const procedureCtrl  =require('../controller/procedure.controller.server');
 
 const multer = require('multer');
 const uploadfiles = multer({
@@ -33,7 +34,7 @@ router
     .post(userCtrl.register);
     
 router
-    .route('/getManagers/:managerRoleId')
+    .route('/getManagers')
     .get(userCtrl.fetchAllManagers);
 
 router
@@ -62,6 +63,16 @@ router
         session: false
     }), authorization.authorize('ADMIN'), roleCtrl.delete)
 
+router
+    .route('/procedures')
+    .get(procedureCtrl.fetchAll)
+    .post(procedureCtrl.insert);
+
+router
+    .route('/procedures/:id')
+    .get(procedureCtrl.fetchOne)
+    .put(procedureCtrl.update)
+    .delete(procedureCtrl.delete);
 
 router
     .route('/sync-db')

@@ -73,23 +73,30 @@ module.exports.fetch = function (search = '_', orderBy = 'username', order = 'DE
     }); // end of promise
 };
 
-module.exports.fetchAllManagers = async function (managerRoleId) {
+module.exports.fetchAllManagers = async function () {
 
-        try {
-            const managers = await User
-                .getUser()
-                .findAll({
+    try {
+        const managers = await User
+            .getUser()
+            .findAll({
+                attributes: ['id', 'title', 'firstname', 'lastname', 'email', 'username'],
+                include: [{
+                    model: Role,
+                    attributes: ['name'],
+                    required: true,
                     where: {
-                            RoleId: managerRoleId
-                        }
-                })
-                return managers;
+                        name: 'Manager',
+                    }
+                }]
+            })
 
-        } catch (err) {
-            throw new Error('there_is_an_error_in_db_connection');
-        }
+        return managers;
 
-}; 
+    } catch (err) {
+        throw new Error(err);
+    }
+
+};
 
 /**
  * check if user exist based on username for authentication
@@ -177,8 +184,7 @@ module.exports.insert = function (user) {
                 <p> Wir wünschen Ihnen viel Erfolg bei der Arbeit mit venator-portal. </p>
                 <br>
                 <p> Mit freundlichen Grüßen </p><p> Venator Consulting GmbH </p>
-                </div>`
-                ,
+                </div>`,
                 text: 'Dear ' + user.firstname + ' ' + user.lastname + ' please click the next link and set ' +
                     'your password to login to your account: ' + env.resetPassLink + token
             };
@@ -223,7 +229,7 @@ module.exports.resetPassword = (data) => {
                             email: email
                         }
                     });
-                    resolve('updated successfully');
+                resolve('updated successfully');
             });
         } catch (error) {
             reject(error);
