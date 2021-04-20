@@ -17,15 +17,15 @@ export class ProceduresComponent implements OnInit {
   cols = [ "Username", "Email", "Firstname", "Lastname", "Title", "MobileNr"]
   ngOnInit(): void {
     
-    this._roleServiceService.getmanagerRoleId()
-    .subscribe(
-      (data) => { 
-        this.managerRoleId = data.id ;
-        console.log(this.managerRoleId)
-        },
-      (error) => console.log(error),
-      () => {
-         this._usersService.getManagers(this.managerRoleId)
+    // this._roleServiceService.getmanagerRoleId()
+    // .subscribe(
+    //   (data) => { 
+    //     this.managerRoleId = data.id ;
+    //     console.log(this.managerRoleId)
+    //     },
+    //   (error) => console.log(error),
+    //   () => {
+         this._usersService.getManagers()
         .subscribe(
           (data) => { 
             this.managers = data.results
@@ -33,8 +33,8 @@ export class ProceduresComponent implements OnInit {
             },
           (error) => console.log(error)
         );
-      }
-    );
+    //   }
+    // );
 
   }
 

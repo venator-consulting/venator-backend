@@ -47,5 +47,5 @@ module.exports.fetchAllManagers = function (req, res, next) {
     })
 
 
-}; */
+}; 
 

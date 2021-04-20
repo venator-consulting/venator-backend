@@ -32,7 +32,7 @@ export class ProcedureRegistrationComponent implements OnInit {
           (data) => { 
             const temp = data.results;
             temp.forEach(manager => {
-              manager.fullName = manager.firstname + ' ' + manager.lastname;
+              manager.fullName = manager.title + '. ' + manager.firstname + ' ' + manager.lastname;
               // delete manager.Role;
             });
             this.managers = temp;

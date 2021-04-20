@@ -18,15 +18,15 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this._roleServiceService.getmanagerRoleId()
-    .subscribe(
-      (data) => { 
-        this.managerRoleId = data.id ;
-        console.log(this.managerRoleId)
-        },
-      (error) => console.log(error),
-      () => {
-         this._usersService.getManagers(this.managerRoleId)
+    // this._roleServiceService.getmanagerRoleId()
+    // .subscribe(
+    //   (data) => { 
+    //     this.managerRoleId = data.id ;
+    //     console.log(this.managerRoleId)
+    //     },
+    //   (error) => console.log(error),
+    //   () => {
+         this._usersService.getManagers()
         .subscribe(
           (data) => { 
             this.managers = data.results
@@ -34,8 +34,8 @@ export class UsersComponent implements OnInit {
             },
           (error) => console.log(error)
         );
-      }
-    );
+    //   }
+    // );
 
   }
 

@@ -19,8 +19,8 @@ export class RoleServiceService {
  }
 
  addProcedure(procedure) {
-  console.log(procedure)
-   return this._http.post<any>(this._thisURL + '/addProcedure', procedure);
+  // console.log(procedure)
+   return this._http.post<any>(this._thisURL + '/procedures', procedure);
 }
 
 }
