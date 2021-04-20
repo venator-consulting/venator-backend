@@ -34,8 +34,20 @@ module.exports.resetPass = async (req, res) => {
         res.status(500).json(error);
     }
 };
+module.exports.fetchAllManagers = async (req, res) => {
+    try {
+        managerRoleId = req.params.managerRoleId
 
-module.exports.fetchAllManagers = function (req, res, next) {
+        const users = await userRepo.fetchAllManagers(managerRoleId)
+        .then(result=> {
+            return res.send({
+                results: result
+            });
+        })    } catch (error) {
+        res.status(500).json(error);
+    }
+};
+/* module.exports.fetchAllManagers = function (req, res, next) {
     managerRoleId = req.params.managerRoleId
 
     userRepo.fetchAllManagers(managerRoleId)
@@ -47,5 +59,5 @@ module.exports.fetchAllManagers = function (req, res, next) {
     })
 
 
-};
+}; */
 

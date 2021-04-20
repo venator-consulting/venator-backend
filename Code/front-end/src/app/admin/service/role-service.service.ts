@@ -15,12 +15,9 @@ export class RoleServiceService {
      return this._http.get<any>(this._thisURL + '/roles');
   }
   getmanagerRoleId() {
-    return this._http.get<any>(this._thisURL + '/roles/getManagerId');
+    return this._http.get<any>(this._thisURL + '/roles/getmanagerRoleId');
  }
 
- addProcedure(procedure) {
-  console.log(procedure)
-   return this._http.post<any>(this._thisURL + '/addProcedure', procedure);
-}
+
 
 }

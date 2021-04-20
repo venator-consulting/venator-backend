@@ -17,18 +17,25 @@ module.exports.fetchAll = async function (req, res, next) {
     }
 };
 
-module.exports.getManagerId = function (req, res, next) {
+module.exports.getmanagerRoleId = async function (req, res, next) {
 
-    roleRepo.getManagerId()
-    .then(result=> {
-        console.log(result)
-        return res.send({
-            results: result
-        });
-    })
-
-
+    try {
+        const roles =  roleRepo.getmanagerRoleId()
+        .then(result=> {
+            return res.send({
+                id: result.id
+            });
+        })
+          
+    } catch (e) {
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
 };
+
 
 module.exports.insert = async function (req, res) {
     try {

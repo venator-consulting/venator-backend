@@ -1,0 +1,42 @@
+
+     
+     <div>
+        <div>
+            <p-chart type="pie" [data]="basicData" ></p-chart>
+         </div>
+         <div>
+            <p-table #dt  [value]="postings"  [columns]="cols"  
+            [rows]="10"  styleClass="p-datatable-sm p-datatable-gridlines"  
+            [resizableColumns]="true" [reorderableColumns]="true" 
+            >
+
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup *ngFor="let col of cols">
+                    <col pResizableColumn  >
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th pReorderableColumn pResizableColumn pSortableColumn="col.header" *ngFor="let col of cols">                
+                           <span class="p-text-center"> {{col.header}} </span>   
+                    </th>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body"   let-index="rowIndex" let-columns="columns" let-rowData >
+                <tr [pReorderableRow]="index">
+                    <td pReorderableRowHandle pResizableColumn *ngFor="let col of cols" class="ui-resizable-column" aria-placeholder=""> 
+                        {{ rowData[col.field] }}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7" >No postings found.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+         </div>
+     </div>
+
+

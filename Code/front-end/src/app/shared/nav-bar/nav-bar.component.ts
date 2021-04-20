@@ -29,26 +29,6 @@ export class NavBarComponent implements OnInit {
               }
             
         }
-/*         {
-            label: 'Files',
-            items: [{
-                    label: 'New', 
-                    icon: 'pi pi-fw pi-plus',
-                    items: [
-                        {label: 'Project'},
-                        {label: 'Other'},
-                    ]
-                },
-                {label: 'Open'},
-                {label: 'Quit'}
-            ]
-        },
-        {
-            label: 'Import',
-            icon: 'pi pi-file',
-            style: { float:'right' } ,
-            routerLink: ['/admin/import']
-        } */
     ];
     this.sidebarItems = [
         {
@@ -60,8 +40,8 @@ export class NavBarComponent implements OnInit {
         {
         label: 'Dashboard',
         items: [
-            {label: 'Verfahren', icon: 'pi  pi-home'},
-            {label: 'Users', icon: 'pi pi-users'}
+            {label: 'Procedures', icon: 'pi  pi-home',routerLink: ['admin/dashboard/procedures']}, 
+            {label: 'Users', icon: 'pi pi-users', routerLink: ['admin/dashboard/users']}
         ]
     },
     {
@@ -73,7 +53,7 @@ export class NavBarComponent implements OnInit {
     {
         label: 'Analyse',
         items: [
-            {label: 'amount analyse', icon: 'pi pi-euro'},
+            {label: 'amount analyse', icon: 'pi pi-euro', routerLink: ['analysis/amount']  },
             {label: 'text analyse', icon: 'pi pi-inbox'},
             {label: 'payment analyse', icon: 'pi pi-credit-card'},
             {label: 'creditors analyse', icon: 'pi pi-chart-bar'},

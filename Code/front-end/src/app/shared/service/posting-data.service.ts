@@ -9,21 +9,22 @@ import { HttpClient } from '@angular/common/http';
 export class PostingDataService {
 
   _thisURL = environment.baseUrl + 'shared';
+  
   constructor(private _http: HttpClient) { }
 
-  getDataTable(companyCode:string, offset:number) {
-    return this._http.get(this._thisURL + '/getPostingData/' + companyCode + '/' + offset);
+  getDataTable(companyCode:string, offset:number, limit: number) {
+    return this._http.get(this._thisURL + '/getPostingData/' + companyCode + '/' + offset + '/' + limit);
   }
 
-  getLastDataTable(companyCode:string) {
-    return this._http.get(this._thisURL + '/getLastPostingData/' + companyCode );
+  getLastDataTable(companyCode:string, limit: number) {
+    return this._http.get(this._thisURL + '/getLastPostingData/' + companyCode + '/' + limit);
   }
 
-  getLastDataPrevious(companyCode:string, strtId, endId) {
-    return this._http.get(this._thisURL + '/getLastDataPrevious/' + companyCode + '/' + strtId + '/' + endId);
+  getLastDataPrevious(companyCode:string, strtId, endId , limit: number) {
+    return this._http.get(this._thisURL + '/getLastDataPrevious/' + companyCode + '/' + strtId + '/' + endId + '/' + limit);
   }
 
-  getLastDataNext(companyCode:string, strtId, endId) {
-    return this._http.get(this._thisURL + '/getLastDataNext/' + companyCode + '/' + strtId + '/' + endId);
+  getLastDataNext(companyCode:string, strtId, endId , limit: number) {
+    return this._http.get(this._thisURL + '/getLastDataNext/' + companyCode + '/' + strtId + '/' + endId + '/' + limit);
   }
 }

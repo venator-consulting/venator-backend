@@ -49,6 +49,10 @@ import {TooltipModule} from 'primeng/tooltip';
 import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/reset-password-new-user.component';
 import { ProcedureRegistrationComponent } from './admin/procedure-registration/procedure-registration.component';
 import {CheckboxModule} from 'primeng/checkbox';
+import { AmountAnalysisComponent } from './shared/analysis/amount-analysis/amount-analysis.component';
+import {ChartModule} from 'primeng/chart';
+import { ProceduresComponent } from './admin/dashboard/procedures/procedures.component';
+import { UsersComponent } from './admin/dashboard/users/users.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +69,10 @@ import {CheckboxModule} from 'primeng/checkbox';
     LayoutComponent,
     SAPDataTableComponent,
     ResetPasswordNewUserComponent,
-    ProcedureRegistrationComponent
+    ProcedureRegistrationComponent,
+    AmountAnalysisComponent,
+    ProceduresComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,
@@ -76,6 +83,7 @@ import {CheckboxModule} from 'primeng/checkbox';
     MenubarModule,
     DividerModule,
     StepsModule,
+    ChartModule,
     CheckboxModule,
     ToastModule,
     MenubarModule,

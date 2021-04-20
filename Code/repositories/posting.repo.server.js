@@ -3,7 +3,7 @@ const {
     Op
 } = require("sequelize");
 
-module.exports.fetchAll = function (companyCode, offset) {
+module.exports.fetchAll = function (companyCode, offset, limit) {
     return new Promise(async (resolve, reject) => {
         try {
             const postings = await Posting
@@ -13,7 +13,7 @@ module.exports.fetchAll = function (companyCode, offset) {
                         companyCode: companyCode
                     },
                     offset: offset,
-                    limit: 10,
+                    limit: limit,
                     order: [
                         ['id', 'ASC'],
                     ]
@@ -25,7 +25,7 @@ module.exports.fetchAll = function (companyCode, offset) {
     });
 
 }; 
-module.exports.fetchLastData = function (companyCode) {
+module.exports.fetchLastData = function (companyCode, limit) {
     return new Promise(async (resolve, reject) => {
         try {
             const postings = await Posting
@@ -35,13 +35,12 @@ module.exports.fetchLastData = function (companyCode) {
                         companyCode: companyCode
                     },
                    // offset: offset,
-                    limit: 10,
+                    limit: limit,
                     order: [
                         ['id', 'DESC'],
                     ]
                 })
                 .then(result => {
-                    console.log(result.count);
                     let data = {rows: result.rows, count: result.count}
                     resolve(data);
                   });
@@ -52,7 +51,7 @@ module.exports.fetchLastData = function (companyCode) {
     });
 
 };
-module.exports.fetchLastDataPrevious = function (companyCode, startId, endId) {
+module.exports.fetchLastDataPrevious = function (companyCode, startId, endId, limit) {
     return new Promise(async (resolve, reject) => {
         try {
             const postings = await Posting
@@ -63,7 +62,7 @@ module.exports.fetchLastDataPrevious = function (companyCode, startId, endId) {
                         id :  {[Op.between]: [startId, endId]}
                     },
                    // offset: offset,
-                    limit: 10,
+                    limit: limit,
                     order: [
                         ['id', 'DESC'],
                     ]
@@ -77,7 +76,7 @@ module.exports.fetchLastDataPrevious = function (companyCode, startId, endId) {
 
 };
 
-module.exports.fetchFirstFilteredData = function (filterValue, filterField, offset) {
+module.exports.fetchFirstFilteredData = function (filterValue, filterField, offset, limit) {
     const criteria = {};
     criteria[filterField] = filterValue;
     return new Promise(async (resolve, reject) => {
@@ -87,7 +86,7 @@ module.exports.fetchFirstFilteredData = function (filterValue, filterField, offs
                 .findAndCountAll({
                     where: criteria,
                     offset: offset,
-                    limit: 10,
+                    limit: limit,
                 })
                 .then(result => {
                     let data = {rows: result.rows, count: result.count}
@@ -101,33 +100,128 @@ module.exports.fetchFirstFilteredData = function (filterValue, filterField, offs
 
 };
 
-module.exports.fetchSecondFilteredData = async function (filterValue1, filterField1,filterValue2, filterField2, offset) {
+module.exports.fetchSecondFilteredData =  function (filterValue1, filterField1,filterValue2, filterField2, offset, limit) {
 
 
     const criteria = {};
     criteria[filterField1] = filterValue1;
     criteria[filterField2] = filterValue2;
 
-    //return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
+            console.log(criteria)
             const postings = await Posting
                 .getPosting()
                 .findAndCountAll({
                     where: criteria,
                     offset: offset,
-                    limit: 10,
-                    order: [
-                        ['id', 'DESC'],
-                    ]
+                    limit: limit,
+
                 })
-                let data = {rows: postings.rows, count: postings.count}
-                //resolve(data);
-                return data;
+                .then(result => {
+                    let data = {rows: result.rows, count: result.count}
+                    resolve(data);
+                  });
 
         } catch (err) {
-            //throw(err);
             throw new Error('there_is_an_error_in_db_connection');
         }
-    //});
+    });
+
+};
+
+module.exports.fetchThirdFilteredData =  function (filterValue1, filterField1,filterValue2, filterField2, filterValue3, filterField3, offset, limit) {
+
+
+    const criteria = {};
+    criteria[filterField1] = filterValue1;
+    criteria[filterField2] = filterValue2;
+    criteria[filterField3] = filterValue3;
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log(criteria)
+            const postings = await Posting
+                .getPosting()
+                .findAndCountAll({
+                    where: criteria,
+                    offset: offset,
+                    limit: limit,
+
+                })
+                .then(result => {
+                    let data = {rows: result.rows, count: result.count}
+                    resolve(data);
+                  });
+
+        } catch (err) {
+            throw new Error('there_is_an_error_in_db_connection');
+        }
+    });
+
+};
+
+module.exports.fetchFirthFilteredData =  function (filterValue1, filterField1,filterValue2, filterField2, filterValue3, filterField3, filterValue4, filterField4, offset, limit) {
+
+
+    const criteria = {};
+    criteria[filterField1] = filterValue1;
+    criteria[filterField2] = filterValue2;
+    criteria[filterField3] = filterValue3;
+    criteria[filterField4] = filterValue4;
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log(criteria)
+            const postings = await Posting
+                .getPosting()
+                .findAndCountAll({
+                    where: criteria,
+                    offset: offset,
+                    limit: limit,
+
+                })
+                .then(result => {
+                    let data = {rows: result.rows, count: result.count}
+                    resolve(data);
+                  });
+
+        } catch (err) {
+            throw new Error('there_is_an_error_in_db_connection');
+        }
+    });
+
+};
+
+module.exports.fetchFifthFilteredData =  function (filterValue1, filterField1,filterValue2, filterField2, filterValue3, filterField3, filterValue4, filterField4, filterValue5, filterField5, offset, limit) {
+
+
+    const criteria = {};
+    criteria[filterField1] = filterValue1;
+    criteria[filterField2] = filterValue2;
+    criteria[filterField3] = filterValue3;
+    criteria[filterField4] = filterValue4;
+    criteria[filterField5] = filterValue5;
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log(criteria)
+            const postings = await Posting
+                .getPosting()
+                .findAndCountAll({
+                    where: criteria,
+                    offset: offset,
+                    limit: limit,
+
+                })
+                .then(result => {
+                    let data = {rows: result.rows, count: result.count}
+                    resolve(data);
+                  });
+
+        } catch (err) {
+            throw new Error('there_is_an_error_in_db_connection');
+        }
+    });
 
 };

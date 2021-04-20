@@ -19,5 +19,7 @@ export class ImportService {
   importFile(formData) {
     return this._http.post<any>(this._thisURL + '/import', formData);
   }
-
+  addProcedure(procedure) {
+    console.log(procedure)
+  }
 }

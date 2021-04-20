@@ -77,16 +77,12 @@ module.exports.fetchAllManagers = async function (managerRoleId) {
 
         try {
             const managers = await User
-                .getManagers()
+                .getUser()
                 .findAll({
-                    where: criteria,
-                    offset: offset,
-                    limit: 10,
                     where: {
-                            roleId: managerRoleId
+                            RoleId: managerRoleId
                         }
                 })
-
                 return managers;
 
         } catch (err) {
@@ -176,7 +172,7 @@ module.exports.insert = function (user) {
                 <p> Sie bekommen diese Email, weil Sie registriert wurden und ein neues Passwort für Ihr Konto festlegen sollen.</p>
                 <p> -----------------------------------------------------------------------------------------</p>
                 <p> Rufen Sie bitte den folgenden Link
-                <a href="${env.resetPassLink + token}">  </a> auf, um den Prozess abzuschließen.</p>
+                <a href="${env.resetPassLink + token}"> ${env.resetPassLink + token} </a> auf, um den Prozess abzuschließen.</p>
                 <p><b> Hinweis: </b> für Ihre  Sicherheit läuft der Link in 6 Stunden ab. </p>
                 <p> Wir wünschen Ihnen viel Erfolg bei der Arbeit mit venator-portal. </p>
                 <br>
