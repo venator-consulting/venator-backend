@@ -7,16 +7,16 @@
 
             <div class="p-fluid">
 
-                 <div class="p-field p-grid">
+                <div class="p-field p-grid">
                     <label  class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Client </label>
                     <div class="p-col-12 p-md-10">
-                        <p-dropdown placeholder="select a client" #manager="ngModel" name="manager" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched"
-                         [showClear]="true" [options]="managers" [(ngModel)]="procedureModel.userId" optionLabel="fullName" optionValue="id">
+                        <p-dropdown  placeholder="select a Client" name="client" optionValue="id" optionLabel="username" #client="ngModel" [options]="managers" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true"  [(ngModel)]="procedureModel.userId">
                             <div class="ng-tns-c42-167 p-dropdown p-component">
                                 <span class="ng-tns-c42-167 p-dropdown-label p-inputtext p-placeholder p-dropdown-label-empty ng-star-inserted"> </span>
                             </div>
                         </p-dropdown>  
-                        <small  class="spanCss"  *ngIf="manager.invalid && manager.touched "> client is required </small> 
+                        <small  class="spanCss" *ngIf="client.invalid && client.touched "> client is required </small> 
+
                     </div>
                 </div>
                 <div class="p-field p-grid">

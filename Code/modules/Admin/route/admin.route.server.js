@@ -38,8 +38,8 @@ router
     .get(userCtrl.fetchAllManagers);
 
 router
-    .route('/roles/getManagerId')
-    .get(roleCtrl.getManagerId);
+    .route('/roles/getmanagerRoleId') 
+    .get(roleCtrl.getmanagerRoleId);
 
 router
     .route('/reset')
