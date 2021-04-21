@@ -1,4 +1,4 @@
-<p-card >
+<p-card>
   <p-toast></p-toast>
   <p-steps [model]="items" [(activeIndex)]="activeIndex" [readonly]="true"></p-steps>
   <!-- {{filesList[currentFileIndex]?.orginalName}} -->
@@ -27,72 +27,82 @@
 
     <div class="p-grid">
 
-
       <div class="p-col-10">
+        <label for=""> Select Manager </label>
+        <p-dropdown [options]="managers" [(ngModel)]="selectedManagerId" placeholder="Select Manager"
+          optionLabel="fullName" optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required
+          (onChange)="managerChangedHandler($event)" [disabled]="selectedProcedureId > 0"></p-dropdown>
+      </div>
+
+      <div class="p-col-10" *ngIf="selectedManagerId>0">
+        <label for=""> Select Procedure </label>
+        <p-dropdown [options]="procedures" [(ngModel)]="selectedProcedureId" placeholder="Select Procedure"
+          optionLabel="name" optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required [disabled]="selectedTemplate"></p-dropdown>
+      </div>
+
+      <div class="p-col-10" *ngIf="selectedProcedureId>0">
         <label for=""> Select Template </label>
         <p-dropdown [options]="templates" [(ngModel)]="selectedTemplate" placeholder="Select a Template"
-          optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
+          optionLabel="name" optionValue="value" [showClear]="true" [filter]="true" filterBy="name" (onChange)="selectTemplatHandler($event)"></p-dropdown>
       </div>
-      
+
 
       <div class="p-grid">
         <p-messages></p-messages>
       </div>
+        <div class="p-col-12" *ngFor="let f of filesList; let i = index;" [hidden]="!selectedTemplate">
+          <!-- {{f | json}} -->
+          <br><br>
 
-      <div class="p-col-12" *ngFor="let f of filesList; let i = index;">
-        <!-- {{f | json}} -->
-        <br><br>
-        
-        <div class="p-grid" *ngIf="f.imported!==true">
-          <div class="p-col-3">
-            <!-- maxFileSize="100000000" -->
-            <p-fileUpload name="excel" mode="advanced" [showUploadButton]="false" customUpload="true"
-              (uploadHandler)="UploadHandler($event, f, i)" uploadLabel="Set File" chooseLabel="Search" [auto]="true"
-              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .csv, text/plain">
-              <ng-template pTemplate="content">
-                <!-- <span *ngIf="f.file">{{f?.file?.name}} - {{ (f?.file?.size / 1024) | number: '1.0-2' }} KB</span> -->
-                <!-- <ul *ngIf="uploadedFiles.length">
+          <div class="p-grid" *ngIf="f.imported!==true">
+            <div class="p-col-3">
+              <!-- maxFileSize="100000000" -->
+              <p-fileUpload name="excel" mode="advanced" [showUploadButton]="false" customUpload="true"
+                (uploadHandler)="UploadHandler($event, f, i)" uploadLabel="Set File" chooseLabel="Search" [auto]="true"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .csv, text/plain">
+                <ng-template pTemplate="content">
+                  <!-- <span *ngIf="f.file">{{f?.file?.name}} - {{ (f?.file?.size / 1024) | number: '1.0-2' }} KB</span> -->
+                  <!-- <ul *ngIf="uploadedFiles.length">
                   <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
                 </ul> -->
-              </ng-template>
-            </p-fileUpload>
-            <span *ngIf="f.file">{{f?.file?.name}} - {{ (f?.file?.size / 1024) | number: '1.0-2' }} KB</span>
+                </ng-template>
+              </p-fileUpload>
+              <span *ngIf="f.file">{{f?.file?.name}} - {{ (f?.file?.size / 1024) | number: '1.0-2' }} KB</span>
+            </div>
+            <div class="p-col-2">
+              <p-dropdown [options]="fileTypes" [(ngModel)]="f.fileType" placeholder="Select file type"
+                optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
+            </div>
+            <div class="p-col-2">
+              <p-dropdown [options]="fileClass" [(ngModel)]="f.fileClass" placeholder="Select file class"
+                optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
+            </div>
+            <div class="p-col-2" *ngIf="f.fileClass?.value==1">
+              <p-dropdown [options]="accountTypes" [(ngModel)]="f.accountType" placeholder="Select account type"
+                optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
+            </div>
+            <div class="p-col-2" *ngIf="f.fileClass?.value==2 && f.fileType?.value==2">
+              <p-dropdown [options]="locals" [(ngModel)]="f.local" placeholder="Select Localization" optionLabel="name"
+                [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
+            </div>
+            <div class="p-col-2">
+              <span class="p-buttonset">
+                <button pButton type="button" icon="pi pi-upload" iconPos="left" label="Upload"
+                  (click)="uploadFirstStep(f, i)" [disabled]="!f.file || !f.fileType || !f.fileClass || f.uploaded"
+                  class="p-button-raised p-button-rounded"></button>
+                <button pButton type="button" label="Next" class="p-button-raised p-button-rounded"
+                  (click)="goToImport(0, i)"
+                  [disabled]="!f.file || !f.fileType || !f.fileClass || !f.uploaded || f.imported"></button>
+              </span>
+            </div>
           </div>
-          <div class="p-col-2">
-            <p-dropdown [options]="fileTypes" [(ngModel)]="f.fileType" placeholder="Select file type" optionLabel="name"
-              [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
-          </div>
-          <div class="p-col-2">
-            <p-dropdown [options]="fileClass" [(ngModel)]="f.fileClass" placeholder="Select file class"
-              optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
-          </div>
-          <div class="p-col-2" *ngIf="f.fileClass?.value==1">
-            <p-dropdown [options]="accountTypes" [(ngModel)]="f.accountType" placeholder="Select account type"
-              optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
-          </div>
-          <div class="p-col-2" *ngIf="f.fileClass?.value==2 && f.fileType?.value==2">
-            <p-dropdown [options]="locals" [(ngModel)]="f.local" placeholder="Select Localization" optionLabel="name"
-              [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
-          </div>
-          <div class="p-col-2">
-            <span class="p-buttonset">
-              <button pButton type="button" icon="pi pi-upload" iconPos="left" label="Upload"
-                (click)="uploadFirstStep(f, i)" [disabled]="!f.file || !f.fileType || !f.fileClass || f.uploaded"
-                class="p-button-raised p-button-rounded"></button>
-              <button pButton type="button" label="Next" class="p-button-raised p-button-rounded"
-                (click)="goToImport(0, i)"
-                [disabled]="!f.file || !f.fileType || !f.fileClass || !f.uploaded || f.imported"></button>
-            </span>
-          </div>
+
+
         </div>
-
-
-      </div>
-
       <br />
     </div>
 
-    <div class="p-grid">
+    <div class="p-grid" *ngIf="selectedTemplate">
       <div class="p-col-10"></div>
       <div class="p-col-2">
         <button pButton type="button" icon="pi pi-plus" iconPos="left" label="Another File"
@@ -209,7 +219,7 @@
       </p-accordionTab>
       <p-accordionTab header="Posting Mapping" *ngIf="filesList[currentFileIndex]?.fileClass?.value === 2"
         [selected]="true">
-        
+
         <div class="p-grid">
           <div class="p-col-3">Database Field</div>
           <div class="p-col-3">Data Type</div>
@@ -576,7 +586,7 @@
       <div class="p-col-4"></div>
     </div>
 
-    
+
     <p-messages></p-messages>
 
     <br><br>

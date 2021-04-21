@@ -17,6 +17,23 @@ module.exports.fetchAll = async () => {
 };
 
 
+module.exports.getByUserId = async (id) => {
+    try {
+        const res = await Procedure
+            .getProcedures()
+            .findAll({
+                where: {
+                    userId: id,
+                    deleted: false
+                }
+            });
+        return res;
+    } catch (err) {
+        throw new Error('there_is_an_error_in_db_connection');
+    }
+};
+
+
 module.exports.fetchOne = async (id) => {
     try {
         const res = await Procedure
@@ -36,44 +53,46 @@ module.exports.fetchOne = async (id) => {
 
 
 module.exports.insert = async (model) => {
-        try {
-            const result = await Procedure
-                .getProcedures()
-                .create(model);
-            return result;
-        } catch (err) {
-            throw new Error('there_is_an_error_in_db_connection');
-        }
+    try {
+        const result = await Procedure
+            .getProcedures()
+            .create(model);
+        return result;
+    } catch (err) {
+        throw new Error('there_is_an_error_in_db_connection');
+    }
 }; // end of function
 
 
 
 module.exports.update = async (model, id) => {
-        try {
-            const result = await Procedure
-                .getProcedures()
-                .update(model, {
-                    where: {
-                        id: id
-                    }
-                });
-            return result;
-        } catch (err) {
-            throw new Error('there_is_an_error_in_db_connection');
-        }
+    try {
+        const result = await Procedure
+            .getProcedures()
+            .update(model, {
+                where: {
+                    id: id
+                }
+            });
+        return result;
+    } catch (err) {
+        throw new Error('there_is_an_error_in_db_connection');
+    }
 }; // end of update
 
 
 module.exports.delete = async (id) => {
     try {
         const result = await Procedure
-                .getProcedures()
-                .update({deleted: true}, {
-                    where: {
-                        id: id
-                    }
-                });
-            return result;
+            .getProcedures()
+            .update({
+                deleted: true
+            }, {
+                where: {
+                    id: id
+                }
+            });
+        return result;
     } catch (error) {
         throw new Error('there_is_an_error_in_db_connection');
     }

@@ -61,7 +61,11 @@ router
     }), authorization.authorize('ADMIN'), roleCtrl.update)
     .delete(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('ADMIN'), roleCtrl.delete)
+    }), authorization.authorize('ADMIN'), roleCtrl.delete);
+
+router
+    .route('/users/:id/procedures')
+    .get(procedureCtrl.getByUserId);
 
 router
     .route('/procedures')

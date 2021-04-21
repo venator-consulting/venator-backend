@@ -2,6 +2,7 @@ const {
     DataTypes
 } = require('sequelize');
 const sequelize = require('../config/sequelize.config');
+const Procedure = require('./procedures.model.server').getProcedures();
 
 const sequelizer = sequelize.getSequelize();
 
@@ -71,8 +72,13 @@ const User = sequelizer.define('User', {
     tableName: 'users'
 });
 
-// let role = Role.getRole();
-// User.hasOne(Role);
+User.hasMany(Procedure, {
+    foreignKey: {
+        name: 'userId',
+        allowNull: true
+    }
+});
+Procedure.belongsTo(User);
 
 module.exports.getUser = function () {
     return User;

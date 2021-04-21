@@ -2,6 +2,8 @@ import { Choices } from "./choices";
 
 export class FileToImport {
 
+    managerId: number;
+    procedureId: number;
     template: any = {};
     defaultTemplate: any = {};
     fileType: Choices;

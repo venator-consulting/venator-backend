@@ -16,4 +16,8 @@ export class UsersService {
     return this._http.get<any>(this._thisURL + '/getManagers');
  }
 
+ getProcedures(userId) {
+   return this._http.get<any>(this._thisURL + '/users/' + userId + '/procedures');
+ }
+
 }

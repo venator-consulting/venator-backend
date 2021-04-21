@@ -13,9 +13,9 @@ const Procedures = sequelizer.define('Procedures', {
         primaryKey: true,
         autoIncrement: true
     },
-    userId: {
-        type: DataTypes.BIGINT(11),
-    },
+    // userId: {
+    //     type: DataTypes.BIGINT(11),
+    // },
     name: {
         type: DataTypes.STRING(50),
     },

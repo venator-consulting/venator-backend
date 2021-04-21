@@ -1,7 +1,7 @@
 
 
 export class Procedures {
-
+    id: number;
     userId: number =  0;
     name: string ='';
     data:  boolean = false;
