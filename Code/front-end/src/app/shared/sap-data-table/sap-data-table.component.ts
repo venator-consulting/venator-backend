@@ -42,6 +42,8 @@ export class SAPDataTableComponent implements OnInit {
   endId: number = 0;
   pageLimitSizes = [ { value: "25"},{ value: "50"},{ value: "100"}, ]
   limit : number = 25 ; 
+
+
   ngOnInit(): void {
     this.getData()
   }
@@ -435,6 +437,7 @@ export class SAPDataTableComponent implements OnInit {
   }
   limitChange(e) {
     this.limit = e.value
+    this.loading = true; 
     if(this.filterNr === 0) {
       this.getData()
     }

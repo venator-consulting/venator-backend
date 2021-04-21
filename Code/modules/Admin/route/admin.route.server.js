@@ -69,6 +69,10 @@ router
     .post(procedureCtrl.insert);
 
 router
+    .route('/procedures/getManagerProcedures/:managerId')
+    .get(procedureCtrl.getManagerProcedures)
+
+router
     .route('/procedures/:id')
     .get(procedureCtrl.fetchOne)
     .put(procedureCtrl.update)
@@ -82,5 +86,5 @@ router
     .route('/create-admin')
     .get(userCtrl.createDefaultAdmin)
 
-
+    
 module.exports = router;

@@ -32,7 +32,21 @@ module.exports.fetchOne = async (id) => {
         throw new Error('there_is_an_error_in_db_connection');
     }
 };
-
+module.exports.getManagerProcedures = async (managerId) => {
+    try {
+        const res = await Procedure
+            .getProcedures()
+            .findAll({
+                where: {
+                    deleted: false,
+                    userId: managerId
+                }
+            });
+        return res;
+    } catch (err) {
+        throw new Error('there_is_an_error_in_db_connection');
+    }
+};
 
 
 module.exports.insert = async (model) => {

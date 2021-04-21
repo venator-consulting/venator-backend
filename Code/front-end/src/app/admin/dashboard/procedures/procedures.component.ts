@@ -15,6 +15,9 @@ export class ProceduresComponent implements OnInit {
   users: [] = []
   managerRoleId: number ;
   cols = [ "Username", "Email", "Firstname", "Lastname", "Title", "MobileNr"]
+  selectedProcedures : [] = []
+
+
   ngOnInit(): void {
     
     // this._roleServiceService.getmanagerRoleId()
@@ -38,4 +41,16 @@ export class ProceduresComponent implements OnInit {
 
   }
 
+  showProcedures(userId) {
+    this._usersService
+    .getManagerProcedures(userId)
+    .subscribe(
+      (data) => { 
+        this.selectedProcedures = data ;
+        console.log(data)
+
+        },
+      (error) => console.log(error),
+      () => {  }
+    );  }
 }
