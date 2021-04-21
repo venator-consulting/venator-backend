@@ -228,6 +228,8 @@ export class ImportComponent implements OnInit {
     const local = theFile.local?.value;
     const accountType = theFile.accountType?.value;
     const template = theFile.defaultTemplate;
+    const managerId = theFile.managerId;
+    const procedureId = theFile.procedureId;
 
     // const formData: FormData = new FormData();
 
@@ -247,7 +249,9 @@ export class ImportComponent implements OnInit {
         fileClass: fileClass,
         local: local,
         filePath: filePath,
-        accountType: accountType
+        accountType: accountType,
+        managerId: managerId,
+        procedureId: procedureId
       }
     }
 

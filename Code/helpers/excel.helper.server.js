@@ -75,7 +75,7 @@ _getColumnIndex = function (index) {
  * @param {number} templateType 1 for SAP or 2 for Cinram, -1 for others
  * @param {string} local localization, not used for excel till now 
  */
-module.exports.importStreamExcelFile = async function (excelFilePath, template = null, templateType = 1, local = 'de_DE') {
+module.exports.importStreamExcelFile = async function (excelFilePath, managerId, procedureId, template = null, templateType = 1, local = 'de_DE') {
     const t = await sequelizer.transaction();
     let index = 1;
     let bulkCount = 0;
@@ -191,11 +191,11 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
                         const accountNumber = accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null;
                         let accountName = accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null;
                         if (accountNumber) {
-                            let temp = await AccountModel.getAccounts().findAll({
+                            let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                                 where: {
                                     accountNumber: accountNumber,
                                     companyCode: companyCode,
-                                    // procedureId: procedureId
+                                    procedureId: procedureId,
                                     accountType: accountType
                                 },
                                 attributes: ['accountName'],
@@ -209,11 +209,11 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
                         const GLAccountNumber = GLAccountNumberIndex >= 0 ? row.model.cells[GLAccountNumberIndex].value : null;
                         let GLAccountName = null;
                         if (GLAccountNumber) {
-                            let temp = await AccountModel.getAccounts().findAll({
+                            let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                                 where: {
                                     accountNumber: GLAccountNumber,
                                     companyCode: companyCode,
-                                    // procedureId: procedureId
+                                    procedureId: procedureId,
                                     accountType: AccountTypeEnum[3]
                                 },
                                 attributes: ['accountName'],
@@ -226,11 +226,11 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
                         const contraAccountGLAccountNo = contraAccountGLAccountNoIndex >= 0 ? row.model.cells[contraAccountGLAccountNoIndex].value : null;
                         let contraAccountGLAccountName = null;
                         if (contraAccountGLAccountNo) {
-                            let temp = await AccountModel.getAccounts().findAll({
+                            let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                                 where: {
                                     accountNumber: contraAccountGLAccountNo,
                                     companyCode: companyCode,
-                                    // procedureId: procedureId
+                                    procedureId: procedureId,
                                     accountType: AccountTypeEnum[3]
                                 },
                                 attributes: ['accountName'],
@@ -244,11 +244,11 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
                         const debtorNumber = debtorNumberIndex >= 0 ? row.model.cells[debtorNumberIndex].value : null;
                         let debtorName = null;
                         if (debtorNumber) {
-                            let temp = await AccountModel.getAccounts().findAll({
+                            let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                                 where: {
                                     accountNumber: debtorNumber,
                                     companyCode: companyCode,
-                                    // procedureId: procedureId
+                                    procedureId: procedureId,
                                     accountType: AccountTypeEnum[1]
                                 },
                                 attributes: ['accountName'],
@@ -261,11 +261,11 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
                         const contraAccountDebtorNo = contraAccountDebtorNoIndex >= 0 ? row.model.cells[contraAccountDebtorNoIndex].value : null;
                         let contraAccountDebtorName = null;
                         if (contraAccountDebtorNo) {
-                            let temp = await AccountModel.getAccounts().findAll({
+                            let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                                 where: {
                                     accountNumber: contraAccountDebtorNo,
                                     companyCode: companyCode,
-                                    // procedureId: procedureId
+                                    procedureId: procedureId,
                                     accountType: AccountTypeEnum[1]
                                 },
                                 attributes: ['accountName'],
@@ -279,11 +279,11 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
                         const creditorNumber = creditorNumberIndex >= 0 ? row.model.cells[creditorNumberIndex].value : null;
                         let creditorName = null;
                         if (creditorNumber) {
-                            let temp = await AccountModel.getAccounts().findAll({
+                            let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                                 where: {
                                     accountNumber: creditorNumber,
                                     companyCode: companyCode,
-                                    // procedureId: procedureId
+                                    procedureId: procedureId,
                                     accountType: AccountTypeEnum[2]
                                 },
                                 attributes: ['accountName'],
@@ -296,11 +296,11 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
                         const contraAccountCreditorNo = contraAccountCreditorNoIndex >= 0 ? row.model.cells[contraAccountCreditorNoIndex].value : null;
                         let contraAccountCreditorName = null;
                         if (contraAccountCreditorNo) {
-                            let temp = await AccountModel.getAccounts().findAll({
+                            let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                                 where: {
                                     accountNumber: contraAccountCreditorNo,
                                     companyCode: companyCode,
-                                    // procedureId: procedureId
+                                    procedureId: procedureId,
                                     accountType: AccountTypeEnum[2]
                                 },
                                 attributes: ['accountName'],
@@ -350,6 +350,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
                             contraAccountNumber: contraAccountNumberIndex >= 0 ? row.model.cells[contraAccountNumberIndex].value : null,
                             dueDate: dueDateIndex >= 0 ? chrono.parseDate(row.model.cells[dueDateIndex].value) : null,
                             textHeader: textHeaderIndex >= 0 ? row.model.cells[textHeaderIndex].value : null,
+                            procedureId: procedureId
                         });
 
 
@@ -357,7 +358,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
                         if (rowsToInsert.length >= env.bulkInsertSize) {
                             // then bulk insert and empty the array
                             await PostingModel
-                                .getPosting()
+                                .getPosting('posting_' + managerId)
                                 .bulkCreate(rowsToInsert, {
                                     transaction: t
                                 });
@@ -375,7 +376,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
                 if (rowsToInsert.length > 0) {
                     // try {
                     await PostingModel
-                        .getPosting()
+                        .getPosting('posting_' + managerId)
                         .bulkCreate(rowsToInsert, {
                             transaction: t
                         });
@@ -399,11 +400,11 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
 
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
-            
+
             const splitedMsg = err.message.split(" at row ");
-            if(splitedMsg.length > 1 ) {
+            if (splitedMsg.length > 1) {
                 const rowNum = splitedMsg[1];
-                const theRealRowNum = rowNum > 0?  parseInt(rowNum) + 1 + (bulkCount * env.bulkInsertSize) : index;
+                const theRealRowNum = rowNum > 0 ? parseInt(rowNum) + 1 + (bulkCount * env.bulkInsertSize) : index;
                 const errorMsg = splitedMsg[0] + ' at row ' + theRealRowNum;
                 logger.error(`${new Date()}: ${splitedMsg[0]} at row ${theRealRowNum}`);
                 console.log("ERROR on row number: " + theRealRowNum);
@@ -428,7 +429,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, template =
  * @param {string} excelFilePath path of the file on the server
  * @param {AccountTypeEnum} accountType creditor, dibtor or gla
  */
-module.exports.importStreamAccountsExcel = async function (excelFilePath, accountType = 1, template = null) {
+module.exports.importStreamAccountsExcel = async function (excelFilePath, managerId, procedureId, accountType = 1, template = null) {
 
     let benchmark = process.hrtime();
     let index = 1;
@@ -484,7 +485,8 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, accoun
                             accountNumber: accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null,
                             companyCode: companyCodeIndex >= 0 ? row.model.cells[companyCodeIndex].value : null,
                             accountName: accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null,
-                            accountType: AccountTypeEnum[accountType]
+                            accountType: AccountTypeEnum[accountType],
+                            procedureId: procedureId
                         });
 
 
@@ -492,7 +494,7 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, accoun
                         if (rowsToInsert.length >= env.bulkInsertSize) {
                             // then bulk insert and empty the array
                             await AccountModel
-                                .getAccounts()
+                                .getAccounts('accounts_' + managerId)
                                 .bulkCreate(rowsToInsert, {
                                     transaction: t
                                 });
@@ -512,7 +514,7 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, accoun
                 // if the array not empty: bulk insert it then empty it.
                 if (rowsToInsert.length > 0) {
                     await AccountModel
-                        .getAccounts()
+                        .getAccounts('accounts_' + managerId)
                         .bulkCreate(rowsToInsert, {
                             transaction: t
                         });
@@ -535,11 +537,11 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, accoun
 
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
-            
+
             const splitedMsg = err.message.split(" at row ");
-            if(splitedMsg.length > 1 ) {
+            if (splitedMsg.length > 1) {
                 const rowNum = splitedMsg[1];
-                const theRealRowNum = rowNum > 0?  parseInt(rowNum) + 1 + (bulkCount * env.bulkInsertSize) : index;
+                const theRealRowNum = rowNum > 0 ? parseInt(rowNum) + 1 + (bulkCount * env.bulkInsertSize) : index;
                 const errorMsg = splitedMsg[0] + ' at row ' + theRealRowNum;
                 logger.error(`${new Date()}: ${splitedMsg[0]} at row ${theRealRowNum}`);
                 console.log("ERROR on row number: " + theRealRowNum);
