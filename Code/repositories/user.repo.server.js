@@ -33,8 +33,8 @@ module.exports.fetch = function (search = '_', orderBy = 'username', order = 'DE
 
     return new Promise(async (resolve, reject) => {
         try {
-            const roles = await Role
-                .getRole()
+            const user = await User
+                .getUser()
                 .findAll({
                     where: {
                         [Op.or]: [{
@@ -192,10 +192,10 @@ module.exports.insert = function (user) {
             const mailRes = await sendMail(mail);
 
             // if manager create schema
-            if (user.role === 'Manager') {
-                Posting.syncPosting('posting_' + result.dataValues.id);
-                Accounts.syncAccounts('accounts_' + result.dataValues.id);
-            }
+            // if (user.role === 'Manager') {
+            //     Posting.syncPosting('posting_' + result.dataValues.id);
+            //     Accounts.syncAccounts('accounts_' + result.dataValues.id);
+            // }
 
             resolve(result);
         } catch (err) {

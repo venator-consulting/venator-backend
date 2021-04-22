@@ -1,13 +1,13 @@
-const roleRepo = require('../../../repositories/role.repo.server');
+const orgRepo = require('../../../repositories/organisation.repo.server');
 
 
 module.exports.fetchAll = async function (req, res, next) {
     try {
-        const roles = await roleRepo
+        const orgs = await orgRepo
             .fetchAll();
         res
             .status(200)
-            .json(roles);
+            .json(orgs);
     } catch (e) {
         res
             .status(500)
@@ -17,16 +17,14 @@ module.exports.fetchAll = async function (req, res, next) {
     }
 };
 
-module.exports.getmanagerRoleId = async function (req, res, next) {
 
+module.exports.fetchOne = async function (req, res) {
     try {
-        const roles =  roleRepo.getmanagerRoleId()
-        .then(result=> {
-            return res.send({
-                id: result.id
-            });
-        })
-          
+        const org = await orgRepo
+            .fetchOne(req.params.id);
+        res
+            .status(200)
+            .json(org);
     } catch (e) {
         res
             .status(500)
@@ -39,12 +37,10 @@ module.exports.getmanagerRoleId = async function (req, res, next) {
 
 module.exports.insert = async function (req, res) {
     try {
-        const role = {
-            name: req.body.name,
-            role_description: req.body.role_description
-        };
-        const result = await roleRepo
-            .insert(role);
+        const org = req.body;
+
+        const result = await orgRepo
+            .insert(org);
         res.status(201)
             .json(result);
     } catch (e) {
@@ -58,12 +54,9 @@ module.exports.insert = async function (req, res) {
 
 module.exports.update = async function (req, res) {
     try {
-        const role = {
-            name: req.body.name,
-            role_description: req.body.role_description
-        };
-        const result = await roleRepo
-            .update(role, req.params.id);
+        const org = req.body;
+        const result = await orgRepo
+            .update(org, req.params.id);
         res.status(201)
             .json(result);
     } catch (e) {
@@ -77,8 +70,8 @@ module.exports.update = async function (req, res) {
 
 module.exports.delete = async function (req, res) {
     try {
-        const result = await roleRepo
-            .delete(req.params.id);
+        const result = await orgRepo
+            .softDelete(req.params.id);
         res.status(204)
             .json(result);
     } catch (e) {

@@ -7,7 +7,8 @@ const roleCtrl = require('../controller/roles.controller.server');
 const userCtrl = require('../controller/user.controller.server');
 const passport = require('passport');
 const authorization = require('../../../config/authorization.config');
-const procedureCtrl  =require('../controller/procedure.controller.server');
+const procedureCtrl = require('../controller/procedure.controller.server');
+const organisationCtrl = require('../controller/organisation.controller.server');
 
 const multer = require('multer');
 const uploadfiles = multer({
@@ -32,13 +33,13 @@ router
 router
     .route('/user')
     .post(userCtrl.register);
-    
+
 router
     .route('/getManagers')
     .get(userCtrl.fetchAllManagers);
 
 router
-    .route('/roles/getmanagerRoleId') 
+    .route('/roles/getmanagerRoleId')
     .get(roleCtrl.getmanagerRoleId);
 
 router
@@ -83,6 +84,17 @@ router
     .delete(procedureCtrl.delete);
 
 router
+    .route('/organisation')
+    .get(organisationCtrl.fetchAll)
+    .post(organisationCtrl.insert);
+
+router
+    .route('/organisation/:id')
+    .get(organisationCtrl.fetchOne)
+    .put(organisationCtrl.update)
+    .delete(organisationCtrl.delete);
+
+router
     .route('/sync-db')
     .get(dataSyncCtrl.buildDatabaseSchema);
 
@@ -90,5 +102,5 @@ router
     .route('/create-admin')
     .get(userCtrl.createDefaultAdmin)
 
-    
+
 module.exports = router;
