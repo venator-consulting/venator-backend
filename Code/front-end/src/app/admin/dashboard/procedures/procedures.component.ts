@@ -17,17 +17,8 @@ export class ProceduresComponent implements OnInit {
   cols = [ "Username", "Email", "Firstname", "Lastname", "Title", "MobileNr"]
   selectedProcedures : [] = []
 
-
   ngOnInit(): void {
     
-    // this._roleServiceService.getmanagerRoleId()
-    // .subscribe(
-    //   (data) => { 
-    //     this.managerRoleId = data.id ;
-    //     console.log(this.managerRoleId)
-    //     },
-    //   (error) => console.log(error),
-    //   () => {
          this._usersService.getManagers()
         .subscribe(
           (data) => { 
@@ -36,21 +27,21 @@ export class ProceduresComponent implements OnInit {
             },
           (error) => console.log(error)
         );
-    //   }
-    // );
 
   }
 
   showProcedures(userId) {
     this._usersService
-    .getManagerProcedures(userId)
+    .getProcedures(userId)
     .subscribe(
       (data) => { 
         this.selectedProcedures = data ;
-        console.log(data)
-
         },
       (error) => console.log(error),
-      () => {  }
-    );  }
+      () => { 
+
+       }
+    );
+  
+  }
 }

@@ -62,7 +62,7 @@ module.exports.readHeader = async function (filePath) {
 }
 
 
-module.exports.importAccountCsvFile = async function (filePath, accountType = 1, template = null) {
+module.exports.importAccountCsvFile = async function (filePath, managerId, procedureId, accountType = 1, template = null) {
     return new Promise(async (resolve, reject) => {
         let benchmark = process.hrtime();
 
@@ -71,8 +71,8 @@ module.exports.importAccountCsvFile = async function (filePath, accountType = 1,
 
         try {
 
-            const options = cldr.extractNumberSymbols('de_DE');
-            const decimalParser = parseDecimalNumber.withOptions(options);
+            // const options = cldr.extractNumberSymbols('de_DE');
+            // const decimalParser = parseDecimalNumber.withOptions(options);
 
             if (template == null) {
                 template = {
@@ -100,17 +100,18 @@ module.exports.importAccountCsvFile = async function (filePath, accountType = 1,
                 // if (isNaN(accountNumber)) {
                 //     console.log(`${new Date()}: There is an ERROR on row ${index+1}, accountNumber/${template.accountNumber} should be number!`);
                 //     logger.error(`${new Date()}: There is an ERROR on row ${index+1}, accountNumber/${template.accountNumber} should be number!`);
-                    
+
                 //     reject(`There is an ERROR on row ${index+1}, accountNumber/${template.accountNumber} should be number!`);
                 //     return;
                 // }
-                
+
 
                 rowsToInsert.push({
                     accountNumber: row[template.accountNumber],
                     companyCode: row[template.companyCode],
                     accountName: row[template.accountName],
-                    accountType: AccountTypeEnum[accountType]
+                    accountType: AccountTypeEnum[accountType],
+                    procedureId: procedureId
                 });
 
 
@@ -118,7 +119,7 @@ module.exports.importAccountCsvFile = async function (filePath, accountType = 1,
                 if (rowsToInsert.length >= env.bulkInsertSize) {
                     // then bulk insert and empty the array
                     await AccountModel
-                        .getAccounts()
+                        .getAccounts('accounts_' + managerId)
                         .bulkCreate(rowsToInsert, {
                             transaction: t
                         });
@@ -134,7 +135,7 @@ module.exports.importAccountCsvFile = async function (filePath, accountType = 1,
             // if the array not empty: bulk insert it then empty it.
             if (rowsToInsert.length > 0) {
                 await AccountModel
-                    .getAccounts()
+                    .getAccounts('accounts_' + managerId)
                     .bulkCreate(rowsToInsert, {
                         transaction: t
                     });
@@ -177,7 +178,7 @@ module.exports.importAccountCsvFile = async function (filePath, accountType = 1,
 };
 
 
-module.exports.readCsvStream = async function (filePath, template = null, templateType = 1, local = 'de_DE') {
+module.exports.readCsvStream = async function (filePath, managerId, procedureId, template = null, templateType = 1, local = 'de_DE') {
     return new Promise(async (resolve, reject) => {
 
         let index = 1;
@@ -212,25 +213,25 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
 
             for await (const row of parser) {
 
-                const companyCode = row[Standardtemplate.companyCode]? row[Standardtemplate.companyCode] : null;
-                const accountType = row[Standardtemplate.accountType]? row[Standardtemplate.accountType] : null;
+                const companyCode = row[Standardtemplate.companyCode] ? row[Standardtemplate.companyCode] : null;
+                const accountType = row[Standardtemplate.accountType] ? row[Standardtemplate.accountType] : null;
                 let accountNumber = null;
-                let accountName = row[Standardtemplate.accountName]? row[Standardtemplate.accountName] : null;
+                let accountName = row[Standardtemplate.accountName] ? row[Standardtemplate.accountName] : null;
                 if (Standardtemplate.accountNumber && row[Standardtemplate.accountNumber]) {
                     accountNumber = decimalParser(row[Standardtemplate.accountNumber]);
                     if (isNaN(accountNumber)) {
                         console.log(`${new Date()}: There is an ERROR on row ${index+1}, accountNumber/${Standardtemplate.accountNumber} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index+1}, accountNumber/${Standardtemplate.accountNumber} should be number!`);
-                        
+
                         reject(`There is an ERROR on row ${index+1}, accountNumber/${Standardtemplate.accountNumber} should be number!`);
                         return;
                     }
                     if (accountNumber) {
-                        let temp = await AccountModel.getAccounts().findAll({
+                        let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: accountNumber,
                                 companyCode: companyCode,
-                                // procedureId: procedureId
+                                procedureId: procedureId,
                                 accountType: accountType
                             },
                             attributes: ['accountName'],
@@ -252,11 +253,11 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
                         return;
                     }
                     if (GLAccountNumber) {
-                        let temp = await AccountModel.getAccounts().findAll({
+                        let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: GLAccountNumber,
                                 companyCode: companyCode,
-                                // procedureId: procedureId
+                                procedureId: procedureId,
                                 accountType: AccountTypeEnum[3]
                             },
                             attributes: ['accountName'],
@@ -278,11 +279,11 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
                         return;
                     }
                     if (contraAccountGLAccountNo) {
-                        let temp = await AccountModel.getAccounts().findAll({
+                        let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: contraAccountGLAccountNo,
                                 companyCode: companyCode,
-                                // procedureId: procedureId
+                                procedureId: procedureId,
                                 accountType: AccountTypeEnum[3]
                             },
                             attributes: ['accountName'],
@@ -305,11 +306,11 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
                         return;
                     }
                     if (debtorNumber) {
-                        let temp = await AccountModel.getAccounts().findAll({
+                        let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: debtorNumber,
                                 companyCode: companyCode,
-                                // procedureId: procedureId
+                                procedureId: procedureId,
                                 accountType: AccountTypeEnum[1]
                             },
                             attributes: ['accountName'],
@@ -331,11 +332,11 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
                         return;
                     }
                     if (contraAccountDebtorNo) {
-                        let temp = await AccountModel.getAccounts().findAll({
+                        let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: contraAccountDebtorNo,
                                 companyCode: companyCode,
-                                // procedureId: procedureId
+                                procedureId: procedureId,
                                 accountType: AccountTypeEnum[1]
                             },
                             attributes: ['accountName'],
@@ -358,11 +359,11 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
                         return;
                     }
                     if (creditorNumber) {
-                        let temp = await AccountModel.getAccounts().findAll({
+                        let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: creditorNumber,
                                 companyCode: companyCode,
-                                // procedureId: procedureId
+                                procedureId: procedureId,
                                 accountType: AccountTypeEnum[2]
                             },
                             attributes: ['accountName'],
@@ -386,11 +387,11 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
                         return;
                     }
                     if (contraAccountCreditorNo) {
-                        let temp = await AccountModel.getAccounts().findAll({
+                        let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: contraAccountCreditorNo,
                                 companyCode: companyCode,
-                                // procedureId: procedureId
+                                procedureId: procedureId,
                                 accountType: AccountTypeEnum[2]
                             },
                             attributes: ['accountName'],
@@ -460,6 +461,7 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
                     dueDate: chrono.parseDate(row[Standardtemplate.dueDate]),
                     textHeader: row[Standardtemplate.textHeader],
                     accountName: accountName,
+                    procedureId: procedureId
                 });
 
 
@@ -467,7 +469,7 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
                 if (rowsToInsert.length >= env.bulkInsertSize) {
                     // then bulk insert and empty the array
                     await PostingModel
-                        .getPosting()
+                        .getPosting('posting_' + managerId)
                         .bulkCreate(rowsToInsert, {
                             transaction: t
                         });
@@ -483,7 +485,7 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
             // if the array not empty: bulk insert it then empty it.
             if (rowsToInsert.length > 0) {
                 await PostingModel
-                    .getPosting()
+                    .getPosting('posting_' + managerId)
                     .bulkCreate(rowsToInsert, {
                         transaction: t
                     });
@@ -513,7 +515,7 @@ module.exports.readCsvStream = async function (filePath, template = null, templa
                 console.log("ERROR on row number: " + theRealRowNum);
                 reject(errorMsg);
             } else {
-                console.log("ERROR on row number: " + index+1);
+                console.log("ERROR on row number: " + index + 1);
                 reject(err.message);
             }
         }

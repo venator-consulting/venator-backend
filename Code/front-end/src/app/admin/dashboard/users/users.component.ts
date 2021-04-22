@@ -12,20 +12,12 @@ export class UsersComponent implements OnInit {
   managers: [] = []
   users: [] = []
   managerRoleId: number ;
-  cols = [ "Username", "Email", "Firstname", "Lastname", "Title", "MobileNr"]
+  cols = [ "Username", "Email","Title",  "Firstname", "Lastname", "MobileNr"]
 
   constructor(private _usersService: UsersService , private _roleServiceService : RoleServiceService) { }
 
   ngOnInit(): void {
     
-    // this._roleServiceService.getmanagerRoleId()
-    // .subscribe(
-    //   (data) => { 
-    //     this.managerRoleId = data.id ;
-    //     console.log(this.managerRoleId)
-    //     },
-    //   (error) => console.log(error),
-    //   () => {
          this._usersService.getManagers()
         .subscribe(
           (data) => { 
@@ -34,8 +26,7 @@ export class UsersComponent implements OnInit {
             },
           (error) => console.log(error)
         );
-    //   }
-    // );
+
 
   }
 

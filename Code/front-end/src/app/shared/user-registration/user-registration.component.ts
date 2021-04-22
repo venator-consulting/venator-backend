@@ -1,26 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { Roles } from "../../model/roles";
 import { Titles } from "../../model/titles";
 import { Users } from "../../model/users";
-import { AdminRegistrationService } from "../service/admin-registration.service"
+import { UserService } from "../service/user.service";
+
 @Component({
-  selector: 'app-admin-registration',
-  templateUrl: './admin-registration.component.html',
-  styleUrls: ['./admin-registration.component.sass']
+  selector: 'app-user-registration',
+  templateUrl: './user-registration.component.html',
+  styleUrls: ['./user-registration.component.sass']
 })
-export class AdminRegistrationComponent implements OnInit {
-
-  constructor(private _messageService: MessageService, private _adminRegistrationService: AdminRegistrationService) { }
-
-
+export class UserRegistrationComponent implements OnInit {
 
   titles: Titles[] = Titles.getTitles();
- //roles: Roles[] = Roles.getRoles();
-  roles = [{name:'Admin'}];
-
-
-  userModel: Users = {
+   roles = [{name:'Manager'}, {name:'User'}];
+   userModel: Users = {
     title: "",
     email: '',
     role: '',
@@ -35,13 +28,12 @@ export class AdminRegistrationComponent implements OnInit {
     country: '',
   };
 
-
+  constructor(private _messageService: MessageService, private _userService: UserService) { }
 
   ngOnInit(): void {
   }
-
   submitHandler() {
-    this._adminRegistrationService.addUser(this.userModel)
+    this._userService.addUser(this.userModel)
       .subscribe(res => {
         console.dir('done: ' + res);
         this._messageService.add({
@@ -58,5 +50,5 @@ export class AdminRegistrationComponent implements OnInit {
         });
       });
   }
-
+  
 }

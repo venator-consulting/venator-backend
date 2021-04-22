@@ -18,8 +18,8 @@
         </div>
         <div>
             <p-sidebar [(visible)]="sideBarShow" class="sideBarWidth" [showCloseIcon]="false" >
-                <h2 style="font-weight:lighter " class="p-text-center">Mohamad Hamad</h2>
-                <p-menu  [model]="sidebarItems" [style]="{'width':'300px'}"></p-menu >        
+                <h2 style="font-weight:lighter " class="p-text-center"> {{ username }} </h2>
+                <p-menu  [model]="sidebarItems" [style]="{'width':'300px', 'border': 'none'}"></p-menu >        
             </p-sidebar>
         </div>
     </div>

@@ -17,6 +17,7 @@ export class ProcedureRegistrationComponent implements OnInit {
   dataSources: Choices[] = Choices.getDataSources();
 
   procedureModel: Procedures = {
+    id: null,
     userId: 0,
     name: '',
     data: false,

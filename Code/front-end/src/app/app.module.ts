@@ -53,6 +53,10 @@ import { AmountAnalysisComponent } from './shared/analysis/amount-analysis/amoun
 import {ChartModule} from 'primeng/chart';
 import { ProceduresComponent } from './admin/dashboard/procedures/procedures.component';
 import { UsersComponent } from './admin/dashboard/users/users.component';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { OrganisationRegistrationComponent } from './admin/organisation-registration/organisation-registration.component';
+import { UserRegistrationComponent } from './shared/user-registration/user-registration.component';
+import { UserEditComponent } from './shared/user-edit/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +76,10 @@ import { UsersComponent } from './admin/dashboard/users/users.component';
     ProcedureRegistrationComponent,
     AmountAnalysisComponent,
     ProceduresComponent,
-    UsersComponent
+    UsersComponent,
+    OrganisationRegistrationComponent,
+    UserRegistrationComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,
@@ -105,6 +112,7 @@ import { UsersComponent } from './admin/dashboard/users/users.component';
     CardModule,
     ProgressSpinnerModule,
     DialogModule,
+    DynamicDialogModule,
     ContextMenuModule,
     AccordionModule,
     MessagesModule,

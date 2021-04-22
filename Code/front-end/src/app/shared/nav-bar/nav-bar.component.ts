@@ -13,7 +13,7 @@ export class NavBarComponent implements OnInit {
     menuItems: MenuItem[] = [];
     userPages: MenuItem[] = [];
     sidebarItems: MenuItem[]= [];
-
+    username: string = localStorage.getItem('username');
 
   constructor(private messageService: MessageService) { }
 
@@ -66,9 +66,13 @@ export class NavBarComponent implements OnInit {
     this.userPages = [
         
         {label: 'Setting', icon: 'pi pi-globe' , routerLink: ['/admin/import']},
-        {label: 'Reset password', icon: 'pi pi-user-edit' , routerLink: ['/resetPassword']},
-        {label: 'Add admin', icon: 'pi pi-user-plus' , routerLink: ['/admin/registration']}, 
+        {label: 'Reset password', icon: 'pi pi-lock' , routerLink: ['/resetPassword']},
+        {label: 'Add admin', icon: 'pi pi-user-plus' , routerLink: ['/admin/admin/add']}, 
         {label: 'Add procedure', icon: 'pi pi-user-plus' , routerLink: ['admin/procedure/add']}, 
+        {label: 'Add Organisation', icon: 'pi pi-plus-circle' , routerLink: ['admin/organisation/add']},
+        
+        {label: 'Add user', icon: 'pi pi-user-plus' , routerLink: ['/shared/user/add']}, 
+        {label: 'Edit user', icon: 'pi pi-user-edit' , routerLink: ['/shared/user/edit']},         
         {label: 'Logout', icon: 'pi pi-fw pi-power-off' , routerLink: ['/']}
     ]
 }

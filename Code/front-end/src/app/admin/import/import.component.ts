@@ -5,6 +5,9 @@ import { Choices } from "../../model/choices";
 import { ImportService } from "../service/import.service";
 import { FileToImport } from "../../model/file-import";
 import { FormGroup, FormControl, FormArray, FormBuilder } from "@angular/forms";
+import { UsersService } from "../service/users.service";
+import { Users } from 'src/app/model/users';
+import { Procedures } from 'src/app/model/procedures';
 
 @Component({
   selector: 'app-import',
@@ -29,15 +32,20 @@ export class ImportComponent implements OnInit {
   accountsCustomTemplate: any = {};
   postingCustomTemplate: any = {};
   headCustomTemplate: any = {};
+  managers: Users[] = new Array();
+  selectedManagerId: number = -1;
+  procedures: Procedures[] = new Array();
+  selectedProcedureId : number = -1;
 
 
-  constructor(private _messageService: MessageService, private _importService: ImportService) {
+  constructor(private _messageService: MessageService, private _importService: ImportService,
+    private _usersService: UsersService) {
 
   }
 
   ngOnInit(): void {
 
-    this.addFormData();
+    // this.addFormData();
 
     this.items = [
       {
@@ -67,14 +75,50 @@ export class ImportComponent implements OnInit {
       }
     ];
 
+
+    this._usersService.getManagers()
+      .subscribe(
+        (data) => {
+          const temp = data.results;
+          temp.forEach(manager => {
+            manager.fullName = manager.title + '. ' + manager.firstname + ' ' + manager.lastname;
+            // delete manager.Role;
+          });
+          this.managers = temp;
+        },
+        (error) => console.log(error)
+      );
+
   } // end of ngOnInit
+  
+
+  managerChangedHandler(e) {
+    // alert(e.value);
+    if (e.value > 0) {
+      this._usersService.getProcedures(e.value)
+      .subscribe(
+        data => {
+          this.procedures = data;
+        },
+        error => console.log(error)
+      );
+    }
+  }
+
+  selectTemplatHandler(e) {
+    this.addFormData();
+  }
 
   removeFormData(index: number) {
     this.filesList = this.filesList.splice(index, 1);
   }
 
   addFormData() {
-    this.filesList.push(new FileToImport());
+    let f = new FileToImport();
+    f.managerId = this.selectedManagerId;
+    f.procedureId = this.selectedProcedureId;
+    f.defaultTemplate = this.selectedTemplate;
+    this.filesList.push(f);
   }
 
   goToImport(wizardIndex, fileIndex) {
@@ -149,7 +193,7 @@ export class ImportComponent implements OnInit {
         this._messageService.add({
           severity: 'success',
           summary: 'File uploaded!',
-          detail: 'the file ' + this.filesList[this.currentFileIndex].orginalName +  ' uploaded successfuly! you can upload another file now'
+          detail: 'the file ' + this.filesList[this.currentFileIndex].orginalName + ' uploaded successfuly! you can upload another file now'
         });
       }, err => {
         console.log('error: ' + err);
@@ -184,6 +228,8 @@ export class ImportComponent implements OnInit {
     const local = theFile.local?.value;
     const accountType = theFile.accountType?.value;
     const template = theFile.defaultTemplate;
+    const managerId = theFile.managerId;
+    const procedureId = theFile.procedureId;
 
     // const formData: FormData = new FormData();
 
@@ -203,7 +249,9 @@ export class ImportComponent implements OnInit {
         fileClass: fileClass,
         local: local,
         filePath: filePath,
-        accountType: accountType
+        accountType: accountType,
+        managerId: managerId,
+        procedureId: procedureId
       }
     }
 

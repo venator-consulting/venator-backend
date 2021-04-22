@@ -61,8 +61,8 @@ const sequelizer = sequelize.getSequelize();
 
 
 
-module.exports.getPosting = function (tableName = 'Posting') {
-    return sequelizer.define('Posting', {
+module.exports.getPosting = function (tableName = 'Posting_3') {
+    return sequelizer.define('Posting_3', {
         id: {
             type: DataTypes.BIGINT(11),
             allowNull: false,
@@ -321,7 +321,7 @@ module.exports.getPosting = function (tableName = 'Posting') {
 };
 
 
-module.exports.syncPosting = async function (tableName = 'Posting') {
+module.exports.syncPosting = async function (tableName = 'Posting_3') {
     await this.getPosting(tableName).sync({
         alter: true
     });
