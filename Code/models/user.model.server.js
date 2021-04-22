@@ -2,7 +2,7 @@ const {
     DataTypes
 } = require('sequelize');
 const sequelize = require('../config/sequelize.config');
-const Procedure = require('./procedures.model.server').getProcedures();
+const Organisation = require('./organisation.model.server').getOrganisation();
 
 const sequelizer = sequelize.getSequelize();
 
@@ -13,9 +13,6 @@ const User = sequelizer.define('User', {
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
-    },
-    managerId: {
-        type: DataTypes.BIGINT(11),
     },
     firstname: {
         type: DataTypes.STRING(25),
@@ -72,13 +69,8 @@ const User = sequelizer.define('User', {
     tableName: 'users'
 });
 
-User.hasMany(Procedure, {
-    foreignKey: {
-        name: 'userId',
-        allowNull: true
-    }
-});
-Procedure.belongsTo(User);
+Organisation.hasMany(User);
+User.belongsTo(Organisation);
 
 module.exports.getUser = function () {
     return User;

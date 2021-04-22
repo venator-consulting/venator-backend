@@ -2,6 +2,7 @@ const {
     DataTypes
 } = require('sequelize');
 const sequelize = require('../config/sequelize.config');
+const Procedure = require('./procedures.model.server').getProcedures();
 
 const sequelizer = sequelize.getSequelize();
 
@@ -45,6 +46,10 @@ const Organisation = sequelizer.define('Organisation', {
 }, {
     tableName: 'organisation'
 });
+
+
+Organisation.hasMany(Procedure);
+Procedure.belongsTo(Organisation);
 
 
 module.exports.getOrganisation = function () {
