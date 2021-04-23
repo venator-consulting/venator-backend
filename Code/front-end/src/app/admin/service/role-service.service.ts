@@ -19,8 +19,10 @@ export class RoleServiceService {
  }
 
  addProcedure(procedure) {
-  // console.log(procedure)
    return this._http.post<any>(this._thisURL + '/procedures', procedure);
 }
 
+editProcedure(procedure) {
+   return this._http.put<any>(this._thisURL + '/procedures/edit', procedure);
+}
 }

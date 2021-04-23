@@ -57,6 +57,9 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { OrganisationRegistrationComponent } from './admin/organisation-registration/organisation-registration.component';
 import { UserRegistrationComponent } from './shared/user-registration/user-registration.component';
 import { UserEditComponent } from './shared/user-edit/user-edit.component';
+import { UserDashboardComponent } from './shared/user-dashboard/user-dashboard.component';
+import { OrganisationUsersComponent } from './shared/organisation-users/organisation-users.component';
+import { ProcedureEditComponent } from './admin/procedure-edit/procedure-edit.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +82,10 @@ import { UserEditComponent } from './shared/user-edit/user-edit.component';
     UsersComponent,
     OrganisationRegistrationComponent,
     UserRegistrationComponent,
-    UserEditComponent
+    UserEditComponent,
+    UserDashboardComponent,
+    OrganisationUsersComponent,
+    ProcedureEditComponent
   ],
   imports: [
     BrowserModule,

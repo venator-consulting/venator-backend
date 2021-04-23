@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Organisation } from "../../model/organisation"; 
+import { Organisation } from "../../shared/model/organisation"; 
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -20,12 +21,16 @@ export class OrganisationRegistrationComponent implements OnInit {
     country:'',
   }
 
-  constructor() { }
+  constructor(private _router: Router,) { }
 
   ngOnInit(): void {
   }
 
   submitHandler() {
     console.log(this.organisation)
+  }
+  cancelHandle(){
+    this._router.navigate(['/admin/dashboard/procedures']); 
+
   }
 }

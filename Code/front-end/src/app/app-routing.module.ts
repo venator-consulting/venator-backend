@@ -16,6 +16,10 @@ import { ProceduresComponent } from "./admin/dashboard/procedures/procedures.com
 import { UsersComponent } from "./admin/dashboard/users/users.component"; 
 import { UserRegistrationComponent } from "./shared/user-registration/user-registration.component"; 
 import { UserEditComponent } from "./shared/user-edit/user-edit.component"; 
+import { ProcedureEditComponent } from "./admin/procedure-edit/procedure-edit.component"; 
+import {UserDashboardComponent } from "./shared/user-dashboard/user-dashboard.component" ;
+import {OrganisationUsersComponent } from "./shared/organisation-users/organisation-users.component" ;
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -28,17 +32,20 @@ const routes: Routes = [
   { path: 'admin/admin/add', component: AdminRegistrationComponent },
   { path: 'admin/organisation/add', component: OrganisationRegistrationComponent },
   { path: 'admin/procedure/add', component: ProcedureRegistrationComponent },
+  { path: 'admin/procedure/edit', component: ProcedureEditComponent },
   { path: 'admin/dashboard/procedures', component: ProceduresComponent },
   { path: 'admin/dashboard/users', component: UsersComponent },
-  { path: 'dashboard', component: LayoutComponent },
   { path: 'admin/import', component: ImportComponent },
+
   { path: 'shared/user/add', component: UserRegistrationComponent },
   { path: 'shared/user/edit', component: UserEditComponent },
+  { path: 'shared/user/procedures', component: UserDashboardComponent },
+  { path: 'shared/user/users', component: OrganisationUsersComponent },
   { path: 'data', component: SAPDataTableComponent },
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },
   { path: 'reset/:token', component: ResetPasswordNewUserComponent },
-  { path: 'analysis/amount', component: AmountAnalysisComponent },
+  { path: 'reset/:token', component: ResetPasswordNewUserComponent },
   { path: '**', component: NotfoundComponent },
 
 ];

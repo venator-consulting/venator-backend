@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Choices } from "../../model/choices";
+import { Choices } from "../../shared/model/choices";
 import { ImportService } from "../service/import.service";
-import { FileToImport } from "../../model/file-import";
+import { FileToImport } from "../../shared/model/file-import";
 import { FormGroup, FormControl, FormArray, FormBuilder } from "@angular/forms";
 import { UsersService } from "../service/users.service";
-import { Users } from 'src/app/model/users';
-import { Procedures } from 'src/app/model/procedures';
+import { Users } from 'src/app/shared/model/users';
+import { Procedures } from 'src/app/shared/model/procedures';
 
 @Component({
   selector: 'app-import',

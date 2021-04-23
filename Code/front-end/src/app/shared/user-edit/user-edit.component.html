@@ -110,9 +110,18 @@
             </div>
 
             <div class="p-field p-grid">
-                <button pbutton pripple type="submit" label="Submit" class="p-mt-4  p-ripple p-button p-component buttonCss" >
-                    <span class="p-button-label"> Submit </span>
-                </button>
+                <div class="p-xs-col-5  p-mr-4">
+    
+                    <button pbutton pripple type="button" label="cancel" class="p-mt-4  p-ripple p-button p-component p-cancelButton " (click)="cancelHandle()" >
+                        <span class="p-button-label"> Cancel </span>
+                    </button>
+                </div>
+                <div class="p-xs-col-5 ">
+                    <button pbutton pripple type="submit" label="Submit" class="p-mt-4  p-ripple p-button p-component " >
+                        <span class="p-button-label"> Confirm </span>
+                    </button>
+                </div>
+ 
             </div>
         </div>
         </form>

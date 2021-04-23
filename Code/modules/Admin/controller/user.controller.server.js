@@ -48,4 +48,16 @@ module.exports.fetchAllManagers = function (req, res, next) {
 
 
 }; 
+module.exports.getUsersByOrganisationId = function (req, res, next) {
+     organisationId = req.params.id
+
+    userRepo.getUsersByOrganisationId(organisationId)
+    .then(result=> {
+        return res.send({
+            results: result
+        });
+    })
+
+
+}; 
 

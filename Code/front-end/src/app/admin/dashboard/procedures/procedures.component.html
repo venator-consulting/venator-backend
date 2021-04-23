@@ -14,7 +14,7 @@
 <tr>
     <th style="width: 6rem"></th>
     <th  pResizableColumn ="col" *ngFor="let col of cols">                
-           <span class="p-text-center" class="subTable"> {{col}} </span>   
+           <span class="p-text-center" class="headerColor"> {{col}} </span>   
     </th>
 </tr>
 
@@ -41,11 +41,11 @@
             <div class="p-p-3" >
                 <p-table [value]="selectedProcedures"  [resizableColumns]="true" dataKey="id" styleClass="p-datatable-sm" >
                     <ng-template pTemplate="header">
-                        <tr class="subTable">
-                            <th pResizableColumn ><span class="subTable">name</span>  </th>
-                            <th pResizableColumn> <span class="subTable">dataSource</span> </th>
-                            <th pResizableColumn style="width: 8rem">  <span class="subTable">data</span></th>
-                            <th pResizableColumn style="width: 8rem"> <span class="subTable">analysis</span> </th>
+                        <tr class="headerColor">
+                            <th pResizableColumn ><span class="headerColor">name</span>  </th>
+                            <th pResizableColumn> <span class="headerColor">dataSource</span> </th>
+                            <th pResizableColumn style="width: 8rem">  <span class="headerColor">data</span></th>
+                            <th pResizableColumn style="width: 8rem"> <span class="headerColor">analysis</span> </th>
                             <th style="width: 6rem"> </th>
 
                         </tr>
@@ -58,7 +58,7 @@
                             <td  pResizableColumn  class="ui-resizable-column">{{procedure.dataSource}}</td>
                             <td  pResizableColumn  class="ui-resizable-column" style="width: 8rem"><i *ngIf="procedure.data" class="pi pi-check checkIcon"></i> <i *ngIf="!procedure.data" class="pi pi-times closeIcon"></i></td>
                             <td  pResizableColumn  class="ui-resizable-column" style="width: 8rem"><i *ngIf="procedure.analysis" class="pi pi-check checkIcon"></i> <i *ngIf="!procedure.analysis" class="pi pi-times closeIcon"></i></td>               
-                            <td style="width: 6rem" pTooltip="Edit Procedure" tooltipPosition="bottom"><i  class="pi pi-pencil subTable"></i> </td>               
+                            <td style="width: 6rem" pTooltip="Edit Procedure" tooltipPosition="bottom"><i  class="pi pi-pencil headerColor"></i> </td>               
 
                         </tr>
                     </ng-template>

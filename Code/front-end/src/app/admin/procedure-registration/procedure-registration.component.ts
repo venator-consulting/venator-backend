@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { RoleServiceService } from "../service/role-service.service";
 import { UsersService } from "../service/users.service";
-import { Procedures } from "../../model/procedures";
-import { Choices } from "../../model/choices";
+import { Procedures } from "../../shared/model/procedures";
+import { Choices } from "../../shared/model/choices";
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-procedure-registration',
@@ -18,7 +19,7 @@ export class ProcedureRegistrationComponent implements OnInit {
 
   procedureModel: Procedures = {
     id: null,
-    userId: 0,
+    organisationId: 0,
     name: '',
     data: false,
     analysis: false,
@@ -26,7 +27,7 @@ export class ProcedureRegistrationComponent implements OnInit {
 
   };
 
-  constructor(private _messageService: MessageService, private _roleServiceService : RoleServiceService, private _usersService: UsersService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _roleServiceService : RoleServiceService, private _usersService: UsersService) { }
   ngOnInit(): void {
         this._usersService.getManagers()
         .subscribe(
@@ -59,5 +60,10 @@ export class ProcedureRegistrationComponent implements OnInit {
           summary: 'ERROR!',
           detail: err.error
         });
-      });  }
+      });
+  }
+  cancelHandle(){
+    this._router.navigate(['/admin/dashboard/procedures']); 
+
+  }
 }

@@ -1,0 +1,44 @@
+<p-table [value]="users"  [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines" >
+    <ng-template pTemplate="header">
+        <tr >
+            <th pResizableColumn ><span class="headerColor">role</span>  </th>
+            <th pResizableColumn ><span class="headerColor">username</span>  </th>
+            <th pResizableColumn> <span class="headerColor">firstname</span> </th>
+            <th pResizableColumn >  <span class="headerColor">lastname</span></th>
+            <th pResizableColumn > <span class="headerColor">email</span> </th>
+            <th pResizableColumn > <span class="headerColor">mobileNr</span> </th>
+            <th pResizableColumn > <span class="headerColor">street</span> </th>
+            <th pResizableColumn > <span class="headerColor">houseNr</span> </th>
+            <th pResizableColumn > <span class="headerColor">postcode</span> </th>
+            <th pResizableColumn > <span class="headerColor">city</span> </th>
+            <th pResizableColumn > <span class="headerColor">country</span> </th>
+
+            <th *ngIf="role==='Admin'" style="width: 4rem" > </th>
+
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-user  >
+        <tr >
+            <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.RoleId}}</td>
+            <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.username}}</td>
+            <td  pResizableColumn  class="ui-resizable-column">{{user.firstname}}</td>
+            <td  pResizableColumn  class="ui-resizable-column">{{user.lastname}}</td>
+            <td  pResizableColumn  class="ui-resizable-column">{{user.email}}</td>
+            <td  pResizableColumn  class="ui-resizable-column">{{user.mobileNr}}</td>
+            <td  pResizableColumn  class="ui-resizable-column">{{user.street}}</td>
+            <td  pResizableColumn  class="ui-resizable-column">{{user.houseNr}}</td>
+            <td  pResizableColumn  class="ui-resizable-column">{{user.postcode}}</td>
+            <td  pResizableColumn  class="ui-resizable-column">{{user.city}}</td>
+            <td  pResizableColumn  class="ui-resizable-column">{{user.country}}</td>
+
+            <td  *ngIf="role==='Admin'"style="width: 4rem" ><i  class="pi pi-pencil headerColor" pTooltip="Edit user" tooltipPosition="bottom" (click) = "edituser(user.id)"></i> </td>               
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="4">There are no users for this organisation yet.</td>
+        </tr>
+    </ng-template>
+</p-table>

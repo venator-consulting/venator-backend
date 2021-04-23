@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PostingDataService } from  '../service/posting-data.service';
 import { DataFilterService } from  '../service/data-filter.service';
 import { ExportDataService } from  '../service/export-data.service';
-import { dataTableColumns } from "../../model/dataTableColumns";
+import { dataTableColumns } from "../model/dataTableColumns";
 import { MessageService } from 'primeng/api';
 
 @Component({

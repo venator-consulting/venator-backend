@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { Roles } from "../../model/roles";
-import { Titles } from "../../model/titles";
-import { Users } from "../../model/users";
-import { AdminRegistrationService } from "../service/admin-registration.service"
+import { Roles } from "../../shared/model/roles";
+import { Titles } from "../../shared/model/titles";
+import { Users } from "../../shared/model/users";
+import { AdminRegistrationService } from "../service/admin-registration.service";
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-admin-registration',
   templateUrl: './admin-registration.component.html',
@@ -11,7 +13,7 @@ import { AdminRegistrationService } from "../service/admin-registration.service"
 })
 export class AdminRegistrationComponent implements OnInit {
 
-  constructor(private _messageService: MessageService, private _adminRegistrationService: AdminRegistrationService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _adminRegistrationService: AdminRegistrationService) { }
 
 
 
@@ -58,5 +60,8 @@ export class AdminRegistrationComponent implements OnInit {
         });
       });
   }
+  cancelHandle(){
+    this._router.navigate(['/admin/dashboard/procedures']); 
 
+  }
 }

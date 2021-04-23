@@ -40,8 +40,8 @@ export class NavBarComponent implements OnInit {
         {
         label: 'Dashboard',
         items: [
-            {label: 'Procedures', icon: 'pi  pi-home',routerLink: ['admin/dashboard/procedures']}, 
-            {label: 'Users', icon: 'pi pi-users', routerLink: ['admin/dashboard/users']}
+            {label: 'Procedures', icon: 'pi  pi-home',routerLink: ['/shared/user/procedures']}, 
+            {label: 'Users', icon: 'pi pi-users', routerLink: ['/shared/user/users']}
         ]
     },
     {
@@ -53,7 +53,7 @@ export class NavBarComponent implements OnInit {
     {
         label: 'Analyse',
         items: [
-            {label: 'amount analyse', icon: 'pi pi-euro', routerLink: ['analysis/amount']  },
+            {label: 'amount analyse', icon: 'pi pi-euro', routerLink: ['/analysis/amount']  },
             {label: 'text analyse', icon: 'pi pi-inbox'},
             {label: 'payment analyse', icon: 'pi pi-credit-card'},
             {label: 'creditors analyse', icon: 'pi pi-chart-bar'},

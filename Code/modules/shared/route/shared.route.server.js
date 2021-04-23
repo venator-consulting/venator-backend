@@ -3,10 +3,19 @@ const router = express.Router();
 const loginCtrl = require('../controller/login.controller.server');
 const getDataCtrl = require("../controller/getPostingData.controller.server");
 const userCtrl = require('../../Admin/controller/user.controller.server');
+const procedureCtrl = require('../controller/procedure.controller.server');
 
 router
     .route('/login')
     .post(loginCtrl.loginAuthenticate);
+
+router
+    .route('/users/:id/procedures')
+    .get(procedureCtrl.getByUserId);
+
+router
+    .route('/users/:id')
+    .get(userCtrl.getUsersByOrganisationId);
 
 router
     .route('/resetPassword')

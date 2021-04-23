@@ -97,6 +97,25 @@ module.exports.fetchAllManagers = async function () {
     }
 
 };
+module.exports.getUsersByOrganisationId = async function (id) {
+
+    try {
+        const users = await User
+            .getUser()
+            .findAll({
+                where: {
+                    organisationId: id,
+                    deleted: false
+                }
+            });
+
+        return users;
+
+    } catch (err) {
+        throw new Error(err);
+    }
+
+};
 
 /**
  * check if user exist based on username for authentication

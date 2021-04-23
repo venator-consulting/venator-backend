@@ -55,14 +55,23 @@
             <div class="p-field p-grid">
                 <label for="logo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Logo </label>
                 <div class="p-col-12 p-md-10">
-                    <p-fileUpload name="logo"  #logo="ngModel"  name="logo" chooseLabel="Search" customUpload="true" [auto]="true" mode="basic" accept="image/*"  styleClass="logoCss" [(ngModel)]="organisation.logo"></p-fileUpload>
+                    <p-fileUpload name="logo"  #logo="ngModel"  name="logo" chooseLabel="Search" customUpload="true"  [auto]="true" mode="basic" accept="image/*"  styleClass="logoCss p-cancelButton " [(ngModel)]="organisation.logo"></p-fileUpload>
                 </div>
             </div>
 
             <div class="p-field p-grid">
-                <button pbutton pripple type="submit" label="Submit" class="p-mt-4  p-ripple p-button p-component buttonCss" >
-                    <span class="p-button-label"> Submit </span>
-                </button>
+                <div class="p-xs-col-5  p-mr-4">
+    
+                    <button pbutton pripple type="button" label="cancel" class="p-mt-4  p-ripple p-button p-component p-cancelButton " (click)="cancelHandle()" >
+                        <span class="p-button-label"> Cancel </span>
+                    </button>
+                </div>
+                <div class="p-xs-col-5 ">
+                    <button pbutton pripple type="submit" label="Submit" class="p-mt-4  p-ripple p-button p-component " >
+                        <span class="p-button-label"> Confirm </span>
+                    </button>
+                </div>
+ 
             </div>
         </div>
         </form>

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { Titles } from "../../model/titles";
-import { Users } from "../../model/users";
+import { Titles } from "../model/titles";
+import { Users } from "../model/users";
 import { UserService } from "../service/user.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-registration',
@@ -28,7 +29,7 @@ export class UserRegistrationComponent implements OnInit {
     country: '',
   };
 
-  constructor(private _messageService: MessageService, private _userService: UserService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _userService: UserService) { }
 
   ngOnInit(): void {
   }
@@ -50,5 +51,8 @@ export class UserRegistrationComponent implements OnInit {
         });
       });
   }
-  
+  cancelHandle(){
+    this._router.navigate(['/shared/user/users']); 
+
+  }
 }

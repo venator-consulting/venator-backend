@@ -23,7 +23,7 @@ module.exports.getByUserId = async (id) => {
             .getProcedures()
             .findAll({
                 where: {
-                    userId: id,
+                    organisationId: id,
                     deleted: false
                 }
             });

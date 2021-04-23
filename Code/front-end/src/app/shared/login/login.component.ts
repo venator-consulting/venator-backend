@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
       username: this.username,
       password: this.password
     };
-
+    console.log(data)
     this._authService
       .login(data)
       .subscribe(res => {
@@ -34,14 +34,20 @@ export class LoginComponent implements OnInit {
           const fullName = userInfo.firstname + ' ' + userInfo.lastname;
           const role = userInfo.Role;
           const username = userInfo.username;
-
+          const organisationId = userInfo.organisationId
+        
           localStorage.setItem('username', username);
           localStorage.setItem('role', role);
           localStorage.setItem('full_name', fullName);
+          localStorage.setItem('organisationId', organisationId);
           localStorage.setItem('token', res.token);
         }
 
-        this._router.navigate(['/dashboard']);
+        if(localStorage.getItem('role') === "Admin") {
+          this._router.navigate(['/admin/dashboard/procedures']);
+        } else {
+          this._router.navigate(['/shared/user/dashboard']);
+        }
 
       }, err => {
         this._messageService.add({
