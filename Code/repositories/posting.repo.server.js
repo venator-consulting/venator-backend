@@ -3,6 +3,29 @@ const {
     Op
 } = require("sequelize");
 
+
+module.exports.fetch = async (criteria) => {
+    try {
+        const OrganisationId = criteria.OrganisationId;
+        if(!OrganisationId) throw new Error("Organisation_id_is_mandatory");
+        delete criteria.OrganisationId;
+        const limit = criteria.limit? criteria.limit : 25;
+        delete criteria.limit;
+        const offset = criteria.offset? criteria.offset : 0;
+        delete criteria.offset;
+        return await Posting
+            .getPosting('posting_' + OrganisationId)
+            .findAndCountAll({
+                where: criteria,
+                offset: +offset,
+                limit: +limit
+            });
+    } catch (err) {
+        // TO-DO: set a custom error message in production environment
+        throw new Error(err.message);
+    }
+};
+
 module.exports.fetchAll = function (companyCode, offset, limit) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -24,7 +47,7 @@ module.exports.fetchAll = function (companyCode, offset, limit) {
         }
     });
 
-}; 
+};
 module.exports.fetchLastData = function (companyCode, limit) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -34,16 +57,19 @@ module.exports.fetchLastData = function (companyCode, limit) {
                     where: {
                         companyCode: companyCode
                     },
-                   // offset: offset,
+                    // offset: offset,
                     limit: limit,
                     order: [
                         ['id', 'DESC'],
                     ]
                 })
                 .then(result => {
-                    let data = {rows: result.rows, count: result.count}
+                    let data = {
+                        rows: result.rows,
+                        count: result.count
+                    }
                     resolve(data);
-                  });
+                });
 
         } catch (err) {
             reject(err);
@@ -59,9 +85,11 @@ module.exports.fetchLastDataPrevious = function (companyCode, startId, endId, li
                 .findAll({
                     where: {
                         companyCode: companyCode,
-                        id :  {[Op.between]: [startId, endId]}
+                        id: {
+                            [Op.between]: [startId, endId]
+                        }
                     },
-                   // offset: offset,
+                    // offset: offset,
                     limit: limit,
                     order: [
                         ['id', 'DESC'],
@@ -89,9 +117,12 @@ module.exports.fetchFirstFilteredData = function (filterValue, filterField, offs
                     limit: limit,
                 })
                 .then(result => {
-                    let data = {rows: result.rows, count: result.count}
+                    let data = {
+                        rows: result.rows,
+                        count: result.count
+                    }
                     resolve(data);
-                  });
+                });
 
         } catch (err) {
             reject(err);
@@ -100,7 +131,7 @@ module.exports.fetchFirstFilteredData = function (filterValue, filterField, offs
 
 };
 
-module.exports.fetchSecondFilteredData =  function (filterValue1, filterField1,filterValue2, filterField2, offset, limit) {
+module.exports.fetchSecondFilteredData = function (filterValue1, filterField1, filterValue2, filterField2, offset, limit) {
 
 
     const criteria = {};
@@ -119,9 +150,12 @@ module.exports.fetchSecondFilteredData =  function (filterValue1, filterField1,f
 
                 })
                 .then(result => {
-                    let data = {rows: result.rows, count: result.count}
+                    let data = {
+                        rows: result.rows,
+                        count: result.count
+                    }
                     resolve(data);
-                  });
+                });
 
         } catch (err) {
             throw new Error('there_is_an_error_in_db_connection');
@@ -130,7 +164,7 @@ module.exports.fetchSecondFilteredData =  function (filterValue1, filterField1,f
 
 };
 
-module.exports.fetchThirdFilteredData =  function (filterValue1, filterField1,filterValue2, filterField2, filterValue3, filterField3, offset, limit) {
+module.exports.fetchThirdFilteredData = function (filterValue1, filterField1, filterValue2, filterField2, filterValue3, filterField3, offset, limit) {
 
 
     const criteria = {};
@@ -150,9 +184,12 @@ module.exports.fetchThirdFilteredData =  function (filterValue1, filterField1,fi
 
                 })
                 .then(result => {
-                    let data = {rows: result.rows, count: result.count}
+                    let data = {
+                        rows: result.rows,
+                        count: result.count
+                    }
                     resolve(data);
-                  });
+                });
 
         } catch (err) {
             throw new Error('there_is_an_error_in_db_connection');
@@ -161,7 +198,7 @@ module.exports.fetchThirdFilteredData =  function (filterValue1, filterField1,fi
 
 };
 
-module.exports.fetchFirthFilteredData =  function (filterValue1, filterField1,filterValue2, filterField2, filterValue3, filterField3, filterValue4, filterField4, offset, limit) {
+module.exports.fetchFirthFilteredData = function (filterValue1, filterField1, filterValue2, filterField2, filterValue3, filterField3, filterValue4, filterField4, offset, limit) {
 
 
     const criteria = {};
@@ -182,9 +219,12 @@ module.exports.fetchFirthFilteredData =  function (filterValue1, filterField1,fi
 
                 })
                 .then(result => {
-                    let data = {rows: result.rows, count: result.count}
+                    let data = {
+                        rows: result.rows,
+                        count: result.count
+                    }
                     resolve(data);
-                  });
+                });
 
         } catch (err) {
             throw new Error('there_is_an_error_in_db_connection');
@@ -193,7 +233,7 @@ module.exports.fetchFirthFilteredData =  function (filterValue1, filterField1,fi
 
 };
 
-module.exports.fetchFifthFilteredData =  function (filterValue1, filterField1,filterValue2, filterField2, filterValue3, filterField3, filterValue4, filterField4, filterValue5, filterField5, offset, limit) {
+module.exports.fetchFifthFilteredData = function (filterValue1, filterField1, filterValue2, filterField2, filterValue3, filterField3, filterValue4, filterField4, filterValue5, filterField5, offset, limit) {
 
 
     const criteria = {};
@@ -215,9 +255,12 @@ module.exports.fetchFifthFilteredData =  function (filterValue1, filterField1,fi
 
                 })
                 .then(result => {
-                    let data = {rows: result.rows, count: result.count}
+                    let data = {
+                        rows: result.rows,
+                        count: result.count
+                    }
                     resolve(data);
-                  });
+                });
 
         } catch (err) {
             throw new Error('there_is_an_error_in_db_connection');

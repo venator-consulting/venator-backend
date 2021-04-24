@@ -22,6 +22,10 @@ router
     .post(userCtrl.resetPass);
 
 router
+    .route('/posting')
+    .get(getDataCtrl.fetch);
+
+router
     .route('/getPostingData/:companyCode/:offset/:limit')
     .get(getDataCtrl.getData);
 

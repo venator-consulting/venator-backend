@@ -1,6 +1,21 @@
 
+const { getPosting } = require("../../../models/posting.model.server");
 const postngRepo = require("../../../repositories/posting.repo.server")
 
+
+module.exports.fetch = async (req, res) => {
+    try {
+        const criteria = req.query;
+        const result = await postngRepo.fetch(criteria);
+        res
+            .status(200)
+            .json(result);
+    } catch (er) {
+        res
+            .status(500)
+            .json(er.message);
+    }
+};
 
 module.exports.getData = function (req, res, next) {
         companyCode = req.params.companyCode
