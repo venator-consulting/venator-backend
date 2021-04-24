@@ -49,6 +49,11 @@ module.exports.fetchOne = async (id) => {
         throw new Error('there_is_an_error_in_db_connection');
     }
 };
+
+/**
+ * @deprecated please use getByOrgId
+ * @param {*} managerId 
+ */
 module.exports.getManagerProcedures = async (managerId) => {
     try {
         const res = await Procedure

@@ -19,7 +19,7 @@ export class ProcedureEditComponent implements OnInit {
 
   procedureModel: Procedures = {
     id: this.currentProcedureId,
-    organisationId: 0,
+    OrganisationId: 0,
     name: this.currentProcedureName,
     data: this.currentProcedureData,
     analysis: this.currentProcedureAnalysis,
