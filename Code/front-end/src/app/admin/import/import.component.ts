@@ -5,7 +5,6 @@ import { Choices } from "../../shared/model/choices";
 import { ImportService } from "../service/import.service";
 import { FileToImport } from "../../shared/model/file-import";
 import { FormGroup, FormControl, FormArray, FormBuilder } from "@angular/forms";
-import { UsersService } from "../service/users.service";
 import { Users } from 'src/app/shared/model/users';
 import { Procedures } from 'src/app/shared/model/procedures';
 import { OrganisationService } from '../service/organisation.service';
@@ -34,7 +33,6 @@ export class ImportComponent implements OnInit {
   accountsCustomTemplate: any = {};
   postingCustomTemplate: any = {};
   headCustomTemplate: any = {};
-  managers: Users[] = new Array();
   orgs: Organisation[] = new Array();
   selectedOrgId: number = -1;
   procedures: Procedures[] = new Array();
@@ -78,20 +76,6 @@ export class ImportComponent implements OnInit {
     ];
 
 
-    // this._usersService.getManagers()
-    //   .subscribe(
-    //     (data) => {
-    //       const temp = data.results;
-    //       temp.forEach(manager => {
-    //         manager.fullName = manager.title + '. ' + manager.firstname + ' ' + manager.lastname;
-    //         // delete manager.Role;
-    //       });
-    //       this.managers = temp;
-    //     },
-    //     (error) => console.log(error)
-    //   );
-
-
     this._orgService.get()
       .subscribe(
         (data) => {
@@ -127,7 +111,7 @@ export class ImportComponent implements OnInit {
 
   addFormData() {
     let f = new FileToImport();
-    f.managerId = this.selectedOrgId;
+    f.OrganisationId = this.selectedOrgId;
     f.procedureId = this.selectedProcedureId;
     f.defaultTemplate = this.selectedTemplate;
     this.filesList.push(f);
@@ -240,7 +224,7 @@ export class ImportComponent implements OnInit {
     const local = theFile.local?.value;
     const accountType = theFile.accountType?.value;
     const template = theFile.defaultTemplate;
-    const managerId = theFile.managerId;
+    const OrganisationId = theFile.OrganisationId;
     const procedureId = theFile.procedureId;
 
     // const formData: FormData = new FormData();
@@ -262,7 +246,7 @@ export class ImportComponent implements OnInit {
         local: local,
         filePath: filePath,
         accountType: accountType,
-        managerId: managerId,
+        OrganisationId: OrganisationId,
         procedureId: procedureId
       }
     }

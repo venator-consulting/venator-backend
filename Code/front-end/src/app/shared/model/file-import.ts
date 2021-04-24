@@ -2,7 +2,7 @@ import { Choices } from "./choices";
 
 export class FileToImport {
 
-    managerId: number;
+    OrganisationId: number;
     procedureId: number;
     template: any = {};
     defaultTemplate: any = {};

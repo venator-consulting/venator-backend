@@ -282,14 +282,14 @@ module.exports.importFile = function (req, res, next) {
     const local = reqData.local == 1 ? 'en_US' : 'de_DE';
     const accountType = reqData.accountType;
     const template = reqData.template;
-    const managerId = reqData.managerId;
+    const OrganisationId = reqData.OrganisationId;
     const procedureId = reqData.procedureId;
     // if file type === 1 then is it an excel file
     if (fileType == 1) {
         // excel posting file
         if (fileClass == 2) {
             excelHelper
-                .importStreamExcelFile(filePath, managerId, procedureId,  template, -1)
+                .importStreamExcelFile(filePath, OrganisationId, procedureId,  template, -1)
                 .then(header => {
                     res
                         .status(200)
@@ -309,7 +309,7 @@ module.exports.importFile = function (req, res, next) {
         } else if (fileClass == 1) {
             // it's an accounts file
             excelHelper
-                .importStreamAccountsExcel(filePath, managerId, procedureId,  accountType)
+                .importStreamAccountsExcel(filePath, OrganisationId, procedureId,  accountType)
                 .then(header => {
                     res
                         .status(200)
@@ -346,7 +346,7 @@ module.exports.importFile = function (req, res, next) {
         // accounts file
         if (fileClass == 1) {
             csvStreamHelper
-                .importAccountCsvFile(filePath, managerId, procedureId, accountType, template)
+                .importAccountCsvFile(filePath, OrganisationId, procedureId, accountType, template)
                 .then(header => {
                     res
                         .status(200)
@@ -364,7 +364,7 @@ module.exports.importFile = function (req, res, next) {
         } else if (fileClass == 2) {
             // it's a posting file
             csvStreamHelper
-                .readCsvStream(filePath, managerId, procedureId, template, -1, local)
+                .readCsvStream(filePath, OrganisationId, procedureId, template, -1, local)
                 .then(header => {
                     res
                         .status(200)
