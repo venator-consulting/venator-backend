@@ -26,6 +26,8 @@ app.use(bearerToken());
 app.use('/api/shared', sharedRoutes);
 app.use('/api/admin', adminRoutes);
 
+app.use("/public", express.static(path.join("public")));  
+
 app.use(express.static('front-end/dist/front-end/'));
 
 app.get('*', (req, res) => {

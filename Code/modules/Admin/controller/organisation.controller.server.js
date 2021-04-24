@@ -1,3 +1,4 @@
+const env = require('../../../config/environment');
 const orgRepo = require('../../../repositories/organisation.repo.server');
 
 
@@ -37,7 +38,10 @@ module.exports.fetchOne = async function (req, res) {
 
 module.exports.insert = async function (req, res) {
     try {
-        const org = req.body;
+        const file = req.file;
+        const filePath = file.path;
+        const org = JSON.parse(req.body.data);
+        org.logo = env.domain + filePath;
 
         const result = await orgRepo
             .insert(org);

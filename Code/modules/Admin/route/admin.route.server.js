@@ -15,6 +15,10 @@ const uploadfiles = multer({
     dest: env.uploadPath
 });
 
+const publicImgs = multer({
+    dest: env.publicImgsPath
+});
+
 router
     .route('/template-types')
     .get(uploadCtrl.getTemplateTypes);
@@ -86,12 +90,12 @@ router
 router
     .route('/organisation')
     .get(organisationCtrl.fetchAll)
-    .post(organisationCtrl.insert);
+    .post(publicImgs.single('logo'), organisationCtrl.insert);
 
 router
     .route('/organisation/:id')
     .get(organisationCtrl.fetchOne)
-    .put(organisationCtrl.update)
+    .put(publicImgs.single('logo'), organisationCtrl.update)
     .delete(organisationCtrl.delete);
 
 router
