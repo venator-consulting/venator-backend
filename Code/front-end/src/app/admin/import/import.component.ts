@@ -8,6 +8,8 @@ import { FormGroup, FormControl, FormArray, FormBuilder } from "@angular/forms";
 import { UsersService } from "../service/users.service";
 import { Users } from 'src/app/shared/model/users';
 import { Procedures } from 'src/app/shared/model/procedures';
+import { OrganisationService } from '../service/organisation.service';
+import { Organisation } from 'src/app/shared/model/organisation';
 
 @Component({
   selector: 'app-import',
@@ -33,13 +35,13 @@ export class ImportComponent implements OnInit {
   postingCustomTemplate: any = {};
   headCustomTemplate: any = {};
   managers: Users[] = new Array();
-  selectedManagerId: number = -1;
+  orgs: Organisation[] = new Array();
+  selectedOrgId: number = -1;
   procedures: Procedures[] = new Array();
-  selectedProcedureId : number = -1;
+  selectedProcedureId: number = -1;
 
 
-  constructor(private _messageService: MessageService, private _importService: ImportService,
-    private _usersService: UsersService) {
+  constructor(private _messageService: MessageService, private _importService: ImportService, private _orgService: OrganisationService) {
 
   }
 
@@ -76,32 +78,42 @@ export class ImportComponent implements OnInit {
     ];
 
 
-    this._usersService.getManagers()
+    // this._usersService.getManagers()
+    //   .subscribe(
+    //     (data) => {
+    //       const temp = data.results;
+    //       temp.forEach(manager => {
+    //         manager.fullName = manager.title + '. ' + manager.firstname + ' ' + manager.lastname;
+    //         // delete manager.Role;
+    //       });
+    //       this.managers = temp;
+    //     },
+    //     (error) => console.log(error)
+    //   );
+
+
+    this._orgService.get()
       .subscribe(
         (data) => {
-          const temp = data.results;
-          temp.forEach(manager => {
-            manager.fullName = manager.title + '. ' + manager.firstname + ' ' + manager.lastname;
-            // delete manager.Role;
-          });
-          this.managers = temp;
+          this.orgs = data;
         },
         (error) => console.log(error)
       );
 
-  } // end of ngOnInit
-  
 
-  managerChangedHandler(e) {
+  } // end of ngOnInit
+
+
+  orgChangedHandler(e) {
     // alert(e.value);
     if (e.value > 0) {
-      this._usersService.getProcedures(e.value)
-      .subscribe(
-        data => {
-          this.procedures = data;
-        },
-        error => console.log(error)
-      );
+      this._orgService.getProcedures(e.value)
+        .subscribe(
+          data => {
+            this.procedures = data;
+          },
+          error => console.log(error)
+        );
     }
   }
 
@@ -115,7 +127,7 @@ export class ImportComponent implements OnInit {
 
   addFormData() {
     let f = new FileToImport();
-    f.managerId = this.selectedManagerId;
+    f.managerId = this.selectedOrgId;
     f.procedureId = this.selectedProcedureId;
     f.defaultTemplate = this.selectedTemplate;
     this.filesList.push(f);

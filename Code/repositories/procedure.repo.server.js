@@ -17,13 +17,13 @@ module.exports.fetchAll = async () => {
 };
 
 
-module.exports.getByUserId = async (id) => {
+module.exports.getByOrgId = async (id) => {
     try {
         const res = await Procedure
             .getProcedures()
             .findAll({
                 where: {
-                    organisationId: id,
+                    OrganisationId: id,
                     deleted: false
                 }
             });

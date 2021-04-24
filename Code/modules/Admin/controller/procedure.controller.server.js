@@ -33,28 +33,12 @@ module.exports.fetchOne = async (req, res) => {
     }
 };
 
-module.exports.getManagerProcedures = async (req, res) => {
-    let managerId = req.params.managerId
-    
-    try {
-        const result = await procedureRepo
-            .getManagerProcedures(managerId);
-        res
-            .status(200)
-            .json(result);
-    } catch (e) {
-        res
-            .status(500)
-            .json({
-                error: e
-            });
-    }
-};
 
-module.exports.getByUserId = async (req, res) => {
+
+module.exports.getByOrgId = async (req, res) => {
     try {
         const result = await procedureRepo
-            .getByUserId(req.params.id);
+            .getByOrgId(req.params.id);
         res.status(200)
             .json(result);
     } catch (e) {

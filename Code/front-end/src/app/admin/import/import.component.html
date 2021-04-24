@@ -29,12 +29,12 @@
 
       <div class="p-col-10">
         <label for=""> Select Manager </label>
-        <p-dropdown [options]="managers" [(ngModel)]="selectedManagerId" placeholder="Select Manager"
-          optionLabel="fullName" optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required
-          (onChange)="managerChangedHandler($event)" [disabled]="selectedProcedureId > 0"></p-dropdown>
+        <p-dropdown [options]="orgs" [(ngModel)]="selectedOrgId" placeholder="Select Manager"
+          optionLabel="name" optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required
+          (onChange)="orgChangedHandler($event)" [disabled]="selectedProcedureId > 0"></p-dropdown>
       </div>
 
-      <div class="p-col-10" *ngIf="selectedManagerId>0">
+      <div class="p-col-10" *ngIf="selectedOrgId>0">
         <label for=""> Select Procedure </label>
         <p-dropdown [options]="procedures" [(ngModel)]="selectedProcedureId" placeholder="Select Procedure"
           optionLabel="name" optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required [disabled]="selectedTemplate"></p-dropdown>

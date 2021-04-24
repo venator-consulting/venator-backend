@@ -32,4 +32,8 @@ export class OrganisationService {
     return this._http.delete<any>(this._thisURL + '/' + id);
   }
 
+  getProcedures(id: number) {
+    return this._http.get<any>(this._thisURL + '/' + id + '/procedures')
+  }
+
 }

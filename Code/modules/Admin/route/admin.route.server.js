@@ -68,18 +68,15 @@ router
         session: false
     }), authorization.authorize('ADMIN'), roleCtrl.delete);
 
-router
-    .route('/users/:id/procedures')
-    .get(procedureCtrl.getByUserId);
+// router
+//     .route('/users/:id/procedures')
+//     .get(procedureCtrl.getByUserId);
 
 router
     .route('/procedures')
     .get(procedureCtrl.fetchAll)
     .post(procedureCtrl.insert);
 
-router
-    .route('/procedures/getManagerProcedures/:managerId')
-    .get(procedureCtrl.getManagerProcedures)
 
 router
     .route('/procedures/:id')
@@ -97,6 +94,11 @@ router
     .get(organisationCtrl.fetchOne)
     .put(publicImgs.single('logo'), organisationCtrl.update)
     .delete(organisationCtrl.delete);
+
+router
+    .route('/organisation/:id/procedures')
+    .get(procedureCtrl.getByOrgId);
+
 
 router
     .route('/sync-db')
