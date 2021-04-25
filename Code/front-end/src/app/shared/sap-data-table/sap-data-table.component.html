@@ -1,54 +1,76 @@
 <div class="card" style="overflow: scroll;">
-    <p-toast></p-toast>
+  <p-toast></p-toast>
+<!-- [paginator]="true"   [rowsPerPageOptions]="[25,50,100]" [rows]="25"-->
+  <p-table #dt [value]="postings" [columns]="cols" [lazy]="true" [loading]="loading" [showCurrentPageReport]="true"
+     styleClass="p-datatable-sm p-datatable-gridlines"  
+    [resizableColumns]="true" [reorderableColumns]="true"[style]="{width:'10000px'}"
+    scrollHeight="400px" [scrollable]="true">
+    <ng-template pTemplate="caption">
+      <div class="p-mb-4">
+        <!-- Export as excel -->
+        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportXLSX()"
+          class="p-mr-2 p-button-warning" pTooltip="Xlsx" tooltipPosition="bottom"></button>
+        <!-- Export as PDF -->
+        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPDF()"
+          class="p-mr-2 p-button-warning" pTooltip="Pdf" tooltipPosition="bottom"></button>
+        <!-- Limit options -->
+        <p-dropdown [options]="pageLimitSizes" optionValue="value" optionLabel="value" [(ngModel)]="limit"
+          (onChange)="limitChange($event)" class="p-mr-2"></p-dropdown>
+          <!-- Go to First page -->
+        <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-double-left"
+          (click)="firstPage()" class="p-mr-2" pTooltip="first page" tooltipPosition="bottom"></button>
+          <!-- Go previous -->
+        <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-left" (click)="previousPage()"
+          class=" p-mr-2" pTooltip="previous" tooltipPosition="bottom"></button>
+          <!-- Page number -->
+        <input pInputText type="number" min="1" class="pageNrInput p-mr-2" [disabled]="true"
+          (change)="pageNrChange($any($event.target).value)" [value]="pageNr" [placeholder]="pageNr" />
+          <!-- Go to next Page -->
+        <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-right"
+          (click)="nextPage()" class="p-mr-2" pTooltip="next" tooltipPosition="bottom"></button>
+          <!-- Go to last page -->
+        <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple
+          icon="pi pi-angle-double-right" (click)="lastPage()" class="p-mr-2" pTooltip="last page"
+          tooltipPosition="bottom"></button>
+          <!-- Clear filter -->
+        <button type="button" *ngIf="filterClearShow" pButton pRipple icon="pi pi-filter-slash"
+          (click)="clearFilter()" class="p-ml-6 clearFilter" pTooltip="clear filter" tooltipPosition="bottom"></button>
 
-    <p-table #dt  [value]="postings"  [columns]="cols"  [lazy]="true" [loading]="loading" [showCurrentPageReport]="true"
-        [rows]="10"  styleClass="p-datatable-sm p-datatable-gridlines"  [paginator]="true" [rows]="25"
-        [resizableColumns]="true" [reorderableColumns]="true" [rowsPerPageOptions]="[25,50,100]"
-        [style]="{width:'10000px'}"  scrollHeight="400px" [scrollable]="true" >
-        <ng-template pTemplate="caption">
-            <div class="p-mb-4">
-                <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportXLSX()" class="p-mr-2 p-button-warning" pTooltip="Xlsx" tooltipPosition="bottom"></button>
-                <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPDF()" class="p-mr-2 p-button-warning" pTooltip="Pdf" tooltipPosition="bottom"></button>
-                <p-dropdown [options]="pageLimitSizes" optionValue="value" optionLabel="value"   [(ngModel)]="limit"  (onChange)="limitChange($event)" class="p-mr-2"></p-dropdown>
-                <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-double-left" (click)="firstPage()" class="p-mr-2" pTooltip="first page" tooltipPosition="bottom"></button>
-                <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-left"  (click)="previousPage()" class=" p-mr-2"  pTooltip="previous" tooltipPosition="bottom"></button>
-                <input  pInputText  type="number" min="1" class="pageNrInput p-mr-2" (change)="pageNrChange($any($event.target).value)"  [value]="pageNr" [placeholder]="pageNr" />
-                <button type="button" [disabled]="endId && lastId && endId === lastId " pButton pRipple icon="pi pi-angle-right" (click)="nextPage()" class="p-mr-2" pTooltip="next" tooltipPosition="bottom"></button>
-                <button type="button"  [disabled]="filterNr > 0 || selectLastPage"  pButton pRipple icon="pi pi-angle-double-right"  (click)="lastPage()" class="p-mr-2" pTooltip="last page" tooltipPosition="bottom"></button>
-                <button type="button" *ngIf="filterClearShow && filterNr>0" pButton pRipple icon="pi pi-filter-slash"  (click)="clearFilter()" class="p-ml-6 clearFilter" pTooltip="clear filter" tooltipPosition="bottom"></button>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup *ngFor="let col of cols">
+        <col pResizableColumn>
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th pReorderableColumn pResizableColumn pSortableColumn="col.header" *ngFor="let col of cols">
+          <span class="p-text-center"> {{col.header}} </span>
+        </th>
+      </tr>
+      <tr>
+        <th pResizableColumn *ngFor="let col of cols ">
+          <input pInputText type="text" (change)="filterChange($any($event.target).value, col.field)"
+            class="filterInputCss" />
+          <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()" pTooltip="Filter"
+            tooltipPosition="bottom"></i>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-index="rowIndex" let-columns="columns" let-rowData>
+      <tr [pReorderableRow]="index">
+        <td pReorderableRowHandle pResizableColumn *ngFor="let col of cols" class="ui-resizable-column"
+          aria-placeholder="">
+          {{ rowData[col.field] }}
+        </td>
+      </tr>
+    </ng-template>
 
-            </div>
-        </ng-template>
-        <ng-template pTemplate="colgroup" let-columns>
-            <colgroup *ngFor="let col of cols">
-                <col pResizableColumn  >
-            </colgroup>
-        </ng-template>
-        <ng-template pTemplate="header" let-columns>
-            <tr>
-                <th pReorderableColumn pResizableColumn pSortableColumn="col.header" *ngFor="let col of cols">                
-                       <span class="p-text-center"> {{col.header}} </span>   
-                </th>
-            </tr>
-            <tr>
-                <th pResizableColumn *ngFor="let col of cols " >
-                        <input  pInputText  type="text" (change)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
-                        <i class="pi pi-filter p-ml-2 iconColor" (click) = "submitFilter()" pTooltip="Filter" tooltipPosition="bottom" ></i>
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body"   let-index="rowIndex" let-columns="columns" let-rowData >
-            <tr [pReorderableRow]="index">
-                <td pReorderableRowHandle pResizableColumn *ngFor="let col of cols" class="ui-resizable-column" aria-placeholder=""> 
-                    {{ rowData[col.field] }}
-                </td>
-            </tr>
-        </ng-template>
-
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td colspan="7" >No postings found.</td>
-            </tr>
-        </ng-template>
-    </p-table>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7">No postings found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
