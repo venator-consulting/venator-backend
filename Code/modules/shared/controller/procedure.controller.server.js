@@ -3,10 +3,10 @@ const procedureRepo = require('../../../repositories/procedure.repo.server');
 
 
 
-module.exports.getByUserId = async (req, res) => {
+module.exports.getByOrgId = async (req, res) => {
     try {
         const result = await procedureRepo
-            .getByUserId(req.params.id);
+            .getByOrgId(req.params.id);
         res.status(200)
             .json(result);
     } catch (e) {

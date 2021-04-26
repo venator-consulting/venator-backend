@@ -19,6 +19,22 @@
 
                     </div>
                 </div>
+                <div class="p-field p-grid" *ngIf="userModel.role==='Manager' || userModel.role==='User'">
+                    <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Organisation </label>
+                    <div class="p-col-12 p-md-10">
+                      <p-dropdown placeholder="select an Organisation" name="client" optionValue="id" optionLabel="name"
+                        #client="ngModel" [options]="orgs" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched"
+                        [showClear]="true" [(ngModel)]="userModel.organisationId">
+                        <div class="ng-tns-c42-167 p-dropdown p-component">
+                          <span
+                            class="ng-tns-c42-167 p-dropdown-label p-inputtext p-placeholder p-dropdown-label-empty ng-star-inserted">
+                          </span>
+                        </div>
+                      </p-dropdown>
+                      <small class="spanCss" *ngIf="client.invalid && client.touched "> client is required </small>
+          
+                    </div>
+                  </div>
                 <div class="p-field p-grid">
                     <label  class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Title </label>
                     <div class="p-col-12 p-md-10">

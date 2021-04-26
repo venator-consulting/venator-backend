@@ -18,7 +18,7 @@ export class SAPDataTableComponent implements OnInit {
   filterClearShow: boolean = false;
   loading: boolean = false;
   selectLastPage: boolean = false;
-  OrganisationId: number = 9;
+  OrganisationId: number = 3;
   data: any;
   postings: [] = [];
   cols: dataTableColumns[] = dataTableColumns.getDataTableColumns();
@@ -68,6 +68,7 @@ filterChange(value, field) {
 
 submitFilter() {
   this.loading = true;
+  this.filterClearShow= true;
   this.getData();
 }
 
@@ -79,6 +80,7 @@ clearFilter() {
   };
   this.pageNr = 1;
   this.loading = true;
+  this.filterClearShow= false;
   this.getData();
 }
 

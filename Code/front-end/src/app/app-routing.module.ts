@@ -12,8 +12,7 @@ import { SAPDataTableComponent } from './shared/sap-data-table/sap-data-table.co
 import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/reset-password-new-user.component';
 import { ProcedureRegistrationComponent } from './admin/procedure-registration/procedure-registration.component';
 import { AmountAnalysisComponent } from "./shared/analysis/amount-analysis/amount-analysis.component";
-import { ProceduresComponent } from "./admin/dashboard/procedures/procedures.component";
-import { UsersComponent } from "./admin/dashboard/users/users.component"; 
+import { AdminDashboardComponent } from "./admin/admin-dashboard/admin-dashboard.component";
 import { UserRegistrationComponent } from "./shared/user-registration/user-registration.component"; 
 import { UserEditComponent } from "./shared/user-edit/user-edit.component"; 
 import { ProcedureEditComponent } from "./admin/procedure-edit/procedure-edit.component"; 
@@ -33,8 +32,7 @@ const routes: Routes = [
   { path: 'admin/organisation/add', component: OrganisationRegistrationComponent },
   { path: 'admin/procedure/add', component: ProcedureRegistrationComponent },
   { path: 'admin/procedure/edit', component: ProcedureEditComponent },
-  { path: 'admin/dashboard/procedures', component: ProceduresComponent },
-  { path: 'admin/dashboard/users', component: UsersComponent },
+  { path: 'admin/dashboard', component: AdminDashboardComponent },
   { path: 'admin/import', component: ImportComponent },
 
   { path: 'shared/user/add', component: UserRegistrationComponent },

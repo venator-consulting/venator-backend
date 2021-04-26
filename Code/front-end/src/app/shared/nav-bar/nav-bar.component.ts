@@ -14,6 +14,7 @@ export class NavBarComponent implements OnInit {
     userPages: MenuItem[] = [];
     sidebarItems: MenuItem[]= [];
     username: string = localStorage.getItem('username');
+    role: string = localStorage.getItem('role');
 
   constructor(private messageService: MessageService) { }
 
@@ -30,6 +31,8 @@ export class NavBarComponent implements OnInit {
             
         }
     ];
+
+if(this.role === "Admin"){
     this.sidebarItems = [
         {
             label: 'Adminstrator',
@@ -40,8 +43,7 @@ export class NavBarComponent implements OnInit {
         {
         label: 'Dashboard',
         items: [
-            {label: 'Procedures', icon: 'pi  pi-home',routerLink: ['/shared/user/procedures']}, 
-            {label: 'Users', icon: 'pi pi-users', routerLink: ['/shared/user/users']}
+            {label: 'Organisations', icon: 'pi  pi-home',routerLink: ['/admin/dashboard']}, 
         ]
     },
     {
@@ -65,16 +67,38 @@ export class NavBarComponent implements OnInit {
 
     this.userPages = [
         
-        {label: 'Setting', icon: 'pi pi-globe' , routerLink: ['/admin/import']},
-        {label: 'Reset password', icon: 'pi pi-lock' , routerLink: ['/resetPassword']},
-        {label: 'Add admin', icon: 'pi pi-user-plus' , routerLink: ['/admin/admin/add']}, 
+        {label: 'Add user', icon: 'pi pi-user-plus' , routerLink: ['/admin/admin/add']}, 
         {label: 'Add procedure', icon: 'pi pi-user-plus' , routerLink: ['admin/procedure/add']}, 
         {label: 'Add Organisation', icon: 'pi pi-plus-circle' , routerLink: ['admin/organisation/add']},
-        
+        {label: 'Reset password', icon: 'pi pi-lock' , routerLink: ['/resetPassword']},
+    ]
+} else {
+    this.sidebarItems = [
+
+        {
+        label: 'Dashboard',
+        items: [
+            {label: 'Procedures', icon: 'pi  pi-home',routerLink: ['/shared/user/procedures']}, 
+            {label: 'Users', icon: 'pi pi-users', routerLink: ['/shared/user/users']}
+        ]
+    },
+    {
+        label: 'Data',
+        items: [
+            {label: 'Table', icon: 'pi pi-table', routerLink: ['/data'] },
+        ]
+    },
+
+];
+
+    this.userPages = [
+               
         {label: 'Add user', icon: 'pi pi-user-plus' , routerLink: ['/shared/user/add']}, 
         {label: 'Edit user', icon: 'pi pi-user-edit' , routerLink: ['/shared/user/edit']},         
         {label: 'Logout', icon: 'pi pi-fw pi-power-off' , routerLink: ['/']}
     ]
+}
+
 }
 
   

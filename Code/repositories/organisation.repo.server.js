@@ -16,6 +16,7 @@ module.exports.fetchAll = async () => {
                     deleted: false
                 }
             });
+            console.log("orgs: ",orgs)
         return orgs;
     } catch (err) {
         throw new Error('there_is_an_error_in_db_connection');

@@ -11,7 +11,7 @@ router
 
 router
     .route('/users/:id/procedures')
-    .get(procedureCtrl.getByUserId);
+    .get(procedureCtrl.getByOrgId);
 
 router
     .route('/users/:id')

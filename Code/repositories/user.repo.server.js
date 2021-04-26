@@ -79,7 +79,7 @@ module.exports.fetchAllManagers = async function () {
         const managers = await User
             .getUser()
             .findAll({
-                attributes: ['id', 'title', 'firstname', 'lastname', 'email', 'username'],
+                attributes: ['id','organisationId', 'title', 'firstname', 'lastname', 'email', 'username'],
                 include: [{
                     model: Role,
                     attributes: ['name'],

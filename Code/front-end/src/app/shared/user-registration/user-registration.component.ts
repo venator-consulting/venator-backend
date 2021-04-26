@@ -16,6 +16,7 @@ export class UserRegistrationComponent implements OnInit {
    roles = [{name:'Manager'}, {name:'User'}];
    userModel: Users = {
     title: "",
+    organisationId: 0,
     email: '',
     role: '',
     firstname: '',

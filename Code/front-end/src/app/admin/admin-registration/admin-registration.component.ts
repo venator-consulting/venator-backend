@@ -5,6 +5,7 @@ import { Titles } from "../../shared/model/titles";
 import { Users } from "../../shared/model/users";
 import { AdminRegistrationService } from "../service/admin-registration.service";
 import { Router } from '@angular/router';
+import { OrganisationService } from '../service/organisation.service';
 
 @Component({
   selector: 'app-admin-registration',
@@ -13,17 +14,19 @@ import { Router } from '@angular/router';
 })
 export class AdminRegistrationComponent implements OnInit {
 
-  constructor(private _router: Router, private _messageService: MessageService, private _adminRegistrationService: AdminRegistrationService) { }
+  constructor(private _router: Router, private _messageService: MessageService,
+      private _adminRegistrationService: AdminRegistrationService, private _orgService : OrganisationService) { }
 
 
-
+  orgs: [] = [];
   titles: Titles[] = Titles.getTitles();
- //roles: Roles[] = Roles.getRoles();
-  roles = [{name:'Admin'}];
+  roles: Roles[] = Roles.getRoles();
+  //roles = [{name:'Admin'}];
 
 
   userModel: Users = {
     title: "",
+    organisationId: 0,
     email: '',
     role: '',
     firstname: '',
@@ -40,6 +43,13 @@ export class AdminRegistrationComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this._orgService.get()
+    .subscribe(
+      (data) => {
+        this.orgs = data;
+      },
+      (error) => console.log(error)
+    );
   }
 
   submitHandler() {

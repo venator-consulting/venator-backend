@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
       username: this.username,
       password: this.password
     };
-    console.log(data)
     this._authService
       .login(data)
       .subscribe(res => {
@@ -46,7 +45,7 @@ export class LoginComponent implements OnInit {
         if(localStorage.getItem('role') === "Admin") {
           this._router.navigate(['/admin/dashboard/procedures']);
         } else {
-          this._router.navigate(['/shared/user/dashboard']);
+          this._router.navigate(['/shared/user/procedures']);
         }
 
       }, err => {

@@ -51,8 +51,6 @@ import { ProcedureRegistrationComponent } from './admin/procedure-registration/p
 import {CheckboxModule} from 'primeng/checkbox';
 import { AmountAnalysisComponent } from './shared/analysis/amount-analysis/amount-analysis.component';
 import {ChartModule} from 'primeng/chart';
-import { ProceduresComponent } from './admin/dashboard/procedures/procedures.component';
-import { UsersComponent } from './admin/dashboard/users/users.component';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { OrganisationRegistrationComponent } from './admin/organisation-registration/organisation-registration.component';
 import { UserRegistrationComponent } from './shared/user-registration/user-registration.component';
@@ -60,6 +58,8 @@ import { UserEditComponent } from './shared/user-edit/user-edit.component';
 import { UserDashboardComponent } from './shared/user-dashboard/user-dashboard.component';
 import { OrganisationUsersComponent } from './shared/organisation-users/organisation-users.component';
 import { ProcedureEditComponent } from './admin/procedure-edit/procedure-edit.component';
+import {SelectButtonModule} from 'primeng/selectbutton';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -78,14 +78,13 @@ import { ProcedureEditComponent } from './admin/procedure-edit/procedure-edit.co
     ResetPasswordNewUserComponent,
     ProcedureRegistrationComponent,
     AmountAnalysisComponent,
-    ProceduresComponent,
-    UsersComponent,
     OrganisationRegistrationComponent,
     UserRegistrationComponent,
     UserEditComponent,
     UserDashboardComponent,
     OrganisationUsersComponent,
-    ProcedureEditComponent
+    ProcedureEditComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -106,6 +105,7 @@ import { ProcedureEditComponent } from './admin/procedure-edit/procedure-edit.co
     MultiSelectModule,
     TooltipModule,
     TreeModule,
+    SelectButtonModule,
     InputTextModule,
     ProgressBarModule,
     DropdownModule,

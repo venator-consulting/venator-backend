@@ -16,18 +16,19 @@ export class UserEditComponent implements OnInit {
   titles: Titles[] = Titles.getTitles();
   roles = [{name:'Manager'}, {name:'User'}];
   userModel: Users = {
-   title: "",
-   email: '',
-   role: '',
-   firstname: '',
-   lastname: '',
-   username: '',
-   mobileNr: null,
-   contactPerson: '',
-   street: '',
-   houseNr: null,
-   city: '',
-   country: '',
+    title: "",
+    organisationId: 0,
+    email: '',
+    role: '',
+    firstname: '',
+    lastname: '',
+    username: '',
+    mobileNr: null,
+    contactPerson: '',
+    street: '',
+    houseNr: null,
+    city: '',
+    country: '',
  };
 
   constructor(private _router: Router, private _messageService: MessageService, private _userService: UserService) { }
