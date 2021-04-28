@@ -4,17 +4,20 @@
     [resizableColumns]="true" 
    
 >
-<ng-template pTemplate="colgroup" let-columns>
-<colgroup *ngFor="let col of cols">
-    <col pResizableColumn  >
-</colgroup>
-</ng-template>
+
 <ng-template pTemplate="header" let-columns>
-<tr>
-    <th  pResizableColumn ="col" *ngFor="let col of cols">                
-           <span class="p-text-center" class="headerColor"> {{col}} </span>   
-    </th>
-</tr>
+    <tr>
+        <th  pResizableColumn> <span class="p-text-center" class="headerColor"> {{'sideBarMenu.procedures' | translate}} </span> </th>  
+        <th  pResizableColumn>    <span class="p-text-center" class="headerColor"> {{'sideBarMenu.users' | translate}} </span>   </th>
+        <th  pResizableColumn>    <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationName' | translate}} </span>  </th> 
+        <th  pResizableColumn>    <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationEmail' | translate}} </span> </th>  
+        <th  pResizableColumn>     <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationCountry' | translate}} </span>  </th> 
+        <th  pResizableColumn>     <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationCity' | translate}} </span>   </th>
+        <th  pResizableColumn>     <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationPostCode' | translate}} </span>  </th> 
+        <th  pResizableColumn>     <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationStreet' | translate}} </span>   </th>
+        <th  pResizableColumn>    <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationHouseNr' | translate}} </span>   </th>
+    
+    </tr>
 
 </ng-template>
 

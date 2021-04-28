@@ -32,11 +32,11 @@
         "organisationEmail": "Email",
         "organisationName": "Name",
         "organisationLogo": "Logo",
-        "organisationCountry": "Land",
-        "organisationCity": "Stadt",
-        "organisationPostCode": "Plz",
-        "organisationStreet": "Straße",
-        "organisationHouseNr": "HausNr"
+        "organisationCountry": "Country",
+        "organisationCity": "City",
+        "organisationPostCode": "Postcode",
+        "organisationStreet": "Street",
+        "organisationHouseNr": "House-Nr"
 
 
     },
