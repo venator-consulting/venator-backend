@@ -56,6 +56,6 @@ export class ResetPasswordComponent implements OnInit {
 
   }
   cancelHandle() {
-    this._router.navigate(['/dashboard']);
+    this._router.navigate(['/']);
   }
 }

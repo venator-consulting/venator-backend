@@ -1,3 +1,5 @@
+import {  TranslateService } from '@ngx-translate/core';
+
 export class Choices {
     name: string = 'Select Template';
     value: number = 1;
@@ -29,7 +31,7 @@ export class Choices {
 
         result.push(new Choices("Accounts", 1));
         result.push(new Choices("Posting", 2));
-        result.push(new Choices("Head", 3));
+        result.push(new Choices("Helper", 3));
         return result;
     }
 

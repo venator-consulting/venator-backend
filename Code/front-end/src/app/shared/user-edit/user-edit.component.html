@@ -1,111 +1,111 @@
 <div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
     <div class="card">
         <p-toast></p-toast>
-        <h5 class="p-text-center"> User Edit </h5>
+        <h5 class="p-text-center"> {{'User_Registration.editHeader' | translate}} </h5>
         <form class="p-fluid"  (ngSubmit)="submitHandler()">
 
 
             <div class="p-fluid">
 
                 <div class="p-field p-grid">
-                    <label  class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Role </label>
+                    <label  class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.role' | translate}} </label>
                     <div class="p-col-12 p-md-10">
-                        <p-dropdown placeholder="select a role" name="role"  #role="ngModel" [options]="roles" optionValue="name" optionLabel="name" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true"  [(ngModel)]="userModel.role" >
+                        <p-dropdown placeholder="{{'User_Registration.rolePlaceHolder' | translate}}" name="role"  #role="ngModel" [options]="roles" optionValue="name" optionLabel="name" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true"  [(ngModel)]="userModel.role" >
                             <div class="ng-tns-c42-167 p-dropdown p-component">
                                 <span class="ng-tns-c42-167 p-dropdown-label p-inputtext p-placeholder p-dropdown-label-empty ng-star-inserted"> </span>
                             </div>
                         </p-dropdown>  
-                    <small *ngIf="role.invalid && role.untouched "  class="spanCss"> role is required </small> 
+                    <small *ngIf="role.invalid && role.untouched "  class="spanCss"> {{'User_Registration.roleErrorMsg' | translate}} </small> 
 
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <label  class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Title </label>
+                    <label  class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.title' | translate}} </label>
                     <div class="p-col-12 p-md-10">
-                        <p-dropdown placeholder="select a title" name="title"  #title1="ngModel" [options]="titles" optionValue="name" optionLabel="name" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true"  [(ngModel)]="userModel.title" >
+                        <p-dropdown placeholder="{{'User_Registration.titlePlaceHolder' | translate}}" name="title"  #title1="ngModel" [options]="titles" optionValue="name" optionLabel="name" class="ng-tns-c42-167 ng-pristine ng-valid ng-touched" [showClear]="true"  [(ngModel)]="userModel.title" >
                             <div class="ng-tns-c42-167 p-dropdown p-component">
                                 <span class="ng-tns-c42-167 p-dropdown-label p-inputtext p-placeholder p-dropdown-label-empty ng-star-inserted"> </span>
                             </div>
                         </p-dropdown>  
-                        <small *ngIf="title1.invalid && title1.touched " class="spanCss"> title is required </small> 
+                        <small *ngIf="title1.invalid && title1.touched " class="spanCss"> {{'User_Registration.titleErrorMsg' | translate}} </small> 
 
                     </div>
                 </div>
             <div class="p-field p-grid">
-                <label for="firstname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Firstname</label>
+                <label for="firstname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{'User_Registration.firstname' | translate}}</label>
                 <div class="p-col-12 p-md-10">
                     <input required #firstname="ngModel"  name="firstname" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.firstname" > 
-                    <small *ngIf="firstname.invalid && firstname.touched " class="spanCss ">firstname is required</small>
+                    <small *ngIf="firstname.invalid && firstname.touched " class="spanCss ">{{'User_Registration.firstnameErrorMsg' | translate}}</small>
                 </div>
             </div>
 
             <div class="p-field p-grid">
-                <label for="lastname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Lastname </label>
+                <label for="lastname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.lastname' | translate}} </label>
                 <div class="p-col-12 p-md-10">
                     <input required #lastname="ngModel"  name="lastname" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.lastname" > 
-                    <small *ngIf="lastname.invalid && lastname.touched" class="spanCss ">lastname is required</small>
+                    <small *ngIf="lastname.invalid && lastname.touched" class="spanCss ">{{'User_Registration.lastnameErrorMsg' | translate}}</small>
                 </div>
             </div>
 
             <div class="p-field p-grid">
-                <label for="email" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Email </label>
+                <label for="email" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.email' | translate}} </label>
                 <div class="p-col-12 p-md-10">
                     <input required #email="ngModel"  name="email" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.email" pattern="^(\D)+(\w)*((\.(\w)+)?)+@(\D)+(\w)*((\.(\D)+(\w)*)+)?(\.)[a-z]{2,}$" > 
-                    <small *ngIf="email.invalid && email.touched " class="spanCss "> email is required</small>
+                    <small *ngIf="email.invalid && email.touched " class="spanCss "> {{'User_Registration.emailErrorMsg' | translate}}</small>
                     
                 </div>
             </div>
 
             <div class="p-field p-grid">
-                <label for="username" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Username </label>
+                <label for="username" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.username' | translate}} </label>
                 <div class="p-col-12 p-md-10">
                     <input required #username="ngModel"  name="username" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.username" > 
-                    <small *ngIf="username.invalid && username.touched " class="spanCss ">username is required</small>
+                    <small *ngIf="username.invalid && username.touched " class="spanCss ">{{'User_Registration.usernameErrorMsg' | translate}}</small>
                 </div>
             </div>
 
             <div class="p-field p-grid">
-                <label for="mobileNr" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> MobileNr </label>
+                <label for="mobileNr" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.mobileNr' | translate}} </label>
                 <div class="p-col-12 p-md-10">
                     <input required #mobileNr="ngModel"  name="mobileNr" type="number" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.mobileNr" > 
-                    <small *ngIf="mobileNr.invalid && mobileNr.touched" class="spanCss ">mobileNr is required</small>
+                    <small *ngIf="mobileNr.invalid && mobileNr.touched" class="spanCss ">{{'User_Registration.mobileNrErrorMsg' | translate}}</small>
                 </div>
             </div>
 
-            <div class="p-field p-grid">
-                <label for="contactPerson" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> ContactPerson </label>
-                <div class="p-col-12 p-md-10">
-                    <input required #contactPerson="ngModel"  name="contactPerson" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.contactPerson" > 
-                    <small *ngIf="contactPerson.invalid && contactPerson.touched" class="spanCss ">contactPerson is required</small>
-                </div>
-            </div>
 
             <div class="p-field p-grid">
-                <label for="street" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Street </label>
+                <label for="street" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.street' | translate}} </label>
                 <div class="p-col-12 p-md-10">
                     <input required #street="ngModel"  name="street" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.street" > 
-                    <small *ngIf="street.invalid && street.touched" class="spanCss ">Street is required</small>
+                    <small *ngIf="street.invalid && street.touched" class="spanCss ">{{'User_Registration.streetErrorMsg' | translate}}</small>
                 </div>
             </div>
             <div class="p-field p-grid">
-                <label for="houseNr" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> HouseNr </label>
+                <label for="houseNr" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.houseNr' | translate}} </label>
                 <div class="p-col-12 p-md-10">
                     <input required #houseNr="ngModel"  name="houseNr" type="number" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.houseNr" > 
-                    <small *ngIf="houseNr.invalid && houseNr.touched" class="spanCss ">houseNr is required</small>
+                    <small *ngIf="houseNr.invalid && houseNr.touched" class="spanCss ">{{'User_Registration.houseNrErrorMsg' | translate}}</small>
                 </div>
             </div>
             <div class="p-field p-grid">
-                <label for="city" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> City </label>
+                <label for="city" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.city' | translate}} </label>
                 <div class="p-col-12 p-md-10">
                     <input required #city="ngModel"  name="city" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.city" > 
-                    <small *ngIf="city.invalid && city.touched" class="spanCss ">city is required</small>
+                    <small *ngIf="city.invalid && city.touched" class="spanCss ">{{'User_Registration.cityErrorMsg' | translate}}</small>
                 </div>
             </div>
             <div class="p-field p-grid">
-                <label for="country" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Country </label>
+                <label for="postcode" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.postcode' | translate}} </label>
+                <div class="p-col-12 p-md-10">
+                    <input required #postcode="ngModel"  name="postcode" type="number" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.postcode" > 
+                    <small *ngIf="postcode.invalid && postcode.touched" class="spanCss ">{{'User_Registration.postcodeErrorMsg' | translate}}</small>
+                </div>
+            </div>
+            <div class="p-field p-grid">
+                <label for="country" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.country' | translate}} </label>
                 <div class="p-col-12 p-md-10">
                     <input required #country="ngModel"  name="country" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.country" > 
-                    <small *ngIf="country.invalid && country.touched" class="spanCss ">Country is required</small>
+                    <small *ngIf="country.invalid && country.touched" class="spanCss ">{{'User_Registration.countryErrorMsg' | translate}}</small>
                 </div>
             </div>
 
@@ -113,12 +113,12 @@
                 <div class="p-xs-col-5  p-mr-4">
     
                     <button pbutton pripple type="button" label="cancel" class="p-mt-4  p-ripple p-button p-component p-cancelButton " (click)="cancelHandle()" >
-                        <span class="p-button-label"> Cancel </span>
+                        <span class="p-button-label"> {{'User_Registration.cancelButton' | translate}} </span>
                     </button>
                 </div>
                 <div class="p-xs-col-5 ">
                     <button pbutton pripple type="submit" label="Submit" class="p-mt-4  p-ripple p-button p-component " >
-                        <span class="p-button-label"> Confirm </span>
+                        <span class="p-button-label"> {{'User_Registration.confirmButton' | translate}} </span>
                     </button>
                 </div>
  

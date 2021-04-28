@@ -28,6 +28,7 @@ export class UserEditComponent implements OnInit {
     street: '',
     houseNr: null,
     city: '',
+    postcode: null,
     country: '',
  };
 

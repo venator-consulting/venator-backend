@@ -1,4 +1,4 @@
-<div>
+<div class="p-mt-2">
     <p-table [value]="organisations" dataKey="id" [columns]="cols"
     styleClass="p-datatable-gridlines"
     [resizableColumns]="true" 
@@ -27,12 +27,12 @@
         <td style="width: 6rem">
             <button pButton pRipple type="button" icon="pi pi-user" class="p-button-rounded p-button-warning" pTooltip="show" tooltipPosition="bottom" (click)="showUsers(organisation.organisationId)"></button>    
         </td>  
-        <td  pResizableColumn  class="ui-resizable-column">{{organisation.username}}</td>
+        <td  pResizableColumn  class="ui-resizable-column">{{organisation.name}}</td>
         <td  pResizableColumn  class="ui-resizable-column">{{organisation.email}}</td>
-        <td  pResizableColumn  class="ui-resizable-column">{{organisation.firstname}}</td>
-        <td  pResizableColumn  class="ui-resizable-column">{{organisation.lastname}}</td>
-        <td  pResizableColumn  class="ui-resizable-column">{{organisation.title}}</td>
-        <td  pResizableColumn  class="ui-resizable-column">{{organisation.mobileNumber}}</td> 
+        <td  pResizableColumn  class="ui-resizable-column">{{organisation.country}}</td>
+        <td  pResizableColumn  class="ui-resizable-column">{{organisation.city}}</td>
+        <td  pResizableColumn  class="ui-resizable-column">{{organisation.postCode}}</td>
+        <td  pResizableColumn  class="ui-resizable-column">{{organisation.houseNr}}</td> 
 
 
     </tr>

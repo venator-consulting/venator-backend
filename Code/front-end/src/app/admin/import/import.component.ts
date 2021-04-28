@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Choices } from "../../shared/model/choices";
 import { ImportService } from "../service/import.service";
 import { FileToImport } from "../../shared/model/file-import";
-import { FormGroup, FormControl, FormArray, FormBuilder } from "@angular/forms";
-import { Users } from 'src/app/shared/model/users';
+import { TranslateService } from '@ngx-translate/core';
 import { Procedures } from 'src/app/shared/model/procedures';
 import { OrganisationService } from '../service/organisation.service';
 import { Organisation } from 'src/app/shared/model/organisation';
@@ -39,53 +38,59 @@ export class ImportComponent implements OnInit {
   selectedProcedureId: number = -1;
 
 
-  constructor(private _messageService: MessageService, private _importService: ImportService, private _orgService: OrganisationService) {
-
+  constructor(public _translateService: TranslateService ,private _messageService: MessageService, private _importService: ImportService, private _orgService: OrganisationService) {
+    _translateService.addLangs(['de','en']);
+    _translateService.setDefaultLang('de');
+    const browserLang = _translateService.getBrowserLang();
+    _translateService.use(browserLang.match(/de|en/) ? browserLang : 'de');
   }
 
   ngOnInit(): void {
 
-    // this.addFormData();
+    this._translateService.get('Admin_Import').subscribe(elem => {
 
-    this.items = [
-      {
-        label: 'BasisDatie importieren',
-        command: (event: any) => {
-          this.activeIndex = 0;
-          // this._messageService.add({severity:'info', summary:'First Step', detail: event.item.label});
-        }
-      },
-      {
-        label: 'Helper files',
-        command: (event: any) => {
-          this.activeIndex = 1;
-        }
-      },
-      {
-        label: 'Mapping',
-        command: (event: any) => {
-          this.activeIndex = 2;
-        }
-      },
-      {
-        label: 'Import',
-        command: (event: any) => {
-          this.activeIndex = 3;
-        }
-      }
-    ];
-
-
-    this._orgService.get()
-      .subscribe(
-        (data) => {
-          this.orgs = data;
+      this.items = [
+        {
+          label: elem.firstStepLabel,
+          command: (event: any) => {
+            this.activeIndex = 0;
+            // this._messageService.add({severity:'info', summary:'First Step', detail: event.item.label});
+          }
         },
-        (error) => console.log(error)
-      );
+        {
+          label: elem.secondStepLabel,
+          command: (event: any) => {
+            this.activeIndex = 1;
+          }
+        },
+        {
+          label: elem.thirdStepLabel,
+          command: (event: any) => {
+            this.activeIndex = 2;
+          }
+        },
+        {
+          label: elem.firthStepLabel,
+          command: (event: any) => {
+            this.activeIndex = 3;
+          }
+        }
+      ];
+  
+  
+      this._orgService.get()
+        .subscribe(
+          (data) => {
+            this.orgs = data;
+          },
+          (error) => console.log(error)
+        );
+    })
 
 
-  } // end of ngOnInit
+
+  } 
+  // end of ngOnInit
 
 
   orgChangedHandler(e) {

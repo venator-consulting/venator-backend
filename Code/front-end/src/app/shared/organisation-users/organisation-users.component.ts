@@ -12,20 +12,21 @@ export class OrganisationUsersComponent implements OnInit {
   organisationId = localStorage.getItem('organisationId')
   role = localStorage.getItem('role')
   users  : [] = [];
-
-  constructor(private _userService : UserService, private _router: Router) { }
+  cols = [];
+  constructor(private _userService : UserService, private _router: Router) {
+  }
 
   ngOnInit(): void {
-
+    console.log()
     this._userService
-    .getUsers(3)
+    .getUsers(this.organisationId)
     .subscribe(
       (data) => { 
         this.users = data.results ;
         console.log(this.users)
         },
       (error) => console.log(error),
-      () => {  }
+      () => { }
     );
   }
   edituser(id) {

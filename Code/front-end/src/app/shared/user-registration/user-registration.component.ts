@@ -27,6 +27,7 @@ export class UserRegistrationComponent implements OnInit {
     street: '',
     houseNr: null,
     city: '',
+    postcode: null,
     country: '',
   };
 

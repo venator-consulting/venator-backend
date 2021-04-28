@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../service/auth.service";
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -14,9 +15,18 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
 
-  constructor(private _messageService: MessageService, private _authService: AuthService, private _router: Router) { }
+  constructor(private _messageService: MessageService, private _authService: AuthService, private _router: Router, public _translateService: TranslateService) {
+    _translateService.addLangs(['de','en']);
+    _translateService.setDefaultLang('de');
+    const browserLang = _translateService.getBrowserLang();
+    _translateService.use(browserLang.match(/de|en/) ? browserLang : 'de');
+    
+   }
 
   ngOnInit(): void {
+   this._translateService.get('LOGIN.welcomeMsg').subscribe(elem => {
+      console.log(elem)
+    });
   }
 
   login() {
@@ -43,7 +53,7 @@ export class LoginComponent implements OnInit {
         }
 
         if(localStorage.getItem('role') === "Admin") {
-          this._router.navigate(['/admin/dashboard/procedures']);
+          this._router.navigate(['/admin/dashboard']);
         } else {
           this._router.navigate(['/shared/user/procedures']);
         }
