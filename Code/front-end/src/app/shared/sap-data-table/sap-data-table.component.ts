@@ -4,6 +4,7 @@ import { DataFilterService } from '../service/data-filter.service';
 import { ExportDataService } from '../service/export-data.service';
 import { dataTableColumns } from "../model/dataTableColumns";
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sap-data-table',
@@ -13,16 +14,17 @@ import { MessageService } from 'primeng/api';
 export class SAPDataTableComponent implements OnInit {
 
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
-    private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService) { }
+    private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService, private _router: Router) { }
 
   filterClearShow: boolean = false;
   loading: boolean = false;
   selectLastPage: boolean = false;
-  OrganisationId: number = 3;
+  OrganisationId: number = 9;
+  ProcedureId: number = 1;
   data: any;
   postings: [] = [];
   cols: dataTableColumns[] = dataTableColumns.getDataTableColumns();
-  pageLimitSizes = [{ value: "2" },{ value: "5" },{ value: "25" }, { value: "50" }, { value: "100" },]
+  pageLimitSizes = [{ value: "2" }, { value: "5" }, { value: "25" }, { value: "50" }, { value: "100" },]
   limit: number = 2;
   pageNr: number = 1;
   maxPageNr: number = 0;
@@ -34,130 +36,130 @@ export class SAPDataTableComponent implements OnInit {
   totalCount: number = 0;
 
 
-ngOnInit(): void {
-  this.getData()
-}
-
-getData() {
-  this._dataFilterService
-    .get(this.criteria)
-    .subscribe(
-      data => {
-        this.data = data;
-        this.postings = this.data.rows;
-        this.totalCount = this.data.count;
-        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
-        this.loading = false
-        console.log(this.data.count);
-      },
-      error => console.log(error),
-    );
-}
-
-filterChange(value, field) {
-  if (value) {
-    this.criteria[field] = value;
-  } else {
-    delete this.criteria[field];
+  ngOnInit(): void {
+    this.getData()
   }
-  this.pageNr = 1;
-  this.criteria.offset = 0;
-  this.loading = true;
-  this.getData();
-}
 
-submitFilter() {
-  this.loading = true;
-  this.filterClearShow= true;
-  this.getData();
-}
+  getData() {
+    this._dataFilterService
+      .get(this.criteria)
+      .subscribe(
+        data => {
+          this.data = data;
+          this.postings = this.data.rows;
+          this.totalCount = this.data.count;
+          this.maxPageNr = Math.ceil(this.totalCount / this.limit);
+          this.loading = false
+          console.log(this.data.count);
+        },
+        error => console.log(error),
+      );
+  }
 
-clearFilter() {
-  this.criteria = {
-    OrganisationId: this.OrganisationId,
-    limit: this.limit,
-    offset: 0
-  };
-  this.pageNr = 1;
-  this.loading = true;
-  this.filterClearShow= false;
-  this.getData();
-}
+  filterChange(value, field) {
+    if (value) {
+      this.criteria[field] = value;
+    } else {
+      delete this.criteria[field];
+    }
+    this.pageNr = 1;
+    this.criteria.offset = 0;
+    this.loading = true;
+    this.getData();
+  }
+
+  submitFilter() {
+    this.loading = true;
+    this.filterClearShow = true;
+    this.getData();
+  }
+
+  clearFilter() {
+    this.criteria = {
+      OrganisationId: this.OrganisationId,
+      limit: this.limit,
+      offset: 0
+    };
+    this.pageNr = 1;
+    this.loading = true;
+    this.filterClearShow = false;
+    this.getData();
+  }
 
 
-nextPage() {
-  ++this.pageNr;
-  if (this.pageNr >= this.maxPageNr) return;
-  this.loading = true;
-  this.criteria.offset += this.limit;
-  
-  this.getData();
-}
+  nextPage() {
+    ++this.pageNr;
+    if (this.pageNr >= this.maxPageNr) return;
+    this.loading = true;
+    this.criteria.offset += this.limit;
+
+    this.getData();
+  }
 
 
-lastPage() {
-  this.pageNr = this.maxPageNr;
-  this.criteria.offset = (this.pageNr - 1) * this.limit;
-  this.loading = true;
-  this.getData();
-}
+  lastPage() {
+    this.pageNr = this.maxPageNr;
+    this.criteria.offset = (this.pageNr - 1) * this.limit;
+    this.loading = true;
+    this.getData();
+  }
 
-previousPage() {
-  --this.pageNr;
-  if (this.pageNr <= 0) return;
-  this.loading = true;
-  this.criteria.offset -= this.limit;
-  
-  this.getData();
-}
+  previousPage() {
+    --this.pageNr;
+    if (this.pageNr <= 0) return;
+    this.loading = true;
+    this.criteria.offset -= this.limit;
 
-firstPage() {
-  this.pageNr = 1;
-  this.loading = true;
-  this.criteria.offset = 0;
-  
-  this.getData();
-}
+    this.getData();
+  }
 
-pageNrChange(value) {
-  this.loading = true;
-  this.criteria.offset = (this.pageNr - 1) * this.limit;
-  this.loading = true;
-  this.getData();
-}
+  firstPage() {
+    this.pageNr = 1;
+    this.loading = true;
+    this.criteria.offset = 0;
 
-limitChange(e) {
-  this.limit = e.value
-  this.criteria.offset = 0;
-  this.criteria.limit = this.limit;
-  this.pageNr = 1;
-  this.loading = true;
-  this.getData();
-}
+    this.getData();
+  }
 
-exportXLSX() {
-  this._exportDataService
-    .exportXLSX(this.postings)
-    .subscribe(
-      (data) => {
+  pageNrChange(value) {
+    this.loading = true;
+    this.criteria.offset = (this.pageNr - 1) * this.limit;
+    this.loading = true;
+    this.getData();
+  }
 
-        console.log(data)
-      },
-      (error) => console.log(error),
-      () => { }
-    );
-}
-exportPDF() {
-  this._exportDataService
-    .exportPDF(this.postings)
-    .subscribe(
-      (data) => {
+  limitChange(e) {
+    this.limit = e.value
+    this.criteria.offset = 0;
+    this.criteria.limit = this.limit;
+    this.pageNr = 1;
+    this.loading = true;
+    this.getData();
+  }
 
-        console.log(data)
-      },
-      (error) => console.log(error),
-      () => { }
-    );
-}
+  exportXLSX() {
+    this._exportDataService
+      .exportXLSX('posting', this.OrganisationId, this.ProcedureId)
+      .subscribe(
+        url => {
+          console.log(url);
+          debugger;
+          window.open(url.toString(), "_blank");
+        },
+        (error) => console.log(error),
+      );
+  }
+  exportPDF() {
+    this._exportDataService
+      .exportPDF(this.postings)
+      .subscribe(
+        (data) => {
+
+          console.log(data);
+        },
+        (error) => console.log(error),
+        () => { }
+      );
+  }
 
 }
