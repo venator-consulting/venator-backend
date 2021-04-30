@@ -39,7 +39,7 @@ const routes: Routes = [
   { path: 'shared/user/edit', component: UserEditComponent },
   { path: 'shared/user/procedures', component: UserDashboardComponent },
   { path: 'shared/user/users', component: OrganisationUsersComponent },
-  { path: 'data', component: SAPDataTableComponent },
+  { path: 'shared/data', component: SAPDataTableComponent },
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },
   { path: 'reset/:token', component: ResetPasswordNewUserComponent },

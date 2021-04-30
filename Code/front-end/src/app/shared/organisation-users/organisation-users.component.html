@@ -15,8 +15,9 @@
                 <th pResizableColumn ><span class="headerColor">{{'User_Registration.city' | translate}}</span>  </th>
                 <th pResizableColumn ><span class="headerColor">{{'User_Registration.country' | translate}}</span>  </th>
 
-                <th *ngIf="role==='Admin'" style="width: 4rem" > </th>
-    
+                <th *ngIf="role!=='User'" style="width: 4rem" > </th>
+                <th *ngIf="role==='Admin'" style="width: 4rem; border: none; background-color: #ffff; color:#58585a"  ><i  class="pi pi-user-plus" pTooltip="Add User" tooltipPosition="bottom" (click) = "addUser()"></i>  </th>
+
             </tr>
         </ng-template>
 
@@ -29,15 +30,15 @@
                 <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.title}}</td>
                 <td  pResizableColumn  class="ui-resizable-column">{{user.firstname}}</td>
                 <td  pResizableColumn  class="ui-resizable-column">{{user.lastname}}</td>
-                <td  pResizableColumn  class="ui-resizable-column">{{user.mobileNr}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.mobileNumber}}</td>
                 <td  pResizableColumn  class="ui-resizable-column">{{user.street}}</td>
-                <td  pResizableColumn  class="ui-resizable-column">{{user.houseNr}}</td>
-                <td  pResizableColumn  class="ui-resizable-column">{{user.postcode}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.housenumber}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.postCode}}</td>
                 <td  pResizableColumn  class="ui-resizable-column">{{user.city}}</td>
                 <td  pResizableColumn  class="ui-resizable-column">{{user.country}}</td>
     
-                <td  *ngIf="role==='Admin'"style="width: 4rem" ><i  class="pi pi-pencil headerColor" pTooltip="Edit user" tooltipPosition="bottom" (click) = "edituser(user.id)"></i> </td>               
-    
+                <td  *ngIf="role!=='User'"style="width: 4rem" ><i  class="pi pi-user-edit headerColor" pTooltip="Edit user" tooltipPosition="bottom" (click) = "edituser(user)"></i> </td>               
+
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">

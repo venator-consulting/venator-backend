@@ -27,6 +27,7 @@ module.exports.getByOrgId = async (id) => {
                     deleted: false
                 }
             });
+            console.log(res)
         return res;
     } catch (err) {
         throw new Error('there_is_an_error_in_db_connection');

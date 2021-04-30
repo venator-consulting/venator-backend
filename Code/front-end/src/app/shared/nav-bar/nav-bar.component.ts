@@ -59,6 +59,9 @@ export class NavBarComponent implements OnInit {
                     label: 'Adminstrator',
                     items: [
                         {label: 'Import', icon: 'pi pi-file',routerLink: ['/admin/import']},
+                        {label: elem.addUser, icon: 'pi pi-user-plus' , routerLink: ['/admin/admin/add']}, 
+                        {label: elem.addOrganisation, icon: 'pi pi-plus-circle' , routerLink: ['admin/organisation/add']},
+                        {label: elem.resetPassword, icon: 'pi pi-lock' , routerLink: ['/resetPassword']},
                     ]
                 },
                 {
@@ -70,7 +73,7 @@ export class NavBarComponent implements OnInit {
             {
                 label: elem.data,
                 items: [
-                    {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
+                    {label: elem.table, icon: 'pi pi-table', routerLink: ['/shared/data'] },
                 ]
             },
             {
@@ -88,14 +91,12 @@ export class NavBarComponent implements OnInit {
     
             this.userPages = [
                 
-                {label: elem.addUser, icon: 'pi pi-user-plus' , routerLink: ['/admin/admin/add']}, 
-                {label: elem.addProcedure, icon: 'pi pi-user-plus' , routerLink: ['admin/procedure/add']}, 
-                {label: elem.addOrganisation, icon: 'pi pi-plus-circle' , routerLink: ['admin/organisation/add']},
-                {label: elem.resetPassword, icon: 'pi pi-lock' , routerLink: ['/resetPassword']},
+
+                {label: elem.setting, icon: 'pi pi-globe' },
                 {label: elem.logout, icon: 'pi pi-fw pi-power-off' , routerLink: ['/']}
-    
+
             ]
-        } else {
+        } else if(this.role === "Manager") {
             this.sidebarItems = [
     
                 {
@@ -115,9 +116,28 @@ export class NavBarComponent implements OnInit {
         ];
     
             this.userPages = [
-                    
-                {label: elem.addUser, icon: 'pi pi-user-plus' , routerLink: ['/shared/user/add']}, 
-                {label: elem.editUser, icon: 'pi pi-user-edit' , routerLink: ['/shared/user/edit']},         
+                {label: elem.setting, icon: 'pi pi-globe' },
+                {label: elem.logout, icon: 'pi pi-fw pi-power-off' , routerLink: ['/']}
+            ]
+        } else if(this.role === "User") {
+            this.sidebarItems = [
+    
+                {
+                label: 'Dashboard',
+                items: [
+                    {label: elem.procedures, icon: 'pi  pi-home',routerLink: ['/shared/user/procedures']}, 
+                ]
+            },
+            {
+                label: elem.data,
+                items: [
+                    {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
+                ]
+            },
+    
+        ];
+    
+            this.userPages = [
                 {label: elem.logout, icon: 'pi pi-fw pi-power-off' , routerLink: ['/']}
             ]
         }

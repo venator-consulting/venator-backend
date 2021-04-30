@@ -1,4 +1,13 @@
 {
+    "ErrorHandler": {
+        "badRequest_400": "der Server kann die gesendete Anfrage nicht verarbeiten",
+        "unauthorized_401": "Eine Authentifizierung ist erforderlich, bitte überprüfen Sie den Benutzernamen und das Passwort",
+        "forbidden_403": "Der Zugriff auf die angeforderte Ressource ist verboten",
+        "NotFound_404": "Der Server kann die angeforderte Ressource nicht finden",
+        "internalServerError_500": "Auf dem Server ist ein Fehler aufgetreten. Wir werden das Problem sehr bald beheben",
+        "passwordsMatch": "Die Passwörter stimmen nicht überein"
+
+    },
     "LOGIN": {
         "welcomeMsg": "Loggen Sie sich bitte in Venator-Portal ein",
         "welcomeWord": "Willkommen",
@@ -15,12 +24,13 @@
         "textAnalysis": "Text Analyse",
         "paymentAnalyse": "Zahlung Analyse",
         "creditorsAnalyse": "Kreditoren Analyse",
-        "addUser": "Benutzer hinzufügen",
+        "addUser": "Admin hinzufügen",
         "editUser": "Benutzer bearbeiten",
         "addOrganisation": "Organisation hinzufügen",
         "addProcedure": "Verfahren hinzufügen",
         "editProcedure": "Verfahren bearbeiten",
         "resetPassword": "Passwort zurücksetzen",
+        "setting": "Einstellung",
         "logout": "Ausloggen",
         "procedures": "Verfahren",
         "users": "Benutzer"
@@ -49,7 +59,7 @@
         "selectOrganisationPlaceholder":"organisation auswählen",
         "selectProcedure": "Wählen Sie ein Verfahren aus",
         "selectProcedurePlaceholder": "verfahren auswählen",
-        "selectTemplate": "Wählen Sie ein Template aus ",
+        "selectTemplate": "Wählen Sie ein Template aus",
         "selectTemplatePlaceholder": "template auswählen",
         "selectFileFormat": "Wählen Sie ein Dateiformat aus ",
         "selectFileType": "Wählen Sie einen Dateityp aus ",
@@ -237,7 +247,7 @@
         "header": "Venator-Portal Passwort zurücksetzen",
         "password": "neues Passwort",
         "passwordErrorMsg": "Passwort ist erforderlich",
-        "passwordConfirm": " Passwort bestätigen",
+        "passwordConfirm": "Passwort bestätigen",
         "passwordConfirmErrorMsg": "Passwort bestätigen ist erforderlich",
         "cancelButton": "Abbrechen",
         "confirmButton": "Bestätigen"

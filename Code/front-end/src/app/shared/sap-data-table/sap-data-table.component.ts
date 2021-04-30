@@ -15,6 +15,9 @@ export class SAPDataTableComponent implements OnInit {
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
     private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService) { }
 
+
+  organisationId = localStorage.getItem('organisationId')
+  procedureId = localStorage.getItem('currentProcedureId')
   filterClearShow: boolean = false;
   loading: boolean = false;
   selectLastPage: boolean = false;
@@ -28,6 +31,8 @@ export class SAPDataTableComponent implements OnInit {
   maxPageNr: number = 0;
   criteria: any = {
     OrganisationId: this.OrganisationId,
+    procedureId: this.procedureId,
+
     limit: this.limit,
     offset: 0
   };
@@ -48,7 +53,9 @@ getData() {
         this.totalCount = this.data.count;
         this.maxPageNr = Math.ceil(this.totalCount / this.limit);
         this.loading = false
-        console.log(this.data.count);
+        console.log(this.organisationId);
+        console.log(this.procedureId);
+
       },
       error => console.log(error),
     );

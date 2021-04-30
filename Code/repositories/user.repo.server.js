@@ -104,11 +104,10 @@ module.exports.getUsersByOrganisationId = async function (id) {
             .getUser()
             .findAll({
                 where: {
-                    organisationId: id,
+                    OrganisationId: id,
                     deleted: false
                 }
             });
-
         return users;
 
     } catch (err) {

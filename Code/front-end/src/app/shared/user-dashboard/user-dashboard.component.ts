@@ -17,10 +17,11 @@ export class UserDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this._userService
-    .getProcedures(3)
+    .getProcedures(this.organisationId)
     .subscribe(
       (data) => { 
         this.procedures = data ;
+        console.log(this.organisationId)
         console.log(data)
         },
       (error) => console.log(error),
@@ -28,6 +29,8 @@ export class UserDashboardComponent implements OnInit {
     );
   }
   dataTable(id) {
+    localStorage.setItem('currentProcedureId', id);
+    this._router.navigate(['/shared/data']); 
 
   }
   editProcedure(id,name,data,analysis) {
@@ -37,6 +40,10 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedureAnalysis', analysis);
 
    this._router.navigate(['/admin/procedure/edit']); 
+
+  }
+  addProcedure(){
+    this._router.navigate(['/admin/procedure/add']); 
 
   }
 }

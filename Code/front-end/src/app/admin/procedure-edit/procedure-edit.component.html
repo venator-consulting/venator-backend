@@ -11,7 +11,6 @@
                 <label for="procedureName" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Procedure_Registration.name' | translate}} </label>
                 <div class="p-col-12 p-md-10">
                     <input required #procedureName="ngModel" [placeholder]="currentProcedureName" name="procedureName" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="procedureModel.name" > 
-                    <small *ngIf="procedureName.invalid && procedureName.touched " class="spanCss ">{{'Procedure_Registration.header' | translate}}</small>
                 </div>
             </div> 
 

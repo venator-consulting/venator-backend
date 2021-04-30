@@ -28,20 +28,20 @@
     <div class="p-grid">
 
       <div class="p-col-10">
-        <label for=""> {{'Admin_Import.selectOrganisation' | translate}} </label>
+        <label class="p-mr-4"> {{'Admin_Import.selectOrganisation' | translate}} </label>
         <p-dropdown [options]="orgs" [(ngModel)]="selectedOrgId" placeholder=" {{'Admin_Import.selectOrganisationPlaceholder' | translate}}"
           optionLabel="name" optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required
           (onChange)="orgChangedHandler($event)" [disabled]="selectedProcedureId > 0"></p-dropdown>
       </div>
 
       <div class="p-col-10" *ngIf="selectedOrgId>0">
-        <label for=""> {{'Admin_Import.selectProcedure' | translate}} </label>
+        <label class="p-mr-4"> {{'Admin_Import.selectProcedure' | translate}} </label>
         <p-dropdown [options]="procedures" [(ngModel)]="selectedProcedureId" placeholder="{{'Admin_Import.selectProcedurePlaceholder' | translate}}"
           optionLabel="name" optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required [disabled]="selectedTemplate"></p-dropdown>
       </div>
 
       <div class="p-col-10" *ngIf="selectedProcedureId>0">
-        <label for=""> {{'Admin_Import.selectTemplate' | translate}} </label>
+        <label class="p-mr-4"> {{'Admin_Import.selectTemplate' | translate}} </label>
         <p-dropdown [options]="templates" [(ngModel)]="selectedTemplate" placeholder="{{'Admin_Import.selectTemplatePlaceholder' | translate}}"
           optionLabel="name" optionValue="value" [showClear]="true" [filter]="true" filterBy="name" (onChange)="selectTemplatHandler($event)"></p-dropdown>
       </div>
@@ -55,16 +55,13 @@
           <br><br>
 
           <div class="p-grid" *ngIf="f.imported!==true">
-            <div class="p-col-3">
+            <div class="p-col-2">
               <!-- maxFileSize="100000000" -->
-              <p-fileUpload name="excel" mode="advanced" [showUploadButton]="false" customUpload="true"
+              <p-fileUpload name="excel" mode="basic" [showUploadButton]="false" customUpload="true"
                 (uploadHandler)="UploadHandler($event, f, i)" uploadLabel="Set File" chooseLabel="{{'Admin_Import.searchLabel' | translate}}" [auto]="true"
                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .csv, text/plain">
                 <ng-template pTemplate="content">
-                  <!-- <span *ngIf="f.file">{{f?.file?.name}} - {{ (f?.file?.size / 1024) | number: '1.0-2' }} KB</span> -->
-                  <!-- <ul *ngIf="uploadedFiles.length">
-                  <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-                </ul> -->
+
                 </ng-template>
               </p-fileUpload>
               <span *ngIf="f.file">{{f?.file?.name}} - {{ (f?.file?.size / 1024) | number: '1.0-2' }} KB</span>
