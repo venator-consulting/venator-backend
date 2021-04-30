@@ -1,10 +1,10 @@
 <p-table [value]="procedures"  [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines" >
     <ng-template pTemplate="header">
         <tr >
-            <th pResizableColumn ><span class="headerColor">name</span>  </th>
-            <th pResizableColumn> <span class="headerColor">dataSource</span> </th>
-            <th pResizableColumn >  <span class="headerColor">data</span></th>
-            <th pResizableColumn > <span class="headerColor">analysis</span> </th>
+            <th pResizableColumn ><span class="headerColor">{{'Procedure_Registration.name' | translate}}</span>  </th>
+            <th pResizableColumn> <span class="headerColor">{{'Procedure_Registration.datasource' | translate}}</span> </th>
+            <th pResizableColumn >  <span class="headerColor">{{'Procedure_Registration.data' | translate}}</span></th>
+            <th pResizableColumn > <span class="headerColor">{{'Procedure_Registration.analysis' | translate}}</span> </th>
             <th *ngIf="role==='Admin'" style="width: 4rem"  > </th>
 
         </tr>
@@ -23,7 +23,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="4">There are no order for this product yet.</td>
+            <td colspan="4">{{'Procedure_Registration.NoProceduresFound' | translate}}</td>
         </tr>
     </ng-template>
 </p-table>

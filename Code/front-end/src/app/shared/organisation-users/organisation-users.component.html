@@ -1,44 +1,49 @@
-<p-table [value]="users"  [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines" >
-    <ng-template pTemplate="header">
-        <tr >
-            <th pResizableColumn ><span class="headerColor">role</span>  </th>
-            <th pResizableColumn ><span class="headerColor">username</span>  </th>
-            <th pResizableColumn> <span class="headerColor">firstname</span> </th>
-            <th pResizableColumn >  <span class="headerColor">lastname</span></th>
-            <th pResizableColumn > <span class="headerColor">email</span> </th>
-            <th pResizableColumn > <span class="headerColor">mobileNr</span> </th>
-            <th pResizableColumn > <span class="headerColor">street</span> </th>
-            <th pResizableColumn > <span class="headerColor">houseNr</span> </th>
-            <th pResizableColumn > <span class="headerColor">postcode</span> </th>
-            <th pResizableColumn > <span class="headerColor">city</span> </th>
-            <th pResizableColumn > <span class="headerColor">country</span> </th>
+<div class="p-mt-4" >
+    <p-table [value]="users"  [resizableColumns]="true"  dataKey="id" styleClass="p-datatable-gridlines" >
+        <ng-template pTemplate="header"  >
+            <tr >
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.role' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.username' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.email' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.title' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.firstname' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.lastname' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.mobileNr' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.street' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.houseNr' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.postcode' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.city' | translate}}</span>  </th>
+                <th pResizableColumn ><span class="headerColor">{{'User_Registration.country' | translate}}</span>  </th>
 
-            <th *ngIf="role==='Admin'" style="width: 4rem" > </th>
+                <th *ngIf="role==='Admin'" style="width: 4rem" > </th>
+    
+            </tr>
+        </ng-template>
 
-        </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-user  >
-        <tr >
-            <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.RoleId}}</td>
-            <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.username}}</td>
-            <td  pResizableColumn  class="ui-resizable-column">{{user.firstname}}</td>
-            <td  pResizableColumn  class="ui-resizable-column">{{user.lastname}}</td>
-            <td  pResizableColumn  class="ui-resizable-column">{{user.email}}</td>
-            <td  pResizableColumn  class="ui-resizable-column">{{user.mobileNr}}</td>
-            <td  pResizableColumn  class="ui-resizable-column">{{user.street}}</td>
-            <td  pResizableColumn  class="ui-resizable-column">{{user.houseNr}}</td>
-            <td  pResizableColumn  class="ui-resizable-column">{{user.postcode}}</td>
-            <td  pResizableColumn  class="ui-resizable-column">{{user.city}}</td>
-            <td  pResizableColumn  class="ui-resizable-column">{{user.country}}</td>
-
-            <td  *ngIf="role==='Admin'"style="width: 4rem" ><i  class="pi pi-pencil headerColor" pTooltip="Edit user" tooltipPosition="bottom" (click) = "edituser(user.id)"></i> </td>               
-
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-        <tr>
-            <td colspan="4">There are no users for this organisation yet.</td>
-        </tr>
-    </ng-template>
-</p-table>
+    
+        <ng-template pTemplate="body" let-user  >
+            <tr >
+                <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.RoleId}}</td>
+                <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.username}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.email}}</td>
+                <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.title}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.firstname}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.lastname}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.mobileNr}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.street}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.houseNr}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.postcode}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.city}}</td>
+                <td  pResizableColumn  class="ui-resizable-column">{{user.country}}</td>
+    
+                <td  *ngIf="role==='Admin'"style="width: 4rem" ><i  class="pi pi-pencil headerColor" pTooltip="Edit user" tooltipPosition="bottom" (click) = "edituser(user.id)"></i> </td>               
+    
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="12">{{'User_Registration.NoUsersFound' | translate}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

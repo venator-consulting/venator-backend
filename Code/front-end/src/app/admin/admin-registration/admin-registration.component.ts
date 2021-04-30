@@ -37,6 +37,7 @@ export class AdminRegistrationComponent implements OnInit {
     street: '',
     houseNr: null,
     city: '',
+    postcode: null,
     country: '',
   };
 

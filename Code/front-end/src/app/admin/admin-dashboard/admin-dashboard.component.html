@@ -1,20 +1,23 @@
-<div>
+<div class="p-mt-2">
     <p-table [value]="organisations" dataKey="id" [columns]="cols"
     styleClass="p-datatable-gridlines"
     [resizableColumns]="true" 
    
 >
-<ng-template pTemplate="colgroup" let-columns>
-<colgroup *ngFor="let col of cols">
-    <col pResizableColumn  >
-</colgroup>
-</ng-template>
+
 <ng-template pTemplate="header" let-columns>
-<tr>
-    <th  pResizableColumn ="col" *ngFor="let col of cols">                
-           <span class="p-text-center" class="headerColor"> {{col}} </span>   
-    </th>
-</tr>
+    <tr>
+        <th  pResizableColumn> <span class="p-text-center" class="headerColor"> {{'sideBarMenu.procedures' | translate}} </span> </th>  
+        <th  pResizableColumn>    <span class="p-text-center" class="headerColor"> {{'sideBarMenu.users' | translate}} </span>   </th>
+        <th  pResizableColumn>    <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationName' | translate}} </span>  </th> 
+        <th  pResizableColumn>    <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationEmail' | translate}} </span> </th>  
+        <th  pResizableColumn>     <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationCountry' | translate}} </span>  </th> 
+        <th  pResizableColumn>     <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationCity' | translate}} </span>   </th>
+        <th  pResizableColumn>     <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationPostCode' | translate}} </span>  </th> 
+        <th  pResizableColumn>     <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationStreet' | translate}} </span>   </th>
+        <th  pResizableColumn>    <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationHouseNr' | translate}} </span>   </th>
+    
+    </tr>
 
 </ng-template>
 
@@ -27,12 +30,12 @@
         <td style="width: 6rem">
             <button pButton pRipple type="button" icon="pi pi-user" class="p-button-rounded p-button-warning" pTooltip="show" tooltipPosition="bottom" (click)="showUsers(organisation.organisationId)"></button>    
         </td>  
-        <td  pResizableColumn  class="ui-resizable-column">{{organisation.username}}</td>
+        <td  pResizableColumn  class="ui-resizable-column">{{organisation.name}}</td>
         <td  pResizableColumn  class="ui-resizable-column">{{organisation.email}}</td>
-        <td  pResizableColumn  class="ui-resizable-column">{{organisation.firstname}}</td>
-        <td  pResizableColumn  class="ui-resizable-column">{{organisation.lastname}}</td>
-        <td  pResizableColumn  class="ui-resizable-column">{{organisation.title}}</td>
-        <td  pResizableColumn  class="ui-resizable-column">{{organisation.mobileNumber}}</td> 
+        <td  pResizableColumn  class="ui-resizable-column">{{organisation.country}}</td>
+        <td  pResizableColumn  class="ui-resizable-column">{{organisation.city}}</td>
+        <td  pResizableColumn  class="ui-resizable-column">{{organisation.postCode}}</td>
+        <td  pResizableColumn  class="ui-resizable-column">{{organisation.houseNr}}</td> 
 
 
     </tr>

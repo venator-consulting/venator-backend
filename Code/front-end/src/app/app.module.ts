@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule,  TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,7 +10,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavBarComponent } from './shared/nav-bar/nav-bar.component';
 import { FooterComponent } from './shared/footer/footer.component';
-import { BreadCrumbComponent } from './shared/bread-crumb/bread-crumb.component';
 import { MenubarModule } from 'primeng/menubar';
 import { ImportComponent } from './admin/import/import.component';
 import { StepsModule } from 'primeng/steps';
@@ -17,7 +18,7 @@ import { NotfoundComponent } from './shared/notfound/notfound.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { FileUploadModule } from 'primeng/fileupload';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -61,12 +62,15 @@ import { ProcedureEditComponent } from './admin/procedure-edit/procedure-edit.co
 import {SelectButtonModule} from 'primeng/selectbutton';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
+
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
     FooterComponent,
-    BreadCrumbComponent,
     ImportComponent,
     UnauthComponent,
     NotfoundComponent,
@@ -110,6 +114,13 @@ import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard
     ProgressBarModule,
     DropdownModule,
     HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     SidebarModule,
     ListboxModule,
     PanelMenuModule,

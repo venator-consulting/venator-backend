@@ -8,7 +8,6 @@ import { PrimeNGConfig } from 'primeng/api';
 })
 export class AppComponent implements OnInit {
 
-  username: string = localStorage.getItem('username'); 
 
   constructor(private primengConfig: PrimeNGConfig) { }
 
