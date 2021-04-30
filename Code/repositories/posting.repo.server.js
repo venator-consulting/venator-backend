@@ -13,6 +13,15 @@ module.exports.fetch = async (criteria) => {
         delete criteria.limit;
         const offset = criteria.offset? criteria.offset : 0;
         delete criteria.offset;
+        for (const key in criteria) {
+            if (Object.hasOwnProperty.call(criteria, key)) {
+                if(criteria[key].toString().length > 2) {
+                    criteria[key] = {
+                        [Op.like]: '%' + criteria[key] + '%'
+                    };
+                }
+            }
+        }
         return await Posting
             .getPosting('posting_' + OrganisationId)
             .findAndCountAll({
