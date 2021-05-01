@@ -4,7 +4,7 @@ module.exports = {
     documentType: 'BELEGART',
     documentDate: 'BELEGDATUM',
     recordNumber: 'BS',
-    creditAmount: 'BETRAGHW',
+    balance: 'BETRAGHW',
     transactionCurrency: 'HW',
     applicationDocument: 'AUSGLEICHSBELEG',
     textPosting: 'TEXT',

@@ -96,14 +96,13 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
 
             for await (const row of parser) {
 
-                // const accountNumber = decimalParser(row[template.accountNumber]);
-                // if (isNaN(accountNumber)) {
-                //     console.log(`${new Date()}: There is an ERROR on row ${index+1}, accountNumber/${template.accountNumber} should be number!`);
-                //     logger.error(`${new Date()}: There is an ERROR on row ${index+1}, accountNumber/${template.accountNumber} should be number!`);
-
-                //     reject(`There is an ERROR on row ${index+1}, accountNumber/${template.accountNumber} should be number!`);
-                //     return;
-                // }
+                const accountTypeId = decimalParser(row[template.accountTypeId]);
+                if (isNaN(accountTypeId)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
+                    return;
+                }
 
 
                 rowsToInsert.push({
@@ -111,7 +110,41 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
                     companyCode: row[template.companyCode],
                     accountName: row[template.accountName],
                     accountType: AccountTypeEnum[accountType],
-                    procedureId: procedureId
+                    procedureId: procedureId,
+                    accountTypeId: accountTypeId,
+                    accountTypeIdInternal: row[template.accountTypeIdInternal],
+                    nameAffix1: row[template.nameAffix1],
+                    nameAffix2: row[template.nameAffix2],
+                    VATId: row[template.VATId],
+                    taxNumber: row[template.taxNumber],
+                    street: row[template.street],
+                    postCode: row[template.postCode],
+                    city: row[template.city],
+                    country: row[template.country],
+                    contactPerson: row[template.contactPerson],
+                    phone: row[template.phone],
+                    email: row[template.email],
+                    bankName1: row[template.bankName1],
+                    accountNumber: row[template.accountNumber],
+                    bankSortCode1: row[template.bankSortCode1],
+                    bankAccountNo1: row[template.bankAccountNo1],
+                    countryCode1: row[template.countryCode1],
+                    iBAN_No1: row[template.iBAN_No1],
+                    swift_code1: row[template.swift_code1],
+                    differentAccountHolder1: row[template.differentAccountHolder1],
+                    bankSortCode2: row[template.bankSortCode2],
+                    bankName2: row[template.bankName2],
+                    bankAccountNo2: row[template.bankAccountNo2],
+                    countryCode2: row[template.countryCode2],
+                    iBAN_No2: row[template.iBAN_No2],
+                    swift_code2: row[template.swift_code2],
+                    differentAccountHolder2: row[template.differentAccountHolder2],
+                    bankName3: row[template.bankName3],
+                    bankAccountNo3: row[template.bankAccountNo3],
+                    countryCode3: row[template.countryCode3],
+                    iBAN_No3: row[template.iBAN_No3],
+                    swift_code3: row[template.swift_code3],
+                    differentAccountHolder3: row[template.differentAccountHolder3],
                 });
 
 

@@ -121,9 +121,6 @@ module.exports.getAccounts = function (tableName = 'accounts') {
         differentAccountHolder2: {
             type: DataTypes.STRING(25)
         },
-        bankSortCode2: {
-            type: DataTypes.STRING(25)
-        },
         bankName3: {
             type: DataTypes.STRING(25)
         },
