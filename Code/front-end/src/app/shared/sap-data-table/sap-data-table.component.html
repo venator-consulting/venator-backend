@@ -1,10 +1,9 @@
 <div class="card" style="overflow: scroll;">
   <p-toast></p-toast>
-<!-- [paginator]="true"   [rowsPerPageOptions]="[25,50,100]" [rows]="25"  [scrollable]="true"-->
+  <!-- [paginator]="true"   [rowsPerPageOptions]="[25,50,100]" [rows]="25"  [scrollable]="true"-->
   <p-table #dt [value]="postings" [columns]="cols" [lazy]="true" [loading]="loading" [showCurrentPageReport]="true"
-     styleClass="p-datatable-sm p-datatable-gridlines"  
-    [resizableColumns]="true" [reorderableColumns]="true"[style]="{width:'10000px'}"
-    scrollHeight="400px">
+    styleClass="p-datatable-sm p-datatable-gridlines" [resizableColumns]="true" [reorderableColumns]="true"
+    [style]="{width:'10000px'}" scrollHeight="400px">
     <ng-template pTemplate="caption">
       <div class="p-mb-4">
         <!-- Export as excel -->
@@ -13,25 +12,31 @@
         <!-- Limit options -->
         <p-dropdown [options]="pageLimitSizes" optionValue="value" optionLabel="value" [(ngModel)]="limit"
           (onChange)="limitChange($event)" class="p-mr-2"></p-dropdown>
-          <!-- Go to First page -->
+        <!-- Go to First page -->
         <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-double-left"
-          (click)="firstPage()" class="p-mr-2" pTooltip="{{'Data_Table.firstPage' | translate}}" tooltipPosition="bottom"></button>
-          <!-- Go previous -->
+          (click)="firstPage()" class="p-mr-2" pTooltip="{{'Data_Table.firstPage' | translate}}"
+          tooltipPosition="bottom"></button>
+        <!-- Go previous -->
         <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-left" (click)="previousPage()"
           class=" p-mr-2" pTooltip="{{'Data_Table.previous' | translate}}" tooltipPosition="bottom"></button>
-          <!-- Page number -->
+        <!-- Page number -->
         <input pInputText type="number" min="1" class="pageNrInput p-mr-2" [disabled]="true"
           (change)="pageNrChange($any($event.target).value)" [value]="pageNr" [placeholder]="pageNr" />
-          <!-- Go to next Page -->
+        <!-- Go to next Page -->
         <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-right"
-          (click)="nextPage()" class="p-mr-2" pTooltip="{{'Data_Table.next' | translate}}" tooltipPosition="bottom"></button>
-          <!-- Go to last page -->
-        <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple
-          icon="pi pi-angle-double-right" (click)="lastPage()" class="p-mr-2" pTooltip="{{'Data_Table.lastPage' | translate}}"
+          (click)="nextPage()" class="p-mr-2" pTooltip="{{'Data_Table.next' | translate}}"
           tooltipPosition="bottom"></button>
-          <!-- Clear filter -->
-        <button type="button" *ngIf="filterClearShow" pButton pRipple icon="pi pi-filter-slash"
-          (click)="clearFilter()" class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" tooltipPosition="bottom"></button>
+        <!-- Go to last page -->
+        <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-double-right"
+          (click)="lastPage()" class="p-mr-2" pTooltip="{{'Data_Table.lastPage' | translate}}"
+          tooltipPosition="bottom"></button>
+
+        <!-- dispalyed data of total count -->
+        shown {{displayedDataCount}} of {{totalCount}}
+        <!-- Clear filter -->
+        <button type="button" *ngIf="filterClearShow" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+          class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}"
+          tooltipPosition="bottom"></button>
 
       </div>
     </ng-template>
@@ -50,8 +55,8 @@
         <th pResizableColumn *ngFor="let col of cols ">
           <input pInputText type="text" (change)="filterChange($any($event.target).value, col.field)"
             class="filterInputCss" />
-          <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()" pTooltip="{{'Data_Table.filter' | translate}}"
-            tooltipPosition="bottom"></i>
+          <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()"
+            pTooltip="{{'Data_Table.filter' | translate}}" tooltipPosition="bottom"></i>
         </th>
       </tr>
     </ng-template>
@@ -59,7 +64,7 @@
       <tr [pReorderableRow]="index">
         <td pReorderableRowHandle pResizableColumn *ngFor="let col of cols" class="ui-resizable-column"
           aria-placeholder="">
-          {{ rowData[col.field] }}
+          {{ col.header == 'balance' ? (rowData[col.field] | currency:'EUR')  : rowData[col.field]}}
         </td>
       </tr>
     </ng-template>

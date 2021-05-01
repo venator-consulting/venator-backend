@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslateModule,  TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -18,40 +18,40 @@ import { NotfoundComponent } from './shared/notfound/notfound.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { FileUploadModule } from 'primeng/fileupload';
-import { HttpClientModule, HttpClient  } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { AccordionModule } from 'primeng/accordion';
-import {MessagesModule} from 'primeng/messages';
-import {MessageModule} from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 import { LoginComponent } from './shared/login/login.component';
 import { AdminRegistrationComponent } from './admin/admin-registration/admin-registration.component';
 import { ResetPasswordComponent } from './shared/reset-password/reset-password.component';
-import {PasswordModule} from 'primeng/password';
-import {MenuModule} from 'primeng/menu';
+import { PasswordModule } from 'primeng/password';
+import { MenuModule } from 'primeng/menu';
 import { LayoutComponent } from './shared/layout/layout.component'
-import {MegaMenuModule} from 'primeng/megamenu';
-import {ContextMenuModule} from 'primeng/contextmenu';
-import {PanelMenuModule} from 'primeng/panelmenu';
-import {SidebarModule} from 'primeng/sidebar';
-import {ListboxModule} from 'primeng/listbox';
-import {TreeModule} from 'primeng/tree';
-import {DividerModule} from 'primeng/divider';
-import {TableModule} from 'primeng/table';
-import {CalendarModule} from 'primeng/calendar';
-import {MultiSelectModule} from 'primeng/multiselect';
-import {ProgressBarModule} from 'primeng/progressbar';
-import {InputTextModule} from 'primeng/inputtext';
+import { MegaMenuModule } from 'primeng/megamenu';
+import { ContextMenuModule } from 'primeng/contextmenu';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { SidebarModule } from 'primeng/sidebar';
+import { ListboxModule } from 'primeng/listbox';
+import { TreeModule } from 'primeng/tree';
+import { DividerModule } from 'primeng/divider';
+import { TableModule } from 'primeng/table';
+import { CalendarModule } from 'primeng/calendar';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { InputTextModule } from 'primeng/inputtext';
 import { SAPDataTableComponent } from './shared/sap-data-table/sap-data-table.component';
-import {TooltipModule} from 'primeng/tooltip';
+import { TooltipModule } from 'primeng/tooltip';
 import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/reset-password-new-user.component';
 import { ProcedureRegistrationComponent } from './admin/procedure-registration/procedure-registration.component';
-import {CheckboxModule} from 'primeng/checkbox';
+import { CheckboxModule } from 'primeng/checkbox';
 import { AmountAnalysisComponent } from './shared/analysis/amount-analysis/amount-analysis.component';
-import {ChartModule} from 'primeng/chart';
+import { ChartModule } from 'primeng/chart';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { OrganisationRegistrationComponent } from './admin/organisation-registration/organisation-registration.component';
 import { UserRegistrationComponent } from './shared/user-registration/user-registration.component';
@@ -59,8 +59,11 @@ import { UserEditComponent } from './shared/user-edit/user-edit.component';
 import { UserDashboardComponent } from './shared/user-dashboard/user-dashboard.component';
 import { OrganisationUsersComponent } from './shared/organisation-users/organisation-users.component';
 import { ProcedureEditComponent } from './admin/procedure-edit/procedure-edit.component';
-import {SelectButtonModule} from 'primeng/selectbutton';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+registerLocaleData(localeDe, 'de');
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -137,7 +140,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     PasswordModule,
     MegaMenuModule
   ],
-  providers: [MessageService],
+  providers: [MessageService, {
+    provide: LOCALE_ID,
+    useValue: 'de'
+  }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

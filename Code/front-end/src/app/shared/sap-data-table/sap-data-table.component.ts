@@ -6,6 +6,7 @@ import { dataTableColumns } from "../model/dataTableColumns";
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-sap-data-table',
   templateUrl: './sap-data-table.component.html',
@@ -31,9 +32,10 @@ export class SAPDataTableComponent implements OnInit {
   limit: number = 2;
   pageNr: number = 1;
   maxPageNr: number = 0;
+  displayedDataCount = 0;
   criteria: any = {
     OrganisationId: this.OrganisationId,
-    procedureId: this.procedureId,
+    procedureId: this.ProcedureId,
 
     limit: this.limit,
     offset: 0
@@ -46,6 +48,7 @@ export class SAPDataTableComponent implements OnInit {
   }
 
 getData() {
+  debugger;
   this._dataFilterService
     .get(this.criteria)
     .subscribe(
@@ -53,6 +56,7 @@ getData() {
         this.data = data;
         this.postings = this.data.rows;
         this.totalCount = this.data.count;
+        this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
         this.maxPageNr = Math.ceil(this.totalCount / this.limit);
         this.loading = false
         console.log(this.organisationId);

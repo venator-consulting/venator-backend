@@ -55,7 +55,7 @@
           <br><br>
 
           <div class="p-grid" *ngIf="f.imported!==true">
-            <div class="p-col-2">
+            <div class="p-sm-6 p-lg-3">
               <!-- maxFileSize="100000000" -->
               <p-fileUpload name="excel" mode="basic" [showUploadButton]="false" customUpload="true"
                 (uploadHandler)="UploadHandler($event, f, i)" uploadLabel="Set File" chooseLabel="{{'Admin_Import.searchLabel' | translate}}" [auto]="true"
@@ -66,23 +66,23 @@
               </p-fileUpload>
               <span *ngIf="f.file">{{f?.file?.name}} - {{ (f?.file?.size / 1024) | number: '1.0-2' }} KB</span>
             </div>
-            <div class="p-col-2">
+            <div class="p-sm-6 p-lg-2">
               <p-dropdown [options]="fileTypes" [(ngModel)]="f.fileType" placeholder="{{'Admin_Import.selectFileFormat' | translate}}"
                 optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
             </div>
-            <div class="p-col-2">
+            <div class="p-sm-6 p-lg-2">
               <p-dropdown [options]="fileClass" [(ngModel)]="f.fileClass" placeholder="{{'Admin_Import.selectFileType' | translate}}"
                 optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
             </div>
-            <div class="p-col-2" *ngIf="f.fileClass?.value==1">
+            <div class="p-sm-6 p-lg-2" *ngIf="f.fileClass?.value==1">
               <p-dropdown [options]="accountTypes" [(ngModel)]="f.accountType" placeholder="{{'Admin_Import.selectAccountType' | translate}}"
                 optionLabel="name" [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
             </div>
-            <div class="p-col-2" *ngIf="f.fileClass?.value==2 && f.fileType?.value==2">
+            <div class="p-sm-6 p-lg-2" *ngIf="f.fileClass?.value==2 && f.fileType?.value==2">
               <p-dropdown [options]="locals" [(ngModel)]="f.local" placeholder="{{'Admin_Import.selectLocalization' | translate}}" optionLabel="name"
                 [showClear]="true" [filter]="true" filterBy="name"></p-dropdown>
             </div>
-            <div class="p-col-2">
+            <div class="p-sm-6 p-lg-3">
               <span class="p-buttonset">
                 <button pButton type="button" icon="pi pi-upload" iconPos="left" label="{{'Admin_Import.uploadLabel' | translate}}"
                   (click)="uploadFirstStep(f, i)" [disabled]="!f.file || !f.fileType || !f.fileClass || f.uploaded"
