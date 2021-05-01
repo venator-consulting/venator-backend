@@ -9,17 +9,17 @@ export class Users {
     firstname: string ='';
     lastname: string ='';
     username: string ='';
-    mobileNr: number = null;
+    mobileNr: string ='';
     contactPerson: string ='';
     street: string ='';
     houseNr: number = null;
     city: string ='';
-    postcode: number = null;
+    postcode: string ='';
     country: string ='';
 
     constructor(title: string, organisationId: number, email: string, role: string,firstname: string,lastname: string,
-                username: string,mobileNr: number,street: string,houseNr: number,city: string,
-                postcode: number, country: string ) {
+                username: string,mobileNr: string,street: string,houseNr: number,city: string,
+                postcode: string, country: string ) {
                     
         this.title = title;
         this.organisationId = organisationId;

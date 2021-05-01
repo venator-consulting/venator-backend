@@ -37,18 +37,18 @@ export class LoginComponent implements OnInit {
     this._authService
       .login(data)
       .subscribe(res => {
-        
+
         if (res && res.user.userinfo) {
           const userInfo = res.user.userinfo;
           const fullName = userInfo.firstname + ' ' + userInfo.lastname;
           const role = userInfo.Role;
           const username = userInfo.username;
-          const organisationId = userInfo.organisationId
+          const OrganisationId = userInfo.OrganisationId
         
           localStorage.setItem('username', username);
           localStorage.setItem('role', role);
           localStorage.setItem('full_name', fullName);
-          localStorage.setItem('organisationId', organisationId);
+          localStorage.setItem('organisationId', OrganisationId);
           localStorage.setItem('token', res.token);
         }
 
@@ -59,11 +59,32 @@ export class LoginComponent implements OnInit {
         }
 
       }, err => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR!',
-          detail: err.error.message
-        });
+        this._translateService.get("ErrorHandler").subscribe(elem => {
+          let errorMsg = "" ; 
+
+          if(err.status=== 400){
+            errorMsg = elem.badRequest_400
+          }
+          else if (err.status=== 401) {
+            errorMsg = elem.unauthorized_401
+          }
+          else if (err.status=== 403) {
+            errorMsg = elem.forbidden_403
+          }
+          else if (err.status=== 404) {
+            errorMsg = elem.NotFound_404
+          }
+          else if (err.status=== 500) {
+            errorMsg = elem.internalServerError_500
+          }
+          this._messageService.add({
+            severity: 'error',
+            summary: 'ERROR',
+            life: 10000,
+            detail: errorMsg
+          });
+        })
+
       });
 
   }

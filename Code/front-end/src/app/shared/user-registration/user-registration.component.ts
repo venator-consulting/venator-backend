@@ -4,6 +4,7 @@ import { Titles } from "../model/titles";
 import { Users } from "../model/users";
 import { UserService } from "../service/user.service";
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-registration',
@@ -31,7 +32,7 @@ export class UserRegistrationComponent implements OnInit {
     country: '',
   };
 
-  constructor(private _router: Router, private _messageService: MessageService, private _userService: UserService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _userService: UserService, public _translateService: TranslateService) { }
 
   ngOnInit(): void {
   }
@@ -45,12 +46,31 @@ export class UserRegistrationComponent implements OnInit {
           detail: 'Registered successfully'
         });
       }, err => {
-        console.log('error: ' + err.error);
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR!',
-          detail: err.error
-        });
+        this._translateService.get("ErrorHandler").subscribe(elem => {
+          let errorMsg = "" ; 
+
+          if(err.status=== 400){
+            errorMsg = elem.badRequest_400
+          }
+          else if (err.status=== 401) {
+            errorMsg = elem.unauthorized_401
+          }
+          else if (err.status=== 403) {
+            errorMsg = elem.forbidden_403
+          }
+          else if (err.status=== 404) {
+            errorMsg = elem.NotFound_404
+          }
+          else if (err.status=== 500) {
+            errorMsg = elem.internalServerError_500
+          }
+          this._messageService.add({
+            severity: 'error',
+            summary: 'ERROR',
+            life: 10000,
+            detail: errorMsg
+          });
+        })
       });
   }
   cancelHandle(){

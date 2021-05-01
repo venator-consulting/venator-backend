@@ -1,4 +1,13 @@
 {
+    "ErrorHandler": {
+        "badRequest_400": "the server is unable to process the sent request",
+        "unauthorized_401": "Authentication is required, please check the username and password",
+        "forbidden_403": "the access to the requested resource is forbidden",
+        "notFound_404": "Server cannot find the requested resource !",
+        "internalServerError_500": "something went wrong on the server , we will fix the problem very soon",
+        "passwordsMatch": "The password don't match"
+
+    },
     "LOGIN": {
         "welcomeMsg": "Please use the form to sign-in Ventator-Portal",
         "welcomeWord": "Welcom",
@@ -23,6 +32,7 @@
         "addProcedure": "Add procedure",
         "editProcedure": "Edit procedure",
         "resetPassword": "Reset password",
+        "setting": "Setting",
         "logout": "Logout",
         "procedures": "Procedures",
         "users": "Users"
@@ -50,7 +60,7 @@
         "selectOrganisationPlaceholder":"select organisation",
         "selectProcedure": "Select a Procedure",
         "selectProcedurePlaceholder": "select procedure",
-        "selectTemplate": "Select a Template ",
+        "selectTemplate": "Select a Template",
         "selectTemplatePlaceholder": "select template",
         "selectFileFormat": "Select a Fileformat ",
         "selectFileType": "Select a Filetype ",
@@ -58,7 +68,7 @@
         "selectLocalization": "Select Localization",
         "uploadLabel": "Upload",
         "searchLabel": "Search",
-        "previousLabel": "previous",
+        "previousLabel": "back",
         "nextLabel": "next",
         "continueLabel": "continue",
         "anotherFile": "Another File",
@@ -238,7 +248,7 @@
         "header": "Venator-Portal reset Password",
         "password": "new password",
         "passwordErrorMsg": "new password is required",
-        "passwordConfirm": " password confirmation",
+        "passwordConfirm": "password confirmation",
         "passwordConfirmErrorMsg": "password confirmation is required",
         "cancelButton": "Cancel",
         "confirmButton": "Confirm"
@@ -247,8 +257,8 @@
     "Data_Table": {
         "firstPage": "first page",
         "lastPage":  "last page",
-        "previous": "previous",
-        "next": "next",
+        "previous": "previous page",
+        "next": "next page",
         "clearFilter": "clear filter",
         "filter": "filter"
 

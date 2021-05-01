@@ -16,6 +16,9 @@ export class SAPDataTableComponent implements OnInit {
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
     private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService, private _router: Router) { }
 
+
+  organisationId = localStorage.getItem('organisationId')
+  procedureId = localStorage.getItem('currentProcedureId')
   filterClearShow: boolean = false;
   loading: boolean = false;
   selectLastPage: boolean = false;
@@ -30,6 +33,8 @@ export class SAPDataTableComponent implements OnInit {
   maxPageNr: number = 0;
   criteria: any = {
     OrganisationId: this.OrganisationId,
+    procedureId: this.procedureId,
+
     limit: this.limit,
     offset: 0
   };
@@ -40,6 +45,25 @@ export class SAPDataTableComponent implements OnInit {
     this.getData()
   }
 
+<<<<<<< HEAD
+getData() {
+  this._dataFilterService
+    .get(this.criteria)
+    .subscribe(
+      data => {
+        this.data = data;
+        this.postings = this.data.rows;
+        this.totalCount = this.data.count;
+        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
+        this.loading = false
+        console.log(this.organisationId);
+        console.log(this.procedureId);
+
+      },
+      error => console.log(error),
+    );
+}
+=======
   getData() {
     this._dataFilterService
       .get(this.criteria)
@@ -55,6 +79,7 @@ export class SAPDataTableComponent implements OnInit {
         error => console.log(error),
       );
   }
+>>>>>>> 76a6025ea47c7809819029bc031e2beb05c1077b
 
   filterChange(value, field) {
     if (value) {

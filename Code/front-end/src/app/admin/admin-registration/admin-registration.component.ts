@@ -6,6 +6,7 @@ import { Users } from "../../shared/model/users";
 import { AdminRegistrationService } from "../service/admin-registration.service";
 import { Router } from '@angular/router';
 import { OrganisationService } from '../service/organisation.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-registration',
@@ -14,7 +15,7 @@ import { OrganisationService } from '../service/organisation.service';
 })
 export class AdminRegistrationComponent implements OnInit {
 
-  constructor(private _router: Router, private _messageService: MessageService,
+  constructor(private _router: Router, private _messageService: MessageService, public _translateService: TranslateService,
       private _adminRegistrationService: AdminRegistrationService, private _orgService : OrganisationService) { }
 
 
@@ -63,12 +64,31 @@ export class AdminRegistrationComponent implements OnInit {
           detail: 'Registered successfully'
         });
       }, err => {
-        console.log('error: ' + err.error);
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR!',
-          detail: err.error
-        });
+        this._translateService.get("ErrorHandler").subscribe(elem => {
+          let errorMsg = "" ; 
+
+          if(err.status=== 400){
+            errorMsg = elem.badRequest_400
+          }
+          else if (err.status=== 401) {
+            errorMsg = elem.unauthorized_401
+          }
+          else if (err.status=== 403) {
+            errorMsg = elem.forbidden_403
+          }
+          else if (err.status=== 404) {
+            errorMsg = elem.NotFound_404
+          }
+          else if (err.status=== 500) {
+            errorMsg = elem.internalServerError_500
+          }
+          this._messageService.add({
+            severity: 'error',
+            summary: 'ERROR',
+            life: 10000,
+            detail: errorMsg
+          });
+        })
       });
   }
   cancelHandle(){

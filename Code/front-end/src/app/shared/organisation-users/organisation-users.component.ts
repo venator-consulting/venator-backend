@@ -17,21 +17,36 @@ export class OrganisationUsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log()
     this._userService
     .getUsers(this.organisationId)
     .subscribe(
       (data) => { 
         this.users = data.results ;
-        console.log(this.users)
+        console.log(data)
         },
       (error) => console.log(error),
       () => { }
     );
   }
-  edituser(id) {
+  edituser(user) {
+    localStorage.setItem('selectedUser_userId', user.id);
+    localStorage.setItem('selectedUser_roleId', user.RoleId);
+    localStorage.setItem('selectedUser_username', user.username);
+    localStorage.setItem('selectedUser_email', user.email);
+    localStorage.setItem('selectedUser_title', user.title);
+    localStorage.setItem('selectedUser_firstname', user.firstname);
+    localStorage.setItem('selectedUser_lastname', user.lastname);
+    localStorage.setItem('selectedUser_mobileNr', user.mobileNumber);
+    localStorage.setItem('selectedUser_street', user.street);
+    localStorage.setItem('selectedUser_houseNr', user.housenumber);
+    localStorage.setItem('selectedUser_postcode', user.postCode);
+    localStorage.setItem('selectedUser_city', user.city);
+    localStorage.setItem('selectedUser_country', user.country);
 
-    localStorage.setItem('procedureId', id);
     this._router.navigate(['/shared/user/edit']); 
+  }
+  addUser(){
+    this._router.navigate(['/shared/user/add']); 
+
   }
 }
