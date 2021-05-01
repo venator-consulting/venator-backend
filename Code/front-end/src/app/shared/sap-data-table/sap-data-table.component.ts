@@ -45,7 +45,6 @@ export class SAPDataTableComponent implements OnInit {
     this.getData()
   }
 
-<<<<<<< HEAD
 getData() {
   this._dataFilterService
     .get(this.criteria)
@@ -63,23 +62,6 @@ getData() {
       error => console.log(error),
     );
 }
-=======
-  getData() {
-    this._dataFilterService
-      .get(this.criteria)
-      .subscribe(
-        data => {
-          this.data = data;
-          this.postings = this.data.rows;
-          this.totalCount = this.data.count;
-          this.maxPageNr = Math.ceil(this.totalCount / this.limit);
-          this.loading = false
-          console.log(this.data.count);
-        },
-        error => console.log(error),
-      );
-  }
->>>>>>> 76a6025ea47c7809819029bc031e2beb05c1077b
 
   filterChange(value, field) {
     if (value) {
