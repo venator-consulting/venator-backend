@@ -62,7 +62,7 @@ const sequelizer = sequelize.getSequelize();
 
 
 module.exports.getPosting = function (tableName = 'Posting_3') {
-    return sequelizer.define('Posting_3', {
+    return sequelizer.define('Posting', {
         id: {
             type: DataTypes.BIGINT(11),
             allowNull: false,

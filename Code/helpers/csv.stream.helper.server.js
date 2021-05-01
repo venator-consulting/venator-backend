@@ -425,10 +425,122 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     return;
                 }
 
+                const documentTypeNumber = decimalParser(row[Standardtemplate.documentTypeNumber]);
+                if (isNaN(documentTypeNumber)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, documentTypeNumber/${Standardtemplate.documentTypeNumber} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, documentTypeNumber/${Standardtemplate.documentTypeNumber} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, documentTypeNumber/${Standardtemplate.documentTypeNumber} should be number!`);
+
+                    return;
+                }
+
+                const balance = decimalParser(row[Standardtemplate.balance]);
+                if (isNaN(balance)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, balance/${Standardtemplate.balance} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, balance/${Standardtemplate.balance} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, balance/${Standardtemplate.balance} should be number!`);
+
+                    return;
+                }
+
+                const debitAmount = decimalParser(row[Standardtemplate.debitAmount]);
+                if (isNaN(debitAmount)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
+
+                    return;
+                }
+
+                const balanceTransactionCurrency = decimalParser(row[Standardtemplate.balanceTransactionCurrency]);
+                if (isNaN(balanceTransactionCurrency)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
+
+                    return;
+                }
+
+                const debitAmountTransactionCurrency = decimalParser(row[Standardtemplate.debitAmountTransactionCurrency]);
+                if (isNaN(debitAmountTransactionCurrency)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
+
+                    return;
+                }
+
+                const creditAmountTransactionCurrency = decimalParser(row[Standardtemplate.creditAmountTransactionCurrency]);
+                if (isNaN(creditAmountTransactionCurrency)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
+
+                    return;
+                }
+
+                const exchangeRate = decimalParser(row[Standardtemplate.exchangeRate]);
+                if (isNaN(exchangeRate)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
+
+                    return;
+                }
+
+                const cashDiscount = decimalParser(row[Standardtemplate.cashDiscount]);
+                if (isNaN(cashDiscount)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
+
+                    return;
+                }
+
+                const taxAmount = decimalParser(row[Standardtemplate.taxAmount]);
+                if (isNaN(taxAmount)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
+
+                    return;
+                }
+
+                const taxAmountDebit = decimalParser(row[Standardtemplate.taxAmountDebit]);
+                if (isNaN(taxAmountDebit)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
+
+                    return;
+                }
+
+                const taxAmountCredit = decimalParser(row[Standardtemplate.taxAmountCredit]);
+                if (isNaN(taxAmountCredit)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
+
+                    return;
+                }
+
+                const identifierBalanceCarryforward = decimalParser(row[Standardtemplate.identifierBalanceCarryforward]);
+                if (isNaN(identifierBalanceCarryforward)) {
+                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
+                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
+                    reject(`There is an ERROR on row ${index+1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
+
+                    return;
+                }
+
                 rowsToInsert.push({
                     assignment: row[Standardtemplate.assignment],
                     documentNumber: row[Standardtemplate.documentNumber],
+                    documentNumber2: row[Standardtemplate.documentNumber2],
+                    documentTypeNumber: documentTypeNumber,
                     documentType: row[Standardtemplate.documentType],
+                    documentTypeName: row[Standardtemplate.documentTypeName],
+                    documentTypeNew: row[Standardtemplate.documentTypeNew],
                     documentDate: chrono.parseDate(row[Standardtemplate.documentDate]),
                     recordNumber: recordNumber,
                     creditAmount: creditAmount,
@@ -440,6 +552,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     companyCode: companyCode,
                     fiscalYear: row[Standardtemplate.fiscalYear],
                     postingPeriod: postingPeriod,
+                    executionDate: chrono.parseDate(row[Standardtemplate.executionDate]),
                     accountType: accountType,
                     accountNumber: accountNumber,
                     debitCredit: row[Standardtemplate.debitCredit],
@@ -459,9 +572,50 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     contraAccountDebtorNo: contraAccountDebtorNo,
                     contraAccountDebtorName: contraAccountDebtorName,
                     dueDate: chrono.parseDate(row[Standardtemplate.dueDate]),
+                    dueDateNew: chrono.parseDate(row[Standardtemplate.dueDateNew]),
                     textHeader: row[Standardtemplate.textHeader],
                     accountName: accountName,
-                    procedureId: procedureId
+                    procedureId: procedureId,
+                    client: row[Standardtemplate.client],
+                    contraAccountName: row[Standardtemplate.contraAccountName],
+                    balance: balance,
+                    debitAmount: debitAmount,
+                    balanceTransactionCurrency: balanceTransactionCurrency,
+                    debitAmountTransactionCurrency: debitAmountTransactionCurrency,
+                    creditAmountTransactionCurrency: creditAmountTransactionCurrency,
+                    exchangeRate: exchangeRate,
+                    cashDiscount: cashDiscount,
+                    postingKey: row[Standardtemplate.postingKey],
+                    salesTaxKey: row[Standardtemplate.salesTaxKey],
+                    taxRate: row[Standardtemplate.taxRate],
+                    euTaxRate: row[Standardtemplate.euTaxRate],
+                    taxAmount: taxAmount,
+                    taxAmountDebit: taxAmountDebit,
+                    taxAmountCredit: taxAmountCredit,
+                    stackNumber: row[Standardtemplate.stackNumber],
+                    CostCenter1: row[Standardtemplate.CostCenter1],
+                    CostCenter2: row[Standardtemplate.CostCenter2],
+                    applicationDateNew: chrono.parseDate(row[Standardtemplate.applicationDateNew]),
+                    identifierBalanceCarryforward: identifierBalanceCarryforward,
+                    generalReversal: row[Standardtemplate.generalReversal],
+                    ledgerId: row[Standardtemplate.ledgerId],
+                    documentLink: row[Standardtemplate.documentLink],
+                    typeDocumentInformation1: row[Standardtemplate.typeDocumentInformation1],
+                    contentDocumentInformation1: row[Standardtemplate.contentDocumentInformation1],
+                    typeDocumentInformation2: row[Standardtemplate.typeDocumentInformation2],
+                    contentDocumentInformation2: row[Standardtemplate.contentDocumentInformation2],
+                    typeDocumentInformation3: row[Standardtemplate.typeDocumentInformation3],
+                    contentDocumentInformation3: row[Standardtemplate.contentDocumentInformation3],
+                    typeDocumentInformation4: row[Standardtemplate.typeDocumentInformation4],
+                    contentDocumentInformation4: row[Standardtemplate.contentDocumentInformation4],
+                    typeDocumentInformation5: row[Standardtemplate.typeDocumentInformation5],
+                    contentDocumentInformation5: row[Standardtemplate.contentDocumentInformation5],
+                    typeDocumentInformation6: row[Standardtemplate.typeDocumentInformation6],
+                    contentDocumentInformation6: row[Standardtemplate.contentDocumentInformation6],
+                    typeDocumentInformation7: row[Standardtemplate.typeDocumentInformation7],
+                    contentDocumentInformation7: row[Standardtemplate.contentDocumentInformation7],
+                    typeDocumentInformation8: row[Standardtemplate.typeDocumentInformation8],
+                    contentDocumentInformation8: row[contentDocumentInformation8.contentDocumentInformation8]
                 });
 
 
