@@ -3,6 +3,10 @@ const csvHelper = require('../../../helpers/csv.helper.server');
 const csvStreamHelper = require('../../../helpers/csv.stream.helper.server');
 const wMobelTemplate = require('../../../models/templates/sap.wmobel.template');
 const defaultAccountTemplate = require('../../../models/templates/accounts.default.template');
+const {
+    fiscalYear
+} = require('../../../models/templates/sap.wmobel.template');
+const fs = require('fs');
 
 
 module.exports.getHeaderExcel = function (req, res, next) {
@@ -271,136 +275,148 @@ module.exports.headerFile = function (req, res, next) {
 
 
 module.exports.importFile = function (req, res, next) {
-    if (!!req.body.data) {
-        // return data form error
-    }
-    // const reqData = JSON.parse(req.body.data);
-    const reqData = req.body.data;
-    const filePath = reqData.filePath;
-    const fileType = reqData.fileType;
-    const fileClass = reqData.fileClass;
-    const local = reqData.local == 1 ? 'en_US' : 'de_DE';
-    const accountType = reqData.accountType;
-    const template = reqData.template;
-    const OrganisationId = reqData.OrganisationId;
-    const procedureId = reqData.procedureId;
-    // if file type === 1 then is it an excel file
-    if (fileType == 1) {
-        // excel posting file
-        if (fileClass == 2) {
-            excelHelper
-                .importStreamExcelFile(filePath, OrganisationId, procedureId,  template, -1)
-                .then(header => {
-                    res
-                        .status(200)
-                        .json({
-                            message: 'imported successfully'
-                        });
+    try {
+        if (!!req.body.data) {
+            // return data form error
+        }
+        // const reqData = JSON.parse(req.body.data);
+        const reqData = req.body.data;
+        const filePath = reqData.filePath;
+        const fileType = reqData.fileType;
+        const fileClass = reqData.fileClass;
+        const local = reqData.local == 1 ? 'en_US' : 'de_DE';
+        const accountType = reqData.accountType;
+        const template = reqData.template;
+        const OrganisationId = reqData.OrganisationId;
+        const procedureId = reqData.procedureId;
+        // if file type === 1 then is it an excel file
+        if (fileType == 1) {
+            // excel posting file
+            if (fileClass == 2) {
+                excelHelper
+                    .importStreamExcelFile(filePath, OrganisationId, procedureId, template, -1)
+                    .then(header => {
+                        fs.unlinkSync(filePath);
+                        res
+                            .status(200)
+                            .json({
+                                message: 'imported successfully'
+                            });
 
-                })
-                .catch(er => {
-                    res
-                        .status(500)
-                        .json({
-                            error: er
-                        });
-                });
-            // excel accounts file
-        } else if (fileClass == 1) {
-            // it's an accounts file
-            excelHelper
-                .importStreamAccountsExcel(filePath, OrganisationId, procedureId,  accountType)
-                .then(header => {
-                    res
-                        .status(200)
-                        .json({
-                            message: 'imported successfully'
-                        });
+                    })
+                    .catch(er => {
+                        res
+                            .status(500)
+                            .json({
+                                error: er
+                            });
+                    });
+                // excel accounts file
+            } else if (fileClass == 1) {
+                // it's an accounts file
+                excelHelper
+                    .importStreamAccountsExcel(filePath, OrganisationId, procedureId, accountType)
+                    .then(header => {
+                        fs.unlinkSync(filePath);
+                        res
+                            .status(200)
+                            .json({
+                                message: 'imported successfully'
+                            });
 
-                })
-                .catch(er => {
-                    res
-                        .status(500)
-                        .json({
-                            error: er
-                        });
-                });
-            // excel head file
-        } else if (fileClass == 3) {
-            // it's a head file
-            res
-                .status(200)
-                .json({
-                    message: 'not implemented yet',
-                });
+                    })
+                    .catch(er => {
+                        res
+                            .status(500)
+                            .json({
+                                error: er
+                            });
+                    });
+                // excel head file
+            } else if (fileClass == 3) {
+                // it's a head file
+                res
+                    .status(200)
+                    .json({
+                        message: 'not implemented yet',
+                    });
+            } else {
+                // return error file class
+                res
+                    .status(400)
+                    .json({
+                        error: 'Please choose a file Class',
+                    });
+            }
+
+        } else if (fileType == 2) {
+            // accounts file
+            if (fileClass == 1) {
+                csvStreamHelper
+                    .importAccountCsvFile(filePath, OrganisationId, procedureId, accountType, template)
+                    .then(header => {
+                        fs.unlinkSync(filePath);
+                        res
+                            .status(200)
+                            .json({
+                                message: 'imported successfully'
+                            });
+                    })
+                    .catch(er => {
+                        res
+                            .status(500)
+                            .json({
+                                error: er
+                            });
+                    });
+            } else if (fileClass == 2) {
+                // it's a posting file
+                csvStreamHelper
+                    .readCsvStream(filePath, OrganisationId, procedureId, template, -1, local)
+                    .then(header => {
+                        fs.unlinkSync(filePath);
+                        res
+                            .status(200)
+                            .json({
+                                message: 'imported successfully'
+                            });
+
+                    })
+                    .catch(er => {
+                        res
+                            .status(500)
+                            .json({
+                                error: er
+                            });
+                    });
+            } else if (fileClass == 3) {
+                // it's a head file
+                res
+                    .status(200)
+                    .json({
+                        message: 'not implemented yet',
+                    });
+            } else {
+                // return error file class
+                res
+                    .status(400)
+                    .json({
+                        error: 'Please choose a file Class',
+                    });
+            }
         } else {
-            // return error file class
+            // return error file type
             res
                 .status(400)
                 .json({
-                    error: 'Please choose a file Class',
+                    error: 'Please choose a file type: CSV OR Excel',
                 });
         }
-
-    } else if (fileType == 2) {
-        // accounts file
-        if (fileClass == 1) {
-            csvStreamHelper
-                .importAccountCsvFile(filePath, OrganisationId, procedureId, accountType, template)
-                .then(header => {
-                    res
-                        .status(200)
-                        .json({
-                            message: 'imported successfully'
-                        });
-                })
-                .catch(er => {
-                    res
-                        .status(500)
-                        .json({
-                            error: er
-                        });
-                });
-        } else if (fileClass == 2) {
-            // it's a posting file
-            csvStreamHelper
-                .readCsvStream(filePath, OrganisationId, procedureId, template, -1, local)
-                .then(header => {
-                    res
-                        .status(200)
-                        .json({
-                            message: 'imported successfully'
-                        });
-
-                })
-                .catch(er => {
-                    res
-                        .status(500)
-                        .json({
-                            error: er
-                        });
-                });
-        } else if (fileClass == 3) {
-            // it's a head file
-            res
-                .status(200)
-                .json({
-                    message: 'not implemented yet',
-                });
-        } else {
-            // return error file class
-            res
-                .status(400)
-                .json({
-                    error: 'Please choose a file Class',
-                });
-        }
-    } else {
-        // return error file type
+    } catch (e) {
         res
-            .status(400)
-            .json({
-                error: 'Please choose a file type: CSV OR Excel',
-            });
+        .status(500)
+        .json({
+            error: e.message,
+        });
     }
 }

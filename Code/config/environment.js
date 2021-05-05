@@ -1,12 +1,12 @@
 module.exports = {
-    domain: 'http://localhost:8000/',
+    domain: 'http://venalytics.de:8000/',
     port: 8000,
     jwtSecret: 'IT\'s just a secret For JWT token so use some special @#$%!1',
     uploadPath: './modules/Admin/files/',
     publicImgsPath: './public/imgs/',
-    databaseName: 'accountant',
-    databaseUsername: 'owl',
-    databasePassword: 'Asama56ab',
+    databaseName: 'venator',
+    databaseUsername: 'venator',
+    databasePassword: '$Venator1',
     databaseHost: 'localhost',
     databaseDialect: 'mysql', /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
     bulkInsertSize: 2000,
@@ -17,6 +17,6 @@ module.exports = {
     mailerPort: 587,
     mailerUser: 'elza.tillman13@ethereal.email',
     mailerPassword: 'JdRqgGeAb5HeDqp3Ny',
-    resetPassLink: 'http://localhost:8000/reset/', 
+    resetPassLink: 'http://venalytics.de:8000/reset/', 
     
 };
