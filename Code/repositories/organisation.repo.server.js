@@ -78,8 +78,8 @@ module.exports.insert = async (org) => {
             .getOrganisation()
             .create(org);
 
-        await Posting.syncPosting('posting_' + result.dataValues.id);
-        await Accounts.syncAccounts('accounts_' + result.dataValues.id);
+        Posting.syncPosting('posting_' + result.dataValues.id);
+        Accounts.syncAccounts('accounts_' + result.dataValues.id);
 
         return result;
     } catch (err) {
