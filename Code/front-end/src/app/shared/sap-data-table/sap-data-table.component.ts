@@ -23,8 +23,6 @@ export class SAPDataTableComponent implements OnInit {
   filterClearShow: boolean = false;
   loading: boolean = false;
   selectLastPage: boolean = false;
-  OrganisationId: number = 9;
-  ProcedureId: number = 1;
   data: any;
   postings: [] = [];
   cols: dataTableColumns[] = dataTableColumns.getDataTableColumns();
@@ -35,8 +33,7 @@ export class SAPDataTableComponent implements OnInit {
   displayedDataCount = 0;
   criteria: any = {
     OrganisationId: this.organisationId,
-    procedureId: this.ProcedureId,
-
+    procedureId: this.procedureId,
     limit: this.limit,
     offset: 0
   };
@@ -86,7 +83,7 @@ getData() {
 
   clearFilter() {
     this.criteria = {
-      OrganisationId: this.OrganisationId,
+      OrganisationId: this.organisationId,
       limit: this.limit,
       offset: 0
     };
@@ -99,7 +96,7 @@ getData() {
 
   nextPage() {
     ++this.pageNr;
-    if (this.pageNr >= this.maxPageNr) return;
+    if (this.pageNr > this.maxPageNr) return;
     this.loading = true;
     this.criteria.offset += +this.limit;
 
@@ -116,6 +113,7 @@ getData() {
 
   previousPage() {
     --this.pageNr;
+    debugger
     if (this.pageNr <= 0) return;
     this.loading = true;
     this.criteria.offset -= +this.limit;
@@ -149,7 +147,7 @@ getData() {
 
   exportXLSX() {
     this._exportDataService
-      .exportXLSX('posting', this.OrganisationId, this.ProcedureId)
+      .exportXLSX('posting', this.organisationId, this.procedureId)
       .subscribe(
         url => {
           console.log(url);

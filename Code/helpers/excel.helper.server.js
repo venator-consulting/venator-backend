@@ -133,7 +133,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
             let documentTypeNewIndex = -1;
             let dueDateNewIndex = -1;
             let executionDateIndex = -1;
-            let ContraAccountNameIndex = -1;
+            let contraAccountNameIndex = -1;
             let balanceIndex = -1;
             let debitAmountIndex = -1;
             let balanceTransactionCurrencyIndex = -1;
@@ -230,7 +230,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                         documentTypeNewIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'documentTypeNewIndex');
                         dueDateNewIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'dueDateNewIndex');
                         executionDateIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'executionDateIndex');
-                        ContraAccountNameIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'ContraAccountNameIndex');
+                        contraAccountNameIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'contraAccountNameIndex');
                         balanceIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'balanceIndex');
                         debitAmountIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'debitAmountIndex');
                         balanceTransactionCurrencyIndex = getHeaderIndex(Standardtemplate, fileHeaders, 'balanceTransactionCurrencyIndex');
@@ -282,7 +282,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                         const accountType = accountTypeIndex >= 0 ? row.model.cells[accountTypeIndex].value : null;
                         const accountNumber = accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null;
                         let accountName = accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null;
-                        if (accountNumber) {
+                        if (accountNumber && accountType) {
                             let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                                 where: {
                                     accountNumber: accountNumber,
@@ -296,6 +296,24 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                             accountName = temp.length > 0 ? temp[0].accountName : null;
                         }
 
+
+                        // contraAccount
+                        const contraAccountType = contraAccountTypeIndex >= 0 ? row.model.cells[contraAccountTypeIndex].value : null;
+                        const contraAccountNumber = contraAccountNumberIndex >= 0 ? row.model.cells[contraAccountNumberIndex].value : null;
+                        let contraAccountName = contraAccountNameIndex >= 0 ? row.model.cells[contraAccountNameIndex].value : null;
+                        if (contraAccountNumber && contraAccountType) {
+                            let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
+                                where: {
+                                    accountNumber: contraAccountNumber,
+                                    companyCode: companyCode,
+                                    procedureId: procedureId,
+                                    accountType: contraAccountType
+                                },
+                                attributes: ['accountName'],
+                                limit: 1
+                            });
+                            contraAccountName = temp.length > 0 ? temp[0].accountName : null;
+                        }
 
                         // GlaAccount
                         const GLAccountNumber = GLAccountNumberIndex >= 0 ? row.model.cells[GLAccountNumberIndex].value : null;
@@ -438,8 +456,8 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                             postingPeriod: postingPeriodIndex >= 0 ? row.model.cells[postingPeriodIndex].value : null,
                             debitCredit: debitCredit,
                             reference: referenceIndex >= 0 ? row.model.cells[referenceIndex].value : null,
-                            contraAccountType: contraAccountTypeIndex >= 0 ? row.model.cells[contraAccountTypeIndex].value : null,
-                            contraAccountNumber: contraAccountNumberIndex >= 0 ? row.model.cells[contraAccountNumberIndex].value : null,
+                            contraAccountType: contraAccountType,
+                            contraAccountNumber: contraAccountNumber,
                             dueDate: dueDateIndex >= 0 ? chrono.parseDate(row.model.cells[dueDateIndex].value) : null,
                             textHeader: textHeaderIndex >= 0 ? row.model.cells[textHeaderIndex].value : null,
                             procedureId: procedureId,
@@ -450,7 +468,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                             documentTypeNew: documentTypeNewIndex >= 0 ? row.model.cells[documentTypeNewIndex].value : null,
                             dueDateNew: dueDateNewIndex >= 0 ? chrono.parseDate(row.model.cells[dueDateNewIndex].value) : null,
                             executionDate: executionDateIndex >= 0 ? chrono.parseDate(row.model.cells[executionDateIndex].value) : null,
-                            ContraAccountName: ContraAccountNameIndex >= 0 ? row.model.cells[ContraAccountNameIndex].value : null,
+                            contraAccountName: contraAccountName,
                             balance: balanceIndex >= 0 ? row.model.cells[balanceIndex].value : null,
                             debitAmount: debitAmountIndex >= 0 ? row.model.cells[debitAmountIndex].value : null,
                             balanceTransactionCurrency: balanceTransactionCurrencyIndex >= 0 ? row.model.cells[balanceTransactionCurrencyIndex].value : null,
