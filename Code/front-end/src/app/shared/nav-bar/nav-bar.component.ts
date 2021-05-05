@@ -70,12 +70,12 @@ export class NavBarComponent implements OnInit {
                     {label: 'Organisations', icon: 'pi  pi-home',routerLink: ['/admin/dashboard']}, 
                 ]
             },
-            {
+/*             {
                 label: elem.data,
                 items: [
                     {label: elem.table, icon: 'pi pi-table', routerLink: ['/shared/data'] },
                 ]
-            },
+            }, */
             {
                 label: elem.analysis,
                 items: [
@@ -106,12 +106,12 @@ export class NavBarComponent implements OnInit {
                     {label: elem.users, icon: 'pi pi-users', routerLink: ['/shared/user/users']}
                 ]
             },
-            {
+/*             {
                 label: elem.data,
                 items: [
                     {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
                 ]
-            },
+            }, */
     
         ];
     
@@ -128,12 +128,12 @@ export class NavBarComponent implements OnInit {
                     {label: elem.procedures, icon: 'pi  pi-home',routerLink: ['/shared/user/procedures']}, 
                 ]
             },
-            {
+/*             {
                 label: elem.data,
                 items: [
                     {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
                 ]
-            },
+            }, */
     
         ];
     

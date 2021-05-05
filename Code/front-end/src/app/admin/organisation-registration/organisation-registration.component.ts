@@ -36,6 +36,7 @@ export class OrganisationRegistrationComponent implements OnInit {
       street: this.organisation.street,
       houseNr: this.organisation.houseNr,
       city: this.organisation.city,
+      postcode:this.organisation.postcode,
       country: this.organisation.country
     }));
   
@@ -82,7 +83,7 @@ export class OrganisationRegistrationComponent implements OnInit {
 
 
   cancelHandle(){
-    this._router.navigate(['/admin/dashboard/procedures']); 
+    this._router.navigate(['/admin/dashboard']); 
 
   }
 

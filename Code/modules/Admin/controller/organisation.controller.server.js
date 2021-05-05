@@ -39,10 +39,11 @@ module.exports.fetchOne = async function (req, res) {
 module.exports.insert = async function (req, res) {
     try {
         const file = req.file;
-        const filePath = file.path;
         const org = JSON.parse(req.body.data);
-        org.logo = env.domain + filePath;
-
+        if(file) {
+            const filePath = file.path;
+            org.logo = env.domain + filePath;
+        }
         const result = await orgRepo
             .insert(org);
         res.status(201)

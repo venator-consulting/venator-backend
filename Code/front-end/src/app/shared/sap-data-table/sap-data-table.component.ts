@@ -26,7 +26,7 @@ export class SAPDataTableComponent implements OnInit {
   data: any;
   postings: [] = [];
   cols: dataTableColumns[] = dataTableColumns.getDataTableColumns();
-  pageLimitSizes = [{ value: "2" }, { value: "5" }, { value: "25" }, { value: "50" }, { value: "100" },]
+  pageLimitSizes = [{ value: 2 }, { value: 5 }, { value: 25 }, { value: 50 }, { value: 100 },]
   limit: number = 2;
   pageNr: number = 1;
   maxPageNr: number = 0;
@@ -45,7 +45,6 @@ export class SAPDataTableComponent implements OnInit {
   }
 
 getData() {
-  debugger;
   this._dataFilterService
     .get(this.criteria)
     .subscribe(
@@ -89,7 +88,7 @@ getData() {
       offset: 0
     };
     this.pageNr = 1;
-    this.loading = true;
+    //this.loading = true;
     this.filterClearShow = false;
     this.getData();
   }
@@ -99,7 +98,7 @@ getData() {
     ++this.pageNr;
     if (this.pageNr > this.maxPageNr) return;
     this.loading = true;
-    this.criteria.offset += this.limit;
+    this.criteria.offset += +this.limit;
 
     this.getData();
   }
@@ -107,7 +106,7 @@ getData() {
 
   lastPage() {
     this.pageNr = this.maxPageNr;
-    this.criteria.offset = (this.pageNr - 1) * this.limit;
+    this.criteria.offset = (this.pageNr - 1) * +this.limit;
     this.loading = true;
     this.getData();
   }
@@ -117,7 +116,7 @@ getData() {
     debugger
     if (this.pageNr <= 0) return;
     this.loading = true;
-    this.criteria.offset -= this.limit;
+    this.criteria.offset -= +this.limit;
 
     this.getData();
   }
@@ -152,7 +151,6 @@ getData() {
       .subscribe(
         url => {
           console.log(url);
-          debugger;
           window.open(url.toString(), "_blank");
         },
         (error) => console.log(error),

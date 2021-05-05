@@ -13,10 +13,10 @@ module.exports = {
     defaultAdminUsername: 'admin',
     defaultAdminEmail: 'admin@domain.com',
     defaultAdminPassword: 'admin',
-    mailerHost: 'smtp.ethereal.email',
+    mailerHost: 'smtp.ionos.de',
     mailerPort: 587,
-    mailerUser: 'elza.tillman13@ethereal.email',
-    mailerPassword: 'JdRqgGeAb5HeDqp3Ny',
+    mailerUser: 'login@venalytics.de',
+    mailerPassword: '$Werft12',
     resetPassLink: 'http://venalytics.de:8000/reset/', 
     
 };

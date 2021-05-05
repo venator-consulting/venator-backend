@@ -16,7 +16,7 @@ module.exports.fetchAll = async () => {
                     deleted: false
                 }
             });
-            console.log("orgs: ",orgs)
+        console.log("orgs: ", orgs)
         return orgs;
     } catch (err) {
         throw new Error('there_is_an_error_in_db_connection');
@@ -31,15 +31,15 @@ module.exports.fetch = async (search = '_', orderBy = 'name', order = 'DESC', li
             .findAll({
                 where: {
                     [Op.or]: [{
-                            name: {
-                                [Op.like]: '%' + search + '%'
-                            }
-                        },
-                        {
-                            email: {
-                                [Op.like]: '%' + search + '%'
-                            }
+                        name: {
+                            [Op.like]: '%' + search + '%'
                         }
+                    },
+                    {
+                        email: {
+                            [Op.like]: '%' + search + '%'
+                        }
+                    }
                     ]
 
                 },
@@ -59,13 +59,13 @@ module.exports.fetch = async (search = '_', orderBy = 'name', order = 'DESC', li
 module.exports.fetchOne = async (orgId) => {
     try {
         return await Organisation
-        .getOrganisation()
-        .findAll({
-            where: {
-                deleted: false,
-                id: orgId
-            }
-        });
+            .getOrganisation()
+            .findAll({
+                where: {
+                    deleted: false,
+                    id: orgId
+                }
+            });
     } catch (error) {
         throw new Error('there_is_an_error_in_db_connection');
     }
@@ -78,8 +78,8 @@ module.exports.insert = async (org) => {
             .getOrganisation()
             .create(org);
 
-        Posting.syncPosting('posting_' + result.dataValues.id);
-        Accounts.syncAccounts('accounts_' + result.dataValues.id);
+        await Posting.syncPosting('posting_' + result.dataValues.id);
+        await Accounts.syncAccounts('accounts_' + result.dataValues.id);
 
         return result;
     } catch (err) {
