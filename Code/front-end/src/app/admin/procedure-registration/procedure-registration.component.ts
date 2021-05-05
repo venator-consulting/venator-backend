@@ -17,6 +17,7 @@ export class ProcedureRegistrationComponent implements OnInit {
 
   orgs: [] = [];
   dataSources: Choices[] = Choices.getDataSources();
+  organisationId = localStorage.getItem('organisationId')
 
   procedureModel: Procedures = new Procedures();
 

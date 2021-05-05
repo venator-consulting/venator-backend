@@ -209,6 +209,8 @@
         "houseNrErrorMsg": "house-Nr is required",
         "city": "city",
         "cityErrorMsg": "city is required",
+        "postcode": "Postcode",
+        "postcodeErrorMsg": "postcode ist erforderlich",
         "country": "Country",
         "countryErrorMsg": "country is required",
         "logo": "Logo",

@@ -32,7 +32,7 @@
           tooltipPosition="bottom"></button>
 
         <!-- dispalyed data of total count -->
-        shown {{displayedDataCount}} of {{totalCount}}
+        {{displayedDataCount}} of {{totalCount}}
         <!-- Clear filter -->
         <button type="button" *ngIf="filterClearShow" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
           class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}"
@@ -48,7 +48,7 @@
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th pReorderableColumn pResizableColumn pSortableColumn="col.header" *ngFor="let col of cols">
-          <span class="p-text-center"> {{col.header}} </span>
+          <span class="p-text-center" pTooltip="{{col.header}}" tooltipPosition="bottom"> {{col.header}} </span>
         </th>
       </tr>
       <tr>

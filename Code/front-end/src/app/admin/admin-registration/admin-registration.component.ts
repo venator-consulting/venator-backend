@@ -21,8 +21,8 @@ export class AdminRegistrationComponent implements OnInit {
 
   orgs: [] = [];
   titles: Titles[] = Titles.getTitles();
-  roles: Roles[] = Roles.getRoles();
-  //roles = [{name:'Admin'}];
+  //roles: Roles[] = Roles.getRoles();
+  roles = [{name:'Admin'}];
 
 
   userModel: Users = {
