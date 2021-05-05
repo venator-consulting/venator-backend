@@ -20,7 +20,7 @@ export class SAPDataTableComponent implements OnInit {
 
   organisationId = localStorage.getItem('organisationId')
   procedureId = localStorage.getItem('currentProcedureId')
-  filterClearShow: boolean = false;
+  filtersNo: number = 0;
   loading: boolean = false;
   selectLastPage: boolean = false;
   data: any;
@@ -54,20 +54,24 @@ getData() {
         this.totalCount = this.data.count;
         this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
         this.maxPageNr = Math.ceil(this.totalCount / this.limit);
-        this.loading = false
+        this.loading = false;
         console.log(this.organisationId);
         console.log(this.procedureId);
 
       },
-      error => console.log(error),
+      error => {
+        this.loading = false;
+      },
     );
 }
 
   filterChange(value, field) {
     if (value) {
       this.criteria[field] = value;
+      ++this.filtersNo;
     } else {
       delete this.criteria[field];
+      --this.filtersNo;
     }
     this.pageNr = 1;
     this.criteria.offset = 0;
@@ -77,19 +81,17 @@ getData() {
 
   submitFilter() {
     this.loading = true;
-    this.filterClearShow = true;
     this.getData();
   }
 
   clearFilter() {
     this.criteria = {
       OrganisationId: this.organisationId,
+      procedureId: this.procedureId,
       limit: this.limit,
       offset: 0
     };
     this.pageNr = 1;
-    //this.loading = true;
-    this.filterClearShow = false;
     this.getData();
   }
 

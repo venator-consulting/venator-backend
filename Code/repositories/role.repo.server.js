@@ -137,7 +137,7 @@ module.exports.createDefaultAdminRole = function () {
     return Role
         .getRole()
         .create({
-            name: 'ADMIN',
+            name: 'Admin',
             role_description: 'the ADMIN Can Do any thing'
         });
 };

@@ -35,7 +35,7 @@
         {{displayedDataCount}} of {{totalCount}}
         <!-- Clear filter -->
         <button type="button"  pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
-          class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}"
+          class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
           tooltipPosition="bottom"></button>
 
       </div>
@@ -53,7 +53,7 @@
       </tr>
       <tr>
         <th pResizableColumn *ngFor="let col of cols ">
-          <input pInputText type="text" (change)="filterChange($any($event.target).value, col.field)"
+          <input pInputText type="text" [(ngModel)]="criteria[col.field]" (change)="filterChange($any($event.target).value, col.field)"
             class="filterInputCss" />
           <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()"
             pTooltip="{{'Data_Table.filter' | translate}}" tooltipPosition="bottom"></i>
