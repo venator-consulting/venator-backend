@@ -248,6 +248,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
 
                 const companyCode = row[Standardtemplate.companyCode] ? row[Standardtemplate.companyCode] : null;
                 const accountType = row[Standardtemplate.accountType] ? row[Standardtemplate.accountType] : null;
+                const contraAccountType = row[Standardtemplate.contraAccountType] ? row[Standardtemplate.contraAccountType] : null;
                 let accountNumber = null;
                 let accountName = row[Standardtemplate.accountName] ? row[Standardtemplate.accountName] : null;
                 if (Standardtemplate.accountNumber && row[Standardtemplate.accountNumber]) {
@@ -271,6 +272,32 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                             limit: 1
                         });
                         accountName = temp.length > 0 ? temp[0].accountName : null;
+                    }
+                }
+
+                let contraAccountNumber = null;
+                let contraAccountName = row[Standardtemplate.contraAccountName] ? row[Standardtemplate.contraAccountName] : null;
+                if (Standardtemplate.contraAccountNumber && row[Standardtemplate.contraAccountNumber]) {
+                    contraAccountNumber = decimalParser(row[Standardtemplate.contraAccountNumber]);
+                    if (isNaN(contraAccountNumber)) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index+1}, contraAccountNumber/${Standardtemplate.contraAccountNumber} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index+1}, contraAccountNumber/${Standardtemplate.contraAccountNumber} should be number!`);
+
+                        reject(`There is an ERROR on row ${index+1}, contraAccountNumber/${Standardtemplate.contraAccountNumber} should be number!`);
+                        return;
+                    }
+                    if (contraAccountNumber) {
+                        let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
+                            where: {
+                                accountNumber: contraAccountNumber,
+                                companyCode: companyCode,
+                                procedureId: procedureId,
+                                accountType: contraAccountType
+                            },
+                            attributes: ['accountName'],
+                            limit: 1
+                        });
+                        contraAccountName = temp.length > 0 ? temp[0].accountName : null;
                     }
                 }
 
@@ -596,8 +623,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     debtorName: debtorName,
                     creditorNumber: creditorNumber,
                     creditorName: creditorName,
-                    contraAccountType: row[Standardtemplate.contraAccountType],
-                    contraAccountNumber: row[Standardtemplate.contraAccountNumber],
+                    contraAccountType: contraAccountType,
+                    contraAccountNumber: contraAccountNumber,
                     contraAccountGLAccountNo: contraAccountGLAccountNo,
                     contraAccountGLAccountName: contraAccountGLAccountName,
                     contraAccountCreditorNo: contraAccountCreditorNo,
@@ -610,7 +637,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     accountName: accountName,
                     procedureId: procedureId,
                     client: row[Standardtemplate.client],
-                    contraAccountName: row[Standardtemplate.contraAccountName],
+                    contraAccountName: contraAccountName,
                     balance: balance,
                     debitAmount: debitAmount,
                     balanceTransactionCurrency: balanceTransactionCurrency,
