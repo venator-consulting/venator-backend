@@ -14,6 +14,10 @@ router
     .get(procedureCtrl.getByOrgId);
 
 router
+    .route('/user/add')
+    .post(userCtrl.register);
+
+router
     .route('/users/:id')
     .get(userCtrl.getUsersByOrganisationId);
 

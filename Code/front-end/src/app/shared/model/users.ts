@@ -5,7 +5,9 @@ export class Users {
     title: string =  '';
     organisationId: number = 0;
     email: string ='';
-    role:  string ='';
+    // role:  string ='';
+    RoleId: number = 3;
+    role: string = '';
     firstname: string ='';
     lastname: string ='';
     username: string ='';
@@ -17,13 +19,14 @@ export class Users {
     postcode: string ='';
     country: string ='';
 
-    constructor(title: string, organisationId: number, email: string, role: string,firstname: string,lastname: string,
+    constructor(title: string, organisationId: number, email: string, RoleId:number, role: string,firstname: string,lastname: string,
                 username: string,mobileNr: string,street: string,houseNr: number,city: string,
                 postcode: string, country: string ) {
                     
         this.title = title;
         this.organisationId = organisationId;
         this.email = email;
+        this.RoleId = RoleId;
         this.role = role;
         this.firstname = firstname;
         this.lastname = lastname;

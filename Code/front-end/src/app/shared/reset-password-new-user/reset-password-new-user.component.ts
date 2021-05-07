@@ -19,10 +19,9 @@ export class ResetPasswordNewUserComponent implements OnInit {
   token:any ; 
   constructor(private _messageService: MessageService, private _authService: AuthService, private _router: Router,  private _route: ActivatedRoute, public _translateService: TranslateService) { }
   ngOnInit(): void {
-    debugger;
+    this._translateService.setDefaultLang('de');
     this.token = this._route.snapshot.paramMap.get('token');
-    console.log(this.token)
-    debugger;
+    // console.log(this.token)
   }
 
   submitHandle() {

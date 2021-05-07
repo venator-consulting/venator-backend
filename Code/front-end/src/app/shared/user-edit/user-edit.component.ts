@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class UserEditComponent implements OnInit {
 
   titles: Titles[] = Titles.getTitles();
-  roles = [{name:'Manager'}, {name:'User'}];
+  roles = [{name:'Manager', value: 2}, {name:'User', value: 3}];
   selectedUserId = localStorage.getItem('selectedUser_userId');
   selectedUserRoleId = localStorage.getItem('selectedUser_roleId');
   selectedUserUsername = localStorage.getItem('selectedUser_username');
@@ -34,7 +34,8 @@ export class UserEditComponent implements OnInit {
     title: this.selectedUserTitle,
     organisationId: 0,
     email: this.selectedUserEmail,
-    role: '',
+    role: this.selectedUserRoleId,
+    RoleId: +this.selectedUserRoleId,
     firstname: this.selectedUserFirstname,
     lastname: this.selectedUserLastname,
     username: this.selectedUserUsername,

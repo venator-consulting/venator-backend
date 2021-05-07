@@ -14,12 +14,13 @@ import { TranslateService } from '@ngx-translate/core';
 export class UserRegistrationComponent implements OnInit {
 
   titles: Titles[] = Titles.getTitles();
-   roles = [{name:'Manager'}, {name:'User'}];
-   userModel: Users = {
+  roles = [{ name: 'Manager', value: 2 }, { name: 'User', value: 3 }];
+  userModel: Users = {
     title: "",
     organisationId: 0,
     email: '',
-    role: '',
+    role: 'User',
+    RoleId: 3,
     firstname: '',
     lastname: '',
     username: '',
@@ -47,21 +48,21 @@ export class UserRegistrationComponent implements OnInit {
         });
       }, err => {
         this._translateService.get("ErrorHandler").subscribe(elem => {
-          let errorMsg = "" ; 
+          let errorMsg = "";
 
-          if(err.status=== 400){
+          if (err.status === 400) {
             errorMsg = elem.badRequest_400
           }
-          else if (err.status=== 401) {
+          else if (err.status === 401) {
             errorMsg = elem.unauthorized_401
           }
-          else if (err.status=== 403) {
+          else if (err.status === 403) {
             errorMsg = elem.forbidden_403
           }
-          else if (err.status=== 404) {
+          else if (err.status === 404) {
             errorMsg = elem.NotFound_404
           }
-          else if (err.status=== 500) {
+          else if (err.status === 500) {
             errorMsg = elem.internalServerError_500
           }
           this._messageService.add({
@@ -73,8 +74,8 @@ export class UserRegistrationComponent implements OnInit {
         })
       });
   }
-  cancelHandle(){
-    this._router.navigate(['/shared/user/users']); 
+  cancelHandle() {
+    this._router.navigate(['/shared/user/users']);
 
   }
 }

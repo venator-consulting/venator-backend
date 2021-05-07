@@ -228,26 +228,31 @@ module.exports.resetPassword = (data) => {
         try {
             jwt.verify(data.token, env.jwtSecret, async function (err, decoded) {
                 if (err) reject(err);
-                const email = decoded.email;
-                const expire = decoded.expire;
-                const now = new Date();
-                if (now.getTime() > Date.parse(expire)) reject('registeration expired');
-
-                const salt = bcrypt.genSaltSync(10);
-                const hashedPassword = bcrypt.hashSync(data.password, salt);
-
-
-                const result = await User
-                    .getUser()
-                    .update({
-                        password: hashedPassword,
-                        reseted: true
-                    }, {
-                        where: {
-                            email: email
-                        }
-                    });
-                resolve('updated successfully');
+                if(decoded) {
+                    const email = decoded.email;
+                    const expire = decoded.expire;
+                    const now = new Date();
+                    if (now.getTime() > Date.parse(expire)) reject('registeration expired');
+    
+                    const salt = bcrypt.genSaltSync(10);
+                    const hashedPassword = bcrypt.hashSync(data.password, salt);
+    
+    
+                    const result = await User
+                        .getUser()
+                        .update({
+                            password: hashedPassword,
+                            reseted: true
+                        }, {
+                            where: {
+                                email: email
+                            }
+                        });
+                    resolve('updated successfully');
+                }else {
+                    reject("error: invalid token!");
+                }
+                
             });
         } catch (error) {
             reject(error);
