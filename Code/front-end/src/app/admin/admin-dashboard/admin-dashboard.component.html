@@ -16,7 +16,7 @@
         <th  pResizableColumn>     <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationPostCode' | translate}} </span>  </th> 
         <th  pResizableColumn>     <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationStreet' | translate}} </span>   </th>
         <th  pResizableColumn>    <span class="p-text-center" class="headerColor"> {{'Admin_Dashboard.organisationHouseNr' | translate}} </span>   </th>
-    
+        <th  pResizableColumn>    <span class="p-text-center" class="headerColor"> {{'Data_Table.actions' | translate}} </span>   </th>
     </tr>
 
 </ng-template>
@@ -24,7 +24,6 @@
 <ng-template pTemplate="body" let-organisation let-expanded="expanded" let-index="rowIndex">
     <tr [pReorderableRow]="index">
         <td style="width: 6rem">
-
             <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-warning" pTooltip="show" tooltipPosition="bottom" (click)="showProcedures(organisation.id)"></button>
         </td>  
         <td style="width: 6rem">
@@ -37,7 +36,9 @@
         <td  pResizableColumn  class="ui-resizable-column">{{organisation.postCode}}</td>
         <td  pResizableColumn  class="ui-resizable-column">{{organisation.street}}</td>
         <td  pResizableColumn  class="ui-resizable-column">{{organisation.houseNr}}</td> 
-
+        <td style="width: 6rem">
+            <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning" pTooltip="Edit organisation" tooltipPosition="bottom" (click)="editOrg(organisation.id)"></button>
+        </td>
 
     </tr>
 </ng-template>

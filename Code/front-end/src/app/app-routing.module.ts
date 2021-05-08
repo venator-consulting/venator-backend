@@ -30,6 +30,7 @@ const routes: Routes = [
   // },
   { path: 'admin/admin/add', component: AdminRegistrationComponent },
   { path: 'admin/organisation/add', component: OrganisationRegistrationComponent },
+  { path: 'admin/organisation/edit/:id', component: OrganisationRegistrationComponent },
   { path: 'admin/procedure/add', component: ProcedureRegistrationComponent },
   { path: 'admin/procedure/edit', component: ProcedureEditComponent },
   { path: 'admin/dashboard', component: AdminDashboardComponent },

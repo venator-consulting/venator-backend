@@ -262,7 +262,8 @@
         "previous": "previous page",
         "next": "next page",
         "clearFilter": "clear filter",
-        "filter": "filter"
+        "filter": "filter",
+        "actions": "Actions"
 
     }
   }

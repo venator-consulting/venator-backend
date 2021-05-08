@@ -8,7 +8,7 @@ export class Organisation {
     street: string ='';
     houseNr: number = null;
     city: string ='';
-    postcode: number = null;
+    postCode: number = null;
     country: string ='';
 
 

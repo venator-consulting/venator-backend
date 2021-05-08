@@ -41,4 +41,10 @@ export class AdminDashboardComponent implements OnInit {
     this._router.navigate(['/shared/user/users']);
   
   }
+
+  editOrg(id) {
+    this._router.navigate(['/admin/organisation/edit/' + id]);
+  }
+
+
 }

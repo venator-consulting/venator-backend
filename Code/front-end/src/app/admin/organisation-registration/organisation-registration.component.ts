@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Organisation } from "../../shared/model/organisation"; 
+import { Organisation } from "../../shared/model/organisation";
 import { MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrganisationService } from '../service/organisation.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -14,77 +14,145 @@ import { TranslateService } from '@ngx-translate/core';
 export class OrganisationRegistrationComponent implements OnInit {
 
   organisation: Organisation = new Organisation();
+  id: number;
 
-  constructor(private _router: Router, private _messageService: MessageService, private _orgService: OrganisationService, public _translateService: TranslateService) { }
+  constructor(private _router: Router, private _messageService: MessageService,
+    private _orgService: OrganisationService, public _translateService: TranslateService,
+    private _route: ActivatedRoute) { }
 
   ngOnInit(): void {
-  }
+    this.id = +this._route.snapshot.paramMap.get('id');
+    if (this.id > 0) {
+      this._orgService
+        .getOne(this.id)
+        .subscribe(res => {
+          if (res.length > 0) {
+            this.organisation = res[0];
+          }
+        }, err => {
+          this._translateService.get("ErrorHandler").subscribe(elem => {
+            let errorMsg = "";
+
+            if (err.status === 400) {
+              errorMsg = elem.badRequest_400
+            }
+            else if (err.status === 401) {
+              errorMsg = elem.unauthorized_401
+            }
+            else if (err.status === 403) {
+              errorMsg = elem.forbidden_403
+            }
+            else if (err.status === 404) {
+              errorMsg = elem.NotFound_404
+            }
+            else if (err.status === 500) {
+              errorMsg = elem.internalServerError_500
+            }
+            this._messageService.add({
+              severity: 'error',
+              summary: 'ERROR',
+              life: 10000,
+              detail: errorMsg
+            });
+          });
+        });
+    }
+
+  } // end of ngInit
 
   UploadHandler(event) {
     const selectedFiles: FileList = event.files;
-    // debugger;
     this.organisation.logo = selectedFiles[0];
   }
 
   submitHandler() {
-    // console.log(this.organisation);
+
     const formData: FormData = new FormData();
     formData.append('logo', this.organisation.logo);
-    formData.append('data', JSON.stringify({
-      name: this.organisation.name,
-      email: this.organisation.email,
-      street: this.organisation.street,
-      houseNr: this.organisation.houseNr,
-      city: this.organisation.city,
-      postcode:this.organisation.postcode,
-      country: this.organisation.country
-    }));
-  
-    this._orgService
-      .insert(formData)
-      .subscribe(res => {
-        // console.dir('done: ' + res);
+    formData.append('data', JSON.stringify(this.organisation));
 
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS!',
-          detail: 'Organisation inserted successfully!'
-        });
-      }, err => {
-        this._translateService.get("ErrorHandler").subscribe(elem => {
-          let errorMsg = "" ; 
-
-          if(err.status=== 400){
-            errorMsg = elem.badRequest_400
-          }
-          else if (err.status=== 401) {
-            errorMsg = elem.unauthorized_401
-          }
-          else if (err.status=== 403) {
-            errorMsg = elem.forbidden_403
-          }
-          else if (err.status=== 404) {
-            errorMsg = elem.NotFound_404
-          }
-          else if (err.status=== 500) {
-            errorMsg = elem.internalServerError_500
-          }
+    // if organisation has an id value, then the action is update
+    if (this.organisation && this.organisation.id > 0) {
+      this._orgService
+        .update(formData, this.organisation.id)
+        .subscribe(res => {
           this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: errorMsg
+            severity: 'success',
+            summary: 'SUCCESS!',
+            detail: 'Organisation updated successfully!'
           });
-        })
-      });
-  
-  }
+        }, err => {
+          this._translateService.get("ErrorHandler").subscribe(elem => {
+            let errorMsg = "";
+
+            if (err.status === 400) {
+              errorMsg = elem.badRequest_400
+            }
+            else if (err.status === 401) {
+              errorMsg = elem.unauthorized_401
+            }
+            else if (err.status === 403) {
+              errorMsg = elem.forbidden_403
+            }
+            else if (err.status === 404) {
+              errorMsg = elem.NotFound_404
+            }
+            else if (err.status === 500) {
+              errorMsg = elem.internalServerError_500
+            }
+            this._messageService.add({
+              severity: 'error',
+              summary: 'ERROR',
+              life: 10000,
+              detail: errorMsg
+            });
+          })
+        });
+    } else {
+      this._orgService
+        .insert(formData)
+        .subscribe(res => {
+          this.organisation = res;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS!',
+            detail: 'Organisation inserted successfully!'
+          });
+        }, err => {
+          this._translateService.get("ErrorHandler").subscribe(elem => {
+            let errorMsg = "";
+
+            if (err.status === 400) {
+              errorMsg = elem.badRequest_400
+            }
+            else if (err.status === 401) {
+              errorMsg = elem.unauthorized_401
+            }
+            else if (err.status === 403) {
+              errorMsg = elem.forbidden_403
+            }
+            else if (err.status === 404) {
+              errorMsg = elem.NotFound_404
+            }
+            else if (err.status === 500) {
+              errorMsg = elem.internalServerError_500
+            }
+            this._messageService.add({
+              severity: 'error',
+              summary: 'ERROR',
+              life: 10000,
+              detail: errorMsg
+            });
+          })
+        });
+
+    } // end of if-else has an id
+  } // end of submit handler function
 
 
 
-  cancelHandle(){
-    this._router.navigate(['/admin/dashboard']); 
-
+  cancelHandle() {
+    this._router.navigate(['/admin/dashboard']);
   }
 
 }
