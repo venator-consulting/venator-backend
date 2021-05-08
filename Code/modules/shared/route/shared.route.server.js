@@ -15,7 +15,7 @@ router
     .route('/users/:id/procedures')
     .get(passport.authenticate('jwt', {
         session: false
-    }), procedureCtrl.getByOrgId);
+    }), authorization.authorize('Manager', 'Admin'), procedureCtrl.getByOrgId);
 
 router
     .route('/user/add')
@@ -27,7 +27,7 @@ router
     .route('/users/:id')
     .get(passport.authenticate('jwt', {
         session: false
-    }), userCtrl.getUsersByOrganisationId);
+    }), authorization.authorize('Manager', 'Admin'), userCtrl.getUsersByOrganisationId);
 
 router
     .route('/resetPassword')
