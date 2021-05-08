@@ -18,7 +18,7 @@ import { NotfoundComponent } from './shared/notfound/notfound.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { FileUploadModule } from 'primeng/fileupload';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -63,6 +63,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import { AuthGuard } from './auth.guard';
+import { TokenInterceptor } from './token.interceptor';
 registerLocaleData(localeDe, 'de');
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -140,9 +142,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     PasswordModule,
     MegaMenuModule
   ],
-  providers: [MessageService, {
+  providers: [MessageService, AuthGuard, {
     provide: LOCALE_ID,
     useValue: 'de'
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
   }
   ],
   bootstrap: [AppComponent]

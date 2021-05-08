@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
+const authorization = require('../../../config/authorization.config');
 const loginCtrl = require('../controller/login.controller.server');
 const getDataCtrl = require("../controller/getPostingData.controller.server");
 const userCtrl = require('../../Admin/controller/user.controller.server');
@@ -11,15 +13,21 @@ router
 
 router
     .route('/users/:id/procedures')
-    .get(procedureCtrl.getByOrgId);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), procedureCtrl.getByOrgId);
 
 router
     .route('/user/add')
-    .post(userCtrl.register);
+    .post(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Manager'), userCtrl.register);
 
 router
     .route('/users/:id')
-    .get(userCtrl.getUsersByOrganisationId);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), userCtrl.getUsersByOrganisationId);
 
 router
     .route('/resetPassword')
@@ -27,10 +35,14 @@ router
 
 router
     .route('/posting')
-    .get(getDataCtrl.fetch);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), getDataCtrl.fetch);
 
 router
     .route('/export/:tableName/:OrganisationId/:ProcedureId')
-    .get(getDataCtrl.exportAsExcel);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), getDataCtrl.exportAsExcel);
 
 module.exports = router;

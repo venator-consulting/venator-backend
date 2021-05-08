@@ -9,11 +9,7 @@ module.exports.authorize = function (...allowed) {
             if (!err) {
                 // console.log(decoded);
                 req.userinfo = decoded.userinfo;
-                // const isAllowed = role => !!decoded.roles[role];
                 for (let i = 0; i < allowed.length; i++) {
-                    console.log(allowed[i]);
-                    // console.log(isAllowed(allowed[i]));
-                    // if (isAllowed(allowed[i])) {
                     if (allowed[i] == decoded.userinfo.Role) {
                         authorized = true;
                         next();
