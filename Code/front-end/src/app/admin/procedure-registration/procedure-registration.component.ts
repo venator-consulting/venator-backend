@@ -39,7 +39,7 @@ export class ProcedureRegistrationComponent implements OnInit {
   submitHandler() {
     this._roleServiceService.addProcedure(this.procedureModel)
       .subscribe(res => {
-        console.dir('done: ' + res);
+        // console.dir('done: ' + res);
         this._messageService.add({
           severity: 'success',
           summary: 'Registered successfully!',

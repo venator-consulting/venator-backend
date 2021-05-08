@@ -23,7 +23,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   submitHandle() {
-    console.log(this.passwordObj)
+    // console.log(this.passwordObj)
     if (this.passwordObj.selectedPassword === this.passwordObj.confirmedPassword) {
         let password = this.passwordObj.selectedPassword
         this._authService

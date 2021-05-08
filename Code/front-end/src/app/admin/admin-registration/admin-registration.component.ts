@@ -58,7 +58,7 @@ export class AdminRegistrationComponent implements OnInit {
   submitHandler() {
     this._adminRegistrationService.addUser(this.userModel)
       .subscribe(res => {
-        console.dir('done: ' + res);
+        // console.dir('done: ' + res);
         this._messageService.add({
           severity: 'success',
           summary: 'Registered successfully!',

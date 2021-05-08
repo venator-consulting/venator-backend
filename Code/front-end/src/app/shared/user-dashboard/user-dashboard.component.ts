@@ -21,8 +21,8 @@ export class UserDashboardComponent implements OnInit {
     .subscribe(
       (data) => { 
         this.procedures = data ;
-        console.log(this.organisationId)
-        console.log(data)
+        // console.log(this.organisationId)
+        // console.log(data)
         },
       (error) => console.log(error),
       () => {  }

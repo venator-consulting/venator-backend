@@ -22,12 +22,12 @@ export class OrganisationRegistrationComponent implements OnInit {
 
   UploadHandler(event) {
     const selectedFiles: FileList = event.files;
-    debugger;
+    // debugger;
     this.organisation.logo = selectedFiles[0];
   }
 
   submitHandler() {
-    console.log(this.organisation);
+    // console.log(this.organisation);
     const formData: FormData = new FormData();
     formData.append('logo', this.organisation.logo);
     formData.append('data', JSON.stringify({
@@ -43,7 +43,7 @@ export class OrganisationRegistrationComponent implements OnInit {
     this._orgService
       .insert(formData)
       .subscribe(res => {
-        console.dir('done: ' + res);
+        // console.dir('done: ' + res);
 
         this._messageService.add({
           severity: 'success',

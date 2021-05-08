@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
    this._translateService.get('LOGIN.welcomeMsg').subscribe(elem => {
-      console.log(elem)
+      // console.log(elem)
     });
   }
 

@@ -56,7 +56,7 @@ export class UserEditComponent implements OnInit {
   submitHandler() {
     this._userService.editUser(this.userModel)
       .subscribe(res => {
-        console.dir('done: ' + res);
+        // console.dir('done: ' + res);
         this._messageService.add({
           severity: 'success',
           summary: 'Updated successfully!',
