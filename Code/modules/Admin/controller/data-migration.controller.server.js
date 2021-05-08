@@ -1,3 +1,7 @@
+const sendMail = require('../../../config/mailer.config').sendMail;
+const logger = require('../../../config/logger.config').logger;
+const env = require('../../../config/environment');
+
 module.exports.buildDatabaseSchema = async function (req, res, next) {
 
     try {
@@ -17,8 +21,23 @@ module.exports.buildDatabaseSchema = async function (req, res, next) {
             .status(200)
             .json('done');
     } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> data migration controller </h3 >
+            <p> sync database tables </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
         res
             .status(500)
-            .json(error);
+            .json({
+                error: error.message,
+            });
     }
 };

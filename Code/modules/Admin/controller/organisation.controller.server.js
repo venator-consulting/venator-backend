@@ -1,5 +1,7 @@
 const env = require('../../../config/environment');
 const orgRepo = require('../../../repositories/organisation.repo.server');
+const sendMail = require('../../../config/mailer.config').sendMail;
+const logger = require('../../../config/logger.config').logger;
 
 
 module.exports.fetchAll = async function (req, res, next) {
@@ -9,11 +11,24 @@ module.exports.fetchAll = async function (req, res, next) {
         res
             .status(200)
             .json(orgs);
-    } catch (e) {
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> data migration controller </h3 >
+            <p> sync database tables </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
         res
             .status(500)
             .json({
-                error: e
+                error: error
             });
     }
 };
@@ -26,11 +41,24 @@ module.exports.fetchOne = async function (req, res) {
         res
             .status(200)
             .json(org);
-    } catch (e) {
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> data migration controller </h3 >
+            <p> sync database tables </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
         res
             .status(500)
             .json({
-                error: e
+                error: error
             });
     }
 };
@@ -40,7 +68,7 @@ module.exports.insert = async function (req, res) {
     try {
         const file = req.file;
         const org = JSON.parse(req.body.data);
-        if(file) {
+        if (file) {
             const filePath = file.path;
             org.logo = env.domain + filePath;
         }
@@ -48,11 +76,24 @@ module.exports.insert = async function (req, res) {
             .insert(org);
         res.status(201)
             .json(result);
-    } catch (e) {
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> data migration controller </h3 >
+            <p> sync database tables </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
         res
             .status(500)
             .json({
-                error: e
+                error: error
             });
     }
 };
@@ -64,11 +105,24 @@ module.exports.update = async function (req, res) {
             .update(org, req.params.id);
         res.status(201)
             .json(result);
-    } catch (e) {
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> data migration controller </h3 >
+            <p> sync database tables </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
         res
             .status(500)
             .json({
-                error: e
+                error: error
             });
     }
 };
@@ -79,11 +133,24 @@ module.exports.delete = async function (req, res) {
             .softDelete(req.params.id);
         res.status(204)
             .json(result);
-    } catch (e) {
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> data migration controller </h3 >
+            <p> sync database tables </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
         res
             .status(500)
             .json({
-                error: e
+                error: error
             });
     }
 };
