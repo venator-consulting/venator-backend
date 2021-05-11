@@ -107,6 +107,7 @@ export class ImportComponent implements OnInit {
   }
 
   selectTemplatHandler(e) {
+    this.filesList = [];
     this.addFormData();
   }
 

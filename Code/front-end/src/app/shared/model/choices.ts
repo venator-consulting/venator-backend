@@ -15,6 +15,7 @@ export class Choices {
 
         result.push(new Choices("SAP W-mobel", 1));
         result.push(new Choices("SAP Cinram", 2));
+        result.push(new Choices("Other", 3));
         return result;
     }
 
