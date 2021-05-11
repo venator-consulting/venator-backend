@@ -82,15 +82,18 @@ module.exports.getPosting = function (tableName = 'Posting') {
             type: DataTypes.BIGINT(11)
         },
         documentNumber: {
-            type: DataTypes.STRING(25)
+            type: DataTypes.STRING(50)
         },
         documentNumber2: {
-            type: DataTypes.STRING(25)
+            type: DataTypes.STRING(50)
         },
         assignment: {
             type: DataTypes.STRING(25)
         },
         reference: {
+            type: DataTypes.STRING(25)
+        },
+        documentType: {
             type: DataTypes.STRING(25)
         },
         documentTypeNumber: {

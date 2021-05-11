@@ -1,12 +1,15 @@
 const excelHelper = require('../../../helpers/excel.helper.server');
 const csvStreamHelper = require('../../../helpers/csv.stream.helper.server');
 const wMobelTemplate = require('../../../models/templates/sap.wmobel.template');
+const cinramTemplate = require('../../../models/templates/sap.cinram.template');
 const defaultAccountTemplate = require('../../../models/templates/accounts.default.template');
 
 const sendMail = require('../../../config/mailer.config').sendMail;
 const logger = require('../../../config/logger.config').logger;
+const env = require('../../../config/environment');
 
 const fs = require('fs');
+
 
 
 module.exports.getTemplateTypes = async function (req, res) {
@@ -18,7 +21,7 @@ module.exports.getTemplateTypes = async function (req, res) {
     } catch (error) {
         await sendMail({
             from: 'Venator, Bug reporting',
-            to: user.email,
+            to: env.developerMail,
             subject: 'exception stack trace',
             html: ` 
             <div>
@@ -56,12 +59,16 @@ module.exports.headerFile = async function (req, res, next) {
         const template = reqData.template;
         let defaultTemplate = {};
         // posting default template
-        if ((!template || template == 1) && fileClass == 2) {
+        if (template == 1 && fileClass == 2) {
             defaultTemplate = wMobelTemplate;
         }
         // accounts set template
-        if ((!template || template == 1) && fileClass == 1) {
+        else if (template == 1 && fileClass == 1) {
             defaultTemplate = defaultAccountTemplate;
+        } else if (template == 2 && fileClass == 2) {
+            defaultTemplate = cinramTemplate.posting;
+        } else {
+            defaultTemplate = {};
         }
         // if file type === 1 then is it an excel file
         if (fileType == 1) {
@@ -120,7 +127,7 @@ module.exports.headerFile = async function (req, res, next) {
     } catch (error) {
         await sendMail({
             from: 'Venator, Bug reporting',
-            to: user.email,
+            to: env.developerMail,
             subject: 'exception stack trace',
             html: ` 
             <div>
@@ -137,7 +144,7 @@ module.exports.headerFile = async function (req, res, next) {
                 error: error.message,
             });
     }
-}
+};
 
 
 module.exports.importFile = async function (req, res, next) {
@@ -281,12 +288,44 @@ module.exports.importFile = async function (req, res, next) {
     } catch (error) {
         await sendMail({
             from: 'Venator, Bug reporting',
-            to: user.email,
+            to: env.developerMail,
             subject: 'exception stack trace',
             html: ` 
             <div>
             <h3> admin upload controller </h3 >
             <p> import file </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
+        res
+            .status(500)
+            .json({
+                error: error.message,
+            });
+    }
+};
+
+module.exports.deleteFileFromServier = async function (req, res) {
+    try {
+        let message = "file not found";
+        if (req.body.nameOnServer) {
+            fs.unlinkSync(req.body.nameOnServer);
+            message = "the file deleted successfully";
+        }
+        res
+            .status(200)
+            .json(message);
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> admin upload controller </h3 >
+            <p> Delete file from the server </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,

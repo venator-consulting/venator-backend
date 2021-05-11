@@ -112,7 +112,7 @@ export class ImportComponent implements OnInit {
   }
 
   removeFormData(index: number) {
-    this.filesList = this.filesList.splice(index, 1);
+    this.filesList.splice(index, 1);
   }
 
   addFormData() {
@@ -140,6 +140,42 @@ export class ImportComponent implements OnInit {
     this.filesList[this.currentFileIndex].defaultTemplate = this.postingCustomTemplate;
   }
 
+  deleteFileFromServer(f: FileToImport, index) {
+    this.waiting = true;
+
+    const nameOnServer = f?.nameOnServer;
+    if (nameOnServer) {
+      this._importService
+        .deleteFile({nameOnServer: nameOnServer})
+        .subscribe(res => {
+          this.waiting = false;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'File Deleted!',
+            detail: 'the file ' + this.filesList[index].orginalName + ' deleted successfuly!'
+          });
+          debugger;
+          this.removeFormData(index);
+
+        },
+          err => {
+            this.waiting = false;
+            this._messageService.add({
+              severity: 'warning',
+              summary: 'File not Deleted!',
+              detail: 'the file ' + this.filesList[index].orginalName + ' not found on the server!'
+            });
+          });
+    } else {
+      this._messageService.add({
+        severity: 'warning',
+        summary: 'File not Deleted!',
+        detail: 'There is no file selected!'
+      });
+    }
+
+  }
+
   // upload step 1
   uploadFirstStep(f: FileToImport, index) {
     this.waiting = true;
@@ -152,7 +188,7 @@ export class ImportComponent implements OnInit {
     const fileType: number = f?.fileType?.value;
     const local: number = f?.local?.value;
     const fileClass: number = f?.fileClass?.value;
-    const temmplate: number = this.selectedTemplate?.value;
+    const temmplate: number = this.selectedTemplate;
     const formData: FormData = new FormData();
     if (!!file) {
       formData.append('excel', file);

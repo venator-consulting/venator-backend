@@ -41,6 +41,12 @@ router
 
 
 router
+    .route('/delete-file')
+    .post(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'),uploadCtrl.deleteFileFromServier);
+
+router
     .route('/user')
     .post(passport.authenticate('jwt', {
         session: false
