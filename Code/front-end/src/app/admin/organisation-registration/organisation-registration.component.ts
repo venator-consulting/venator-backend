@@ -22,7 +22,6 @@ export class OrganisationRegistrationComponent implements OnInit {
 
   UploadHandler(event) {
     const selectedFiles: FileList = event.files;
-    debugger;
     this.organisation.logo = selectedFiles[0];
   }
 

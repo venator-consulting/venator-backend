@@ -38,25 +38,25 @@ module.exports.fetch = function (search = '_', orderBy = 'username', order = 'DE
                 .findAll({
                     where: {
                         [Op.or]: [{
-                                username: {
-                                    [Op.like]: '%' + search + '%'
-                                }
-                            },
-                            {
-                                firstname: {
-                                    [Op.like]: '%' + search + '%'
-                                }
-                            },
-                            {
-                                lastname: {
-                                    [Op.like]: '%' + search + '%'
-                                }
-                            },
-                            {
-                                email: {
-                                    [Op.like]: '%' + search + '%'
-                                }
+                            username: {
+                                [Op.like]: '%' + search + '%'
                             }
+                        },
+                        {
+                            firstname: {
+                                [Op.like]: '%' + search + '%'
+                            }
+                        },
+                        {
+                            lastname: {
+                                [Op.like]: '%' + search + '%'
+                            }
+                        },
+                        {
+                            email: {
+                                [Op.like]: '%' + search + '%'
+                            }
+                        }
                         ]
 
                     },
@@ -79,7 +79,7 @@ module.exports.fetchAllManagers = async function () {
         const managers = await User
             .getUser()
             .findAll({
-                attributes: ['id','organisationId', 'title', 'firstname', 'lastname', 'email', 'username'],
+                attributes: ['id', 'organisationId', 'title', 'firstname', 'lastname', 'email', 'username'],
                 include: [{
                     model: Role,
                     attributes: ['name'],
@@ -129,28 +129,28 @@ module.exports.existUser = function (username) {
                 .findOne({
                     where: {
                         [Op.and]: [{
-                                [Op.or]: [{
-                                        username: username,
-                                    },
-                                    {
-                                        email: username,
-                                    }
-                                ],
+                            [Op.or]: [{
+                                username: username,
                             },
                             {
-                                deleted: false,
-                            },
-                            {
-                                [Op.or]: [{
-                                        expireDate: {
-                                            [Op.gt]: new Date()
-                                        }
-                                    },
-                                    {
-                                        expireDate: null
-                                    }
-                                ]
+                                email: username,
                             }
+                            ],
+                        },
+                        {
+                            deleted: false,
+                        },
+                        {
+                            [Op.or]: [{
+                                expireDate: {
+                                    [Op.gt]: new Date()
+                                }
+                            },
+                            {
+                                expireDate: null
+                            }
+                            ]
+                        }
 
                         ]
                     },
@@ -187,8 +187,9 @@ module.exports.insert = function (user) {
             };
             const token = jwt.sign(tokenPayload, env.jwtSecret);
 
+
             const mail = {
-                from: 'Venator, No Reply mail',
+                from: env.mailerUser,
                 to: user.email,
                 subject: 'Confirmation Mail',
                 html: ` 
@@ -208,7 +209,7 @@ module.exports.insert = function (user) {
             };
 
             const mailRes = await sendMail(mail);
-
+            console.log(mailRes);
             // if manager create schema
             // if (user.role === 'Manager') {
             //     Posting.syncPosting('posting_' + result.dataValues.id);
@@ -217,6 +218,7 @@ module.exports.insert = function (user) {
 
             resolve(result);
         } catch (err) {
+            console.log(err);
             reject(err);
         }
     }); // end of promise

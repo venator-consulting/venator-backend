@@ -223,6 +223,7 @@
     "Procedure_Registration": {
         "editHeader": "edit procedure ",
         "registrationHeader": "Procedure Registration",
+        "addProedurePlaceHolder": "Verfahren hinzufügen",
         "name": "Name",
         "nameErrorMsg": "name is required",
         "organisation": "Organisation",

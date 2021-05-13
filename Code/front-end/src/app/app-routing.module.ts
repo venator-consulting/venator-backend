@@ -43,7 +43,6 @@ const routes: Routes = [
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },
   { path: 'reset/:token', component: ResetPasswordNewUserComponent },
-  { path: 'reset/:token', component: ResetPasswordNewUserComponent },
   { path: '**', component: NotfoundComponent },
 
 ];
