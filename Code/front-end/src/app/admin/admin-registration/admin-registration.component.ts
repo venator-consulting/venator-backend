@@ -22,13 +22,14 @@ export class AdminRegistrationComponent implements OnInit {
   orgs: [] = [];
   titles: Titles[] = Titles.getTitles();
   //roles: Roles[] = Roles.getRoles();
-  roles = [{name:'Admin'}];
+  roles = [{name:'Admin', value: 1}];
 
 
   userModel: Users = {
     title: "",
     organisationId: 0,
     email: '',
+    RoleId: 1,
     role: '',
     firstname: '',
     lastname: '',
@@ -57,7 +58,7 @@ export class AdminRegistrationComponent implements OnInit {
   submitHandler() {
     this._adminRegistrationService.addUser(this.userModel)
       .subscribe(res => {
-        console.dir('done: ' + res);
+        // console.dir('done: ' + res);
         this._messageService.add({
           severity: 'success',
           summary: 'Registered successfully!',

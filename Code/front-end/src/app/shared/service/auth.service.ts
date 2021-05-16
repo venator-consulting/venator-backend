@@ -22,5 +22,17 @@ export class AuthService {
   adminRegistration(data: any) {
     return this._http.post<any>(this._thisURL + '/adminRegistration', data);
   }
-  
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  getToken() {
+    return localStorage.getItem('token');
+  }
+
+  getRole() {
+    return localStorage.getItem('role');
+  }
+
 }

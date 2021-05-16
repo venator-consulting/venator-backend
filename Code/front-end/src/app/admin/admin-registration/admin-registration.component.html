@@ -38,7 +38,7 @@
             <div class="p-field p-grid">
                 <label for="firstname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{'User_Registration.firstname' | translate}}</label>
                 <div class="p-col-12 p-md-10">
-                    <input required #firstname="ngModel"  name="firstname" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.firstname" > 
+                    <input required #firstname="ngModel"  name="firstname" maxlength="25" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.firstname" > 
                     <small *ngIf="firstname.invalid && firstname.touched " class="spanCss ">{{'User_Registration.firstnameErrorMsg' | translate}}</small>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             <div class="p-field p-grid">
                 <label for="lastname" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.lastname' | translate}} </label>
                 <div class="p-col-12 p-md-10">
-                    <input required #lastname="ngModel"  name="lastname" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.lastname" > 
+                    <input required #lastname="ngModel"  name="lastname" type="text" maxlength="25" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.lastname" > 
                     <small *ngIf="lastname.invalid && lastname.touched" class="spanCss ">{{'User_Registration.lastnameErrorMsg' | translate}}</small>
                 </div>
             </div>
@@ -54,7 +54,7 @@
             <div class="p-field p-grid">
                 <label for="email" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.email' | translate}} </label>
                 <div class="p-col-12 p-md-10">
-                    <input required #email="ngModel"  name="email" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.email" pattern="^(\D)+(\w)*((\.(\w)+)?)+@(\D)+(\w)*((\.(\D)+(\w)*)+)?(\.)[a-z]{2,}$" > 
+                    <input required #email="ngModel"  name="email" type="text" maxlength="50" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.email" pattern="^(\D)+(\w)*((\.(\w)+)?)+@(\D)+(\w)*((\.(\D)+(\w)*)+)?(\.)[a-z]{2,}$" > 
                     <small *ngIf="email.invalid && email.touched " class="spanCss "> {{'User_Registration.emailErrorMsg' | translate}}</small>
                     
                 </div>
@@ -63,7 +63,7 @@
             <div class="p-field p-grid">
                 <label for="username" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'User_Registration.username' | translate}} </label>
                 <div class="p-col-12 p-md-10">
-                    <input required #username="ngModel"  name="username" type="text" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.username" > 
+                    <input required #username="ngModel"  name="username" type="text" maxlength="25" pinputtext class="p-inputtext p-component ng-untouched ng-pristine ng-valid"  [(ngModel)]="userModel.username" > 
                     <small *ngIf="username.invalid && username.touched " class="spanCss ">{{'User_Registration.usernameErrorMsg' | translate}}</small>
                 </div>
             </div>

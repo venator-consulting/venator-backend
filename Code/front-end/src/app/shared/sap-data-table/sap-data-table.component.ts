@@ -55,8 +55,8 @@ getData() {
         this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
         this.maxPageNr = Math.ceil(this.totalCount / this.limit);
         this.loading = false;
-        console.log(this.organisationId);
-        console.log(this.procedureId);
+        // console.log(this.organisationId);
+        // console.log(this.procedureId);
 
       },
       error => {
@@ -115,7 +115,7 @@ getData() {
 
   previousPage() {
     --this.pageNr;
-    debugger
+    // debugger
     if (this.pageNr <= 0) return;
     this.loading = true;
     this.criteria.offset -= +this.limit;
@@ -152,7 +152,7 @@ getData() {
       .exportXLSX('posting', this.organisationId, this.procedureId)
       .subscribe(
         url => {
-          console.log(url);
+          // console.log(url);
           window.open(url.toString(), "_blank");
         },
         (error) => console.log(error),
@@ -164,7 +164,7 @@ getData() {
       .subscribe(
         (data) => {
 
-          console.log(data);
+          // console.log(data);
         },
         (error) => console.log(error),
         () => { }

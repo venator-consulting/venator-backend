@@ -107,11 +107,12 @@ export class ImportComponent implements OnInit {
   }
 
   selectTemplatHandler(e) {
+    this.filesList = [];
     this.addFormData();
   }
 
   removeFormData(index: number) {
-    this.filesList = this.filesList.splice(index, 1);
+    this.filesList.splice(index, 1);
   }
 
   addFormData() {
@@ -139,6 +140,42 @@ export class ImportComponent implements OnInit {
     this.filesList[this.currentFileIndex].defaultTemplate = this.postingCustomTemplate;
   }
 
+  deleteFileFromServer(f: FileToImport, index) {
+    this.waiting = true;
+
+    const nameOnServer = f?.nameOnServer;
+    if (nameOnServer) {
+      this._importService
+        .deleteFile({nameOnServer: nameOnServer})
+        .subscribe(res => {
+          this.waiting = false;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'File Deleted!',
+            detail: 'the file ' + this.filesList[index].orginalName + ' deleted successfuly!'
+          });
+          debugger;
+          this.removeFormData(index);
+
+        },
+          err => {
+            this.waiting = false;
+            this._messageService.add({
+              severity: 'warning',
+              summary: 'File not Deleted!',
+              detail: 'the file ' + this.filesList[index].orginalName + ' not found on the server!'
+            });
+          });
+    } else {
+      this._messageService.add({
+        severity: 'warning',
+        summary: 'File not Deleted!',
+        detail: 'There is no file selected!'
+      });
+    }
+
+  }
+
   // upload step 1
   uploadFirstStep(f: FileToImport, index) {
     this.waiting = true;
@@ -151,7 +188,7 @@ export class ImportComponent implements OnInit {
     const fileType: number = f?.fileType?.value;
     const local: number = f?.local?.value;
     const fileClass: number = f?.fileClass?.value;
-    const temmplate: number = this.selectedTemplate?.value;
+    const temmplate: number = this.selectedTemplate;
     const formData: FormData = new FormData();
     if (!!file) {
       formData.append('excel', file);
@@ -174,7 +211,7 @@ export class ImportComponent implements OnInit {
     this._importService
       .uploadFile(formData)
       .subscribe(res => {
-        console.dir('done: ' + res);
+        // console.dir('done: ' + res);
 
         this.waiting = false;
         f.fileHeader = res.headers;
@@ -190,14 +227,14 @@ export class ImportComponent implements OnInit {
         }
         f.uploaded = true;
         this.currentFileIndex = index;
-        console.dir(this.filesList);
+        // console.dir(this.filesList);
         this._messageService.add({
           severity: 'success',
           summary: 'File uploaded!',
           detail: 'the file ' + this.filesList[this.currentFileIndex].orginalName + ' uploaded successfuly! you can upload another file now'
         });
       }, err => {
-        console.log('error: ' + err);
+        // console.log('error: ' + err);
         this.waiting = false;
         this._messageService.add({
           severity: 'error',
@@ -212,7 +249,7 @@ export class ImportComponent implements OnInit {
 
   UploadHandler(event, f: FileToImport, index: number) {
     const selectedFiles: FileList = event.files;
-    debugger;
+    // debugger;
     f.file = selectedFiles[0];
     f.index = index;
   }
@@ -259,19 +296,19 @@ export class ImportComponent implements OnInit {
     this._importService
       .importFile(data)
       .subscribe(res => {
-        console.dir('done: ' + res);
+        // console.dir('done: ' + res);
 
         this.waiting = false;
         this.filesList[this.currentFileIndex].imported = true;
-        console.dir(this.filesList);
+        // console.dir(this.filesList);
         this._messageService.add({
           severity: 'success',
           summary: 'File imported!',
           detail: 'the file ' + this.filesList[this.currentFileIndex].orginalName + ' imported successfuly! you can import another file now'
         });
       }, err => {
-        debugger;
-        console.log('error: ' + err.error.error);
+        // debugger;
+        // console.log('error: ' + err.error.error);
         this.waiting = false;
         this._messageService.add({
           severity: 'error',
@@ -281,56 +318,4 @@ export class ImportComponent implements OnInit {
       });
 
   }
-  // Upload(event, f: FileToImport) {
-
-  //   this.waiting = true;
-
-  //   const selectedFiles: FileList = event.files;
-  //   // let files = event.files;
-  //   const formData: FormData = new FormData();
-  //   let currentFileUpload: File = selectedFiles[0];
-
-  //   if (!!selectedFiles) {
-  //     formData.append('excel', currentFileUpload);
-  //     // files.forEach((file : File) => {
-  //     //   formData.append('excel', file, file.name);
-  //     // });
-  //   } else {
-  //     this._messageService.add({
-  //       severity: 'warning',
-  //       summary: 'Please choose a file',
-  //       detail: 'You should chose a posting file!'
-  //     });
-  //     return;
-  //   }
-
-
-  //   formData.append('data', JSON.stringify({
-  //     template: this.selectedTemplate.value
-  //   }));
-
-  //   this._importService
-  //     .uploadFile(formData)
-  //     .subscribe(res => {
-  //       console.dir('done: ' + res);
-  //       this.waiting = false;
-  //       this._messageService.add({
-  //         severity: 'success',
-  //         summary: 'Posting uploaded!',
-  //         detail: 'the file uploaded successfuly!'
-  //       });
-  //     }, err => {
-  //       console.log('error: ' + err);
-  //       this.waiting = false;
-  //       this._messageService.add({
-  //         severity: 'error',
-  //         summary: 'ERROR!',
-  //         detail: 'There is an error occured, please try again!'
-  //       });
-  //     });
-
-
-  // } // end of uploading post file function
-
-
 }

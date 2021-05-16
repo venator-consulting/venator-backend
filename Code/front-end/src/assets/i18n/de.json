@@ -262,7 +262,8 @@
         "previous": "vorherige Seite",
         "next": "nächste Seite",
         "clearFilter": "Filter löschen",
-        "filter": "Filter"
+        "filter": "Filter",
+        "actions": "Actions"
 
     }
   }

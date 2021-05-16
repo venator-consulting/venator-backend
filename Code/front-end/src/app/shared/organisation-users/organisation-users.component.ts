@@ -22,7 +22,7 @@ export class OrganisationUsersComponent implements OnInit {
     .subscribe(
       (data) => { 
         this.users = data.results ;
-        console.log(data)
+        // console.log(data)
         },
       (error) => console.log(error),
       () => { }

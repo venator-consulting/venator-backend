@@ -52,11 +52,11 @@
           </div>
         </div>
         <div class="p-field p-grid">
-          <label for="postcode" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Organisation_Registration.postcode' | translate}} </label>
+          <label for="postCode" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Organisation_Registration.postcode' | translate}} </label>
           <div class="p-col-12 p-md-10">
-            <input required #postcode="ngModel" name="postcode" type="text" pinputtext
-              class="p-inputtext p-component ng-untouched ng-pristine ng-valid" [(ngModel)]="organisation.postcode">
-            <small *ngIf="postcode.invalid && postcode.touched" class="spanCss ">{{'Organisation_Registration.postcodeErrorMsg' | translate}}</small>
+            <input required #postCode="ngModel" name="postCode" type="text" pinputtext
+              class="p-inputtext p-component ng-untouched ng-pristine ng-valid" [(ngModel)]="organisation.postCode">
+            <small *ngIf="postCode.invalid && postCode.touched" class="spanCss ">{{'Organisation_Registration.postcodeErrorMsg' | translate}}</small>
           </div>
         </div>
         <div class="p-field p-grid">
@@ -74,6 +74,9 @@
               mode="basic" accept="image/*" styleClass="logoCss p-cancelButton "
               (uploadHandler)="UploadHandler($event)">
             </p-fileUpload>
+            <div *ngIf="organisation.id && organisation.logo">
+              <img src="{{organisation.logo}}" alt="organisation logo" width="30">
+            </div>
           </div>
         </div>
 

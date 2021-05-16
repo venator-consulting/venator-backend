@@ -17,6 +17,7 @@ module.exports = {
     mailerPort: 587,
     mailerUser: 'login@venalytics.de',
     mailerPassword: '$Werft12',
-    resetPassLink: 'http://venalytics.de:8000/reset/', 
+    resetPassLink: 'http://venalytics.de/reset/', 
+    developerMail: 'ibrahim.ad.dandan@gmail.com'
     
 };

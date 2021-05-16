@@ -19,6 +19,11 @@ export class ImportService {
   importFile(formData) {
     return this._http.post<any>(this._thisURL + '/import', formData);
   }
+
+  deleteFile(data) {
+    return this._http.post<any>(this._thisURL + '/delete-file', data);
+  }
+
   addProcedure(procedure) {
     console.log(procedure)
   }

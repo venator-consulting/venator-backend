@@ -1,280 +1,153 @@
 const excelHelper = require('../../../helpers/excel.helper.server');
-const csvHelper = require('../../../helpers/csv.helper.server');
 const csvStreamHelper = require('../../../helpers/csv.stream.helper.server');
 const wMobelTemplate = require('../../../models/templates/sap.wmobel.template');
+const cinramTemplate = require('../../../models/templates/sap.cinram.template');
 const defaultAccountTemplate = require('../../../models/templates/accounts.default.template');
-const {
-    fiscalYear
-} = require('../../../models/templates/sap.wmobel.template');
+
+const sendMail = require('../../../config/mailer.config').sendMail;
+const logger = require('../../../config/logger.config').logger;
+const env = require('../../../config/environment');
+
 const fs = require('fs');
 
 
-module.exports.getHeaderExcel = function (req, res, next) {
-    const csvFile = req.file;
-    const filePath = csvFile.path;
-    excelHelper
-        .readHeader(filePath)
-        .then(header => {
-            res
-                .status(200)
-                .json({
-                    fileName: csvFile.filename,
-                    orginalName: csvFile.originalname,
-                    headers: header
-                });
 
-        });
-};
-
-module.exports.getTemplateTypes = function (req, res) {
-    const templateTypes = require('../../../models/enums/template.type');
-    res
-        .status(200)
-        .json(templateTypes);
-};
-
-module.exports.uploadExcel = function (req, res, next) {
-    const excelFile = req.file;
-    // first of all check if the file uploaded successfully!
-
-    // to check if the mime ype is valid!
-    const mimeType = excelFile.mimeType;
-    // get the path to open the stream from the server
-    const filePath = excelFile.path;
-    console.log('uploaded files: ' + JSON.stringify(req.file, null, 2));
-    excelHelper
-        .readExcelFile(filePath)
-        .then(done => {
-            res
-                .status(200)
-                .json('done');
-
-        });
-
-};
-
-
-module.exports.getHeaderCsv = function (req, res, next) {
-    console.log("csv header requested");
-    const csvFile = req.file;
-    const filePath = csvFile.path;
-    csvHelper
-        .readHeader(filePath)
-        .then(header => {
-            res
-                .status(200)
-                .json({
-                    fileName: csvFile.filename,
-                    orginalName: csvFile.originalname,
-                    headers: header
-                });
-
-        });
-};
-
-
-module.exports.uploadCsv = function (req, res, next) {
-    const csvFile = req.file;
-    // first of all check if the file uploaded successfully!
-
-    // to check if the mime ype is valid!
-    const mimeType = csvFile.mimeType;
-    // get the path to open the stream from the server
-    const filePath = csvFile.path;
-    console.log('uploaded files: ' + JSON.stringify(req.file, null, 2));
-    csvHelper
-        .readCsvFile(filePath)
-        .then(done => {
-            if (!!done.error) {
-                res
-                    .status(500)
-                    .json(done.error);
-            } else {
-                res
-                    .status(200)
-                    .json('done');
-            }
-        })
-        .catch(er => {
-            res
-                .status(500)
-                .json(er);
-        });
-};
-
-
-module.exports.uploadCsvStream = function (req, res, next) {
-    const csvFile = req.file;
-    // first of all check if the file uploaded successfully!
-
-    // to check if the mime ype is valid!
-    const mimeType = csvFile.mimeType;
-    // get the path to open the stream from the server
-    const filePath = csvFile.path;
-    console.log('uploaded files: ' + JSON.stringify(req.file, null, 2));
-    csvStreamHelper
-        .readCsvStream(filePath)
-        .then(done => {
-            if (!!done.error) {
-                res
-                    .status(500)
-                    .json(done.error);
-            } else {
-                res
-                    .status(200)
-                    .json('done');
-            }
-        })
-        .catch(er => {
-            res
-                .status(500)
-                .json(er);
-        });
-};
-
-
-module.exports.uploadAccountCsv = function (req, res, next) {
-    const csvFile = req.file;
-    // first of all check if the file uploaded successfully!
-
-    // to check if the mime ype is valid!
-    const mimeType = csvFile.mimeType;
-    // get the path to open the stream from the server
-    const filePath = csvFile.path;
-    let accountType = null;
-    if (req && req.data)
-        accountType = req.accountType;
-    else accountType = 1;
-
-    console.log('uploaded files: ' + JSON.stringify(req.file, null, 2));
-    csvHelper
-        .importAccountCsvFile(filePath, accountType)
-        .then(done => {
-            if (!!done.error) {
-                res
-                    .status(500)
-                    .json(done.error);
-            } else {
-                res
-                    .status(200)
-                    .json('done');
-            }
-        })
-        .catch(er => {
-            res
-                .status(500)
-                .json(er);
-        });
-};
-
-
-module.exports.uploadAccountExcel = function (req, res, next) {
-    const csvFile = req.file;
-    // first of all check if the file uploaded successfully!
-
-    // to check if the mime ype is valid!
-    const mimeType = csvFile.mimeType;
-    // get the path to open the stream from the server
-    const filePath = csvFile.path;
-    let accountType = null;
-    if (req && req.data)
-        accountType = req.accountType;
-    else accountType = 1;
-
-    console.log('uploaded files: ' + JSON.stringify(req.file, null, 2));
-    excelHelper
-        .importAccountExcelFile(filePath, accountType)
-        .then(done => {
-            res
-                .status(200)
-                .json('done');
-
-        });
-};
-
-
-module.exports.headerFile = function (req, res, next) {
-    const file = req.file;
-    const filePath = file.path;
-    if (!!req.data) {
-        // return data form error
-    }
-    if (!!req.file) {
-        // return file error
-    }
-    const reqData = JSON.parse(req.body.data);
-    const fileType = reqData.fileType;
-    const fileClass = reqData.fileClass;
-    const local = reqData.local;
-    const accountType = reqData.accountType;
-    const template = reqData.template;
-    let defaultTemplate = {};
-    // posting default template
-    if ((!template || template == 1) && fileClass == 2) {
-        defaultTemplate = wMobelTemplate;
-    }
-    // accounts set template
-    if ((!template || template == 1) && fileClass == 1) {
-        defaultTemplate = defaultAccountTemplate;
-    }
-    // if file type === 1 then is it an excel file
-    if (fileType == 1) {
-        // excel file
-        excelHelper
-            .readHeader(filePath)
-            .then(header => {
-                res
-                    .status(200)
-                    .json({
-                        fileName: filePath,
-                        orginalName: file.originalname,
-                        headers: header,
-                        defaultTemplate: defaultTemplate
-                    });
-
-            })
-            .catch(er => {
-                res
-                    .status(500)
-                    .json({
-                        error: er
-                    });
-            });
-
-    } else if (fileType == 2) {
-        // it's a csv file
-        csvStreamHelper
-            .readHeader(filePath)
-            .then(header => {
-                res
-                    .status(200)
-                    .json({
-                        fileName: filePath,
-                        orginalName: file.originalname,
-                        headers: header,
-                        defaultTemplate: defaultTemplate
-                    });
-
-            })
-            .catch(er => {
-                res
-                    .status(500)
-                    .json({
-                        error: er
-                    });
-            })
-    } else {
-        // return error file type
+module.exports.getTemplateTypes = async function (req, res) {
+    try {
+        const templateTypes = require('../../../models/enums/template.type');
         res
-            .status(400)
+            .status(200)
+            .json(templateTypes);
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> admin upload controller </h3 >
+            <p> get template types </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
+        res
+            .status(500)
             .json({
-                error: 'Please choose a file type: CSV OR Excel',
+                error: error.message,
             });
     }
-}
+};
 
 
-module.exports.importFile = function (req, res, next) {
+module.exports.headerFile = async function (req, res, next) {
+    try {
+        const file = req.file;
+        const filePath = file.path;
+        if (!!req.data) {
+            // return data form error
+        }
+        if (!!req.file) {
+            // return file error
+        }
+        const reqData = JSON.parse(req.body.data);
+        const fileType = reqData.fileType;
+        const fileClass = reqData.fileClass;
+        const local = reqData.local;
+        const accountType = reqData.accountType;
+        const template = reqData.template;
+        let defaultTemplate = {};
+        // posting default template
+        if (template == 1 && fileClass == 2) {
+            defaultTemplate = wMobelTemplate;
+        }
+        // accounts set template
+        else if (template == 1 && fileClass == 1) {
+            defaultTemplate = defaultAccountTemplate;
+        } else if (template == 2 && fileClass == 2) {
+            defaultTemplate = cinramTemplate.posting;
+        } else {
+            defaultTemplate = {};
+        }
+        // if file type === 1 then is it an excel file
+        if (fileType == 1) {
+            // excel file
+            excelHelper
+                .readHeader(filePath)
+                .then(header => {
+                    res
+                        .status(200)
+                        .json({
+                            fileName: filePath,
+                            orginalName: file.originalname,
+                            headers: header,
+                            defaultTemplate: defaultTemplate
+                        });
+
+                })
+                .catch(er => {
+                    res
+                        .status(500)
+                        .json({
+                            error: er
+                        });
+                });
+
+        } else if (fileType == 2) {
+            // it's a csv file
+            csvStreamHelper
+                .readHeader(filePath)
+                .then(header => {
+                    res
+                        .status(200)
+                        .json({
+                            fileName: filePath,
+                            orginalName: file.originalname,
+                            headers: header,
+                            defaultTemplate: defaultTemplate
+                        });
+
+                })
+                .catch(er => {
+                    res
+                        .status(500)
+                        .json({
+                            error: er
+                        });
+                })
+        } else {
+            // return error file type
+            res
+                .status(400)
+                .json({
+                    error: 'Please choose a file type: CSV OR Excel',
+                });
+        }
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> admin upload controller </h3 >
+            <p> get header file </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
+        res
+            .status(500)
+            .json({
+                error: error.message,
+            });
+    }
+};
+
+
+module.exports.importFile = async function (req, res, next) {
     try {
         if (!!req.body.data) {
             // return data form error
@@ -412,11 +285,56 @@ module.exports.importFile = function (req, res, next) {
                     error: 'Please choose a file type: CSV OR Excel',
                 });
         }
-    } catch (e) {
-        res
-        .status(500)
-        .json({
-            error: e.message,
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> admin upload controller </h3 >
+            <p> import file </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
         });
+        logger.error(`${new Date()}: ${error}`);
+        res
+            .status(500)
+            .json({
+                error: error.message,
+            });
+    }
+};
+
+module.exports.deleteFileFromServier = async function (req, res) {
+    try {
+        let message = "file not found";
+        if (req.body.nameOnServer) {
+            fs.unlinkSync(req.body.nameOnServer);
+            message = "the file deleted successfully";
+        }
+        res
+            .status(200)
+            .json(message);
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> admin upload controller </h3 >
+            <p> Delete file from the server </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
+        res
+            .status(500)
+            .json({
+                error: error.message,
+            });
     }
 }

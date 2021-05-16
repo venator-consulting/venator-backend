@@ -36,7 +36,7 @@ export class ProcedureEditComponent implements OnInit {
   submitHandler(){
      this._roleServiceService.editProcedure(this.procedureModel)
       .subscribe(res => {
-        console.dir('done: ' + res);
+        // console.dir('done: ' + res);
         this._messageService.add({
           severity: 'success',
           summary: 'updated successfully!',

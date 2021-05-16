@@ -29,16 +29,22 @@ export class AdminDashboardComponent implements OnInit {
     );
   }
   showProcedures(id) {
-    console.log(id)
+    // console.log(id)
     localStorage.setItem('organisationId', id);
     this._router.navigate(['/shared/user/procedures']);
 
   
   }
   showUsers(id) {
-    console.log(id)
+    // console.log(id)
     localStorage.setItem('organisationId', id);
     this._router.navigate(['/shared/user/users']);
   
   }
+
+  editOrg(id) {
+    this._router.navigate(['/admin/organisation/edit/' + id]);
+  }
+
+
 }

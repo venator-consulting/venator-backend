@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth.guard';
 import { ImportComponent } from "./admin/import/import.component";
 import { UnauthComponent } from "./shared/unauth/unauth.component";
 import { NotfoundComponent } from "./shared/notfound/notfound.component";
@@ -28,17 +29,18 @@ const routes: Routes = [
   //     { path: 'import', component: ImportComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   //   ]
   // },
-  { path: 'admin/admin/add', component: AdminRegistrationComponent },
-  { path: 'admin/organisation/add', component: OrganisationRegistrationComponent },
-  { path: 'admin/procedure/add', component: ProcedureRegistrationComponent },
-  { path: 'admin/procedure/edit', component: ProcedureEditComponent },
-  { path: 'admin/dashboard', component: AdminDashboardComponent },
-  { path: 'admin/import', component: ImportComponent },
+  { path: 'admin/admin/add', component: AdminRegistrationComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
+  { path: 'admin/organisation/add', component: OrganisationRegistrationComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
+  { path: 'admin/organisation/edit/:id', component: OrganisationRegistrationComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
+  { path: 'admin/procedure/add', component: ProcedureRegistrationComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
+  { path: 'admin/procedure/edit', component: ProcedureEditComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
+  { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
+  { path: 'admin/import', component: ImportComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
 
-  { path: 'shared/user/add', component: UserRegistrationComponent },
-  { path: 'shared/user/edit', component: UserEditComponent },
-  { path: 'shared/user/procedures', component: UserDashboardComponent },
-  { path: 'shared/user/users', component: OrganisationUsersComponent },
+  { path: 'shared/user/add', component: UserRegistrationComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
+  { path: 'shared/user/edit', component: UserEditComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
+  { path: 'shared/user/procedures', component: UserDashboardComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
+  { path: 'shared/user/users', component: OrganisationUsersComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
   { path: 'shared/data', component: SAPDataTableComponent },
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },
