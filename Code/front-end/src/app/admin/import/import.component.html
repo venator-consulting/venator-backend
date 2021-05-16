@@ -11,14 +11,14 @@
   <!-- 
     <div class="p-col-1">
     </div> -->
-  <div [hidden]="activeIndex != 0" class="p-col-12">
+  <div [hidden]="activeIndex != 0" class="p-sm-12">
     <div class="p-grid">
       <div class="p-col-4">
         <h2>{{'Admin_Import.firstStepHeader' | translate}}</h2>
       </div>
-      <div class="p-col-4" *ngIf="waiting">
+      <!-- <div class="p-col-4" *ngIf="waiting">
         <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
-      </div>
+      </div> -->
       <div class="p-col-4">
         <h3>{{filesList[currentFileIndex]?.orginalName}}</h3>
       </div>
@@ -74,16 +74,19 @@
       <div class="p-grid">
         <p-messages></p-messages>
       </div>
-      <div class="p-col-12" *ngFor="let f of filesList; let i = index;" [hidden]="!selectedTemplate">
+      <div class="p-sm-12" *ngFor="let f of filesList; let i = index;" [hidden]="!selectedTemplate">
         <!-- {{f | json}} -->
         <br><br>
 
         <div class="p-grid" *ngIf="f.imported!==true">
+          <div class="p-sm-12">
+            <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
+          </div>
           <div class="p-sm-6 p-lg-3">
             <!-- maxFileSize="100000000" -->
-            <p-fileUpload name="excel" mode="basic" [showUploadButton]="false" customUpload="true"
-              (uploadHandler)="UploadHandler($event, f, i)" uploadLabel="Set File"
-              chooseLabel="{{'Admin_Import.searchLabel' | translate}}" [auto]="true"
+            <p-fileUpload name="excel" mode="advanced" [showUploadButton]="false" customUpload="true"
+              (uploadHandler)="UploadHandler($event, f, i)" uploadLabel="Set File"  [auto]="true"
+              chooseLabel="{{'Admin_Import.searchLabel' | translate}}"
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .csv, text/plain">
               <ng-template pTemplate="content">
 
@@ -116,7 +119,7 @@
               <button pButton type="button" icon="pi pi-upload" iconPos="left"
                 label="{{'Admin_Import.uploadLabel' | translate}}" (click)="uploadFirstStep(f, i)"
                 [disabled]="!f.file || !f.fileType || !f.fileClass || f.uploaded || waiting"
-                class="p-button-raised p-button-rounded"></button>
+                class="p-button-raised p-button-rounded"><i class="pi pi-spinner pi-spin" *ngIf="waiting"></i></button>
               <button pButton type="button" label="{{'Admin_Import.nextLabel' | translate}}"
                 class="p-button-raised p-button-rounded" (click)="goToImport(0, i)"
                 [disabled]="!f.file || !f.fileType || !f.fileClass || !f.uploaded || f.imported"></button>
@@ -185,13 +188,14 @@
       <p-accordionTab header="{{'Admin_Import.thirdStepHeader' | translate}}"
         *ngIf="filesList[currentFileIndex]?.fileClass?.value === 1" [selected]="true">
         <div class="p-grid">
-          <div class="p-col-3">{{'Admin_Import.databaseField' | translate}}</div>
-          <div class="p-col-3">{{'Admin_Import.selectedFile' | translate}}</div>
-          <div class="p-col-6">{{'Admin_Import.mappingField' | translate}}</div>
+          <!-- p-sm-12 p-lg-8 -->
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.databaseField' | translate}}</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.selectedFile' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">{{'Admin_Import.mappingField' | translate}}</div>
 
-          <div class="p-col-3">{{'Admin_Import.textDataType' | translate}}</div>
-          <div class="p-col-3">{{'Admin_Import.textDataType' | translate}}</div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">
             <select name="mdt" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['client']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -200,9 +204,9 @@
             </select>
           </div>
 
-          <div class="p-col-3">BuKr</div>
-          <div class="p-col-3">{{'Admin_Import.client' | translate}}</div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2">BuKr</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.client' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">
             <select name="mdt" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['companyCode']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -212,9 +216,9 @@
             </select>
           </div>
 
-          <div class="p-col-3">accountType</div>
-          <div class="p-col-3">{{'Admin_Import.textDataType' | translate}}</div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2">accountType</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">
             <select name="mdt" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountType']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -224,9 +228,9 @@
             </select>
           </div>
 
-          <div class="p-col-3">accountNumber</div>
-          <div class="p-col-3">{{'Admin_Import.numberDataType' | translate}}</div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2">accountNumber</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.numberDataType' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">
             <select name="mdt" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountNumber']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -236,9 +240,9 @@
             </select>
           </div>
 
-          <div class="p-col-3">accountName</div>
-          <div class="p-col-3">{{'Admin_Import.textDataType' | translate}}</div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2">accountName</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">
             <select name="mdt" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountName']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -253,23 +257,23 @@
         [selected]="true">
 
         <div class="p-grid">
-          <div class="p-col-3">
+          <div class="p-sm-6 p-lg-2">
             <h2><b> Database Field </b></h2>
           </div>
-          <div class="p-col-3">
+          <div class="p-sm-6 p-lg-2">
             <h2><b> Data Type</b></h2>
           </div>
-          <div class="p-col-6">
+          <div class="p-sm-12 p-lg-8">
             <h2><b> Mapping Field </b></h2>
           </div>
 
-          <div class="p-col-3">
+          <div class="p-sm-6 p-lg-2">
             <h4><b>{{'Admin_Import.client' | translate}}</b></h4>
           </div>
-          <div class="p-col-3">
+          <div class="p-sm-6 p-lg-2">
             <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
           </div>
-          <div class="p-col-6">
+          <div class="p-sm-12 p-lg-8">
             <select name="client" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['client']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -279,9 +283,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.documentType' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.documentType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="documentType" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentType']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -291,9 +295,9 @@
           </div>
 
 
-          <!-- <div class="p-col-3">{{'Admin_Import.documentTypeName' | translate}}</div>
-          <div class="p-col-3">{{'Admin_Import.textDataType' | translate}}</div>
-          <div class="p-col-6">
+          <!-- <div class="p-sm-6 p-lg-2">{{'Admin_Import.documentTypeName' | translate}}</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">
             <select name="documentTypeName" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentTypeName']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -303,9 +307,9 @@
           </div> -->
 
 
-          <!-- <div class="p-col-3">{{'Admin_Import.documentTypeNew' | translate}}</div>
-          <div class="p-col-3">{{'Admin_Import.textDataType' | translate}}</div>
-          <div class="p-col-6">
+          <!-- <div class="p-sm-6 p-lg-2">{{'Admin_Import.documentTypeNew' | translate}}</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">
             <select name="documentTypeNew" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentTypeNew']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -316,9 +320,9 @@
 
 
 
-          <!-- <div class="p-col-3">{{'Admin_Import.dueDateNew' | translate}}</div>
-          <div class="p-col-3">{{'Admin_Import.dateDataType' | translate}}</div>
-          <div class="p-col-6">
+          <!-- <div class="p-sm-6 p-lg-2">{{'Admin_Import.dueDateNew' | translate}}</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.dateDataType' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">
             <select name="dueDateNew" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['dueDateNew']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -327,9 +331,9 @@
             </select>
           </div> -->
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.executionDate' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.dateDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.executionDate' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.dateDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="executionDate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['executionDate']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -339,9 +343,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.documentNumber2' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.documentNumber2' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="documentNumber2" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentNumber2']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -351,9 +355,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.assignment' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.assignment' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="assignment" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['assignment']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -363,9 +367,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.documentNumber' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.documentNumber' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="documentNumber" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentNumber']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -375,9 +379,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.documentType' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.documentType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="documentType" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentType']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -387,9 +391,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.documentDate' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.dateDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.documentDate' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.dateDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="documentDate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentDate']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -399,9 +403,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.recordNumber' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.recordNumber' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="recordNumber" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['recordNumber']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -411,9 +415,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.creditAmount' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.creditAmount' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="creditAmount" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['creditAmount']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -423,9 +427,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.transactionCurrency' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.transactionCurrency' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="transactionCurrency"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['transactionCurrency']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -436,9 +440,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.applicationDocument' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.applicationDocument' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="applicationDocument"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['applicationDocument']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -449,9 +453,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textPosting' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textPosting' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="textPosting" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['textPosting']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -461,9 +465,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.applicationDate' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.dateDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.applicationDate' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.dateDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="applicationDate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['applicationDate']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -473,9 +477,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.postingDate' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.dateDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.postingDate' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.dateDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="postingDate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['postingDate']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -485,9 +489,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.companyCode' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.companyCode' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="companyCode" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['companyCode']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -497,9 +501,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.fiscalYear' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.fiscalYear' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="fiscalYear" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['fiscalYear']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -509,9 +513,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.postingPeriod' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.postingPeriod' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="postingPeriod" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['postingPeriod']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -521,9 +525,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.accountType' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.accountType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="accountType" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountType']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -533,9 +537,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.accountNumber' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.accountNumber' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="accountNumber" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountNumber']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -545,9 +549,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.debitCredit' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.debitCredit' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="debitCredit" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['debitCredit']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -557,9 +561,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.reference' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.reference' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="reference" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['reference']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -569,9 +573,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.GLAccountNumber' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.GLAccountNumber' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="GLAccountNumber" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['GLAccountNumber']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -582,9 +586,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contraAccountType' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contraAccountType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contraAccountType"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountType']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -595,9 +599,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contraAccountNumber' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contraAccountNumber' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contraAccountNumber"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountNumber']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -608,9 +612,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contraAccountGLAccountNo' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contraAccountGLAccountNo' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contraAccountGLAccountNo"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountGLAccountNo']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -621,9 +625,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contraAccountCreditorNo' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contraAccountCreditorNo' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contraAccountCreditorNo"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountCreditorNo']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -634,9 +638,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contraAccountDebtorNo' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contraAccountDebtorNo' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contraAccountDebtorNo"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountDebtorNo']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -647,9 +651,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.dueDate' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.dateDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.dueDate' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.dateDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="dueDate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['dueDate']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -659,9 +663,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textHeader' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textHeader' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="textHeader" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['textHeader']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -671,9 +675,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.accountName' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.accountName' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="accountName" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountName']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -683,9 +687,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contraAccountName' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contraAccountName' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="ContraAccountName"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountName']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -696,9 +700,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.balance' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.balance' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="balance" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['balance']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -707,9 +711,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.debitAmount' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.debitAmount' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="debitAmount" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['debitAmount']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -718,9 +722,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.balanceTransactionCurrency' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.balanceTransactionCurrency' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="balanceTransactionCurrency"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['balanceTransactionCurrency']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -730,9 +734,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.debitAmountTransactionCurrency' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.debitAmountTransactionCurrency' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="debitAmountTransactionCurrency"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['debitAmountTransactionCurrency']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -742,9 +746,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.creditAmountTransactionCurrency' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.creditAmountTransactionCurrency' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="creditAmountTransactionCurrency"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['creditAmountTransactionCurrency']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -755,9 +759,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.exchangeRate' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.exchangeRate' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="exchangeRate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['exchangeRate']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -767,9 +771,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.cashDiscount' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.cashDiscount' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="cashDiscount" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['cashDiscount']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -779,9 +783,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.postingKey' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.postingKey' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="postingKey" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['postingKey']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -791,9 +795,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.salesTaxKey' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.salesTaxKey' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="salesTaxKey" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['salesTaxKey']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -803,9 +807,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.taxRate' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.taxRate' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="taxRate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['taxRate']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -815,9 +819,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.euTaxRate' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.euTaxRate' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="euTaxRate" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['euTaxRate']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -827,9 +831,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.taxAmount' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.taxAmount' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="taxAmount" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['taxAmount']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -839,9 +843,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.taxAmountDebit' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.taxAmountDebit' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="taxAmountDebit" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['taxAmountDebit']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -852,9 +856,9 @@
 
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.taxAmountCredit' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.taxAmountCredit' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="taxAmountCredit" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['taxAmountCredit']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -864,9 +868,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.stackNumber' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.stackNumber' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="stackNumber" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['stackNumber']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -876,9 +880,9 @@
           </div>
 
 
-          <!-- <div class="p-col-3">{{'Admin_Import.constCenter1' | translate}}</div>
-          <div class="p-col-3">{{'Admin_Import.textDataType' | translate}}</div>
-          <div class="p-col-6">
+          <!-- <div class="p-sm-6 p-lg-2">{{'Admin_Import.constCenter1' | translate}}</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">
             <select name="constCenter1" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['constCenter1']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -888,9 +892,9 @@
           </div> -->
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.CostCenter2' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.CostCenter2' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="CostCenter2" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['CostCenter2']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -900,9 +904,9 @@
           </div>
 
 
-          <!-- <div class="p-col-3">{{'Admin_Import.applicationDateNew' | translate}}</div>
-          <div class="p-col-3">{{'Admin_Import.textDataType' | translate}}</div>
-          <div class="p-col-6">
+          <!-- <div class="p-sm-6 p-lg-2">{{'Admin_Import.applicationDateNew' | translate}}</div>
+          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-12 p-lg-8">
             <select name="applicationDateNew" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['applicationDateNew']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -913,9 +917,9 @@
 
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.identifierBalanceCarryforward' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.identifierBalanceCarryforward' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="identifierBalanceCarryforward"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['identifierBalanceCarryforward']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -926,9 +930,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.generalReversal' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.generalReversal' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="generalReversal" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['generalReversal']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -939,9 +943,9 @@
 
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.ledgerId' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.ledgerId' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="ledgerId" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['ledgerId']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -951,9 +955,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.documentLink' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.documentLink' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="documentLink" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentLink']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
@@ -964,9 +968,9 @@
 
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.typeDocumentInformation1' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.typeDocumentInformation1' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="typeDocumentInformation1"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation1']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -977,9 +981,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contentDocumentInformation1' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contentDocumentInformation1' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contentDocumentInformation1"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation1']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -990,9 +994,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.typeDocumentInformation2' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.typeDocumentInformation2' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="typeDocumentInformation2"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation2']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1002,9 +1006,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contentDocumentInformation2' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contentDocumentInformation2' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contentDocumentInformation2"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation2']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1015,9 +1019,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.typeDocumentInformation3' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.typeDocumentInformation3' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="typeDocumentInformation3"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation3']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1028,9 +1032,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contentDocumentInformation3' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contentDocumentInformation3' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contentDocumentInformation3"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation3']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1041,9 +1045,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.typeDocumentInformation4' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.typeDocumentInformation4' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="typeDocumentInformation4"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation4']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1054,9 +1058,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contentDocumentInformation4' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contentDocumentInformation4' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contentDocumentInformation4"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation4']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1067,9 +1071,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.typeDocumentInformation5' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.typeDocumentInformation5' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="typeDocumentInformation5"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation5']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1080,9 +1084,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contentDocumentInformation5' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contentDocumentInformation5' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contentDocumentInformation5"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation5']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1093,9 +1097,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.typeDocumentInformation6' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.typeDocumentInformation6' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="typeDocumentInformation6"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation6']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1106,9 +1110,9 @@
           </div>
 
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contentDocumentInformation6' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contentDocumentInformation6' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contentDocumentInformation6"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation6']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1118,9 +1122,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.typeDocumentInformation7' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.typeDocumentInformation7' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="typeDocumentInformation7"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation7']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1130,9 +1134,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contentDocumentInformation7' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contentDocumentInformation7' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contentDocumentInformation7"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation7']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1142,9 +1146,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.typeDocumentInformation8' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.typeDocumentInformation8' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="typeDocumentInformation8"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation8']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
@@ -1154,9 +1158,9 @@
             </select>
           </div>
 
-          <div class="p-col-3"><h4><b>{{'Admin_Import.contentDocumentInformation8' | translate}}</b></h4></div>
-          <div class="p-col-3"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
-          <div class="p-col-6">
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contentDocumentInformation8' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
             <select name="contentDocumentInformation8"
               [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation8']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">

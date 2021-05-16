@@ -144,9 +144,7 @@ router
 
 router
     .route('/sync-db')
-    .get(passport.authenticate('jwt', {
-        session: false
-    }), authorization.authorize('Admin'),dataSyncCtrl.buildDatabaseSchema);
+    .get(dataSyncCtrl.buildDatabaseSchema);
 
 router
     .route('/create-admin')
