@@ -100,7 +100,12 @@ module.exports.insert = async function (req, res) {
 
 module.exports.update = async function (req, res) {
     try {
-        const org = req.body;
+        const file = req.file;
+        const org = JSON.parse(req.body.data);
+        if (file) {
+            const filePath = file.path;
+            org.logo = env.domain + filePath;
+        }
         const result = await orgRepo
             .update(org, req.params.id);
         res.status(201)

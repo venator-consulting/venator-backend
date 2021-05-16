@@ -95,11 +95,11 @@ module.exports.insert = async (org) => {
  */
 module.exports.update = async (org, orgId) => {
     try {
-        return await Organisation
+         await Organisation
             .getOrganisation()
             .update(org, {
                 where: {
-                    id: orgId
+                    id: +orgId
                 }
             });
     } catch (err) {
