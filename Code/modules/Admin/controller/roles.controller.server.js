@@ -143,8 +143,36 @@ module.exports.delete = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> Roles controller </h3 >
+            <p> Delete roles </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
+        res
+            .status(500)
+            .json({
+                error: error
+            });
+    }
+};
+
+module.exports.createDefaultRoles = async function (req, res) {
+    try {
+        const result = await roleRepo
+            .createDefaultRoles();
+        res.status(201)
+            .json(result);
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> Roles controller </h3 >
+            <p> Create default Roles </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,

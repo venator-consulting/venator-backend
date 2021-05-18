@@ -5,6 +5,8 @@ import { ExportDataService } from '../service/export-data.service';
 import { dataTableColumns } from "../model/dataTableColumns";
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { stringify } from '@angular/compiler/src/util';
 
 
 @Component({
@@ -15,7 +17,8 @@ import { Router } from '@angular/router';
 export class SAPDataTableComponent implements OnInit {
 
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
-    private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService, private _router: Router) { }
+    private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService, private _router: Router,
+    private _translateService: TranslateService) { }
 
 
   organisationId = localStorage.getItem('organisationId')
@@ -25,8 +28,8 @@ export class SAPDataTableComponent implements OnInit {
   selectLastPage: boolean = false;
   data: any;
   postings: [] = [];
-  cols: dataTableColumns[] = dataTableColumns.getDataTableColumns();
-  pageLimitSizes = [ { value: 25 }, { value: 50 }, { value: 100 },]
+  cols: dataTableColumns[];
+  pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 },]
   limit: number = 25;
   pageNr: number = 1;
   maxPageNr: number = 0;
@@ -41,29 +44,42 @@ export class SAPDataTableComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getData()
+    this.getData();
+    this._translateService.setDefaultLang('de');
+    this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      dataTableColumns.getDataTableColumns(this._translateService, event.lang).then(cols => {
+        debugger;
+        this.cols = cols;
+      });
+    });
+    
+    // this._translateService.get("test").subscribe(t => {
+    //   alert(t);
+    // });
+    
   }
 
-getData() {
-  this._dataFilterService
-    .get(this.criteria)
-    .subscribe(
-      data => {
-        this.data = data;
-        this.postings = this.data.rows;
-        this.totalCount = this.data.count;
-        this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
-        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
-        this.loading = false;
-        // console.log(this.organisationId);
-        // console.log(this.procedureId);
+  async getData() {
+    // alert(await this._translateService.get("test").toPromise());
+    this._dataFilterService
+      .get(this.criteria)
+      .subscribe(
+        data => {
+          this.data = data;
+          this.postings = this.data.rows;
+          this.totalCount = this.data.count;
+          this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
+          this.maxPageNr = Math.ceil(this.totalCount / this.limit);
+          this.loading = false;
+          // console.log(this.organisationId);
+          // console.log(this.procedureId);
 
-      },
-      error => {
-        this.loading = false;
-      },
-    );
-}
+        },
+        error => {
+          this.loading = false;
+        },
+      );
+  }
 
   filterChange(value, field) {
     if (value) {

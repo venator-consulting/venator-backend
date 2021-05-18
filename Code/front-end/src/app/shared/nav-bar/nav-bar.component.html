@@ -11,7 +11,7 @@
                      <select #langSelect (change)="_translateService.use(langSelect.value)"
                      class="layout-topbar-action p-d-flex p-dir-row p-jc-center p-ai-center p-px-2 rounded-circle ng-tns-c186-0 p-ripple"
                     style=" height: 60px; background-color: #58585a ; color: #ffffff; border: none "
-                    >
+                    [(ngModel)]="browserLang">
                         <option *ngFor="let lang of _translateService.getLangs(); index as i" value="{{lang}}">{{lang | uppercase}} </option>
                     </select> 
 

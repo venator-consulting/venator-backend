@@ -9,7 +9,7 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
     try {
 
         const options = {
-            filename: './public/Venator_Consuting_Exported_file_' + tableName + organisationId + procedureId + '.xlsx',
+            filename: './public/Venator_Consuting_Exported_file_' + tableName + '_' + organisationId + '_' + procedureId + '.xlsx',
             useStyles: true,
             useSharedStrings: false
         };
@@ -40,7 +40,7 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
         //     worksheet.addRow(row, 'i+').commit();
         // }
 
-        const str = connection.query('SELECT * FROM ' + tableName + '_' + organisationId).stream();
+        const str = connection.query('SELECT * FROM ' + tableName + '_' + organisationId + ' t WHERE t.procedureId = ' + procedureId).stream();
 
         str.on('data', (row) => {
             i++;
@@ -54,7 +54,7 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
 
         str.on('end', async () => {
             await workbook.commit();
-            cb(env.domain + 'public/Venator_Consuting_Exported_file_' + tableName + organisationId + procedureId + '.xlsx');
+            cb(env.domain + 'public/Venator_Consuting_Exported_file_' + tableName + '_' + organisationId + '_' + procedureId + '.xlsx');
         });
 
         // await workbook.commit();

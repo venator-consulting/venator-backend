@@ -1,5 +1,7 @@
 const Role = require('../models/role.model.server');
-const { Op } = require("sequelize");
+const {
+    Op
+} = require("sequelize");
 
 module.exports.fetchAll = function () {
     return new Promise(async (resolve, reject) => {
@@ -18,7 +20,11 @@ module.exports.getmanagerRoleId = function () {
         try {
             const managerData = await Role
                 .getRole()
-                .findOne({ where: { name: 'Manager' } })
+                .findOne({
+                    where: {
+                        name: 'Manager'
+                    }
+                })
             resolve(managerData);
         } catch (err) {
             reject(err);
@@ -140,4 +146,20 @@ module.exports.createDefaultAdminRole = function () {
             name: 'Admin',
             role_description: 'the ADMIN Can Do any thing'
         });
+};
+
+
+module.exports.createDefaultRoles = function () {
+    return Role
+        .getRole()
+        .create([
+            {
+                name: 'Manager',
+                role_description: 'the Manager Role'
+            },
+            {
+                name: 'User',
+                role_description: 'the User Role'
+            }
+        ]);
 };

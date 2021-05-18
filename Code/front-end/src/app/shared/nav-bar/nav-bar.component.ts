@@ -16,15 +16,15 @@ export class NavBarComponent implements OnInit {
     sidebarItems: MenuItem[] = [];
     username: string = localStorage.getItem('username');
     role: string = localStorage.getItem('role');
-
+    browserLang: string = 'de';
 
 
 
     constructor(public _translateService: TranslateService, private _router: Router) {
         this._translateService.addLangs(['de', 'en']);
         this._translateService.setDefaultLang('de');
-        const browserLang = this._translateService.getBrowserLang();
-        this._translateService.use(browserLang.match(/de|en/) ? browserLang : 'de');
+        this.browserLang = this._translateService.getBrowserLang();
+        this._translateService.use(this.browserLang.match(/de|en/) ? this.browserLang : 'de');
 
     }
 
