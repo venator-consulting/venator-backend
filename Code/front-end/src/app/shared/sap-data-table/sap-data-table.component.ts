@@ -26,8 +26,8 @@ export class SAPDataTableComponent implements OnInit {
   data: any;
   postings: [] = [];
   cols: dataTableColumns[] = dataTableColumns.getDataTableColumns();
-  pageLimitSizes = [{ value: 2 }, { value: 5 }, { value: 25 }, { value: 50 }, { value: 100 },]
-  limit: number = 2;
+  pageLimitSizes = [ { value: 25 }, { value: 50 }, { value: 100 },]
+  limit: number = 25;
   pageNr: number = 1;
   maxPageNr: number = 0;
   displayedDataCount = 0;

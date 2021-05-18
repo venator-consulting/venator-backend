@@ -9,11 +9,11 @@
 
     },
     "LOGIN": {
-        "welcomeMsg": "Please use the form to sign-in Ventator-Portal",
-        "welcomeWord": "Welcom",
+        "welcomeMsg": "Please log in ",
+        "welcomeWord": "Welcom to Venalytics",
         "passwordPlaceholder": "Password",
         "loginButton": "Login",
-        "passowrdForgetLink": "forget password ?"
+        "passowrdForgetLink": "Forgot password ?"
 
 
 
@@ -46,41 +46,41 @@
         "organisationCity": "City",
         "organisationPostCode": "Postcode",
         "organisationStreet": "Street",
-        "organisationHouseNr": "House-Nr"
-
+        "organisationHouseNr": "House-Nr",
+        "show": "Show"
 
     },
     "Admin_Import": {
-        "firstStepLabel": "upload base files",
-        "secondStepLabel": "upload helper files",
-        "thirdStepLabel": "Fields mapping",
-        "firthStepLabel": "import files",
-        "firstStepHeader": "upload files",
+        "firstStepLabel": "Upload base file",
+        "secondStepLabel": "Upload auxiliary files",
+        "thirdStepLabel": "Mapping",
+        "firthStepLabel": "Import files",
+        "firstStepHeader": "Upload files",
         "selectOrganisation": "Select an organisation",
         "selectOrganisationPlaceholder":"select organisation",
         "selectProcedure": "Select a Procedure",
         "selectProcedurePlaceholder": "select procedure",
         "selectTemplate": "Select a Template",
         "selectTemplatePlaceholder": "select template",
-        "selectFileFormat": "Select a Fileformat ",
+        "selectFileFormat": "Select a fileformat ",
         "selectFileType": "Select a Filetype ",
-        "selectAccountType": "Select account type",
+        "selectAccountType": "Select an account type",
         "selectLocalization": "Select Localization",
         "uploadLabel": "Upload",
         "searchLabel": "Search",
-        "previousLabel": "back",
-        "nextLabel": "next",
-        "continueLabel": "continue",
+        "previousLabel": "Back",
+        "nextLabel": "Next",
+        "continueLabel": "Continue",
         "anotherFile": "Another File",
-        "secondStepHeader": "please upload the helper files",
+        "secondStepHeader": "please upload the auxiliary files",
         "databaseField": "Database Field",
         "selectedFile": "File",
         "mappingField": "Mapping Field",
-        "thirdStepHeader": "please mapping the fields",
+        "thirdStepHeader": "please map the database fields",
         "numberDataType": "Number",
         "textDataType": "Text",
         "dateDataType": "Date",
-        "firthStepHeader": "import files",
+        "firthStepHeader": "Import files",
 
         "client": "Client",
         "companyCode": "Companycode",
@@ -224,6 +224,7 @@
         "editHeader": "edit procedure ",
         "registrationHeader": "Procedure Registration",
         "addProedurePlaceHolder": "Verfahren hinzufügen",
+        "editProedurePlaceHolder": "edit",
         "name": "Name",
         "nameErrorMsg": "name is required",
         "organisation": "Organisation",
@@ -248,22 +249,22 @@
 
     },
     "Password_Reset": {
-        "header": "Venator-Portal reset Password",
-        "password": "new password",
+        "header": "Venalytics password reset",
+        "password": "New password",
         "passwordErrorMsg": "new password is required",
-        "passwordConfirm": "password confirmation",
+        "passwordConfirm": "Password confirmation",
         "passwordConfirmErrorMsg": "password confirmation is required",
         "cancelButton": "Cancel",
         "confirmButton": "Confirm"
 
     },
     "Data_Table": {
-        "firstPage": "first page",
-        "lastPage":  "last page",
-        "previous": "previous page",
-        "next": "next page",
-        "clearFilter": "clear filter",
-        "filter": "filter",
+        "firstPage": "First page",
+        "lastPage":  "Last page",
+        "previous": "Previous page",
+        "next": "Next page",
+        "clearFilter": "Clear filter",
+        "filter": "Filter",
         "actions": "Actions"
 
     }

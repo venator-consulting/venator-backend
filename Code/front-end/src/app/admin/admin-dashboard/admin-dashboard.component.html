@@ -24,10 +24,10 @@
 <ng-template pTemplate="body" let-organisation let-expanded="expanded" let-index="rowIndex">
     <tr [pReorderableRow]="index">
         <td style="width: 6rem">
-            <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-warning" pTooltip="show" tooltipPosition="bottom" (click)="showProcedures(organisation.id)"></button>
+            <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-warning" pTooltip="{{'Admin_Dashboard.show' | translate}}"  tooltipPosition="bottom" (click)="showProcedures(organisation.id)"></button>
         </td>  
         <td style="width: 6rem">
-            <button pButton pRipple type="button" icon="pi pi-user" class="p-button-rounded p-button-warning" pTooltip="show" tooltipPosition="bottom" (click)="showUsers(organisation.id)"></button>    
+            <button pButton pRipple type="button" icon="pi pi-user" class="p-button-rounded p-button-warning" pTooltip="{{'Admin_Dashboard.show' | translate}}" tooltipPosition="bottom" (click)="showUsers(organisation.id)"></button>    
         </td>  
         <td  pResizableColumn  class="ui-resizable-column">{{organisation.name}}</td>
         <td  pResizableColumn  class="ui-resizable-column">{{organisation.email}}</td>

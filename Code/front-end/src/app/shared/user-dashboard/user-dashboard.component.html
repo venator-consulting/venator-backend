@@ -18,7 +18,7 @@
             <td  pResizableColumn  class="ui-resizable-column">{{procedure.dataSource}}</td>
             <td  pResizableColumn  class="ui-resizable-column" ><i *ngIf="procedure.data" class="pi pi-check checkIcon"></i> <i *ngIf="!procedure.data" class="pi pi-times closeIcon"></i></td>
             <td  pResizableColumn  class="ui-resizable-column" ><i *ngIf="procedure.analysis" class="pi pi-check checkIcon"></i> <i *ngIf="!procedure.analysis" class="pi pi-times closeIcon"></i></td>               
-            <td  *ngIf="role!=='User'" style="width: 4rem"  ><i  class="pi pi-pencil headerColor" pTooltip="Edit Procedure" tooltipPosition="bottom" (click) = "editProcedure(procedure.id, procedure.name, procedure.data, procedure.analysis )"></i> </td>               
+            <td  *ngIf="role!=='User'" style="width: 4rem"  ><i  class="pi pi-pencil headerColor" pTooltip="{{'Procedure_Registration.editProedurePlaceHolder' | translate}}" tooltipPosition="bottom" (click) = "editProcedure(procedure.id, procedure.name, procedure.data, procedure.analysis )"></i> </td>               
 
         </tr>
     </ng-template>

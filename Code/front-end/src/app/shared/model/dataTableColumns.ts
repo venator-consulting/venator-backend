@@ -12,7 +12,7 @@
     static getDataTableColumns(): dataTableColumns[] {
         let result: dataTableColumns[] = [];
 
-        result.push(new dataTableColumns("client", "client"));
+/*         result.push(new dataTableColumns("client", "client"));
         result.push(new dataTableColumns("companyCode", "companyCode"));
         result.push(new dataTableColumns("documentNumber", "documentNumber"));
         result.push(new dataTableColumns("documentDate", "documentDate"));
@@ -88,7 +88,93 @@
         result.push(new dataTableColumns("contentDocumentInformation5", "contentDocumentInformation5"));
         result.push(new dataTableColumns("typeDocumentInformation6", "typeDocumentInformation6"));
         result.push(new dataTableColumns("contentDocumentInformation6", "contentDocumentInformation6"));
+ */
+        result.push(new dataTableColumns("client", "Mandant"));
+        result.push(new dataTableColumns("companyCode", "Buchungskreis"));
+        result.push(new dataTableColumns("documentNumber", "Belegnummer"));
+        result.push(new dataTableColumns("documentDate", "Belegdatum"));
+        result.push(new dataTableColumns("accountType","Kontotyp"));
+        result.push(new dataTableColumns("contraAccountType", "Gegenkontotyp"));
+        result.push(new dataTableColumns("accountNumber", "Kontonummer"));
+        result.push(new dataTableColumns("accountName", "Kontobezeichnung"));
+        result.push(new dataTableColumns("contraAccountNumber", "Kontonummer Gegenkonto"));
+        result.push(new dataTableColumns("contraAccountName", "Bezeichnung Gegenkonto"));
+        result.push(new dataTableColumns("balance", "Saldo EUR"));
+        result.push(new dataTableColumns("debitCredit", "Soll / Haben"));
+        result.push(new dataTableColumns("debitAmount", "Umsatz Soll EUR"));
+        result.push(new dataTableColumns("creditAmount", "Umsatz Haben EUR"));
+        result.push(new dataTableColumns("stackNumber", "Stapelnummer"));
+        result.push(new dataTableColumns("recordNumber", "Buchungssatznummer"));
+        result.push(new dataTableColumns("fiscalYear", "Geschäftsjahr"));
+        result.push(new dataTableColumns("identificationNumber", "identificationNumber"));
+        result.push(new dataTableColumns( "executionDate",  "Leistungsdatum"));
+        result.push(new dataTableColumns("dueDate", "Faelligkeitsdatum"));
+        result.push(new dataTableColumns("assignment", "Zuordnung"));
+        result.push(new dataTableColumns("reference", "Referenz"));
+        result.push(new dataTableColumns("documentType", "Belegart"));
+        result.push(new dataTableColumns("documentTypeNew", "Belegart angepasst"));
+        result.push(new dataTableColumns("postingDate", "Buchungsdatum"));
+        result.push(new dataTableColumns("GLAccountNumber", "Hauptbuchkonto"));
+        result.push(new dataTableColumns("GLAccountName", "Bezeichnung Hauptbuchkonto"));
+        result.push(new dataTableColumns("debtorNumber", "Debitorenkonto"));
+        result.push(new dataTableColumns("debtorName", "Bezeichnung Debitorenkonto"));
+        result.push(new dataTableColumns("creditorNumber", "Kreditorenkonto"));
+        result.push(new dataTableColumns("creditorName", "Bezeichnung Kreditorenkonto"));
+        result.push(new dataTableColumns("contraAccountGLAccountNo", "Sachkonto Gegenkonto"));
+        result.push(new dataTableColumns("contraAccountGLAccountName", "Bezeichnung Gegenkonto Sachkonto"));
+        result.push(new dataTableColumns("contraAccountDebtorNo", "Debitorenkonto Gegenkonto"));
+        result.push(new dataTableColumns("contraAccountDebtorName", "Bezeichnung Gegenkonto Debitor"));
+        result.push(new dataTableColumns("contraAccountCreditorNo", "Kreditorenkonto Gegenkonto"));
+        result.push(new dataTableColumns("contraAccountCreditorName", "Bezeichnung Gegenkonto Kreditor"));
+        result.push(new dataTableColumns("balanceTransactionCurrency","Saldo Belegwährung"));
+        result.push(new dataTableColumns("debitAmountTransactionCurrency", "Umsatz Soll Belegwährung"));
+        result.push(new dataTableColumns("creditAmountTransactionCurrency", "Umsatz Haben Belegwährung"));
+        result.push(new dataTableColumns("transactionCurrency", "Belegwährung"));
+        result.push(new dataTableColumns("documentNumber2", "Belegfeld 2"));
+        result.push(new dataTableColumns("bookingAmount", "bookingAmount"));
+        result.push(new dataTableColumns("exchangeRate", "Umrechnungskurs"));
+        result.push(new dataTableColumns("cashDiscount", "Skonto EUR"));
 
+
+        result.push(new dataTableColumns("costCenter1", "Kostenstelle 1"));
+        result.push(new dataTableColumns("costCenter2", "Kostenstelle 2"));
+        result.push(new dataTableColumns("salesTaxKey", "Umsatzsteuerschlüssel"));
+        result.push(new dataTableColumns("textPosting", "Buchungstext"));
+        result.push(new dataTableColumns("textHeader", "Belegkopftext"));
+        result.push(new dataTableColumns("postingKey", "Buchungsschlüssel"));
+        result.push(new dataTableColumns("taxRate", "Steuersatz"));
+        result.push(new dataTableColumns("euTaxRate", "EU Steuersatz"));
+        result.push(new dataTableColumns("taxAmount", "Steuerbetrag"));
+        result.push(new dataTableColumns("taxAmountDebit", "Steuerbetrag Soll"));
+        result.push(new dataTableColumns("taxAmountCredit", "Steuerbetrag Haben"));
+        result.push(new dataTableColumns("costQuantityField", "costQuantityField"));
+        result.push(new dataTableColumns("identifierBalanceCarryforward", "Kennung EB-Buchung"));
+        result.push(new dataTableColumns("postingPeriod", "Buchungsperiode"));
+        result.push(new dataTableColumns("differentTaxationType", "differentTaxationType"));
+
+        result.push(new dataTableColumns("applicationDocument", "Ausgleichsbeleg"));
+        result.push(new dataTableColumns("applicationDate", "Datum des Ausgleichs"));
+        result.push(new dataTableColumns("applicationDateNew", "Ausgleichsdatum angepasst"));
+        result.push(new dataTableColumns("ledgerId", "ID des Rechnungslegungsbereichs"));
+        result.push(new dataTableColumns("documentLink", "Beleglink"));
+
+        result.push(new dataTableColumns("generalReversal", "Generalumkehr (GU)"));
+        result.push(new dataTableColumns("typeDocumentInformation1", "Art der Beleginformation 1"));
+        result.push(new dataTableColumns("contentDocumentInformation1", "Inhalt der Beleginformation 1"));
+        result.push(new dataTableColumns("typeDocumentInformation2", "Art der Beleginformation 2"));
+        result.push(new dataTableColumns("contentDocumentInformation2", "Inhalt der Beleginformation 2"));
+        result.push(new dataTableColumns("typeDocumentInformation3", "Art der Beleginformation 3"));
+        result.push(new dataTableColumns("contentDocumentInformation3", "Inhalt der Beleginformation 3"));
+        result.push(new dataTableColumns("typeDocumentInformation4", "Art der Beleginformation 4"));
+        result.push(new dataTableColumns("contentDocumentInformation4", "Inhalt der Beleginformation 4"));
+        result.push(new dataTableColumns("typeDocumentInformation5", "Art der Beleginformation 5"));
+        result.push(new dataTableColumns("contentDocumentInformation5", "Inhalt der Beleginformation 5"));
+        result.push(new dataTableColumns("typeDocumentInformation6", "Art der Beleginformation 6"));
+        result.push(new dataTableColumns("contentDocumentInformation6", "Inhalt der Beleginformation 6"));
+        result.push(new dataTableColumns("typeDocumentInformation6", "Art der Beleginformation 7"));
+        result.push(new dataTableColumns("contentDocumentInformation6", "Inhalt der Beleginformation 7"));
+        result.push(new dataTableColumns("typeDocumentInformation6", "Art der Beleginformation 8"));
+        result.push(new dataTableColumns("contentDocumentInformation6", "Inhalt der Beleginformation 8"));
         return result;
     }
   }
