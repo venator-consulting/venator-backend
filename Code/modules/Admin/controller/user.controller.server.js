@@ -44,8 +44,31 @@ module.exports.register = async (req, res) => {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> user controller </h3 >
+            <p> register user </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
+        res.status(500).json(error);
+    }
+};
+
+
+module.exports.edit = async (req, res) => {
+    try {
+        const user = await userRepo.update(req.body, req.body.id);
+        res.status(201).json(user);
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> user controller </h3 >
+            <p> update user </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,

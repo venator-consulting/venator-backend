@@ -125,7 +125,7 @@ module.exports.update = async function (req, res) {
     try {
         const procedure = req.body;
         const result = await procedureRepo
-            .update(procedure, req.params.id);
+            .update(procedure, req.body.id);
         res.status(201)
             .json(result);
     } catch (error) {

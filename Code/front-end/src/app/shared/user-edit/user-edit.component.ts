@@ -16,41 +16,27 @@ export class UserEditComponent implements OnInit {
 
   titles: Titles[] = Titles.getTitles();
   roles = [{name:'Manager', value: 2}, {name:'User', value: 3}];
-  selectedUserId = localStorage.getItem('selectedUser_userId');
-  selectedUserRoleId = localStorage.getItem('selectedUser_roleId');
-  selectedUserUsername = localStorage.getItem('selectedUser_username');
-  selectedUserEmail = localStorage.getItem('selectedUser_email');
-  selectedUserTitle = localStorage.getItem('selectedUser_title');
-  selectedUserFirstname = localStorage.getItem('selectedUser_firstname');
-  selectedUserLastname = localStorage.getItem('selectedUser_lastname');
-  selectedUserMobileNr = localStorage.getItem('selectedUser_mobileNr');
-  selectedUserStreet = localStorage.getItem('selectedUser_street');
-  selectedUserHouseNr = parseFloat(localStorage.getItem('selectedUser_houseNr'));
-  selectedUserpostcode = localStorage.getItem('selectedUser_postcode');
-  selectedUserCity = localStorage.getItem('selectedUser_city');
-  selectedUserCountry = localStorage.getItem('selectedUser_country');
+  
 
-  userModel: Users = {
-    title: this.selectedUserTitle,
-    OrganisationId: 0,
-    email: this.selectedUserEmail,
-    role: this.selectedUserRoleId,
-    RoleId: +this.selectedUserRoleId,
-    firstname: this.selectedUserFirstname,
-    lastname: this.selectedUserLastname,
-    username: this.selectedUserUsername,
-    mobileNr: this.selectedUserMobileNr,
-    contactPerson: this.selectedUserTitle,
-    street: this.selectedUserStreet,
-    houseNr: this.selectedUserHouseNr,
-    city: this.selectedUserCity,
-    postCode: this.selectedUserpostcode,
-    country: this.selectedUserCountry,
- };
+  userModel: Users;
 
   constructor(private _router: Router, private _messageService: MessageService, private _userService: UserService, public _translateService: TranslateService) { }
 
   ngOnInit(): void {
+    this.userModel = new Users();
+    this.userModel.id = +localStorage.getItem('selectedUser_userId');
+    this.userModel.RoleId = +localStorage.getItem('selectedUser_roleId');
+    this.userModel.username = localStorage.getItem('selectedUser_username');
+    this.userModel.email = localStorage.getItem('selectedUser_email');
+    this.userModel.title = localStorage.getItem('selectedUser_title');
+    this.userModel.firstname = localStorage.getItem('selectedUser_firstname');
+    this.userModel.lastname = localStorage.getItem('selectedUser_lastname');
+    this.userModel.mobileNumber = localStorage.getItem('selectedUser_mobileNr');
+    this.userModel.street = localStorage.getItem('selectedUser_street');
+    this.userModel.housenumber = parseFloat(localStorage.getItem('selectedUser_houseNr'));
+    this.userModel.postCode = localStorage.getItem('selectedUser_postcode');
+    this.userModel.city = localStorage.getItem('selectedUser_city');
+    this.userModel.country = localStorage.getItem('selectedUser_country');
   }
 
   submitHandler() {

@@ -12,24 +12,17 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ProcedureEditComponent implements OnInit {
 
+  procedureModel: Procedures;
 
-  currentProcedureId = parseInt(localStorage.getItem('currentProcedureId'));
-  currentProcedureName = localStorage.getItem('currentProcedureName');
-  currentProcedureData :boolean = (localStorage.getItem('currentProcedureData') === "true");
-  currentProcedureAnalysis :boolean = (localStorage.getItem('currentProcedureAnalysis') === "true");
 
-  procedureModel: Procedures = {
-    id: this.currentProcedureId,
-    OrganisationId: 0,
-    name: this.currentProcedureName,
-    data: this.currentProcedureData,
-    analysis: this.currentProcedureAnalysis,
-    dataSource: '',
-
-  };
   constructor(private _router: Router, private _messageService: MessageService, private _roleServiceService : RoleServiceService, public _translateService: TranslateService) { }
 
   ngOnInit(): void {
+    this.procedureModel = new Procedures();
+    this.procedureModel.id = +localStorage.getItem('currentProcedureId');
+    this.procedureModel.name = localStorage.getItem('currentProcedureName');
+    this.procedureModel.data = (localStorage.getItem('currentProcedureData') === "true");
+    this.procedureModel.analysis = (localStorage.getItem('currentProcedureAnalysis') === "true");
 
   }
 
