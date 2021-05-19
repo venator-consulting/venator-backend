@@ -17,9 +17,9 @@ export class dataTableColumns {
   //     this.header = header;
   // }
 
-  static async getDataTableColumns(translateService: TranslateService, lang: string): Promise<dataTableColumns[]> {
+  static async getDataTableColumns(translateService: TranslateService): Promise<dataTableColumns[]> {
     let result: dataTableColumns[] = [];
-    await translateService.use(lang).toPromise();
+    // await translateService.use(lang).toPromise();
     result.push(new dataTableColumns("client", await translateService.get("Admin_Import.client").toPromise()));
     result.push(new dataTableColumns("companyCode", await translateService.get("Admin_Import.companyCode").toPromise()));
     result.push(new dataTableColumns("documentNumber", await translateService.get("Admin_Import.documentNumber").toPromise()));
@@ -96,7 +96,7 @@ export class dataTableColumns {
     result.push(new dataTableColumns("contentDocumentInformation5", await translateService.get("Admin_Import.contentDocumentInformation5").toPromise()));
     result.push(new dataTableColumns("typeDocumentInformation6", await translateService.get("Admin_Import.typeDocumentInformation6").toPromise()));
     result.push(new dataTableColumns("contentDocumentInformation6", await translateService.get("Admin_Import.contentDocumentInformation6").toPromise()));
-
+    return result;
     // result.push(new dataTableColumns("client", "Mandant"));
     // result.push(new dataTableColumns("companyCode", "Buchungskreis"));
     // result.push(new dataTableColumns("documentNumber", "Belegnummer"));
@@ -183,6 +183,6 @@ export class dataTableColumns {
     // result.push(new dataTableColumns("contentDocumentInformation6", "Inhalt der Beleginformation 7"));
     // result.push(new dataTableColumns("typeDocumentInformation6", "Art der Beleginformation 8"));
     // result.push(new dataTableColumns("contentDocumentInformation6", "Inhalt der Beleginformation 8"));
-    return result;
+    // return result;
   }
 }

@@ -44,23 +44,27 @@ export class SAPDataTableComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getData();
-    this._translateService.setDefaultLang('de');
+
+    // this._translateService.setDefaultLang('de');
+    // this._translateService.
+    dataTableColumns.getDataTableColumns(this._translateService).then(cols => {
+      debugger;
+      this.cols = cols;
+      this.getData();
+    });
+
+
     this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-      dataTableColumns.getDataTableColumns(this._translateService, event.lang).then(cols => {
+      dataTableColumns.getDataTableColumns(this._translateService).then(cols => {
         debugger;
         this.cols = cols;
+        // this.getData();
       });
     });
-    
-    // this._translateService.get("test").subscribe(t => {
-    //   alert(t);
-    // });
-    
+
   }
 
   async getData() {
-    // alert(await this._translateService.get("test").toPromise());
     this._dataFilterService
       .get(this.criteria)
       .subscribe(
@@ -71,8 +75,6 @@ export class SAPDataTableComponent implements OnInit {
           this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
           this.maxPageNr = Math.ceil(this.totalCount / this.limit);
           this.loading = false;
-          // console.log(this.organisationId);
-          // console.log(this.procedureId);
 
         },
         error => {
