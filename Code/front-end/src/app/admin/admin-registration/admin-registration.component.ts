@@ -25,27 +25,13 @@ export class AdminRegistrationComponent implements OnInit {
   roles = [{name:'Admin', value: 1}];
 
 
-  userModel: Users = {
-    title: "",
-    OrganisationId: 0,
-    email: '',
-    RoleId: 1,
-    role: '',
-    firstname: '',
-    lastname: '',
-    username: '',
-    mobileNr: null,
-    contactPerson: '',
-    street: '',
-    houseNr: null,
-    city: '',
-    postCode: null,
-    country: '',
-  };
+  userModel: Users;
 
 
 
   ngOnInit(): void {
+    this.userModel = new Users();
+    
     this._orgService.get()
     .subscribe(
       (data) => {

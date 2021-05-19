@@ -3,7 +3,7 @@
 export class Users {
 
     title: string =  '';
-    OrganisationId: number = 0;
+    OrganisationId: number;
     email: string ='';
     // role:  string ='';
     RoleId: number = 3;
