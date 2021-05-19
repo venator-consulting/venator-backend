@@ -3,7 +3,7 @@
 export class Users {
 
     title: string =  '';
-    organisationId: number = 0;
+    OrganisationId: number = 0;
     email: string ='';
     // role:  string ='';
     RoleId: number = 3;
@@ -16,10 +16,10 @@ export class Users {
     street: string ='';
     houseNr: number = null;
     city: string ='';
-    postcode: string ='';
+    postCode: string ='';
     country: string ='';
 
-    constructor(title: string, organisationId: number, email: string, RoleId:number, role: string,firstname: string,lastname: string,
+/*     constructor(title: string, organisationId: number, email: string, RoleId:number, role: string,firstname: string,lastname: string,
                 username: string,mobileNr: string,street: string,houseNr: number,city: string,
                 postcode: string, country: string ) {
                     
@@ -38,7 +38,7 @@ export class Users {
         this.postcode = postcode;
         this.country = country;
 
-    }
+    } */
 
     static setUser(userModel) {
 

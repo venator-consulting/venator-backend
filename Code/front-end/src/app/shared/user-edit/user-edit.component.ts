@@ -26,13 +26,13 @@ export class UserEditComponent implements OnInit {
   selectedUserMobileNr = localStorage.getItem('selectedUser_mobileNr');
   selectedUserStreet = localStorage.getItem('selectedUser_street');
   selectedUserHouseNr = parseFloat(localStorage.getItem('selectedUser_houseNr'));
-  selectedUserPostcode = localStorage.getItem('selectedUser_postcode');
+  selectedUserpostcode = localStorage.getItem('selectedUser_postcode');
   selectedUserCity = localStorage.getItem('selectedUser_city');
   selectedUserCountry = localStorage.getItem('selectedUser_country');
 
   userModel: Users = {
     title: this.selectedUserTitle,
-    organisationId: 0,
+    OrganisationId: 0,
     email: this.selectedUserEmail,
     role: this.selectedUserRoleId,
     RoleId: +this.selectedUserRoleId,
@@ -44,7 +44,7 @@ export class UserEditComponent implements OnInit {
     street: this.selectedUserStreet,
     houseNr: this.selectedUserHouseNr,
     city: this.selectedUserCity,
-    postcode: this.selectedUserPostcode,
+    postCode: this.selectedUserpostcode,
     country: this.selectedUserCountry,
  };
 

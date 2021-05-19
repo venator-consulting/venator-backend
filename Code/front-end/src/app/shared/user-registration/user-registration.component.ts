@@ -15,27 +15,13 @@ export class UserRegistrationComponent implements OnInit {
 
   titles: Titles[] = Titles.getTitles();
   roles = [{ name: 'Manager', value: 2 }, { name: 'User', value: 3 }];
-  userModel: Users = {
-    title: "",
-    organisationId: 0,
-    email: '',
-    role: 'User',
-    RoleId: 3,
-    firstname: '',
-    lastname: '',
-    username: '',
-    mobileNr: null,
-    contactPerson: '',
-    street: '',
-    houseNr: null,
-    city: '',
-    postcode: null,
-    country: '',
-  };
+  userModel: Users;
 
   constructor(private _router: Router, private _messageService: MessageService, private _userService: UserService, public _translateService: TranslateService) { }
 
   ngOnInit(): void {
+    this.userModel = new Users();
+    this.userModel.OrganisationId = +localStorage.getItem('organisationId');
   }
   submitHandler() {
     this._userService.addUser(this.userModel)

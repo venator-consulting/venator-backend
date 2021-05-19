@@ -27,7 +27,7 @@ export class AdminRegistrationComponent implements OnInit {
 
   userModel: Users = {
     title: "",
-    organisationId: 0,
+    OrganisationId: 0,
     email: '',
     RoleId: 1,
     role: '',
@@ -39,7 +39,7 @@ export class AdminRegistrationComponent implements OnInit {
     street: '',
     houseNr: null,
     city: '',
-    postcode: null,
+    postCode: null,
     country: '',
   };
 

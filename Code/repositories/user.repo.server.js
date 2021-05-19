@@ -3,7 +3,7 @@ const Posting = require('../models/posting.model.server');
 const Accounts = require('../models/accounts.model.server');
 const env = require('../config/environment');
 const bcrypt = require('bcryptjs');
-const sendMail = require('../config/mailer.config').sendMail;
+//const sendMail = require('../config/mailer.config').sendMail;
 const jwt = require('jsonwebtoken');
 const randomstring = require('randomstring');
 const {
@@ -208,8 +208,8 @@ module.exports.insert = function (user) {
                     'your password to login to your account: ' + env.resetPassLink + token
             };
 
-            const mailRes = await sendMail(mail);
-            console.log(mailRes);
+            //  const mailRes = await sendMail(mail);
+            //  console.log(mailRes);
             // if manager create schema
             // if (user.role === 'Manager') {
             //     Posting.syncPosting('posting_' + result.dataValues.id);
@@ -230,16 +230,16 @@ module.exports.resetPassword = (data) => {
         try {
             jwt.verify(data.token, env.jwtSecret, async function (err, decoded) {
                 if (err) reject(err);
-                if(decoded) {
+                if (decoded) {
                     const email = decoded.email;
                     const expire = decoded.expire;
                     const now = new Date();
                     if (now.getTime() > Date.parse(expire)) reject('registeration expired');
-    
+
                     const salt = bcrypt.genSaltSync(10);
                     const hashedPassword = bcrypt.hashSync(data.password, salt);
-    
-    
+
+
                     const result = await User
                         .getUser()
                         .update({
@@ -251,10 +251,10 @@ module.exports.resetPassword = (data) => {
                             }
                         });
                     resolve('updated successfully');
-                }else {
+                } else {
                     reject("error: invalid token!");
                 }
-                
+
             });
         } catch (error) {
             reject(error);

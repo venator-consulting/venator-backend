@@ -15,13 +15,13 @@ router
     .route('/users/:id/procedures')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Manager', 'Admin'), procedureCtrl.getByOrgId);
+    }), procedureCtrl.getByOrgId);
 
 router
     .route('/user/add')
     .post(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Manager'), userCtrl.register);
+    }), authorization.authorize('Manager', 'Admin'), userCtrl.register);
 
 router
     .route('/users/:id')
