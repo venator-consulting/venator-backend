@@ -48,7 +48,6 @@ export class SAPDataTableComponent implements OnInit {
     this._translateService.setDefaultLang('de');
     this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
       dataTableColumns.getDataTableColumns(this._translateService, event.lang).then(cols => {
-        debugger;
         this.cols = cols;
       });
     });
@@ -131,7 +130,6 @@ export class SAPDataTableComponent implements OnInit {
 
   previousPage() {
     --this.pageNr;
-    // debugger
     if (this.pageNr <= 0) return;
     this.loading = true;
     this.criteria.offset -= +this.limit;
