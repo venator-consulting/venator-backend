@@ -208,7 +208,7 @@ module.exports.insert = function (user) {
                     'your password to login to your account: ' + env.resetPassLink + token
             };
 
-            //  const mailRes = await sendMail(mail);
+              const mailRes = await sendMail(mail);
             //  console.log(mailRes);
             // if manager create schema
             // if (user.role === 'Manager') {

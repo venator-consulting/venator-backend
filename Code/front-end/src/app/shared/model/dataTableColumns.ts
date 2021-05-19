@@ -37,14 +37,14 @@ export class dataTableColumns {
     result.push(new dataTableColumns("recordNumber", await translateService.get("Admin_Import.recordNumber").toPromise()));
     result.push(new dataTableColumns("fiscalYear", await translateService.get("Admin_Import.fiscalYear").toPromise()));
     result.push(new dataTableColumns("taxAmount", await translateService.get("Admin_Import.taxAmount").toPromise()));
-    result.push(new dataTableColumns("identificationNumber", await translateService.get("Admin_Import.identificationNumber").toPromise()));
+    //result.push(new dataTableColumns("identificationNumber", await translateService.get("Admin_Import.identificationNumber").toPromise()));
     result.push(new dataTableColumns("executionDate", await translateService.get("Admin_Import.executionDate").toPromise()));
     result.push(new dataTableColumns("dueDate", await translateService.get("Admin_Import.dueDate").toPromise()));
     result.push(new dataTableColumns("ledgerId", await translateService.get("Admin_Import.ledgerId").toPromise()));
     result.push(new dataTableColumns("assignment", await translateService.get("Admin_Import.assignment").toPromise()));
     result.push(new dataTableColumns("reference", await translateService.get("Admin_Import.reference").toPromise()));
     result.push(new dataTableColumns("documentType", await translateService.get("Admin_Import.documentType").toPromise()));
-    result.push(new dataTableColumns("documentTypeNew", await translateService.get("Admin_Import.documentTypeNew").toPromise()));
+   // result.push(new dataTableColumns("documentTypeNew", await translateService.get("Admin_Import.documentTypeNew").toPromise()));
     result.push(new dataTableColumns("postingDate", await translateService.get("Admin_Import.postingDate").toPromise()));
     result.push(new dataTableColumns("GLAccountNumber", await translateService.get("Admin_Import.GLAccountNumber").toPromise()));
     result.push(new dataTableColumns("GLAccountName", await translateService.get("Admin_Import.GLAccountName").toPromise()));
@@ -61,7 +61,7 @@ export class dataTableColumns {
     result.push(new dataTableColumns("debitCredit", await translateService.get("Admin_Import.debitCredit").toPromise()));
     result.push(new dataTableColumns("balanceTransactionCurrency", await translateService.get("Admin_Import.balanceTransactionCurrency").toPromise()));
     result.push(new dataTableColumns("documentNumber2", await translateService.get("Admin_Import.documentNumber2").toPromise()));
-    result.push(new dataTableColumns("bookingAmount", await translateService.get("Admin_Import.bookingAmount").toPromise()));
+  //  result.push(new dataTableColumns("bookingAmount", await translateService.get("Admin_Import.bookingAmount").toPromise()));
     result.push(new dataTableColumns("exchangeRate", await translateService.get("Admin_Import.exchangeRate").toPromise()));
     result.push(new dataTableColumns("transactionCurrency", await translateService.get("Admin_Import.transactionCurrency").toPromise()));
     result.push(new dataTableColumns("costCenter1", await translateService.get("Admin_Import.costCenter1").toPromise()));
@@ -70,10 +70,10 @@ export class dataTableColumns {
     result.push(new dataTableColumns("textPosting", await translateService.get("Admin_Import.textPosting").toPromise()));
     result.push(new dataTableColumns("taxRate", await translateService.get("Admin_Import.taxRate").toPromise()));
     result.push(new dataTableColumns("euTaxRate", await translateService.get("Admin_Import.euTaxRate").toPromise()));
-    result.push(new dataTableColumns("costQuantityField", await translateService.get("Admin_Import.costQuantityField").toPromise()));
+   // result.push(new dataTableColumns("costQuantityField", await translateService.get("Admin_Import.costQuantityField").toPromise()));
     result.push(new dataTableColumns("identifierBalanceCarryforward", await translateService.get("Admin_Import.identifierBalanceCarryforward").toPromise()));
     result.push(new dataTableColumns("postingPeriod", await translateService.get("Admin_Import.postingPeriod").toPromise()));
-    result.push(new dataTableColumns("differentTaxationType", await translateService.get("Admin_Import.differentTaxationType").toPromise()));
+  //  result.push(new dataTableColumns("differentTaxationType", await translateService.get("Admin_Import.differentTaxationType").toPromise()));
     result.push(new dataTableColumns("documentLink", await translateService.get("Admin_Import.documentLink").toPromise()));
     result.push(new dataTableColumns("cashDiscount", await translateService.get("Admin_Import.cashDiscount").toPromise()));
     result.push(new dataTableColumns("textHeader", await translateService.get("Admin_Import.textHeader").toPromise()));
@@ -82,7 +82,7 @@ export class dataTableColumns {
     result.push(new dataTableColumns("taxAmountCredit", await translateService.get("Admin_Import.taxAmountCredit").toPromise()));
     result.push(new dataTableColumns("applicationDocument", await translateService.get("Admin_Import.applicationDocument").toPromise()));
     result.push(new dataTableColumns("applicationDate", await translateService.get("Admin_Import.applicationDate").toPromise()));
-    result.push(new dataTableColumns("applicationDateNew", await translateService.get("Admin_Import.applicationDateNew").toPromise()));
+   // result.push(new dataTableColumns("applicationDateNew", await translateService.get("Admin_Import.applicationDateNew").toPromise()));
     result.push(new dataTableColumns("generalReversal", await translateService.get("Admin_Import.generalReversal").toPromise()));
     result.push(new dataTableColumns("typeDocumentInformation1", await translateService.get("Admin_Import.typeDocumentInformation1").toPromise()));
     result.push(new dataTableColumns("contentDocumentInformation1", await translateService.get("Admin_Import.contentDocumentInformation1").toPromise()));
