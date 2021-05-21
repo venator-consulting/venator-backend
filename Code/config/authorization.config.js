@@ -42,3 +42,21 @@ module.exports.extractUserInfo = function () {
         next();
     };
 };
+
+module.exports.belongToOrganisation = function () {
+    return (req, res, next) => {
+        jwt.verify(req.token, config.jwtSecret, function (err, decoded) {
+            const userinfo = decoded.userinfo;
+            if ((req.params.id && userinfo.OrganisationId != req.params.id) || 
+            (req.query.OrganisationId && userinfo.OrganisationId != req.query.OrganisationId)
+            && userinfo.Role != "Admin") {
+                console.log('unauthorized!!!');
+                res.status(403).json({
+                    message: "Forbidden"
+                });
+            } else {
+                next();
+            }
+        });
+    };
+};

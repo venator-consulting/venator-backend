@@ -15,7 +15,7 @@ router
     .route('/users/:id/procedures')
     .get(passport.authenticate('jwt', {
         session: false
-    }), procedureCtrl.getByOrgId);
+    }), authorization.belongToOrganisation(), procedureCtrl.getByOrgId);
 
 router
     .route('/user/add')
@@ -33,7 +33,7 @@ router
     .route('/users/:id')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Manager', 'Admin'), userCtrl.getUsersByOrganisationId);
+    }), authorization.authorize('Manager', 'Admin'), authorization.belongToOrganisation(), userCtrl.getUsersByOrganisationId);
 
 router
     .route('/resetPassword')
@@ -49,7 +49,7 @@ router
     .route('/posting')
     .get(passport.authenticate('jwt', {
         session: false
-    }), getDataCtrl.fetch);
+    }), authorization.belongToOrganisation(), getDataCtrl.fetch);
 
 router
     .route('/export/:tableName/:OrganisationId/:ProcedureId')
