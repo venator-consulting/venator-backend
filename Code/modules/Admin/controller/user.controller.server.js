@@ -100,6 +100,28 @@ module.exports.resetPass = async (req, res) => {
     }
 };
 
+module.exports.changePassword = async (req, res) => {
+    try {
+        const result = await userRepo.changePassword(req.userinfo.email, req.body.password);
+        res.status(201).json(result);
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> users controller </h3 >
+            <p> reset password </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
+        res.status(500).json(error);
+    }
+};
+
 module.exports.fetchAllManagers = async function (req, res) {
 
     try {

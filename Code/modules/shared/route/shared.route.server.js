@@ -39,6 +39,12 @@ router
     .route('/resetPassword')
     .post(userCtrl.resetPass);
 
+    router
+    .route('/profile/resetPassword')
+    .post(passport.authenticate('jwt', {
+        session: false
+    }), authorization.extractUserInfo(), userCtrl.changePassword);
+
 router
     .route('/posting')
     .get(passport.authenticate('jwt', {
