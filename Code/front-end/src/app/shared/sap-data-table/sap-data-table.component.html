@@ -1,9 +1,11 @@
-<div class="card" style="overflow: scroll;">
+<div class="card" style="overflow-x: scroll;">
   <p-toast></p-toast>
   <!-- [paginator]="true"   [rowsPerPageOptions]="[25,50,100]" [rows]="25"  [scrollable]="true"-->
-  <p-table #dt [value]="postings" [columns]="cols" [lazy]="true" [loading]="loading" [showCurrentPageReport]="true"
-    styleClass="p-datatable-sm p-datatable-gridlines" [resizableColumns]="true" [reorderableColumns]="true" 
-    [style]="{width:'10000px'}" scrollHeight="400px">
+  <p-table #dt [value]="postings" [columns]="cols" [loading]="loading" 
+     [reorderableColumns]="true" 
+    [style]="{width:'10000px'}" 
+    [scrollable]="true" [rows]="100" scrollHeight="200px" [virtualScroll]="true" [virtualRowHeight]="34" 
+    [lazy]="true" [resizableColumns]="true">
     <ng-template pTemplate="caption">
       <div class="p-mb-4">
         <!-- Export as excel -->
@@ -62,7 +64,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-index="rowIndex" let-columns="columns" let-rowData>
       <tr [pReorderableRow]="index">
-        <td pReorderableRowHandle pResizableColumn *ngFor="let col of cols" class="ui-resizable-column"
+        <td pReorderableRowHandle *ngFor="let col of cols" class="ui-resizable-column"
           aria-placeholder="">
           {{ col.header == 'balance' ? (rowData[col.field] | currency:'EUR')  : rowData[col.field]}}
         </td>

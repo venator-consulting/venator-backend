@@ -18,8 +18,8 @@ module.exports.fetchAll = async function (req, res, next) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> Organisation controller </h3 >
+            <p> fetch all </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -48,8 +48,8 @@ module.exports.fetchOne = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> organization controller </h3 >
+            <p> fetch one </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -83,8 +83,8 @@ module.exports.insert = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> organisation controller </h3 >
+            <p> insert new one </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -117,8 +117,8 @@ module.exports.update = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> organisation controller </h3 >
+            <p> update </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -145,8 +145,8 @@ module.exports.delete = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> organisation controller </h3 >
+            <p> delete </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,

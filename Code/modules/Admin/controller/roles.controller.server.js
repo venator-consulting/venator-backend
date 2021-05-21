@@ -18,8 +18,8 @@ module.exports.fetchAll = async function (req, res, next) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> roles controller </h3 >
+            <p> fetch all </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -50,8 +50,8 @@ module.exports.getmanagerRoleId = async function (req, res, next) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> roles controller </h3 >
+            <p> get manager role id </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -83,8 +83,8 @@ module.exports.insert = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> roles controller </h3 >
+            <p> insert role </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -115,8 +115,8 @@ module.exports.update = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> roles controller </h3 >
+            <p> update role </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,

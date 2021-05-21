@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const config = require('../../../config/environment');
+const errorHandler = require('../../../helpers/error.handler.server').errorHandler;
 
 
 module.exports.loginAuthenticate = function (req, res, next) {
     passport.authenticate('local', { session: false }, (err, user, info) => {
         if (err) {
+            errorHandler('login controller: login authentication', err);
             return res.status(400).json({
                 message: 'Something is not right',
                 err: err

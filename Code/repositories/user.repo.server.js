@@ -106,7 +106,8 @@ module.exports.getUsersByOrganisationId = async function (id) {
                 where: {
                     OrganisationId: id,
                     deleted: false
-                }
+                },
+                include: Role
             });
         return users;
 
