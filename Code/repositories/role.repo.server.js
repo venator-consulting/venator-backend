@@ -152,7 +152,7 @@ module.exports.createDefaultAdminRole = function () {
 module.exports.createDefaultRoles = function () {
     return Role
         .getRole()
-        .create([
+        .bulkCreate([
             {
                 name: 'Manager',
                 role_description: 'the Manager Role'

@@ -15,9 +15,9 @@ const DocumentType = sequelizer.define('DocumentType', {
     procedureId: {
         type: DataTypes.BIGINT(11),
     },
-    documentTypeId: {
-        type: DataTypes.BIGINT(11),
-    },
+    // documentTypeId: {
+    //     type: DataTypes.BIGINT(11),
+    // },
     documentTypeName: {
         type: DataTypes.ENUM("Rechnung", "Zahlung"),
     }

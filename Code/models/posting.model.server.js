@@ -102,7 +102,10 @@ module.exports.getPosting = function (tableName = 'Posting') {
         documentTypeName: {
             type: DataTypes.STRING(25)
         },
-        documentTypeNew: {
+        documentTypeNewId: {
+            type: DataTypes.BIGINT(11)
+        },
+        documentTypeNewName: {
             type: DataTypes.STRING(25)
         },
         documentDate: {
@@ -319,7 +322,14 @@ module.exports.getPosting = function (tableName = 'Posting') {
             type: DataTypes.STRING(50)
         }
     }, {
-        tableName: tableName
+        tableName: tableName,
+        indexes: [
+            {
+                fields: ['procedureId'],
+                using: 'gin',
+                operator: 'jsonb_path_ops'
+              }
+        ]
     });
 };
 

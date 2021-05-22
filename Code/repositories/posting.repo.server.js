@@ -1,6 +1,6 @@
 const Posting = require('../models/posting.model.server');
 const {
-    Op
+    Op, fn, col
 } = require("sequelize");
 
 
@@ -56,4 +56,42 @@ module.exports.fetchAll = function (companyCode, offset, limit) {
         }
     });
 
+};
+
+module.exports.getDocTypes = async (organisationId, procedureId) => {
+    try {
+        const result = await Posting
+            .getPosting('posting_' + organisationId)
+            .findAll({
+                where: {
+                    ProcedureId: procedureId
+                },
+                attributes: [
+                    [fn('DISTINCT', col('documentType')) ,'documentType']
+                ],
+                distinct: true
+            });
+            return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+module.exports.updateDocTypeNew = async (organisationId, procedureId, documentType, documentTypeNewId, documentTypeNewName) => {
+    try {
+        return await Posting
+            .getPosting('posting_' + organisationId)
+            .update({
+                documentTypeNewId: documentTypeNewId,
+                documentTypeNewName: documentTypeNewName
+            },
+            {
+                where: {
+                    procedureId: procedureId,
+                    documentType: documentType
+                }
+            });
+    } catch (error) {
+        throw new Error(error);
+    }
 };
