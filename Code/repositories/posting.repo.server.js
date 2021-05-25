@@ -67,7 +67,10 @@ module.exports.getDocTypes = async (organisationId, procedureId) => {
                     ProcedureId: procedureId
                 },
                 attributes: [
-                    [fn('DISTINCT', col('documentType')) ,'documentType']
+                    [fn('DISTINCT', col('documentType')) ,'documentType'],
+                    'documentTypeNewId',
+                    'documentTypeNewName',
+                    'procedureId'
                 ],
                 distinct: true
             });

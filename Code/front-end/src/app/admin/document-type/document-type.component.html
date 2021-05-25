@@ -1,0 +1,70 @@
+<p-toast></p-toast>
+<div class="p-grid">
+
+  <div class="p-col-10">
+    <div class="p-grid">
+      <div class="p-col-2">
+        <label class="p-mr-4"> {{'Admin_Import.selectOrganisation' | translate}} </label>
+      </div>
+      <div class="p-col-5">
+        <p-dropdown [options]="orgs" [(ngModel)]="selectedOrgId"
+          placeholder=" {{'Admin_Import.selectOrganisationPlaceholder' | translate}}" optionLabel="name"
+          optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required
+          (onChange)="orgChangedHandler($event)" [style]="{width:'300px'}">
+        </p-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-col-10" *ngIf="selectedOrgId>0">
+    <div class="p-grid">
+      <div class="p-col-2">
+        <label class="p-mr-4"> {{'Admin_Import.selectProcedure' | translate}} </label>
+      </div>
+      <div class="p-col-5">
+        <p-dropdown [options]="procedures" [(ngModel)]="selectedPrcId"
+          placeholder="{{'Admin_Import.selectProcedurePlaceholder' | translate}}" optionLabel="name" optionValue="id"
+          [showClear]="true" [filter]="true" filterBy="name" required (onChange)="prcChangedHandler($event)"
+          [style]="{width:'300px'}"></p-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="p-col-10" *ngIf="selectedPrcId>0">
+    <p-table #dt dataKey="id" [value]="postingDocTypes" dataKey="ID">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Document Type</th>
+          <th>Document Type new</th>
+          <th>Action</th>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{row.documentType}}</td>
+          <td>
+            <div *ngIf="!row.isEditable">{{row.documentTypeNewName}}</div>
+            <div *ngIf="row.isEditable">
+              <p-dropdown [options]="docTypes" [(ngModel)]="row.documentTypeNewId" optionValue="id"
+                placeholder="Document Type new" optionLabel="documentTypeName"
+                [showClear]="true" [filter]="true" filterBy="documentTypeName"
+                (onChange)="docTypeChangedHandler($event, row)" [style]="{width:'300px'}"></p-dropdown>
+            </div>
+          </td>
+          <td><button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(row)"
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable" pTooltip="Edit"
+              tooltipPosition="bottom"></button> &nbsp;
+            <button type="button" pButton pRipple icon="pi pi-save" (click)="save(row)"
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable" pTooltip="Save"
+              tooltipPosition="bottom"></button> &nbsp;
+            <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable" pTooltip="Cancel"
+              tooltipPosition="bottom"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>

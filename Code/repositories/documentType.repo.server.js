@@ -3,15 +3,11 @@ const {
     Op
 } = require("sequelize");
 
-module.exports.fetchAll = async (procedureId) => {
+module.exports.fetchAll = async () => {
     try {
         return await DocType
             .getDocumentType()
-            .findAll({
-                where: {
-                    procedureId: procedureId
-                }
-            });
+            .findAll();
     } catch (err) {
         throw new Error(err);
     }

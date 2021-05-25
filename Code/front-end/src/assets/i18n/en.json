@@ -29,6 +29,7 @@
         "addUser": "Add user",
         "editUser": "Edit user",
         "addOrganisation": "Add organisation",
+        "addDocumentType": "Add Document Type",
         "addProcedure": "Add procedure",
         "editProcedure": "Edit procedure",
         "resetPassword": "Reset password",

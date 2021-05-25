@@ -150,7 +150,7 @@ router
 
 
 router
-    .route('/document-type/:prcdrId')
+    .route('/document-type')
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), docTypeCtrl.getAll);

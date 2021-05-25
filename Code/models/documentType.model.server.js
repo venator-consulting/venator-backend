@@ -12,9 +12,9 @@ const DocumentType = sequelizer.define('DocumentType', {
         primaryKey: true,
         autoIncrement: true
     },
-    procedureId: {
-        type: DataTypes.BIGINT(11),
-    },
+    // procedureId: {
+    //     type: DataTypes.BIGINT(11),
+    // },
     // documentTypeId: {
     //     type: DataTypes.BIGINT(11),
     // },

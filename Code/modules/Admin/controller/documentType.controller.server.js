@@ -5,7 +5,7 @@ const docTypeRepo = require('../../../repositories/documentType.repo.server');
 module.exports.getAll = async (req, res) => {
     try {
         const result = await docTypeRepo
-            .fetchAll(req.params.prcdrId);
+            .fetchAll();
         res.status(200)
             .json(result);
     } catch (e) {

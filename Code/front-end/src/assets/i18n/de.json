@@ -27,6 +27,7 @@
         "addUser": "Admin hinzufügen",
         "editUser": "Benutzer bearbeiten",
         "addOrganisation": "Organisation hinzufügen",
+        "addDocumentType": "Document Type hinzufügen",
         "addProcedure": "Verfahren hinzufügen",
         "editProcedure": "Verfahren bearbeiten",
         "resetPassword": "Passwort zurücksetzen",

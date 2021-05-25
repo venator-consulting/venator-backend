@@ -210,6 +210,84 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
     });
 };
 
+detectDelemeter = async (filePath) => {
+    return new Promise((resolve, reject) => {
+        const rs = fs.createReadStream(filePath, {
+            encoding: 'utf8'
+        });
+        let acc = '';
+        let pos = 0;
+        let index;
+        rs
+            .on('data', function (chunk) {
+                index = chunk.indexOf('\n');
+                acc += chunk;
+                index !== -1 ? rs.close() : pos += chunk.length;
+            })
+            .on('close', function () {
+                let line = acc.slice(0, pos + index);
+                const delimiter = require('csv-string').detect(line);
+                console.log(delimiter);
+                resolve(delimiter);
+            })
+            .on('error', function (err) {
+                reject(err);
+            });
+    });
+
+};
+
+detectQuote = async (filePath, delimiter) => {
+    return new Promise((resolve, reject) => {
+        const rs = fs.createReadStream(filePath, {
+            encoding: 'utf8'
+        });
+        let acc = '';
+        let pos = 0;
+        let index;
+        let conformSingle = false;
+        let conformDouble = false;
+        rs
+            .on('data', function (chunk) {
+                index = chunk.indexOf('\n');
+                acc += chunk;
+                index !== -1 ? rs.close() : pos += chunk.length;
+            })
+            .on('close', function () {
+                let line = acc.slice(0, pos + index);
+                let cells = line.split(delimiter);
+                if(cells.length < 2) reject({message: "Can not detect delimiter correctly! please use ; or , or tab."});
+                for (let i = 0; i < cells.length; i++) {
+                    let val = cells[i];
+                    if (val && val.trim()) {
+                        // val = val.substring(1, cells[i].length-1);
+                        conformSingle = val.startsWith('\'') && val.endsWith('\'');
+                        if (!conformSingle) break;
+                    }
+                }
+                for (let i = 0; i < cells.length; i++) {
+                    let val = cells[i];
+                    if (val && val.trim()) {
+                        // val = val.substring(1, cells[i].length-1);
+                        conformDouble = val.startsWith('"') && val.endsWith('"');
+                        if (!conformDouble) break;
+                    }
+                }
+                if (conformDouble && !conformSingle) resolve('"');
+                if (!conformDouble && conformSingle) resolve('\'');
+                if (conformSingle && conformDouble) reject({
+                    message: "the function detect quote dosen't work correctly, please contact the developer!"
+                });
+                if (!conformSingle && !conformDouble) reject({
+                    message: "the parsed file must be quoted!!"
+                });
+            })
+            .on('error', function (err) {
+                reject(err);
+            });
+    });
+};
+
 
 module.exports.readCsvStream = async function (filePath, managerId, procedureId, template = null, templateType = 1, local = 'de_DE') {
     return new Promise(async (resolve, reject) => {
@@ -235,12 +313,15 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
             const t = await sequelizer.transaction();
 
             let rowsToInsert = [];
-
+            const delimiter = await detectDelemeter(filePath);
+            const quote = await detectQuote(filePath, delimiter);
+            console.log(quote);
             const parser = fs.createReadStream(filePath, {
                     encoding: 'utf8'
                 })
                 .pipe(csv({
-                    separator: ';',
+                    separator: delimiter,
+                    quote: quote,
                     encoding: "utf8"
                 }));
 
