@@ -48,9 +48,9 @@ const User = sequelizer.define('User', {
     housenumber: {
         type: DataTypes.INTEGER,
     },
-    contactPerson: {
-        type: DataTypes.STRING(50),
-    },
+    // contactPerson: {
+    //     type: DataTypes.STRING(50),
+    // },
     note: {
         type: DataTypes.STRING(50),
     },
@@ -64,6 +64,9 @@ const User = sequelizer.define('User', {
     reseted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+    country: {
+        type: DataTypes.STRING(25),
     }
 }, {
     tableName: 'users'

@@ -12,12 +12,12 @@ export class UserService {
   constructor(private _http: HttpClient) { }
 
   addUser(user) {
-    console.log(user)
+    // console.log(user)
      return this._http.post<any>(this._thisURL + '/user/add', user);
   }
 
   editUser(user) {
-    console.log(user)
+    // console.log(user)
      return this._http.put<any>(this._thisURL + '/user/edit', user);
   }
 

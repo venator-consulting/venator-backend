@@ -24,6 +24,12 @@ router
     }), authorization.authorize('Manager', 'Admin'), userCtrl.register);
 
 router
+    .route('/user/edit')
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Manager', 'Admin'), userCtrl.edit);
+
+router
     .route('/users/:id')
     .get(passport.authenticate('jwt', {
         session: false

@@ -3,7 +3,7 @@ const Posting = require('../models/posting.model.server');
 const Accounts = require('../models/accounts.model.server');
 const env = require('../config/environment');
 const bcrypt = require('bcryptjs');
-//const sendMail = require('../config/mailer.config').sendMail;
+const sendMail = require('../config/mailer.config').sendMail;
 const jwt = require('jsonwebtoken');
 const randomstring = require('randomstring');
 const {
@@ -208,8 +208,8 @@ module.exports.insert = function (user) {
                     'your password to login to your account: ' + env.resetPassLink + token
             };
 
-              const mailRes = await sendMail(mail);
-            //  console.log(mailRes);
+             const mailRes = await sendMail(mail);
+             console.log(mailRes);
             // if manager create schema
             // if (user.role === 'Manager') {
             //     Posting.syncPosting('posting_' + result.dataValues.id);

@@ -426,7 +426,18 @@
               </option>
             </select>
           </div>
-
+          
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.creditAmount' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-12 p-lg-8">
+            <select style="max-width:400px;" name="creditAmount" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['creditAmount']"
+              class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
+              <option value="null"> </option>
+              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['creditAmount']">{{filesList[currentFileIndex]?.defaultTemplate['creditAmount']}}</option> -->
+              <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}
+              </option>
+            </select>
+          </div>
           <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.transactionCurrency' | translate}}</b></h4></div>
           <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
           <div class="p-sm-12 p-lg-8">
@@ -880,19 +891,19 @@
           </div>
 
 
-          <!-- <div class="p-sm-6 p-lg-2">{{'Admin_Import.constCenter1' | translate}}</div>
+           <div class="p-sm-6 p-lg-2">{{'Admin_Import.costCenter1' | translate}}</div>
           <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
           <div class="p-sm-12 p-lg-8">
-            <select style="max-width:400px;" name="constCenter1" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['constCenter1']"
+            <select style="max-width:400px;" name="costCenter1" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['costCenter1']"
               class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
               <option value="null"> </option>
               <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}
               </option>
             </select>
-          </div> -->
+          </div> 
 
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.CostCenter2' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.costCenter2' | translate}}</b></h4></div>
           <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
           <div class="p-sm-12 p-lg-8">
             <select style="max-width:400px;" name="CostCenter2" [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['CostCenter2']"

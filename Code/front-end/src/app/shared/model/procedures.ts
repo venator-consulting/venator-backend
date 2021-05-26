@@ -2,7 +2,7 @@
 
 export class Procedures {
     id: number;
-    OrganisationId: number =  0;
+    OrganisationId: number;
     name: string ='';
     data:  boolean = false;
     analysis: boolean = false;

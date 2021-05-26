@@ -2,28 +2,28 @@
     "ErrorHandler": {
         "badRequest_400": "der Server kann die gesendete Anfrage nicht verarbeiten",
         "unauthorized_401": "Eine Authentifizierung ist erforderlich, bitte überprüfen Sie den Benutzernamen und das Passwort",
-        "forbidden_403": "Der Zugriff auf die angeforderte Ressource ist verboten",
+        "forbidden_403": "Der Zugriff auf die angeforderte Ressource ist nicht erlaubt",
         "NotFound_404": "Der Server kann die angeforderte Ressource nicht finden",
         "internalServerError_500": "Auf dem Server ist ein Fehler aufgetreten. Wir werden das Problem sehr bald beheben",
         "passwordsMatch": "Die Passwörter stimmen nicht überein"
 
     },
     "LOGIN": {
-        "welcomeMsg": "Loggen Sie sich bitte in Venator-Portal ein",
-        "welcomeWord": "Willkommen",
+        "welcomeMsg": "Bitte loggen Sie sich ein",
+        "welcomeWord": "Willkommen bei Venalytics!",
         "passwordPlaceholder": "Passwort",
-        "loginButton": "Bestätigen",
-        "passowrdForgetLink": "passwort vergessen ?"
+        "loginButton": "Login",
+        "passowrdForgetLink": "Passwort vergessen?"
 
     },
     "sideBarMenu": {
         "data": "Daten",
         "table": "Tabelle",
         "analysis": "Analyse",
-        "amountAnalyisis": "Geld Analyse",
-        "textAnalysis": "Text Analyse",
-        "paymentAnalyse": "Zahlung Analyse",
-        "creditorsAnalyse": "Kreditoren Analyse",
+        "amountAnalyisis": "Betragsanalyse",
+        "textAnalysis": "Textanalyse",
+        "paymentAnalyse": "Zahlunganalyse",
+        "creditorsAnalyse": "Kreditorenanalyse",
         "addUser": "Admin hinzufügen",
         "editUser": "Benutzer bearbeiten",
         "addOrganisation": "Organisation hinzufügen",
@@ -31,7 +31,7 @@
         "editProcedure": "Verfahren bearbeiten",
         "resetPassword": "Passwort zurücksetzen",
         "setting": "Einstellung",
-        "logout": "Ausloggen",
+        "logout": "Logout",
         "procedures": "Verfahren",
         "users": "Benutzer"
 
@@ -44,17 +44,18 @@
         "organisationCity": "Stadt",
         "organisationPostCode": "Plz",
         "organisationStreet": "Straße",
-        "organisationHouseNr": "Haus-Nr"
+        "organisationHouseNr": "Haus-Nr",
+        "show": "Anzeigen"
 
 
     },
     "Admin_Import": {
-        "firstStepLabel": "Basis Dateien Hochladen",
-        "secondStepLabel": "HilfsDateien Hochladen",
-        "thirdStepLabel": "Felder Verknüpfen",
-        "firthStepLabel": "Dateien Importieren",
+        "firstStepLabel": "Basisdatei hochladen",
+        "secondStepLabel": "HilfsDatei hochladen",
+        "thirdStepLabel": "Feldmapping",
+        "firthStepLabel": "Dateien importieren",
 
-        "firstStepHeader": "Dateien Hochladen",
+        "firstStepHeader": "Dateien hochladen",
         "selectOrganisation": "Wählen Sie eine Organisation aus",
         "selectOrganisationPlaceholder":"organisation auswählen",
         "selectProcedure": "Wählen Sie ein Verfahren aus",
@@ -65,17 +66,17 @@
         "selectFileType": "Dateityp",
         "selectAccountType": "Kontoart",
         "selectLocalization": "Lokalisierung",
-        "uploadLabel": "Hochladen",
-        "searchLabel": "Suchen",
-        "previousLabel": "zurück",
-        "nextLabel": "nächste",
+        "uploadLabel": "Upload",
+        "searchLabel": "Durchsuchen",
+        "previousLabel": "Zurück",
+        "nextLabel": "Weiter",
         "continueLabel": "Fortsetzen",
-        "anotherFile": "andere Datei",
+        "anotherFile": "Weitere Datei",
         "secondStepHeader": "Bitte die Hilfsdateien hochladen",
         "databaseField": "Datenbankfeld",
         "selectedFile": "Datei",
         "mappingField": "Zuordnungsfeld",
-        "thirdStepHeader": "Bitte die Felder zuordnen",
+        "thirdStepHeader": "Ordnen Sie die Importfelder den Datenbankfeldern zu.",
         "numberDataType": "Zahl",
         "textDataType": "Text",
         "dateDataType": "Datum",
@@ -133,8 +134,8 @@
         "taxAmountDebit": "Steuerbetrag Soll",
         "taxAmountCredit": "Steuerbetrag Haben",
         "stackNumber": "Stapelnummer",
-        "CostCenter1": "Kostenstelle 1",
-        "CostCenter2": "Kostenstelle 2",
+        "costCenter1": "Kostenstelle 1",
+        "costCenter2": "Kostenstelle 2",
         "applicationDocument": "Ausgleichsbeleg",
         "applicationDate": "Datum des Ausgleichs",
         "identifierBalanceCarryforward": "Kennung EB-Buchung",
@@ -160,7 +161,7 @@
 
     },
     "User_Registration": {
-        "header": "Benutzer Registrieren",
+        "header": "Benutzerverwaltungn",
         "editHeader": "Benutzer bearbeiten",
         "role": "Rolle",
         "roleErrorMsg": "Rolle ist erforderlich",
@@ -213,7 +214,7 @@
         "country": "Land",
         "countryErrorMsg": "Land ist erforderlich",
         "logo": "Logo",
-        "searchButton": "Suchen",
+        "searchButton": "Durchsuchen",
         "cancelButton": "Abbrechen",
         "confirmButton": "Bestätigen",
         "NoOrganisationsFound": "Es gibt noch keine Organisationen"
@@ -222,6 +223,7 @@
     "Procedure_Registration": {
         "editHeader": "Verfahren bearbeiten",
         "addProedurePlaceHolder": "Verfahren hinzufügen",
+        "editProedurePlaceHolder": "bearbeiten",
         "registrationHeader": "Verfahren Registrieren",
         "name": "Name",
         "nameErrorMsg": "Name ist erforderlich",
@@ -247,8 +249,8 @@
 
     },
     "Password_Reset": {
-        "header": "Venator-Portal Passwort zurücksetzen",
-        "password": "neues Passwort",
+        "header": "Venalytics Passwort zurücksetzen",
+        "password": "Neues Passwort",
         "passwordErrorMsg": "Passwort ist erforderlich",
         "passwordConfirm": "Passwort bestätigen",
         "passwordConfirmErrorMsg": "Passwort bestätigen ist erforderlich",
@@ -262,7 +264,8 @@
         "previous": "vorherige Seite",
         "next": "nächste Seite",
         "clearFilter": "Filter löschen",
-        "filter": "Filter"
+        "filter": "Filter",
+        "actions": "Aktionen"
 
     }
   }

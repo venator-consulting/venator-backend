@@ -49,9 +49,10 @@
 
 
     },
+    
     "Admin_Import": {
         "firstStepLabel": "Basisdatei hochladen",
-        "secondStepLabel": "HilfsDatei hochladen",
+        "secondStepLabel": "Hilfsdateien hochladen",
         "thirdStepLabel": "Feldmapping",
         "firthStepLabel": "Dateien importieren",
 
