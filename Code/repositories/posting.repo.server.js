@@ -1,21 +1,27 @@
 const Posting = require('../models/posting.model.server');
 const {
-    Op, fn, col
+    Op,
+    fn,
+    col,
+    QueryTypes
 } = require("sequelize");
+const Sequelize = require('../config/sequelize.config');
+
+const sequelize = Sequelize.getSequelize();
 
 
 module.exports.fetch = async (criteria) => {
     try {
         const OrganisationId = criteria.OrganisationId;
-        if(!OrganisationId) throw new Error("Organisation_id_is_mandatory");
+        if (!OrganisationId) throw new Error("Organisation_id_is_mandatory");
         delete criteria.OrganisationId;
-        const limit = criteria.limit? criteria.limit : 25;
+        const limit = criteria.limit ? criteria.limit : 25;
         delete criteria.limit;
-        const offset = criteria.offset? criteria.offset : 0;
+        const offset = criteria.offset ? criteria.offset : 0;
         delete criteria.offset;
         for (const key in criteria) {
             if (Object.hasOwnProperty.call(criteria, key)) {
-                if(criteria[key].toString().length > 2) {
+                if (criteria[key].toString().length > 2) {
                     criteria[key] = {
                         [Op.like]: '%' + criteria[key] + '%'
                     };
@@ -67,14 +73,14 @@ module.exports.getDocTypes = async (organisationId, procedureId) => {
                     ProcedureId: procedureId
                 },
                 attributes: [
-                    [fn('DISTINCT', col('documentType')) ,'documentType'],
+                    [fn('DISTINCT', col('documentType')), 'documentType'],
                     'documentTypeNewId',
                     'documentTypeNewName',
                     'procedureId'
                 ],
                 distinct: true
             });
-            return result;
+        return result;
     } catch (error) {
         throw new Error(error);
     }
@@ -87,8 +93,7 @@ module.exports.updateDocTypeNew = async (organisationId, procedureId, documentTy
             .update({
                 documentTypeNewId: documentTypeNewId,
                 documentTypeNewName: documentTypeNewName
-            },
-            {
+            }, {
                 where: {
                     procedureId: procedureId,
                     documentType: documentType
@@ -96,5 +101,34 @@ module.exports.updateDocTypeNew = async (organisationId, procedureId, documentTy
             });
     } catch (error) {
         throw new Error(error);
+    }
+};
+
+module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
+    try {
+
+        const query = `SELECT p.creditorNumber , p.creditorName , SUM(p.balance) as totalBalance, COUNT(p.id) as totlaCount
+                            FROM posting_${orgId}  p
+                            WHERE procedureId = :procedureId 
+                                AND UPPER(p.accountType) = 'K' 
+                                AND p.creditorNumber is not NULL
+                                AND (UPPER(p.documentType) = 'KZ' OR 
+                                    UPPER(p.documentType) = 'ZP' OR
+                                    UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+                                AND p.balance = ROUND(p.balance)
+                                AND balance > :baseBalance
+                            GROUP BY p.creditorNumber , p.creditorName`;
+        const result = await sequelize.query(
+            query, {
+                replacements: {
+                    procedureId: prcId,
+                    baseBalance: baseBalance
+                },
+                type: QueryTypes.SELECT
+            }
+        );
+        return result;
+    } catch (error) {
+        throw new Error(error.message);
     }
 };

@@ -44,6 +44,9 @@ const routes: Routes = [
   { path: 'shared/user/procedures', component: UserDashboardComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
   { path: 'shared/user/users', component: OrganisationUsersComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
   { path: 'shared/data', component: SAPDataTableComponent },
+
+  { path: 'analysis/amount', component: AmountAnalysisComponent },
+
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },
   { path: 'reset/:token', component: ResetPasswordNewUserComponent },

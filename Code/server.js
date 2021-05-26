@@ -7,6 +7,7 @@ const path = require('path');
 require('./config/passport.config');
 const bearerToken = require('express-bearer-token');
 const sharedRoutes = require('./modules/shared/route/shared.route.server');
+const analysisRoutes = require('./modules/Analysis/route/analysis.route.server');
 
 
 // require('./helpers/csv.stream.helper.server').detectDelemeter('./modules/Admin/files/0ade1068d7fee672d55ed779c3fdb370')
@@ -34,6 +35,7 @@ app.use(bearerToken());
 
 app.use('/api/shared', sharedRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/analysis', analysisRoutes);
 
 app.use("/public", express.static(path.join("public")));  
 
