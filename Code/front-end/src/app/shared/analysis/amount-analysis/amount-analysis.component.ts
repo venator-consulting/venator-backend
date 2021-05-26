@@ -5,6 +5,7 @@ import { Procedures } from 'src/app/shared/model/procedures';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { Bar } from '../../model/bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-amount-analysis',
@@ -21,7 +22,7 @@ export class AmountAnalysisComponent implements OnInit {
   basicData: any;
 
 
-  constructor(private _analysisService: AnalysisService) { }
+  constructor(private _analysisService: AnalysisService, private _router: Router) { }
 
   ngOnInit(): void {
 
@@ -54,8 +55,8 @@ export class AmountAnalysisComponent implements OnInit {
 
 
 
-    this.selectedOrganisation = 1;//+localStorage.getItem('organisationId');
-    this.selectedProcedure = 1;//+localStorage.getItem('currentProcedureId');
+    this.selectedOrganisation = +localStorage.getItem('organisationId');
+    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
 
     this._analysisService
       .getAmountAnalysis(this.selectedOrganisation, this.selectedProcedure, this.baseBalance)
@@ -72,6 +73,11 @@ export class AmountAnalysisComponent implements OnInit {
       }, er => {
 
       });
+  }// end of ng on init
+
+  goToDetails(row:AmountAnalysis) {
+    this._router.navigate(['/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.creditorNumber]);
   }
+
 
 }

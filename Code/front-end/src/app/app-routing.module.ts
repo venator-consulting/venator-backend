@@ -20,6 +20,7 @@ import { ProcedureEditComponent } from "./admin/procedure-edit/procedure-edit.co
 import { UserDashboardComponent } from "./shared/user-dashboard/user-dashboard.component";
 import { OrganisationUsersComponent } from "./shared/organisation-users/organisation-users.component";
 import { DocumentTypeComponent } from "./admin/document-type/document-type.component";
+import { AmountAnalysisDetailsComponent } from "./shared/analysis/amount-analysis/details/amount-analysis-details.component";
 
 
 const routes: Routes = [
@@ -45,7 +46,8 @@ const routes: Routes = [
   { path: 'shared/user/users', component: OrganisationUsersComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
   { path: 'shared/data', component: SAPDataTableComponent },
 
-  { path: 'analysis/amount', component: AmountAnalysisComponent },
+  { path: 'analysis/amount', component: AmountAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/amount/:orgId/:prcId/:creditorNumber', component: AmountAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },

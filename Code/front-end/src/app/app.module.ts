@@ -66,6 +66,7 @@ import localeDe from '@angular/common/locales/de';
 import { AuthGuard } from './auth.guard';
 import { TokenInterceptor } from './token.interceptor';
 import { DocumentTypeComponent } from './admin/document-type/document-type.component';
+import { AmountAnalysisDetailsComponent } from './shared/analysis/amount-analysis/details/amount-analysis-details.component';
 registerLocaleData(localeDe, 'de');
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -95,7 +96,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     OrganisationUsersComponent,
     ProcedureEditComponent,
     AdminDashboardComponent,
-    DocumentTypeComponent
+    DocumentTypeComponent,
+    AmountAnalysisDetailsComponent
   ],
   imports: [
     BrowserModule,

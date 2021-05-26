@@ -1,5 +1,4 @@
 export class AmountAnalysis {
-    id: number;
     creditorNumber: string;
     creditorName: string;
     totlaCount: number;

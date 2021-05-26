@@ -132,3 +132,19 @@ module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
         throw new Error(error.message);
     }
 };
+
+module.exports.getByCreditorNumber = async (orgId, procedureId, creditorNumber) => {
+    try {
+        const result = await Posting
+            .getPosting('posting_' + orgId)
+            .findAll({
+                where: {
+                    procedureId: procedureId,
+                    creditorNumber: creditorNumber
+                }
+            });
+            return result;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};

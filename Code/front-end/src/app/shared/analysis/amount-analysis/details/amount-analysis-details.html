@@ -1,0 +1,35 @@
+<p>details works!</p>
+<div class="p-grid">
+
+    <div class="p-col-10">
+        <p-table #dt dataKey="id" [value]="data">
+    
+          <ng-template pTemplate="header">
+            <tr>
+              <th>creditorNumber</th>
+              <th>creditorName</th>
+              <th>accountType</th>
+              <th>documentType</th>
+              <th>balance</th>
+              <th>contraAccountNumber</th>
+              <th>contraAccountName</th>
+              <th>documentTypeNewName</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>{{row.creditorNumber}}</td>
+              <td>{{row.creditorName}}</td>
+              <td>{{row.accountType}}</td>
+              <td>{{row.documentType}}</td>
+              <td>{{row.balance}}</td>
+              <td>{{row.contraAccountNumber}}</td>
+              <td>{{row.contraAccountName}}</td>
+              <td>{{row.documentTypeNewName}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+      
+</div>

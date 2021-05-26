@@ -56,7 +56,7 @@
           <td>{{row.totlaCount}}</td>
           <td>{{row.totalBalance}}</td>
           <td><button type="button" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning"
-              *ngIf="!row.isEditable" pTooltip="Details" tooltipPosition="bottom"></button>
+              (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom" ></button>
           </td>
         </tr>
       </ng-template>
