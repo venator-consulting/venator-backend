@@ -54,7 +54,7 @@
           <td>{{row.creditorNumber}}</td>
           <td>{{row.creditorName}}</td>
           <td>{{row.totlaCount}}</td>
-          <td>{{row.totalBalance}}</td>
+          <td>{{row.totalBalance | currency:'EUR':''}}</td>
           <td><button type="button" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning"
               (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom" ></button>
           </td>

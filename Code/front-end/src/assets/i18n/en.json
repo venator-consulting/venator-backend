@@ -118,6 +118,7 @@
         "balance": "Balance",
         "debitCredit": "Debitcredit",
         "debitAmount": "Debitamount",
+        "creditAmount": "Creditamount",
         "balanceTransactionCurrency": "BalanceTransactionCurrency",
         "debitAmountTransactionCurrency": "DebitAmountTransactionCurrency",
         "creditAmountTransactionCurrency": "CreditAmountTransactionCurrency",

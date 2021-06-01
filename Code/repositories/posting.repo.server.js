@@ -70,7 +70,10 @@ module.exports.getDocTypes = async (organisationId, procedureId) => {
             .getPosting('posting_' + organisationId)
             .findAll({
                 where: {
-                    ProcedureId: procedureId
+                    ProcedureId: procedureId,
+                    documentType: {
+                        [Op.ne]: null
+                      }
                 },
                 attributes: [
                     [fn('DISTINCT', col('documentType')), 'documentType'],
@@ -144,6 +147,42 @@ module.exports.getByCreditorNumber = async (orgId, procedureId, creditorNumber) 
                 }
             });
             return result;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
+module.exports.textAnalysis = async (orgId, prcId, keys) => {
+    try {
+
+        let query = `SELECT p.creditorNumber , p.creditorName , COUNT(p.id) as totlaCount
+                            FROM posting_${orgId}  p
+                            WHERE procedureId = :procedureId 
+                                AND UPPER(p.accountType) = 'K' 
+                                AND p.creditorNumber is not NULL 
+                                `;
+        query += keys.length > 0 ? ' AND ( ' : '';
+
+        for (let index = 0; index < keys.length; index++) {
+            const key = keys[index];
+            query += `  p.reference like '%${key}%'
+                        OR p.textPosting like '%${key}%'
+                        OR p.textHeader like '%${key}%' OR`;
+        }
+        query += keys.length > 0 ? ' 1 <> 1) ' : '';
+
+        query += 'GROUP BY p.creditorNumber , p.creditorName';
+
+        const result = await sequelize.query(
+            query, {
+                replacements: {
+                    procedureId: prcId
+                },
+                type: QueryTypes.SELECT
+            }
+        );
+        return result;
     } catch (error) {
         throw new Error(error.message);
     }

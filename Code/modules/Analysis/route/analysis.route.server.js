@@ -16,5 +16,10 @@ router
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.getByCreditorNumber);
 
+router
+    .route('/:orgId/:prcId/text')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.textAnalysis);
 
 module.exports = router;

@@ -9,11 +9,9 @@
               <th>creditorNumber</th>
               <th>creditorName</th>
               <th>accountType</th>
-              <th>documentType</th>
-              <th>balance</th>
-              <th>contraAccountNumber</th>
-              <th>contraAccountName</th>
-              <th>documentTypeNewName</th>
+              <th>Reference</th>
+              <th>textPosting</th>
+              <th>textHeader</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-row>
@@ -21,11 +19,9 @@
               <td>{{row.creditorNumber}}</td>
               <td>{{row.creditorName}}</td>
               <td>{{row.accountType}}</td>
-              <td>{{row.documentType}}</td>
-              <td>{{row.balance | currency:'EUR':''}}</td>
-              <td>{{row.contraAccountNumber}}</td>
-              <td>{{row.contraAccountName}}</td>
-              <td>{{row.documentTypeNewName}}</td>
+              <td>{{row.reference}}</td>
+              <td>{{row.textPosting}}</td>
+              <td>{{row.textHeader}}</td>
             </tr>
           </ng-template>
         </p-table>
