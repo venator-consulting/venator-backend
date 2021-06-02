@@ -94,7 +94,6 @@ export class ImportComponent implements OnInit {
 
 
   orgChangedHandler(e) {
-    // alert(e.value);
     if (e.value > 0) {
       this._orgService.getProcedures(e.value)
         .subscribe(

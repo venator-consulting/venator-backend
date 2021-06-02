@@ -1,7 +1,5 @@
 const postngRepo = require("../../../repositories/posting.repo.server");
-const exportHelper = require('../../../helpers/export.helper');
-const env = require('../../../config/environment');
-
+const errorHandler = require('../../../helpers/error.handler.server').errorHandler;
 
 module.exports.fetch = async (req, res) => {
     try {
@@ -10,10 +8,9 @@ module.exports.fetch = async (req, res) => {
         res
             .status(200)
             .json(result);
-    } catch (er) {
-        res
-            .status(500)
-            .json(er.message);
+    } catch (error) {
+        errorHandler('posting data controller: fetch data', error);
+        res.status(500).json(error);
     }
 };
 
@@ -27,9 +24,8 @@ module.exports.exportAsExcel = async (req, res) => {
                 .json(fileUrl);
         });
 
-    } catch (er) {
-        res
-            .status(500)
-            .json(er);
+    } catch (error) {
+        errorHandler('posting data controller: export as excel', error);
+        res.status(500).json(error);
     }
 };

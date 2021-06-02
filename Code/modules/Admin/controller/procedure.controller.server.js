@@ -18,8 +18,8 @@ module.exports.fetchAll = async function (req, res, next) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> procedure controller </h3 >
+            <p> fetch all </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -47,8 +47,8 @@ module.exports.fetchOne = async (req, res) => {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> procedure controller </h3 >
+            <p> fetch one </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -77,8 +77,8 @@ module.exports.getByOrgId = async (req, res) => {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> procedure controller </h3 >
+            <p> get by organisation id </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -106,8 +106,8 @@ module.exports.insert = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> procedure controller </h3 >
+            <p> insert </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -135,8 +135,8 @@ module.exports.update = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> procedure controller </h3 >
+            <p> update </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -163,8 +163,8 @@ module.exports.delete = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> procedure controller </h3 >
+            <p> delete </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,

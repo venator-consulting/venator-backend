@@ -24,7 +24,7 @@
     
         <ng-template pTemplate="body" let-user  >
             <tr >
-                <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.RoleId}}</td>
+                <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.Role?.name}}</td>
                 <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.username}}</td>
                 <td  pResizableColumn  class="ui-resizable-column">{{user.email}}</td>
                 <td  pResizableColumn  class="ui-resizable-column pointer " >{{user.title}}</td>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { PostingDataService } from '../service/posting-data.service';
 import { DataFilterService } from '../service/data-filter.service';
 import { ExportDataService } from '../service/export-data.service';
@@ -18,7 +18,7 @@ export class SAPDataTableComponent implements OnInit {
 
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
     private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService, private _router: Router,
-    private _translateService: TranslateService) { }
+    private _translateService: TranslateService, private scrollViewport: ElementRef) { }
 
 
   organisationId = localStorage.getItem('organisationId')
@@ -42,6 +42,11 @@ export class SAPDataTableComponent implements OnInit {
   };
   totalCount: number = 0;
 
+//   ngAfterViewInit(): void {
+//     const viewportScrollable = document.getElementsByTagName('cdk-virtual-scroll-viewport');
+//     viewportScrollable[0].classList.add('p-datatable-scrollable-body');
+//     viewportScrollable[0].classList.add('ui-table-scrollable-body');
+// }
 
   ngOnInit(): void {
 

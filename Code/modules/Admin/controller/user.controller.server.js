@@ -19,8 +19,8 @@ module.exports.createDefaultAdmin = async (req, res) => {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> users controller </h3 >
+            <p> create default admin </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${e} </p>
             </div>`,
@@ -89,8 +89,30 @@ module.exports.resetPass = async (req, res) => {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> users controller </h3 >
+            <p> reset password </p>
+            <p> -----------------------------------------------------------------------------------------</p>
+            <p> ${error} </p>
+            </div>`,
+        });
+        logger.error(`${new Date()}: ${error}`);
+        res.status(500).json(error);
+    }
+};
+
+module.exports.changePassword = async (req, res) => {
+    try {
+        const result = await userRepo.changePassword(req.userinfo.email, req.body.password);
+        res.status(201).json(result);
+    } catch (error) {
+        await sendMail({
+            from: 'Venator, Bug reporting',
+            to: env.developerMail,
+            subject: 'exception stack trace',
+            html: ` 
+            <div>
+            <h3> users controller </h3 >
+            <p> reset password </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -112,8 +134,8 @@ module.exports.fetchAllManagers = async function (req, res) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> users controller </h3 >
+            <p> fetch managers tables </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,
@@ -136,8 +158,8 @@ module.exports.getUsersByOrganisationId = async function (req, res, next) {
             subject: 'exception stack trace',
             html: ` 
             <div>
-            <h3> data migration controller </h3 >
-            <p> sync database tables </p>
+            <h3> users controller </h3 >
+            <p> get users by organisation id </p>
             <p> -----------------------------------------------------------------------------------------</p>
             <p> ${error} </p>
             </div>`,

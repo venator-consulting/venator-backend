@@ -29,6 +29,7 @@
         "addUser": "Add user",
         "editUser": "Edit user",
         "addOrganisation": "Add organisation",
+        "addDocumentType": "Add Document Type",
         "addProcedure": "Add procedure",
         "editProcedure": "Edit procedure",
         "resetPassword": "Reset password",
@@ -267,6 +268,14 @@
         "clearFilter": "Clear filter",
         "filter": "Filter",
         "actions": "Actions"
+
+    }, 
+    "AmountAnalysis": {
+        "creditorNumber": "Creditornumber",
+        "creditorName": "creditorname",
+        "NumberOfPostings": "Number of postings",
+        "totalBalance": "Total Balance",
+        "details": "Details"
 
     }
   }

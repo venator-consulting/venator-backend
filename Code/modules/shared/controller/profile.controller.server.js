@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const UsersRepo = require('../../../repositories/user.repo.server');
+const errorHandler = require('../../../helpers/error.handler.server').errorHandler;
 
 module.exports.changePassword = function (req, res, next) {
     const userID = req.userinfo.id;
@@ -22,6 +23,7 @@ module.exports.changePassword = function (req, res, next) {
                         });
                     })
                     .catch(err => {
+                        errorHandler('profile controller in shared folder: change password', err);
                         res.status(500).json({
                             message: 'Something is not right, Internal server ERROR! please try again later',
                             err: err
@@ -31,6 +33,7 @@ module.exports.changePassword = function (req, res, next) {
 
         })
         .catch(er => {
+            errorHandler('profile controller in shared folder: change password', err);
             res.status(500).json({
                 message: 'Something is not right, Internal server ERROR! please try again later',
                 err: er

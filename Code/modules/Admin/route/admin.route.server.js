@@ -9,6 +9,8 @@ const passport = require('passport');
 const authorization = require('../../../config/authorization.config');
 const procedureCtrl = require('../controller/procedure.controller.server');
 const organisationCtrl = require('../controller/organisation.controller.server');
+const docTypeCtrl = require('../controller/documentType.controller.server');
+const postingCtrl = require('../controller/posting.controller.server');
 
 const multer = require('multer');
 const uploadfiles = multer({
@@ -23,52 +25,52 @@ router
     .route('/template-types')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),uploadCtrl.getTemplateTypes);
+    }), authorization.authorize('Admin'), uploadCtrl.getTemplateTypes);
 
 
 router
     .route('/header')
     .post(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),uploadfiles.single('excel'), uploadCtrl.headerFile);
+    }), authorization.authorize('Admin'), uploadfiles.single('excel'), uploadCtrl.headerFile);
 
 
 router
     .route('/import')
     .post(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),uploadCtrl.importFile);
+    }), authorization.authorize('Admin'), uploadCtrl.importFile);
 
 
 router
     .route('/delete-file')
     .post(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),uploadCtrl.deleteFileFromServier);
+    }), authorization.authorize('Admin'), uploadCtrl.deleteFileFromServier);
 
 router
     .route('/user')
     .post(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),userCtrl.register);
+    }), authorization.authorize('Admin'), userCtrl.register);
 
 router
     .route('/getManagers')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),userCtrl.fetchAllManagers);
+    }), authorization.authorize('Admin'), userCtrl.fetchAllManagers);
 
 router
     .route('/roles/getmanagerRoleId')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),roleCtrl.getmanagerRoleId);
+    }), authorization.authorize('Admin'), roleCtrl.getmanagerRoleId);
 
 router
     .route('/reset')
     .post(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),userCtrl.resetPass);
+    }), authorization.authorize('Admin'), userCtrl.resetPass);
 
 router
     .route('/roles')
@@ -96,50 +98,62 @@ router
     .route('/procedures')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),procedureCtrl.fetchAll)
+    }), authorization.authorize('Admin'), procedureCtrl.fetchAll)
     .post(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),procedureCtrl.insert);
+    }), authorization.authorize('Admin'), procedureCtrl.insert);
 
 
 router
     .route('/procedures/:id')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),procedureCtrl.fetchOne)
+    }), authorization.authorize('Admin'), procedureCtrl.fetchOne)
     .put(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),procedureCtrl.update)
+    }), authorization.authorize('Admin'), procedureCtrl.update)
     .delete(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),procedureCtrl.delete);
+    }), authorization.authorize('Admin'), procedureCtrl.delete);
 
 router
     .route('/organisation')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),organisationCtrl.fetchAll)
+    }), authorization.authorize('Admin'), organisationCtrl.fetchAll)
     .post(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),publicImgs.single('logo'), organisationCtrl.insert);
+    }), authorization.authorize('Admin'), publicImgs.single('logo'), organisationCtrl.insert);
 
 router
     .route('/organisation/:id')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),organisationCtrl.fetchOne)
+    }), authorization.authorize('Admin'), organisationCtrl.fetchOne)
     .put(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),publicImgs.single('logo'), organisationCtrl.update)
+    }), authorization.authorize('Admin'), publicImgs.single('logo'), organisationCtrl.update)
     .delete(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),organisationCtrl.delete);
+    }), authorization.authorize('Admin'), organisationCtrl.delete);
 
 router
     .route('/organisation/:id/procedures')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'),procedureCtrl.getByOrgId);
+    }), authorization.authorize('Admin'), procedureCtrl.getByOrgId);
+
+router
+    .route('/document-type/posting/:orgId/:prcdrId')
+    .get(postingCtrl.getDocTypes)
+    .put(postingCtrl.updateDoctypes);
+
+
+router
+    .route('/document-type')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), docTypeCtrl.getAll);
 
 
 router
@@ -148,9 +162,7 @@ router
 
 router
     .route('/create-admin')
-    .get(passport.authenticate('jwt', {
-        session: false
-    }), authorization.authorize('Admin'),userCtrl.createDefaultAdmin)
+    .get(userCtrl.createDefaultAdmin)
 
 
 module.exports = router;

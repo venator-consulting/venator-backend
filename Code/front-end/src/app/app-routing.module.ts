@@ -14,11 +14,13 @@ import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/
 import { ProcedureRegistrationComponent } from './admin/procedure-registration/procedure-registration.component';
 import { AmountAnalysisComponent } from "./shared/analysis/amount-analysis/amount-analysis.component";
 import { AdminDashboardComponent } from "./admin/admin-dashboard/admin-dashboard.component";
-import { UserRegistrationComponent } from "./shared/user-registration/user-registration.component"; 
-import { UserEditComponent } from "./shared/user-edit/user-edit.component"; 
-import { ProcedureEditComponent } from "./admin/procedure-edit/procedure-edit.component"; 
-import {UserDashboardComponent } from "./shared/user-dashboard/user-dashboard.component" ;
-import {OrganisationUsersComponent } from "./shared/organisation-users/organisation-users.component" ;
+import { UserRegistrationComponent } from "./shared/user-registration/user-registration.component";
+import { UserEditComponent } from "./shared/user-edit/user-edit.component";
+import { ProcedureEditComponent } from "./admin/procedure-edit/procedure-edit.component";
+import { UserDashboardComponent } from "./shared/user-dashboard/user-dashboard.component";
+import { OrganisationUsersComponent } from "./shared/organisation-users/organisation-users.component";
+import { DocumentTypeComponent } from "./admin/document-type/document-type.component";
+import { AmountAnalysisDetailsComponent } from "./shared/analysis/amount-analysis/details/amount-analysis-details.component";
 
 
 const routes: Routes = [
@@ -36,12 +38,17 @@ const routes: Routes = [
   { path: 'admin/procedure/edit', component: ProcedureEditComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
   { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
   { path: 'admin/import', component: ImportComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
+  { path: 'admin/document-type', component: DocumentTypeComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
 
   { path: 'shared/user/add', component: UserRegistrationComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
   { path: 'shared/user/edit', component: UserEditComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
   { path: 'shared/user/procedures', component: UserDashboardComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
   { path: 'shared/user/users', component: OrganisationUsersComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
   { path: 'shared/data', component: SAPDataTableComponent },
+
+  { path: 'analysis/amount', component: AmountAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/amount/:orgId/:prcId/:creditorNumber', component: AmountAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },
   { path: 'reset/:token', component: ResetPasswordNewUserComponent },

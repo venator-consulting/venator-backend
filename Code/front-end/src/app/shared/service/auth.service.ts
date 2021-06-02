@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
 
+  
   _thisURL = environment.baseUrl + 'shared';
 
   constructor(private _http: HttpClient) { }
@@ -18,6 +19,11 @@ export class AuthService {
   resetPassword(data: any) {
     return this._http.post<any>(this._thisURL + '/resetPassword', data);
   }
+
+  changePassword(data: {password: string}) {
+    return this._http.post<any>(this._thisURL + '/profile/resetPassword', data);
+  }
+
 
   adminRegistration(data: any) {
     return this._http.post<any>(this._thisURL + '/adminRegistration', data);

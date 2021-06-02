@@ -12,10 +12,10 @@ import { TranslateService } from '@ngx-translate/core';
 export class ResetPasswordComponent implements OnInit {
 
   passwordObj = {
-    selectedPassword : "",
+    selectedPassword: "",
     confirmedPassword: "",
   }
-  pass :string;
+  pass: string;
 
   constructor(private _messageService: MessageService, private _authService: AuthService, private _router: Router, public _translateService: TranslateService) { }
 
@@ -25,37 +25,28 @@ export class ResetPasswordComponent implements OnInit {
   submitHandle() {
     // console.log(this.passwordObj)
     if (this.passwordObj.selectedPassword === this.passwordObj.confirmedPassword) {
-        let password = this.passwordObj.selectedPassword
-        this._authService
-        .resetPassword(password)
+      let password = this.passwordObj.selectedPassword
+      this._authService
+        .changePassword({ password: password })
         .subscribe(res => {
-          if(res.message === "successfully"){
             this._router.navigate(['/']);
-          } else {
-            this._messageService.add({
-              severity: 'error',
-              summary: 'ERROR!',
-              detail: "password could not be reset"
-            });
-          }
-  
         }, err => {
           this._translateService.get("ErrorHandler").subscribe(elem => {
-            let errorMsg = "" ; 
-  
-            if(err.status=== 400){
+            let errorMsg = "";
+
+            if (err.status === 400) {
               errorMsg = elem.badRequest_400
             }
-            else if (err.status=== 401) {
+            else if (err.status === 401) {
               errorMsg = elem.unauthorized_401
             }
-            else if (err.status=== 403) {
+            else if (err.status === 403) {
               errorMsg = elem.forbidden_403
             }
-            else if (err.status=== 404) {
+            else if (err.status === 404) {
               errorMsg = elem.NotFound_404
             }
-            else if (err.status=== 500) {
+            else if (err.status === 500) {
               errorMsg = elem.internalServerError_500
             }
             this._messageService.add({
@@ -66,7 +57,7 @@ export class ResetPasswordComponent implements OnInit {
             });
           })
         });
-      
+
     } else {
       this._translateService.get("ErrorHandler").subscribe(elem => {
         this._messageService.add({

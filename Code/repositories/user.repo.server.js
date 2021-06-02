@@ -38,25 +38,25 @@ module.exports.fetch = function (search = '_', orderBy = 'username', order = 'DE
                 .findAll({
                     where: {
                         [Op.or]: [{
-                            username: {
-                                [Op.like]: '%' + search + '%'
+                                username: {
+                                    [Op.like]: '%' + search + '%'
+                                }
+                            },
+                            {
+                                firstname: {
+                                    [Op.like]: '%' + search + '%'
+                                }
+                            },
+                            {
+                                lastname: {
+                                    [Op.like]: '%' + search + '%'
+                                }
+                            },
+                            {
+                                email: {
+                                    [Op.like]: '%' + search + '%'
+                                }
                             }
-                        },
-                        {
-                            firstname: {
-                                [Op.like]: '%' + search + '%'
-                            }
-                        },
-                        {
-                            lastname: {
-                                [Op.like]: '%' + search + '%'
-                            }
-                        },
-                        {
-                            email: {
-                                [Op.like]: '%' + search + '%'
-                            }
-                        }
                         ]
 
                     },
@@ -106,7 +106,8 @@ module.exports.getUsersByOrganisationId = async function (id) {
                 where: {
                     OrganisationId: id,
                     deleted: false
-                }
+                },
+                include: Role
             });
         return users;
 
@@ -129,28 +130,28 @@ module.exports.existUser = function (username) {
                 .findOne({
                     where: {
                         [Op.and]: [{
-                            [Op.or]: [{
-                                username: username,
+                                [Op.or]: [{
+                                        username: username,
+                                    },
+                                    {
+                                        email: username,
+                                    }
+                                ],
                             },
                             {
-                                email: username,
-                            }
-                            ],
-                        },
-                        {
-                            deleted: false,
-                        },
-                        {
-                            [Op.or]: [{
-                                expireDate: {
-                                    [Op.gt]: new Date()
-                                }
+                                deleted: false,
                             },
                             {
-                                expireDate: null
+                                [Op.or]: [{
+                                        expireDate: {
+                                            [Op.gt]: new Date()
+                                        }
+                                    },
+                                    {
+                                        expireDate: null
+                                    }
+                                ]
                             }
-                            ]
-                        }
 
                         ]
                     },
@@ -208,8 +209,8 @@ module.exports.insert = function (user) {
                     'your password to login to your account: ' + env.resetPassLink + token
             };
 
-             const mailRes = await sendMail(mail);
-             console.log(mailRes);
+            const mailRes = await sendMail(mail);
+            console.log(mailRes);
             // if manager create schema
             // if (user.role === 'Manager') {
             //     Posting.syncPosting('posting_' + result.dataValues.id);
@@ -264,6 +265,26 @@ module.exports.resetPassword = (data) => {
 
 };
 
+
+module.exports.changePassword = async function (email, password) {
+    try {
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+        const result = await User
+            .getUser()
+            .update({
+                password: hashedPassword,
+                reseted: true
+            }, {
+                where: {
+                    email: email
+                }
+            });
+        return result;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
 
 
 module.exports.createDefaultAdmin = function (role) {
