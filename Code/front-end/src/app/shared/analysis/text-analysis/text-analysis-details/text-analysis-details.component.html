@@ -1,7 +1,8 @@
+
 <div class="p-grid">
 
-    <div class="p-col-12">
-        <p-table #dt dataKey="id" [value]="data" >
+    <div class="p-col-10">
+        <p-table #dt dataKey="id" [value]="data">
     
           <ng-template pTemplate="header">
             <tr>
@@ -19,7 +20,9 @@
               <th>{{ 'DataTableColumns.ledgerId '| translate}}</th>
               <th>{{ 'DataTableColumns.executionDate' | translate}}</th>
               <th>{{ 'DataTableColumns.dueDate' | translate}}</th> 
-
+              <th>{{ 'DataTableColumns.reference' | translate}}</th>
+              <th>{{ 'DataTableColumns.textPosting' | translate}}</th>
+              <th>{{ 'DataTableColumns.textHeader' | translate}}</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-row>
@@ -38,6 +41,9 @@
               <td>{{row.ledgerId}}</td>
               <td>{{row.executionDate}}</td>
               <td>{{row.dueDate}}</td>
+              <td>{{row.reference}}</td>
+              <td>{{row.textPosting}}</td>
+              <td>{{row.textHeader}}</td>
 
             </tr>
           </ng-template>

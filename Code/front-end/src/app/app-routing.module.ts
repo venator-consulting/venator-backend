@@ -21,6 +21,8 @@ import { UserDashboardComponent } from "./shared/user-dashboard/user-dashboard.c
 import { OrganisationUsersComponent } from "./shared/organisation-users/organisation-users.component";
 import { DocumentTypeComponent } from "./admin/document-type/document-type.component";
 import { AmountAnalysisDetailsComponent } from "./shared/analysis/amount-analysis/details/amount-analysis-details.component";
+import { TextAnalysisComponent } from "./shared/analysis/text-analysis/text-analysis.component";
+import { TextAnalysisDetailsComponent } from "./shared/analysis/text-analysis/text-analysis-details/text-analysis-details.component";
 
 
 const routes: Routes = [
@@ -48,6 +50,8 @@ const routes: Routes = [
 
   { path: 'analysis/amount', component: AmountAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/amount/:orgId/:prcId/:creditorNumber', component: AmountAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/text', component: TextAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/text/:orgId/:prcId/:creditorNumber', component: TextAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },

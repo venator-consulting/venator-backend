@@ -1,0 +1,36 @@
+<p-toast></p-toast>
+<div class="p-grid" *ngIf="this.basicData">
+  <div class="p-col-10">
+    <div class="card">
+      <p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+    </div>
+  </div>
+</div>
+
+<div class="p-grid">
+
+  <div class="p-col-10" *ngIf="selectedProcedure>0">
+    <p-table #dt dataKey="id" [value]="data">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{'AmountAnalysis.creditorNumber' | translate}}</th>
+          <th>{{'AmountAnalysis.creditorName' | translate}}</th>
+          <th>{{'AmountAnalysis.NumberOfPostings' | translate}}</th>
+          <th>{{'AmountAnalysis.details' | translate}}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>{{row.creditorNumber}}</td>
+          <td>{{row.creditorName}}</td>
+          <td>{{row.totlaCount}}</td>
+          <td><button type="button" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning"
+              (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom" ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>

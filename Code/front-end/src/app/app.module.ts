@@ -67,6 +67,8 @@ import { AuthGuard } from './auth.guard';
 import { TokenInterceptor } from './token.interceptor';
 import { DocumentTypeComponent } from './admin/document-type/document-type.component';
 import { AmountAnalysisDetailsComponent } from './shared/analysis/amount-analysis/details/amount-analysis-details.component';
+import { TextAnalysisComponent } from './shared/analysis/text-analysis/text-analysis.component';
+import { TextAnalysisDetailsComponent } from './shared/analysis/text-analysis/text-analysis-details/text-analysis-details.component';
 registerLocaleData(localeDe, 'de');
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -97,7 +99,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     ProcedureEditComponent,
     AdminDashboardComponent,
     DocumentTypeComponent,
-    AmountAnalysisDetailsComponent
+    AmountAnalysisDetailsComponent,
+    TextAnalysisComponent,
+    TextAnalysisDetailsComponent
   ],
   imports: [
     BrowserModule,

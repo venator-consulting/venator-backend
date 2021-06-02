@@ -82,6 +82,7 @@ export class DocumentTypeComponent implements OnInit {
   }
 
   orgChangedHandler(e) {
+    this.selectedPrcId = 0;
     if (e.value > 0) {
       this._orgService.getProcedures(e.value)
         .subscribe(
