@@ -1,10 +1,8 @@
 <div class="card" style="overflow-x: scroll;">
   <p-toast></p-toast>
   <!-- [paginator]="true"   [rowsPerPageOptions]="[25,50,100]" [rows]="25"  [scrollable]="true"-->
-  <p-table #dt [value]="postings" [columns]="cols" [loading]="loading" 
-     [reorderableColumns]="true" 
-    [style]="{width:'10000px'}" 
-    [lazy]="true" [resizableColumns]="true">
+  <p-table #dt [value]="postings" [columns]="cols" [loading]="loading" [reorderableColumns]="true"
+    [style]="{width:'10000px'}" [lazy]="true" [resizableColumns]="true">
     <ng-template pTemplate="caption">
       <div class="p-mb-4">
         <!-- Export as excel -->
@@ -35,7 +33,7 @@
         <!-- dispalyed data of total count -->
         {{displayedDataCount}} of {{totalCount}}
         <!-- Clear filter -->
-        <button type="button"  pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+        <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
           class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
           tooltipPosition="bottom"></button>
 
@@ -53,9 +51,17 @@
         </th>
       </tr>
       <tr>
-        <th pResizableColumn *ngFor="let col of cols ">
-          <input pInputText type="text" [(ngModel)]="criteria[col.field]" (change)="filterChange($any($event.target).value, col.field)"
-            class="filterInputCss" />
+        <th pResizableColumn *ngFor="let col of cols " class="autocomplete">
+          <!-- <input pInputText type="text" [(ngModel)]="criteria[col.field]"
+            (change)="filterChange($any($event.target).value, col.field)" class="filterInputCss" /> -->
+
+          <p-autoComplete [suggestions]="completeWords"
+            (completeMethod)="filterChange($event.query, col.field)" 
+            (onClear)="filterChange($event.query, col.field)"
+            (onSelect)="filterChange($event.word, col.field)"
+              field="word" [minLength]="1"
+            [inputStyle]="{width:'90%'}" [style]="{width:'90%'}"></p-autoComplete>
+
           <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()"
             pTooltip="{{'Data_Table.filter' | translate}}" tooltipPosition="bottom"></i>
         </th>
@@ -63,8 +69,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-index="rowIndex" let-columns="columns" let-rowData>
       <tr [pReorderableRow]="index">
-        <td pReorderableRowHandle *ngFor="let col of cols" class="ui-resizable-column"
-          aria-placeholder="">
+        <td pReorderableRowHandle *ngFor="let col of cols" class="ui-resizable-column" aria-placeholder="">
           {{ (col.header == 'Balance' || col.header == 'Saldo EUR' ||
           col.header == 'Debitamount' || col.header == 'Umsatz Soll EUR' ||
           col.header == 'Creditamount' || col.header == 'Umsatz Haben EUR') ? 

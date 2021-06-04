@@ -6,6 +6,7 @@ const loginCtrl = require('../controller/login.controller.server');
 const getDataCtrl = require("../controller/getPostingData.controller.server");
 const userCtrl = require('../../Admin/controller/user.controller.server');
 const procedureCtrl = require('../controller/procedure.controller.server');
+const dictCtrl = require('../controller/dictionary.controller.server');
 
 router
     .route('/login')
@@ -39,7 +40,7 @@ router
     .route('/resetPassword')
     .post(userCtrl.resetPass);
 
-    router
+router
     .route('/profile/resetPassword')
     .post(passport.authenticate('jwt', {
         session: false
@@ -56,5 +57,11 @@ router
     .get(passport.authenticate('jwt', {
         session: false
     }), getDataCtrl.exportAsExcel);
+
+router
+    .route('/complete/:word')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), dictCtrl.fetch)
 
 module.exports = router;
