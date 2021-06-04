@@ -68,7 +68,7 @@
           {{ (col.header == 'Balance' || col.header == 'Saldo EUR' ||
           col.header == 'Debitamount' || col.header == 'Umsatz Soll EUR' ||
           col.header == 'Creditamount' || col.header == 'Umsatz Haben EUR') ? 
-          (rowData[col.field] | currency:'EUR':'')  : rowData[col.field]}}
+          (rowData[col.field] | currency:'EUR':'')  : rowData[col.field] }}
         </td>
       </tr>
     </ng-template>
