@@ -135,8 +135,8 @@
         "taxAmountDebit": "TaxAmountDebit",
         "taxAmountCredit": "TaxAmountCredit",
         "stackNumber": "StackNumber",
-        "CostCenter1": "CostCenter1",
-        "CostCenter2": "CostCenter2",
+        "costCenter1": "CostCenter1",
+        "costCenter2": "CostCenter2",
         "applicationDocument": "ApplicationDocument",
         "applicationDate": "ApplicationDate",
         "identifierBalanceCarryforward": "IdentifierBalanceCarryforward",
@@ -268,6 +268,14 @@
         "clearFilter": "Clear filter",
         "filter": "Filter",
         "actions": "Actions"
+
+    }, 
+    "AmountAnalysis": {
+        "creditorNumber": "Creditornumber",
+        "creditorName": "creditorname",
+        "NumberOfPostings": "Number of postings",
+        "totalBalance": "Total Balance",
+        "details": "Details"
 
     }
   }

@@ -31,6 +31,7 @@ export class AdminRegistrationComponent implements OnInit {
 
   ngOnInit(): void {
     this.userModel = new Users();
+    this.userModel.RoleId = 1;
     
     this._orgService.get()
     .subscribe(

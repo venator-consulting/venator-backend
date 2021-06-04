@@ -21,7 +21,6 @@ export class OrganisationUsersComponent implements OnInit {
     .getUsers(this.organisationId)
     .subscribe(
       (data) => { 
-        debugger;
         this.users = data;
         // console.log(data)
         },
