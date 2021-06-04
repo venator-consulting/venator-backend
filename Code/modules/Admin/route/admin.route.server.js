@@ -162,7 +162,11 @@ router
 
 router
     .route('/create-admin')
-    .get(userCtrl.createDefaultAdmin)
+    .get(userCtrl.createDefaultAdmin);
+
+router
+    .route('/dict')
+    .get(dataSyncCtrl.createDict);
 
 
 module.exports = router;
