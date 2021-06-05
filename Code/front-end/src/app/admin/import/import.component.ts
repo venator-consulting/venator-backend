@@ -36,6 +36,7 @@ export class ImportComponent implements OnInit {
   selectedOrgId: number = -1;
   procedures: Procedures[] = new Array();
   selectedProcedureId: number = -1;
+  tempheader: any = {};
 
 
   constructor(public _translateService: TranslateService ,private _messageService: MessageService, private _importService: ImportService, private _orgService: OrganisationService) {
@@ -213,7 +214,13 @@ export class ImportComponent implements OnInit {
         // console.dir('done: ' + res);
 
         this.waiting = false;
-        f.fileHeader = res.headers;
+        this.tempheader = res.headers;
+        f.fileHeader = new Array();
+        for (let index = 0; index < res.headers.length; index++) {
+          const element = res.headers[index];
+          f.fileHeader.push({name: element});
+        }
+        // f.fileHeader = res.headers;
         f.nameOnServer = res.fileName;
         f.orginalName = res.orginalName;
         f.defaultTemplate = res.defaultTemplate;
@@ -316,5 +323,28 @@ export class ImportComponent implements OnInit {
         });
       });
 
-  }
+  } // end of import this file function
+
+
+  filterMapping(event) {
+    
+    let filtered : any[] = [];
+    let query = event.query;
+
+    for(let i = 0; i < this.filesList[this.currentFileIndex].fileHeader.length; i++) {
+        let header = this.filesList[this.currentFileIndex].fileHeader[i];
+        if (header.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+            filtered.push(header);
+        }
+    }
+    
+    this.filesList[this.currentFileIndex].fileHeader = filtered;
+} // end of filter mapping function
+
+
+restoreFileHeaders() {
+  this.filesList[this.currentFileIndex].fileHeader = this.tempheader;
+}
+
+
 }
