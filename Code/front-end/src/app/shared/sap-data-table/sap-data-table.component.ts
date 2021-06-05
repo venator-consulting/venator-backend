@@ -46,12 +46,6 @@ export class SAPDataTableComponent implements OnInit {
   totalCount: number = 0;
   completeWords: Word[] = new Array();
 
-//   ngAfterViewInit(): void {
-//     const viewportScrollable = document.getElementsByTagName('cdk-virtual-scroll-viewport');
-//     viewportScrollable[0].classList.add('p-datatable-scrollable-body');
-//     viewportScrollable[0].classList.add('ui-table-scrollable-body');
-// }
-
   ngOnInit(): void {
 
     // this._translateService.setDefaultLang('de');
