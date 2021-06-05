@@ -6,7 +6,7 @@ import { dataTableColumns } from "../model/dataTableColumns";
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-import { stringify } from '@angular/compiler/src/util';
+import { AutocompleteService } from '../service/autocomplete.service';
 
 
 @Component({
@@ -18,7 +18,8 @@ export class SAPDataTableComponent implements OnInit {
 
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
     private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService, private _router: Router,
-    private _translateService: TranslateService, private scrollViewport: ElementRef) { }
+    private _translateService: TranslateService, private scrollViewport: ElementRef,
+    private _autocompleteService : AutocompleteService) { }
 
 
   organisationId = localStorage.getItem('organisationId')
@@ -66,6 +67,13 @@ export class SAPDataTableComponent implements OnInit {
         // this.getData();
       });
     });
+
+    this._autocompleteService
+      .autocompeteGerman('Zwangsvollstr')
+      .subscribe(res => {
+        console.log(res);
+        
+      });
 
   }
 

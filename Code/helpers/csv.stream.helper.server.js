@@ -96,13 +96,13 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
 
             for await (const row of parser) {
 
-                /*                 const accountTypeId = decimalParser(row[template.accountTypeId]);
-                                if (isNaN(accountTypeId)) {
-                                    console.log(`${new Date()}: There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
-                                    logger.error(`${new Date()}: There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
-                                    reject(`There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
-                                    return;
-                                } */
+                // const accountTypeId = decimalParser(row[template.accountTypeId]);
+                // if (isNaN(accountTypeId)) {
+                //     console.log(`${new Date()}: There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
+                //     logger.error(`${new Date()}: There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
+                //     reject(`There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
+                //     return;
+                // }
 
 
                 rowsToInsert.push({
@@ -111,7 +111,7 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
                     accountName: row[template.accountName],
                     accountType: AccountTypeEnum[accountType],
                     procedureId: procedureId,
-                    //  accountTypeId: accountTypeId,
+                    // accountTypeId: accountTypeId,
                     accountTypeIdInternal: row[template.accountTypeIdInternal],
                     nameAffix1: row[template.nameAffix1],
                     nameAffix2: row[template.nameAffix2],
@@ -255,9 +255,10 @@ detectQuote = async (filePath, delimiter) => {
             })
             .on('close', function () {
                 let line = acc.slice(0, pos + index);
+                // line = line.endsWith('\\r') ? line.slice(0, line.length - 2) : line;
                 let cells = line.split(delimiter);
-                if (cells.length < 2) reject({ message: "Can not detect delimiter correctly! please use ; or , or tab." });
-                for (let i = 0; i < cells.length; i++) {
+                if(cells.length < 2) reject({message: "Can not detect delimiter correctly! please use ; or , or tab."});
+                for (let i = 0; i < cells.length - 1; i++) {
                     let val = cells[i];
                     if (val && val.trim()) {
                         // val = val.substring(1, cells[i].length-1);
@@ -265,7 +266,7 @@ detectQuote = async (filePath, delimiter) => {
                         if (!conformSingle) break;
                     }
                 }
-                for (let i = 0; i < cells.length; i++) {
+                for (let i = 0; i < cells.length -1; i++) {
                     let val = cells[i];
                     if (val && val.trim()) {
                         // val = val.substring(1, cells[i].length-1);
