@@ -122,13 +122,14 @@
           tooltipPosition="bottom">{{col.header}} </th>
       </tr>
       <tr>
-        <th pResizableColumn *ngFor="let col of cols " class="autocomplete">
+        <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
           <!-- <input pInputText type="text" [(ngModel)]="criteria[col.field]"
             (change)="filterChange($any($event.target).value, col.field)" class="filterInputCss" /> -->
 
           <p-autoComplete [suggestions]="completeWords" (completeMethod)="filterChange($event.query, col.field)"
             (onClear)="filterChange($event.query, col.field)" (onSelect)="filterChange($event.word, col.field)"
-            field="word" [minLength]="1" [inputStyle]="{width:'90%'}" [style]="{width:'90%'}"></p-autoComplete>
+            field="word" [minLength]="1" [inputStyle]="{width:'90%'}" [style]="{width:'90%'}"
+             appendTo="body"></p-autoComplete>
 
           <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()"
             pTooltip="{{'Data_Table.filter' | translate}}" tooltipPosition="bottom"></i>
