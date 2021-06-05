@@ -5,8 +5,8 @@ module.exports = {
     uploadPath: './modules/Admin/files/',
     publicImgsPath: './public/imgs/',
     databaseName: 'venator',
-    databaseUsername: 'root',
-    databasePassword: '',
+    databaseUsername: 'owl',
+    databasePassword: 'Asama56ab',
     databaseHost: 'localhost',
     databaseDialect: 'mysql', /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
     bulkInsertSize: 2000,

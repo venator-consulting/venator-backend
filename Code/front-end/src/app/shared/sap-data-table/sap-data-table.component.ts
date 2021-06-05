@@ -6,7 +6,9 @@ import { dataTableColumns } from "../model/dataTableColumns";
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-import { AutocompleteService } from '../service/autocomplete.service';
+// import { AutocompleteService } from '../service/autocomplete.service';
+import { Word } from '../model/word';
+import { DictionaryService } from '../service/dictionary.service';
 
 
 @Component({
@@ -19,7 +21,7 @@ export class SAPDataTableComponent implements OnInit {
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
     private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService, private _router: Router,
     private _translateService: TranslateService, private scrollViewport: ElementRef,
-    private _autocompleteService : AutocompleteService) { }
+    private _autocompleteService : DictionaryService) { }
 
 
   organisationId = localStorage.getItem('organisationId')
@@ -42,19 +44,14 @@ export class SAPDataTableComponent implements OnInit {
     offset: 0
   };
   totalCount: number = 0;
-
-//   ngAfterViewInit(): void {
-//     const viewportScrollable = document.getElementsByTagName('cdk-virtual-scroll-viewport');
-//     viewportScrollable[0].classList.add('p-datatable-scrollable-body');
-//     viewportScrollable[0].classList.add('ui-table-scrollable-body');
-// }
+  completeWords: Word[] = new Array();
 
   ngOnInit(): void {
 
     // this._translateService.setDefaultLang('de');
     // this._translateService.
     dataTableColumns.getDataTableColumns(this._translateService).then(cols => {
-      debugger;
+      // debugger;
       this.cols = cols;
       this.getData();
     });
@@ -62,18 +59,18 @@ export class SAPDataTableComponent implements OnInit {
 
     this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
       dataTableColumns.getDataTableColumns(this._translateService).then(cols => {
-        debugger;
+        // debugger;
         this.cols = cols;
         // this.getData();
       });
     });
 
-    this._autocompleteService
-      .autocompeteGerman('Zwangsvollstr')
-      .subscribe(res => {
-        console.log(res);
+    // this._autocompleteService
+    //   .autocompeteGerman('Zwangsvollstr')
+    //   .subscribe(res => {
+    //     console.log(res);
         
-      });
+    //   });
 
   }
 
@@ -107,7 +104,22 @@ export class SAPDataTableComponent implements OnInit {
     this.pageNr = 1;
     this.criteria.offset = 0;
     this.loading = true;
+    this.autoComplete(value);
     this.getData();
+  }
+
+  autoComplete(word: string) {
+    if (word && word.length > 2) {
+      this._autocompleteService
+      .complete(word)
+      .subscribe(res => {
+        console.log(res);
+        this.completeWords = res;
+      });
+    } else {
+      this.completeWords = new Array();
+    }
+    
   }
 
   submitFilter() {

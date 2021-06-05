@@ -70,6 +70,7 @@ import { AmountAnalysisDetailsComponent } from './shared/analysis/amount-analysi
 import { TextAnalysisComponent } from './shared/analysis/text-analysis/text-analysis.component';
 import { TextAnalysisDetailsComponent } from './shared/analysis/text-analysis/text-analysis-details/text-analysis-details.component';
 registerLocaleData(localeDe, 'de');
+import {AutoCompleteModule} from 'primeng/autocomplete';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -148,7 +149,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MessagesModule,
     MessageModule,
     PasswordModule,
-    MegaMenuModule
+    MegaMenuModule,
+    AutoCompleteModule
   ],
   providers: [MessageService, AuthGuard, {
     provide: LOCALE_ID,
