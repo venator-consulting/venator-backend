@@ -21,6 +21,7 @@ export class DocumentTypeComponent implements OnInit {
   postingDocTypes: PostingDocTypes[];
   docTypes: DocumentTypes[];
   originalVal: number = -1;
+  cols: { header, field }[] = new Array();
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
     private _orgService: OrganisationService, private _docTypesService: PostingService) { }
@@ -42,6 +43,19 @@ export class DocumentTypeComponent implements OnInit {
         },
         (error) => console.log(error)
       );
+
+
+      this.cols = [
+        {
+          header: 'Document_Type.documentType',
+          field: 'documentType'
+        },
+        {
+          header: 'Document_Type.documentTypeNewName',
+          field: 'documentTypeNewName'
+        }
+      ];
+
 
   } // end of ng on init
 

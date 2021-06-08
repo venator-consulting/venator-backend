@@ -65,7 +65,8 @@
             <p-dropdown [options]="templates" [(ngModel)]="selectedTemplate"
               placeholder="{{'Admin_Import.selectTemplatePlaceholder' | translate}}" optionLabel="name"
               optionValue="value" [showClear]="true" [filter]="true" filterBy="name"
-              (onChange)="selectTemplatHandler($event)" [style]="{width:'300px'}"></p-dropdown>
+              (onChange)="selectTemplatHandler($event)" [style]="{width:'300px'}">
+            </p-dropdown>
           </div>
         </div>
       </div>
@@ -97,22 +98,50 @@
           <div class="p-sm-6 p-lg-2">
             <p-dropdown [options]="fileTypes" [(ngModel)]="f.fileType" [style]="{width:'200px'}"
               placeholder="{{'Admin_Import.selectFileFormat' | translate}}" optionLabel="name" [showClear]="true"
-              [filter]="true" filterBy="name"></p-dropdown>
+              [filter]="true" filterBy="name">
+              <ng-template pTemplate="item" let-item>
+                {{'Admin_Import.'+item.name | translate}}
+              </ng-template>
+              <ng-template pTemplate="selectedItem" let-item>
+                {{'Admin_Import.'+item.name | translate}}
+              </ng-template>
+            </p-dropdown>
           </div>
           <div class="p-sm-6 p-lg-2">
             <p-dropdown [options]="fileClass" [(ngModel)]="f.fileClass" [style]="{width:'200px'}"
               placeholder="{{'Admin_Import.selectFileType' | translate}}" optionLabel="name" [showClear]="true"
-              [filter]="true" filterBy="name"></p-dropdown>
+              [filter]="true" filterBy="name">
+              <ng-template pTemplate="item" let-item>
+                {{'Admin_Import.'+item.name | translate}}
+              </ng-template>
+              <ng-template pTemplate="selectedItem" let-item>
+                {{'Admin_Import.'+item.name | translate}}
+              </ng-template>
+            </p-dropdown>
           </div>
           <div class="p-sm-6 p-lg-2" *ngIf="f.fileClass?.value==1">
             <p-dropdown [options]="accountTypes" [(ngModel)]="f.accountType" [style]="{width:'200px'}"
               placeholder="{{'Admin_Import.selectAccountType' | translate}}" optionLabel="name" [showClear]="true"
-              [filter]="true" filterBy="name"></p-dropdown>
+              [filter]="true" filterBy="name">
+              <ng-template pTemplate="item" let-item>
+                {{'Admin_Import.'+item.name | translate}}
+              </ng-template>
+              <ng-template pTemplate="selectedItem" let-item>
+                {{'Admin_Import.'+item.name | translate}}
+              </ng-template>
+            </p-dropdown>
           </div>
           <div class="p-sm-6 p-lg-2" *ngIf="f.fileClass?.value==2 && f.fileType?.value==2">
             <p-dropdown [options]="locals" [(ngModel)]="f.local" [style]="{width:'200px'}"
               placeholder="{{'Admin_Import.selectLocalization' | translate}}" optionLabel="name" [showClear]="true"
-              [filter]="true" filterBy="name"></p-dropdown>
+              [filter]="true" filterBy="name">
+              <ng-template pTemplate="item" let-item>
+                {{'Admin_Import.'+item.name | translate}}
+              </ng-template>
+              <ng-template pTemplate="selectedItem" let-item>
+                {{'Admin_Import.'+item.name | translate}}
+              </ng-template>
+            </p-dropdown>
           </div>
           <div class="p-sm-6 p-lg-3">
             <span class="p-buttonset">
@@ -196,65 +225,47 @@
           <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
           <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
           <div class="p-sm-12 p-lg-8">
-            <select style="width:100%;max-width:400px;" name="mdt"
-              [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['client']"
-              class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="null"> </option>
-              <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}
-              </option>
-            </select>
+            <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['client']"
+              [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">BuKr</div>
           <div class="p-sm-6 p-lg-2">{{'Admin_Import.client' | translate}}</div>
           <div class="p-sm-12 p-lg-8">
-            <select style="width:100%;max-width:400px;" name="mdt"
-              [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['companyCode']"
-              class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="null"> </option>
-              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['companyCode']">{{filesList[currentFileIndex]?.defaultTemplate['companyCode']}}</option> -->
-              <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}
-              </option>
-            </select>
+            <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['companyCode']"
+              [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">accountType</div>
           <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
           <div class="p-sm-12 p-lg-8">
-            <select style="width:100%;max-width:400px;" name="mdt"
-              [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountType']"
-              class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="null"> </option>
-              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['accountType']">{{filesList[currentFileIndex]?.defaultTemplate['accountType']}}</option> -->
-              <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}
-              </option>
-            </select>
+            <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountType']"
+              [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
+
           </div>
 
           <div class="p-sm-6 p-lg-2">accountNumber</div>
           <div class="p-sm-6 p-lg-2">{{'Admin_Import.numberDataType' | translate}}</div>
           <div class="p-sm-12 p-lg-8">
-            <select style="width:100%;max-width:400px;" name="mdt"
-              [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountNumber']"
-              class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="null"> </option>
-              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['accountNumber']">{{filesList[currentFileIndex]?.defaultTemplate['accountNumber']}}</option> -->
-              <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}
-              </option>
-            </select>
+            <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountNumber']"
+              [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">accountName</div>
           <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
           <div class="p-sm-12 p-lg-8">
-            <select style="width:100%;max-width:400px;" name="mdt"
-              [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountName']"
-              class="p-dropdown p-component p-inputtext p-dropdown-trigger custom-select">
-              <option value="null"> </option>
-              <!-- <option value="filesList[currentFileIndex]?.defaultTemplate['accountName']">{{filesList[currentFileIndex]?.defaultTemplate['accountName']}}</option> -->
-              <option *ngFor="let h of filesList[currentFileIndex].fileHeader; let i = index;" value="{{h}}">{{h}}
-              </option>
-            </select>
+            <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountName']"
+              [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
         </div>
       </p-accordionTab>
@@ -287,7 +298,8 @@
 
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['client']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -299,7 +311,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['executionDate']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -312,7 +325,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentNumber2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -325,7 +339,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['assignment']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -337,7 +352,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentNumber']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -349,7 +365,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentType']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -361,7 +378,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentDate']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -373,7 +391,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['recordNumber']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -385,7 +404,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['creditAmount']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -397,7 +417,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['creditAmount']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
           <div class="p-sm-6 p-lg-2">
             <h4><b>{{'Admin_Import.transactionCurrency' | translate}}</b></h4>
@@ -408,7 +429,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['transactionCurrency']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -420,7 +442,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['applicationDocument']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -432,7 +455,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['textPosting']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -444,7 +468,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['applicationDate']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -456,7 +481,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['postingDate']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -468,7 +494,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['companyCode']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -480,7 +507,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['fiscalYear']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -492,7 +520,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['postingPeriod']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -504,7 +533,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountType']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -516,7 +546,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountNumber']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -528,7 +559,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['debitCredit']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -540,7 +572,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['reference']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -552,7 +585,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['GLAccountNumber']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -565,7 +599,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountType']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -577,7 +612,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountNumber']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -589,7 +625,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountGLAccountNo']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -601,7 +638,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountCreditorNo']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -613,7 +651,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountDebtorNo']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -625,7 +664,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['dueDate']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -637,7 +677,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['textHeader']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -649,7 +690,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountName']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -661,7 +703,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contraAccountName']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -674,7 +717,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['balance']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -686,7 +730,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['debitAmount']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -698,7 +743,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['balanceTransactionCurrency']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -710,7 +756,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['debitAmountTransactionCurrency']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -722,7 +769,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['creditAmountTransactionCurrency']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -735,7 +783,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['exchangeRate']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -748,7 +797,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['cashDiscount']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -761,7 +811,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['postingKey']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -774,7 +825,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['salesTaxKey']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -787,7 +839,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['taxRate']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -800,7 +853,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['euTaxRate']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -813,7 +867,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['taxAmount']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -826,7 +881,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['taxAmountDebit']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -840,7 +896,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['taxAmountCredit']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -853,7 +910,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['stackNumber']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -862,7 +920,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['constCenter1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -875,7 +934,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['CostCenter2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -888,7 +948,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['identifierBalanceCarryforward']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -901,7 +962,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['generalReversal']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -915,7 +977,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['ledgerId']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -928,7 +991,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['documentLink']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -942,7 +1006,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -955,7 +1020,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -968,7 +1034,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -980,7 +1047,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -993,7 +1061,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation3']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -1006,7 +1075,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation3']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -1019,7 +1089,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation4']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -1032,7 +1103,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation4']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -1045,7 +1117,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation5']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -1058,7 +1131,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation5']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -1071,7 +1145,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation6']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
 
@@ -1084,7 +1159,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation6']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -1096,7 +1172,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation7']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -1108,7 +1185,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation7']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -1120,7 +1198,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['typeDocumentInformation8']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
           <div class="p-sm-6 p-lg-2">
@@ -1132,7 +1211,8 @@
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contentDocumentInformation8']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
-              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name" filterBy="name"></p-dropdown>
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
           </div>
 
         </div>

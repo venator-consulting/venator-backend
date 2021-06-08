@@ -64,9 +64,20 @@
         "selectTemplate": "Select a Template",
         "selectTemplatePlaceholder": "select template",
         "selectFileFormat": "Select a fileformat ",
+        "Excel": "Excel",
+        "Csv": "Csv",
         "selectFileType": "Select a Filetype ",
+        "Accounts": "Accounts",
+        "Posting": "Posting",
+        "Helper": "Helper",
         "selectAccountType": "Select an account type",
+        "Kreditor": "Kreditor",
+        "Debtor": "Debtor",
+        "GLA_Account": "GLA Account",
+        "Other": "Other",
         "selectLocalization": "Select Localization",
+        "en_US": "en_US",
+        "de_DE": "de_DE",
         "uploadLabel": "Upload",
         "searchLabel": "Search",
         "previousLabel": "Back",
@@ -222,6 +233,19 @@
         "NoProceduresFound": "There are no organisations yet."
 
     },
+
+    "Document_Type": {
+        "Zahlung": "Payment",
+        "Rechnung": "Invoice",
+
+        "documentType": "Document Type",
+        "documentTypeNewName": "Document Type new",
+        "Action": "Action",
+        "Edit": "Edit",
+        "Save": "Save",
+        "Cancel": "Cancel"
+    },
+
     "Procedure_Registration": {
         "editHeader": "edit procedure ",
         "registrationHeader": "Procedure Registration",
