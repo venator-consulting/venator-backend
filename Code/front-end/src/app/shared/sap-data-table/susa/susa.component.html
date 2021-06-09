@@ -1,0 +1,63 @@
+<div class="p-grid">
+  <div class="p-col-4"></div>
+  <div class="p-col-8">
+    <h2>Procedure: {{procedureName}}</h2>
+  </div>
+</div>
+
+<div class="p-grid">
+  <div class="p-col-4"></div>
+  <div class="p-col-8">
+    <p-calendar [(ngModel)]="fromDate" [minDate]="fromDate" [maxDate]="toDate" [monthNavigator]="true"
+      [yearNavigator]="true" yearRange="{{fromDate.getFullYear()+':'+toDate.getFullYear()}}"></p-calendar>
+      &nbsp;
+    <p-calendar [(ngModel)]="toDate" [minDate]="fromDate" [maxDate]="toDate" [monthNavigator]="true"
+      [yearNavigator]="true" yearRange="{{fromDate.getFullYear()+':'+toDate.getFullYear()}}"></p-calendar>
+      &nbsp;
+      <button type="button" pButton pRipple icon="pi pi-filter"
+      class="p-button-rounded p-button-primary" label="Search" (click)="getData();"
+      pTooltip="{{'Search' | translate}}" tooltipPosition="bottom"></button>
+  </div>
+</div>
+
+<div class="p-grid">
+  <p-table [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
+    [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
+    <ng-template pTemplate="caption" >
+        <div class="p-grid">
+      <div class="p-col-2">
+        <!-- Add Procedure -->
+        <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
+          class="p-button-rounded p-button-primary" label="back"
+          pTooltip="{{'back to data table' | translate}}" tooltipPosition="bottom"></button>
+      </div>
+      
+    </div>
+    </ng-template>
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col *ngFor="let col of cols">
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+          {{col.header | translate}}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td pReorderableRowHandle *ngFor="let col of cols">
+          {{ row[col.field] }}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4">{{'not Found' | translate}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+</div>

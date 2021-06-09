@@ -10,6 +10,7 @@ import { ResetPasswordComponent } from './shared/reset-password/reset-password.c
 import { AdminRegistrationComponent } from './admin/admin-registration/admin-registration.component';
 import { OrganisationRegistrationComponent } from './admin/organisation-registration/organisation-registration.component';
 import { SAPDataTableComponent } from './shared/sap-data-table/sap-data-table.component';
+import { SusaComponent } from "./shared/sap-data-table/susa/susa.component";
 import { ResetPasswordNewUserComponent } from './shared/reset-password-new-user/reset-password-new-user.component';
 import { ProcedureRegistrationComponent } from './admin/procedure-registration/procedure-registration.component';
 import { AmountAnalysisComponent } from "./shared/analysis/amount-analysis/amount-analysis.component";
@@ -46,7 +47,8 @@ const routes: Routes = [
   { path: 'shared/user/edit', component: UserEditComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
   { path: 'shared/user/procedures', component: UserDashboardComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
   { path: 'shared/user/users', component: OrganisationUsersComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager'] } },
-  { path: 'shared/data', component: SAPDataTableComponent },
+  { path: 'shared/data', component: SAPDataTableComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'shared/data/susa', component: SusaComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'analysis/amount', component: AmountAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/amount/:orgId/:prcId/:creditorNumber', component: AmountAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },

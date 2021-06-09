@@ -78,7 +78,7 @@
 </div>
 <div class="card" style="overflow-x: scroll;">
   <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="400px" [style]="{width:'10000px'}"
-    [resizableColumns]="true" styleClass="p-datatable-gridlines"  [reorderableColumns]="true">
+    [resizableColumns]="true" styleClass="p-datatable-gridlines" [reorderableColumns]="true">
     <ng-template pTemplate="caption">
       <div class="p-mb-4">
         <!-- Export as excel -->
@@ -113,6 +113,10 @@
           class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
           tooltipPosition="bottom"></button>
 
+        <button type="button" pButton pRipple icon="pi pi-info-circle" (click)="susa()"
+          class="p-ml-6" pTooltip="{{'Susa' | translate}}" 
+          tooltipPosition="bottom" label="Susa"></button>
+
       </div>
     </ng-template>
     <ng-template pTemplate="colgroup">
@@ -132,8 +136,8 @@
 
           <p-autoComplete [suggestions]="completeWords" (completeMethod)="filterChange($event.query, col.field)"
             (onClear)="filterChange($event.query, col.field)" (onSelect)="filterChange($event.word, col.field)"
-            field="word" [minLength]="1" [inputStyle]="{width:'90%'}" [style]="{width:'90%'}"
-             appendTo="body" [(ngModel)]="criteria[col.field]"></p-autoComplete>
+            field="word" [minLength]="1" [inputStyle]="{width:'90%'}" [style]="{width:'90%'}" appendTo="body"
+            [(ngModel)]="criteria[col.field]"></p-autoComplete>
 
           <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()"
             pTooltip="{{'Data_Table.filter' | translate}}" tooltipPosition="bottom"></i>

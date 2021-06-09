@@ -16,15 +16,16 @@ export class PostingDataService {
     return this._http.get(this._thisURL + '/getPostingData/' + companyCode + '/' + offset + '/' + limit);
   }
 
-  getLastDataTable(companyCode:string, limit: number) {
-    return this._http.get(this._thisURL + '/getLastPostingData/' + companyCode + '/' + limit);
+  getDefaultSusaDateRange(orgId: number, prcId: number) {
+    return this._http.get<any>(this._thisURL + `/susa/defaultDate/${orgId}/${prcId}`);
   }
 
-  getLastDataPrevious(companyCode:string, strtId, endId , limit: number) {
-    return this._http.get(this._thisURL + '/getLastDataPrevious/' + companyCode + '/' + strtId + '/' + endId + '/' + limit);
+  getSusa(orgId: number, prcId: number, fromDate: string, toDate: string) {
+    let url = this._thisURL + `/susa/${orgId}/${prcId}`;
+    if (fromDate && toDate) {
+      url += `/${fromDate}/${toDate}`
+    }
+    return this._http.get<any>(url);
   }
 
-  getLastDataNext(companyCode:string, strtId, endId , limit: number) {
-    return this._http.get(this._thisURL + '/getLastDataNext/' + companyCode + '/' + strtId + '/' + endId + '/' + limit);
-  }
 }
