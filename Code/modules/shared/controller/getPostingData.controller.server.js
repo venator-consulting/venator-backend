@@ -29,3 +29,43 @@ module.exports.exportAsExcel = async (req, res) => {
         res.status(500).json(error);
     }
 };
+
+
+module.exports.susaDateRange = async (req, res) => {
+    try {
+        const result = await postngRepo
+            .susaDateRange(req.params.orgId, req.params.prcId);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('posting data controller: Susa analysis - get date range', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+
+module.exports.susaAnalysis = async (req, res) => {
+    try {
+        if (!req.params.fromDate || !req.params.toDate) {
+            const dateRange = await postngRepo
+                .susaDateRange(req.params.orgId, req.params.prcId);
+            req.params.fromDate = dateRange[0].mindate;
+            req.params.toDate = dateRange[0].maxdate;
+        }
+        const result = await postngRepo
+            .susaAnalysis(req.params.orgId, req.params.prcId, req.params.fromDate, req.params.toDate);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('posting data controller: Susa analysis - get Analysis', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};

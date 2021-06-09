@@ -66,6 +66,25 @@ router
     }), getDataCtrl.exportAsExcel);
 
 router
+    .route('/susa/defaultDate/:orgId/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), getDataCtrl.susaDateRange);
+
+router
+    .route('/susa/:orgId/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), getDataCtrl.susaAnalysis);
+
+
+router
+    .route('/susa/:orgId/:prcId/:fromDate/:toDate')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), getDataCtrl.susaAnalysis);
+
+router
     .route('/complete/:word')
     .get(passport.authenticate('jwt', {
         session: false
