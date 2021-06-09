@@ -65,9 +65,20 @@
         "selectTemplate": "Wählen Sie ein Template aus",
         "selectTemplatePlaceholder": "template auswählen",
         "selectFileFormat": "Dateiformat",
+        "Excel": "Excel in Germany",
+        "Csv": "Csv in Germany",
         "selectFileType": "Dateityp",
+        "Accounts": "Accounts in Germany",
+        "Posting": "Posting in Germany",
+        "Helper": "Helper in Germany",
         "selectAccountType": "Kontoart",
+        "Kreditor": "Kreditor in Germany",
+        "Debtor": "Debtor in Germany",
+        "GLA_Account": "GLA Account in Germany",
+        "Other": "Other in Germany",
         "selectLocalization": "Lokalisierung",
+        "en_US": "en_US in Germany",
+        "de_DE": "de_DE in Germany",
         "uploadLabel": "Upload",
         "searchLabel": "Durchsuchen",
         "previousLabel": "Zurück",
@@ -221,6 +232,17 @@
         "confirmButton": "Bestätigen",
         "NoOrganisationsFound": "Es gibt noch keine Organisationen"
 
+    },
+    "Document_Type": {
+        "Zahlung": "Zahlung",
+        "Rechnung": "Rechnung",
+
+        "documentType": "Document Type in Germany",
+        "documentTypeNewName": "Document Type new in Germany",
+        "Action": "Aktionen",
+        "Edit": "bearbeiten",
+        "Save": "Speichern",
+        "Cancel": "Stornieren"
     },
     "Procedure_Registration": {
         "editHeader": "Verfahren bearbeiten",

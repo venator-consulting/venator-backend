@@ -13,10 +13,10 @@ module.exports.buildDatabaseSchema = async function (req, res, next) {
         await require('../../../models/procedures.model.server').syncProcedures();
         await require('../../../models/documentType.model.server').syncDocumentType();
         await require('../../../models/accountType.model.server').syncAccountType();
-        await require('../../../models/accounts.model.server').syncAccounts();
+        // await require('../../../models/accounts.model.server').syncAccounts();
         await require('../../../models/role.model.server').syncRole();
         await require('../../../models/user.model.server').syncUser();
-        await require('../../../models/posting.model.server').syncPosting();
+        // await require('../../../models/posting.model.server').syncPosting();
 
         res
             .status(200)

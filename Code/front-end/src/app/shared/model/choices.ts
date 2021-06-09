@@ -49,7 +49,7 @@ export class Choices {
 
         result.push(new Choices("Kreditor", 1));
         result.push(new Choices("Debtor", 2));
-        result.push(new Choices("GLA Account", 3));
+        result.push(new Choices("GLA_Account", 3));
         result.push(new Choices("Other", 4));
         return result;
     }

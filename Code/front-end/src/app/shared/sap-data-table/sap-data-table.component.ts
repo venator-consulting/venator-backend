@@ -9,6 +9,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 // import { AutocompleteService } from '../service/autocomplete.service';
 import { Word } from '../model/word';
 import { DictionaryService } from '../service/dictionary.service';
+import { ProcedureService } from "../service/procedure.service";
 
 
 @Component({
@@ -21,11 +22,12 @@ export class SAPDataTableComponent implements OnInit {
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
     private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService, private _router: Router,
     private _translateService: TranslateService, private scrollViewport: ElementRef,
-    private _autocompleteService : DictionaryService) { }
+    private _autocompleteService: DictionaryService, private prcService: ProcedureService) { }
 
 
-  organisationId = localStorage.getItem('organisationId')
-  procedureId = localStorage.getItem('currentProcedureId')
+  organisationId = localStorage.getItem('organisationId');
+  procedureId = localStorage.getItem('currentProcedureId');
+  procedureName: string = "";
   filtersNo: number = 0;
   loading: boolean = false;
   selectLastPage: boolean = false;
@@ -65,12 +67,13 @@ export class SAPDataTableComponent implements OnInit {
       });
     });
 
-    // this._autocompleteService
-    //   .autocompeteGerman('Zwangsvollstr')
-    //   .subscribe(res => {
-    //     console.log(res);
-        
-    //   });
+    if (this.procedureId && +this.procedureId > 0) {
+      this.prcService
+        .getById(+this.procedureId)
+        .subscribe(prc => {
+          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+        }, er => { });
+    }
 
   }
 
@@ -111,15 +114,15 @@ export class SAPDataTableComponent implements OnInit {
   autoComplete(word: string) {
     if (word && word.length > 2) {
       this._autocompleteService
-      .complete(word)
-      .subscribe(res => {
-        console.log(res);
-        this.completeWords = res;
-      });
+        .complete(word)
+        .subscribe(res => {
+          console.log(res);
+          this.completeWords = res;
+        });
     } else {
       this.completeWords = new Array();
     }
-    
+
   }
 
   submitFilter() {

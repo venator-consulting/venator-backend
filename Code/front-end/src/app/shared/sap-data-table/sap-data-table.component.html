@@ -70,8 +70,12 @@
     </ng-template>
   </p-table>
 </div> -->
-
-
+<div class="p-grid">
+  <div class="p-col-4"></div>
+  <div class="p-col-8">
+    <h2>Procedure: {{procedureName}}</h2>
+  </div>
+</div>
 <div class="card" style="overflow-x: scroll;">
   <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="350px" [style]="{width:'10000px'}"
     [resizableColumns]="true" styleClass="p-datatable-gridlines"  [reorderableColumns]="true">
@@ -129,7 +133,7 @@
           <p-autoComplete [suggestions]="completeWords" (completeMethod)="filterChange($event.query, col.field)"
             (onClear)="filterChange($event.query, col.field)" (onSelect)="filterChange($event.word, col.field)"
             field="word" [minLength]="1" [inputStyle]="{width:'90%'}" [style]="{width:'90%'}"
-             appendTo="body"></p-autoComplete>
+             appendTo="body" [(ngModel)]="criteria[col.field]"></p-autoComplete>
 
           <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()"
             pTooltip="{{'Data_Table.filter' | translate}}" tooltipPosition="bottom"></i>

@@ -13,6 +13,13 @@ router
     .post(loginCtrl.loginAuthenticate);
 
 router
+    .route('/procedure/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), procedureCtrl.getById);
+
+
+router
     .route('/users/:id/procedures')
     .get(passport.authenticate('jwt', {
         session: false

@@ -11,39 +11,65 @@ export class UserDashboardComponent implements OnInit {
 
   organisationId = localStorage.getItem('organisationId')
   role = localStorage.getItem('role')
-  procedures  : [] = [];
+  procedures: [] = [];
+  cols: { header, field }[] = new Array();
+  check = '<i class="pi pi-check checkIcon"></i>';
 
-  constructor(private _userService : UserService, private _router: Router) { }
+  constructor(private _userService: UserService, private _router: Router) { }
 
   ngOnInit(): void {
     this._userService
-    .getProcedures(this.organisationId)
-    .subscribe(
-      (data) => { 
-        this.procedures = data ;
-        // console.log(this.organisationId)
-        // console.log(data)
+      .getProcedures(this.organisationId)
+      .subscribe(
+        (data) => {
+          this.procedures = data;
+          // console.log(this.organisationId)
+          // console.log(data)
         },
-      (error) => console.log(error),
-      () => {  }
-    );
-  }
+        (error) => console.log(error),
+        () => { }
+      );
+
+      this.cols = [
+        {
+          header: 'Procedure_Registration.name',
+          field: 'name'
+        },
+        {
+          header: 'Procedure_Registration.datasource',
+          field: 'dataSource'
+        },
+        {
+          header: 'Procedure_Registration.data',
+          field: 'data'
+        },
+        {
+          header: 'Procedure_Registration.analysis',
+          field: 'analysis'
+        },
+      ];
+
+    
+  } // end of ng on init
+
+
+
   dataTable(id) {
     localStorage.setItem('currentProcedureId', id);
-    this._router.navigate(['/shared/data']); 
+    this._router.navigate(['/shared/data']);
 
   }
-  editProcedure(id,name,data,analysis) {
+  editProcedure(id, name, data, analysis) {
     localStorage.setItem('currentProcedureId', id);
     localStorage.setItem('currentProcedureName', name);
     localStorage.setItem('currentProcedureData', data);
     localStorage.setItem('currentProcedureAnalysis', analysis);
 
-   this._router.navigate(['/admin/procedure/edit']); 
+    this._router.navigate(['/admin/procedure/edit']);
 
   }
-  addProcedure(){
-    this._router.navigate(['/admin/procedure/add']); 
+  addProcedure() {
+    this._router.navigate(['/admin/procedure/add']);
 
   }
 }

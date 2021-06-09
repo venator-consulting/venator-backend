@@ -27,7 +27,63 @@ export class OrganisationUsersComponent implements OnInit {
       (error) => console.log(error),
       () => { }
     );
-  }
+
+    this.cols = [
+      {
+        header: 'User_Registration.role',
+        field: "Role",
+        subField: 'name'
+      },
+      {
+        header: 'User_Registration.username',
+        field: 'username'
+      },
+      {
+        header: 'User_Registration.email',
+        field: 'email'
+      },
+      {
+        header: 'User_Registration.title',
+        field: 'title'
+      },
+      {
+        header: 'User_Registration.firstname',
+        field: 'firstname'
+      },
+      {
+        header: 'User_Registration.lastname',
+        field: 'lastname'
+      },
+      {
+        header: 'User_Registration.mobileNr',
+        field: 'mobileNumber'
+      },
+      {
+        header: 'User_Registration.street',
+        field: 'street'
+      },
+      {
+        header: 'User_Registration.houseNr',
+        field: 'housenumber'
+      },
+      {
+        header: 'User_Registration.postcode',
+        field: 'postCode'
+      },
+      {
+        header: 'User_Registration.city',
+        field: 'city'
+      },
+      {
+        header: 'User_Registration.country',
+        field: 'country'
+      }
+    ];
+
+
+  } // end of ng on init
+
+
   edituser(user) {
     localStorage.setItem('selectedUser_userId', user.id);
     localStorage.setItem('selectedUser_roleId', user.RoleId);

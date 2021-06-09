@@ -30,36 +30,49 @@
     </div>
   </div>
   <div class="p-col-10" *ngIf="selectedPrcId>0">
-    <p-table #dt dataKey="id" [value]="postingDocTypes">
 
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Document Type</th>
-          <th>Document Type new</th>
-          <th>Action</th>
 
-        </tr>
-      </ng-template>
+    <p-table #dt dataKey="id" [value]="postingDocTypes" [columns]="cols" styleClass="p-datatable-gridlines"
+    [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col *ngFor="let col of cols">
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+          {{col.header | translate}}</th>
+        <th>{{'Document_Type.Action' | translate}}</th>
+      </tr>
+
+    </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td>{{row.documentType}}</td>
-          <td>
-            <div *ngIf="!row.isEditable">{{row.documentTypeNewName}}</div>
-            <div *ngIf="row.isEditable">
-              <p-dropdown [options]="docTypes" [(ngModel)]="row.documentTypeNewId" optionValue="id"
-                placeholder="Document Type new" optionLabel="documentTypeName"
-                [showClear]="true" [filter]="true" filterBy="documentTypeName"
-                (onChange)="docTypeChangedHandler($event, row)" [style]="{width:'300px'}"></p-dropdown>
+          <td pReorderableRowHandle *ngFor="let col of cols">
+            {{ col.field != 'documentTypeNewName' ? row[col.field] : '' }}
+            <div *ngIf="!row.isEditable && col.field == 'documentTypeNewName'">{{'Document_Type.'+row.documentTypeNewName | translate}}</div>
+            <div *ngIf="row.isEditable && col.field == 'documentTypeNewName'">
+              <p-dropdown [options]="docTypes" [(ngModel)]="row.documentTypeNewId" optionValue="id" appendTo="body" 
+                placeholder="Document Type new" optionLabel="documentTypeName" [showClear]="true" [filter]="true"
+                filterBy="documentTypeName" (onChange)="docTypeChangedHandler($event, row)" [style]="{width:'300px'}">
+                <ng-template pTemplate="item" let-item>
+                  {{'Document_Type.'+item.documentTypeName | translate}}
+                </ng-template>
+                <ng-template pTemplate="selectedItem" let-item>
+                  {{'Document_Type.'+item.documentTypeName | translate}}
+                </ng-template>
+              </p-dropdown>
             </div>
           </td>
           <td><button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(row)"
-              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable" pTooltip="Edit"
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable" pTooltip="{{'Document_Type.Edit' | translate}}"
               tooltipPosition="bottom"></button> &nbsp;
             <button type="button" pButton pRipple icon="pi pi-save" (click)="save(row)"
-              class="p-button-rounded p-button-warning" *ngIf="row.isEditable" pTooltip="Save"
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable" pTooltip="{{'Document_Type.Save' | translate}}"
               tooltipPosition="bottom"></button> &nbsp;
             <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
-              class="p-button-rounded p-button-warning" *ngIf="row.isEditable" pTooltip="Cancel"
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable" pTooltip="{{'Document_Type.Cancel' | translate}}"
               tooltipPosition="bottom"></button>
           </td>
         </tr>
