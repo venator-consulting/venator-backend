@@ -18,6 +18,6 @@ module.exports = {
     mailerUser: 'elza.tillman13@ethereal.email',
     mailerPassword: 'JdRqgGeAb5HeDqp3Ny',
     resetPassLink: 'http://localhost/reset/', 
-    developerMail: 'ibrahim.ad.dandan@gmail.com'
+    developerMail: 'mohamad.hamad@venator-consulting.de'
     
 };
