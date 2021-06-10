@@ -71,6 +71,7 @@ import { TextAnalysisComponent } from './shared/analysis/text-analysis/text-anal
 import { TextAnalysisDetailsComponent } from './shared/analysis/text-analysis/text-analysis-details/text-analysis-details.component';
 registerLocaleData(localeDe, 'de');
 import {AutoCompleteModule} from 'primeng/autocomplete';
+import { SusaComponent } from './shared/sap-data-table/susa/susa.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -102,7 +103,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DocumentTypeComponent,
     AmountAnalysisDetailsComponent,
     TextAnalysisComponent,
-    TextAnalysisDetailsComponent
+    TextAnalysisDetailsComponent,
+    SusaComponent
   ],
   imports: [
     BrowserModule,

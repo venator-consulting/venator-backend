@@ -1,6 +1,7 @@
 module.exports = [
-    0,
-    'D',
+    false,
     'K',
-    'S'
+    'D',
+    'S',
+    false
 ]

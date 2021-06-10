@@ -19,8 +19,8 @@ import { ProcedureService } from "../service/procedure.service";
 })
 export class SAPDataTableComponent implements OnInit {
 
-  constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
-    private _dataFilterService: DataFilterService, private _exportDataService: ExportDataService, private _router: Router,
+  constructor(private _messageService: MessageService, private _dataFilterService: DataFilterService,
+     private _exportDataService: ExportDataService, private _router: Router,
     private _translateService: TranslateService, private scrollViewport: ElementRef,
     private _autocompleteService: DictionaryService, private prcService: ProcedureService) { }
 
@@ -214,6 +214,10 @@ export class SAPDataTableComponent implements OnInit {
         (error) => console.log(error),
         () => { }
       );
+  }
+
+  susa() {
+    this._router.navigate(['/shared/data/susa']);
   }
 
 }

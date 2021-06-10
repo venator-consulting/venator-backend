@@ -109,7 +109,7 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
                     accountNumber: row[template.accountNumber],
                     companyCode: row[template.companyCode],
                     accountName: row[template.accountName],
-                    accountType: AccountTypeEnum[accountType],
+                    accountType: AccountTypeEnum[accountType] ? row[template.accountType]: AccountTypeEnum[accountType] ,
                     procedureId: procedureId,
                     // accountTypeId: accountTypeId,
                     accountTypeIdInternal: row[template.accountTypeIdInternal],
@@ -346,7 +346,6 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: accountNumber,
-                                companyCode: companyCode,
                                 procedureId: procedureId,
                                 accountType: accountType
                             },
@@ -372,7 +371,6 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: contraAccountNumber,
-                                companyCode: companyCode,
                                 procedureId: procedureId,
                                 accountType: contraAccountType
                             },
@@ -398,7 +396,6 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: GLAccountNumber,
-                                companyCode: companyCode,
                                 procedureId: procedureId,
                                 accountType: AccountTypeEnum[3]
                             },
@@ -424,7 +421,6 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: contraAccountGLAccountNo,
-                                companyCode: companyCode,
                                 procedureId: procedureId,
                                 accountType: AccountTypeEnum[3]
                             },
@@ -451,7 +447,6 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: debtorNumber,
-                                companyCode: companyCode,
                                 procedureId: procedureId,
                                 accountType: AccountTypeEnum[1]
                             },
@@ -477,7 +472,6 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: contraAccountDebtorNo,
-                                companyCode: companyCode,
                                 procedureId: procedureId,
                                 accountType: AccountTypeEnum[1]
                             },
@@ -504,7 +498,6 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: creditorNumber,
-                                companyCode: companyCode,
                                 procedureId: procedureId,
                                 accountType: AccountTypeEnum[2]
                             },
@@ -532,7 +525,6 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
                                 accountNumber: contraAccountCreditorNo,
-                                companyCode: companyCode,
                                 procedureId: procedureId,
                                 accountType: AccountTypeEnum[2]
                             },
