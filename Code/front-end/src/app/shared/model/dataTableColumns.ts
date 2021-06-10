@@ -1,5 +1,4 @@
 import { TranslateService } from "@ngx-translate/core";
-import { Observable } from "rxjs";
 
 
 export class dataTableColumns {
@@ -12,14 +11,8 @@ export class dataTableColumns {
     this.header = header;
   }
 
-  //   constructor(field: string, header: string, translateService: any) {
-  //     this.field  = field;
-  //     this.header = header;
-  // }
-
   static async getDataTableColumns(translateService: TranslateService): Promise<dataTableColumns[]> {
     let result: dataTableColumns[] = [];
-    // await translateService.use(lang).toPromise();
     result.push(new dataTableColumns("client", await translateService.get("DataTableColumns.client").toPromise()));
     result.push(new dataTableColumns("companyCode", await translateService.get("DataTableColumns.companyCode").toPromise()));
     result.push(new dataTableColumns("documentNumber", await translateService.get("DataTableColumns.documentNumber").toPromise()));

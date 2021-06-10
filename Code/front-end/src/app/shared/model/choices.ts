@@ -47,7 +47,7 @@ export class Choices {
     static getAccountTypes() : Choices[] {
         let result: Choices[] = [];
 
-        result.push(new Choices("Kreditor", 1));
+        result.push(new Choices("Creditor", 1));
         result.push(new Choices("Debtor", 2));
         result.push(new Choices("GLA_Account", 3));
         result.push(new Choices("Other", 4));

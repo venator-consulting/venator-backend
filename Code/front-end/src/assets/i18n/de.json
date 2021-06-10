@@ -65,20 +65,20 @@
         "selectTemplate": "Wählen Sie ein Template aus",
         "selectTemplatePlaceholder": "template auswählen",
         "selectFileFormat": "Dateiformat",
-        "Excel": "Excel in Germany",
-        "Csv": "Csv in Germany",
+        "Excel": "Excel",
+        "Csv": "Csv",
         "selectFileType": "Dateityp",
-        "Accounts": "Accounts in Germany",
-        "Posting": "Posting in Germany",
-        "Helper": "Helper in Germany",
+        "Accounts": "Stammdaten",
+        "Posting": "Buchungen",
+        "Helper": "Helferdateien",
         "selectAccountType": "Kontoart",
-        "Kreditor": "Kreditor in Germany",
-        "Debtor": "Debtor in Germany",
-        "GLA_Account": "GLA Account in Germany",
-        "Other": "Other in Germany",
+        "Creditor": "Kreditoren",
+        "Debtor": "Debitoren",
+        "GLA_Account": "Sachkonten",
+        "Other": "Sonstiges",
         "selectLocalization": "Lokalisierung",
-        "en_US": "en_US in Germany",
-        "de_DE": "de_DE in Germany",
+        "en_US": "en_US",
+        "de_DE": "de_DE",
         "uploadLabel": "Upload",
         "searchLabel": "Durchsuchen",
         "previousLabel": "Zurück",
@@ -236,13 +236,12 @@
     "Document_Type": {
         "Zahlung": "Zahlung",
         "Rechnung": "Rechnung",
-
-        "documentType": "Document Type in Germany",
-        "documentTypeNewName": "Document Type new in Germany",
+        "documentType": "Belegart",
+        "documentTypeNewName": "Belegart neu",
         "Action": "Aktionen",
         "Edit": "bearbeiten",
         "Save": "Speichern",
-        "Cancel": "Stornieren"
+        "Cancel": "Abbrechen"
     },
     "Procedure_Registration": {
         "editHeader": "Verfahren bearbeiten",
@@ -382,4 +381,5 @@
 
 
     }
+
   }
