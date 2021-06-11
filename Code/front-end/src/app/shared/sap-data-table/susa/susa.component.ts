@@ -59,31 +59,31 @@ export class SusaComponent implements OnInit {
 
     this.cols = [
       {
-        header: 'KontoNr.',
+        header: 'Susa.creditornumber',
         field: 'creditorNumber'
       },
       {
-        header: 'KontoName',
+        header: 'Susa.creditorName',
         field: 'creditorName'
       },
       {
-        header: 'Anfangssaldo',
+        header: 'Susa.startingBalance',
         field: 'famount'
       },
       {
-        header: 'Summe Soll',
+        header: 'Susa.sumDebit',
         field: 'inamount'
       },
       {
-        header: 'Summe Haben',
+        header: 'Susa.sumCredit',
         field: 'creditAmount'
       },
       {
-        header: 'Saldo',
+        header: 'Susa.balance',
         field: 'debitAmount'
       },
       {
-        header: 'Endsaldo',
+        header: 'Susa.endingBalance',
         field: 'outamount'
       },
     ];

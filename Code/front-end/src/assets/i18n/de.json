@@ -380,6 +380,20 @@
         "contentDocumentInformation6": "Inhalt der Beleginformation 6"
 
 
+    },
+    "Susa": {
+        "creditornumber": "Kreditornumber",
+        "creditorName": "Kreditorname",
+        "startingBalance": "Anfangssaldo",
+        "balance": "Saldo" ,
+        "endingBalance": "Endsaldo",
+        "sumCredit": "Summe Haben",
+        "sumDebit": "Summe Soll",
+        "from": "Von",
+        "to": "Bis",
+        "daten": "Daten",
+        "search": "Suchen",
+        "datenToolTip": "Zurück zur Datentabelle"
     }
 
   }
