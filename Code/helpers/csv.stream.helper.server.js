@@ -109,7 +109,7 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
                     accountNumber: row[template.accountNumber],
                     companyCode: row[template.companyCode],
                     accountName: row[template.accountName],
-                    accountType: AccountTypeEnum[accountType] ? row[template.accountType]: AccountTypeEnum[accountType] ,
+                    accountType: AccountTypeEnum[accountType] ? AccountTypeEnum[accountType] : row[template.accountType] ,
                     procedureId: procedureId,
                     // accountTypeId: accountTypeId,
                     accountTypeIdInternal: row[template.accountTypeIdInternal],

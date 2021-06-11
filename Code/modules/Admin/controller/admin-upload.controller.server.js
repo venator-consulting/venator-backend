@@ -188,7 +188,7 @@ module.exports.importFile = async function (req, res, next) {
             } else if (fileClass == 1) {
                 // it's an accounts file
                 excelHelper
-                    .importStreamAccountsExcel(filePath, OrganisationId, procedureId, accountType)
+                    .importStreamAccountsExcel(filePath, OrganisationId, procedureId, accountType, template)
                     .then(header => {
                         fs.unlinkSync(filePath);
                         res

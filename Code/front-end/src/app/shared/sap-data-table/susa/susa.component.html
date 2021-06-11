@@ -8,15 +8,17 @@
   <div class="p-col-4"></div>
   <div class="p-col-8 p-mb-4">
     <p-toast></p-toast>
+    <label >{{ 'Susa.from' | translate}} :   </label>
     <p-calendar [(ngModel)]="fromDate" [minDate]="fromDate" [maxDate]="toDate" [monthNavigator]="true" 
       [yearNavigator]="true" yearRange="{{fromDate.getFullYear()+':'+toDate.getFullYear()}}"></p-calendar>
       &nbsp;
+      <label >{{ 'Susa.to' | translate}} :  </label>
     <p-calendar [(ngModel)]="toDate" [minDate]="fromDate" [maxDate]="toDate" [monthNavigator]="true"
       [yearNavigator]="true" yearRange="{{fromDate.getFullYear()+':'+toDate.getFullYear()}}"></p-calendar>
       &nbsp;
       <button type="button" pButton pRipple icon="pi pi-filter"
-      class="p-button-rounded p-button-primary" label="Search" (click)="getData();"
-      pTooltip="{{'Search' | translate}}" tooltipPosition="bottom"></button>
+      class="p-button-rounded p-button-primary" label="{{'Susa.search' | translate}}" (click)="getData();"
+      pTooltip="{{ 'Susa.search' | translate}} " tooltipPosition="bottom"></button>
   </div>
 </div>
 
@@ -28,8 +30,8 @@
       <div class="p-col-2">
         <!-- Add Procedure -->
         <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
-          class="p-button-rounded p-button-primary" label="back"
-          pTooltip="{{'back to data table' | translate}}" tooltipPosition="bottom"></button>
+          class="p-button-rounded p-button-primary" label="{{ 'Susa.daten' | translate}} "
+          pTooltip="{{ 'Susa.datenToolTip' | translate}} " tooltipPosition="bottom"></button>
       </div>
       
     </div>

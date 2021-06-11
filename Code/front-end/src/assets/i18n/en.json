@@ -383,5 +383,19 @@
         "contentDocumentInformation6": "Contentdocument Information 6"
 
 
+    },
+    "Susa": {
+        "creditornumber": "Creditornumber",
+        "creditorName": "Creditorname",
+        "startingBalance": "Startingbalance",
+        "balance": "Balance" ,
+        "endingBalance": "Endingbalance",
+        "sumCredit": "Sum Credit",
+        "sumDebit": "Sum Debit",
+        "from": "From",
+        "to": "To",
+        "daten": "Data",
+        "search": "Search",
+        "datenToolTip": "Back to Datatable"
     }
   }
