@@ -274,6 +274,7 @@ export class ImportComponent implements OnInit {
     const template = theFile.defaultTemplate;
     const OrganisationId = theFile.OrganisationId;
     const procedureId = theFile.procedureId;
+    debugger;
 
     // const formData: FormData = new FormData();
 

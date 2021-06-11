@@ -396,13 +396,26 @@
           </div>
 
           <div class="p-sm-6 p-lg-2">
-            <h4><b>{{'Admin_Import.creditAmount' | translate}}</b></h4>
+            <h4><b>{{'Admin_Import.debtorNumber' | translate}}</b></h4>
           </div>
           <div class="p-sm-6 p-lg-2">
-            <h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4>
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
           </div>
           <div class="p-sm-12 p-lg-8">
-            <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['creditAmount']"
+            <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['debtorNumber']"
+              [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
+              [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
+              filterBy="name"></p-dropdown>
+          </div>
+
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.creditorNumber' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-12 p-lg-8">
+            <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['creditorNumber']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
               [style]="{width:'400px'}" [autoDisplayFirst]="false" optionLabel="name" optionValue="name"
               filterBy="name"></p-dropdown>
