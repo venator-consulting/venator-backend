@@ -43,11 +43,13 @@ export class SusaComponent implements OnInit {
             life: 10000,
             detail: "There is no dates in this procedure"
           });
+        } else {
+          this.getData();
         }
       }, er => {
 
       });
-    this.getData();
+    
 
     if (this.procedureId && +this.procedureId > 0) {
       this.prcService
@@ -58,6 +60,10 @@ export class SusaComponent implements OnInit {
     }
 
     this.cols = [
+      {
+        header: 'Konto.',
+        field: 'accountType'
+      },
       {
         header: 'KontoNr.',
         field: 'creditorNumber'

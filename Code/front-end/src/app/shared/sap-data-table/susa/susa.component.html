@@ -49,7 +49,13 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td pReorderableRowHandle *ngFor="let col of cols">
-          {{ row[col.field] }}
+          <div *ngIf="(col.field == 'accountType' || col.field == 'creditorNumber' || col.field == 'creditorName');then withoutFilter else withFilter"></div>
+          <ng-template #withoutFilter>
+            {{ row[col.field] }}
+          </ng-template>
+          <ng-template #withFilter>
+            {{ (col.field == 'outamount'? +row['famount'] + +row['inamount'] : +row[col.field]) | currency:'EUR':''}}
+          </ng-template>
         </td>
       </tr>
     </ng-template>

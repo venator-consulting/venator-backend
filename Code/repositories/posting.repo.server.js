@@ -216,7 +216,7 @@ module.exports.susaDateRange = async (orgId, prcId) => {
 module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate) => {
     try {
 
-        let query = `SELECT DISTINCT pos.creditorNumber, pos.creditorName, fromRange.famount, inRange.inamount , outRange.outamount, credit.creditAmount, debit.debitAmount
+        let query = `SELECT DISTINCT pos.accountType, pos.creditorNumber, pos.creditorName, fromRange.famount, inRange.inamount , credit.creditAmount, debit.debitAmount
         FROM posting_${orgId} pos 
         LEFT OUTER JOIN
             ( SELECT p.creditorNumber , p.creditorName , SUM(p.balance) famount
@@ -240,18 +240,6 @@ module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate) => {
                 GROUP BY p2.creditorNumber , p2.creditorName
             ) as inRange 
         ON pos.creditorNumber = inRange.creditorNumber
-        
-        left OUTER JOIN 
-            ( select p3.creditorNumber , p3.creditorName , SUM(p3.balance) outamount
-                FROM venator.posting_${orgId} p3
-                WHERE
-                    p3.procedureId = :procedureId
-                    AND UPPER(p3.accountType) = 'K' 
-                    AND p3.creditorNumber is not NULL
-                    AND  p3.documentDate >  :toDate 
-                GROUP BY p3.creditorNumber , p3.creditorName
-            ) as outRange 
-        ON pos.creditorNumber = outRange.creditorNumber
         
         left OUTER JOIN 
             ( select p4.creditorNumber , p4.creditorName , SUM(p4.balance) creditAmount

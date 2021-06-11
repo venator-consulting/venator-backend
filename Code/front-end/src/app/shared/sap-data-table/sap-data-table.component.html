@@ -1,4 +1,3 @@
-
 <div class="p-grid">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
@@ -6,7 +5,7 @@
 </div>
 <div class="card" style="overflow-x: scroll;">
   <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="350px" [style]="{width:'10000px'}"
-    [resizableColumns]="true" styleClass="p-datatable-gridlines"  [reorderableColumns]="true">
+    [resizableColumns]="true" styleClass="p-datatable-gridlines" [reorderableColumns]="true">
     <ng-template pTemplate="caption">
       <div class="p-mb-4">
         <!-- Export as excel -->
@@ -41,9 +40,8 @@
           class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
           tooltipPosition="bottom"></button>
 
-        <button type="button" pButton pRipple icon="pi pi-info-circle" (click)="susa()"
-          class="p-ml-6" pTooltip="{{'Susa' | translate}}" 
-          tooltipPosition="bottom" label="Susa"></button>
+        <button type="button" pButton pRipple icon="pi pi-info-circle" (click)="susa()" class="p-ml-6"
+          pTooltip="{{'Susa' | translate}}" tooltipPosition="bottom" label="Susa"></button>
 
       </div>
     </ng-template>
@@ -75,10 +73,18 @@
     <ng-template pTemplate="body" let-rowData>
       <tr>
         <td pReorderableRowHandle *ngFor="let col of cols">
-          {{ (col.header == 'Balance' || col.header == 'Saldo EUR' ||
-              col.header == 'Debitamount' || col.header == 'Umsatz Soll EUR' ||
-              col.header == 'Creditamount' || col.header == 'Umsatz Haben EUR') ? 
-              (rowData[col.field] | currency:'EUR':'')  : rowData[col.field]}}
+          <div
+            *ngIf="(col.field == 'balance' || col.field == 'debitAmount' || col.field == 'creditAmount' || col.field == 'documentDate' || col.field == 'executionDate' || col.field == 'dueDate' || col.field == 'postingDate' || col.field == 'applicationDate');then withFilter else withoutFilter">
+          </div>
+          <ng-template #withoutFilter>
+            {{ rowData[col.field] }}
+          </ng-template>
+          <ng-template #withFilter>
+            {{ (col.field == 'balance' || col.field == 'debitAmount' ||
+              col.field == 'creditAmount') ? 
+              (rowData[col.field] | currency:'EUR':'')  : rowData[col.field] | date:'dd.MM.yyyy'}}
+          </ng-template>
+          
         </td>
       </tr>
     </ng-template>
