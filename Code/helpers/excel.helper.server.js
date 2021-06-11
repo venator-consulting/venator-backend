@@ -687,7 +687,7 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
                             accountNumber: accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null,
                             companyCode: companyCodeIndex >= 0 ? row.model.cells[companyCodeIndex].value : null,
                             accountName: accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null,
-                            accountType: AccountTypeEnum[accountType] ? row.model.cells[accountNameIndex].value : AccountTypeEnum[accountType],
+                            accountType: AccountTypeEnum[accountType] ? AccountTypeEnum[accountType] : row.model.cells[accountTypeIndex].value ,
                             procedureId: procedureId
                         });
 
