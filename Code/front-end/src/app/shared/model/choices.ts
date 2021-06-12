@@ -13,8 +13,8 @@ export class Choices {
     static getTemplates(): Choices[] {
         let result: Choices[] = [];
 
-        result.push(new Choices("SAP W-mobel", 1));
-        result.push(new Choices("SAP Cinram", 2));
+        result.push(new Choices("SAP_W-mobel", 1));
+        result.push(new Choices("SAP_Cinram", 2));
         result.push(new Choices("Other", 3));
         return result;
     }

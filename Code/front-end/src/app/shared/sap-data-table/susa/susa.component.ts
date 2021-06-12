@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PostingDataService } from '../../service/posting-data.service';
 import { MessageService } from 'primeng/api';
@@ -13,8 +13,6 @@ import * as FileSaver from 'file-saver';
   providers: [DatePipe]
 })
 export class SusaComponent implements OnInit {
-
-  @ViewChild('dt') dt: ElementRef;
   
   organisationId: number;
   procedureId: number;

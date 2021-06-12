@@ -66,6 +66,12 @@
               placeholder="{{'Admin_Import.selectTemplatePlaceholder' | translate}}" optionLabel="name"
               optionValue="value" [showClear]="true" [filter]="true" filterBy="name"
               (onChange)="selectTemplatHandler($event)" [style]="{width:'300px'}">
+              <ng-template pTemplate="item" let-item>
+                {{'Admin_Import.'+item.name | translate}}
+              </ng-template>
+              <ng-template pTemplate="selectedItem" let-item>
+                {{'Admin_Import.'+item.name | translate}}
+              </ng-template>
             </p-dropdown>
           </div>
         </div>
@@ -218,12 +224,19 @@
         *ngIf="filesList[currentFileIndex]?.fileClass?.value === 1" [selected]="true">
         <div class="p-grid">
           <!-- p-sm-12 p-lg-8 -->
-          <div class="p-sm-6 p-lg-2">{{'Admin_Import.databaseField' | translate}}</div>
-          <div class="p-sm-6 p-lg-2">{{'Admin_Import.selectedFile' | translate}}</div>
-          <div class="p-sm-12 p-lg-8">{{'Admin_Import.mappingField' | translate}}</div>
+          <div class="p-sm-6 p-lg-2">
+            <h2><b> {{'Admin_Import.databaseField' | translate}} </b></h2>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h2><b> {{'Admin_Import.selectedFile' | translate}} </b></h2>
+          </div>
+          <div class="p-sm-12 p-lg-8">
+            <h2><b> {{'Admin_Import.mappingField' | translate}} </b></h2>
+          </div>
 
-          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
-          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['client']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -231,8 +244,8 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2">BuKr</div>
-          <div class="p-sm-6 p-lg-2">{{'Admin_Import.client' | translate}}</div>
+          <div class="p-sm-6 p-lg-2"><h4><b> BuKr</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.client' | translate}}</b></h4></div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['companyCode']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -240,8 +253,8 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2">accountType</div>
-          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-6 p-lg-2"><h4><b>accountType</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountType']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -250,8 +263,8 @@
 
           </div>
 
-          <div class="p-sm-6 p-lg-2">accountNumber</div>
-          <div class="p-sm-6 p-lg-2">{{'Admin_Import.numberDataType' | translate}}</div>
+          <div class="p-sm-6 p-lg-2"><h4><b>accountNumber</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountNumber']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -259,8 +272,8 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2">accountName</div>
-          <div class="p-sm-6 p-lg-2">{{'Admin_Import.textDataType' | translate}}</div>
+          <div class="p-sm-6 p-lg-2"><h4><b>accountName</b></h4></div>
+          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountName']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"

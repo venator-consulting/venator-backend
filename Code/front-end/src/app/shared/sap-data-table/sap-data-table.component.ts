@@ -112,16 +112,16 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   autoComplete(word: string) {
-    if (word && word.length > 2) {
-      this._autocompleteService
-        .complete(word)
-        .subscribe(res => {
-          console.log(res);
-          this.completeWords = res;
-        });
-    } else {
+    // if (word && word.length > 2) {
+    //   this._autocompleteService
+    //     .complete(word)
+    //     .subscribe(res => {
+    //       console.log(res);
+    //       this.completeWords = res;
+    //     });
+    // } else {
       this.completeWords = new Array();
-    }
+    // }
 
   }
 

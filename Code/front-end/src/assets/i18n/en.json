@@ -62,6 +62,8 @@
         "selectProcedure": "Select a Procedure",
         "selectProcedurePlaceholder": "select procedure",
         "selectTemplate": "Select a Template",
+        "SAP_W-mobel": "SAP W-mobel",
+        "SAP_Cinram": "SAP Cinram",
         "selectTemplatePlaceholder": "select template",
         "selectFileFormat": "Select a fileformat ",
         "Excel": "Excel",
