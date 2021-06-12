@@ -40,6 +40,7 @@ export class SusaComponent implements OnInit {
         debugger;
         if (isNaN(minYear)) {
           this.fromDate = this.toDate = new Date();
+          this.waiting = false;
           this._messageService.add({
             severity: 'error',
             summary: 'ERROR',
