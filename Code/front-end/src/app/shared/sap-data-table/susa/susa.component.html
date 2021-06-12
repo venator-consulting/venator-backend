@@ -5,36 +5,45 @@
 </div>
 
 <div class="p-grid">
-  <div class="p-col-4"></div>
-  <div class="p-col-8 p-mb-4">
+  <div class="p-col-8 p-mb-4 p-text-right">
     <p-toast></p-toast>
-    <label >{{ 'Susa.from' | translate}} :   </label>
-    <p-calendar [(ngModel)]="fromDate" [minDate]="fromDate" [maxDate]="toDate" [monthNavigator]="true" 
+    <label>{{ 'Susa.from' | translate}} : </label>
+    <p-calendar [(ngModel)]="fromDate" [minDate]="fromDate" [maxDate]="toDate" [monthNavigator]="true"
       [yearNavigator]="true" yearRange="{{fromDate.getFullYear()+':'+toDate.getFullYear()}}"></p-calendar>
-      &nbsp;
-      <label >{{ 'Susa.to' | translate}} :  </label>
+    &nbsp;
+    <label>{{ 'Susa.to' | translate}} : </label>
     <p-calendar [(ngModel)]="toDate" [minDate]="fromDate" [maxDate]="toDate" [monthNavigator]="true"
       [yearNavigator]="true" yearRange="{{fromDate.getFullYear()+':'+toDate.getFullYear()}}"></p-calendar>
-      &nbsp;
-      <button type="button" pButton pRipple icon="pi pi-filter"
+    &nbsp;
+    <button type="button" pButton pRipple icon="pi pi-filter" [disabled]="waiting"
       class="p-button-rounded p-button-primary" label="{{'Susa.search' | translate}}" (click)="getData();"
-      pTooltip="{{ 'Susa.search' | translate}} " tooltipPosition="bottom"></button>
+      pTooltip="{{ 'Susa.search' | translate}} " tooltipPosition="bottom">
+      <i class="pi pi-spinner pi-spin" *ngIf="waiting"></i>
+    </button>
+  </div>
+  <div class="p-sm-4">
+    <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
   </div>
 </div>
 
 <div class="p-grid">
-  <p-table [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
-    [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
-    <ng-template pTemplate="caption" >
-        <div class="p-grid">
-      <div class="p-col-2">
-        <!-- Add Procedure -->
-        <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
-          class="p-button-rounded p-button-primary" label="{{ 'Susa.daten' | translate}} "
-          pTooltip="{{ 'Susa.datenToolTip' | translate}} " tooltipPosition="bottom"></button>
+  <p-table #dt [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
+    [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
+    [reorderableColumns]="true">
+    <ng-template pTemplate="caption">
+      <div class="p-grid">
+        <div class="p-col-1">
+          <!-- Add Procedure -->
+          <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
+            class="p-button-rounded p-button-primary" label="{{ 'Susa.daten' | translate}} "
+            pTooltip="{{ 'Susa.datenToolTip' | translate}} " tooltipPosition="bottom"></button>
+        </div>
+        <div class="p-col-2">
+          <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+            class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
+        </div>
+
       </div>
-      
-    </div>
     </ng-template>
     <ng-template pTemplate="colgroup">
       <colgroup>
@@ -51,7 +60,9 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td pReorderableRowHandle *ngFor="let col of cols">
-          <div *ngIf="(col.field == 'accountType' || col.field == 'creditorNumber' || col.field == 'creditorName');then withoutFilter else withFilter"></div>
+          <div
+            *ngIf="(col.field == 'accountType' || col.field == 'creditorNumber' || col.field == 'creditorName');then withoutFilter else withFilter">
+          </div>
           <ng-template #withoutFilter>
             {{ row[col.field] }}
           </ng-template>
