@@ -27,7 +27,7 @@
     <tr>
       <td pReorderableRowHandle *ngFor="let col of cols">
         <i *ngIf="procedure[col.field].toString().toLowerCase().trim() == 'true'" class="pi pi-check checkIcon"></i> <i
-          *ngIf="!procedure.data" class="pi pi-times closeIcon"></i>
+          *ngIf="procedure[col.field].toString().toLowerCase().trim() == 'false'" class="pi pi-times closeIcon"></i>
         {{ (procedure[col.field].toString().toLowerCase().trim() != 'true' && procedure[col.field].toString().toLowerCase().trim() != 'false') ? procedure[col.field] : ''}}
       </td>
       <td *ngIf="role!=='User'" style="width: 10em">
