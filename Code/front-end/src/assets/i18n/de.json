@@ -384,8 +384,8 @@
 
     },
     "Susa": {
-        "creditornumber": "Kreditornumber",
-        "creditorName": "Kreditorname",
+        "accountnumber": "Kontonummer",
+        "accountName": "Kontobezeichnung",
         "startingBalance": "Anfangssaldo",
         "balance": "Saldo" ,
         "endingBalance": "Endsaldo",

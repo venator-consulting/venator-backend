@@ -61,7 +61,7 @@
       <tr>
         <td pReorderableRowHandle *ngFor="let col of cols">
           <div
-            *ngIf="(col.field == 'accountType' || col.field == 'creditorNumber' || col.field == 'creditorName');then withoutFilter else withFilter">
+            *ngIf="(col.field == 'accountType' || col.field == 'accountNumber' || col.field == 'accountName');then withoutFilter else withFilter">
           </div>
           <ng-template #withoutFilter>
             {{ row[col.field] }}
