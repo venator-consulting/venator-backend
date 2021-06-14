@@ -69,12 +69,12 @@ export class SusaComponent implements OnInit {
         field: 'accountType'
       },
       {
-        header: 'Susa.creditornumber',
-        field: 'creditorNumber'
+        header: 'Susa.accountnumber',
+        field: 'accountNumber'
       },
       {
-        header: 'Susa.creditorName',
-        field: 'creditorName'
+        header: 'Susa.accountName',
+        field: 'accountName'
       },
       {
         header: 'Susa.startingBalance',

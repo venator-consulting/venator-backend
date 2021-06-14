@@ -387,8 +387,8 @@
 
     },
     "Susa": {
-        "creditornumber": "Creditornumber",
-        "creditorName": "Creditorname",
+        "accountnumber": "Account number",
+        "accountName": "Account name",
         "startingBalance": "Startingbalance",
         "balance": "Balance" ,
         "endingBalance": "Endingbalance",
