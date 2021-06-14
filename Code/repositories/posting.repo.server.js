@@ -216,64 +216,59 @@ module.exports.susaDateRange = async (orgId, prcId) => {
 module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate) => {
     try {
 
-        let query = `SELECT DISTINCT pos.accountType, pos.creditorNumber, pos.creditorName, fromRange.famount, inRange.inamount , credit.creditAmount, debit.debitAmount
+        let query = `SELECT DISTINCT pos.accountType, pos.accountNumber, pos.accountName, fromRange.famount, inRange.inamount , credit.creditAmount, debit.debitAmount
         FROM posting_${orgId} pos 
         LEFT OUTER JOIN
-            ( SELECT p.creditorNumber , p.creditorName , SUM(p.balance) famount
+            ( SELECT p.accountNumber , p.accountName , SUM(p.balance) famount
                 FROM venator.posting_${orgId} p 
                 WHERE
                     p.procedureId = :procedureId
-                    AND UPPER(p.accountType) = 'K' 
-                    AND p.creditorNumber is not NULL 
+                    AND p.accountNumber is not NULL 
                     AND  p.documentDate <  :fromDate
-                GROUP BY p.creditorNumber , p.creditorName) as fromRange
-            ON pos.creditorNumber = fromRange.creditorNumber
+                GROUP BY p.accountNumber , p.accountName) as fromRange
+            ON pos.accountNumber = fromRange.accountNumber
             left OUTER JOIN 
-            ( select p2.creditorNumber , p2.creditorName , SUM(p2.balance) inamount
+            ( select p2.accountNumber , p2.accountName , SUM(p2.balance) inamount
                 FROM venator.posting_${orgId} p2
                 WHERE
                     p2.procedureId = :procedureId
-                    AND UPPER(p2.accountType) = 'K' 
-                    AND p2.creditorNumber is not NULL 
+                    AND p2.accountNumber is not NULL 
                     AND  p2.documentDate >  :fromDate
                     AND  p2.documentDate <  :toDate 
-                GROUP BY p2.creditorNumber , p2.creditorName
+                GROUP BY p2.accountNumber , p2.accountName
             ) as inRange 
-        ON pos.creditorNumber = inRange.creditorNumber
+        ON pos.accountNumber = inRange.accountNumber
         
         left OUTER JOIN 
-            ( select p4.creditorNumber , p4.creditorName , SUM(p4.balance) creditAmount
+            ( select p4.accountNumber , p4.accountName , SUM(p4.balance) creditAmount
                 FROM venator.posting_${orgId} p4
                 WHERE
                     p4.procedureId = :procedureId
-                    AND UPPER(p4.accountType) = 'K' 
-                    AND p4.creditorNumber is not NULL 
+                    AND p4.accountNumber is not NULL 
                     AND p4.balance > 0
                     AND  p4.documentDate >  :fromDate
                     AND  p4.documentDate <  :toDate 
-                GROUP BY p4.creditorNumber , p4.creditorName
+                GROUP BY p4.accountNumber , p4.accountName
             ) as credit 
-        ON pos.creditorNumber = credit.creditorNumber
+        ON pos.accountNumber = credit.accountNumber
         
         left OUTER JOIN 
-            ( select p5.creditorNumber , p5.creditorName , SUM(p5.balance) debitAmount
+            ( select p5.accountNumber , p5.accountName , SUM(p5.balance) debitAmount
                 FROM venator.posting_${orgId} p5
                 WHERE
                     p5.procedureId = :procedureId
-                    AND UPPER(p5.accountType) = 'K' 
-                    AND p5.creditorNumber is not NULL
+                    AND p5.accountNumber is not NULL
                     AND p5.balance < 0
                     AND  p5.documentDate >  :fromDate
                     AND  p5.documentDate <  :toDate 
-                GROUP BY p5.creditorNumber , p5.creditorName
+                GROUP BY p5.accountNumber , p5.accountName
             ) as debit 
-        ON pos.creditorNumber = debit.creditorNumber
+        ON pos.accountNumber = debit.accountNumber
         
         
         WHERE
                     pos.procedureId = :procedureId
-                    AND UPPER(pos.accountType) = 'K' 
-                    AND pos.creditorNumber is not NULL 
+                    AND pos.accountNumber is not NULL 
                                 `;
 
 
