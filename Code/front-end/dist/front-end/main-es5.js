@@ -2630,30 +2630,6 @@
                       _this7.sideBarShow = false;
                     }
                   }]
-                },
-                /*             {
-                                label: elem.data,
-                                items: [
-                                    {label: elem.table, icon: 'pi pi-table', routerLink: ['/shared/data'] },
-                                ]
-                            }, */
-                {
-                  label: elem.analysis,
-                  items: [// { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/analysis/amount'] ,command: () => {this.sideBarShow = false}},
-                  // { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/analysis/text'] ,command: () => {this.sideBarShow = false}},
-                  {
-                    label: elem.paymentAnalyse,
-                    icon: 'pi pi-credit-card',
-                    command: function command() {
-                      _this7.sideBarShow = false;
-                    }
-                  }, {
-                    label: elem.creditorsAnalyse,
-                    icon: 'pi pi-chart-bar',
-                    command: function command() {
-                      _this7.sideBarShow = false;
-                    }
-                  }]
                 }];
                 _this7.userPages = [{
                   label: elem.setting,
@@ -5239,7 +5215,7 @@
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", !procedure_r13.data);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", procedure_r13[col_r16.field].toString().toLowerCase().trim() == "false");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
 
@@ -5836,6 +5812,7 @@
 
               if (isNaN(minYear)) {
                 _this12.fromDate = _this12.toDate = new Date();
+                _this12.waiting = false;
 
                 _this12._messageService.add({
                   severity: 'error',

@@ -1319,21 +1319,6 @@ class NavBarComponent {
                             { label: 'Organisations', icon: 'pi  pi-home', routerLink: ['/admin/dashboard'], command: () => { this.sideBarShow = false; } },
                         ]
                     },
-                    /*             {
-                                    label: elem.data,
-                                    items: [
-                                        {label: elem.table, icon: 'pi pi-table', routerLink: ['/shared/data'] },
-                                    ]
-                                }, */
-                    {
-                        label: elem.analysis,
-                        items: [
-                            // { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/analysis/amount'] ,command: () => {this.sideBarShow = false}},
-                            // { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/analysis/text'] ,command: () => {this.sideBarShow = false}},
-                            { label: elem.paymentAnalyse, icon: 'pi pi-credit-card', command: () => { this.sideBarShow = false; } },
-                            { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar', command: () => { this.sideBarShow = false; } },
-                        ]
-                    }
                 ];
                 this.userPages = [
                     { label: elem.setting, icon: 'pi pi-globe' },
@@ -2626,7 +2611,7 @@ function UserDashboardComponent_ng_template_4_td_1_Template(rf, ctx) { if (rf & 
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", procedure_r13[col_r16.field].toString().toLowerCase().trim() == "true");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", !procedure_r13.data);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", procedure_r13[col_r16.field].toString().toLowerCase().trim() == "false");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"](" ", procedure_r13[col_r16.field].toString().toLowerCase().trim() != "true" && procedure_r13[col_r16.field].toString().toLowerCase().trim() != "false" ? procedure_r13[col_r16.field] : "", " ");
 } }
@@ -2920,6 +2905,7 @@ class SusaComponent {
             debugger;
             if (isNaN(minYear)) {
                 this.fromDate = this.toDate = new Date();
+                this.waiting = false;
                 this._messageService.add({
                     severity: 'error',
                     summary: 'ERROR',
