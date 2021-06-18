@@ -59,7 +59,7 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td pReorderableRowHandle *ngFor="let col of cols">
+        <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
           <div
             *ngIf="(col.field == 'accountType' || col.field == 'accountNumber' || col.field == 'accountName');then withoutFilter else withFilter">
           </div>

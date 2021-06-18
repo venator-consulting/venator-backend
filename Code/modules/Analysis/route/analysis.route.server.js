@@ -22,4 +22,8 @@ router
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.textAnalysis);
 
+router
+    .route('/:orgId/:prcId/payment')
+    .get(analysisCtrl.textAnalysis);
+
 module.exports = router;

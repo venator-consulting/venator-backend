@@ -24,6 +24,7 @@ import { DocumentTypeComponent } from "./admin/document-type/document-type.compo
 import { AmountAnalysisDetailsComponent } from "./shared/analysis/amount-analysis/details/amount-analysis-details.component";
 import { TextAnalysisComponent } from "./shared/analysis/text-analysis/text-analysis.component";
 import { TextAnalysisDetailsComponent } from "./shared/analysis/text-analysis/text-analysis-details/text-analysis-details.component";
+import { PaymentAnalysisComponent } from "./shared/analysis/payment-analysis/payment-analysis.component";
 
 
 const routes: Routes = [
@@ -54,6 +55,7 @@ const routes: Routes = [
   { path: 'analysis/amount/:orgId/:prcId/:creditorNumber', component: AmountAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/text', component: TextAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/text/:orgId/:prcId/:creditorNumber', component: TextAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/payment', component: PaymentAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },

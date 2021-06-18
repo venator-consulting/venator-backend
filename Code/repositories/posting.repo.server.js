@@ -194,9 +194,7 @@ module.exports.susaDateRange = async (orgId, prcId) => {
         let query = `SELECT MAX(documentDate)  maxdate, MIN(documentDate) mindate from posting_${orgId} pos
                         WHERE
                             pos.procedureId = :procedureId
-                            AND UPPER(pos.accountType) = 'K' 
-                            AND pos.creditorNumber is not NULL 
-                            AND pos.creditorName is not NULL`;
+                            AND pos.accountNumber is not NULL`;
 
         const result = await sequelize.query(
             query, {
@@ -287,3 +285,4 @@ module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate) => {
         throw new Error(error.message);
     }
 };
+
