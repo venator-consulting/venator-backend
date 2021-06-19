@@ -2,6 +2,7 @@ const errorHandler = require('../../../helpers/error.handler.server').errorHandl
 const postingRepo = require('../../../repositories/posting.repo.server');
 const nlpHelper = require('../../../helpers/nlp.helper.server');
 const keywords = require('../../../models/analysis/text.analysis.keywords');
+const paymentAnalysisRepo = require('../../../repositories/payment.analysis.repo');
 
 module.exports.amountAnalysis = async (req, res) => {
     try {
@@ -19,10 +20,10 @@ module.exports.amountAnalysis = async (req, res) => {
     }
 };
 
-module.exports.getByCreditorNumber = async (req, res) => {
+module.exports.getByAccountNumber = async (req, res) => {
     try {
         const result = await postingRepo
-            .getByCreditorNumber(req.params.orgId, req.params.prcId, req.params.creditorNumber);
+            .getByAccountNumber(req.params.orgId, req.params.prcId, req.params.accountNumber);
         res.status(200)
             .json(result);
     } catch (e) {
@@ -53,3 +54,41 @@ module.exports.textAnalysis = async (req, res) => {
 };
 
 
+module.exports.paymentAnalysisDateRange = async (req, res) => {
+    try {
+        const result = await paymentAnalysisRepo.paymentDateRange(req.params.orgId, req.params.prcId);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: Amount analysis - get details', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+module.exports.paymentAnalysis = async (req, res) => {
+    try {
+        const dateRange = await paymentAnalysisRepo
+            .paymentDateRange(req.params.orgId, req.params.prcId);
+        // let result = {};
+        paymentAnalysisRepo.paymentAnalysis(req.params.orgId, req.params.prcId, dateRange[0].mindate, dateRange[0].mindate, data => {
+            // result = data;
+            res.status(200)
+            .json({
+                data: data,
+                dateRange: dateRange
+            });
+        })
+        
+    } catch (e) {
+        errorHandler('Analysis controller: Amount analysis - get details', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};

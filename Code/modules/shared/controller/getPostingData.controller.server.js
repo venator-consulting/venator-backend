@@ -56,8 +56,9 @@ module.exports.susaAnalysis = async (req, res) => {
             req.params.fromDate = req.params.fromDate? req.params.fromDate : dateRange[0].mindate;
             req.params.toDate = req.params.toDate ? req.params.toDate : dateRange[0].maxdate;
         }
+        const criteria = req.query;
         const result = await postngRepo
-            .susaAnalysis(req.params.orgId, req.params.prcId, req.params.fromDate, req.params.toDate);
+            .susaAnalysis(req.params.orgId, req.params.prcId, req.params.fromDate, req.params.toDate, criteria);
         res.status(200)
             .json(result);
     } catch (e) {

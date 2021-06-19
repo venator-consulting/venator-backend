@@ -6,8 +6,8 @@
     
           <ng-template pTemplate="header">
             <tr>
-              <th>{{ 'DataTableColumns.creditorNumber' | translate}}</th>
-              <th>{{ 'DataTableColumns.creditorName' | translate}}</th>
+              <th>{{ 'DataTableColumns.accountNumber' | translate}}</th>
+              <th>{{ 'DataTableColumns.accountName' | translate}}</th>
               <th>{{ 'DataTableColumns.accountType' | translate}}</th>
               <th>{{ 'DataTableColumns.documentType' | translate}}</th>
               <th>{{ 'DataTableColumns.balance' | translate}}</th>
@@ -27,8 +27,8 @@
           </ng-template>
           <ng-template pTemplate="body" let-row>
             <tr>
-              <td>{{row.creditorNumber}}</td>
-              <td>{{row.creditorName}}</td>
+              <td>{{row.accountNumber}}</td>
+              <td>{{row.accountName}}</td>
               <td>{{row.accountType}}</td>
               <td>{{row.documentType}}</td>
               <td>{{row.balance | currency:'EUR':''}}</td>
@@ -36,14 +36,14 @@
               <td>{{row.contraAccountName}}</td>
               <td>{{row.documentTypeNewName}}</td>
               <td>{{row.documentNumber}}</td>
-              <td>{{row.documentDate}}</td>
+              <td>{{row.documentDate | date: 'yyyy-MM-dd'}}</td>
               <td>{{row.recordNumber}}</td>
               <td>{{row.ledgerId}}</td>
-              <td>{{row.executionDate}}</td>
-              <td>{{row.dueDate}}</td>
-              <td>{{row.reference}}</td>
-              <td>{{row.textPosting}}</td>
-              <td>{{row.textHeader}}</td>
+              <td>{{row.executionDate | date: 'yyyy-MM-dd'}}</td>
+              <td>{{row.dueDate | date: 'yyyy-MM-dd'}}</td>
+              <td [innerHTML]="row.reference | highlight"></td>
+              <td [innerHTML]="row.textPosting | highlight"></td>
+              <td [innerHTML]="row.textHeader | highlight"></td>
 
             </tr>
           </ng-template>

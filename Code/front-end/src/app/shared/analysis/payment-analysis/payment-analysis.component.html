@@ -1,0 +1,56 @@
+<p-toast></p-toast>
+<div class="p-grid" *ngIf="basicData && ready">
+  <div class="p-col-12 p-text-center"><label>{{ 'Susa.from' | translate}} : </label> {{startDate | date: 'yyyy-MM-dd'}}
+    -
+    <label>{{ 'Susa.to' | translate}} : </label>{{endDate | date: 'yyyy-MM-dd'}}</div>
+  <div class="p-col-6">
+    <div class="card">
+      <p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+    </div>
+  </div>
+  <div class="p-col-6">
+    <p-table #dtmax dataKey="id" [value]="top10">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{'AmountAnalysis.creditorNumber' | translate}}</th>
+          <th>{{'AmountAnalysis.creditorName' | translate}}</th>
+          <th>{{'Value' | translate}}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="p-text-right">{{row.accountNumber}}</td>
+          <td class="p-text-right">{{row.accountName}}</td>
+          <td class="p-text-right">{{row.value | currency:'EUR':''}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<div class="p-grid">
+
+  <div class="p-col-10" *ngIf="selectedProcedure>0">
+    <p-table #dtmax dataKey="id" [value]="accounts">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{'AmountAnalysis.creditorNumber' | translate}}</th>
+          <th>{{'AmountAnalysis.creditorName' | translate}}</th>
+          <th>{{'Blue' | translate}}</th>
+          <th>{{'Red' | translate}}</th>
+          <th>{{'Green' | translate}}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td class="p-text-right">{{row.accountNumber}}</td>
+          <td class="p-text-right">{{row.accountName}}</td>
+          <td class="p-text-right">{{row.blue | currency:'EUR':''}}</td>
+          <td class="p-text-right">{{row.red | currency:'EUR':''}}</td>
+          <td class="p-text-right">{{row.green | currency:'EUR':''}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>

@@ -1,14 +1,14 @@
 export class TextAnalysis {
-    creditorNumber: string;
-    creditorName: string;
+    accountNumber: string;
+    accountName: string;
     totlaCount: number;
 }
 
 export class TextAnalysisDetails {
     id: number;
     accountType: string;
-    creditorNumber: string;
-    creditorName: string;
+    accountNumber: string;
+    accountName: string;
     contraAccountNumber: string;
     contraAccountName: string;
     reference: string;

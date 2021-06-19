@@ -41,7 +41,11 @@
         <div class="p-col-2">
           <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
             class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
+          <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+            class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
+            tooltipPosition="bottom"></button>
         </div>
+
 
       </div>
     </ng-template>
@@ -55,11 +59,25 @@
         <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
           {{col.header | translate}}</th>
       </tr>
+      <tr>
+        <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
+          <!-- <input pInputText type="text" [(ngModel)]="criteria[col.field]"
+            (change)="filterChange($any($event.target).value, col.field)" class="filterInputCss" /> -->
+
+          <p-autoComplete [suggestions]="completeWords" (completeMethod)="filterChange($event.query, col.field)"
+            (onClear)="filterChange($event.query, col.field)" (onSelect)="filterChange($event.word, col.field)"
+            field="word" [minLength]="1" [inputStyle]="{width:'90%'}" [style]="{width:'90%'}" appendTo="body"
+            [(ngModel)]="criteria[col.field]"></p-autoComplete>
+
+          <!-- <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()"
+            pTooltip="{{'Data_Table.filter' | translate}}" tooltipPosition="bottom"></i> -->
+        </th>
+      </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td pReorderableRowHandle *ngFor="let col of cols">
+        <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
           <div
             *ngIf="(col.field == 'accountType' || col.field == 'accountNumber' || col.field == 'accountName');then withoutFilter else withFilter">
           </div>

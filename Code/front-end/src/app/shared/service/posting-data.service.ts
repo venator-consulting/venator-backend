@@ -20,12 +20,12 @@ export class PostingDataService {
     return this._http.get<any>(this._thisURL + `/susa/defaultDate/${orgId}/${prcId}`);
   }
 
-  getSusa(orgId: number, prcId: number, fromDate: string, toDate: string) {
+  getSusa(orgId: number, prcId: number, fromDate: string, toDate: string, criteria: any) {
     let url = this._thisURL + `/susa/${orgId}/${prcId}`;
     if (fromDate && toDate) {
       url += `/${fromDate}/${toDate}`
     }
-    return this._http.get<any>(url);
+    return this._http.get<any>(url, { params: criteria });
   }
 
 }

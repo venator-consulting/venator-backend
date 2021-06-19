@@ -12,7 +12,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
   orgId: number;
   prcId: number;
-  creditorNumber: string;
+  accountNumber: string;
   data: AmountAnalysisDetails[] = new Array();
 
   constructor(private _route: ActivatedRoute, private _analysisService: AnalysisService) { }
@@ -21,10 +21,10 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
     this.prcId = +this._route.snapshot.paramMap.get('prcId');
-    this.creditorNumber = this._route.snapshot.paramMap.get('creditorNumber');
+    this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
 
     this._analysisService
-      .getAmountAnalysisDetails(this.orgId, this.prcId, this.creditorNumber)
+      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber)
       .subscribe(res => {
         this.data = res;
       }, er => {});

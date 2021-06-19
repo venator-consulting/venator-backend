@@ -79,17 +79,17 @@ export class NavBarComponent implements OnInit {
                                         {label: elem.table, icon: 'pi pi-table', routerLink: ['/shared/data'] },
                                     ]
                                 }, */
-                    // {
-                    //     label: elem.analysis,
-                    //     items: [
-                    //         // { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/analysis/amount'] ,command: () => {this.sideBarShow = false}},
-                    //         // { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/analysis/text'] ,command: () => {this.sideBarShow = false}},
-                    //         { label: elem.paymentAnalyse, icon: 'pi pi-credit-card' ,command: () => {this.sideBarShow = false}},
-                    //         { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' ,command: () => {this.sideBarShow = false}},
+                    {
+                        label: elem.analysis,
+                        items: [
+                            { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/analysis/amount'] ,command: () => {this.sideBarShow = false}},
+                            { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/analysis/text'] ,command: () => {this.sideBarShow = false}},
+                            { label: elem.paymentAnalyse, icon: 'pi pi-credit-card', routerLink: ['/analysis/payment'], command: () => {this.sideBarShow = false}},
+                            // { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' ,command: () => {this.sideBarShow = false}},
 
 
-                    //     ]
-                    // }
+                        ]
+                    }
                 ];
 
                 this.userPages = [

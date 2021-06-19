@@ -1,6 +1,6 @@
 export class AmountAnalysis {
-    creditorNumber: string;
-    creditorName: string;
+    accountNumber: string;
+    accountName: string;
     totlaCount: number;
     totalBalance: number;
 }
@@ -11,8 +11,8 @@ export class AmountAnalysisDetails {
     accountType: string;
     documentType: string;
     documentTypeNewName: string;
-    creditorNumber: string;
-    creditorName: string;
+    accountNumber: string;
+    accountName: string;
     contraAccountNumber: string;
     contraAccountName: string;
 }

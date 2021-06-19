@@ -62,7 +62,7 @@ export class TextAnalysisComponent implements OnInit {
         };
         for (let i = 0; i < this.data.length; i++) {
           const element = this.data[i];
-          this.basicData.datasets.push(new Bar(element.creditorName, `rgb(${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255},${Math.random() * 25500 % 255})`, element.totlaCount));
+          this.basicData.datasets.push(new Bar(element.accountName, `rgb(${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255},${Math.random() * 25500 % 255})`, element.totlaCount));
         }
       }, er => {
 
@@ -72,7 +72,7 @@ export class TextAnalysisComponent implements OnInit {
 
 
   goToDetails(row:TextAnalysis) {
-    this._router.navigate(['/analysis/text/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.creditorNumber]);
+    this._router.navigate(['/analysis/text/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
   }
 
 
