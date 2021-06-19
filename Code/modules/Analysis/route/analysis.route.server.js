@@ -24,6 +24,8 @@ router
 
 router
     .route('/:orgId/:prcId/payment')
-    .get(analysisCtrl.textAnalysis);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.textAnalysis);
 
 module.exports = router;
