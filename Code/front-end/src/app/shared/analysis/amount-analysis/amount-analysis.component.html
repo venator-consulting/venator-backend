@@ -42,8 +42,8 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th>{{'AmountAnalysis.creditorNumber' | translate}}</th>
-          <th>{{'AmountAnalysis.creditorName' | translate}}</th>
+          <th>{{'AmountAnalysis.accountNumber' | translate}}</th>
+          <th>{{'AmountAnalysis.accountName' | translate}}</th>
           <th>{{'AmountAnalysis.NumberOfPostings' | translate}}</th>
           <th>{{'AmountAnalysis.totalBalance' | translate}}</th>
           <th>{{'AmountAnalysis.details' | translate}}</th>
@@ -51,8 +51,8 @@
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td>{{row.creditorNumber}}</td>
-          <td>{{row.creditorName}}</td>
+          <td>{{row.accountNumber}}</td>
+          <td>{{row.accountName}}</td>
           <td>{{row.totlaCount}}</td>
           <td>{{row.totalBalance | currency:'EUR':''}}</td>
           <td><button type="button" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning"

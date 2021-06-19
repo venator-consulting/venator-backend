@@ -297,8 +297,8 @@
 
     }, 
     "AmountAnalysis": {
-        "creditorNumber": "Creditornumber",
-        "creditorName": "creditorname",
+        "accountNumber": "Account number",
+        "accountName": "Account name",
         "NumberOfPostings": "Number of postings",
         "totalBalance": "Total Balance",
         "details": "Details"

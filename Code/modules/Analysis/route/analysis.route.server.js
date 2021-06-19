@@ -11,10 +11,10 @@ router
     }), authorization.canDisplayAnalysis(), analysisCtrl.amountAnalysis);
 
 router
-    .route('/:orgId/:prcId/amount/details/:creditorNumber')
+    .route('/:orgId/:prcId/amount/details/:accountNumber')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.canDisplayAnalysis(), analysisCtrl.getByCreditorNumber);
+    }), authorization.canDisplayAnalysis(), analysisCtrl.getByAccountNumber);
 
 router
     .route('/:orgId/:prcId/text')
@@ -26,6 +26,6 @@ router
     .route('/:orgId/:prcId/payment')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.canDisplayAnalysis(), analysisCtrl.textAnalysis);
+    }), authorization.canDisplayAnalysis(), analysisCtrl.paymentAnalysis);
 
 module.exports = router;

@@ -68,7 +68,7 @@ export class AmountAnalysisComponent implements OnInit {
         };
         for (let i = 0; i < this.data.length; i++) {
           const element = this.data[i];
-          this.basicData.datasets.push(new Bar(element.creditorName, `rgb(${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255},${Math.random() * 25500 % 255})`, element.totlaCount));
+          this.basicData.datasets.push(new Bar(element.accountName, `rgb(${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255},${Math.random() * 25500 % 255})`, element.totlaCount));
         }
       }, er => {
 
@@ -76,7 +76,7 @@ export class AmountAnalysisComponent implements OnInit {
   }// end of ng on init
 
   goToDetails(row:AmountAnalysis) {
-    this._router.navigate(['/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.creditorNumber]);
+    this._router.navigate(['/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
   }
 
 

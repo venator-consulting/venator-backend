@@ -52,9 +52,9 @@ const routes: Routes = [
   { path: 'shared/data/susa', component: SusaComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'analysis/amount', component: AmountAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
-  { path: 'analysis/amount/:orgId/:prcId/:creditorNumber', component: AmountAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/amount/:orgId/:prcId/:accountNumber', component: AmountAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/text', component: TextAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
-  { path: 'analysis/text/:orgId/:prcId/:creditorNumber', component: TextAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/text/:orgId/:prcId/:accountNumber', component: TextAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/payment', component: PaymentAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'unauthorized', component: UnauthComponent },

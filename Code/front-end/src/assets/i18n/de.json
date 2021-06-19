@@ -294,8 +294,8 @@
 
     }, 
     "AmountAnalysis": {
-        "creditorNumber": "Kreditornummer",
-        "creditorName": "Kreditorname",
+        "accountNumber": "Kontonummer",
+        "accountName": "Kontobezeichnung",
         "NumberOfPostings": "Anzahl der Buchungen",
         "totalBalance": "Gesamtsaldo",
         "details": "Details"

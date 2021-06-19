@@ -110,17 +110,17 @@ module.exports.updateDocTypeNew = async (organisationId, procedureId, documentTy
 module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
     try {
 
-        const query = `SELECT p.creditorNumber , p.creditorName , SUM(p.balance) as totalBalance, COUNT(p.id) as totlaCount
+        const query = `SELECT p.accountNumber , p.accountName , SUM(p.balance) as totalBalance, COUNT(p.id) as totlaCount
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
-                                AND p.creditorNumber is not NULL
+                                AND p.accountNumber is not NULL
                                 AND (UPPER(p.documentType) = 'KZ' OR 
                                     UPPER(p.documentType) = 'ZP' OR
                                     UPPER(p.documentTypeNewName) = 'ZAHLUNG')
                                 AND p.balance = ROUND(p.balance)
                                 AND balance > :baseBalance
-                            GROUP BY p.creditorNumber , p.creditorName`;
+                            GROUP BY p.accountNumber , p.accountName`;
         const result = await sequelize.query(
             query, {
                 replacements: {
@@ -136,14 +136,14 @@ module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
     }
 };
 
-module.exports.getByCreditorNumber = async (orgId, procedureId, creditorNumber) => {
+module.exports.getByAccountNumber = async (orgId, procedureId, accountNumber) => {
     try {
         const result = await Posting
             .getPosting('posting_' + orgId)
             .findAll({
                 where: {
                     procedureId: procedureId,
-                    creditorNumber: creditorNumber
+                    accountNumber: accountNumber
                 }
             });
         return result;
@@ -156,11 +156,11 @@ module.exports.getByCreditorNumber = async (orgId, procedureId, creditorNumber) 
 module.exports.textAnalysis = async (orgId, prcId, keys) => {
     try {
 
-        let query = `SELECT p.creditorNumber , p.creditorName , COUNT(p.id) as totlaCount
+        let query = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
-                                AND p.creditorNumber is not NULL 
+                                AND p.accountNumber is not NULL 
                                 `;
         query += keys.length > 0 ? ' AND ( ' : '';
 
@@ -172,7 +172,7 @@ module.exports.textAnalysis = async (orgId, prcId, keys) => {
         }
         query += keys.length > 0 ? ' 1 <> 1) ' : '';
 
-        query += 'GROUP BY p.creditorNumber , p.creditorName';
+        query += 'GROUP BY p.accountNumber , p.accountName';
 
         const result = await sequelize.query(
             query, {

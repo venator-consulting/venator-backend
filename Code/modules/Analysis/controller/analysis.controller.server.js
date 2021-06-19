@@ -20,10 +20,10 @@ module.exports.amountAnalysis = async (req, res) => {
     }
 };
 
-module.exports.getByCreditorNumber = async (req, res) => {
+module.exports.getByAccountNumber = async (req, res) => {
     try {
         const result = await postingRepo
-            .getByCreditorNumber(req.params.orgId, req.params.prcId, req.params.creditorNumber);
+            .getByAccountNumber(req.params.orgId, req.params.prcId, req.params.accountNumber);
         res.status(200)
             .json(result);
     } catch (e) {
@@ -69,7 +69,7 @@ module.exports.paymentAnalysisDateRange = async (req, res) => {
     }
 };
 
-module.exports.textAnalysis = async (req, res) => {
+module.exports.paymentAnalysis = async (req, res) => {
     try {
         const dateRange = await paymentAnalysisRepo
             .paymentDateRange(req.params.orgId, req.params.prcId);
