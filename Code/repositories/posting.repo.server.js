@@ -211,7 +211,7 @@ module.exports.susaDateRange = async (orgId, prcId) => {
 };
 
 
-module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate) => {
+module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate, criteria) => {
     try {
 
         let query = `SELECT DISTINCT pos.accountType, pos.accountNumber, pos.accountName, fromRange.famount, inRange.inamount , credit.creditAmount, debit.debitAmount
@@ -268,7 +268,18 @@ module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate) => {
                     pos.procedureId = :procedureId
                     AND pos.accountNumber is not NULL 
                                 `;
-
+        for (const key in criteria) {
+            if (Object.hasOwnProperty.call(criteria, key)) {
+                if (criteria[key].toString().length > 2) {
+                    query += ` AND pos.${key} like '%${criteria[key]}%'`
+                    criteria[key] = {
+                        [Op.like]: '%' + criteria[key] + '%'
+                    };
+                } else {
+                    query += ` AND pos.${key} = '${criteria[key]}'`
+                }
+            }
+        }
 
         const result = await sequelize.query(
             query, {
@@ -285,4 +296,3 @@ module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate) => {
         throw new Error(error.message);
     }
 };
-

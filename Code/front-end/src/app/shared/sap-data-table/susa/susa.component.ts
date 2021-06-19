@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { ProcedureService } from '../../service/procedure.service';
 import { DatePipe } from '@angular/common';
 import * as FileSaver from 'file-saver';
+import { Word } from '../../model/word';
 
 @Component({
   selector: 'app-susa',
@@ -13,15 +14,18 @@ import * as FileSaver from 'file-saver';
   providers: [DatePipe]
 })
 export class SusaComponent implements OnInit {
-  
-  organisationId: number;
-  procedureId: number;
+
+  organisationId: number = +localStorage.getItem('organisationId');
+  procedureId: number = +localStorage.getItem('currentProcedureId');
   fromDate: Date = new Date();
   toDate: Date = new Date();
   procedureName: string = "";
   cols: { header, field }[] = new Array();
   data: any[] = new Array();
   waiting: boolean = false;
+  criteria: any = {};
+  completeWords: Word[] = new Array();
+  filtersNo: number = 0;
 
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
     private _router: Router, private prcService: ProcedureService, private datepipe: DatePipe) { }
@@ -105,7 +109,7 @@ export class SusaComponent implements OnInit {
     let fdate = this.datepipe.transform(this.fromDate, 'yyyy-MM-dd');
     let tdate = this.datepipe.transform(this.toDate, 'yyyy-MM-dd');
     this._postingDataService
-      .getSusa(this.organisationId, this.procedureId, fdate, tdate)
+      .getSusa(this.organisationId, this.procedureId, fdate, tdate, this.criteria)
       .subscribe(res => {
         this.data = res;
         this.waiting = false;
@@ -139,4 +143,36 @@ export class SusaComponent implements OnInit {
     // FileSaver.saveAs(file);
     FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
+
+  clearFilter() {
+    this.criteria = {};
+    this.getData();
+  }
+
+  filterChange(value, field) {
+    if (value) {
+      this.criteria[field] = value;
+      ++this.filtersNo;
+    } else {
+      delete this.criteria[field];
+      --this.filtersNo;
+    }
+    this.waiting = true;
+    // this.autoComplete(value);
+    this.getData();
+  }
+
+  // autoComplete(word: string) {
+    // if (word && word.length > 2) {
+    //   this._autocompleteService
+    //     .complete(word)
+    //     .subscribe(res => {
+    //       console.log(res);
+    //       this.completeWords = res;
+    //     });
+    // } else {
+      // this.completeWords = new Array();
+    // }
+  // }
+
 }
