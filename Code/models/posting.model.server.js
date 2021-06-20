@@ -323,13 +323,13 @@ module.exports.getPosting = function (tableName = 'Posting') {
         }
     }, {
         tableName: tableName,
-        indexes: [
-            {
-                fields: ['procedureId'],
-                using: 'gin',
-                operator: 'jsonb_path_ops'
-              }
-        ]
+        // indexes: [
+        //     {
+        //         fields: ['procedureId'],
+        //         using: 'gin',
+        //         operator: 'jsonb_path_ops'
+        //       }
+        // ]
     });
 };
 
