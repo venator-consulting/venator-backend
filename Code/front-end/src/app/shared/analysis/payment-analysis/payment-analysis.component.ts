@@ -3,6 +3,7 @@ import { AnalysisService } from '../../service/analysis.service';
 import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
 import { PaymentAnalysis, PaymentData } from '../../model/paymentAnalysis';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-payment-analysis',
@@ -30,7 +31,7 @@ export class PaymentAnalysisComponent implements OnInit {
   endDate: Date = new Date();
 
 
-  constructor(private _analysisService: AnalysisService, private _router: Router) { }
+  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router) { }
 
   ngOnInit(): void {
 
@@ -121,7 +122,12 @@ export class PaymentAnalysisComponent implements OnInit {
           }
         });
       }, er => {
-
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
       });
 
   } // end of init function

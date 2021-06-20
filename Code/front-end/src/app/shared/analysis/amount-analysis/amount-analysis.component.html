@@ -8,55 +8,31 @@
 </div>
 
 <div class="p-grid">
-
-  <!-- <div class="p-col-10">
-    <div class="p-grid">
-      <div class="p-col-2">
-        <label class="p-mr-4"> {{'Admin_Import.selectOrganisation' | translate}} </label>
-      </div>
-      <div class="p-col-5">
-        <p-dropdown [options]="orgs" [(ngModel)]="selectedOrgId"
-          placeholder=" {{'Admin_Import.selectOrganisationPlaceholder' | translate}}" optionLabel="name"
-          optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required
-          (onChange)="orgChangedHandler($event)" [style]="{width:'300px'}">
-        </p-dropdown>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- <div class="p-col-10" *ngIf="selectedOrgId>0">
-    <div class="p-grid">
-      <div class="p-col-2">
-        <label class="p-mr-4"> {{'Admin_Import.selectProcedure' | translate}} </label>
-      </div>
-      <div class="p-col-5">
-        <p-dropdown [options]="procedures" [(ngModel)]="selectedPrcId"
-          placeholder="{{'Admin_Import.selectProcedurePlaceholder' | translate}}" optionLabel="name" optionValue="id"
-          [showClear]="true" [filter]="true" filterBy="name" required (onChange)="prcChangedHandler($event)"
-          [style]="{width:'300px'}"></p-dropdown>
-      </div>
-    </div>
-  </div> -->
   <div class="p-col-10" *ngIf="selectedProcedure>0">
-    <p-table #dt dataKey="id" [value]="data">
-
+    <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
+    [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
+    [reorderableColumns]="true">
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col *ngFor="let col of cols">
+        </colgroup>
+      </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th>{{'AmountAnalysis.accountNumber' | translate}}</th>
-          <th>{{'AmountAnalysis.accountName' | translate}}</th>
-          <th>{{'AmountAnalysis.NumberOfPostings' | translate}}</th>
-          <th>{{'AmountAnalysis.totalBalance' | translate}}</th>
+          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+            {{col.header | translate}}
+          </th>
           <th>{{'AmountAnalysis.details' | translate}}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td>{{row.accountNumber}}</td>
-          <td>{{row.accountName}}</td>
-          <td>{{row.totlaCount}}</td>
-          <td>{{row.totalBalance | currency:'EUR':''}}</td>
+          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
+            <span *ngIf="col.field=='balance'">{{ row[col.field] | currency:'EUR':''}}</span>
+            <span *ngIf="col.field!='balance'">{{ row[col.field] }}</span>
+          </td>
           <td><button type="button" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning"
-              (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom" ></button>
+              (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom"></button>
           </td>
         </tr>
       </ng-template>

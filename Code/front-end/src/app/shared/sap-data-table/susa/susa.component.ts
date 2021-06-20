@@ -55,7 +55,12 @@ export class SusaComponent implements OnInit {
           this.getData();
         }
       }, er => {
-
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
       });
 
 
@@ -114,7 +119,12 @@ export class SusaComponent implements OnInit {
         this.data = res;
         this.waiting = false;
       }, er => {
-
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
       });
   }
 

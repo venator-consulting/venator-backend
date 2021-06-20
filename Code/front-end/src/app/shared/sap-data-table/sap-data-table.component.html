@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="p-grid">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
@@ -72,7 +73,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowData>
       <tr>
-        <td pReorderableRowHandle *ngFor="let col of cols">
+        <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
           <div
             *ngIf="(col.field == 'balance' || col.field == 'debitAmount' || col.field == 'creditAmount' || col.field == 'documentDate' || col.field == 'executionDate' || col.field == 'dueDate' || col.field == 'postingDate' || col.field == 'applicationDate');then withFilter else withoutFilter">
           </div>

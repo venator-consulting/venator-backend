@@ -92,6 +92,12 @@ export class SAPDataTableComponent implements OnInit {
         },
         error => {
           this.loading = false;
+          this._messageService.add({
+            severity: 'error',
+            summary: 'ERROR',
+            life: 10000,
+            detail: "There is an error occured please try again"
+          });
         },
       );
   }
