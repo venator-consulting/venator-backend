@@ -1,54 +1,43 @@
-
+<p-toast></p-toast>
 <div class="p-grid">
-
+  <div class="card" style="overflow-x: scroll;">
     <div class="p-col-10">
-        <p-table #dt dataKey="id" [value]="data">
-    
-          <ng-template pTemplate="header">
-            <tr>
-              <th>{{ 'DataTableColumns.accountNumber' | translate}}</th>
-              <th>{{ 'DataTableColumns.accountName' | translate}}</th>
-              <th>{{ 'DataTableColumns.accountType' | translate}}</th>
-              <th>{{ 'DataTableColumns.documentType' | translate}}</th>
-              <th>{{ 'DataTableColumns.balance' | translate}}</th>
-              <th>{{ 'DataTableColumns.contraAccountNumber' | translate}}</th>
-              <th>{{ 'DataTableColumns.contraAccountName' | translate}}</th>
-              <th>{{ 'DataTableColumns.documentTypeNew' | translate}}</th>
-               <th>{{ 'DataTableColumns.documentNumber' | translate}}</th>
-              <th>{{ 'DataTableColumns.documentDate '| translate}}</th>
-              <th>{{ 'DataTableColumns.recordNumber '| translate}}</th>
-              <th>{{ 'DataTableColumns.ledgerId '| translate}}</th>
-              <th>{{ 'DataTableColumns.executionDate' | translate}}</th>
-              <th>{{ 'DataTableColumns.dueDate' | translate}}</th> 
-              <th>{{ 'DataTableColumns.reference' | translate}}</th>
-              <th>{{ 'DataTableColumns.textPosting' | translate}}</th>
-              <th>{{ 'DataTableColumns.textHeader' | translate}}</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-row>
-            <tr>
-              <td>{{row.accountNumber}}</td>
-              <td>{{row.accountName}}</td>
-              <td>{{row.accountType}}</td>
-              <td>{{row.documentType}}</td>
-              <td>{{row.balance | currency:'EUR':''}}</td>
-              <td>{{row.contraAccountNumber}}</td>
-              <td>{{row.contraAccountName}}</td>
-              <td>{{row.documentTypeNewName}}</td>
-              <td>{{row.documentNumber}}</td>
-              <td>{{row.documentDate | date: 'yyyy-MM-dd'}}</td>
-              <td>{{row.recordNumber}}</td>
-              <td>{{row.ledgerId}}</td>
-              <td>{{row.executionDate | date: 'yyyy-MM-dd'}}</td>
-              <td>{{row.dueDate | date: 'yyyy-MM-dd'}}</td>
-              <td [innerHTML]="row.reference | highlight"></td>
-              <td [innerHTML]="row.textPosting | highlight"></td>
-              <td [innerHTML]="row.textHeader | highlight"></td>
+      <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
+        [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
+        [style]="{width:'2500px'}" [reorderableColumns]="true">
+        <ng-template pTemplate="colgroup">
+          <colgroup>
+            <col *ngFor="let col of cols">
+          </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+              {{col.header | translate}}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
+              <span *ngIf="col.field=='balance'">
+                {{ row[col.field]  | currency:'EUR':'' }}
+              </span>
+              <span *ngIf="col.field=='documentDate' || col.field=='executionDate' || col.field=='dueDate'">
+                {{ row[col.field]  | date: 'yyyy-MM-dd' }}
+              </span>
+              <span *ngIf="col.field=='reference' || col.field=='textPosting' || col.field=='textHeader'"
+                [innerHTML]="row[col.field] | highlight">
+              </span>
+              <span
+                *ngIf="col.field!='balance' && col.field !='documentDate' && col.field !='executionDate' && col.field!='dueDate' && col.field!='reference' && col.field!='textPosting' && col.field!='textHeader'">
+                {{ row[col.field] }}
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
 
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-
-      
 </div>

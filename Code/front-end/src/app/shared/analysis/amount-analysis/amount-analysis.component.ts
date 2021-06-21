@@ -20,12 +20,14 @@ export class AmountAnalysisComponent implements OnInit {
   baseBalance = 500;
   basicOptions: any;
   basicData: any;
+  cols: { header: string; field: string; }[];
+  waiting: boolean = false;
 
 
-  constructor(private _analysisService: AnalysisService, private _router: Router) { }
+  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router) { }
 
   ngOnInit(): void {
-
+    this.waiting = true;
     this.basicOptions = {
       responsive: true,
       scales: {
@@ -53,7 +55,24 @@ export class AmountAnalysisComponent implements OnInit {
       }
     };
 
-
+    this.cols = [
+      {
+        header: 'AmountAnalysis.accountNumber',
+        field: 'accountNumber'
+      },
+      {
+        header: 'AmountAnalysis.accountName',
+        field: 'accountName'
+      },
+      {
+        header: 'AmountAnalysis.NumberOfPostings',
+        field: 'NumberOfPostings'
+      },
+      {
+        header: 'AmountAnalysis.totalBalance',
+        field: 'totalBalance'
+      }
+    ];
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
@@ -70,8 +89,14 @@ export class AmountAnalysisComponent implements OnInit {
           const element = this.data[i];
           this.basicData.datasets.push(new Bar(element.accountName, `rgb(${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255},${Math.random() * 25500 % 255})`, element.totlaCount));
         }
+        this.waiting = false;
       }, er => {
-
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
       });
   }// end of ng on init
 
