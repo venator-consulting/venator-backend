@@ -72,6 +72,23 @@ export class AmountAnalysisComponent implements OnInit {
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
 
+    this.getData();
+
+    if (this.selectedProcedure && +this.selectedProcedure > 0) {
+      this.prcService
+        .getById(+this.selectedProcedure)
+        .subscribe(prc => {
+          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+        }, er => { });
+    }
+
+  }// end of ng on init
+
+  goToDetails(row: AmountAnalysis) {
+    this._router.navigate(['/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber + '/' + this.baseBalance]);
+  }
+
+  getData() {
     this._analysisService
       .getAmountAnalysis(this.selectedOrganisation, this.selectedProcedure, this.baseBalance)
       .subscribe(res => {
@@ -93,20 +110,7 @@ export class AmountAnalysisComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
-
-    if (this.selectedProcedure && +this.selectedProcedure > 0) {
-      this.prcService
-        .getById(+this.selectedProcedure)
-        .subscribe(prc => {
-          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-        }, er => { });
-      }
-
-    }// end of ng on init
-
-    goToDetails(row: AmountAnalysis) {
-      this._router.navigate(['/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber + '/' + this.baseBalance]);
-    }
-
-
   }
+
+
+}
