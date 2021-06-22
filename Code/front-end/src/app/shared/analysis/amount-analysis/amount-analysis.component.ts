@@ -30,6 +30,9 @@ export class AmountAnalysisComponent implements OnInit {
     this.waiting = true;
     this.basicOptions = {
       responsive: true,
+      legend: {
+        display: false
+      },
       scales: {
         yAxes: [{
           type: 'linear',
@@ -40,18 +43,7 @@ export class AmountAnalysisComponent implements OnInit {
             min: 0,
           }
         },
-        {
-          type: 'linear',
-          display: true,
-          position: 'right',
-          id: 'Creditor',
-          gridLines: {
-            drawOnChartArea: false
-          },
-          ticks: {
-            min: 0,
-          }
-        }]
+        ]
       }
     };
 
@@ -66,7 +58,7 @@ export class AmountAnalysisComponent implements OnInit {
       },
       {
         header: 'AmountAnalysis.NumberOfPostings',
-        field: 'NumberOfPostings'
+        field: 'totlaCount'
       },
       {
         header: 'AmountAnalysis.totalBalance',
@@ -100,8 +92,8 @@ export class AmountAnalysisComponent implements OnInit {
       });
   }// end of ng on init
 
-  goToDetails(row:AmountAnalysis) {
-    this._router.navigate(['/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
+  goToDetails(row: AmountAnalysis) {
+    this._router.navigate(['/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber + '/' + this.baseBalance]);
   }
 
 

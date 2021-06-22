@@ -11,16 +11,22 @@ router
     }), authorization.canDisplayAnalysis(), analysisCtrl.amountAnalysis);
 
 router
-    .route('/:orgId/:prcId/amount/details/:accountNumber')
+    .route('/:orgId/:prcId/amount/details/:accountNumber/:baseBalance')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.canDisplayAnalysis(), analysisCtrl.getByAccountNumber);
+    }), authorization.canDisplayAnalysis(), analysisCtrl.amountAnalysisDetails);
 
 router
     .route('/:orgId/:prcId/text')
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.textAnalysis);
+
+router
+    .route('/:orgId/:prcId/text/details/:accountNumber')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.textAnalysisDetails);
 
 router
     .route('/:orgId/:prcId/payment')

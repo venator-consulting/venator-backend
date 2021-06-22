@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { TextAnalysisDetails } from 'src/app/shared/model/textAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
@@ -18,7 +18,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
   cols: { header: string; field: string; }[];
   waiting: boolean = false;
 
-  constructor(private _messageService: MessageService, private _route: ActivatedRoute, private _analysisService: AnalysisService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, private _analysisService: AnalysisService) { }
 
   ngOnInit(): void {
     this.waiting = true;
@@ -111,6 +111,10 @@ export class TextAnalysisDetailsComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+  }
+
+  goBack() {
+    this._router.navigate(['/analysis/text/']);
   }
 
 }

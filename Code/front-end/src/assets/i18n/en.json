@@ -296,6 +296,10 @@
         "actions": "Actions"
 
     }, 
+    "Analysis": {
+        "back": "Back",
+        "export": "Export"
+    },
     "AmountAnalysis": {
         "accountNumber": "Account number",
         "accountName": "Account name",

@@ -27,6 +27,9 @@ export class TextAnalysisComponent implements OnInit {
 
     this.basicOptions = {
       responsive: true,
+      legend: {
+        display: false
+      },
       scales: {
         yAxes: [{
           type: 'linear',
@@ -36,19 +39,8 @@ export class TextAnalysisComponent implements OnInit {
           ticks: {
             min: 0,
           }
-        },
-        {
-          type: 'linear',
-          display: true,
-          position: 'right',
-          id: 'Creditor',
-          gridLines: {
-            drawOnChartArea: false
-          },
-          ticks: {
-            min: 0,
-          }
-        }]
+        }
+        ]
       }
     };
 
@@ -66,7 +58,7 @@ export class TextAnalysisComponent implements OnInit {
       },
       {
         header: 'AmountAnalysis.NumberOfPostings',
-        field: 'NumberOfPostings'
+        field: 'totlaCount'
       }
     ];
 
@@ -96,7 +88,7 @@ export class TextAnalysisComponent implements OnInit {
   } // end of ng on init
 
 
-  goToDetails(row:TextAnalysis) {
+  goToDetails(row: TextAnalysis) {
     this._router.navigate(['/analysis/text/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
   }
 

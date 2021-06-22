@@ -5,6 +5,22 @@
         <p-table #dt dataKey="id" [value]="data" [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
         [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
         [reorderableColumns]="true">
+        <ng-template pTemplate="caption">
+          <div class="p-grid">
+            <div class="p-col-1">
+              <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
+                class="p-button-rounded p-button-primary" label="{{ 'Analysis.back' | translate}} "
+                pTooltip="{{ 'Analysis.back' | translate}} " tooltipPosition="bottom"></button>
+            </div>
+            <div class="p-col-2">
+              <!-- <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
+              <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+                class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
+                tooltipPosition="bottom"></button> -->
+            </div>
+          </div>
+        </ng-template>
         <ng-template pTemplate="colgroup">
           <colgroup>
             <col *ngFor="let col of cols">

@@ -19,8 +19,8 @@ export class AnalysisService {
     return this._http.get<AmountAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/amount/' + baseBalance);
   }
 
-  getAmountAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<AmountAnalysisDetails[]> {
-    return this._http.get<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber);
+  getAmountAnalysisDetails(orgId: number, prcId: number, accountNumber: string, baseBalance: number): Observable<AmountAnalysisDetails[]> {
+    return this._http.get<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber + '/' + baseBalance);
   }
 
   getTextAnalysis(orgId: number, prcId: number): Observable<TextAnalysis[]> {
@@ -28,7 +28,7 @@ export class AnalysisService {
   }
 
   getTextAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<TextAnalysisDetails[]> {
-    return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber);
+    return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/text/details/' + accountNumber);
   }
 
   getPaymentAnalysis(orgId: number, prcId: number): Observable<PaymentAnalysis> {

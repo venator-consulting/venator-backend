@@ -20,6 +20,23 @@ module.exports.amountAnalysis = async (req, res) => {
     }
 };
 
+module.exports.amountAnalysisDetails = async (req, res) => {
+    try {
+        const result = await postingRepo
+            .amountAnalysisDetails(req.params.orgId, req.params.prcId, req.params.baseBalance, req.params.accountNumber);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: get Amount analysis', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+
 module.exports.getByAccountNumber = async (req, res) => {
     try {
         const result = await postingRepo
@@ -41,6 +58,23 @@ module.exports.textAnalysis = async (req, res) => {
         let fileKeywords = await nlpHelper.getsynonyms(keywords);
         const result = await postingRepo
             .textAnalysis(req.params.orgId, req.params.prcId, fileKeywords);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: Amount analysis', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+module.exports.textAnalysisDetails = async (req, res) => {
+    try {
+        let fileKeywords = await nlpHelper.getsynonyms(keywords);
+        const result = await postingRepo
+            .textAnalysisDetails(req.params.orgId, req.params.prcId, fileKeywords, req.params.accountNumber);
         res.status(200)
             .json(result);
     } catch (e) {

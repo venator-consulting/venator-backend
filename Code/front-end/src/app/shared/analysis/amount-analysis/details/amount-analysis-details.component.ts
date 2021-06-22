@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
@@ -17,13 +17,15 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   data: AmountAnalysisDetails[] = new Array();
   waiting: boolean;
   cols: { header: string; field: string; }[];
+  baseBalance: number;
 
-  constructor(private _messageService: MessageService, private _route: ActivatedRoute, private _analysisService: AnalysisService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, private _analysisService: AnalysisService) { }
 
   ngOnInit(): void {
     this.waiting = true;
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
     this.prcId = +this._route.snapshot.paramMap.get('prcId');
+    this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
 
 
@@ -85,9 +87,9 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         field: 'dueDate'
       }
     ];
-    
+
     this._analysisService
-      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber)
+      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber, this.baseBalance)
       .subscribe(res => {
         this.data = res;
         this.waiting = false;
@@ -102,5 +104,9 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
   }// end of ng on init
 
+
+  goBack() {
+    this._router.navigate(['/analysis/amount/']);
+  }
 
 }
