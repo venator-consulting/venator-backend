@@ -63,7 +63,7 @@ export class NavBarComponent implements OnInit {
                             { label: 'Import', icon: 'pi pi-file', routerLink: ['/admin/import'] ,command: () => {this.sideBarShow = false} },
                             { label: elem.addUser, icon: 'pi pi-user-plus', routerLink: ['/admin/admin/add'] ,command: () => {this.sideBarShow = false}},
                             { label: elem.addOrganisation, icon: 'pi pi-plus-circle', routerLink: ['admin/organisation/add'] ,command: () => {this.sideBarShow = false}},
-                            // { label: elem.addDocumentType, icon: 'pi pi-plus-circle', routerLink: ['admin/document-type'] ,command: () => {this.sideBarShow = false}},
+                            { label: elem.addDocumentType, icon: 'pi pi-plus-circle', routerLink: ['admin/document-type'] ,command: () => {this.sideBarShow = false}},
                             { label: elem.resetPassword, icon: 'pi pi-lock', routerLink: ['/resetPassword'] ,command: () => {this.sideBarShow = false}},
                         ]
                     },

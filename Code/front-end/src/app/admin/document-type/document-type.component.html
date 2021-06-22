@@ -51,7 +51,11 @@
         <tr>
           <td pReorderableRowHandle *ngFor="let col of cols">
             {{ col.field != 'documentTypeNewName' ? row[col.field] : '' }}
-            <div *ngIf="!row.isEditable && col.field == 'documentTypeNewName'">{{'Document_Type.'+row.documentTypeNewName | translate}}</div>
+            <div *ngIf="!row.isEditable && col.field == 'documentTypeNewName'">
+              <span  *ngIf="row.documentTypeNewName && (row.documentTypeNewName.toLowerCase() == 'zahlung' || row.documentTypeNewName.toLowerCase() == 'rechnung')">
+                {{'Document_Type.'+row.documentTypeNewName | translate}}
+              </span>
+            </div>
             <div *ngIf="row.isEditable && col.field == 'documentTypeNewName'">
               <p-dropdown [options]="docTypes" [(ngModel)]="row.documentTypeNewId" optionValue="id" appendTo="body" 
                 placeholder="Document Type new" optionLabel="documentTypeName" [showClear]="true" [filter]="true"
