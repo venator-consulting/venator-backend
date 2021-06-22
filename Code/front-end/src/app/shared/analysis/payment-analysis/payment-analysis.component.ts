@@ -4,6 +4,7 @@ import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
 import { PaymentAnalysis, PaymentData } from '../../model/paymentAnalysis';
 import { MessageService } from 'primeng/api';
+import { ProcedureService } from '../../service/procedure.service';
 
 @Component({
   selector: 'app-payment-analysis',
@@ -29,9 +30,11 @@ export class PaymentAnalysisComponent implements OnInit {
   redAccounts: any[] = new Array();
   startDate: Date = new Date();
   endDate: Date = new Date();
+  procedureName: string;
 
 
-  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router) { }
+  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
+    private prcService: ProcedureService) { }
 
   ngOnInit(): void {
 
@@ -78,15 +81,11 @@ export class PaymentAnalysisComponent implements OnInit {
           this.greenAccounts.push(...element.green.accounts);
           this.redAccounts.push(...element.red.accounts);
         }
-        // get top 10
-        this.blueAccounts.sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
-        this.top10 = this.blueAccounts.slice(0, 9);
-        debugger;
-        this.ready = true;
+
         this.blueAccounts.forEach(value => {
           const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
           if (i >= 0) {
-            this.accounts[i].blue += value.value; 
+            this.accounts[i].blue += value.value;
           } else {
             this.accounts.push({
               accountNumber: value.accountNumber,
@@ -99,7 +98,7 @@ export class PaymentAnalysisComponent implements OnInit {
         this.redAccounts.forEach(value => {
           const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
           if (i >= 0) {
-            this.accounts[i].red += value.value; 
+            this.accounts[i].red += value.value;
           } else {
             this.accounts.push({
               accountNumber: value.accountNumber,
@@ -112,7 +111,7 @@ export class PaymentAnalysisComponent implements OnInit {
         this.greenAccounts.forEach(value => {
           const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
           if (i >= 0) {
-            this.accounts[i].green += value.value; 
+            this.accounts[i].green += value.value;
           } else {
             this.accounts.push({
               accountNumber: value.accountNumber,
@@ -121,6 +120,12 @@ export class PaymentAnalysisComponent implements OnInit {
             });
           }
         });
+
+        // get top 10
+        this.accounts.sort((a, b) => Math.abs(b.blue) - Math.abs(a.blue));
+        this.top10 = this.accounts.slice(0, 9);
+        debugger;
+        this.ready = true;
       }, er => {
         this._messageService.add({
           severity: 'error',
@@ -130,6 +135,13 @@ export class PaymentAnalysisComponent implements OnInit {
         });
       });
 
+      if (this.selectedProcedure && +this.selectedProcedure > 0) {
+        this.prcService
+          .getById(+this.selectedProcedure)
+          .subscribe(prc => {
+            this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+          }, er => { });
+        }
   } // end of init function
 
 

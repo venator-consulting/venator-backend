@@ -239,7 +239,8 @@
     "Document_Type": {
         "Zahlung": "Payment",
         "Rechnung": "Invoice",
-        
+        "null": " ",
+
         "documentType": "Document Type",
         "documentTypeNewName": "Document Type new",
         "Action": "Action",

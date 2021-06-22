@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-details',
@@ -119,6 +120,26 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
   goBack() {
     this._router.navigate(['/analysis/amount/']);
+  }
+
+
+  exportExcel() {
+    import("xlsx").then(xlsx => {
+      const worksheet = xlsx.utils.json_to_sheet(this.data);
+      const workbook = { Sheets: { 'amount_analysis': worksheet }, SheetNames: ['amount_analysis'] };
+      const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+      this.saveAsExcelFile(excelBuffer, "amount_analysis");
+    });
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const d: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    // FileSaver.saveAs(file);
+    FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
 }

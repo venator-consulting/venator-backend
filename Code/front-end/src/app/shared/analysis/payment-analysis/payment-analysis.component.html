@@ -1,4 +1,9 @@
 <p-toast></p-toast>
+<div class="p-grid">
+  <div class="p-col-12">
+    <h2 class="p-text-center">{{procedureName}}</h2>
+  </div>
+</div>
 <div class="p-grid" *ngIf="basicData && ready">
   <div class="p-col-12 p-text-center"><label>{{ 'Susa.from' | translate}} : </label> {{startDate | date: 'yyyy-MM-dd'}}
     -
@@ -21,7 +26,7 @@
         <tr>
           <td class="p-text-right">{{row.accountNumber}}</td>
           <td class="p-text-right">{{row.accountName}}</td>
-          <td class="p-text-right">{{row.value | currency:'EUR':''}}</td>
+          <td class="p-text-right">{{row.blue | currency:'EUR':''}}</td>
         </tr>
       </ng-template>
     </p-table>

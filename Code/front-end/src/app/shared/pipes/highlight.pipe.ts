@@ -10,15 +10,19 @@ export class HighlightPipe implements PipeTransform {
 
   constructor(el: ElementRef, private sanitizer: DomSanitizer) {
     this._nativeElement = el.nativeElement;
-   }
+  }
 
   transform(value: string): SafeHtml | null {
     if (!value)
       return null;
     this.keywords.forEach(word => {
       const regEx = new RegExp(word, 'ig');
-      value = value.replace(regEx, `<span class="highlight"><b>${word}</b></span>`);
-      debugger;
+      let wordList = value.split(" ").filter((elem, index) => {
+        return regEx.test(elem);
+      });
+      wordList.forEach(w => {
+        value = value.replace(w, `<span class="highlight"><b>${w}</b></span>`);
+      });
     });
     return this.sanitizer.sanitize(SecurityContext.HTML, value) || ''
     // return this.sanitizer.bypassSecurityTrustHtml(value);
@@ -27,7 +31,7 @@ export class HighlightPipe implements PipeTransform {
 
 
   keywords = [
-    'Pfändung',
+    ' *Pfändung* ',
     'Pfaendung',
     'Vollstreckung',
     'Rechtskräftig',

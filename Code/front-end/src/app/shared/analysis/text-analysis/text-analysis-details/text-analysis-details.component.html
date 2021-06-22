@@ -18,9 +18,9 @@
                 pTooltip="{{ 'Analysis.back' | translate}} " tooltipPosition="bottom"></button>
             </div>
             <div class="p-col-2">
-              <!-- <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+               <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
                 class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
-              <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+              <!-- <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
                 class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
                 tooltipPosition="bottom"></button> -->
             </div>
@@ -48,9 +48,9 @@
                 {{ row[col.field]  | date: 'yyyy-MM-dd' }}
               </span>
               <span *ngIf="col.field=='reference' || col.field=='textPosting' || col.field=='textHeader'"
-                [innerHTML]="row[col.field] | highlight">
+                [innerHTML]="row[col.field] | highlight" pTooltip="{{ row[col.field] }}">
               </span>
-              <span
+              <span pTooltip="{{ row[col.field] }}"
                 *ngIf="col.field!='balance' && col.field !='documentDate' && col.field !='executionDate' && col.field!='dueDate' && col.field!='reference' && col.field!='textPosting' && col.field!='textHeader'">
                 {{ row[col.field] }}
               </span>

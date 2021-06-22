@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { TextAnalysisDetails } from 'src/app/shared/model/textAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-text-analysis-details',
@@ -127,6 +128,25 @@ export class TextAnalysisDetailsComponent implements OnInit {
 
   goBack() {
     this._router.navigate(['/analysis/text/']);
+  }
+
+  exportExcel() {
+    import("xlsx").then(xlsx => {
+      const worksheet = xlsx.utils.json_to_sheet(this.data);
+      const workbook = { Sheets: { 'text_analysis': worksheet }, SheetNames: ['text_analysis'] };
+      const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+      this.saveAsExcelFile(excelBuffer, "text_analysis");
+    });
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const d: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    // FileSaver.saveAs(file);
+    FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
 }
