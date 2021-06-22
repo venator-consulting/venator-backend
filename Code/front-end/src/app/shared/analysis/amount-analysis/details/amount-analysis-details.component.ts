@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
+import { ProcedureService } from 'src/app/shared/service/procedure.service';
 
 @Component({
   selector: 'app-details',
@@ -18,8 +19,10 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   waiting: boolean;
   cols: { header: string; field: string; }[];
   baseBalance: number;
+  procedureName: any;
 
-  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, private _analysisService: AnalysisService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, 
+    private _analysisService: AnalysisService,  private prcService: ProcedureService) { }
 
   ngOnInit(): void {
     this.waiting = true;
@@ -101,6 +104,15 @@ export class AmountAnalysisDetailsComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+
+
+      if (this.prcId && +this.prcId > 0) {
+        this.prcService
+          .getById(+this.prcId)
+          .subscribe(prc => {
+            this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+          }, er => { });
+        }
 
   }// end of ng on init
 

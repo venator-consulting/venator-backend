@@ -106,7 +106,7 @@ module.exports.paymentAnalysisDateRange = async (req, res) => {
 module.exports.paymentAnalysis = async (req, res) => {
     try {
         const dateRange = await paymentAnalysisRepo
-            .paymentDateRange(req.params.orgId, req.params.prcId);
+            .paymentDateRange(+req.params.orgId, +req.params.prcId);
         // let result = {};
         paymentAnalysisRepo.paymentAnalysis(req.params.orgId, req.params.prcId, dateRange[0].mindate, dateRange[0].mindate, data => {
             // result = data;
@@ -115,7 +115,13 @@ module.exports.paymentAnalysis = async (req, res) => {
                 data: data,
                 dateRange: dateRange
             });
-        })
+        }, err => {
+            res.status(500)
+            .json({
+                messsage: err,
+                dateRange: dateRange
+            });
+        });
         
     } catch (e) {
         errorHandler('Analysis controller: Amount analysis - get details', e);

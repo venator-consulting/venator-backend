@@ -12,12 +12,12 @@ module.exports.paymentDateRange = async (orgId, prcId) => {
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.documentDate is not NULL 
-                        AND (UPPER(pos.documentType) = 'RECHNUNG'
-                            OR UPPER(pos.documentType) = 'ZAHLUNG'
-                            OR UPPER(pos.documentTypeNewName) = 'KZ'
-                            OR UPPER(pos.documentTypeNewName) = 'ZP'
-                            OR UPPER(pos.documentTypeNewName) = 'RE'
-                            OR UPPER(pos.documentTypeNewName) = 'KR')`;
+                        AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
+                            OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
+                            OR UPPER(pos.documentType) = 'KZ'
+                            OR UPPER(pos.documentType) = 'ZP'
+                            OR UPPER(pos.documentType) = 'RE'
+                            OR UPPER(pos.documentType) = 'KR')`;
 
         const result = await sequelize.query(
             query, {
@@ -42,8 +42,17 @@ monthDiff = (d1, d2) => {
     return months <= 0 ? 0 : months;
 }
 
-module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
+module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1) => {
     try {
+        if (!fromDate) {
+            throw new Error('Document Date is null for this procedure!');
+        }
+        if (!toDate) {
+            throw new Error('Application Date is null for this procedure!');
+        }
+        if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
+            throw new Error('DocumentDate and ApplicationDate must be Date!');
+        }
         const diff = monthDiff(fromDate, toDate);
         // if diff = 0 throw an error
         let finalRes = [];
@@ -82,12 +91,12 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.documentDate is not NULL 
-                        AND (UPPER(pos.documentType) = 'RECHNUNG'
-                            OR UPPER(pos.documentType) = 'ZAHLUNG'
-                            OR UPPER(pos.documentTypeNewName) = 'KZ'
-                            OR UPPER(pos.documentTypeNewName) = 'ZP'
-                            OR UPPER(pos.documentTypeNewName) = 'RE'
-                            OR UPPER(pos.documentTypeNewName) = 'KR')`;
+                        AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
+                            OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
+                            OR UPPER(pos.documentType) = 'KZ'
+                            OR UPPER(pos.documentType) = 'ZP'
+                            OR UPPER(pos.documentType) = 'RE'
+                            OR UPPER(pos.documentType) = 'KR')`;
 
         const str = connection.query(query).stream();
 
@@ -95,9 +104,9 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
             finalRes.forEach(element => {
                 // get last day of the month
                 var d = new Date(element.yearName, +element.monthName + 1, 0);
-                if (((row.documentType && row.documentType.toString().toUpperCase() == 'RECHNUNG') ||
-                        (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RE') ||
-                        (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'KR')) &&
+                if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
                     row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d)) {
                     element.blue.value += +row.balance;
                         // add creditor to the list
@@ -112,14 +121,14 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
                             });
                         }
 
-                } else if (((row.documentType && row.documentType.toString().toUpperCase() == 'RECHNUNG') ||
-                        (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RE') ||
-                        (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'KR')) &&
+                } else if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
                     row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d) && row.dueDate <= d) {
                     element.red.value += +row.balance;
-                } else if (((row.documentType && row.documentType.toString().toUpperCase() == 'ZAHLUNG') ||
-                        (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'KZ') ||
-                        (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZP')) &&
+                } else if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'KZ') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'ZP')) &&
                     row.documentDate <= d && row.applicationDate == null) {
                     element.green.value += +row.balance;
                 }
@@ -130,6 +139,6 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
             cb(finalRes);
         });
     } catch (error) {
-        throw new Error(error.message);
+        cb1(error.message);
     }
 };

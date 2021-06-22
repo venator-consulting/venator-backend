@@ -3,6 +3,7 @@ import { ActivatedRoute, Router} from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { TextAnalysisDetails } from 'src/app/shared/model/textAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
+import { ProcedureService } from 'src/app/shared/service/procedure.service';
 
 @Component({
   selector: 'app-text-analysis-details',
@@ -17,8 +18,10 @@ export class TextAnalysisDetailsComponent implements OnInit {
   data: TextAnalysisDetails[] = new Array();
   cols: { header: string; field: string; }[];
   waiting: boolean = false;
+  procedureName: string;
 
-  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, private _analysisService: AnalysisService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, 
+    private _analysisService: AnalysisService,  private prcService: ProcedureService) { }
 
   ngOnInit(): void {
     this.waiting = true;
@@ -111,6 +114,15 @@ export class TextAnalysisDetailsComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+
+
+      if (this.prcId && +this.prcId > 0) {
+        this.prcService
+          .getById(+this.prcId)
+          .subscribe(prc => {
+            this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+          }, er => { });
+        }
   }
 
   goBack() {

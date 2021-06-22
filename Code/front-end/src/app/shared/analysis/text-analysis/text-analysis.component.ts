@@ -4,6 +4,7 @@ import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
 import { TextAnalysis } from "../../model/textAnalysis";
 import { MessageService } from 'primeng/api';
+import { ProcedureService } from '../../service/procedure.service';
 
 @Component({
   selector: 'app-text-analysis',
@@ -19,8 +20,10 @@ export class TextAnalysisComponent implements OnInit {
   data: TextAnalysis[] = new Array();
   cols: { header: string; field: string; }[];
   waiting: boolean = false;
+  procedureName: any;
 
-  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router) { }
+  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, 
+    private _router: Router, private prcService: ProcedureService) { }
 
   ngOnInit(): void {
     this.waiting = true;
@@ -84,6 +87,14 @@ export class TextAnalysisComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+
+      if (this.selectedProcedure && +this.selectedProcedure > 0) {
+        this.prcService
+          .getById(+this.selectedProcedure)
+          .subscribe(prc => {
+            this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+          }, er => { });
+        }
 
   } // end of ng on init
 
