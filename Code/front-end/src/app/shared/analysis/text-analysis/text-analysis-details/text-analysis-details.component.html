@@ -37,6 +37,12 @@
               {{col.header | translate}}
             </th>
           </tr>
+          <tr>
+            <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
+              <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
+                (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
+            </th>
+          </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row>
           <tr>

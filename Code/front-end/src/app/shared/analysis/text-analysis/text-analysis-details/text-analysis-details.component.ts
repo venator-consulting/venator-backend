@@ -20,6 +20,8 @@ export class TextAnalysisDetailsComponent implements OnInit {
   cols: { header: string; field: string; }[];
   waiting: boolean = false;
   procedureName: string;
+  tempData: any[];
+  criteria: any = {};
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, 
     private _analysisService: AnalysisService,  private prcService: ProcedureService) { }
@@ -106,6 +108,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
       .getTextAnalysisDetails(this.orgId, this.prcId, this.accountNumber)
       .subscribe(res => {
         this.data = res;
+        this.tempData = res;
         this.waiting = false;
       }, er => {
         this._messageService.add({
@@ -147,6 +150,40 @@ export class TextAnalysisDetailsComponent implements OnInit {
     });
     // FileSaver.saveAs(file);
     FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
+
+
+  filterChange(query, colName): void {
+    debugger;
+    if (!query) {
+      delete this.criteria[colName];
+      if (Object.keys(this.criteria).length < 1) {
+        this.data = [...this.tempData];
+      } else {
+        for (const key in this.criteria) {
+          if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+            const element = this.criteria[key];
+            if (element.length < 3) {
+              this.data = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+            } else {
+              this.data = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+            }
+          }
+        }
+      }
+    } else {
+      this.data = [...this.tempData];
+      for (const key in this.criteria) {
+        if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+          const element = this.criteria[key];
+          if (element.length < 3) {
+            this.data = this.data.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+          } else {
+            this.data = this.data.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+          }
+        }
+      } // end of for each criteria field
+    }
   }
 
 }
