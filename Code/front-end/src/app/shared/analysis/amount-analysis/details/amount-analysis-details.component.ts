@@ -23,6 +23,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   procedureName: any;
   tempData: any[];
   criteria: any = {};
+  searching: boolean = false;
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
     private _analysisService: AnalysisService, private prcService: ProcedureService) { }
@@ -147,6 +148,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
 
   filterChange(query, colName): void {
+    this.searching = true;
     debugger;
     if (!query) {
       delete this.criteria[colName];
@@ -177,6 +179,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         }
       } // end of for each criteria field
     }
+    this.searching = false;
   }
 
 }

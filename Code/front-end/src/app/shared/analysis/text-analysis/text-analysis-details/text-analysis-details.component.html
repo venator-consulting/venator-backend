@@ -7,6 +7,7 @@
 <div class="p-grid">
   <div class="card" style="overflow-x: scroll;">
     <div class="p-col-10">
+      <p-progressBar mode="indeterminate" [style]="{'height': '5px'}" *ngIf="searching"></p-progressBar>
       <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
         [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
         [style]="{width:'2500px'}" [reorderableColumns]="true">
