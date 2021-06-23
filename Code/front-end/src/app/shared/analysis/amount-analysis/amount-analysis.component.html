@@ -3,6 +3,18 @@
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
   </div>
+  <div class="p-col-12">
+    <div class="p-text-center">
+      <label for="baseBalance">Base Balance: </label>
+      <!-- <input pInputNumber type="number" name="baseBalance" [(ngModel)]="baseBalance"/> -->
+      <p-inputNumber [(ngModel)]="baseBalance" mode="decimal" locale="de-DE" [minFractionDigits]="2" [min]="0"
+        [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="100"
+        decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus"
+        decrementButtonIcon="pi pi-minus">
+      </p-inputNumber>
+      <button pButton type="button" icon="pi pi-search" (click)="getData()"></button>
+    </div>
+  </div>
 </div>
 <div class="p-grid" *ngIf="this.basicData">
   <div class="p-col-10">
@@ -15,8 +27,8 @@
 <div class="p-grid">
   <div class="p-col-10" *ngIf="selectedProcedure>0">
     <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
-    [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
-    [reorderableColumns]="true">
+      [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
+      [reorderableColumns]="true">
       <ng-template pTemplate="colgroup">
         <colgroup>
           <col *ngFor="let col of cols">

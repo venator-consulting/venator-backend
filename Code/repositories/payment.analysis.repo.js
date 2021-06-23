@@ -1,11 +1,13 @@
 const connection = require('../config/mysql.config').getConnection();
-const { QueryTypes } = require("sequelize");
+const {
+    QueryTypes
+} = require("sequelize");
 const Sequelize = require('../config/sequelize.config');
 const sequelize = Sequelize.getSequelize();
 
 module.exports.paymentDateRange = async (orgId, prcId) => {
     try {
-        let query = `SELECT MAX(pos.applicationDate)  maxdate, MIN(pos.documentDate) mindate 
+        let query = `SELECT MAX(pos.applicationDate)  maxdate, MIN(pos.documentDate) mindate , MAX(pos.dueDate) maxdue 
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = :procedureId
@@ -109,28 +111,48 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
                     row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d)) {
                     element.blue.value += +row.balance;
-                        // add creditor to the list
-                        const i = element.blue.accounts.findIndex(x => x.accountNumber==row.accountNumber); 
-                        if (i >= 0) {
-                            element.blue.accounts[i].value += +row.balance;
-                        } else {
-                            element.blue.accounts.push({
-                                value: +row.balance,
-                                accountNumber: row.accountNumber,
-                                accountName: row.accountName
-                            });
-                        }
+                    // add creditor to the list
+                    const i = element.blue.accounts.findIndex(x => x.accountNumber == row.accountNumber);
+                    if (i >= 0) {
+                        element.blue.accounts[i].value += +row.balance;
+                    } else {
+                        element.blue.accounts.push({
+                            value: +row.balance,
+                            accountNumber: row.accountNumber,
+                            accountName: row.accountName
+                        });
+                    }
 
                 } else if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
                     row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d) && row.dueDate <= d) {
                     element.red.value += +row.balance;
+                    const i = element.red.accounts.findIndex(x => x.accountNumber == row.accountNumber);
+                    if (i >= 0) {
+                        element.red.accounts[i].value += +row.balance;
+                    } else {
+                        element.red.accounts.push({
+                            value: +row.balance,
+                            accountNumber: row.accountNumber,
+                            accountName: row.accountName
+                        });
+                    }
                 } else if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KZ') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'ZP')) &&
                     row.documentDate <= d && row.applicationDate == null) {
                     element.green.value += +row.balance;
+                    const i = element.green.accounts.findIndex(x => x.accountNumber == row.accountNumber);
+                    if (i >= 0) {
+                        element.green.accounts[i].value += +row.balance;
+                    } else {
+                        element.green.accounts.push({
+                            value: +row.balance,
+                            accountNumber: row.accountNumber,
+                            accountName: row.accountName
+                        });
+                    }
                 }
             });
         });

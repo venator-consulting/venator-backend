@@ -78,7 +78,9 @@
             *ngIf="(col.field == 'balance' || col.field == 'debitAmount' || col.field == 'creditAmount' || col.field == 'documentDate' || col.field == 'executionDate' || col.field == 'dueDate' || col.field == 'postingDate' || col.field == 'applicationDate');then withFilter else withoutFilter">
           </div>
           <ng-template #withoutFilter>
+            <span pTooltip="{{ rowData[col.field] }}">
             {{ rowData[col.field] }}
+          </span>
           </ng-template>
           <ng-template #withFilter>
             {{ (col.field == 'balance' || col.field == 'debitAmount' ||

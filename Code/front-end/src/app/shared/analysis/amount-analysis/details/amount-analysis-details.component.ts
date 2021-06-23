@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-details',
@@ -20,9 +21,11 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   cols: { header: string; field: string; }[];
   baseBalance: number;
   procedureName: any;
+  tempData: any[];
+  criteria: any = {};
 
-  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, 
-    private _analysisService: AnalysisService,  private prcService: ProcedureService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
+    private _analysisService: AnalysisService, private prcService: ProcedureService) { }
 
   ngOnInit(): void {
     this.waiting = true;
@@ -95,6 +98,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber, this.baseBalance)
       .subscribe(res => {
         this.data = res;
+        this.tempData = res;
         this.waiting = false;
       }, er => {
         this._messageService.add({
@@ -106,19 +110,73 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       });
 
 
-      if (this.prcId && +this.prcId > 0) {
-        this.prcService
-          .getById(+this.prcId)
-          .subscribe(prc => {
-            this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-          }, er => { });
-        }
+    if (this.prcId && +this.prcId > 0) {
+      this.prcService
+        .getById(+this.prcId)
+        .subscribe(prc => {
+          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+        }, er => { });
+    }
 
   }// end of ng on init
 
 
   goBack() {
     this._router.navigate(['/analysis/amount/']);
+  }
+
+
+  exportExcel() {
+    import("xlsx").then(xlsx => {
+      const worksheet = xlsx.utils.json_to_sheet(this.data);
+      const workbook = { Sheets: { 'amount_analysis': worksheet }, SheetNames: ['amount_analysis'] };
+      const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+      this.saveAsExcelFile(excelBuffer, "amount_analysis");
+    });
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const d: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    // FileSaver.saveAs(file);
+    FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
+
+
+  filterChange(query, colName): void {
+    debugger;
+    if (!query) {
+      delete this.criteria[colName];
+      if (Object.keys(this.criteria).length < 1) {
+        this.data = [...this.tempData];
+      } else {
+        for (const key in this.criteria) {
+          if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+            const element = this.criteria[key];
+            if (element.length < 3) {
+              this.data = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+            } else {
+              this.data = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+            }
+          }
+        }
+      }
+    } else {
+      this.data = [...this.tempData];
+      for (const key in this.criteria) {
+        if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+          const element = this.criteria[key];
+          if (element.length < 3) {
+            this.data = this.data.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+          } else {
+            this.data = this.data.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+          }
+        }
+      } // end of for each criteria field
+    }
   }
 
 }

@@ -19,7 +19,7 @@ export class DocumentTypeComponent implements OnInit {
   selectedOrgId: number = -1;
   selectedPrcId: number = -1;
   postingDocTypes: PostingDocTypes[];
-  docTypes: DocumentTypes[];
+  docTypes: DocumentTypes[] = new Array();
   originalVal: number = -1;
   cols: { header, field }[] = new Array();
 
@@ -27,6 +27,11 @@ export class DocumentTypeComponent implements OnInit {
     private _orgService: OrganisationService, private _docTypesService: PostingService) { }
 
   ngOnInit(): void {
+    this.docTypes.push({
+      id: 0,
+      documentTypeName: 'null'
+    });
+
     this._orgService.get()
       .subscribe(
         (data) => {
@@ -39,22 +44,22 @@ export class DocumentTypeComponent implements OnInit {
       .getDocTypesEnum()
       .subscribe(
         (data) => {
-          this.docTypes = data;
+          this.docTypes.push(...data);
         },
         (error) => console.log(error)
       );
 
 
-      this.cols = [
-        {
-          header: 'Document_Type.documentType',
-          field: 'documentType'
-        },
-        {
-          header: 'Document_Type.documentTypeNewName',
-          field: 'documentTypeNewName'
-        }
-      ];
+    this.cols = [
+      {
+        header: 'Document_Type.documentType',
+        field: 'documentType'
+      },
+      {
+        header: 'Document_Type.documentTypeNewName',
+        field: 'documentTypeNewName'
+      }
+    ];
 
 
   } // end of ng on init
@@ -68,7 +73,7 @@ export class DocumentTypeComponent implements OnInit {
 
   cancel(row) {
     row.documentTypeNewId = this.originalVal;
-    row.documentTypeNewName = this.docTypes.filter(row => row.id == this.originalVal)[0].documentTypeName;
+    row.documentTypeNewName = this.docTypes.filter(row => row.id == this.originalVal)[0]?.documentTypeName;
     row.isEditable = false;
   }
 
@@ -80,7 +85,7 @@ export class DocumentTypeComponent implements OnInit {
       .subscribe(res => {
         row.isEditable = false;
         let numOfRecords = res.length > 0 ? res[0] : 0;
-        
+
         this._messageService.add({
           severity: 'success',
           summary: 'DONE!',
