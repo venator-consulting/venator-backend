@@ -239,7 +239,7 @@
     "Document_Type": {
         "Zahlung": "Payment",
         "Rechnung": "Invoice",
-
+        
         "documentType": "Document Type",
         "documentTypeNewName": "Document Type new",
         "Action": "Action",
@@ -296,6 +296,10 @@
         "actions": "Actions"
 
     }, 
+    "Analysis": {
+        "back": "Back",
+        "export": "Export"
+    },
     "AmountAnalysis": {
         "accountNumber": "Account number",
         "accountName": "Account name",

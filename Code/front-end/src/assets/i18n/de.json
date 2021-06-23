@@ -293,6 +293,10 @@
         "actions": "Aktionen"
 
     }, 
+    "Analysis": {
+        "back": "Zurück",
+        "export": "Export"
+    },
     "AmountAnalysis": {
         "accountNumber": "Kontonummer",
         "accountName": "Kontobezeichnung",

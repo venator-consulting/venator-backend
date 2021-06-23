@@ -1,5 +1,6 @@
 const postngRepo = require("../../../repositories/posting.repo.server");
 const errorHandler = require('../../../helpers/error.handler.server').errorHandler;
+const exportHelper = require('../../../helpers/export.helper');
 
 module.exports.fetch = async (req, res) => {
     try {

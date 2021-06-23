@@ -119,7 +119,7 @@ module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
                                     UPPER(p.documentType) = 'ZP' OR
                                     UPPER(p.documentTypeNewName) = 'ZAHLUNG')
                                 AND p.balance = ROUND(p.balance)
-                                AND balance > :baseBalance
+                                AND balance >= :baseBalance
                             GROUP BY p.accountNumber , p.accountName`;
         const result = await sequelize.query(
             query, {
@@ -135,6 +135,37 @@ module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
         throw new Error(error.message);
     }
 };
+
+
+module.exports.amountAnalysisDetails = async (orgId, prcId, baseBalance, accountNumber) => {
+    try {
+
+        const query = `SELECT *
+                            FROM posting_${orgId}  p
+                            WHERE procedureId = :procedureId 
+                                AND UPPER(p.accountType) = 'K' 
+                                AND p.accountNumber = :accountNumber
+                                AND (UPPER(p.documentType) = 'KZ' OR 
+                                    UPPER(p.documentType) = 'ZP' OR
+                                    UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+                                AND p.balance = ROUND(p.balance)
+                                AND balance >= :baseBalance`;
+        const result = await sequelize.query(
+            query, {
+                replacements: {
+                    procedureId: prcId,
+                    baseBalance: baseBalance,
+                    accountNumber: accountNumber
+                },
+                type: QueryTypes.SELECT
+            }
+        );
+        return result;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
 
 module.exports.getByAccountNumber = async (orgId, procedureId, accountNumber) => {
     try {
@@ -178,6 +209,41 @@ module.exports.textAnalysis = async (orgId, prcId, keys) => {
             query, {
                 replacements: {
                     procedureId: prcId
+                },
+                type: QueryTypes.SELECT
+            }
+        );
+        return result;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
+module.exports.textAnalysisDetails = async (orgId, prcId, keys, accountNumber) => {
+    try {
+
+        let query = `SELECT *
+                            FROM posting_${orgId}  p
+                            WHERE procedureId = :procedureId 
+                                AND UPPER(p.accountType) = 'K' 
+                                AND p.accountNumber = :accountNumber
+                                `;
+        query += keys.length > 0 ? ' AND ( ' : '';
+
+        for (let index = 0; index < keys.length; index++) {
+            const key = keys[index];
+            query += `  p.reference like '%${key}%'
+                        OR p.textPosting like '%${key}%'
+                        OR p.textHeader like '%${key}%' OR`;
+        }
+        query += keys.length > 0 ? ' 1 <> 1) ' : '';
+
+        const result = await sequelize.query(
+            query, {
+                replacements: {
+                    procedureId: prcId,
+                    accountNumber: accountNumber
                 },
                 type: QueryTypes.SELECT
             }

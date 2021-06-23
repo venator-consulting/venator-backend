@@ -4,6 +4,7 @@ const env = require('../config/environment');
 
 
 module.exports.errorHandler = async (title, error) => {
+    logger.error(`${new Date()}: ${error}`);
     await sendMail({
         from: 'Venator, Bug reporting',
         to: env.developerMail,
@@ -15,5 +16,4 @@ module.exports.errorHandler = async (title, error) => {
         <p> ${error} </p>
         </div>`,
     });
-    logger.error(`${new Date()}: ${error}`);
 };

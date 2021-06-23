@@ -79,7 +79,7 @@ export class PaymentAnalysisComponent implements OnInit {
           this.redAccounts.push(...element.red.accounts);
         }
         // get top 10
-        this.blueAccounts.sort((a, b) => Math.abs(a.value) - Math.abs(b.value));
+        this.blueAccounts.sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
         this.top10 = this.blueAccounts.slice(0, 9);
         debugger;
         this.ready = true;

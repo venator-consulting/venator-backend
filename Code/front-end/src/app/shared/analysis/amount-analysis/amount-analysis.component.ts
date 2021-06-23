@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
+import { ProcedureService } from '../../service/procedure.service';
 
 @Component({
   selector: 'app-amount-analysis',
@@ -22,14 +23,19 @@ export class AmountAnalysisComponent implements OnInit {
   basicData: any;
   cols: { header: string; field: string; }[];
   waiting: boolean = false;
+  procedureName: string = "";
 
 
-  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router) { }
+  constructor(private _messageService: MessageService, private _analysisService: AnalysisService,
+    private _router: Router, private prcService: ProcedureService) { }
 
   ngOnInit(): void {
     this.waiting = true;
     this.basicOptions = {
       responsive: true,
+      legend: {
+        display: false
+      },
       scales: {
         yAxes: [{
           type: 'linear',
@@ -40,18 +46,7 @@ export class AmountAnalysisComponent implements OnInit {
             min: 0,
           }
         },
-        {
-          type: 'linear',
-          display: true,
-          position: 'right',
-          id: 'Creditor',
-          gridLines: {
-            drawOnChartArea: false
-          },
-          ticks: {
-            min: 0,
-          }
-        }]
+        ]
       }
     };
 
@@ -66,7 +61,7 @@ export class AmountAnalysisComponent implements OnInit {
       },
       {
         header: 'AmountAnalysis.NumberOfPostings',
-        field: 'NumberOfPostings'
+        field: 'totlaCount'
       },
       {
         header: 'AmountAnalysis.totalBalance',
@@ -98,11 +93,20 @@ export class AmountAnalysisComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
-  }// end of ng on init
 
-  goToDetails(row:AmountAnalysis) {
-    this._router.navigate(['/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
+    if (this.selectedProcedure && +this.selectedProcedure > 0) {
+      this.prcService
+        .getById(+this.selectedProcedure)
+        .subscribe(prc => {
+          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+        }, er => { });
+      }
+
+    }// end of ng on init
+
+    goToDetails(row: AmountAnalysis) {
+      this._router.navigate(['/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber + '/' + this.baseBalance]);
+    }
+
+
   }
-
-
-}

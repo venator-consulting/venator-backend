@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
+import { ProcedureService } from 'src/app/shared/service/procedure.service';
 
 @Component({
   selector: 'app-details',
@@ -17,13 +18,17 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   data: AmountAnalysisDetails[] = new Array();
   waiting: boolean;
   cols: { header: string; field: string; }[];
+  baseBalance: number;
+  procedureName: any;
 
-  constructor(private _messageService: MessageService, private _route: ActivatedRoute, private _analysisService: AnalysisService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, 
+    private _analysisService: AnalysisService,  private prcService: ProcedureService) { }
 
   ngOnInit(): void {
     this.waiting = true;
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
     this.prcId = +this._route.snapshot.paramMap.get('prcId');
+    this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
 
 
@@ -85,9 +90,9 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         field: 'dueDate'
       }
     ];
-    
+
     this._analysisService
-      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber)
+      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber, this.baseBalance)
       .subscribe(res => {
         this.data = res;
         this.waiting = false;
@@ -100,7 +105,20 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         });
       });
 
+
+      if (this.prcId && +this.prcId > 0) {
+        this.prcService
+          .getById(+this.prcId)
+          .subscribe(prc => {
+            this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+          }, er => { });
+        }
+
   }// end of ng on init
 
+
+  goBack() {
+    this._router.navigate(['/analysis/amount/']);
+  }
 
 }
