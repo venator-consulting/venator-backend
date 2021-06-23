@@ -18,11 +18,13 @@ export class TextAnalysisDetailsComponent implements OnInit {
   accountNumber: string;
   data: TextAnalysisDetails[] = new Array();
   cols: { header: string; field: string; }[];
+  frozenCols: { header: string; field: string; }[];
   waiting: boolean = false;
   procedureName: string;
   tempData: any[];
   criteria: any = {};
   searching: boolean = false;
+  selected: TextAnalysisDetails[] = new Array();
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, 
     private _analysisService: AnalysisService,  private prcService: ProcedureService) { }
@@ -104,6 +106,20 @@ export class TextAnalysisDetailsComponent implements OnInit {
       }
     ];
 
+    this.frozenCols = [
+      // {
+      //   header: 'Action',
+      //   field: 'Action'
+      // },
+      // {
+      //   header: 'Relevant',
+      //   field: 'textRelevant'
+      // },
+      {
+        header: 'Comment',
+        field: 'textRelevantComment'
+      }
+    ];
 
     this._analysisService
       .getTextAnalysisDetails(this.orgId, this.prcId, this.accountNumber)
@@ -187,6 +203,11 @@ export class TextAnalysisDetailsComponent implements OnInit {
       } // end of for each criteria field
     }
     this.searching = false;
+  }
+
+
+  saveRelevant() {
+    console.log(this.selected);
   }
 
 }

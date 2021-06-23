@@ -14,4 +14,6 @@ export class TextAnalysisDetails {
     reference: string;
     textPosting: string;
     textHeader: string;
+    textRelevant: Boolean;
+    textRelevantComment: string;
 }
