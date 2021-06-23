@@ -92,7 +92,7 @@ export class SusaComponent implements OnInit {
       },
       {
         header: 'Susa.sumDebit',
-        field: 'inamount'
+        field: 'debitAmount'
       },
       {
         header: 'Susa.sumCredit',
@@ -100,7 +100,7 @@ export class SusaComponent implements OnInit {
       },
       {
         header: 'Susa.balance',
-        field: 'debitAmount'
+        field: 'inamount'
       },
       {
         header: 'Susa.endingBalance',
