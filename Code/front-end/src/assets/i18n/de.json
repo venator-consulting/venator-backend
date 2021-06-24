@@ -389,6 +389,7 @@
 
     },
     "Susa": {
+        "accountType": "Kontotyp",
         "accountnumber": "Kontonummer",
         "accountName": "Kontobezeichnung",
         "startingBalance": "Anfangssaldo",

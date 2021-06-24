@@ -392,6 +392,7 @@
 
     },
     "Susa": {
+        "accountType": "Account type",
         "accountnumber": "Account number",
         "accountName": "Account name",
         "startingBalance": "Startingbalance",
