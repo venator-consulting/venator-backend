@@ -44,7 +44,7 @@ module.exports.getByAccountNumber = async (req, res) => {
         res.status(200)
             .json(result);
     } catch (e) {
-        errorHandler('Analysis controller: Amount analysis - get details', e);
+        errorHandler('Analysis controller: getByAccountNumber - fetch all records for a specific account', e);
         res
             .status(500)
             .json({
@@ -52,6 +52,24 @@ module.exports.getByAccountNumber = async (req, res) => {
             });
     }
 };
+
+
+module.exports.amountJustRelevant = async (req, res) => {
+    try {
+        const result = await postingRepo
+            .amountJustRelevant(req.params.orgId, req.params.prcId, req.params.accountNumber);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: getByAccountNumber - fetch the relevant records for a specific account', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
 
 module.exports.textAnalysis = async (req, res) => {
     try {
@@ -103,6 +121,23 @@ module.exports.textBulkUpdate = async (req, res) => {
     }
 };
 
+
+
+module.exports.textJustRelevant = async (req, res) => {
+    try {
+        const result = await postingRepo
+            .textJustRelevant(req.params.orgId, req.params.prcId, req.params.accountNumber);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: getByAccountNumber - fetch the relevant records for a specific account', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
 
 module.exports.paymentAnalysisDateRange = async (req, res) => {
     try {

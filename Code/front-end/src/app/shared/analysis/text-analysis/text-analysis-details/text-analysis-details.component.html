@@ -7,6 +7,11 @@
 <div class="p-grid">
   <!-- <div class="card"> -->
   <div class="p-col-12">
+    <span class="p-text-center">
+      <p-selectButton [options]="detailsOptions" (onChange)="changeData($event.value)" 
+      optionLabel="name" optionValue="value" [(ngModel)]="detailsOption">
+      </p-selectButton>
+    </span>
     <p-progressBar mode="indeterminate" [style]="{'height': '5px'}" *ngIf="searching"></p-progressBar>
     <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
       [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"

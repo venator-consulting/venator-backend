@@ -16,11 +16,33 @@ router
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.amountAnalysisDetails);
 
+
+router
+    .route('/:orgId/:prcId/amount/details/:accountNumber/relevant')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.amountJustRelevant);
+
+router
+    .route('/:orgId/:prcId/details/:accountNumber')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.getByAccountNumber);
+
+
 router
     .route('/:orgId/:prcId/text')
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.textAnalysis);
+
+
+router
+    .route('/:orgId/:prcId/text/details/:accountNumber/relevant')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.textJustRelevant);
+
 
 router
     .route('/:orgId/:prcId/text/details/:accountNumber')

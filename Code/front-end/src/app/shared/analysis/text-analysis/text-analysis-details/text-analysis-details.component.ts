@@ -25,6 +25,8 @@ export class TextAnalysisDetailsComponent implements OnInit {
   criteria: any = {};
   searching: boolean = false;
   selected: TextAnalysisDetails[] = new Array();
+  detailsOptions: { name: string; value: number; }[];
+  detailsOption: number = 1;
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
     private _analysisService: AnalysisService, private prcService: ProcedureService) { }
@@ -34,6 +36,12 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
     this.prcId = +this._route.snapshot.paramMap.get('prcId');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+
+    this.detailsOptions = [
+      { name: 'Sys-Relevants', value: 1 },
+      { name: 'User Relevant', value: 2 },
+      { name: 'All', value: 3 }
+    ];
 
     this.cols = [
       {
@@ -107,14 +115,6 @@ export class TextAnalysisDetailsComponent implements OnInit {
     ];
 
     this.frozenCols = [
-      // {
-      //   header: 'Action',
-      //   field: 'Action'
-      // },
-      // {
-      //   header: 'Relevant',
-      //   field: 'textRelevant'
-      // },
       {
         header: 'Comment',
         field: 'textRelevantComment'
@@ -246,5 +246,78 @@ export class TextAnalysisDetailsComponent implements OnInit {
         });
       });
   }
+
+  changeData(option: number): void {
+    switch (option) {
+      case 1:
+        this.getSysRelevant();
+        break;
+      case 2:
+        this.getUserRelevant();
+        break;
+      case 3:
+        this.getAllByAccount();
+        break;
+      default:
+        this.getSysRelevant();
+        break;
+    }
+  }
+
+  getSysRelevant() {
+    this.waiting = true;
+    this._analysisService
+      .getTextAnalysisDetails(this.orgId, this.prcId, this.accountNumber)
+      .subscribe(res => {
+        this.data = res;
+        this.tempData = res;
+        this.waiting = false;
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
+  }
+
+  getUserRelevant() {
+    this.waiting = true;
+    this._analysisService
+      .getTextAnalysisDetailsRelevant(this.orgId, this.prcId, this.accountNumber)
+      .subscribe(res => {
+        this.data = res;
+        this.tempData = res;
+        this.waiting = false;
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
+  }
+
+
+  getAllByAccount() {
+    this.waiting = true;
+    this._analysisService
+      .getAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber)
+      .subscribe(res => {
+        this.data = res;
+        this.tempData = res;
+        this.waiting = false;
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
+  }
+
 
 }

@@ -272,6 +272,40 @@ module.exports.textBulkUpdate = async (orgId, records) => {
     }
 }
 
+module.exports.textJustRelevant = async (orgId, prcId, accountNumber) => {
+    try {
+        return await Posting
+            .getPosting('posting_' + orgId)
+            .findAll({
+                where: {
+                    textRelevant: true,
+                    accountNumber: accountNumber,
+                    ProcedureId: prcId
+                },
+            });
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+
+module.exports.amountJustRelevant = async (orgId, prcId, accountNumber) => {
+    try {
+        return await Posting
+            .getPosting('posting_' + orgId)
+            .findAll({
+                where: {
+                    amountRelevant: true,
+                    accountNumber: accountNumber,
+                    ProcedureId: prcId
+                },
+            });
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+
 module.exports.susaDateRange = async (orgId, prcId) => {
     try {
         let query = `SELECT MAX(documentDate)  maxdate, MIN(documentDate) mindate from posting_${orgId} pos
