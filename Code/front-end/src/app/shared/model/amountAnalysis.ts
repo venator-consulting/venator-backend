@@ -15,4 +15,6 @@ export class AmountAnalysisDetails {
     accountName: string;
     contraAccountNumber: string;
     contraAccountName: string;
+    amountRelevant: boolean;
+    amountRelevantComment: string;
 }
