@@ -14,11 +14,14 @@ router
     .route('/:orgId/:prcId/amount/details/:accountNumber/:baseBalance')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.canDisplayAnalysis(), analysisCtrl.amountAnalysisDetails);
+    }), authorization.canDisplayAnalysis(), analysisCtrl.amountAnalysisDetails)
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.amountBulkUpdate);
 
 
 router
-    .route('/:orgId/:prcId/amount/details/:accountNumber/relevant')
+    .route('/:orgId/:prcId/amount/details-relevant/:accountNumber')
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.amountJustRelevant);

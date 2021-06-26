@@ -304,7 +304,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
   getAllByAccount() {
     this.waiting = true;
     this._analysisService
-      .getAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber)
+      .getTextAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber)
       .subscribe(res => {
         this.data = res;
         this.tempData = res;

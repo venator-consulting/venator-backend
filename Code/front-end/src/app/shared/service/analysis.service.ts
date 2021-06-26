@@ -23,8 +23,8 @@ export class AnalysisService {
     return this._http.get<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber + '/' + baseBalance);
   }
 
-  getAmountAnalysisDetailsRelevant(orgId: number, prcId: number, accountNumber: string): Observable<TextAnalysisDetails[]> {
-    return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber + '/relevant');
+  getAmountAnalysisDetailsRelevant(orgId: number, prcId: number, accountNumber: string): Observable<AmountAnalysisDetails[]> {
+    return this._http.get<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details-relevant/' + accountNumber);
   }
 
   getTextAnalysis(orgId: number, prcId: number): Observable<TextAnalysis[]> {
@@ -39,12 +39,20 @@ export class AnalysisService {
     return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/text/details/' + accountNumber + '/relevant');
   }
 
-  getAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string): Observable<TextAnalysisDetails[]> {
+  getTextAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string): Observable<TextAnalysisDetails[]> {
     return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber);
+  }
+
+  getAmountAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string): Observable<AmountAnalysisDetails[]> {
+    return this._http.get<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber);
   }
 
   setRelevantTextAnalysis(orgId: number, prcId: number, accountNumber: string, records: TextAnalysisDetails[]): Observable<TextAnalysisDetails[]> {
     return this._http.put<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/text/details/' + accountNumber, records);
+  }
+
+  setRelevantAmountAnalysis(orgId: number, prcId: number, accountNumber: string, baseBalance: number, records: AmountAnalysisDetails[]): Observable<AmountAnalysisDetails[]> {
+    return this._http.put<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber+ '/' + baseBalance, records);
   }
 
   getPaymentAnalysis(orgId: number, prcId: number): Observable<PaymentAnalysis> {

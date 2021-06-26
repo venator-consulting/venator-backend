@@ -106,6 +106,22 @@ module.exports.textAnalysisDetails = async (req, res) => {
 };
 
 
+module.exports.amountBulkUpdate = async (req, res) => {
+    try {
+        const result = await postingRepo.amountBulkUpdate(req.params.orgId, req.body);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: amount bulk update - set records as relevant on amount analysis.', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+
 module.exports.textBulkUpdate = async (req, res) => {
     try {
         const result = await postingRepo.textBulkUpdate(req.params.orgId, req.body);

@@ -272,6 +272,24 @@ module.exports.textBulkUpdate = async (orgId, records) => {
     }
 }
 
+/**
+ * Bulk update of array of posting records
+ * @param {number} orgId 
+ * @param {Posting[]} records 
+ */
+ module.exports.amountBulkUpdate = async (orgId, records) => {
+    try {
+        const postings = await Posting
+            .getPosting('posting_' + orgId)
+            .bulkCreate(records, {
+                updateOnDuplicate: ['amountRelevant', 'amountRelevantComment']
+            });
+        return postings;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
 module.exports.textJustRelevant = async (orgId, prcId, accountNumber) => {
     try {
         return await Posting

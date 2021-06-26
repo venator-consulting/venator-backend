@@ -19,11 +19,15 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   data: AmountAnalysisDetails[] = new Array();
   waiting: boolean;
   cols: { header: string; field: string; }[];
+  frozenCols: { header: string; field: string; }[];
   baseBalance: number;
   procedureName: any;
   tempData: any[];
   criteria: any = {};
   searching: boolean = false;
+  selected: AmountAnalysisDetails[] = new Array();
+  detailsOptions: { name: string; value: number; }[];
+  detailsOption: number = 1;
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
     private _analysisService: AnalysisService, private prcService: ProcedureService) { }
@@ -35,6 +39,19 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
 
+    this.detailsOptions = [
+      { name: 'Sys-Relevants', value: 1 },
+      { name: 'User Relevant', value: 2 },
+      { name: 'All', value: 3 }
+    ];
+
+
+    this.frozenCols = [
+      {
+        header: 'Comment',
+        field: 'amountRelevantComment'
+      }
+    ];
 
     this.cols = [
       {
@@ -181,5 +198,122 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     }
     this.searching = false;
   }
+
+
+  selectRow(row: AmountAnalysisDetails): void {
+    const index = this.selected.map(item => item.id).indexOf(row.id);
+    if (row.amountRelevant) {
+      row.amountRelevant = false;
+      row.amountRelevantComment = '';
+    } else {
+      row.amountRelevant = true;
+    }
+    if (index == -1) {
+      this.selected.push(row);
+    }
+  }
+
+  commentChanged(row: AmountAnalysisDetails): void {
+    const index = this.selected.map(item => item.id).indexOf(row.id);
+    row.amountRelevant = true;
+    if (index == -1) {
+      this.selected.push(row);
+    }
+  }
+
+  saveRelevant() {
+    console.log(this.selected);
+    this._analysisService
+      .setRelevantAmountAnalysis(this.orgId, this.prcId, this.accountNumber, this.baseBalance, this.selected)
+      .subscribe(res => {
+        this._messageService.add({
+          severity: 'success',
+          summary: 'SUCCESS',
+          life: 10000,
+          detail: "records set as relevant successfully!"
+        });
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
+  }
+
+  changeData(option: number): void {
+    switch (option) {
+      case 1:
+        this.getSysRelevant();
+        break;
+      case 2:
+        this.getUserRelevant();
+        break;
+      case 3:
+        this.getAllByAccount();
+        break;
+      default:
+        this.getSysRelevant();
+        break;
+    }
+  }
+
+  getSysRelevant() {
+    this.waiting = true;
+    this._analysisService
+      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber, this.baseBalance)
+      .subscribe(res => {
+        this.data = res;
+        this.tempData = res;
+        this.waiting = false;
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
+  }
+
+  getUserRelevant() {
+    this.waiting = true;
+    this._analysisService
+      .getAmountAnalysisDetailsRelevant(this.orgId, this.prcId, this.accountNumber)
+      .subscribe(res => {
+        this.data = res;
+        this.tempData = res;
+        this.waiting = false;
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
+  }
+
+
+  getAllByAccount() {
+    this.waiting = true;
+    this._analysisService
+      .getAmountAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber)
+      .subscribe(res => {
+        this.data = res;
+        this.tempData = res;
+        this.waiting = false;
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
+  }
+
+
 
 }
