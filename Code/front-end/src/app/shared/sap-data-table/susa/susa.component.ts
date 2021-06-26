@@ -26,6 +26,7 @@ export class SusaComponent implements OnInit {
   criteria: any = {};
   completeWords: Word[] = new Array();
   filtersNo: number = 0;
+  searching: boolean = false;
 
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
     private _router: Router, private prcService: ProcedureService, private datepipe: DatePipe) { }
@@ -111,6 +112,7 @@ export class SusaComponent implements OnInit {
 
   getData() {
     this.waiting = true;
+    this.searching = true;
     let fdate = this.datepipe.transform(this.fromDate, 'yyyy-MM-dd');
     let tdate = this.datepipe.transform(this.toDate, 'yyyy-MM-dd');
     this._postingDataService
@@ -118,6 +120,7 @@ export class SusaComponent implements OnInit {
       .subscribe(res => {
         this.data = res;
         this.waiting = false;
+        this.searching = false;
       }, er => {
         this._messageService.add({
           severity: 'error',

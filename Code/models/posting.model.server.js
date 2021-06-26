@@ -320,6 +320,18 @@ module.exports.getPosting = function (tableName = 'Posting') {
         },
         contentDocumentInformation8: {
             type: DataTypes.STRING(50)
+        },
+        textRelevant: {
+            type: DataTypes.BOOLEAN
+        },
+        textRelevantComment: {
+            type: DataTypes.STRING(500)
+        },
+        amountRelevant: {
+            type: DataTypes.BOOLEAN
+        },
+        amountRelevantComment: {
+            type: DataTypes.STRING(500)
         }
     }, {
         tableName: tableName,

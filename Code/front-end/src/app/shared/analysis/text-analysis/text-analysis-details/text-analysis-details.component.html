@@ -5,66 +5,95 @@
   </div>
 </div>
 <div class="p-grid">
-  <div class="card" style="overflow-x: scroll;">
-    <div class="p-col-10">
-      <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
-        [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
-        [style]="{width:'2500px'}" [reorderableColumns]="true">
-        <ng-template pTemplate="caption">
-          <div class="p-grid">
-            <div class="p-col-1">
-              <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
-                class="p-button-rounded p-button-primary" label="{{ 'Analysis.back' | translate}} "
-                pTooltip="{{ 'Analysis.back' | translate}} " tooltipPosition="bottom"></button>
-            </div>
-            <div class="p-col-2">
-               <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
-                class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
-              <!-- <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+  <!-- <div class="card"> -->
+  <div class="p-col-12">
+    <p-progressBar mode="indeterminate" [style]="{'height': '5px'}" *ngIf="searching"></p-progressBar>
+    <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
+      [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
+      [style]="{width:'100%'}" [reorderableColumns]="true" [frozenColumns]="frozenCols" frozenWidth="450px"
+      [(selection)]="selected">
+      <ng-template pTemplate="caption">
+        <div class="p-grid">
+          <div class="p-col-1">
+            <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
+              class="p-button-rounded p-button-primary" label="{{ 'Analysis.back' | translate}} "
+              pTooltip="{{ 'Analysis.back' | translate}} " tooltipPosition="bottom"></button>
+          </div>
+          <div class="p-col-2">
+            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+              class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
+            <!-- <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
                 class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
                 tooltipPosition="bottom"></button> -->
-            </div>
+                <button type="button" pButton pRipple icon="pi pi-check" (click)="saveRelevant()"
+              class="p-button-primary p-mr-2" pTooltip="Save" tooltipPosition="bottom" label="Save Relevant"></button>
           </div>
-        </ng-template>
-        <ng-template pTemplate="colgroup">
-          <colgroup>
-            <col *ngFor="let col of cols">
-          </colgroup>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
-              {{col.header | translate}}
-            </th>
-          </tr>
-          <tr>
-            <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
-              <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
-                (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
-            </th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-row>
-          <tr>
-            <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
-              <span *ngIf="col.field=='balance'">
-                {{ row[col.field]  | currency:'EUR':'' }}
-              </span>
-              <span *ngIf="col.field=='documentDate' || col.field=='executionDate' || col.field=='dueDate'">
-                {{ row[col.field]  | date: 'yyyy-MM-dd' }}
-              </span>
-              <span *ngIf="col.field=='reference' || col.field=='textPosting' || col.field=='textHeader'"
-                [innerHTML]="row[col.field] | highlight" pTooltip="{{ row[col.field] }}">
-              </span>
-              <span pTooltip="{{ row[col.field] }}"
-                *ngIf="col.field!='balance' && col.field !='documentDate' && col.field !='executionDate' && col.field!='dueDate' && col.field!='reference' && col.field!='textPosting' && col.field!='textHeader'">
-                {{ row[col.field] }}
-              </span>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
+          
+        </div>
+      </ng-template>
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col style="width:15px;">
+          <col *ngFor="let col of columns" style="width:150px">
+          
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th>
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
+            {{col.header | translate}}
+          </th>
+          
+        </tr>
+        <tr>
+          <th></th>
+          <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
+            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
+          </th>
+          <!-- <th>
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox> 
+          </th> -->
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+          </td>
+          <!-- <td pEditableColumn>
+            
+        </td> -->
+          <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">
+            <p-cellEditor *ngIf="col.field == 'textRelevantComment'">
+              <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="row.textRelevantComment" style="width: 100%; padding: 5px;">
+              </ng-template>
+              <ng-template pTemplate="output">
+                  {{row.textRelevantComment}}
+              </ng-template>
+          </p-cellEditor>
+            <span *ngIf="col.field=='balance'">
+              {{ row[col.field]  | currency:'EUR':'' }}
+            </span>
+            <span *ngIf="col.field=='documentDate' || col.field=='executionDate' || col.field=='dueDate'">
+              {{ row[col.field]  | date: 'yyyy-MM-dd' }}
+            </span>
+            <span *ngIf="col.field=='reference' || col.field=='textPosting' || col.field=='textHeader'"
+              [innerHTML]="row[col.field] | highlight" pTooltip="{{ row[col.field] }}">
+            </span>
+            <span pTooltip="{{ row[col.field] }}"
+              *ngIf="col.field!='balance' && col.field !='documentDate' && col.field !='executionDate' && col.field!='dueDate' && col.field!='reference' && col.field!='textPosting' && col.field!='textHeader' && col.field != 'textRelevantComment'">
+              {{ row[col.field] }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
+  <!-- </div> -->
 
 </div>

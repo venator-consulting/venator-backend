@@ -8,6 +8,7 @@
 <div class="p-grid">
 
   <div class="p-col-12">
+    <p-progressBar mode="indeterminate" [style]="{'height': '5px'}" *ngIf="searching"></p-progressBar>
     <p-table #dt dataKey="id" [value]="data" [value]="data" [resizableColumns]="true" dataKey="id"
       styleClass="p-datatable-gridlines" [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true"
       scrollHeight="350px" [reorderableColumns]="true">

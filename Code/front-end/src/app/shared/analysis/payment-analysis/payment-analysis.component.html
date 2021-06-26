@@ -5,9 +5,9 @@
   </div>
 </div>
 <div class="p-grid" *ngIf="basicData && ready">
-  <div class="p-col-12 p-text-center"><label>{{ 'Susa.from' | translate}} : </label> {{startDate | date: 'yyyy-MM-dd'}}
+  <!-- <div class="p-col-12 p-text-center"><label>{{ 'Susa.from' | translate}} : </label> {{startDate | date: 'yyyy-MM-dd'}}
     -
-    <label>{{ 'Susa.to' | translate}} : </label>{{endDate | date: 'yyyy-MM-dd'}}</div>
+    <label>{{ 'Susa.to' | translate}} : </label>{{endDate | date: 'yyyy-MM-dd'}}</div> -->
   <div class="p-col-6">
     <div class="card">
       <p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
