@@ -26,7 +26,10 @@ router
     .route('/:orgId/:prcId/text/details/:accountNumber')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.canDisplayAnalysis(), analysisCtrl.textAnalysisDetails);
+    }), authorization.canDisplayAnalysis(), analysisCtrl.textAnalysisDetails)
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.textBulkUpdate);
 
 router
     .route('/:orgId/:prcId/payment')

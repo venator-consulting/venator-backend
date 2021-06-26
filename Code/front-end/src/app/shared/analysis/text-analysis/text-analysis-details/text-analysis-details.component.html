@@ -10,7 +10,7 @@
     <p-progressBar mode="indeterminate" [style]="{'height': '5px'}" *ngIf="searching"></p-progressBar>
     <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
       [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
-      [style]="{width:'100%'}" [reorderableColumns]="true" [frozenColumns]="frozenCols" frozenWidth="450px"
+      [style]="{width:'100%'}" [reorderableColumns]="true" [frozenColumns]="frozenCols" frozenWidth="500px"
       [(selection)]="selected">
       <ng-template pTemplate="caption">
         <div class="p-grid">
@@ -33,15 +33,15 @@
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col style="width:15px;">
-          <col *ngFor="let col of columns" style="width:150px">
+          <col style="width:17px;">
+          <col *ngFor="let col of columns" style="width:200px">
           
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th>
-            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
           </th>
           <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
             {{col.header | translate}}
@@ -62,7 +62,9 @@
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr>
           <td>
-            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+            <i class="pi pi-star-o" (click)="selectRow(row)" *ngIf="!row.textRelevant"></i>
+            <i class="pi pi-star" (click)="selectRow(row)" *ngIf="row.textRelevant"></i>
+            <!-- <p-tableCheckbox [value]="row"></p-tableCheckbox> -->
           </td>
           <!-- <td pEditableColumn>
             
@@ -70,7 +72,8 @@
           <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">
             <p-cellEditor *ngIf="col.field == 'textRelevantComment'">
               <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="row.textRelevantComment" style="width: 100%; padding: 5px;">
+                  <input pInputText type="text" [(ngModel)]="row.textRelevantComment" style="width: 100%; padding: 5px;"
+                  (change)="commentChanged(row)">
               </ng-template>
               <ng-template pTemplate="output">
                   {{row.textRelevantComment}}

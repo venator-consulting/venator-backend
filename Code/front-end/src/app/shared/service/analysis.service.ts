@@ -31,6 +31,10 @@ export class AnalysisService {
     return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/text/details/' + accountNumber);
   }
 
+  setRelevantTextAnalysis(orgId: number, prcId: number, accountNumber: string, records: TextAnalysisDetails[]): Observable<TextAnalysisDetails[]> {
+    return this._http.put<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/text/details/' + accountNumber, records);
+  }
+
   getPaymentAnalysis(orgId: number, prcId: number): Observable<PaymentAnalysis> {
     return this._http.get<PaymentAnalysis>(this._thisURL + orgId + '/' + prcId + '/payment');
   }

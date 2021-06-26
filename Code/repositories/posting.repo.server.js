@@ -254,6 +254,23 @@ module.exports.textAnalysisDetails = async (orgId, prcId, keys, accountNumber) =
     }
 };
 
+/**
+ * Bulk update of array of posting records
+ * @param {number} orgId 
+ * @param {Posting[]} records 
+ */
+module.exports.textBulkUpdate = async (orgId, records) => {
+    try {
+        const postings = await Posting
+            .getPosting('posting_' + orgId)
+            .bulkCreate(records, {
+                updateOnDuplicate: ['textRelevant', 'textRelevantComment']
+            });
+        return postings;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
 
 module.exports.susaDateRange = async (orgId, prcId) => {
     try {

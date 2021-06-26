@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { TextAnalysisDetails } from 'src/app/shared/model/textAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
@@ -26,8 +26,8 @@ export class TextAnalysisDetailsComponent implements OnInit {
   searching: boolean = false;
   selected: TextAnalysisDetails[] = new Array();
 
-  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute, 
-    private _analysisService: AnalysisService,  private prcService: ProcedureService) { }
+  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
+    private _analysisService: AnalysisService, private prcService: ProcedureService) { }
 
   ngOnInit(): void {
     this.waiting = true;
@@ -137,13 +137,13 @@ export class TextAnalysisDetailsComponent implements OnInit {
       });
 
 
-      if (this.prcId && +this.prcId > 0) {
-        this.prcService
-          .getById(+this.prcId)
-          .subscribe(prc => {
-            this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-          }, er => { });
-        }
+    if (this.prcId && +this.prcId > 0) {
+      this.prcService
+        .getById(+this.prcId)
+        .subscribe(prc => {
+          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+        }, er => { });
+    }
   }
 
   goBack() {
@@ -205,9 +205,46 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this.searching = false;
   }
 
+  selectRow(row: TextAnalysisDetails): void {
+    const index = this.selected.map(item => item.id).indexOf(row.id);
+    if (row.textRelevant) {
+      row.textRelevant = false;
+      row.textRelevantComment = '';
+    } else {
+      row.textRelevant = true;
+    }
+    if (index == -1) {
+      this.selected.push(row);
+    }
+  }
+
+  commentChanged(row: TextAnalysisDetails): void {
+    const index = this.selected.map(item => item.id).indexOf(row.id);
+    row.textRelevant = true;
+    if (index == -1) {
+      this.selected.push(row);
+    }
+  }
 
   saveRelevant() {
     console.log(this.selected);
+    this._analysisService
+      .setRelevantTextAnalysis(this.orgId, this.prcId, this.accountNumber, this.selected)
+      .subscribe(res => {
+        this._messageService.add({
+          severity: 'success',
+          summary: 'SUCCESS',
+          life: 10000,
+          detail: "records set as relevant successfully!"
+        });
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
   }
 
 }
