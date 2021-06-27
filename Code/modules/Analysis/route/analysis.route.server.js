@@ -62,4 +62,10 @@ router
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.paymentAnalysis);
 
+router
+    .route('/:orgId/:prcId/payment/details/:accountNumber')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.paymentAnalysisDetails);
+
 module.exports = router;

@@ -28,5 +28,24 @@ class Account {
 }
 
 export class PaymentAnalysisDetails {
+    dateRange: DateRange[];
+    data: {
+        data: PaymentData[];
+        blue: PaymentDetailsRecord[];
+        red: PaymentDetailsRecord[];
+        green: PaymentDetailsRecord[];
+    }
+}
 
+export class PaymentDetailsRecord {
+    id: number;
+    accountNumber: string;
+    accountName: string;
+    accountType: string;
+    documentDate: Date;
+    dueDate: Date;
+    applicationDate: Date;
+    balance: number;
+    documentTypeNewName: string;
+    documentType: string;
 }
