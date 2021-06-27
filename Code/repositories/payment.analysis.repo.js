@@ -164,3 +164,105 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
         cb1(error.message);
     }
 };
+
+
+module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, accountNumber, cb, cb1) => {
+    try {
+        if (!fromDate) {
+            throw new Error('Document Date is null for this procedure!');
+        }
+        if (!toDate) {
+            throw new Error('Application Date is null for this procedure!');
+        }
+        if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
+            throw new Error('DocumentDate and ApplicationDate must be Date!');
+        }
+        const diff = monthDiff(fromDate, toDate);
+        // if diff = 0 throw an error
+        let result = [];
+        let finalResult = {
+            data: result,
+            blue: [],
+            red: [],
+            green: []
+        };
+        let starterMonth = fromDate.getMonth() + 1;
+        let starterYear = fromDate.getFullYear();
+        for (let index = 0; index <= diff; index++) {
+            const element = {
+                monthName: starterMonth,
+                yearName: starterYear,
+                blue: {
+                    value: 0,
+                },
+                red: {
+                    value: 0,
+                },
+                green: {
+                    value: 0,
+                }
+            };
+            result.push(element);
+            starterMonth++;
+            if (starterMonth > 12) {
+                starterMonth = 1;
+                starterYear++;
+            }
+        }
+
+        let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
+                         pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
+                    FROM posting_${orgId} pos
+                    WHERE
+                        pos.procedureId = ${prcId}
+                        AND UPPER(pos.accountType) = 'K'
+                        AND pos.accountNumber = ${accountNumber} 
+                        AND pos.documentDate is not NULL 
+                        AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
+                            OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
+                            OR UPPER(pos.documentType) = 'KZ'
+                            OR UPPER(pos.documentType) = 'ZP'
+                            OR UPPER(pos.documentType) = 'RE'
+                            OR UPPER(pos.documentType) = 'KR')`;
+
+        const str = connection.query(query).stream();
+
+        str.on('data', (row) => {
+            result.forEach(element => {
+                // get last day of the month
+                var d = new Date(element.yearName, +element.monthName + 1, 0);
+                // BLUES................
+                if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
+                    row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d)) {
+                    element.blue.value += +row.balance;
+                    // add row to the blue list
+                    finalResult.blue.push(row);
+                    // RED......................
+                } else if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
+                    row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d) && row.dueDate <= d) {
+                    element.red.value += +row.balance;
+                    // add row to the red list
+                    finalResult.red.push(row);
+                    // GREEN.......................
+                } else if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'KZ') ||
+                        (row.documentType && row.documentType.toString().toUpperCase() == 'ZP')) &&
+                    row.documentDate <= d && row.applicationDate == null) {
+                    element.green.value += +row.balance;
+                    // add row to the green list
+                    finalResult.green.push(row);
+                }
+            });
+        });
+
+        str.on('end', async () => {
+            cb(finalResult);
+        });
+    } catch (error) {
+        cb1(error.message);
+    }
+};

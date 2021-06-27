@@ -1,0 +1,106 @@
+<p-toast></p-toast>
+<div class="p-grid">
+  <div class="p-col-12">
+    <h2 class="p-text-center">{{procedureName}}</h2>
+  </div>
+</div>
+<div class="p-grid">
+    <div class="p-col-1"></div>
+  <div class="p-col-10">
+    <div class="card">
+      <p-chart type="bar" height="140" [data]="basicData" [options]="basicOptions" *ngIf="!waiting">
+      </p-chart>
+    </div>
+  </div>
+  <div class="p-col-12">
+    <span class="p-text-center">
+      <p-selectButton [options]="paymentOptions" [(ngModel)]="displayData" optionLabel="name" optionValue="value">
+      </p-selectButton>
+    </span>
+    <p-table #dtmaxb dataKey="id" selectionMode="single" [value]="blueData" *ngIf="displayData==1"
+      [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="cols" responsive="true"
+      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true">
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns">
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
+            {{col.header | translate}}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr [pSelectableRow]="row">
+          <td *ngFor="let col of columns" class="p-text-right">
+            <span *ngIf="col.field=='value'">
+              {{ row.balance  | currency:'EUR':'' }}
+            </span>
+            <span *ngIf="col.field!='value'">
+              {{ row[col.field] }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-table #dtmaxb dataKey="id" [value]="redData" *ngIf="displayData==2"
+      [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="cols" responsive="true"
+      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true">
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns">
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
+            {{col.header | translate}}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr [pSelectableRow]="row">
+          <td *ngFor="let col of columns" class="p-text-right">
+            <span *ngIf="col.field=='value'">
+              {{ row.balance  | currency:'EUR':'' }}
+            </span>
+            <span *ngIf="col.field!='value'">
+              {{ row[col.field] }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-table #dtmaxb dataKey="id" [value]="greenData" *ngIf="displayData==3"
+      [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="cols" responsive="true"
+      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true">
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns">
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
+            {{col.header | translate}}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr [pSelectableRow]="row">
+          <td *ngFor="let col of columns" class="p-text-right">
+            <span *ngIf="col.field=='value'">
+              {{ row.balance  | currency:'EUR':'' }}
+            </span>
+            <span *ngIf="col.field!='value'">
+              {{ row[col.field] }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <br><br><br>
+  </div>
+</div>

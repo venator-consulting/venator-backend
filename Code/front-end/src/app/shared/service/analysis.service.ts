@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AmountAnalysis, AmountAnalysisDetails } from '../model/amountAnalysis';
 import { TextAnalysis, TextAnalysisDetails } from '../model/textAnalysis';
-import { PaymentAnalysis } from '../model/paymentAnalysis';
+import { PaymentAnalysis, PaymentAnalysisDetails } from '../model/paymentAnalysis';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +57,10 @@ export class AnalysisService {
 
   getPaymentAnalysis(orgId: number, prcId: number): Observable<PaymentAnalysis> {
     return this._http.get<PaymentAnalysis>(this._thisURL + orgId + '/' + prcId + '/payment');
+  }
+
+  getPaymentAnalysisDetails(orgId: number, prcId: number, accountNumber: String): Observable<PaymentAnalysisDetails> {
+    return this._http.get<PaymentAnalysisDetails>(this._thisURL + orgId + '/' + prcId + '/payment/details/'+ accountNumber);
   }
 
 }

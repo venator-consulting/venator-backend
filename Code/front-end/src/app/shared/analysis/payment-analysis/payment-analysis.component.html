@@ -10,8 +10,10 @@
     <label>{{ 'Susa.to' | translate}} : </label>{{endDate | date: 'yyyy-MM-dd'}}</div> -->
   <div class="p-col-6">
     <div class="card">
-      <p-chart type="bar" height="140" [data]="basicData" [options]="basicOptions" *ngIf="!selectedMaxAccountNumber"></p-chart>
-      <p-chart #chart type="bar" height="140" [data]="specificAccountData" [options]="basicOptions" [hidden]="!selectedMaxAccountNumber"></p-chart>
+      <p-chart type="bar" height="140" [data]="basicData" [options]="basicOptions" *ngIf="!selectedMaxAccountNumber">
+      </p-chart>
+      <p-chart #chart type="bar" height="140" [data]="specificAccountData" [options]="basicOptions"
+        [hidden]="!selectedMaxAccountNumber"></p-chart>
     </div>
   </div>
 
@@ -23,9 +25,9 @@
         </ng-template> -->
       </p-selectButton>
     </span>
-    <p-table #dtmaxb dataKey="accountNumber" selectionMode="single" [value]="top10Blue" *ngIf="top10==1" [resizableColumns]="true"
-      styleClass="p-datatable-gridlines" [columns]="top10Cols" responsive="true" [scrollable]="true"
-      scrollHeight="350px" [reorderableColumns]="true" [(selection)]="selectedMaxAccount"
+    <p-table #dtmaxb dataKey="accountNumber" selectionMode="single" [value]="top10Blue" *ngIf="top10==1"
+      [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="top10Cols" responsive="true"
+      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [(selection)]="selectedMaxAccount"
       (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
@@ -52,9 +54,9 @@
         </tr>
       </ng-template>
     </p-table>
-    <p-table #dtmaxr dataKey="accountNumber" selectionMode="single" [value]="top10Red" *ngIf="top10==2" [resizableColumns]="true"
-      styleClass="p-datatable-gridlines" [columns]="top10Cols" responsive="true" [scrollable]="true"
-      scrollHeight="350px" [reorderableColumns]="true" [(selection)]="selectedMaxAccount"
+    <p-table #dtmaxr dataKey="accountNumber" selectionMode="single" [value]="top10Red" *ngIf="top10==2"
+      [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="top10Cols" responsive="true"
+      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [(selection)]="selectedMaxAccount"
       (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
@@ -81,9 +83,9 @@
         </tr>
       </ng-template>
     </p-table>
-    <p-table #dtmaxg dataKey="accountNumber" selectionMode="single" [value]="top10Green" *ngIf="top10==3" [resizableColumns]="true"
-      styleClass="p-datatable-gridlines" [columns]="top10Cols" responsive="true" [scrollable]="true"
-      scrollHeight="350px" [reorderableColumns]="true" [(selection)]="selectedMaxAccount"
+    <p-table #dtmaxg dataKey="accountNumber" selectionMode="single" [value]="top10Green" *ngIf="top10==3"
+      [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="top10Cols" responsive="true"
+      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [(selection)]="selectedMaxAccount"
       (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
@@ -121,6 +123,7 @@
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
           <col *ngFor="let col of columns">
+          <col>
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
@@ -128,13 +131,15 @@
           <th pReorderableColumn pResizableColumn class="p-text-center" *ngFor="let col of columns">
             {{col.header | translate}}
           </th>
+          <th>Actions</th>
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
             <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
-              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" 
-              *ngIf="col.field=='accountNumber' || col.field=='accountName'"/>
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
+              *ngIf="col.field=='accountNumber' || col.field=='accountName'" />
           </th>
+          <th></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-columns="columns">
@@ -146,6 +151,9 @@
             <span *ngIf="col.field=='accountNumber' || col.field=='accountName'">
               {{ row[col.field] }}
             </span>
+          </td>
+          <td><button type="button" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning"
+              (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom"></button>
           </td>
         </tr>
       </ng-template>

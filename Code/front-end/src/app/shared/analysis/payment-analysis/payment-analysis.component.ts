@@ -233,9 +233,9 @@ export class PaymentAnalysisComponent implements OnInit {
   } // end of init function
 
 
-  // goToDetails(row:PaymentAnalysis) {
-  //   this._router.navigate(['/analysis/payment/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.creditorNumber]);
-  // }
+  goToDetails(row: any) {
+    this._router.navigate(['/analysis/payment/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
+  }
 
 
   filterChange(query, colName): void {
@@ -313,7 +313,7 @@ export class PaymentAnalysisComponent implements OnInit {
         this.specificAccountGreenData[i] = Math.abs(total);
       }
     }
-        this.chart.refresh();
+    this.chart.refresh();
   }
 
   onRowUnselect(event) {

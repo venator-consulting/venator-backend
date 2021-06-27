@@ -75,6 +75,7 @@ import { SusaComponent } from './shared/sap-data-table/susa/susa.component';
 import { PaymentAnalysisComponent } from './shared/analysis/payment-analysis/payment-analysis.component';
 import { HighlightPipe } from './shared/pipes/highlight.pipe';
 import {InputNumberModule} from 'primeng/inputnumber';
+import { PaymentAnalysisDetailsComponent } from './shared/analysis/payment-analysis/payment-analysis-details/payment-analysis-details.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -110,6 +111,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SusaComponent,
     PaymentAnalysisComponent,
     HighlightPipe,
+    PaymentAnalysisDetailsComponent,
   ],
   imports: [
     BrowserModule,
