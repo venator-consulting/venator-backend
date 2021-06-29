@@ -39,7 +39,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
 
     this.detailsOptions = [
       { name: 'Sys-Relevants', value: 1 },
-      { name: 'User Relevant', value: 2 },
+      { name: 'Marked', value: 2 },
       { name: 'All', value: 3 }
     ];
 

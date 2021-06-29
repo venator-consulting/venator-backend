@@ -70,8 +70,8 @@
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr>
           <td>
-            <i class="pi pi-star-o" (click)="selectRow(row)" *ngIf="!row.amountRelevant"></i>
-            <i class="pi pi-star" (click)="selectRow(row)" *ngIf="row.amountRelevant"></i>
+            <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.amountRelevant"></i>
+            <i class="pi pi-star "  (click)="selectRow(row)" *ngIf="row.amountRelevant"></i>
             <!-- <p-tableCheckbox [value]="row"></p-tableCheckbox> -->
           </td>
           <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">

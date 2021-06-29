@@ -303,8 +303,18 @@
         "accountName": "Kontobezeichnung",
         "NumberOfPostings": "Anzahl der Buchungen",
         "totalBalance": "Gesamtsaldo",
-        "details": "Details"
-
+        "details": "Details",
+        "baseBalance" : "Basis Saldo"
+    }, 
+    "TextAnalysis": {
+        "accountNumber": "Kontonummer",
+        "accountName": "Kontobezeichnung",
+        "NumberOfPostings": "Anzahl der Buchungen",
+        "totalBalance": "Gesamtsaldo",
+        "details": "Details",
+        "back": "Zurück",
+        "export": "Export",
+        "save": "Speichern"
     }, 
     "DataTableColumns": {
         "client": "Mandant",
