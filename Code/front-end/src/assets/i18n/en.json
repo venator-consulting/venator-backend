@@ -306,9 +306,19 @@
         "accountName": "Account name",
         "NumberOfPostings": "Number of postings",
         "totalBalance": "Total Balance",
-        "details": "Details"
-
+        "details": "Details",
+        "baseBalance" : "Base Balance"
     },
+    "TextAnalysis": {
+        "accountNumber": "Account number",
+        "accountName": "Account name",
+        "NumberOfPostings": "Number of postings",
+        "totalBalance": "Total Balance",
+        "details": "Details",
+        "back": "Back",
+        "export": "Export",
+        "save": "Save"
+    }, 
     "DataTableColumns": {
         "client": "Client",
         "companyCode": "Companycode",
@@ -392,6 +402,7 @@
 
     },
     "Susa": {
+        "accountType": "Account type",
         "accountnumber": "Account number",
         "accountName": "Account name",
         "startingBalance": "Startingbalance",

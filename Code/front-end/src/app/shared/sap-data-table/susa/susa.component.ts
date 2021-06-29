@@ -76,7 +76,7 @@ export class SusaComponent implements OnInit {
 
     this.cols = [
       {
-        header: 'Konto.',
+        header: 'Susa.accountType',
         field: 'accountType'
       },
       {

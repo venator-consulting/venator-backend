@@ -6,7 +6,7 @@
 </div>
 
 <div class="p-grid" *ngIf="this.basicData">
-  <div class="p-col-10">
+  <div class="p-col-12">
     <div class="card">
       <p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
     </div>
@@ -15,7 +15,7 @@
 
 <div class="p-grid">
 
-  <div class="p-col-10" *ngIf="selectedProcedure>0">
+  <div class="p-col-12" *ngIf="selectedProcedure>0">
     <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
     [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
     [reorderableColumns]="true">
