@@ -2,6 +2,7 @@
 <div class="p-grid">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
+    <p-messages></p-messages>
   </div>
 </div>
 <div class="p-grid" *ngIf="basicData && ready">
@@ -9,9 +10,11 @@
     -
     <label>{{ 'Susa.to' | translate}} : </label>{{endDate | date: 'yyyy-MM-dd'}}</div> -->
   <div class="p-col-6">
-    <div class="card">
+    <div class="card p-text-center">
+      <span *ngIf="!selectedMaxAccountNumber"> {{ 'All Accounts' | translate }} </span>
       <p-chart type="bar" height="140" [data]="basicData" [options]="basicOptions" *ngIf="!selectedMaxAccountNumber">
       </p-chart>
+      <span *ngIf="selectedMaxAccountNumber"> {{ selectedMaxAccountName }} </span>
       <p-chart #chart type="bar" height="140" [data]="specificAccountData" [options]="basicOptions"
         [hidden]="!selectedMaxAccountNumber"></p-chart>
     </div>

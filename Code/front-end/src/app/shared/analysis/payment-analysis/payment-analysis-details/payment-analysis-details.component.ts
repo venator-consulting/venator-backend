@@ -84,8 +84,33 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       });
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
+    if (!this.selectedOrganisation) {
+      this._messageService.add({
+        severity: 'error',
+        summary: 'ERROR',
+        life: 10000,
+        detail: "there is no Ortganisation selected!"
+      });
+    }
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
+    if (!this.selectedProcedure) {
+      this._messageService.add({
+        severity: 'error',
+        summary: 'ERROR',
+        life: 10000,
+        detail: "there is no Procedure selected!"
+      });
+    }
+    this.procedureName = localStorage.getItem('currentProcedureName');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+    if (!this.accountNumber) {
+      this._messageService.add({
+        severity: 'error',
+        summary: 'ERROR',
+        life: 10000,
+        detail: "there is no Account selected!"
+      });
+    }
 
     this._analysisService
       .getPaymentAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
@@ -114,13 +139,13 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         });
       });
 
-    if (this.selectedProcedure && +this.selectedProcedure > 0) {
-      this.prcService
-        .getById(+this.selectedProcedure)
-        .subscribe(prc => {
-          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-        }, er => { });
-    }
+    // if (this.selectedProcedure && +this.selectedProcedure > 0) {
+    //   this.prcService
+    //     .getById(+this.selectedProcedure)
+    //     .subscribe(prc => {
+    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+    //     }, er => { });
+    // }
 
   } // end of ng on init
 

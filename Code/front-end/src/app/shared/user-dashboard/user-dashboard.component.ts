@@ -54,8 +54,9 @@ export class UserDashboardComponent implements OnInit {
 
 
 
-  dataTable(id) {
-    localStorage.setItem('currentProcedureId', id);
+  dataTable(prc) {
+    localStorage.setItem('currentProcedureId', prc.id);
+    localStorage.setItem('currentProcedureName', prc.name);
     this._router.navigate(['/shared/data']);
 
   }

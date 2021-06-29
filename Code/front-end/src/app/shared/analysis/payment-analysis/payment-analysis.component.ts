@@ -47,6 +47,7 @@ export class PaymentAnalysisComponent implements OnInit {
   selectedMaxAccountNumber: string;
   selectedMaxAccount: any;
   @ViewChild('chart') chart: any;
+  selectedMaxAccountName: string;
 
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
@@ -145,6 +146,7 @@ export class PaymentAnalysisComponent implements OnInit {
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
+    this.procedureName = localStorage.getItem('currentProcedureName');
 
     this._analysisService
       .getPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure)
@@ -223,13 +225,13 @@ export class PaymentAnalysisComponent implements OnInit {
         });
       });
 
-    if (this.selectedProcedure && +this.selectedProcedure > 0) {
-      this.prcService
-        .getById(+this.selectedProcedure)
-        .subscribe(prc => {
-          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-        }, er => { });
-    }
+    // if (this.selectedProcedure && +this.selectedProcedure > 0) {
+    //   this.prcService
+    //     .getById(+this.selectedProcedure)
+    //     .subscribe(prc => {
+    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+    //     }, er => { });
+    // }
   } // end of init function
 
 
@@ -277,6 +279,7 @@ export class PaymentAnalysisComponent implements OnInit {
     debugger;
 
     this.selectedMaxAccountNumber = event.data.accountNumber;
+    this.selectedMaxAccountName = event.data.accountName;
 
     // for each month
     for (let i = 0; i < this.data.length; i++) {

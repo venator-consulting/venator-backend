@@ -36,6 +36,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
     this.prcId = +this._route.snapshot.paramMap.get('prcId');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+    this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.detailsOptions = [
       { name: 'Sys-Relevants', value: 1 },
@@ -137,13 +138,13 @@ export class TextAnalysisDetailsComponent implements OnInit {
       });
 
 
-    if (this.prcId && +this.prcId > 0) {
-      this.prcService
-        .getById(+this.prcId)
-        .subscribe(prc => {
-          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-        }, er => { });
-    }
+    // if (this.prcId && +this.prcId > 0) {
+    //   this.prcService
+    //     .getById(+this.prcId)
+    //     .subscribe(prc => {
+    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+    //     }, er => { });
+    // }
   }
 
   goBack() {

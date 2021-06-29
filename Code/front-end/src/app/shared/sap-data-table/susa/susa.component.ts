@@ -35,6 +35,7 @@ export class SusaComponent implements OnInit {
     this.waiting = true;
     this.organisationId = +localStorage.getItem('organisationId');
     this.procedureId = +localStorage.getItem('currentProcedureId');
+    this.procedureName = localStorage.getItem('currentProcedureName');
 
     this._postingDataService
       .getDefaultSusaDateRange(this.organisationId, this.procedureId)
@@ -65,13 +66,13 @@ export class SusaComponent implements OnInit {
       });
 
 
-    if (this.procedureId && +this.procedureId > 0) {
-      this.prcService
-        .getById(+this.procedureId)
-        .subscribe(prc => {
-          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-        }, er => { });
-    }
+    // if (this.procedureId && +this.procedureId > 0) {
+    //   this.prcService
+    //     .getById(+this.procedureId)
+    //     .subscribe(prc => {
+    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+    //     }, er => { });
+    // }
 
     this.cols = [
       {

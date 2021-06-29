@@ -71,16 +71,17 @@ export class AmountAnalysisComponent implements OnInit {
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
+    this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.getData();
 
-    if (this.selectedProcedure && +this.selectedProcedure > 0) {
-      this.prcService
-        .getById(+this.selectedProcedure)
-        .subscribe(prc => {
-          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-        }, er => { });
-    }
+    // if (this.selectedProcedure && +this.selectedProcedure > 0) {
+    //   this.prcService
+    //     .getById(+this.selectedProcedure)
+    //     .subscribe(prc => {
+    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+    //     }, er => { });
+    // }
 
   }// end of ng on init
 

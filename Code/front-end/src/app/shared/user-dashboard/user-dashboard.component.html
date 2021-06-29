@@ -33,7 +33,7 @@
       <td *ngIf="role!=='User'" style="width: 10em">
         <button pButton pRipple type="button" icon="pi pi-bookmark"
           class="p-button-rounded p-button-warning headerColor" pTooltip="{{'Admin_Dashboard.show' | translate}}"
-          tooltipPosition="bottom" (click)="dataTable(procedure.id)"></button> &nbsp;
+          tooltipPosition="bottom" (click)="dataTable(procedure)"></button> &nbsp;
         <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning headerColor"
           pTooltip="{{'Procedure_Registration.editProedurePlaceHolder' | translate}}" tooltipPosition="bottom"
           (click)="editProcedure(procedure.id, procedure.name, procedure.data, procedure.analysis)"></button>

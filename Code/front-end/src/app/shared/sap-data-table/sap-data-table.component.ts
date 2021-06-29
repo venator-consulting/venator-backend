@@ -67,13 +67,15 @@ export class SAPDataTableComponent implements OnInit {
       });
     });
 
-    if (this.procedureId && +this.procedureId > 0) {
-      this.prcService
-        .getById(+this.procedureId)
-        .subscribe(prc => {
-          this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-        }, er => { });
-    }
+    this.procedureName = localStorage.getItem('currentProcedureName');
+
+    // if (this.procedureId && +this.procedureId > 0) {
+    //   this.prcService
+    //     .getById(+this.procedureId)
+    //     .subscribe(prc => {
+    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+    //     }, er => { });
+    // }
 
   }
 
