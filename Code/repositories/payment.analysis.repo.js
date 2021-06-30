@@ -232,6 +232,8 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
                 // get last day of the month
                 var d = new Date(element.yearName, +element.monthName + 1, 0);
                 // BLUES................
+                // and it's late: app date > due date
+                // month we increment already!!!!!!!!!!!!!!!!!!
                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&

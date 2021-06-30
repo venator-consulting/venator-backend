@@ -26,26 +26,26 @@
           </div>
           <div class="p-col-2">
             <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
-              class="p-button-warning p-mr-2" pTooltip="{{ 'TextAnalysis.export' | translate}}" tooltipPosition="bottom"></button>
+              class="p-button-warning p-mr-2" pTooltip="{{ 'TextAnalysis.export' | translate}}"
+              tooltipPosition="bottom"></button>
 
             <button type="button" pButton pRipple icon="pi pi-check" (click)="saveRelevant()"
-              class="p-button-primary p-mr-2" pTooltip="{{ 'TextAnalysis.save' | translate}}" tooltipPosition="bottom" label="{{ 'TextAnalysis.save' | translate}}"></button>
+              class="p-button-primary p-mr-2" pTooltip="{{ 'TextAnalysis.save' | translate}}" tooltipPosition="bottom"
+              label="{{ 'TextAnalysis.save' | translate}}"></button>
           </div>
 
         </div>
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col style="width:17px;">
-          <col *ngFor="let col of columns" style="width:200px">
-
+          <col *ngFor="let col of columns" [style]="{'width': (col.width? col.width : 200) +'px'}">
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th>
-            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
-          </th>
+          <!-- <th> -->
+          <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+          <!-- </th> -->
           <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
             {{col.header | translate}}
           </th>
@@ -54,22 +54,27 @@
         <tr>
           <th></th>
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
-              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
+            <input *ngIf="col.field != 'amountRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
+              [style]="{width:'90%'}" (input)="filterChange($any($event.target).value, col.field)"
+              class="filterInputCss" />
           </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr>
-          <td>
-            <i class="pi pi-star-o" (click)="selectRow(row)" *ngIf="!row.textRelevant"></i>
-            <i class="pi pi-star" (click)="selectRow(row)" *ngIf="row.textRelevant"></i>
-            <!-- <p-tableCheckbox [value]="row"></p-tableCheckbox> -->
-          </td>
+          <!-- <td> -->
+          <!-- <i class="pi pi-star-o" (click)="selectRow(row)" *ngIf="!row.textRelevant"></i> -->
+          <!-- <i class="pi pi-star" (click)="selectRow(row)" *ngIf="row.textRelevant"></i> -->
+          <!-- <p-tableCheckbox [value]="row"></p-tableCheckbox> -->
+          <!-- </td> -->
           <!-- <td pEditableColumn>
             
         </td> -->
           <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">
+            <span *ngIf="col.field == 'textRelevant'">
+              <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.textRelevant"></i>
+              <i class="pi pi-star " (click)="selectRow(row)" *ngIf="row.textRelevant"></i>
+            </span>
             <p-cellEditor *ngIf="col.field == 'textRelevantComment'">
               <ng-template pTemplate="input">
                 <input pInputText type="text" [(ngModel)]="row.textRelevantComment" style="width: 100%; padding: 5px;"
@@ -89,9 +94,16 @@
               [innerHTML]="row[col.field] | highlight" pTooltip="{{ row[col.field] }}">
             </span>
             <span pTooltip="{{ row[col.field] }}"
-              *ngIf="col.field!='balance' && col.field !='documentDate' && col.field !='executionDate' && col.field!='dueDate' && col.field!='reference' && col.field!='textPosting' && col.field!='textHeader' && col.field != 'textRelevantComment'">
+              *ngIf="col.field!='balance' && col.field !='documentDate' && col.field !='executionDate' && col.field!='dueDate' && col.field!='reference' && col.field!='textPosting' && col.field!='textHeader' && col.field != 'textRelevantComment' && col.field != 'textRelevant'">
               {{ row[col.field] }}
             </span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [attr.colspan]="columns.length">
+            No records found
           </td>
         </tr>
       </ng-template>

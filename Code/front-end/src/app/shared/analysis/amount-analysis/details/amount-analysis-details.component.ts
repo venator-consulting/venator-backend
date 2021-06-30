@@ -19,7 +19,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   data: AmountAnalysisDetails[] = new Array();
   waiting: boolean;
   cols: { header: string; field: string; }[];
-  frozenCols: { header: string; field: string; }[];
+  frozenCols: { header: string; field: string; width: string}[];
   baseBalance: number;
   procedureName: any;
   tempData: any[];
@@ -49,8 +49,14 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
     this.frozenCols = [
       {
+        header: '',
+        field: 'amountRelevant',
+        width: '6'
+      },
+      {
         header: 'Comment',
-        field: 'amountRelevantComment'
+        field: 'amountRelevantComment',
+        width: '35'
       }
     ];
 

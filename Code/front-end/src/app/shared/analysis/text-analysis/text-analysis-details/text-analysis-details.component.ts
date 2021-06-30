@@ -18,7 +18,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
   accountNumber: string;
   data: TextAnalysisDetails[] = new Array();
   cols: { header: string; field: string; }[];
-  frozenCols: { header: string; field: string; }[];
+  frozenCols: { header: string; field: string; width: string}[];
   waiting: boolean = false;
   procedureName: string;
   tempData: any[];
@@ -117,8 +117,14 @@ export class TextAnalysisDetailsComponent implements OnInit {
 
     this.frozenCols = [
       {
+        header: '',
+        field: 'textRelevant',
+        width: '6'
+      },
+      {
         header: 'Comment',
-        field: 'textRelevantComment'
+        field: 'textRelevantComment',
+        width: '35'
       }
     ];
 
