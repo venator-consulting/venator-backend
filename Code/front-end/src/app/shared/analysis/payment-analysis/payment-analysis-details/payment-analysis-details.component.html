@@ -39,7 +39,10 @@
             <span *ngIf="col.field=='value'">
               {{ row.balance  | currency:'EUR':'' }}
             </span>
-            <span *ngIf="col.field!='value'">
+            <span *ngIf="col.field=='documentDate' || col.field=='dueDate' || col.field=='applicationDate'">
+              {{ row[col.field]  | date: 'yyyy-MM-dd' }}
+            </span>
+            <span *ngIf="col.field!='value' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate'">
               {{ row[col.field] }}
             </span>
           </td>
@@ -67,7 +70,10 @@
             <span *ngIf="col.field=='value'">
               {{ row.balance  | currency:'EUR':'' }}
             </span>
-            <span *ngIf="col.field!='value'">
+            <span *ngIf="col.field=='documentDate' || col.field=='dueDate' || col.field=='applicationDate'">
+              {{ row[col.field]  | date: 'yyyy-MM-dd' }}
+            </span>
+            <span *ngIf="col.field!='value' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate'">
               {{ row[col.field] }}
             </span>
           </td>
@@ -95,7 +101,10 @@
             <span *ngIf="col.field=='value'">
               {{ row.balance  | currency:'EUR':'' }}
             </span>
-            <span *ngIf="col.field!='value'">
+            <span *ngIf="col.field=='documentDate' || col.field=='dueDate' || col.field=='applicationDate'">
+              {{ row[col.field]  | date: 'yyyy-MM-dd' }}
+            </span>
+            <span *ngIf="col.field!='value' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate'">
               {{ row[col.field] }}
             </span>
           </td>

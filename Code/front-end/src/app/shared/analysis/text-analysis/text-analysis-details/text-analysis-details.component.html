@@ -52,9 +52,9 @@
 
         </tr>
         <tr>
-          <th></th>
+          <!-- <th></th> -->
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-            <input *ngIf="col.field != 'amountRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
+            <input *ngIf="col.field != 'textRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
               [style]="{width:'90%'}" (input)="filterChange($any($event.target).value, col.field)"
               class="filterInputCss" />
           </th>

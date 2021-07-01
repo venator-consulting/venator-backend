@@ -197,9 +197,9 @@ module.exports.textAnalysis = async (orgId, prcId, keys) => {
 
         for (let index = 0; index < keys.length; index++) {
             const key = keys[index];
-            query += `  p.reference like '%${key}%'
-                        OR p.textPosting like '%${key}%'
-                        OR p.textHeader like '%${key}%' OR`;
+            query += `  p.reference ${key}
+                        OR p.textPosting ${key}
+                        OR p.textHeader ${key} OR`;
         }
         query += keys.length > 0 ? ' 1 <> 1) ' : '';
 
@@ -233,9 +233,9 @@ module.exports.textAnalysisDetails = async (orgId, prcId, keys, accountNumber) =
 
         for (let index = 0; index < keys.length; index++) {
             const key = keys[index];
-            query += `  p.reference like '%${key}%'
-                        OR p.textPosting like '%${key}%'
-                        OR p.textHeader like '%${key}%' OR`;
+            query += `  p.reference ${key}
+                        OR p.textPosting ${key}
+                        OR p.textHeader ${key} OR`;
         }
         query += keys.length > 0 ? ' 1 <> 1) ' : '';
 

@@ -179,11 +179,16 @@ export class PaymentAnalysisComponent implements OnInit {
             });
           }
         });
-
+        debugger;
         this.redAccounts.forEach(value => {
           const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
           if (i >= 0) {
-            this.accounts[i].red += value.value;
+            if (this.accounts[i].red) {
+              this.accounts[i].red += value.value;  
+            } else {
+              this.accounts[i].red = value.value;
+            }
+            
           } else {
             this.accounts.push({
               accountNumber: value.accountNumber,
@@ -196,7 +201,11 @@ export class PaymentAnalysisComponent implements OnInit {
         this.greenAccounts.forEach(value => {
           const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
           if (i >= 0) {
-            this.accounts[i].green += value.value;
+            if (this.accounts[i].green) {
+              this.accounts[i].green += value.value;  
+            } else {
+              this.accounts[i].green = value.value;
+            }
           } else {
             this.accounts.push({
               accountNumber: value.accountNumber,

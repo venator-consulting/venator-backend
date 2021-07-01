@@ -93,6 +93,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.documentDate is not NULL 
+                        AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
                             OR UPPER(pos.documentType) = 'KZ'
@@ -105,7 +106,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
         str.on('data', (row) => {
             finalRes.forEach(element => {
                 // get last day of the month
-                var d = new Date(element.yearName, +element.monthName + 1, 0);
+                var d = new Date(element.yearName, +element.monthName, 0);
                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
@@ -123,7 +124,8 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                         });
                     }
 
-                } else if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
+                }
+                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
                     row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d) && row.dueDate <= d) {
@@ -138,7 +140,8 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                             accountName: row.accountName
                         });
                     }
-                } else if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
+                }
+                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KZ') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'ZP')) &&
                     row.documentDate <= d && row.applicationDate == null) {
@@ -218,6 +221,7 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber = ${accountNumber} 
                         AND pos.documentDate is not NULL 
+                        AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
                             OR UPPER(pos.documentType) = 'KZ'
@@ -230,7 +234,7 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
         str.on('data', (row) => {
             result.forEach(element => {
                 // get last day of the month
-                var d = new Date(element.yearName, +element.monthName + 1, 0);
+                var d = new Date(element.yearName, +element.monthName, 0);
                 // BLUES................
                 // and it's late: app date > due date
                 // month we increment already!!!!!!!!!!!!!!!!!!
@@ -240,23 +244,36 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
                     row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d)) {
                     element.blue.value += +row.balance;
                     // add row to the blue list
-                    finalResult.blue.push(row);
+                    const i = finalResult.blue.findIndex(x => x.id == row.id);
+                    if (i == -1) {
+                        finalResult.blue.push(row);
+                    }
                     // RED......................
-                } else if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
+                }
+                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
                     row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d) && row.dueDate <= d) {
                     element.red.value += +row.balance;
                     // add row to the red list
-                    finalResult.red.push(row);
+                    const i = finalResult.red.findIndex(x => x.id == row.id);
+                    if (i == -1) {
+                        finalResult.red.push(row);
+                    }
+                    // finalResult.red.push(row);
                     // GREEN.......................
-                } else if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
+                }
+                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KZ') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'ZP')) &&
                     row.documentDate <= d && row.applicationDate == null) {
                     element.green.value += +row.balance;
                     // add row to the green list
-                    finalResult.green.push(row);
+                    const i = finalResult.green.findIndex(x => x.id == row.id);
+                    if (i == -1) {
+                        finalResult.green.push(row);
+                    }
+                    // finalResult.green.push(row);
                 }
             });
         });
