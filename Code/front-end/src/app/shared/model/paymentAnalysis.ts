@@ -1,6 +1,9 @@
 export class PaymentAnalysis {
-    data: PaymentData[];
-    dateRange: DateRange[]
+    data: {
+        res: PaymentData[];
+        accounts: Account[];
+    };
+    dateRange: DateRange[];
 }
 
 export class PaymentData {
@@ -23,6 +26,9 @@ class Bar {
 
 class Account {
     value: number;
+    blue: number;
+    red: number;
+    green: number;
     accountNumber: string;
     accountName: string;
 }

@@ -151,7 +151,8 @@ export class PaymentAnalysisComponent implements OnInit {
     this._analysisService
       .getPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure)
       .subscribe(res => {
-        this.data = res.data;
+        this.data = res.data.res;
+        this.accounts = res.data.accounts;
         this.startDate = res.dateRange[0].mindate;
         this.endDate = res.dateRange[0].maxdate;
 
@@ -162,58 +163,55 @@ export class PaymentAnalysisComponent implements OnInit {
           this.blueData.push(Math.abs(element.blue.value));
           this.GreenData.push(Math.abs(element.green.value));
           this.RedData.push(Math.abs(element.red.value));
-          this.blueAccounts.push(...element.blue.accounts);
-          this.greenAccounts.push(...element.green.accounts);
-          this.redAccounts.push(...element.red.accounts);
         }
 
-        this.blueAccounts.forEach(value => {
-          const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
-          if (i >= 0) {
-            this.accounts[i].blue += value.value;
-          } else {
-            this.accounts.push({
-              accountNumber: value.accountNumber,
-              accountName: value.accountName,
-              blue: value.value
-            });
-          }
-        });
-        debugger;
-        this.redAccounts.forEach(value => {
-          const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
-          if (i >= 0) {
-            if (this.accounts[i].red) {
-              this.accounts[i].red += value.value;  
-            } else {
-              this.accounts[i].red = value.value;
-            }
+        // this.blueAccounts.forEach(value => {
+        //   const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
+        //   if (i >= 0) {
+        //     this.accounts[i].blue += value.value;
+        //   } else {
+        //     this.accounts.push({
+        //       accountNumber: value.accountNumber,
+        //       accountName: value.accountName,
+        //       blue: value.value
+        //     });
+        //   }
+        // });
+        // debugger;
+        // this.redAccounts.forEach(value => {
+        //   const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
+        //   if (i >= 0) {
+        //     if (this.accounts[i].red) {
+        //       this.accounts[i].red += value.value;  
+        //     } else {
+        //       this.accounts[i].red = value.value;
+        //     }
             
-          } else {
-            this.accounts.push({
-              accountNumber: value.accountNumber,
-              accountName: value.accountName,
-              red: value.value
-            });
-          }
-        });
+        //   } else {
+        //     this.accounts.push({
+        //       accountNumber: value.accountNumber,
+        //       accountName: value.accountName,
+        //       red: value.value
+        //     });
+        //   }
+        // });
 
-        this.greenAccounts.forEach(value => {
-          const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
-          if (i >= 0) {
-            if (this.accounts[i].green) {
-              this.accounts[i].green += value.value;  
-            } else {
-              this.accounts[i].green = value.value;
-            }
-          } else {
-            this.accounts.push({
-              accountNumber: value.accountNumber,
-              accountName: value.accountName,
-              green: value.value
-            });
-          }
-        });
+        // this.greenAccounts.forEach(value => {
+        //   const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
+        //   if (i >= 0) {
+        //     if (this.accounts[i].green) {
+        //       this.accounts[i].green += value.value;  
+        //     } else {
+        //       this.accounts[i].green = value.value;
+        //     }
+        //   } else {
+        //     this.accounts.push({
+        //       accountNumber: value.accountNumber,
+        //       accountName: value.accountName,
+        //       green: value.value
+        //     });
+        //   }
+        // });
 
         // get top 10
         this.accounts.sort((a, b) => Math.abs(b.blue) - Math.abs(a.blue));

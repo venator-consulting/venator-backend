@@ -57,7 +57,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
         }
         const diff = monthDiff(fromDate, toDate);
         // if diff = 0 throw an error
-        let finalRes = [];
+        let res = new Array();
         let starterMonth = fromDate.getMonth() + 1;
         let starterYear = fromDate.getFullYear();
         for (let index = 0; index <= diff; index++) {
@@ -77,13 +77,22 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                     accounts: []
                 }
             };
-            finalRes.push(element);
+            res.push(element);
             starterMonth++;
             if (starterMonth > 12) {
                 starterMonth = 1;
                 starterYear++;
             }
         }
+
+        const finalResult = {
+            res: res,
+            accounts: new Array()
+        }
+
+        const blueBlackList = new Array();
+        const redBlackList = new Array();
+        const greenBlackList = new Array();
 
         let query = `SELECT pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
                          pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
@@ -104,7 +113,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
         const str = connection.query(query).stream();
 
         str.on('data', (row) => {
-            finalRes.forEach(element => {
+            res.forEach(element => {
                 // get last day of the month
                 var d = new Date(element.yearName, +element.monthName, 0);
                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
@@ -113,8 +122,8 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                     row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d)) {
                     element.blue.value += +row.balance;
                     // add creditor to the list
-                    const i = element.blue.accounts.findIndex(x => x.accountNumber == row.accountNumber);
-                    if (i >= 0) {
+                    const b = element.blue.accounts.findIndex(x => x.accountNumber == row.accountNumber);
+                    if (b >= 0) {
                         element.blue.accounts[i].value += +row.balance;
                     } else {
                         element.blue.accounts.push({
@@ -123,15 +132,37 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                             accountName: row.accountName
                         });
                     }
+                    const i = finalResult.accounts.findIndex(x => x.accountNumber == row.accountNumber);
+                    if (i >= 0) {
+                        const j = blueBlackList.findIndex(x => x == row.id);
+                        if (j == -1) {
+                            if (finalResult.accounts[i].blue) {
+                                finalResult.accounts[i].blue += +row.balance;
+                            } else {
+                                finalResult.accounts[i].blue = +row.balance;
+                            }
+                            blueBlackList.push(row.id);
+                        }
 
-                }
-                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
+                    } else {
+                        finalResult.accounts.push({
+                            blue: +row.balance,
+                            red: 0,
+                            green: 0,
+                            accountNumber: row.accountNumber,
+                            accountName: row.accountName
+                        });
+                        blueBlackList.push(row.id);
+                    }
+
+                } // end of blue condition 
+                if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
                     row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d) && row.dueDate <= d) {
                     element.red.value += +row.balance;
-                    const i = element.red.accounts.findIndex(x => x.accountNumber == row.accountNumber);
-                    if (i >= 0) {
+                    const r = element.red.accounts.findIndex(x => x.accountNumber == row.accountNumber);
+                    if (r >= 0) {
                         element.red.accounts[i].value += +row.balance;
                     } else {
                         element.red.accounts.push({
@@ -140,14 +171,35 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                             accountName: row.accountName
                         });
                     }
-                }
-                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
+                    const i = finalResult.accounts.findIndex(x => x.accountNumber == row.accountNumber);
+                    if (i >= 0) {
+                        const j = redBlackList.findIndex(x => x == row.id);
+                        if (j == -1) {
+                            if (finalResult.accounts[i].red) {
+                                finalResult.accounts[i].red += +row.balance;
+                            } else {
+                                finalResult.accounts[i].red = +row.balance;
+                            }
+                            redBlackList.push(row.id);
+                        }
+                    } else {
+                        finalResult.accounts.push({
+                            blue: 0,
+                            red: +row.balance,
+                            green: 0,
+                            accountNumber: row.accountNumber,
+                            accountName: row.accountName
+                        });
+                        redBlackList.push(row.id);
+                    }
+                } // end of red condition
+                if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KZ') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'ZP')) &&
                     row.documentDate <= d && row.applicationDate == null) {
                     element.green.value += +row.balance;
-                    const i = element.green.accounts.findIndex(x => x.accountNumber == row.accountNumber);
-                    if (i >= 0) {
+                    const g = element.green.accounts.findIndex(x => x.accountNumber == row.accountNumber);
+                    if (g >= 0) {
                         element.green.accounts[i].value += +row.balance;
                     } else {
                         element.green.accounts.push({
@@ -156,12 +208,33 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                             accountName: row.accountName
                         });
                     }
-                }
-            });
-        });
+                    const i = finalResult.accounts.findIndex(x => x.accountNumber == row.accountNumber);
+                    if (i >= 0) {
+                        const j = greenBlackList.findIndex(x => x == row.id);
+                        if (j == -1) {
+                            if (finalResult.accounts[i].green) {
+                                finalResult.accounts[i].green += +row.balance;
+                            } else {
+                                finalResult.accounts[i].green = +row.balance;
+                            }
+                            greenBlackList.push(row.id);
+                        }
+                    } else {
+                        finalResult.accounts.push({
+                            blue: 0,
+                            red: 0,
+                            green: +row.balance,
+                            accountNumber: row.accountNumber,
+                            accountName: row.accountName
+                        });
+                        greenBlackList.push(row.id);
+                    }
+                } // end of green condition
+            }); // end of foreach
+        }); // end of fetching row event
 
         str.on('end', async () => {
-            cb(finalRes);
+            cb(finalResult);
         });
     } catch (error) {
         cb1(error.message);
@@ -250,7 +323,7 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
                     }
                     // RED......................
                 }
-                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
+                if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'RECHNUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'RE') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KR')) &&
                     row.documentDate <= d && (row.applicationDate == null || row.applicationDate > d) && row.dueDate <= d) {
@@ -263,7 +336,7 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
                     // finalResult.red.push(row);
                     // GREEN.......................
                 }
-                 if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
+                if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == 'ZAHLUNG') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'KZ') ||
                         (row.documentType && row.documentType.toString().toUpperCase() == 'ZP')) &&
                     row.documentDate <= d && row.applicationDate == null) {
