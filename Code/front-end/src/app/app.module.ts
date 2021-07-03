@@ -78,6 +78,10 @@ import {InputNumberModule} from 'primeng/inputnumber';
 import { PaymentAnalysisDetailsComponent } from './shared/analysis/payment-analysis/payment-analysis-details/payment-analysis-details.component';
 import { DueDateComponent } from './shared/analysis/payment-analysis/due-date/due-date.component';
 
+
+import { BnNgIdleService } from 'bn-ng-idle';
+
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -172,7 +176,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true
-  }
+  },
+  BnNgIdleService
   ],
   bootstrap: [AppComponent]
 })
