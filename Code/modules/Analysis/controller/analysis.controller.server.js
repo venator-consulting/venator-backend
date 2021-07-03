@@ -321,8 +321,22 @@ module.exports.dueDateAnalysis = async (req, res) => {
                 return;
         }
         const toDate =  dateRange[0].maxdate;
+        if (!dateRange[0].mindocdate || !(dateRange[0].mindocdate instanceof Date)) {
+            res.status(400)
+                .json({
+                    messsage: 'this procedure has no due date! please re-import it',
+                    dateRange: dateRange
+                });
+                return;
+        }
+        const mindocdate = dateRange[0].mindocdate;
+        const maxappdate =  dateRange[0].maxappdate;
+        if (!dateRange[0].maxappdate || !(dateRange[0].maxappdate instanceof Date)) {
+            maxappdate =  dateRange[0].maxdate;
+        }
         
-        dueDateAnalysisRepo.dueDateAnalysis(req.params.orgId, req.params.prcId, fromDate, toDate, data => {
+        
+        dueDateAnalysisRepo.dueDateAnalysis(req.params.orgId, req.params.prcId, fromDate, toDate, mindocdate, maxappdate, data => {
             // result = data;
             res.status(200)
                 .json({

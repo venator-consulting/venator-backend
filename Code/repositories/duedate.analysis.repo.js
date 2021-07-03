@@ -7,7 +7,8 @@ const sequelize = Sequelize.getSequelize();
 
 module.exports.dueDateRange = async (orgId, prcId) => {
     try {
-        let query = `SELECT MIN(pos.dueDate) mindate , MAX(pos.dueDate) maxdate
+        let query = `SELECT MIN(pos.dueDate) mindate , MAX(pos.dueDate) maxdate,
+                         MIN(pos.documentDate) mindocdate , MAX(pos.applicationDate) maxappdate
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = :procedureId
@@ -53,7 +54,15 @@ function getNumberOfDays(start, end) {
     return diffInDays;
 }
 
-module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1) => {
+monthDiff = (d1, d2) => {
+    var months;
+    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth();
+    months += d2.getMonth();
+    return months <= 0 ? 0 : months;
+}
+
+module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, mindocdate, maxappdate,  cb, cb1) => {
     try {
 
         if (!fromDate) {
@@ -65,21 +74,43 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
         if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
             throw new Error('Due Date and ApplicationDate must be Date!');
         }
-        // const diff = getNumberOfDays(fromDate, toDate);
+        
+        const diff = monthDiff(mindocdate, maxappdate);
+
+        let res = new Array();
+        let starterMonth = mindocdate.getMonth() + 1;
+        let starterYear = mindocdate.getFullYear();
+        for (let index = 0; index <= diff; index++) {
+            const element = {
+                monthName: starterMonth,
+                yearName: starterYear,
+                positive: 0,
+                negative: 0
+            };
+            res.push(element);
+            starterMonth++;
+            if (starterMonth > 12) {
+                starterMonth = 1;
+                starterYear++;
+            }
+        }
 
         let diffData = new Array();
         let firstChartLabels = new Array();
 
         const finalResult = {
-            data: diffData,
-            labels: firstChartLabels
+            dueDateReference: {
+                data: diffData,
+                labels: firstChartLabels
+            },
+            docDateReference: res
+            // {
+            //     data: diffData,
+            //     positive: new Array(),
+            //     negative: new Array()
+            // }
+            
         };
-
-        // for (let index = 0; index < diff; index++) {
-        //     fromDate.setDate(fromDate.getDate() + index);
-
-
-        // } // end of for every day in diffirence
 
         let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
                          pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
@@ -104,11 +135,20 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
             const rowindex = getNumberOfDays(fromDate, row.dueDate);
             diffData[rowindex] = diffData[rowindex]? diffData[rowindex] + rowDiff : rowDiff;
             firstChartLabels[rowindex] = firstChartLabels[rowindex]? firstChartLabels[rowindex] : row.dueDate.toLocaleDateString('de-DE');;
+        
+            for (const element of res) {
+                if (row.documentDate.getMonth() == (element.monthName -1) && row.documentDate.getFullYear() == element.yearName) {
+                    element.positive += rowDiff > 0 ? rowDiff : 0;
+                    element.negative += rowDiff < 0 ? rowDiff : 0;
+                    continue;
+                }
+            }
         }); // end of on data
 
         str.on('end', async () => {
-            finalResult.data = diffData.filter(Boolean);
-            finalResult.labels = firstChartLabels.filter(Boolean);
+            finalResult.dueDateReference.data = diffData.filter(Boolean);
+            finalResult.dueDateReference.labels = firstChartLabels.filter(Boolean);
+            finalResult.docDateReference = res;
             cb(finalResult);
         });
  
