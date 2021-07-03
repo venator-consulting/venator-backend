@@ -22,11 +22,16 @@ export class DueDateComponent implements OnInit {
   docPositiveData: any[] = new Array();
   docNegativeData: any[] = new Array();
   docData: any[] = new Array();
-  docDataTable: any[];
+  docDataTable: any[] = new Array();
+  notPaidLabels: any[] = new Array();
+  notPaidData: any[] = new Array();
+  notPaidDataTable: any[] = new Array();
+  notPaidChartData: any;
 
   data: any[] = new Array();
   @ViewChild('chart') chart: any;
   docCols: { header: string; field: string; }[];
+  notPaidCols: { header: string; field: string; }[];
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router) { }
 
@@ -77,8 +82,18 @@ export class DueDateComponent implements OnInit {
         field: 'average'
       },
     ];
-
     
+    this.notPaidCols = [
+      {
+        header: 'date',
+        field: 'date'
+      },
+      {
+        header: 'notPaid',
+        field: 'notPaid'
+      }
+    ];
+
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
@@ -103,11 +118,14 @@ export class DueDateComponent implements OnInit {
         // this.chart.refresh();
         // this.chart.reinit();
         this.docDataTable = res.data.docDateReference;
+        this.notPaidDataTable = res.data.docDateReference;
         this.docDataTable.forEach(element => {
           this.docDateLabels.push(element.monthName + '-' + element.yearName);
+          this.notPaidLabels.push(element.monthName + '-' + element.yearName);
           this.docPositiveData.push(element.positive);
           this.docNegativeData.push(element.negative);
           this.docData.push(+element.positive + +element.negative);
+          this.notPaidData.push(+element.notPaid);
         });
 
         this.docDateData = {
@@ -134,6 +152,15 @@ export class DueDateComponent implements OnInit {
               data: this.docNegativeData
           }]
       };
+
+      this.notPaidChartData = {
+        labels: this.notPaidLabels,
+        datasets: [{
+            label: 'Not Paid',
+            backgroundColor: '#42A5F5',
+            data: this.notPaidData
+        }]
+    };
 
       }, er => {
         this._messageService.add({

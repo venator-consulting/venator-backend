@@ -7,6 +7,9 @@ const sequelize = Sequelize.getSequelize();
 
 module.exports.dueDateRange = async (orgId, prcId) => {
     try {
+
+        // AND pos.applicationDate is not NULL
+        // AND (pos.applicationDate <> pos.dueDate)
         let query = `SELECT MIN(pos.dueDate) mindate , MAX(pos.dueDate) maxdate,
                          MIN(pos.documentDate) mindocdate , MAX(pos.applicationDate) maxappdate
                     FROM posting_${orgId} pos
@@ -15,8 +18,6 @@ module.exports.dueDateRange = async (orgId, prcId) => {
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.dueDate is not NULL 
-                        AND pos.applicationDate is not NULL
-                        AND (pos.applicationDate <> pos.dueDate)
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentType) = 'RE'
                             OR UPPER(pos.documentType) = 'KR')`;
@@ -62,7 +63,7 @@ monthDiff = (d1, d2) => {
     return months <= 0 ? 0 : months;
 }
 
-module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, mindocdate, maxappdate,  cb, cb1) => {
+module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, mindocdate, maxappdate, cb, cb1) => {
     try {
 
         if (!fromDate) {
@@ -74,7 +75,7 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, mindocda
         if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
             throw new Error('Due Date and ApplicationDate must be Date!');
         }
-        
+
         const diff = monthDiff(mindocdate, maxappdate);
 
         let res = new Array();
@@ -85,7 +86,8 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, mindocda
                 monthName: starterMonth,
                 yearName: starterYear,
                 positive: 0,
-                negative: 0
+                negative: 0,
+                notPaid: 0
             };
             res.push(element);
             starterMonth++;
@@ -104,14 +106,10 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, mindocda
                 labels: firstChartLabels
             },
             docDateReference: res
-            // {
-            //     data: diffData,
-            //     positive: new Array(),
-            //     negative: new Array()
-            // }
-            
         };
 
+        // AND pos.applicationDate is not NULL
+        // AND (pos.applicationDate <> pos.dueDate)
         let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
                          pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
                     FROM posting_${orgId} pos
@@ -120,8 +118,6 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, mindocda
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.dueDate is not NULL 
-                        AND pos.applicationDate is not NULL
-                        AND (pos.applicationDate <> pos.dueDate)
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentType) = 'RE'
                             OR UPPER(pos.documentType) = 'KR')
@@ -131,18 +127,30 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, mindocda
 
 
         str.on('data', (row) => {
-            const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
-            const rowindex = getNumberOfDays(fromDate, row.dueDate);
-            diffData[rowindex] = diffData[rowindex]? diffData[rowindex] + rowDiff : rowDiff;
-            firstChartLabels[rowindex] = firstChartLabels[rowindex]? firstChartLabels[rowindex] : row.dueDate.toLocaleDateString('de-DE');;
-        
-            for (const element of res) {
-                if (row.documentDate.getMonth() == (element.monthName -1) && row.documentDate.getFullYear() == element.yearName) {
-                    element.positive += rowDiff > 0 ? rowDiff : 0;
-                    element.negative += rowDiff < 0 ? rowDiff : 0;
-                    continue;
+            // too early or too late records
+            if (row.applicationDate) {
+                const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
+                const rowindex = getNumberOfDays(fromDate, row.dueDate);
+                diffData[rowindex] = diffData[rowindex] ? diffData[rowindex] + rowDiff : rowDiff;
+                firstChartLabels[rowindex] = firstChartLabels[rowindex] ? firstChartLabels[rowindex] : row.dueDate.toLocaleDateString('de-DE');;
+
+                for (const element of res) {
+                    if (row.documentDate.getMonth() == (element.monthName - 1) && row.documentDate.getFullYear() == element.yearName) {
+                        element.positive += rowDiff > 0 ? rowDiff : 0;
+                        element.negative += rowDiff < 0 ? rowDiff : 0;
+                        continue;
+                    }
+                }
+                // Not paid at all
+            } else {
+                for (const element of res) {
+                    if (row.documentDate.getMonth() == (element.monthName - 1) && row.documentDate.getFullYear() == element.yearName) {
+                        element.notPaid += +row.balance;
+                        continue;
+                    }
                 }
             }
+
         }); // end of on data
 
         str.on('end', async () => {
@@ -151,7 +159,7 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, mindocda
             finalResult.docDateReference = res;
             cb(finalResult);
         });
- 
+
 
     } catch (error) {
         cb1(error.message);
