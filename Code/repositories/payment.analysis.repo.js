@@ -124,7 +124,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                     // add creditor to the list
                     const b = element.blue.accounts.findIndex(x => x.accountNumber == row.accountNumber);
                     if (b >= 0) {
-                        element.blue.accounts[i].value += +row.balance;
+                        element.blue.accounts[b].value += +row.balance;
                     } else {
                         element.blue.accounts.push({
                             value: +row.balance,
@@ -163,7 +163,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                     element.red.value += +row.balance;
                     const r = element.red.accounts.findIndex(x => x.accountNumber == row.accountNumber);
                     if (r >= 0) {
-                        element.red.accounts[i].value += +row.balance;
+                        element.red.accounts[r].value += +row.balance;
                     } else {
                         element.red.accounts.push({
                             value: +row.balance,
@@ -200,7 +200,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                     element.green.value += +row.balance;
                     const g = element.green.accounts.findIndex(x => x.accountNumber == row.accountNumber);
                     if (g >= 0) {
-                        element.green.accounts[i].value += +row.balance;
+                        element.green.accounts[g].value += +row.balance;
                     } else {
                         element.green.accounts.push({
                             value: +row.balance,
