@@ -3,6 +3,7 @@ const postingRepo = require('../../../repositories/posting.repo.server');
 const nlpHelper = require('../../../helpers/nlp.helper.server');
 const keywords = require('../../../models/analysis/text.analysis.keywords');
 const paymentAnalysisRepo = require('../../../repositories/payment.analysis.repo');
+const dueDateAnalysisRepo = require('../../../repositories/duedate.analysis.repo');
 
 module.exports.amountAnalysis = async (req, res) => {
     try {
@@ -281,6 +282,63 @@ module.exports.paymentAnalysisDetails = async (req, res) => {
 
     } catch (e) {
         errorHandler('Analysis controller: payment analysis Details - get details', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+
+module.exports.dueDateAnalysis = async (req, res) => {
+    try {
+        const dateRange = await dueDateAnalysisRepo
+            .dueDateRange(+req.params.orgId, +req.params.prcId);
+        if (dateRange.length < 1) {
+            res.status(500)
+                .json({
+                    messsage: 'Can not get Date range!',
+                    dateRange: dateRange
+                });
+                return;
+        }
+        if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
+            res.status(400)
+                .json({
+                    messsage: 'this procedure has no due date! please re-import it',
+                    dateRange: dateRange
+                });
+                return;
+        }
+        const fromDate = dateRange[0].mindate;
+        if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+            res.status(400)
+                .json({
+                    messsage: 'this procedure has no due date! please re-import it',
+                    dateRange: dateRange
+                });
+                return;
+        }
+        const toDate =  dateRange[0].maxdate;
+        
+        dueDateAnalysisRepo.dueDateAnalysis(req.params.orgId, req.params.prcId, fromDate, toDate, data => {
+            // result = data;
+            res.status(200)
+                .json({
+                    data: data,
+                    dateRange: dateRange
+                });
+        }, err => {
+            res.status(500)
+                .json({
+                    messsage: err,
+                    dateRange: dateRange
+                });
+        });
+
+    } catch (e) {
+        errorHandler('Analysis controller: payment analysis - get details', e);
         res
             .status(500)
             .json({

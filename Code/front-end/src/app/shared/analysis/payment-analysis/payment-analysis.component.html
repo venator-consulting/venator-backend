@@ -2,6 +2,9 @@
 <div class="p-grid">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
+    <button type="button" pButton pRipple icon="pi pi-clock" label="Due Date Analysis"
+      class="p-button-rounded p-button-warning" (click)="goToDueDate()" pTooltip="Due Date Analysis"
+      tooltipPosition="bottom"></button>
     <p-messages></p-messages>
   </div>
 </div>

@@ -14,6 +14,7 @@ module.exports.paymentDateRange = async (orgId, prcId) => {
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.documentDate is not NULL 
+                        AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
                             OR UPPER(pos.documentType) = 'KZ'
@@ -94,7 +95,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
         const redBlackList = new Array();
         const greenBlackList = new Array();
 
-        let query = `SELECT pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
+        let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
                          pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
                     FROM posting_${orgId} pos
                     WHERE

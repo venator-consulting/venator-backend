@@ -15,6 +15,7 @@ module.exports.dueDateRange = async (orgId, prcId) => {
                         AND pos.accountNumber is not NULL
                         AND pos.dueDate is not NULL 
                         AND pos.applicationDate is not NULL
+                        AND (pos.applicationDate <> pos.dueDate)
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentType) = 'RE'
                             OR UPPER(pos.documentType) = 'KR')`;
@@ -44,7 +45,7 @@ function getNumberOfDays(start, end) {
     const oneDay = 1000 * 60 * 60 * 24;
 
     // Calculating the time difference between two dates
-    const diffInTime = date2.getTime() - date1.getTime();
+    const diffInTime = end.getTime() - start.getTime();
 
     // Calculating the no. of days between two dates
     const diffInDays = Math.round(diffInTime / oneDay);
@@ -52,17 +53,67 @@ function getNumberOfDays(start, end) {
     return diffInDays;
 }
 
-/**
- * 
- * @param {Date} d1 start Date
- * @param {Date} d2 end Date
- * @returns number of months between to dates
- */
-function monthDiff(d1, d2) {
-    var months;
-    months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months -= d1.getMonth();
-    months += d2.getMonth();
-    return months <= 0 ? 0 : months;
-}
+module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1) => {
+    try {
 
+        if (!fromDate) {
+            throw new Error('Due Date is null for this procedure!');
+        }
+        if (!toDate) {
+            throw new Error('Due Date is null for this procedure!');
+        }
+        if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
+            throw new Error('Due Date and ApplicationDate must be Date!');
+        }
+        // const diff = getNumberOfDays(fromDate, toDate);
+
+        let diffData = new Array();
+        let firstChartLabels = new Array();
+
+        const finalResult = {
+            data: diffData,
+            labels: firstChartLabels
+        };
+
+        // for (let index = 0; index < diff; index++) {
+        //     fromDate.setDate(fromDate.getDate() + index);
+
+
+        // } // end of for every day in diffirence
+
+        let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
+                         pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
+                    FROM posting_${orgId} pos
+                    WHERE
+                        pos.procedureId = ${prcId}
+                        AND UPPER(pos.accountType) = 'K'
+                        AND pos.accountNumber is not NULL
+                        AND pos.dueDate is not NULL 
+                        AND pos.applicationDate is not NULL
+                        AND (pos.applicationDate <> pos.dueDate)
+                        AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
+                            OR UPPER(pos.documentType) = 'RE'
+                            OR UPPER(pos.documentType) = 'KR')
+                        ORDER BY pos.dueDate`;
+
+        const str = connection.query(query).stream();
+
+
+        str.on('data', (row) => {
+            const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
+            const rowindex = getNumberOfDays(fromDate, row.dueDate);
+            diffData[rowindex] = diffData[rowindex]? diffData[rowindex] + rowDiff : rowDiff;
+            firstChartLabels[rowindex] = firstChartLabels[rowindex]? firstChartLabels[rowindex] : row.dueDate.toLocaleDateString('de-DE');;
+        }); // end of on data
+
+        str.on('end', async () => {
+            finalResult.data = diffData.filter(Boolean);
+            finalResult.labels = firstChartLabels.filter(Boolean);
+            cb(finalResult);
+        });
+ 
+
+    } catch (error) {
+        cb1(error.message);
+    }
+}

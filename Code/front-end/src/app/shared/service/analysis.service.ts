@@ -63,4 +63,8 @@ export class AnalysisService {
     return this._http.get<PaymentAnalysisDetails>(this._thisURL + orgId + '/' + prcId + '/payment/details/'+ accountNumber);
   }
 
+  getDueDateAnalysis(orgId: number, prcId: number): Observable<any> {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate');
+  }
+
 }

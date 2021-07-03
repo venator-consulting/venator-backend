@@ -246,6 +246,10 @@ export class PaymentAnalysisComponent implements OnInit {
     this._router.navigate(['/analysis/payment/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
   }
 
+  goToDueDate (){
+    this._router.navigate(['/analysis/due-date']);
+  }
+
 
   filterChange(query, colName): void {
     this.searching = true;
