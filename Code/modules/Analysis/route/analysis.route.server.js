@@ -74,4 +74,10 @@ router
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.dueDateAnalysis);
 
+router
+    .route('/:orgId/:prcId/duedate/details/:accountNumber')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.dueDateDetailsAnalysis);
+
 module.exports = router;

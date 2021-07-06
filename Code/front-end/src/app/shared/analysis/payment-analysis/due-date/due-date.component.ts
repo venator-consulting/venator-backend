@@ -25,13 +25,15 @@ export class DueDateComponent implements OnInit {
   docDataTable: any[] = new Array();
   notPaidLabels: any[] = new Array();
   notPaidData: any[] = new Array();
-  notPaidDataTable: any[] = new Array();
+  // notPaidDataTable: any[] = new Array();
   notPaidChartData: any;
 
   data: any[] = new Array();
   @ViewChild('chart') chart: any;
-  docCols: { header: string; field: string; }[];
+  // docCols: { header: string; field: string; }[];
   notPaidCols: { header: string; field: string; }[];
+  delayCols: { header: string; field: string; }[];
+  delayData: any;
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router) { }
 
@@ -64,23 +66,46 @@ export class DueDateComponent implements OnInit {
 
     this.waiting = true;
 
-    this.docCols = [
+    // this.docCols = [
+    //   {
+    //     header: 'date',
+    //     field: 'date'
+    //   },
+    //   {
+    //     header: 'positive',
+    //     field: 'positive'
+    //   },
+    //   {
+    //     header: 'negative',
+    //     field: 'negative'
+    //   },
+    //   {
+    //     header: 'average',
+    //     field: 'average'
+    //   },
+    // ];
+
+    this.delayCols = [
       {
-        header: 'date',
-        field: 'date'
+        header: 'Account Number',
+        field: 'accountNumber'
       },
       {
-        header: 'positive',
-        field: 'positive'
+        header: 'Account Name',
+        field: 'accountName'
       },
       {
-        header: 'negative',
-        field: 'negative'
+        header: 'Positive Delay Total',
+        field: 'delayPos'
       },
       {
-        header: 'average',
-        field: 'average'
+        header: 'Negative Delay Total',
+        field: 'delayNeg'
       },
+      {
+        header: 'count',
+        field: 'count'
+      }
     ];
     
     this.notPaidCols = [
@@ -118,7 +143,8 @@ export class DueDateComponent implements OnInit {
         // this.chart.refresh();
         // this.chart.reinit();
         this.docDataTable = res.data.docDateReference;
-        this.notPaidDataTable = res.data.docDateReference;
+        // this.notPaidDataTable = res.data.docDateReference;
+        this.delayData = res.data.dueDateRefAccounts;
         this.docDataTable.forEach(element => {
           this.docDateLabels.push(element.monthName + '-' + element.yearName);
           this.notPaidLabels.push(element.monthName + '-' + element.yearName);
@@ -171,6 +197,14 @@ export class DueDateComponent implements OnInit {
         });
       });
     
+  }
+
+  backToPayment() {
+    this._router.navigate(['/analysis/payment/']);
+  }
+
+  goToDetails(row) {
+    this._router.navigate(['analysis/due-date/deails/' + row.accountNumber]);
   }
 
 }

@@ -360,3 +360,65 @@ module.exports.dueDateAnalysis = async (req, res) => {
             });
     }
 };
+
+
+module.exports.dueDateDetailsAnalysis = async (req, res) => {
+    try {
+        const dateRange = await dueDateAnalysisRepo
+            .dueDateRange(+req.params.orgId, +req.params.prcId);
+        if (dateRange.length < 1) {
+            res.status(500)
+                .json({
+                    messsage: 'Can not get Date range!',
+                    dateRange: dateRange
+                });
+                return;
+        }
+        
+        if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+            res.status(400)
+                .json({
+                    messsage: 'this procedure has no due date! please re-import it',
+                    dateRange: dateRange
+                });
+                return;
+        }
+        if (!dateRange[0].mindocdate || !(dateRange[0].mindocdate instanceof Date)) {
+            res.status(400)
+                .json({
+                    messsage: 'this procedure has no due date! please re-import it',
+                    dateRange: dateRange
+                });
+                return;
+        }
+        const mindocdate = dateRange[0].mindocdate;
+        const maxappdate =  dateRange[0].maxappdate;
+        if (!dateRange[0].maxappdate || !(dateRange[0].maxappdate instanceof Date)) {
+            maxappdate =  dateRange[0].maxdate;
+        }
+        
+        
+        dueDateAnalysisRepo.dueDateAnalysisDetails(req.params.orgId, req.params.prcId, mindocdate, maxappdate, req.params.accountNumber, data => {
+            // result = data;
+            res.status(200)
+                .json({
+                    data: data,
+                    dateRange: dateRange
+                });
+        }, err => {
+            res.status(500)
+                .json({
+                    messsage: err,
+                    dateRange: dateRange
+                });
+        });
+
+    } catch (e) {
+        errorHandler('Analysis controller: payment analysis - get details', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};

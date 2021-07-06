@@ -27,6 +27,7 @@ import { TextAnalysisDetailsComponent } from "./shared/analysis/text-analysis/te
 import { PaymentAnalysisComponent } from "./shared/analysis/payment-analysis/payment-analysis.component";
 import { PaymentAnalysisDetailsComponent } from "./shared/analysis/payment-analysis/payment-analysis-details/payment-analysis-details.component";
 import { DueDateComponent } from "./shared/analysis/payment-analysis/due-date/due-date.component";
+import { DueDateDetailsComponent } from "./shared/analysis/payment-analysis/due-date-details/due-date-details.component";
 
 
 const routes: Routes = [
@@ -60,6 +61,7 @@ const routes: Routes = [
   { path: 'analysis/payment', component: PaymentAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/payment/:orgId/:prcId/:accountNumber', component: PaymentAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/due-date', component: DueDateComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/due-date/deails/:accountNumber', component: DueDateDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },

@@ -80,6 +80,7 @@ import { DueDateComponent } from './shared/analysis/payment-analysis/due-date/du
 
 
 import { BnNgIdleService } from 'bn-ng-idle';
+import { DueDateDetailsComponent } from './shared/analysis/payment-analysis/due-date-details/due-date-details.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -118,6 +119,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HighlightPipe,
     PaymentAnalysisDetailsComponent,
     DueDateComponent,
+    DueDateDetailsComponent,
   ],
   imports: [
     BrowserModule,

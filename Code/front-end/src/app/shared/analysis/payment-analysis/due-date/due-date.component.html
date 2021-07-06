@@ -2,11 +2,14 @@
 <div class="p-grid">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
+    <button type="button" pButton pRipple icon="pi pi-euro" label="Back To Payment"
+      class="p-button-rounded p-button-warning" (click)="backToPayment()" pTooltip="Back To Payment"
+      tooltipPosition="bottom"></button>
   </div>
 </div>
 
 <div class="p-grid">
-  <div class="p-col-10">
+  <div class="p-col-12">
     <div class="card p-text-center">
       <p-chart #chart type="line" height="350" [data]="basicData" [options]="basicOptions">
       </p-chart>
@@ -14,7 +17,7 @@
   </div>
 
 
-  <div class="p-col-10">
+  <div class="p-col-12">
     <div class="card p-text-center">
       <p-chart #chart2 type="bar" height="350" [data]="docDateData" [options]="basicOptions">
       </p-chart>
@@ -22,13 +25,14 @@
   </div>
 
 
-  <div class="p-col-10">
+  <div class="p-col-12">
     <div class="card p-text-center">
-      <p-table [value]="docDataTable" [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="docCols"
+      <p-table [value]="delayData" [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="delayCols"
         responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true">
         <ng-template pTemplate="colgroup" let-columns>
           <colgroup>
             <col *ngFor="let col of columns">
+            <col>
           </colgroup>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -36,36 +40,37 @@
             <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
               {{col.header | translate}}
             </th>
+            <th>Actions</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row let-columns="columns">
           <tr [pSelectableRow]="row">
             <td *ngFor="let col of columns" class="p-text-right">
-              <span *ngIf="col.field=='date'">
-                {{ row.monthName + '-' + row.yearName }}
+              <span *ngIf="col.field=='delayPos' || col.field=='delayNeg'">
+                {{ row[col.field]  | currency:'EUR':'' }}
               </span>
-              <span *ngIf="col.field=='average'">
-                {{ +row.positive + +row.negative }}
-              </span>
-              <span *ngIf="col.field!='date' && col.field!='average'">
+              <span *ngIf="col.field!='delayPos' && col.field!='delayNeg'">
                 {{ row[col.field] }}
               </span>
             </td>
+            <td><button type="button" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning"
+              (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom"></button>
+          </td>
           </tr>
         </ng-template>
       </p-table>
     </div>
   </div>
 
-  <div class="p-col-10">
+  <!-- <div class="p-col-10">
     <div class="card p-text-center">
       <p-chart #chart2 type="bar" height="350" [data]="notPaidChartData" [options]="basicOptions">
       </p-chart>
     </div>
-  </div>
+  </div> -->
 
 
-  <div class="p-col-10">
+  <!-- <div class="p-col-10">
     <div class="card p-text-center">
       <p-table [value]="notPaidDataTable" [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="notPaidCols"
         responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true">
@@ -98,6 +103,6 @@
         </ng-template>
       </p-table>
     </div>
-  </div>
+  </div> -->
 
 </div>
