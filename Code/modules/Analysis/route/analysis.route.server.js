@@ -80,4 +80,15 @@ router
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.dueDateDetailsAnalysis);
 
+
+router
+    .route('/:orgId/:prcId/credtor/')
+    .get(analysisCtrl.creditorAnalysis);
+
+
+router
+    .route('/:orgId/:prcId/credtor/details/:accountNumber')
+    .get(analysisCtrl.creditorAnalysisDetails);
+
+
 module.exports = router;

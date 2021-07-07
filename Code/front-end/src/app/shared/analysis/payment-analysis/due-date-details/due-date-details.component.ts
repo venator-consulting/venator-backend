@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -9,7 +8,6 @@ import { CurrencyPipe } from '@angular/common';
   selector: 'app-due-date-details',
   templateUrl: './due-date-details.component.html',
   styleUrls: ['./due-date-details.component.sass'],
-  providers: [DatePipe]
 })
 export class DueDateDetailsComponent implements OnInit {
 
@@ -32,7 +30,7 @@ export class DueDateDetailsComponent implements OnInit {
 
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService, 
-    private datepipe: DatePipe, private _router: Router, private _route: ActivatedRoute) { }
+   private _router: Router, private _route: ActivatedRoute) { }
 
 
   ngOnInit(): void {

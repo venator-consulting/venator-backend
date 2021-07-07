@@ -4,6 +4,7 @@ const nlpHelper = require('../../../helpers/nlp.helper.server');
 const keywords = require('../../../models/analysis/text.analysis.keywords');
 const paymentAnalysisRepo = require('../../../repositories/payment.analysis.repo');
 const dueDateAnalysisRepo = require('../../../repositories/duedate.analysis.repo');
+const criteorAnalysisRepo = require('../../../repositories/creditor.analysis.repo');
 
 module.exports.amountAnalysis = async (req, res) => {
     try {
@@ -301,7 +302,7 @@ module.exports.dueDateAnalysis = async (req, res) => {
                     messsage: 'Can not get Date range!',
                     dateRange: dateRange
                 });
-                return;
+            return;
         }
         if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
             res.status(400)
@@ -309,7 +310,7 @@ module.exports.dueDateAnalysis = async (req, res) => {
                     messsage: 'this procedure has no due date! please re-import it',
                     dateRange: dateRange
                 });
-                return;
+            return;
         }
         const fromDate = dateRange[0].mindate;
         if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
@@ -318,24 +319,24 @@ module.exports.dueDateAnalysis = async (req, res) => {
                     messsage: 'this procedure has no due date! please re-import it',
                     dateRange: dateRange
                 });
-                return;
+            return;
         }
-        const toDate =  dateRange[0].maxdate;
+        const toDate = dateRange[0].maxdate;
         if (!dateRange[0].mindocdate || !(dateRange[0].mindocdate instanceof Date)) {
             res.status(400)
                 .json({
                     messsage: 'this procedure has no due date! please re-import it',
                     dateRange: dateRange
                 });
-                return;
+            return;
         }
         const mindocdate = dateRange[0].mindocdate;
-        const maxappdate =  dateRange[0].maxappdate;
+        const maxappdate = dateRange[0].maxappdate;
         if (!dateRange[0].maxappdate || !(dateRange[0].maxappdate instanceof Date)) {
-            maxappdate =  dateRange[0].maxdate;
+            maxappdate = dateRange[0].maxdate;
         }
-        
-        
+
+
         dueDateAnalysisRepo.dueDateAnalysis(req.params.orgId, req.params.prcId, fromDate, toDate, mindocdate, maxappdate, data => {
             // result = data;
             res.status(200)
@@ -372,16 +373,16 @@ module.exports.dueDateDetailsAnalysis = async (req, res) => {
                     messsage: 'Can not get Date range!',
                     dateRange: dateRange
                 });
-                return;
+            return;
         }
-        
+
         if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
             res.status(400)
                 .json({
                     messsage: 'this procedure has no due date! please re-import it',
                     dateRange: dateRange
                 });
-                return;
+            return;
         }
         if (!dateRange[0].mindocdate || !(dateRange[0].mindocdate instanceof Date)) {
             res.status(400)
@@ -389,15 +390,15 @@ module.exports.dueDateDetailsAnalysis = async (req, res) => {
                     messsage: 'this procedure has no due date! please re-import it',
                     dateRange: dateRange
                 });
-                return;
+            return;
         }
         const mindocdate = dateRange[0].mindocdate;
-        const maxappdate =  dateRange[0].maxappdate;
+        const maxappdate = dateRange[0].maxappdate;
         if (!dateRange[0].maxappdate || !(dateRange[0].maxappdate instanceof Date)) {
-            maxappdate =  dateRange[0].maxdate;
+            maxappdate = dateRange[0].maxdate;
         }
-        
-        
+
+
         dueDateAnalysisRepo.dueDateAnalysisDetails(req.params.orgId, req.params.prcId, mindocdate, maxappdate, req.params.accountNumber, data => {
             // result = data;
             res.status(200)
@@ -415,6 +416,44 @@ module.exports.dueDateDetailsAnalysis = async (req, res) => {
 
     } catch (e) {
         errorHandler('Analysis controller: payment analysis - get details', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+module.exports.creditorAnalysis = async (req, res) => {
+    try {
+
+        let fileKeywords = await nlpHelper.getsynonyms(keywords);
+        const result = await criteorAnalysisRepo
+            .creditorAnalysis(req.params.orgId, req.params.prcId, fileKeywords)
+        res.status(200)
+            .json(result);
+
+    } catch (e) {
+        errorHandler('Analysis controller: creditor analysis - get details', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+
+module.exports.creditorAnalysisDetails = async (req, res) => {
+    try {
+
+        let fileKeywords = await nlpHelper.getsynonyms(keywords);
+        const result = await criteorAnalysisRepo
+            .creditorAnalysisDetails(req.params.orgId, req.params.prcId, fileKeywords, req.params.accountNumber)
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: Creditor details analysis - get details', e);
         res
             .status(500)
             .json({

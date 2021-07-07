@@ -41,7 +41,7 @@
               <span *ngIf="col.field=='dueDate' || col.field=='applicationDate' || col.field=='documentDate'">
                 {{ row[col.field]  | date:'yyyy-MM-dd' }}
               </span>
-              <span *ngIf="col.field!='balance' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicatioDate'">
+              <span *ngIf="col.field!='balance' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate'">
                 {{ row[col.field] }}
               </span>
             </td>
