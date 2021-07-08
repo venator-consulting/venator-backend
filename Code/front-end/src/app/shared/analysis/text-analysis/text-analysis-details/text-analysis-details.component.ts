@@ -34,7 +34,9 @@ export class TextAnalysisDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.waiting = true;
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
+    this.orgId = this.orgId? this.orgId : +localStorage.getItem('organisationId');
     this.prcId = +this._route.snapshot.paramMap.get('prcId');
+    this.prcId = this.prcId ? this.prcId : +localStorage.getItem('currentProcedureId');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
     this.procedureName = localStorage.getItem('currentProcedureName');
 

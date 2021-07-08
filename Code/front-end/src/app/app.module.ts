@@ -81,6 +81,8 @@ import { DueDateComponent } from './shared/analysis/payment-analysis/due-date/du
 
 import { BnNgIdleService } from 'bn-ng-idle';
 import { DueDateDetailsComponent } from './shared/analysis/payment-analysis/due-date-details/due-date-details.component';
+import { CreditorAnalysisComponent } from './shared/analysis/creditor-analysis/creditor-analysis.component';
+import { CreditorAnalysisDetailsComponent } from './shared/analysis/creditor-analysis/creditor-analysis-details/creditor-analysis-details.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -120,6 +122,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PaymentAnalysisDetailsComponent,
     DueDateComponent,
     DueDateDetailsComponent,
+    CreditorAnalysisComponent,
+    CreditorAnalysisDetailsComponent,
   ],
   imports: [
     BrowserModule,

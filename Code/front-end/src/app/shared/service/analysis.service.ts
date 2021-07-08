@@ -72,4 +72,12 @@ export class AnalysisService {
   }
 
 
+  getCreditorAnalysis(orgId: number, prcId: number): Observable<any> {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor');
+  }
+
+  getCreditorAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<any> {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor/details/' + accountNumber);
+  }
+
 }

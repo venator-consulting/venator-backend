@@ -7,7 +7,7 @@ import { ProcedureService } from 'src/app/shared/service/procedure.service';
 import * as FileSaver from 'file-saver';
 
 @Component({
-  selector: 'app-details',
+  selector: 'amount-analysis-details',
   templateUrl: './amount-analysis-details.html',
   styleUrls: ['./amount-analysis-details.sass']
 })
@@ -35,7 +35,9 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.waiting = true;
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
+    this.orgId = this.orgId? this.orgId : +localStorage.getItem('organisationId');
     this.prcId = +this._route.snapshot.paramMap.get('prcId');
+    this.prcId = this.prcId ? this.prcId : +localStorage.getItem('currentProcedureId');
     this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
     this.procedureName = localStorage.getItem('currentProcedureName');

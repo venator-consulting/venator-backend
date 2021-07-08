@@ -156,12 +156,11 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
         /**
          *  Text Analysis records Starts
          */
-        let textQuery = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, SUM(p.balance) as totalBalance,
+        let textQuery = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, SUM(p.balance) as totalBalance
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
-                                AND p.accountNumber = :accountNumber
-                                `;
+                                AND p.accountNumber = :accountNumber `;
         textQuery += keys.length > 0 ? ' AND ( ' : '';
 
         for (let index = 0; index < keys.length; index++) {
@@ -184,17 +183,17 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
          * Amount Analysis records starts
          */
 
-        const amountQuery = `SELECT p.accountNumber , p.accountName , SUM(p.balance) as totalBalance, COUNT(p.id) as totlaCount
-         FROM posting_${orgId}  p
-         WHERE procedureId = :procedureId 
-             AND UPPER(p.accountType) = 'K' 
-             AND p.accountNumber = :accountNumber
-             AND (UPPER(p.documentType) = 'KZ' OR 
-                 UPPER(p.documentType) = 'ZP' OR
-                 UPPER(p.documentTypeNewName) = 'ZAHLUNG')
-             AND p.balance = ROUND(p.balance)
-             AND balance >= :baseBalance
-         GROUP BY p.accountNumber , p.accountName`;
+        const amountQuery = `SELECT po.accountNumber , po.accountName , SUM(po.balance) as totalBalance, COUNT(po.id) as totlaCount
+         FROM posting_${orgId}  po
+         WHERE po.procedureId = :procedureId 
+             AND UPPER(po.accountType) = 'K' 
+             AND po.accountNumber = :accountNumber
+             AND (UPPER(po.documentType) = 'KZ' OR 
+                 UPPER(po.documentType) = 'ZP' OR
+                 UPPER(po.documentTypeNewName) = 'ZAHLUNG')
+             AND po.balance = ROUND(po.balance)
+             AND po.balance >= :baseBalance
+         GROUP BY po.accountNumber , po.accountName`;
 
         /**
          * Amount Analysis records ends
@@ -204,12 +203,12 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
         /**
          * Payment records starts
          */
-        const paymentQuery = `SELECT pos.id, pos.accountNumber, pos.accountName, SUM(pos.balance) as totalBalance, COUNT(pos.id) as totlaCount
+        const paymentQuery = `SELECT  pos.accountNumber, pos.accountName, SUM(pos.balance) as totalBalance, COUNT(pos.id) as totlaCount
                 FROM posting_${orgId} pos
                 WHERE
                     pos.procedureId = :procedureId
                     AND UPPER(pos.accountType) = 'K'
-                    AND pos.accountNumber :accountNumber
+                    AND pos.accountNumber = :accountNumber
                     AND pos.documentDate is not NULL 
                     AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
                     AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
@@ -217,7 +216,8 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
                         OR UPPER(pos.documentType) = 'KZ'
                         OR UPPER(pos.documentType) = 'ZP'
                         OR UPPER(pos.documentType) = 'RE'
-                        OR UPPER(pos.documentType) = 'KR')`;
+                        OR UPPER(pos.documentType) = 'KR')
+                GROUP BY pos.accountNumber , pos.accountName`;
         /**
          * Payment records ends
          */
@@ -264,28 +264,65 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
          * execute promises
          */
         let result = new Array();
-        Promise.all([amountResultPromise, textResultPromise, paymentResultPromise]).then((values) => {
-            result = values[0].concat(values[1], values[2]);
+        let textResult = new Array();
+        let amountResult = new Array();
+        let paymentResult = new Array();
+
+        await Promise.all([amountResultPromise, textResultPromise, paymentResultPromise]).then((values) => {
+            result = values;
         });
 
-        let finalResult = new Array();
 
-        result.reduce((res, value) => {
+        result[0].reduce((res, value) => {
             if (!res[value.accountNumber]) {
                 res[value.accountNumber] = {
                     accountNumber: value.accountNumber,
                     accountName: value.accountName,
-                    totalBalance: value.totalBalance,
-                    totlaCount: value.totlaCount
+                    totalBalance: +value.totalBalance,
+                    totlaCount: +value.totlaCount
                 };
-                finalResult.push(res[value.accountNumber])
+                amountResult.push(res[value.accountNumber])
             }
-            res[value.accountNumber].totalBalance += value.totalBalance;
-            res[value.accountNumber].totlaCount += value.totlaCount;
+            res[value.accountNumber].totalBalance += +value.totalBalance;
+            res[value.accountNumber].totlaCount += +value.totlaCount;
             return res;
         }, {});
 
-        return finalResult;
+        result[1].reduce((res, value) => {
+            if (!res[value.accountNumber]) {
+                res[value.accountNumber] = {
+                    accountNumber: value.accountNumber,
+                    accountName: value.accountName,
+                    totalBalance: +value.totalBalance,
+                    totlaCount: +value.totlaCount
+                };
+                textResult.push(res[value.accountNumber])
+            }
+            res[value.accountNumber].totalBalance += +value.totalBalance;
+            res[value.accountNumber].totlaCount += +value.totlaCount;
+            return res;
+        }, {});
+
+        result[2].reduce((res, value) => {
+            if (!res[value.accountNumber]) {
+                res[value.accountNumber] = {
+                    accountNumber: value.accountNumber,
+                    accountName: value.accountName,
+                    totalBalance: +value.totalBalance,
+                    totlaCount: +value.totlaCount
+                };
+                paymentResult.push(res[value.accountNumber])
+            }
+            res[value.accountNumber].totalBalance += +value.totalBalance;
+            res[value.accountNumber].totlaCount += +value.totlaCount;
+            return res;
+        }, {});
+
+        return {
+            text: textResult,
+            amount: amountResult,
+            payment: paymentResult
+        };
 
     } catch (error) {
         throw new Error(error.message);

@@ -83,12 +83,16 @@ router
 
 router
     .route('/:orgId/:prcId/credtor/')
-    .get(analysisCtrl.creditorAnalysis);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.creditorAnalysis);
 
 
 router
     .route('/:orgId/:prcId/credtor/details/:accountNumber')
-    .get(analysisCtrl.creditorAnalysisDetails);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.creditorAnalysisDetails);
 
 
 module.exports = router;

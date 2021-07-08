@@ -28,6 +28,8 @@ import { PaymentAnalysisComponent } from "./shared/analysis/payment-analysis/pay
 import { PaymentAnalysisDetailsComponent } from "./shared/analysis/payment-analysis/payment-analysis-details/payment-analysis-details.component";
 import { DueDateComponent } from "./shared/analysis/payment-analysis/due-date/due-date.component";
 import { DueDateDetailsComponent } from "./shared/analysis/payment-analysis/due-date-details/due-date-details.component";
+import { CreditorAnalysisComponent } from "./shared/analysis/creditor-analysis/creditor-analysis.component";
+import { CreditorAnalysisDetailsComponent } from "./shared/analysis/creditor-analysis/creditor-analysis-details/creditor-analysis-details.component";
 
 
 const routes: Routes = [
@@ -62,6 +64,8 @@ const routes: Routes = [
   { path: 'analysis/payment/:orgId/:prcId/:accountNumber', component: PaymentAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/due-date', component: DueDateComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/due-date/deails/:accountNumber', component: DueDateDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/creditor', component: CreditorAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/creditor/deails/:accountNumber', component: CreditorAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },

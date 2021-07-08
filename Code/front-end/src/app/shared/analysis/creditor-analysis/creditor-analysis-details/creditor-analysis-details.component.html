@@ -1,0 +1,63 @@
+<p-toast></p-toast>
+<div class="p-grid">
+  <div class="p-col-12">
+    <h2 class="p-text-center">{{accountName}}</h2>
+    <p-messages></p-messages>
+  </div>
+
+
+  <div class="p-col-4">
+      <p-card class="p-text-center">
+        <ng-template pTemplate="header">
+            Total Balance for Amount Analysis
+        </ng-template>
+          <h1>{{totalAmount | currency:'EUR':'symbol' }}</h1>
+      </p-card>
+  </div>
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+          Total Balance for Text Analysis
+      </ng-template>
+        <h1>{{totalText | currency:'EUR':'symbol' }}</h1>
+    </p-card>
+</div>
+<div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+          Total Balance for Payment Analysis
+      </ng-template>
+        <h1>{{totalPayment | currency:'EUR':'symbol' }}</h1>
+    </p-card>
+</div>
+
+
+<div class="p-col-4">
+    <p-card class="p-text-center">
+        <p class="option" (click)="setDetails(2)"><i class="pi pi-euro"></i> Amount Details</p>
+        <p class="option" (click)="setDetails(1)"><i class="pi pi-book"></i> Text Details</p>
+        <p class="option" (click)="setDetails(3)"><i class="pi pi-credit-card"></i> Payment Details</p>
+    </p-card>
+</div>
+<div class="p-col-4">
+  <p-card class="p-text-center">
+      <p>Chart will be here</p>
+  </p-card>
+</div>
+<div class="p-col-4">
+  <p-card class="p-text-center">
+      <p>Export will be here!! why not in the caption of the table?</p>
+  </p-card>
+</div>
+
+
+</div>
+
+
+<div class="p-grid">
+    <div class="p-col-12">
+        <app-text-analysis-details *ngIf="displayDetails==1"></app-text-analysis-details>
+        <amount-analysis-details *ngIf="displayDetails==2"></amount-analysis-details>
+        <app-payment-analysis-details *ngIf="displayDetails==3"></app-payment-analysis-details>
+    </div>
+</div>
