@@ -45,37 +45,23 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <!-- <th> -->
-          <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
-          <!-- </th> -->
+
           <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
             {{col.header | translate}}
           </th>
         </tr>
         <tr>
-          <!-- <th></th> -->
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
             <input *ngIf="col.field != 'amountRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
               [style]="{width:'90%'}" (input)="filterChange($any($event.target).value, col.field)"
               class="filterInputCss" />
 
-            <!-- <p-autoComplete [suggestions]="completeWords" (completeMethod)="filterChange($event.query, col.field)"
-              (onClear)="filterChange($event.query, col.field)" (onSelect)="filterChange($event.word, col.field)"
-              field="word" [minLength]="1" [inputStyle]="{width:'90%'}" [style]="{width:'90%'}" appendTo="body"
-              ></p-autoComplete> -->
-
-            <!-- <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()"
-              pTooltip="{{'Data_Table.filter' | translate}}" tooltipPosition="bottom"></i> -->
           </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr>
-          <!-- <td>
-            <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.amountRelevant"></i>
-            <i class="pi pi-star "  (click)="selectRow(row)" *ngIf="row.amountRelevant"></i> -->
-          <!-- <p-tableCheckbox [value]="row"></p-tableCheckbox> -->
-          <!-- </td> -->
+
           <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">
             <span *ngIf="col.field == 'amountRelevant'">
               <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.amountRelevant"></i>

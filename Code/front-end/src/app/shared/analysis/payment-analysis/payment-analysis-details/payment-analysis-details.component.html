@@ -9,7 +9,7 @@
     <div class="p-col-1"></div>
   <div class="p-col-10">
     <div class="card">
-      <p-chart type="bar" height="140" [data]="basicData" [options]="basicOptions" *ngIf="!waiting">
+      <p-chart type="bar" height="100" [data]="basicData" [options]="basicOptions" *ngIf="!waiting">
       </p-chart>
     </div>
   </div>
@@ -18,12 +18,31 @@
       <p-selectButton [options]="paymentOptions" [(ngModel)]="displayData" optionLabel="name" optionValue="value">
       </p-selectButton>
     </span>
-    <p-table #dtmaxb dataKey="id" selectionMode="single" [value]="blueData" *ngIf="displayData==1"
+    <p-table #dtmaxb dataKey="id" [value]="blueData" *ngIf="displayData==1"
       [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="cols" responsive="true"
-      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true">
+      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [frozenColumns]="frozenCols" frozenWidth="500px"
+      [(selection)]="selected">
+      <ng-template pTemplate="caption">
+        <div class="p-grid">
+          <div class="p-col-1">
+            <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
+              class="p-button-rounded p-button-primary" label="{{ 'Analysis.back' | translate}} "
+              pTooltip="{{ 'Analysis.back' | translate}} " tooltipPosition="bottom"></button>
+          </div>
+          <div class="p-col-2">
+            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+              class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
+            <!-- <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+                class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
+                tooltipPosition="bottom"></button> -->
+            <button type="button" pButton pRipple icon="pi pi-check" (click)="saveRelevant()"
+              class="p-button-primary p-mr-2" pTooltip="Save" tooltipPosition="bottom" label="Save Relevant"></button>
+          </div>
+        </div>
+      </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns">
+          <col *ngFor="let col of columns"  [style]="{'width': (col.width? col.width : 200) +'px'}">
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
@@ -32,10 +51,30 @@
             {{col.header | translate}}
           </th>
         </tr>
+        <tr>
+          <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
+            <input *ngIf="col.field != 'paymentRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
+              [style]="{width:'90%'}" (input)="filterChange($any($event.target).value, col.field)"
+              class="filterInputCss" />
+
+          </th>
+        </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr [pSelectableRow]="row">
-          <td *ngFor="let col of columns" class="p-text-right">
+          
+          <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">
+            <span *ngIf="col.field == 'paymentRelevant'">
+              <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.paymentRelevant"></i>
+              <i class="pi pi-star " (click)="selectRow(row)" *ngIf="row.paymentRelevant"></i>
+            </span>
+            <p-cellEditor *ngIf="col.field == 'paymentRelevantComment'">
+              <ng-template pTemplate="input">
+                <input pInputText type="text" [(ngModel)]="row.paymentRelevantComment" style="width: 100%; padding: 5px;"
+                  (change)="commentChanged(row)">
+              </ng-template>
+     
+            </p-cellEditor>
             <span *ngIf="col.field=='value'">
               {{ row.balance  | currency:'EUR':'' }}
             </span>

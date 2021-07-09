@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AmountAnalysis, AmountAnalysisDetails } from '../model/amountAnalysis';
 import { TextAnalysis, TextAnalysisDetails } from '../model/textAnalysis';
-import { PaymentAnalysis, PaymentAnalysisDetails } from '../model/paymentAnalysis';
+import { PaymentAnalysis, PaymentAnalysisDetails, PaymentAnalysisDetailsData } from '../model/paymentAnalysis';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +53,10 @@ export class AnalysisService {
 
   setRelevantAmountAnalysis(orgId: number, prcId: number, accountNumber: string, baseBalance: number, records: AmountAnalysisDetails[]): Observable<AmountAnalysisDetails[]> {
     return this._http.put<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber+ '/' + baseBalance, records);
+  }
+
+  setRelevantPaymentAnalysis(orgId: number, prcId: number, accountNumber: string, records: PaymentAnalysisDetailsData[]): Observable<PaymentAnalysisDetailsData[]> {
+    return this._http.put<PaymentAnalysisDetailsData[]>(this._thisURL + orgId + '/' + prcId + '/payment/details/' + accountNumber+ '/paymentDetails', records);
   }
 
   getPaymentAnalysis(orgId: number, prcId: number): Observable<PaymentAnalysis> {

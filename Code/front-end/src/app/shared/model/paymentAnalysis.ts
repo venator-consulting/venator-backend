@@ -42,7 +42,19 @@ export class PaymentAnalysisDetails {
         green: PaymentDetailsRecord[];
     }
 }
-
+export class PaymentAnalysisDetailsData {
+    id: number;
+    balance: number;
+    accountType: string;
+    documentType: string;
+    documentTypeNewName: string;
+    accountNumber: string;
+    accountName: string;
+    contraAccountNumber: string;
+    contraAccountName: string;
+    paymentRelevant: boolean;
+    paymentRelevantComment: string;
+}
 export class PaymentDetailsRecord {
     id: number;
     accountNumber: string;

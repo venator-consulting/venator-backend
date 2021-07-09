@@ -4,6 +4,8 @@ import { MessageService } from 'primeng/api';
 import { PaymentData, PaymentDetailsRecord } from 'src/app/shared/model/paymentAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
+import { PaymentAnalysisDetailsData } from 'src/app/shared/model/paymentAnalysis';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-payment-analysis-details',
@@ -35,7 +37,10 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   procedureName: string;
   displayData: number;
   cols: { header: string; field: string; }[];
+  frozenCols: { header: string; field: string; width: string}[];
+  selected: PaymentAnalysisDetailsData[] = new Array();
 
+  
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
     private _route: ActivatedRoute, private prcService: ProcedureService) { }
 
@@ -51,17 +56,75 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     ];
 
     this.cols = [
-      { header: 'PaymentAnalysis.accountNumber', field: 'accountNumber' },
-      { header: 'PaymentAnalysis.accountName', field: 'accountName' },
-      { header: 'PaymentAnalysis.accountType', field: 'accountType' },
-      { header: 'PaymentAnalysis.documentDate', field: 'documentDate' },
-      { header: 'PaymentAnalysis.applicationDate', field: 'applicationDate' },
-      { header: 'PaymentAnalysis.dueDate', field: 'dueDate' },
-      { header: 'PaymentAnalysis.balance', field: 'balance' },
-      { header: 'PaymentAnalysis.documentType', field: 'documentType' },
-      { header: 'PaymentAnalysis.documentTypeNewName', field: 'documentTypeNewName' },
+      {
+        header: 'DataTableColumns.accountNumber',
+        field: 'accountNumber'
+      },
+      {
+        header: 'DataTableColumns.accountName',
+        field: 'accountName'
+      },
+      {
+        header: 'DataTableColumns.accountType',
+        field: 'accountType'
+      },
+      {
+        header: 'DataTableColumns.documentType',
+        field: 'documentType'
+      },
+      {
+        header: 'DataTableColumns.balance',
+        field: 'balance'
+      },
+      {
+        header: 'DataTableColumns.contraAccountNumber',
+        field: 'contraAccountNumber'
+      },
+      {
+        header: 'DataTableColumns.contraAccountName',
+        field: 'contraAccountName'
+      },
+      {
+        header: 'DataTableColumns.documentTypeNew',
+        field: 'documentTypeNew'
+      },
+      {
+        header: 'DataTableColumns.documentNumber',
+        field: 'documentNumber'
+      },
+      {
+        header: 'DataTableColumns.documentDate',
+        field: 'documentDate'
+      },
+      {
+        header: 'DataTableColumns.recordNumber',
+        field: 'recordNumber'
+      },
+      {
+        header: 'DataTableColumns.ledgerId',
+        field: 'ledgerId'
+      },
+      {
+        header: 'DataTableColumns.executionDate',
+        field: 'executionDate'
+      },
+      {
+        header: 'DataTableColumns.dueDate',
+        field: 'dueDate'
+      }
     ];
-
+    this.frozenCols = [
+      {
+        header: '',
+        field: 'paymentRelevant',
+        width: '6'
+      },
+      {
+        header: 'Comment',
+        field: 'paymentRelevantComment',
+        width: '35'
+      }
+    ];
     this.basicData = {
       labels: this.labels,
       datasets: new Array()
@@ -139,14 +202,104 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         });
       });
 
-    // if (this.selectedProcedure && +this.selectedProcedure > 0) {
-    //   this.prcService
-    //     .getById(+this.selectedProcedure)
-    //     .subscribe(prc => {
-    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-    //     }, er => { });
-    // }
-
   } // end of ng on init
+  selectRow(row: PaymentAnalysisDetailsData): void {
+    const index = this.selected.map(item => item.id).indexOf(row.id);
+    if (row.paymentRelevant) {
+      row.paymentRelevant = false;
+      row.paymentRelevantComment = '';
+    } else {
+      row.paymentRelevant = true;
+    }
+    if (index == -1) {
+      this.selected.push(row);
+    }
+  }
 
+  commentChanged(row: PaymentAnalysisDetailsData): void {
+    const index = this.selected.map(item => item.id).indexOf(row.id);
+    row.paymentRelevant = true;
+    if (index == -1) {
+      this.selected.push(row);
+    }
+  }
+
+  saveRelevant() {
+    console.log(this.selected);
+    this._analysisService
+      .setRelevantPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure, this.accountNumber,  this.selected)
+      .subscribe(res => {
+        this._messageService.add({
+          severity: 'success',
+          summary: 'SUCCESS',
+          life: 10000,
+          detail: "records set as relevant successfully!"
+        });
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
+  }
+
+  filterChange(query, colName): void {
+    this.searching = true;
+    if (!query) {
+      delete this.criteria[colName];
+      if (Object.keys(this.criteria).length < 1) {
+        this.data = [...this.tempData];
+      } else {
+        for (const key in this.criteria) {
+          if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+            const element = this.criteria[key];
+            if (element.length < 3) {
+              this.data = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+            } else {
+              this.data = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+            }
+          }
+        }
+      }
+    } else {
+      this.data = [...this.tempData];
+      for (const key in this.criteria) {
+        if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+          const element = this.criteria[key];
+          if (element.length < 3) {
+            this.data = this.data.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+          } else {
+            this.data = this.data.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+          }
+        }
+      } // end of for each criteria field
+    }
+    this.searching = false;
+  }
+
+  goBack() {
+    this._router.navigate(['/analysis/payment/']);
+  }
+
+
+  exportExcel() {
+    import("xlsx").then(xlsx => {
+      const worksheet = xlsx.utils.json_to_sheet(this.data);
+      const workbook = { Sheets: { 'payment_analysis': worksheet }, SheetNames: ['payment_analysis'] };
+      const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+      this.saveAsExcelFile(excelBuffer, "payment_analysis");
+    });
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const d: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    // FileSaver.saveAs(file);
+    FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  }
 }

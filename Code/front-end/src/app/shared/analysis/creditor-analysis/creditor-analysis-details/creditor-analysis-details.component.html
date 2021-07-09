@@ -4,7 +4,11 @@
     <h2 class="p-text-center">{{accountName}}</h2>
     <p-messages></p-messages>
   </div>
-
+  <div class="p-col-12 ">
+    <p-card class="p-text-center">
+      <p-chart type="pie" [data]="chartData" height= "350px"></p-chart>
+    </p-card>
+  </div>
 
   <div class="p-col-4">
       <p-card class="p-text-center">
@@ -12,6 +16,8 @@
             Total Balance for Amount Analysis
         </ng-template>
           <h1>{{totalAmount | currency:'EUR':'symbol' }}</h1>
+          <br>
+          <p class="amountColor" (click)="setDetails(2)"><i class="pi pi-arrow-down"></i> show more Details</p>
       </p-card>
   </div>
   <div class="p-col-4">
@@ -20,35 +26,25 @@
           Total Balance for Text Analysis
       </ng-template>
         <h1>{{totalText | currency:'EUR':'symbol' }}</h1>
+        <br>
+        <p class="textColor" (click)="setDetails(1)"><i class="pi pi-arrow-down"></i> show more Details</p>
     </p-card>
 </div>
 <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
           Total Balance for Payment Analysis
+
       </ng-template>
         <h1>{{totalPayment | currency:'EUR':'symbol' }}</h1>
+        <br>
+        <p class="paymentColor" (click)="setDetails(3)"><i class="pi pi-arrow-down"></i> show more Details </p>
+
     </p-card>
 </div>
 
 
-<div class="p-col-4">
-    <p-card class="p-text-center">
-        <p class="option" (click)="setDetails(2)"><i class="pi pi-euro"></i> Amount Details</p>
-        <p class="option" (click)="setDetails(1)"><i class="pi pi-book"></i> Text Details</p>
-        <p class="option" (click)="setDetails(3)"><i class="pi pi-credit-card"></i> Payment Details</p>
-    </p-card>
-</div>
-<div class="p-col-4">
-  <p-card class="p-text-center">
-      <p>Chart will be here</p>
-  </p-card>
-</div>
-<div class="p-col-4">
-  <p-card class="p-text-center">
-      <p>Export will be here!! why not in the caption of the table?</p>
-  </p-card>
-</div>
+
 
 
 </div>

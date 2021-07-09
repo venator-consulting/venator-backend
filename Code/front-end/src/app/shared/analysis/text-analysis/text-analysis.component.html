@@ -8,7 +8,7 @@
 <div class="p-grid" *ngIf="this.basicData">
   <div class="p-col-12">
     <div class="card">
-      <p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+      <p-chart type="bar" [data]="basicData" [options]="basicOptions" height= "350px"></p-chart>
     </div>
   </div>
 </div>
@@ -35,7 +35,7 @@
       <ng-template pTemplate="body" let-row>
         <tr>
           <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">{{ row[col.field] }}</td>
-          <td><button type="button" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning"
+          <td><button type="button" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-warning"
               (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom" ></button>
           </td>
         </tr>

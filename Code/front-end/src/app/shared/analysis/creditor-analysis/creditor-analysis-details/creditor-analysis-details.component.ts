@@ -18,7 +18,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   totalText: number;
   totalPayment: number;
   displayDetails: number;
-
+  chartData: any ; 
   constructor(private _route: ActivatedRoute, private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
 
   ngOnInit(): void {
@@ -37,6 +37,23 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
         this.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
         this.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
         this.accountName = res.text.length > 0 ? res.text[0].accountName : res.amount.length > 0 ? res.amount[0].accountName : res.payment[0]?.accountNumber;
+        this.chartData = {
+          labels: ['Amount','Text','Payment'],
+          datasets: [
+              {
+                  data: [this.totalAmount, this.totalText, this.totalPayment],
+                  backgroundColor: [
+                      "#95ca14",
+                      "#587bc7",
+                      "#fc6521"
+                  ],
+                  hoverBackgroundColor: [
+                      "#FF6384",
+                      "#36A2EB",
+                      "#FFCE56"
+                  ]
+              }]    
+          };
       }, er => {
         this._messageService.add({
           severity: 'error',
@@ -50,7 +67,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   }
 
   setDetails(option: number) {
-    this.displayDetails =option;
+    this.displayDetails = option;
   }
 
 }
