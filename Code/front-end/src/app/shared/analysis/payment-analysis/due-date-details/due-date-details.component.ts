@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { CurrencyPipe } from '@angular/common';
 
@@ -27,15 +27,25 @@ export class DueDateDetailsComponent implements OnInit {
   docData: any[] = new Array();
   docDateData: any = {};
   delayCols: { header: string; field: string; }[];
+  items: MenuItem[];
+  home: MenuItem;
 
-
-  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, 
-   private _router: Router, private _route: ActivatedRoute) { }
+  constructor(private _messageService: MessageService, private _analysisService: AnalysisService,
+    private _router: Router, private _route: ActivatedRoute) { }
 
 
   ngOnInit(): void {
 
     this.waiting = true;
+
+    this.items = [
+      { label: 'Analysis' },
+      { label: 'Payment', routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
+      { label: 'Due Date', routerLink: '/analysis/due-date', routerLinkActiveOptions: { exact: true } },
+      { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
+    ];
+    
+    this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/shared/data' };
 
     this.basicData = {
       labels: this.labels,
@@ -43,21 +53,19 @@ export class DueDateDetailsComponent implements OnInit {
     };
 
     this.basicOptions = {
-      tooltips: {
-        callbacks: {
-          label: function (tooltipItem, data) {
-            debugger;
-            let value = tooltipItem.value;
-            let currencyPipe = new CurrencyPipe('de');
-            value = currencyPipe.transform(value, 'EURO', '');
-            
-            let label = data.datasets[tooltipItem.datasetIndex].label || '';
-            // label = label + ': ' + tooltipItem.value.toString().replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-            // label = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'USD' }).format(label);
-                return label + ': ' + value;
-          }
-        }
-      },
+      // tooltips: {
+      //   callbacks: {
+      //     label: function (tooltipItem, data) {
+      //       debugger;
+      //       let value = tooltipItem.value;
+      //       let currencyPipe = new CurrencyPipe('de');
+      //       value = currencyPipe.transform(value, 'EURO', '');
+
+      //       let label = data.datasets[tooltipItem.datasetIndex].label || '';
+      //       return label + ': ' + value;
+      //     }
+      //   }
+      // },
       scales: {
         xAxes: [{
           ticks: {

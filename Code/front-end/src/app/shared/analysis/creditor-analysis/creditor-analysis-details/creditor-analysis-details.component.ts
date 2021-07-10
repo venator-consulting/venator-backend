@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 
 @Component({
@@ -22,10 +22,20 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   totalAmountCount: any;
   totalPaymentCount: any;
   totalTextCount: any;
+  items: MenuItem[];
+  home: MenuItem;
+
   constructor(private _route: ActivatedRoute, private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
 
   ngOnInit(): void {
 
+    this.items = [
+      { label: 'Analysis' },
+      { label: 'Creditor', routerLink: '/analysis/creditor', routerLinkActiveOptions: { exact: true } },
+      { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
+    ];
+
+    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');

@@ -3,8 +3,9 @@ import { AnalysisService } from '../../service/analysis.service';
 import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
 import { PaymentAnalysis, PaymentData } from '../../model/paymentAnalysis';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { ProcedureService } from '../../service/procedure.service';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-payment-analysis',
@@ -48,12 +49,57 @@ export class PaymentAnalysisComponent implements OnInit {
   selectedMaxAccount: any;
   @ViewChild('chart') chart: any;
   selectedMaxAccountName: string;
+  items: MenuItem[];
+  home: MenuItem;
 
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
     private prcService: ProcedureService) { }
 
   ngOnInit(): void {
+
+    this.items = [
+      { label: 'Analysis' },
+      { label: 'Payment', routerLink: '/analysis/payment' }
+    ];
+
+    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };
+
+    this.basicOptions = {
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            debugger;
+            let value = tooltipItem.value;
+            let currencyPipe = new CurrencyPipe('de');
+            value = currencyPipe.transform(value, 'EURO', '');
+
+            let label = data.datasets[tooltipItem.datasetIndex].label || '';
+            return label + ': ' + value;
+          }
+        }
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            minRotation: 40,
+            maxRotation: 90,
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            minRotation: 0,
+            maxRotation: 0,
+            callback: function (label, index, values) {
+              debugger;
+              let currencyPipe = new CurrencyPipe('de');
+              label = currencyPipe.transform(label, 'EURO', '');
+              return label;
+            }
+          }
+        }],
+      }
+    };
 
     this.top10 = 1;
 
@@ -165,54 +211,6 @@ export class PaymentAnalysisComponent implements OnInit {
           this.RedData.push(Math.abs(element.red.value));
         }
 
-        // this.blueAccounts.forEach(value => {
-        //   const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
-        //   if (i >= 0) {
-        //     this.accounts[i].blue += value.value;
-        //   } else {
-        //     this.accounts.push({
-        //       accountNumber: value.accountNumber,
-        //       accountName: value.accountName,
-        //       blue: value.value
-        //     });
-        //   }
-        // });
-        // debugger;
-        // this.redAccounts.forEach(value => {
-        //   const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
-        //   if (i >= 0) {
-        //     if (this.accounts[i].red) {
-        //       this.accounts[i].red += value.value;  
-        //     } else {
-        //       this.accounts[i].red = value.value;
-        //     }
-            
-        //   } else {
-        //     this.accounts.push({
-        //       accountNumber: value.accountNumber,
-        //       accountName: value.accountName,
-        //       red: value.value
-        //     });
-        //   }
-        // });
-
-        // this.greenAccounts.forEach(value => {
-        //   const i = this.accounts.findIndex(x => x.accountNumber == value.accountNumber);
-        //   if (i >= 0) {
-        //     if (this.accounts[i].green) {
-        //       this.accounts[i].green += value.value;  
-        //     } else {
-        //       this.accounts[i].green = value.value;
-        //     }
-        //   } else {
-        //     this.accounts.push({
-        //       accountNumber: value.accountNumber,
-        //       accountName: value.accountName,
-        //       green: value.value
-        //     });
-        //   }
-        // });
-
         // get top 10
         this.accounts.sort((a, b) => Math.abs(b.blue) - Math.abs(a.blue));
         this.top10Blue = this.accounts.slice(0, 10);
@@ -246,7 +244,7 @@ export class PaymentAnalysisComponent implements OnInit {
     this._router.navigate(['/analysis/payment/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
   }
 
-  goToDueDate (){
+  goToDueDate() {
     this._router.navigate(['/analysis/due-date']);
   }
 
@@ -328,6 +326,7 @@ export class PaymentAnalysisComponent implements OnInit {
       }
     }
     this.chart.refresh();
+    // this.chart.reinit();
   }
 
   onRowUnselect(event) {

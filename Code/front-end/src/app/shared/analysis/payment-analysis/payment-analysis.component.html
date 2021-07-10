@@ -1,4 +1,5 @@
 <p-toast></p-toast>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <div class="p-grid">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
@@ -15,11 +16,11 @@
   <div class="p-col-6">
     <div class="card p-text-center">
       <span *ngIf="!selectedMaxAccountNumber"> {{ 'All Accounts' | translate }} </span>
-      <p-chart type="bar" height="170" [data]="basicData" [options]="basicOptions" *ngIf="!selectedMaxAccountNumber">
+      <p-chart type="bar" height="450" [data]="basicData" [options]="basicOptions" *ngIf="!selectedMaxAccountNumber">
       </p-chart>
       <span *ngIf="selectedMaxAccountNumber"> {{ selectedMaxAccountName }} </span>
-      <p-chart #chart type="bar" height="140" [data]="specificAccountData" [options]="basicOptions"
-        [hidden]="!selectedMaxAccountNumber"></p-chart>
+      <p-chart #chart type="bar" height="450" [data]="specificAccountData" [options]="basicOptions"
+      *ngIf="selectedMaxAccountNumber"></p-chart>
     </div>
   </div>
 

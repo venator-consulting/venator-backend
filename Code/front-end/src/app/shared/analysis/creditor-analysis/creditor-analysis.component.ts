@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from '../../service/analysis.service';
 
 @Component({
@@ -16,10 +16,19 @@ export class CreditorAnalysisComponent implements OnInit {
   waiting: any;
   data: any;
   accountNumber: string;
+  items: MenuItem[];
+  home: MenuItem;
 
   constructor(private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
 
   ngOnInit(): void {
+
+    this.items = [
+      { label: 'Analysis' },
+      { label: 'Creditor', routerLink: '/analysis/creditor' }
+    ];
+
+    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };
 
     this.cols = [
       {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PostingDataService } from '../../service/posting-data.service';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { ProcedureService } from '../../service/procedure.service';
 import { DatePipe } from '@angular/common';
 import * as FileSaver from 'file-saver';
@@ -27,12 +27,20 @@ export class SusaComponent implements OnInit {
   completeWords: Word[] = new Array();
   filtersNo: number = 0;
   searching: boolean = false;
+  items: MenuItem[];
+  home: MenuItem;
 
   constructor(private _messageService: MessageService, private _postingDataService: PostingDataService,
     private _router: Router, private prcService: ProcedureService, private datepipe: DatePipe) { }
 
   ngOnInit(): void {
     this.waiting = true;
+    this.items = [
+      { label: 'SUSA', routerLink: '/shared/data/susa', routerLinkActiveOptions: { exact: true } }
+    ];
+
+    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data', routerLinkActiveOptions: { exact: true } };
+
     this.organisationId = +localStorage.getItem('organisationId');
     this.procedureId = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');

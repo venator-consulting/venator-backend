@@ -77,7 +77,7 @@ import { HighlightPipe } from './shared/pipes/highlight.pipe';
 import {InputNumberModule} from 'primeng/inputnumber';
 import { PaymentAnalysisDetailsComponent } from './shared/analysis/payment-analysis/payment-analysis-details/payment-analysis-details.component';
 import { DueDateComponent } from './shared/analysis/payment-analysis/due-date/due-date.component';
-
+import {BreadcrumbModule} from 'primeng/breadcrumb';
 
 import { BnNgIdleService } from 'bn-ng-idle';
 import { DueDateDetailsComponent } from './shared/analysis/payment-analysis/due-date-details/due-date-details.component';
@@ -172,7 +172,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PasswordModule,
     MegaMenuModule,
     AutoCompleteModule,
-    InputNumberModule
+    InputNumberModule,
+    BreadcrumbModule
   ],
   providers: [MessageService, AuthGuard, {
     provide: LOCALE_ID,

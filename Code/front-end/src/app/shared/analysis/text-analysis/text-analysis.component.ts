@@ -3,7 +3,7 @@ import { AnalysisService } from '../../service/analysis.service';
 import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
 import { TextAnalysis } from "../../model/textAnalysis";
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { ProcedureService } from '../../service/procedure.service';
 
 @Component({
@@ -21,11 +21,21 @@ export class TextAnalysisComponent implements OnInit {
   cols: { header: string; field: string; }[];
   waiting: boolean = false;
   procedureName: any;
+  items: MenuItem[];
+  home: MenuItem;
 
-  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, 
+  constructor(private _messageService: MessageService, private _analysisService: AnalysisService,
     private _router: Router, private prcService: ProcedureService) { }
 
   ngOnInit(): void {
+
+    this.items = [
+      { label: 'Analysis' },
+      { label: 'Text', routerLink: '/analysis/text' }
+    ];
+
+    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };
+
     this.waiting = true;
 
     this.basicOptions = {
@@ -89,13 +99,13 @@ export class TextAnalysisComponent implements OnInit {
         });
       });
 
-      // if (this.selectedProcedure && +this.selectedProcedure > 0) {
-      //   this.prcService
-      //     .getById(+this.selectedProcedure)
-      //     .subscribe(prc => {
-      //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-      //     }, er => { });
-      //   }
+    // if (this.selectedProcedure && +this.selectedProcedure > 0) {
+    //   this.prcService
+    //     .getById(+this.selectedProcedure)
+    //     .subscribe(prc => {
+    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
+    //     }, er => { });
+    //   }
 
   } // end of ng on init
 

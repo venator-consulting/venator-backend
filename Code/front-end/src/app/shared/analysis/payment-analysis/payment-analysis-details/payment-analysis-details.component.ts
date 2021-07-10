@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { PaymentData, PaymentDetailsRecord } from 'src/app/shared/model/paymentAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
 import { PaymentAnalysisDetailsData } from 'src/app/shared/model/paymentAnalysis';
 import * as FileSaver from 'file-saver';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-payment-analysis-details',
@@ -37,10 +38,12 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   procedureName: string;
   displayData: number;
   cols: { header: string; field: string; }[];
-  frozenCols: { header: string; field: string; width: string}[];
+  frozenCols: { header: string; field: string; width: string }[];
   selected: PaymentAnalysisDetailsData[] = new Array();
+  items: MenuItem[];
+  home: MenuItem;
 
-  
+
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
     private _route: ActivatedRoute, private prcService: ProcedureService) { }
 
@@ -48,6 +51,50 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
     this.waiting = true;
     this.displayData = 1;
+    this.items = [
+      { label: 'Analysis' },
+      { label: 'Payment', routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
+      { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
+    ];
+    
+    this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/shared/data' };
+
+    this.basicOptions = {
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            debugger;
+            let value = tooltipItem.value;
+            let currencyPipe = new CurrencyPipe('de');
+            value = currencyPipe.transform(value, 'EURO', '');
+
+            let label = data.datasets[tooltipItem.datasetIndex].label || '';
+            return label + ': ' + value;
+          }
+        }
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            minRotation: 40,
+            maxRotation: 90,
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            minRotation: 0,
+            maxRotation: 0,
+            callback: function (label, index, values) {
+              debugger;
+              let currencyPipe = new CurrencyPipe('de');
+              label = currencyPipe.transform(label, 'EURO', '');
+              return label;
+            }
+          }
+        }],
+      }
+    };
+
 
     this.paymentOptions = [
       { name: 'Blue', value: 1, color: 'blue !important' },
@@ -227,7 +274,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   saveRelevant() {
     console.log(this.selected);
     this._analysisService
-      .setRelevantPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure, this.accountNumber,  this.selected)
+      .setRelevantPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, this.selected)
       .subscribe(res => {
         this._messageService.add({
           severity: 'success',

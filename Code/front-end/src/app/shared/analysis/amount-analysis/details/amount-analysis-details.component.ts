@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
@@ -19,7 +19,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   data: AmountAnalysisDetails[] = new Array();
   waiting: boolean;
   cols: { header: string; field: string; }[];
-  frozenCols: { header: string; field: string; width: string}[];
+  frozenCols: { header: string; field: string; width: string }[];
   baseBalance: number;
   procedureName: any;
   tempData: any[];
@@ -28,14 +28,24 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   selected: AmountAnalysisDetails[] = new Array();
   detailsOptions: { name: string; value: number; }[];
   detailsOption: number = 1;
+  items: MenuItem[];
+  home: MenuItem;
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
     private _analysisService: AnalysisService, private prcService: ProcedureService) { }
 
   ngOnInit(): void {
+    this.items = [
+      { label: 'Analysis' },
+      { label: 'Amount', routerLink: '/analysis/amount', routerLinkActiveOptions: { exact: true } },
+      { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
+    ];
+    
+    this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/shared/data' };
+
     this.waiting = true;
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
-    this.orgId = this.orgId? this.orgId : +localStorage.getItem('organisationId');
+    this.orgId = this.orgId ? this.orgId : +localStorage.getItem('organisationId');
     this.prcId = +this._route.snapshot.paramMap.get('prcId');
     this.prcId = this.prcId ? this.prcId : +localStorage.getItem('currentProcedureId');
     this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance');

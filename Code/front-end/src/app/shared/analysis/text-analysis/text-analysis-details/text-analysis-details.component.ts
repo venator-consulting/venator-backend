@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { TextAnalysisDetails } from 'src/app/shared/model/textAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
@@ -28,11 +28,20 @@ export class TextAnalysisDetailsComponent implements OnInit {
   selected: TextAnalysisDetails[] = new Array();
   detailsOptions: { name: string; value: number; }[];
   detailsOption: number = 1;
+  items: MenuItem[];
+  home: MenuItem;
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
     private _analysisService: AnalysisService, private prcService: ProcedureService) { }
 
   ngOnInit(): void {
+    this.items = [
+      { label: 'Analysis' },
+      { label: 'Text', routerLink: '/analysis/text', routerLinkActiveOptions: { exact: true } },
+      { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
+    ];
+    
+    this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/shared/data' };
     this.waiting = true;
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
     this.orgId = this.orgId? this.orgId : +localStorage.getItem('organisationId');

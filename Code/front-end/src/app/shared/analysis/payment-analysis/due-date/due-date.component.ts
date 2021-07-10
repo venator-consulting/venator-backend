@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 
 @Component({
@@ -34,11 +34,20 @@ export class DueDateComponent implements OnInit {
   notPaidCols: { header: string; field: string; }[];
   delayCols: { header: string; field: string; }[];
   delayData: any;
+  items: MenuItem[];
+  home: MenuItem;
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router) { }
 
   ngOnInit(): void {
 
+    this.items = [
+      { label: 'Analysis' },
+      { label: 'Payment', routerLink: '/analysis/payment' },
+      { label: 'Due Date', routerLink: '/analysis/due-date' }
+    ];
+
+    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };
 
     this.basicData = {
       labels: this.labels,

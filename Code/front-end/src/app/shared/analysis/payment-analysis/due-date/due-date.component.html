@@ -1,4 +1,5 @@
 <p-toast></p-toast>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <div class="p-grid">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
@@ -46,10 +47,10 @@
         <ng-template pTemplate="body" let-row let-columns="columns">
           <tr [pSelectableRow]="row">
             <td *ngFor="let col of columns" class="p-text-right">
-              <span *ngIf="col.field=='delayPos' || col.field=='delayNeg'">
+              <!-- <span *ngIf="col.field=='delayPos' || col.field=='delayNeg'">
                 {{ row[col.field]  | currency:'EUR':'' }}
-              </span>
-              <span *ngIf="col.field!='delayPos' && col.field!='delayNeg'">
+              </span> -->
+              <span >
                 {{ row[col.field] }}
               </span>
             </td>

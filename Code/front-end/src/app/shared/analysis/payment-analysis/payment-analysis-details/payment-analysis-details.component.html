@@ -1,4 +1,5 @@
 <p-toast></p-toast>
+<p-breadcrumb  *ngIf="!details" [model]="items" [home]="home"></p-breadcrumb>
 <div class="p-grid" *ngIf="!details">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
@@ -9,7 +10,7 @@
     <div class="p-col-1"></div>
   <div class="p-col-10">
     <div class="card">
-      <p-chart type="bar" height="100" [data]="basicData" [options]="basicOptions" *ngIf="!waiting">
+      <p-chart type="bar" height="450" [data]="basicData" [options]="basicOptions" *ngIf="!waiting">
       </p-chart>
     </div>
   </div>

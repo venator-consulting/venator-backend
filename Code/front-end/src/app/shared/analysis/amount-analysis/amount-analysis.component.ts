@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
 import { ProcedureService } from '../../service/procedure.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-amount-analysis',
@@ -24,12 +25,22 @@ export class AmountAnalysisComponent implements OnInit {
   cols: { header: string; field: string; }[];
   waiting: boolean = false;
   procedureName: string = "";
+  items: MenuItem[];
+  home: MenuItem;
 
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService,
     private _router: Router, private prcService: ProcedureService) { }
 
   ngOnInit(): void {
+
+    this.items = [
+      {label: 'Analysis'},
+      {label: 'Amount', routerLink: '/analysis/amount'}
+  ];
+  
+  this.home = {icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data'};
+
     this.waiting = true;
     this.basicOptions = {
       responsive: true,
