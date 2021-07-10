@@ -36,8 +36,8 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.items = [
-      { label: 'Analysis' },
-      { label: 'Amount', routerLink: '/analysis/amount', routerLinkActiveOptions: { exact: true } },
+      // { label: 'Analysis' },
+      { label: 'Amount Analysis', routerLink: '/analysis/amount', routerLinkActiveOptions: { exact: true } },
       { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
     ];
     

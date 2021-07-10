@@ -24,8 +24,8 @@ export class CreditorAnalysisComponent implements OnInit {
   ngOnInit(): void {
 
     this.items = [
-      { label: 'Analysis' },
-      { label: 'Creditor', routerLink: '/analysis/creditor' }
+      // { label: 'Analysis' },
+      { label: 'Creditor Analysis', routerLink: '/analysis/creditor' }
     ];
 
     this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };

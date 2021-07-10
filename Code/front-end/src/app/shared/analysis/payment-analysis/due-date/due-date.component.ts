@@ -42,9 +42,9 @@ export class DueDateComponent implements OnInit {
   ngOnInit(): void {
 
     this.items = [
-      { label: 'Analysis' },
-      { label: 'Payment', routerLink: '/analysis/payment' },
-      { label: 'Due Date', routerLink: '/analysis/due-date' }
+      // { label: 'Analysis' },
+      { label: 'Payment Analysis', routerLink: '/analysis/payment' },
+      { label: 'Due Date Analysis', routerLink: '/analysis/due-date' }
     ];
 
     this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };

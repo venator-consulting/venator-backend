@@ -39,9 +39,9 @@ export class DueDateDetailsComponent implements OnInit {
     this.waiting = true;
 
     this.items = [
-      { label: 'Analysis' },
-      { label: 'Payment', routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
-      { label: 'Due Date', routerLink: '/analysis/due-date', routerLinkActiveOptions: { exact: true } },
+      // { label: 'Analysis' },
+      { label: 'Payment Analysis', routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
+      { label: 'Due Date Analysis', routerLink: '/analysis/due-date', routerLinkActiveOptions: { exact: true } },
       { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
     ];
     

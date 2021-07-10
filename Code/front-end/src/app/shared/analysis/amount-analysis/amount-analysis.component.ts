@@ -35,8 +35,8 @@ export class AmountAnalysisComponent implements OnInit {
   ngOnInit(): void {
 
     this.items = [
-      {label: 'Analysis'},
-      {label: 'Amount', routerLink: '/analysis/amount'}
+      // {label: 'Analysis'},
+      {label: 'Amount Analysis', routerLink: '/analysis/amount'}
   ];
   
   this.home = {icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data'};

@@ -52,8 +52,8 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     this.waiting = true;
     this.displayData = 1;
     this.items = [
-      { label: 'Analysis' },
-      { label: 'Payment', routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
+      // { label: 'Analysis' },
+      { label: 'Payment Analysis', routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
       { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
     ];
     

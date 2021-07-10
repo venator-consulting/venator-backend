@@ -30,8 +30,8 @@ export class TextAnalysisComponent implements OnInit {
   ngOnInit(): void {
 
     this.items = [
-      { label: 'Analysis' },
-      { label: 'Text', routerLink: '/analysis/text' }
+      // { label: 'Analysis' },
+      { label: 'Text Analysis', routerLink: '/analysis/text' }
     ];
 
     this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };

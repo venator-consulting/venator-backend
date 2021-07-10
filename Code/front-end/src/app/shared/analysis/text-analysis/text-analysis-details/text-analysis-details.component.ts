@@ -36,8 +36,8 @@ export class TextAnalysisDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.items = [
-      { label: 'Analysis' },
-      { label: 'Text', routerLink: '/analysis/text', routerLinkActiveOptions: { exact: true } },
+      // { label: 'Analysis' },
+      { label: 'Text Analysis', routerLink: '/analysis/text', routerLinkActiveOptions: { exact: true } },
       { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
     ];
     
