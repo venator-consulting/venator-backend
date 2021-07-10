@@ -292,6 +292,22 @@ module.exports.paymentAnalysisDetails = async (req, res) => {
 };
 
 
+module.exports.paymentBulkUpdate = async (req, res) => {
+    try {
+        const result = await paymentAnalysisRepo.paymentBulkUpdate(req.params.orgId, req.body);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: Payment bulk update - set records as relevant on Payment analysis.', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+
 module.exports.dueDateAnalysis = async (req, res) => {
     try {
         const dateRange = await dueDateAnalysisRepo

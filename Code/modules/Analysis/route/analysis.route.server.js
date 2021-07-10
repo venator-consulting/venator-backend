@@ -66,7 +66,10 @@ router
     .route('/:orgId/:prcId/payment/details/:accountNumber')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.canDisplayAnalysis(), analysisCtrl.paymentAnalysisDetails);
+    }), authorization.canDisplayAnalysis(), analysisCtrl.paymentAnalysisDetails)
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.paymentBulkUpdate);
 
 router
     .route('/:orgId/:prcId/duedate')

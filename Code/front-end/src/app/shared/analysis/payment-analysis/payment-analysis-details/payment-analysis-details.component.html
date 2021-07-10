@@ -74,7 +74,9 @@
                 <input pInputText type="text" [(ngModel)]="row.paymentRelevantComment" style="width: 100%; padding: 5px;"
                   (change)="commentChanged(row)">
               </ng-template>
-     
+              <ng-template pTemplate="output">
+                {{row.paymentRelevantComment}}
+              </ng-template>
             </p-cellEditor>
             <span *ngIf="col.field=='value'">
               {{ row.balance  | currency:'EUR':'' }}
@@ -82,7 +84,7 @@
             <span *ngIf="col.field=='documentDate' || col.field=='dueDate' || col.field=='applicationDate'">
               {{ row[col.field]  | date: 'dd.MM.yyyy' }}
             </span>
-            <span *ngIf="col.field!='value' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate'">
+            <span *ngIf="col.field!='value' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate' && col.field!='paymentRelevantComment' && col.field!='paymentRelevant'">
               {{ row[col.field] }}
             </span>
           </td>

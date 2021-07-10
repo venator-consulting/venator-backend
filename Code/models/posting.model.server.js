@@ -332,6 +332,12 @@ module.exports.getPosting = function (tableName = 'Posting') {
         },
         amountRelevantComment: {
             type: DataTypes.STRING(500)
+        },
+        paymentRelevant: {
+            type: DataTypes.BOOLEAN
+        },
+        paymentRelevantComment: {
+            type: DataTypes.STRING(500)
         }
     }, {
         tableName: tableName,

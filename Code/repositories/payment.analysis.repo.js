@@ -1,9 +1,10 @@
-const connection = require('../config/mysql.config').getConnection();
+const connection = require('../config/mysql.config');
 const {
     QueryTypes
 } = require("sequelize");
 const Sequelize = require('../config/sequelize.config');
 const sequelize = Sequelize.getSequelize();
+const Posting = require('../models/posting.model.server');
 
 module.exports.paymentDateRange = async (orgId, prcId) => {
     try {
@@ -111,7 +112,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1)
                             OR UPPER(pos.documentType) = 'RE'
                             OR UPPER(pos.documentType) = 'KR')`;
 
-        const str = connection.query(query).stream();
+        const str = connection.getConnection().query(query).stream();
 
         str.on('data', (row) => {
             res.forEach(element => {
@@ -287,8 +288,7 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
             }
         }
 
-        let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
-                         pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
+        let query = `SELECT *
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = ${prcId}
@@ -303,7 +303,7 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
                             OR UPPER(pos.documentType) = 'RE'
                             OR UPPER(pos.documentType) = 'KR')`;
 
-        const str = connection.query(query).stream();
+        const str = connection.getConnection().query(query).stream();
 
         str.on('data', (row) => {
             result.forEach(element => {
@@ -357,5 +357,41 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
         });
     } catch (error) {
         cb1(error.message);
+    }
+};
+
+
+/**
+ * Bulk update of array of posting records
+ * @param {number} orgId 
+ * @param {Posting[]} records 
+ */
+ module.exports.paymentBulkUpdate = async (orgId, records) => {
+    try {
+        const postings = await Posting
+            .getPosting('posting_' + orgId)
+            .bulkCreate(records, {
+                updateOnDuplicate: ['paymentRelevant', 'paymentRelevantComment']
+            });
+        return postings;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
+module.exports.paymentJustRelevant = async (orgId, prcId, accountNumber) => {
+    try {
+        return await Posting
+            .getPosting('posting_' + orgId)
+            .findAll({
+                where: {
+                    paymentRelevant: true,
+                    accountNumber: accountNumber,
+                    ProcedureId: prcId
+                },
+            });
+    } catch (error) {
+        throw new Error(error);
     }
 };

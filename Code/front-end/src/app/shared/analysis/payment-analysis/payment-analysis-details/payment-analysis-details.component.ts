@@ -63,7 +63,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       tooltips: {
         callbacks: {
           label: function (tooltipItem, data) {
-            debugger;
+            // debugger;
             let value = tooltipItem.value;
             let currencyPipe = new CurrencyPipe('de');
             value = currencyPipe.transform(value, 'EURO', '');
@@ -85,7 +85,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
             minRotation: 0,
             maxRotation: 0,
             callback: function (label, index, values) {
-              debugger;
+              // debugger;
               let currencyPipe = new CurrencyPipe('de');
               label = currencyPipe.transform(label, 'EURO', '');
               return label;
@@ -250,6 +250,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       });
 
   } // end of ng on init
+
   selectRow(row: PaymentAnalysisDetailsData): void {
     const index = this.selected.map(item => item.id).indexOf(row.id);
     if (row.paymentRelevant) {

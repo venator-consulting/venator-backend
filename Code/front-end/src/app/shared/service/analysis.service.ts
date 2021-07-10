@@ -56,7 +56,7 @@ export class AnalysisService {
   }
 
   setRelevantPaymentAnalysis(orgId: number, prcId: number, accountNumber: string, records: PaymentAnalysisDetailsData[]): Observable<PaymentAnalysisDetailsData[]> {
-    return this._http.put<PaymentAnalysisDetailsData[]>(this._thisURL + orgId + '/' + prcId + '/payment/details/' + accountNumber+ '/paymentDetails', records);
+    return this._http.put<PaymentAnalysisDetailsData[]>(this._thisURL + orgId + '/' + prcId + '/payment/details/' + accountNumber, records);
   }
 
   getPaymentAnalysis(orgId: number, prcId: number): Observable<PaymentAnalysis> {
