@@ -8,87 +8,49 @@ const {
 const Sequelize = require('../config/sequelize.config');
 
 const sequelize = Sequelize.getSequelize();
-const connection = require('../config/mysql.config').getConnection();
+// const connection = require('../config/mysql.config').getConnection();
 
 
 module.exports.creditorAnalysis = async (orgId, prcId, keys) => {
     try {
-        /**
-         *  Text Analysis records Starts
-         */
-        let textQuery = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, SUM(p.balance) as totalBalance
+        
+        let query = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, SUM(p.balance) as totalBalance
                             FROM posting_${orgId}  p
                             WHERE p.procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
                                 AND p.accountNumber is not NULL 
                                 `;
-        textQuery += keys.length > 0 ? ' AND ( ' : '';
-
+        query += keys.length > 0 ? ' AND (( ' : '';
+        // for text records
         for (let index = 0; index < keys.length; index++) {
             const key = keys[index];
-            textQuery += `  p.reference ${key}
+            query += `  p.reference ${key}
                         OR p.textPosting ${key}
                         OR p.textHeader ${key} OR`;
         }
-        textQuery += keys.length > 0 ? ' 1 <> 1) ' : '';
+        query += keys.length > 0 ? ' 1 <> 1) ' : '';
+        // for amount records
+        query += ` OR ((UPPER(p.documentType) = 'KZ' OR 
+            UPPER(p.documentType) = 'ZP' OR
+            UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+            AND p.balance = ROUND(p.balance)
+            AND p.balance >= :baseBalance)`;
+        // for payment records
+        query += ` OR (p.documentDate is not NULL 
+            AND (p.applicationDate is null || p.applicationDate > p.dueDate)
+            AND (UPPER(p.documentTypeNewName) = 'RECHNUNG'
+                OR UPPER(p.documentTypeNewName) = 'ZAHLUNG'
+                OR UPPER(p.documentType) = 'KZ'
+                OR UPPER(p.documentType) = 'ZP'
+                OR UPPER(p.documentType) = 'RE'
+                OR UPPER(p.documentType) = 'KR'))`;
 
-        textQuery += 'GROUP BY p.accountNumber , p.accountName';
-
-        /**
-         * Text Analysis records Ends here
-         */
-
-
-
-        /**
-         * Amount Analysis records starts
-         */
-
-        const amountQuery = `SELECT po.accountNumber , po.accountName , SUM(po.balance) as totalBalance, COUNT(po.id) as totlaCount
-         FROM posting_${orgId} po
-         WHERE po.procedureId = :procedureId 
-             AND UPPER(po.accountType) = 'K' 
-             AND po.accountNumber is not NULL
-             AND (UPPER(po.documentType) = 'KZ' OR 
-                 UPPER(po.documentType) = 'ZP' OR
-                 UPPER(po.documentTypeNewName) = 'ZAHLUNG')
-             AND po.balance = ROUND(po.balance)
-             AND po.balance >= :baseBalance
-         GROUP BY po.accountNumber , po.accountName`;
-
-        /**
-         * Amount Analysis records ends
-         */
+        query += ')'
+        query += 'GROUP BY p.accountNumber , p.accountName';
 
 
-        /**
-         * Payment records starts
-         */
-        const paymentQuery = `SELECT pos.accountNumber, pos.accountName, SUM(pos.balance) as totalBalance, COUNT(pos.id) as totlaCount
-                FROM posting_${orgId} pos
-                WHERE
-                    pos.procedureId = :procedureId
-                    AND UPPER(pos.accountType) = 'K'
-                    AND pos.accountNumber is not NULL
-                    AND pos.documentDate is not NULL 
-                    AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
-                    AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
-                        OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
-                        OR UPPER(pos.documentType) = 'KZ'
-                        OR UPPER(pos.documentType) = 'ZP'
-                        OR UPPER(pos.documentType) = 'RE'
-                        OR UPPER(pos.documentType) = 'KR')
-                    GROUP BY pos.accountNumber , pos.accountName`;
-        /**
-         * Payment records ends
-         */
-
-
-        /**
-         * define promises
-         */
-        const amountResultPromise = await sequelize.query(
-            amountQuery, {
+        const result = await sequelize.query(
+            query, {
                 replacements: {
                     procedureId: prcId,
                     baseBalance: 500
@@ -97,53 +59,8 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys) => {
             }
         );
 
-        const textResultPromise = sequelize.query(
-            textQuery, {
-                replacements: {
-                    procedureId: prcId
-                },
-                type: QueryTypes.SELECT
-            }
-        );
 
-        const paymentResultPromise = sequelize.query(
-            paymentQuery, {
-                replacements: {
-                    procedureId: prcId
-                },
-                type: QueryTypes.SELECT
-            }
-        );
-        /**
-         * define promises ends
-         */
-
-        /**
-         * execute promises
-         */
-        let result = new Array();
-        await Promise.all([amountResultPromise, textResultPromise, paymentResultPromise]).then((values) => {
-            result = values[0].concat(values[1], values[2]);
-        });
-
-        let finalResult = new Array();
-
-        result.reduce((res, value) => {
-            if (!res[value.accountNumber]) {
-                res[value.accountNumber] = {
-                    accountNumber: value.accountNumber,
-                    accountName: value.accountName,
-                    totalBalance: +value.totalBalance,
-                    totlaCount: +value.totlaCount
-                };
-                finalResult.push(res[value.accountNumber])
-            }
-            res[value.accountNumber].totalBalance += +value.totalBalance;
-            res[value.accountNumber].totlaCount += +value.totlaCount;
-            return res;
-        }, {});
-
-        return finalResult;
+        return result;
 
     } catch (error) {
         throw new Error(error.message);
@@ -226,7 +143,7 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
         /**
          * define promises
          */
-        const amountResultPromise = await sequelize.query(
+        const amountResultPromise = sequelize.query(
             amountQuery, {
                 replacements: {
                     procedureId: prcId,
@@ -282,9 +199,11 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
                     totlaCount: +value.totlaCount
                 };
                 amountResult.push(res[value.accountNumber])
+            } else {
+                res[value.accountNumber].totalBalance += +value.totalBalance;
+                res[value.accountNumber].totlaCount += +value.totlaCount;
             }
-            res[value.accountNumber].totalBalance += +value.totalBalance;
-            res[value.accountNumber].totlaCount += +value.totlaCount;
+            
             return res;
         }, {});
 
@@ -297,9 +216,11 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
                     totlaCount: +value.totlaCount
                 };
                 textResult.push(res[value.accountNumber])
+            } else {
+                res[value.accountNumber].totalBalance += +value.totalBalance;
+                res[value.accountNumber].totlaCount += +value.totlaCount;
             }
-            res[value.accountNumber].totalBalance += +value.totalBalance;
-            res[value.accountNumber].totlaCount += +value.totlaCount;
+            
             return res;
         }, {});
 
@@ -312,9 +233,10 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
                     totlaCount: +value.totlaCount
                 };
                 paymentResult.push(res[value.accountNumber])
+            } else {
+                res[value.accountNumber].totalBalance += +value.totalBalance;
+                res[value.accountNumber].totlaCount += +value.totlaCount;
             }
-            res[value.accountNumber].totalBalance += +value.totalBalance;
-            res[value.accountNumber].totlaCount += +value.totlaCount;
             return res;
         }, {});
 
