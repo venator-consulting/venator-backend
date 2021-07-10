@@ -426,10 +426,10 @@ module.exports.dueDateDetailsAnalysis = async (req, res) => {
 
 module.exports.creditorAnalysis = async (req, res) => {
     try {
-
+        const criteria = req.query;
         let fileKeywords = await nlpHelper.getsynonyms(keywords);
         const result = await criteorAnalysisRepo
-            .creditorAnalysis(req.params.orgId, req.params.prcId, fileKeywords)
+            .creditorAnalysis(req.params.orgId, req.params.prcId, fileKeywords, criteria)
         res.status(200)
             .json(result);
 

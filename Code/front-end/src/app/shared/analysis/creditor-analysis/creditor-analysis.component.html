@@ -10,6 +10,38 @@
 <p-table #dtmaxb dataKey="accountNumber" [value]="data"
       [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="cols" responsive="true"
       [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" >
+      <ng-template pTemplate="caption">
+        <div class="p-mb-4">
+          <!-- Limit options -->
+          <p-dropdown [options]="pageLimitSizes" optionValue="value" optionLabel="value" [(ngModel)]="limit"
+            (onChange)="limitChange($event)" class="p-mr-2"></p-dropdown>
+          <!-- Go to First page -->
+          <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-double-left"
+            (click)="firstPage()" class="p-mr-2" pTooltip="{{'Data_Table.firstPage' | translate}}"
+            tooltipPosition="bottom"></button>
+          <!-- Go previous -->
+          <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-left" (click)="previousPage()"
+            class=" p-mr-2" pTooltip="{{'Data_Table.previous' | translate}}" tooltipPosition="bottom"></button>
+          <!-- Page number -->
+          <input pInputText type="number" min="1" class="pageNrInput p-mr-2" [disabled]="true"
+            (change)="pageNrChange($any($event.target).value)" [value]="pageNr" [placeholder]="pageNr" />
+          <!-- Go to next Page -->
+          <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-right"
+            (click)="nextPage()" class="p-mr-2" pTooltip="{{'Data_Table.next' | translate}}"
+            tooltipPosition="bottom"></button>
+          <!-- Go to last page -->
+          <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-double-right"
+            (click)="lastPage()" class="p-mr-2" pTooltip="{{'Data_Table.lastPage' | translate}}"
+            tooltipPosition="bottom"></button>
+  
+          <!-- dispalyed data of total count -->
+          {{displayedDataCount}} of {{totalCount}}
+          <!-- Clear filter -->
+          <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+            class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
+            tooltipPosition="bottom"></button>
+        </div>
+      </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
           <col *ngFor="let col of columns">
@@ -22,6 +54,20 @@
             {{col.header | translate}}
           </th>
           <th>Actions</th>
+        </tr>
+        <tr>
+          <th pResizableColumn class="autocomplete">
+            <input pInputText type="text" [(ngModel)]="criteria['accountNumber']"
+              [style]="{width:'90%'}" (input)="filterChange($any($event.target).value, 'accountNumber')"
+              class="filterInputCss" />
+
+          </th>
+          <th pResizableColumn class="autocomplete">
+            <input pInputText type="text" [(ngModel)]="criteria['accountName']"
+              [style]="{width:'90%'}" (input)="filterChange($any($event.target).value, 'accountName')"
+              class="filterInputCss" />
+
+          </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-columns="columns">

@@ -11,10 +11,12 @@ const sequelize = Sequelize.getSequelize();
 // const connection = require('../config/mysql.config').getConnection();
 
 
-module.exports.creditorAnalysis = async (orgId, prcId, keys) => {
+module.exports.creditorAnalysis = async (orgId, prcId, keys, criteria) => {
     try {
-        
-        let query = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, SUM(p.balance) as totalBalance
+
+        let limit = criteria.limit ? criteria.limit : 25;
+        let offset = criteria.offset ? criteria.offset : 0;
+        let query = `SELECT SQL_CALC_FOUND_ROWS p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, SUM(p.balance) as totalBalance
                             FROM posting_${orgId}  p
                             WHERE p.procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
@@ -46,7 +48,14 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys) => {
                 OR UPPER(p.documentType) = 'KR'))`;
 
         query += ')'
-        query += 'GROUP BY p.accountNumber , p.accountName';
+        if (criteria.accountNumber) {
+            query += `and p.accountNumber like '%${criteria.accountNumber}%' `;
+        }
+        if (criteria.accountName) {
+            query += `and p.accountName like '%${criteria.accountName}%' `;
+        }
+        query += 'GROUP BY p.accountNumber , p.accountName ';
+        query += `LIMIT ${limit} offset ${offset}`;
 
 
         const result = await sequelize.query(
@@ -60,7 +69,25 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys) => {
         );
 
 
-        return result;
+        const query1 = `SELECT FOUND_ROWS()`;
+
+        const totalCount = await sequelize.query(
+            query1, {
+                type: QueryTypes.SELECT
+            }
+        );
+
+        let finalResult = {
+            data: result,
+            count: totalCount
+        };
+
+        // await Promise.all([result, totalCount]).then((values) => {
+        //     finalResult = values;
+        // });
+
+
+        return finalResult;
 
     } catch (error) {
         throw new Error(error.message);
@@ -203,7 +230,7 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
                 res[value.accountNumber].totalBalance += +value.totalBalance;
                 res[value.accountNumber].totlaCount += +value.totlaCount;
             }
-            
+
             return res;
         }, {});
 
@@ -220,7 +247,7 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
                 res[value.accountNumber].totalBalance += +value.totalBalance;
                 res[value.accountNumber].totlaCount += +value.totlaCount;
             }
-            
+
             return res;
         }, {});
 

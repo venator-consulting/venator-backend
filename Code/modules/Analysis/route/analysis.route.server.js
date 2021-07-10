@@ -82,7 +82,7 @@ router
 
 
 router
-    .route('/:orgId/:prcId/credtor/')
+    .route('/:orgId/:prcId/credtor')
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.creditorAnalysis);

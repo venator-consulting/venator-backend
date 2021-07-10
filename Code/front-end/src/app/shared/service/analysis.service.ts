@@ -76,8 +76,8 @@ export class AnalysisService {
   }
 
 
-  getCreditorAnalysis(orgId: number, prcId: number): Observable<any> {
-    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor');
+  getCreditorAnalysis(orgId: number, prcId: number, criteria: any): Observable<any> {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor',  { params: criteria });
   }
 
   getCreditorAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<any> {
