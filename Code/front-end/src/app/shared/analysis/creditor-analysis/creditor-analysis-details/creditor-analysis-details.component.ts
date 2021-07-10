@@ -19,6 +19,9 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   totalPayment: number;
   displayDetails: number;
   chartData: any ; 
+  totalAmountCount: any;
+  totalPaymentCount: any;
+  totalTextCount: any;
   constructor(private _route: ActivatedRoute, private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
 
   ngOnInit(): void {
@@ -34,8 +37,11 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
       .getCreditorAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.totalAmount = res.amount.length > 0 ? res.amount[0].totalBalance : 0;
+        this.totalAmountCount = res.amount.length > 0 ? res.amount[0].totlaCount : 0;
         this.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
+        this.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
         this.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
+        this.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
         this.accountName = res.text.length > 0 ? res.text[0].accountName : res.amount.length > 0 ? res.amount[0].accountName : res.payment[0]?.accountNumber;
         this.chartData = {
           labels: ['Amount','Text','Payment'],

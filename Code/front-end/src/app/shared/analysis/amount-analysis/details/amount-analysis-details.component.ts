@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
@@ -12,7 +12,7 @@ import * as FileSaver from 'file-saver';
   styleUrls: ['./amount-analysis-details.sass']
 })
 export class AmountAnalysisDetailsComponent implements OnInit {
-
+  @Input('details') details: boolean = false;
   orgId: number;
   prcId: number;
   accountNumber: string;

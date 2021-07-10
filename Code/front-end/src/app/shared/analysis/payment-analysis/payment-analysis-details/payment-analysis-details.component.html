@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<div class="p-grid">
+<div class="p-grid" *ngIf="!details">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
     <p-messages></p-messages>
@@ -24,7 +24,7 @@
       [(selection)]="selected">
       <ng-template pTemplate="caption">
         <div class="p-grid">
-          <div class="p-col-1">
+          <div class="p-col-1" *ngIf="!details">
             <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
               class="p-button-rounded p-button-primary" label="{{ 'Analysis.back' | translate}} "
               pTooltip="{{ 'Analysis.back' | translate}} " tooltipPosition="bottom"></button>
@@ -79,7 +79,7 @@
               {{ row.balance  | currency:'EUR':'' }}
             </span>
             <span *ngIf="col.field=='documentDate' || col.field=='dueDate' || col.field=='applicationDate'">
-              {{ row[col.field]  | date: 'yyyy-MM-dd' }}
+              {{ row[col.field]  | date: 'dd.MM.yyyy' }}
             </span>
             <span *ngIf="col.field!='value' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate'">
               {{ row[col.field] }}
@@ -110,7 +110,7 @@
               {{ row.balance  | currency:'EUR':'' }}
             </span>
             <span *ngIf="col.field=='documentDate' || col.field=='dueDate' || col.field=='applicationDate'">
-              {{ row[col.field]  | date: 'yyyy-MM-dd' }}
+              {{ row[col.field]  | date: 'dd.MM.yyyy' }}
             </span>
             <span *ngIf="col.field!='value' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate'">
               {{ row[col.field] }}
@@ -141,7 +141,7 @@
               {{ row.balance  | currency:'EUR':'' }}
             </span>
             <span *ngIf="col.field=='documentDate' || col.field=='dueDate' || col.field=='applicationDate'">
-              {{ row[col.field]  | date: 'yyyy-MM-dd' }}
+              {{ row[col.field]  | date: 'dd.MM.yyyy' }}
             </span>
             <span *ngIf="col.field!='value' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate'">
               {{ row[col.field] }}

@@ -39,7 +39,7 @@
                 {{ row[col.field]  | currency:'EUR':'' }}
               </span>
               <span *ngIf="col.field=='dueDate' || col.field=='applicationDate' || col.field=='documentDate'">
-                {{ row[col.field]  | date:'yyyy-MM-dd' }}
+                {{ row[col.field]  | date:'dd.MM.yyyy' }}
               </span>
               <span *ngIf="col.field!='balance' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate'">
                 {{ row[col.field] }}

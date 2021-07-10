@@ -26,7 +26,10 @@
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr [pSelectableRow]="row">
           <td *ngFor="let col of columns" class="p-text-right">
-            <span>
+            <span *ngIf="col.field=='totalBalance'">
+              {{ row.totalBalance  | currency:'EUR':'' }}
+            </span>
+            <span *ngIf="col.field!='totalBalance'">
               {{ row[col.field] }}
             </span>
           </td>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { PaymentData, PaymentDetailsRecord } from 'src/app/shared/model/paymentAnalysis';
@@ -13,7 +13,7 @@ import * as FileSaver from 'file-saver';
   styleUrls: ['./payment-analysis-details.component.sass']
 })
 export class PaymentAnalysisDetailsComponent implements OnInit {
-
+  @Input('details') details: boolean = false;
   startDate: Date = new Date();
   endDate: Date = new Date();
   data: PaymentData[];

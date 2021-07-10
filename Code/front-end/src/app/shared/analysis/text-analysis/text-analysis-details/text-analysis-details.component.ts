@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { TextAnalysisDetails } from 'src/app/shared/model/textAnalysis';
@@ -13,6 +13,7 @@ import * as FileSaver from 'file-saver';
 })
 export class TextAnalysisDetailsComponent implements OnInit {
 
+  @Input('details') details: boolean = false;
   orgId: number;
   prcId: number;
   accountNumber: string;

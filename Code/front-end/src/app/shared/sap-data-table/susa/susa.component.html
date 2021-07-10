@@ -9,11 +9,13 @@
     <p-toast></p-toast>
     <label>{{ 'Susa.from' | translate}} : </label>
     <p-calendar [(ngModel)]="fromDate" [minDate]="fromDate" [maxDate]="toDate" [monthNavigator]="true"
-      [yearNavigator]="true" yearRange="{{fromDate.getFullYear()+':'+toDate.getFullYear()}}"></p-calendar>
+      [yearNavigator]="true" yearRange="{{fromDate.getFullYear()+':'+toDate.getFullYear()}}"
+      dateFormat="dd.mm.yy"></p-calendar>
     &nbsp;
     <label>{{ 'Susa.to' | translate}} : </label>
     <p-calendar [(ngModel)]="toDate" [minDate]="fromDate" [maxDate]="toDate" [monthNavigator]="true"
-      [yearNavigator]="true" yearRange="{{fromDate.getFullYear()+':'+toDate.getFullYear()}}"></p-calendar>
+      [yearNavigator]="true" yearRange="{{fromDate.getFullYear()+':'+toDate.getFullYear()}}"
+      dateFormat="dd.mm.yy"></p-calendar>
     &nbsp;
     <button type="button" pButton pRipple icon="pi pi-filter" [disabled]="waiting"
       class="p-button-rounded p-button-primary" label="{{'Susa.search' | translate}}" (click)="getData();"

@@ -16,6 +16,7 @@
             Total Balance for Amount Analysis
         </ng-template>
           <h1>{{totalAmount | currency:'EUR':'symbol' }}</h1>
+          <h3>{{totalAmountCount}}</h3>
           <br>
           <p class="amountColor" (click)="setDetails(2)"><i class="pi pi-arrow-down"></i> show more Details</p>
       </p-card>
@@ -26,6 +27,7 @@
           Total Balance for Text Analysis
       </ng-template>
         <h1>{{totalText | currency:'EUR':'symbol' }}</h1>
+        <h3>{{totalTextCount}}</h3>
         <br>
         <p class="textColor" (click)="setDetails(1)"><i class="pi pi-arrow-down"></i> show more Details</p>
     </p-card>
@@ -34,9 +36,9 @@
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
           Total Balance for Payment Analysis
-
       </ng-template>
         <h1>{{totalPayment | currency:'EUR':'symbol' }}</h1>
+        <h3>{{totalPaymentCount}}</h3>
         <br>
         <p class="paymentColor" (click)="setDetails(3)"><i class="pi pi-arrow-down"></i> show more Details </p>
 
@@ -52,8 +54,8 @@
 
 <div class="p-grid">
     <div class="p-col-12">
-        <app-text-analysis-details *ngIf="displayDetails==1"></app-text-analysis-details>
-        <amount-analysis-details *ngIf="displayDetails==2"></amount-analysis-details>
-        <app-payment-analysis-details *ngIf="displayDetails==3"></app-payment-analysis-details>
+        <app-text-analysis-details details="true" *ngIf="displayDetails==1"></app-text-analysis-details>
+        <amount-analysis-details details="true" *ngIf="displayDetails==2"></amount-analysis-details>
+        <app-payment-analysis-details details="true" *ngIf="displayDetails==3"></app-payment-analysis-details>
     </div>
 </div>
