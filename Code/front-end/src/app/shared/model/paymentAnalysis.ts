@@ -66,4 +66,6 @@ export class PaymentDetailsRecord {
     balance: number;
     documentTypeNewName: string;
     documentType: string;
+    paymentRelevant: boolean;
+    paymentRelevantComment: string;
 }

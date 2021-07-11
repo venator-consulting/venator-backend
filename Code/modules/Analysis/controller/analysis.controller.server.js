@@ -308,6 +308,23 @@ module.exports.paymentBulkUpdate = async (req, res) => {
 };
 
 
+module.exports.paymentJustRelevant = async (req, res) => {
+    try {
+        const result = await paymentAnalysisRepo
+            .paymentJustRelevant(req.params.orgId, req.params.prcId, req.params.accountNumber);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: getByAccountNumber - fetch the relevant records for a specific account', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+
 module.exports.dueDateAnalysis = async (req, res) => {
     try {
         const dateRange = await dueDateAnalysisRepo

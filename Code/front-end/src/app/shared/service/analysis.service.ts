@@ -67,6 +67,30 @@ export class AnalysisService {
     return this._http.get<PaymentAnalysisDetails>(this._thisURL + orgId + '/' + prcId + '/payment/details/'+ accountNumber);
   }
 
+  /**
+   * get the relevant user for this account based on paymentRelevant field ignore other conditions
+   * because the user can set any record as relevant even if the record is not blue neither red...
+   * @param orgId 
+   * @param prcId 
+   * @param accountNumber 
+   * @returns 
+   */
+  getPaymentAnalysisDetailsRelevant(orgId: number, prcId: number, accountNumber: string): Observable<PaymentAnalysisDetailsData[]> {
+    return this._http.get<PaymentAnalysisDetailsData[]>(this._thisURL + orgId + '/' + prcId + '/payment/details-relevant/' + accountNumber);
+  }
+
+  /**
+   * Get All records for this account; you can use getAmountAnalysisDetailsByAccount
+   * return the same data but the difference in the comment and relative field
+   * @param orgId 
+   * @param prcId 
+   * @param accountNumber 
+   * @returns 
+   */
+  getPaymentAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string): Observable<PaymentAnalysisDetailsData[]> {
+    return this._http.get<PaymentAnalysisDetailsData[]>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber);
+  }
+
   getDueDateAnalysis(orgId: number, prcId: number): Observable<any> {
     return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate');
   }

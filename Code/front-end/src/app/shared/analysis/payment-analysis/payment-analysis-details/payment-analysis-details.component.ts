@@ -21,6 +21,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   blueData: PaymentDetailsRecord[] = new Array();
   redData: PaymentDetailsRecord[] = new Array();
   greenData: PaymentDetailsRecord[] = new Array();
+  relevantData: PaymentAnalysisDetailsData[] = new Array();
   basicOptions: any;
   basicData: any;
   blue: any[] = new Array();
@@ -42,6 +43,8 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   selected: PaymentAnalysisDetailsData[] = new Array();
   items: MenuItem[];
   home: MenuItem;
+  detailsOptions: { name: string; value: number; }[];
+  detailsOption: number;
 
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
@@ -51,6 +54,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
     this.waiting = true;
     this.displayData = 1;
+    this.detailsOption = 1;
     this.items = [
       // { label: 'Analysis' },
       { label: 'Payment Analysis', routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
@@ -100,6 +104,12 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       { name: 'Blue', value: 1, color: 'blue !important' },
       { name: 'Red', value: 2, color: 'red' },
       { name: 'Green', value: 3, color: 'green' }
+    ];
+
+    this.detailsOptions = [
+      { name: 'Sys-Relevants', value: 1 },
+      { name: 'User Relevant', value: 2 },
+      { name: 'All', value: 3 }
     ];
 
     this.cols = [
@@ -222,34 +232,40 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       });
     }
 
+    this.getData();
+
+  } // end of ng on init
+
+  getData() {
     this._analysisService
-      .getPaymentAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
-      .subscribe(res => {
-        this.data = res.data.data;
-        this.startDate = res.dateRange[0].mindate;
-        this.endDate = res.dateRange[0].maxdate;
-        this.blueData = res.data.blue;
-        this.redData = res.data.red;
-        this.greenData = res.data.green;
+    .getPaymentAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+    .subscribe(res => {
+      this.data = res.data.data;
+      this.startDate = res.dateRange[0].mindate;
+      this.endDate = res.dateRange[0].maxdate;
+      this.blueData = res.data.blue;
+      this.redData = res.data.red;
+      this.greenData = res.data.green;
+      if (!(this.labels.length > 0)) {
         for (let i = 0; i < this.data.length; i++) {
           const element = this.data[i];
-
+  
           this.labels.push(element.monthName + '-' + element.yearName);
           this.blue.push(Math.abs(element.blue.value));
           this.green.push(Math.abs(element.green.value));
           this.red.push(Math.abs(element.red.value));
         }
-        this.waiting = false;
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
+      }
+      this.waiting = false;
+    }, er => {
+      this._messageService.add({
+        severity: 'error',
+        summary: 'ERROR',
+        life: 10000,
+        detail: "There is an error occured please try again"
       });
-
-  } // end of ng on init
+    });
+  }
 
   selectRow(row: PaymentAnalysisDetailsData): void {
     const index = this.selected.map(item => item.id).indexOf(row.id);
@@ -277,6 +293,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     this._analysisService
       .setRelevantPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, this.selected)
       .subscribe(res => {
+        this.getData();
         this._messageService.add({
           severity: 'success',
           summary: 'SUCCESS',
@@ -350,4 +367,62 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     // FileSaver.saveAs(file);
     FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
+
+  changeData(option: number): void {
+    switch (option) {
+      case 1:
+        this.getData();
+        break;
+      case 2:
+        this.getUserRelevant();
+        break;
+      case 3:
+        this.getAllByAccount();
+        break;
+      default:
+        this.getData();
+        break;
+    }
+  }
+
+
+  getUserRelevant() {
+    this.waiting = true;
+    this._analysisService
+      .getPaymentAnalysisDetailsRelevant(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+      .subscribe(res => {
+        this.relevantData = res;
+        // this.tempData = res;
+        this.waiting = false;
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
+  }
+
+
+  getAllByAccount() {
+    this.waiting = true;
+    this._analysisService
+      .getPaymentAnalysisDetailsByAccount(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+      .subscribe(res => {
+        this.relevantData = res;
+        // this.tempData = res;
+        this.waiting = false;
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
+      });
+  }
+
+
+
 }

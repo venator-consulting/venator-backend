@@ -71,6 +71,14 @@ router
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.paymentBulkUpdate);
 
+
+router
+    .route('/:orgId/:prcId/payment/details-relevant/:accountNumber')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), analysisCtrl.paymentJustRelevant);
+
+
 router
     .route('/:orgId/:prcId/duedate')
     .get(passport.authenticate('jwt', {
