@@ -88,6 +88,6 @@ router
     .route('/complete/:word')
     .get(passport.authenticate('jwt', {
         session: false
-    }), dictCtrl.fetch)
+    }), dictCtrl.fetch);
 
 module.exports = router;

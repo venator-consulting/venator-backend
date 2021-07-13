@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const authorization = require('../../../config/authorization.config');
 const analysisCtrl = require('../controller/analysis.controller.server');
+const accountTypeCtrl = require('../controller/accountType.controler.server');
 
 router
     .route('/:orgId/:prcId/amount/:baseBalance')
@@ -104,6 +105,23 @@ router
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.canDisplayAnalysis(), analysisCtrl.creditorAnalysisDetails);
+
+
+router
+    .route('/account-type/posting/:orgId/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(),accountTypeCtrl.getDocTypes)
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(),accountTypeCtrl.updateDoctypes);
+
+
+router
+    .route('/account-type')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), accountTypeCtrl.getAll);
 
 
 module.exports = router;

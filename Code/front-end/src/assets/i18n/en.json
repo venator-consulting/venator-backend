@@ -249,6 +249,21 @@
         "Cancel": "Cancel"
     },
 
+    "Account_Type": {
+        "Debitor": "Debitor",
+        "Kreditor": "Kreditor",
+        "Sachkonto": "Sachkonto",
+        "Finanzkonto": "Finanzkonto",
+        "null": " ",
+
+        "accountType": "Account Type",
+        "accountTypeNewName": "Account Type new",
+        "Action": "Action",
+        "Edit": "Edit",
+        "Save": "Save",
+        "Cancel": "Cancel"
+    },
+
     "Procedure_Registration": {
         "editHeader": "edit procedure ",
         "registrationHeader": "Procedure Registration",

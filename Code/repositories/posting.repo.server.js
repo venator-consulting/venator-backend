@@ -89,6 +89,33 @@ module.exports.getDocTypes = async (organisationId, procedureId) => {
     }
 };
 
+
+module.exports.getAccountTypes = async (organisationId, procedureId) => {
+    try {
+        const result = await Posting
+            .getPosting('posting_' + organisationId)
+            .findAll({
+                where: {
+                    ProcedureId: procedureId,
+                    accountType: {
+                        [Op.ne]: null
+                    }
+                },
+                attributes: [
+                    [fn('DISTINCT', col('accountType')), 'accountType'],
+                    'accountTypeNewId',
+                    'accountTypeNewName',
+                    'procedureId'
+                ],
+                distinct: true
+            });
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+
 module.exports.updateDocTypeNew = async (organisationId, procedureId, documentType, documentTypeNewId, documentTypeNewName) => {
     try {
         return await Posting
@@ -106,6 +133,26 @@ module.exports.updateDocTypeNew = async (organisationId, procedureId, documentTy
         throw new Error(error);
     }
 };
+
+
+module.exports.updateAccountTypeNew = async (organisationId, procedureId, accountType, accountTypeNewId, accountTypeNewName) => {
+    try {
+        return await Posting
+            .getPosting('posting_' + organisationId)
+            .update({
+                accountTypeNewId: accountTypeNewId,
+                accountTypeNewName: accountTypeNewName
+            }, {
+                where: {
+                    procedureId: procedureId,
+                    accountType: accountType
+                }
+            });
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 
 module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
     try {

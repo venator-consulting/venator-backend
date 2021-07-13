@@ -30,6 +30,7 @@ import { DueDateComponent } from "./shared/analysis/payment-analysis/due-date/du
 import { DueDateDetailsComponent } from "./shared/analysis/payment-analysis/due-date-details/due-date-details.component";
 import { CreditorAnalysisComponent } from "./shared/analysis/creditor-analysis/creditor-analysis.component";
 import { CreditorAnalysisDetailsComponent } from "./shared/analysis/creditor-analysis/creditor-analysis-details/creditor-analysis-details.component";
+import { AccountTypeComponent } from "./shared/account-type/account-type.component";
 
 
 const routes: Routes = [
@@ -66,6 +67,9 @@ const routes: Routes = [
   { path: 'analysis/due-date/deails/:accountNumber', component: DueDateDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/creditor', component: CreditorAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/creditor/deails/:accountNumber', component: CreditorAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+
+
+  { path: 'shared/accountType', component: AccountTypeComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },

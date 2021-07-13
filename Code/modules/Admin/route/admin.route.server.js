@@ -145,8 +145,12 @@ router
 
 router
     .route('/document-type/posting/:orgId/:prcdrId')
-    .get(postingCtrl.getDocTypes)
-    .put(postingCtrl.updateDoctypes);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), postingCtrl.getDocTypes)
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), postingCtrl.updateDoctypes);
 
 
 router

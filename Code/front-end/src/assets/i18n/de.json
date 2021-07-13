@@ -246,6 +246,23 @@
         "Save": "Speichern",
         "Cancel": "Abbrechen"
     },
+
+    "Account_Type": {
+        "Debitor": "Debitor",
+        "Kreditor": "Kreditor",
+        "Sachkonto": "Sachkonto",
+        "Finanzkonto": "Finanzkonto",
+        "null": " ",
+
+        "accountType": "Account Type",
+        "accountTypeNewName": "Account Type new",
+        "Action": "Aktionen",
+        "Edit": "bearbeiten",
+        "Save": "Speichern",
+        "Cancel": "Abbrechen"
+    },
+
+
     "Procedure_Registration": {
         "editHeader": "Verfahren bearbeiten",
         "addProedurePlaceHolder": "Verfahren hinzufügen",

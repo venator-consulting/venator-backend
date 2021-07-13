@@ -133,6 +133,12 @@ module.exports.getPosting = function (tableName = 'Posting') {
         accountType: {
             type: DataTypes.STRING(10)
         },
+        accountTypeNewId: {
+            type: DataTypes.BIGINT(11)
+        },
+        accountTypeNewName: {
+            type: DataTypes.STRING(25)
+        },
         // Kontoart
         accountNumber: {
             type: DataTypes.STRING(25)
