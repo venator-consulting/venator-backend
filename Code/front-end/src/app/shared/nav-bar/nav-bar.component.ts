@@ -85,6 +85,7 @@ export class NavBarComponent implements OnInit {
                             { label: elem.addUser, icon: 'pi pi-user-plus', routerLink: ['/admin/admin/add'], command: () => { this.sideBarShow = false } },
                             { label: elem.addOrganisation, icon: 'pi pi-plus-circle', routerLink: ['admin/organisation/add'], command: () => { this.sideBarShow = false } },
                             { label: elem.addDocumentType, icon: 'pi pi-plus-circle', routerLink: ['admin/document-type'], command: () => { this.sideBarShow = false } },
+                            { label: elem.addAccountType, icon: 'pi pi-plus-circle', routerLink: ['admin/accountType'], command: () => { this.sideBarShow = false } },
                             { label: elem.resetPassword, icon: 'pi pi-lock', routerLink: ['/resetPassword'], command: () => { this.sideBarShow = false } },
                         ]
                     },
@@ -104,6 +105,12 @@ export class NavBarComponent implements OnInit {
                            { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' , routerLink: ['/analysis/creditor'], command: () => {this.sideBarShow = false}},
 
 
+                        ]
+                    },
+                    {
+                        label: 'Liquidity',
+                        items: [
+                            { label: 'Opening Balance', icon: 'pi  pi-euro', routerLink: ['/liquidity/openingBalance'], command: () => { this.sideBarShow = false } },
                         ]
                     }
                 ];

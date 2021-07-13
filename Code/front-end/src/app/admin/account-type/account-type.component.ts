@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { AccountTypes, PostingAccountTypes } from 'src/app/shared/model/accountType';
-import { AnalysisService } from '../service/analysis.service';
+import { PostingService } from '../service/posting.service';
 
 @Component({
   selector: 'app-account-type',
@@ -20,7 +20,7 @@ export class AccountTypeComponent implements OnInit {
   procedureName: string;
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
-    private _analysisService: AnalysisService) { }
+    private _postingService: PostingService) { }
 
   ngOnInit(): void {
 
@@ -33,7 +33,7 @@ export class AccountTypeComponent implements OnInit {
       AccountTypeName: 'null'
     });
 
-    this._analysisService
+    this._postingService
       .getAccountTypesEnum()
       .subscribe(
         (data) => {
@@ -42,7 +42,7 @@ export class AccountTypeComponent implements OnInit {
         (error) => console.log(error)
       );
 
-    this._analysisService
+    this._postingService
       .getPostingAccountTypes(this.selectedOrgId, this.selectedPrcId)
       .subscribe(
         data => {
@@ -83,7 +83,7 @@ export class AccountTypeComponent implements OnInit {
 
   save(row) {
     
-    this._analysisService
+    this._postingService
       .updateNewAccountType(this.selectedOrgId, this.selectedPrcId, row)
       .subscribe(res => {
         row.isEditable = false;

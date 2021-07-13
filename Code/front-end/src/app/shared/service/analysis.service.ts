@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { AmountAnalysis, AmountAnalysisDetails } from '../model/amountAnalysis';
 import { TextAnalysis, TextAnalysisDetails } from '../model/textAnalysis';
 import { PaymentAnalysis, PaymentAnalysisDetails, PaymentAnalysisDetailsData } from '../model/paymentAnalysis';
-import { AccountTypes, PostingAccountTypes } from '../model/accountType';
 
 @Injectable({
   providedIn: 'root'
@@ -108,21 +107,5 @@ export class AnalysisService {
   getCreditorAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<any> {
     return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor/details/' + accountNumber);
   }
-
-
-
-
-  getAccountTypesEnum():Observable<AccountTypes[]> {
-    return this._http.get<AccountTypes[]>(this._thisURL + 'account-type');
-  }
-
-  getPostingAccountTypes(orgId: number, prcId: number): Observable<PostingAccountTypes[]>{
-    return this._http.get<PostingAccountTypes[]>(this._thisURL + 'account-type/posting/' + orgId + '/' + prcId);
-  }
-
-  updateNewAccountType(orgId: number, prcId: number, data: {accountType, accountTypeNewId, accountTypeNewName}): Observable<any>{
-    return this._http.put<any>(this._thisURL + 'account-type/posting/' + orgId + '/' + prcId, data);
-  }
-  
 
 }

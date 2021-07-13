@@ -30,7 +30,8 @@ import { DueDateComponent } from "./shared/analysis/payment-analysis/due-date/du
 import { DueDateDetailsComponent } from "./shared/analysis/payment-analysis/due-date-details/due-date-details.component";
 import { CreditorAnalysisComponent } from "./shared/analysis/creditor-analysis/creditor-analysis.component";
 import { CreditorAnalysisDetailsComponent } from "./shared/analysis/creditor-analysis/creditor-analysis-details/creditor-analysis-details.component";
-import { AccountTypeComponent } from "./shared/account-type/account-type.component";
+import { AccountTypeComponent } from "./admin/account-type/account-type.component";
+import { OpeningBalanceComponent } from "./shared/liquidity/opening-balance/opening-balance.component";
 
 
 const routes: Routes = [
@@ -69,7 +70,8 @@ const routes: Routes = [
   { path: 'analysis/creditor/deails/:accountNumber', component: CreditorAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
 
-  { path: 'shared/accountType', component: AccountTypeComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'admin/accountType', component: AccountTypeComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
+  { path: 'liquidity/openingBalance', component: OpeningBalanceComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },

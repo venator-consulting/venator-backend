@@ -154,6 +154,52 @@ module.exports.updateAccountTypeNew = async (organisationId, procedureId, accoun
 };
 
 
+module.exports.getStartingBalance = async (organisationId, procedureId) => {
+    try {
+        const result = await Posting
+            .getPosting('posting_' + organisationId)
+            .findAll({
+                where: {
+                    ProcedureId: procedureId,
+                    accountTypeNewName: 'Finanzkonto'
+                },
+                attributes: [
+                    [fn('DISTINCT', col('accountNumber')), 'accountNumber'],
+                    'accountName',
+                    'accountTypeNewId',
+                    'accountTypeNewName',
+                    'procedureId',
+                    'StartingBalance',
+                    'StartingBalanceDate'
+                ],
+                distinct: true
+            });
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+module.exports.updateStartBalance = async (organisationId, procedureId, accountNumber, StartingBalance, StartingBalanceDate) => {
+    try {
+        return await Posting
+            .getPosting('posting_' + organisationId)
+            .update({
+                StartingBalance: StartingBalance,
+                StartingBalanceDate: StartingBalanceDate
+            }, {
+                where: {
+                    procedureId: procedureId,
+                    accountNumber: accountNumber,
+                    accountTypeNewName: 'Finanzkonto'
+                }
+            });
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+
 module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
     try {
 
@@ -227,7 +273,7 @@ module.exports.getByAccountNumber = async (orgId, prcId, accountNumber, criteria
                         [Op.like]: '%' + criteria[key] + '%'
                     };
                 }
-                if(!criteria[key]) delete criteria[key];
+                if (!criteria[key]) delete criteria[key];
             }
         }
         criteria.procedureId = prcId;

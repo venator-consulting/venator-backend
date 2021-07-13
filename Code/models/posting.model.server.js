@@ -344,6 +344,12 @@ module.exports.getPosting = function (tableName = 'Posting') {
         },
         paymentRelevantComment: {
             type: DataTypes.STRING(500)
+        },
+        StartingBalanceDate: {
+            type: DataTypes.DATE
+        },
+        StartingBalance: {
+            type: DataTypes.DECIMAL(13, 2)
         }
     }, {
         tableName: tableName,
