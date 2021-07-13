@@ -28,6 +28,10 @@ export class AmountAnalysisComponent implements OnInit {
   items: MenuItem[];
   home: MenuItem;
 
+  // for filter
+  searching: boolean;
+  criteria: any = {};
+  tempData: any[];
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService,
     private _router: Router, private prcService: ProcedureService) { }
@@ -101,10 +105,12 @@ export class AmountAnalysisComponent implements OnInit {
   }
 
   getData() {
+    this.waiting = false;
     this._analysisService
       .getAmountAnalysis(this.selectedOrganisation, this.selectedProcedure, this.baseBalance)
       .subscribe(res => {
         this.data = res;
+        this.tempData = [...this.data];
         this.basicData = {
           labels: ['Total Count'],
           datasets: new Array()
@@ -122,6 +128,42 @@ export class AmountAnalysisComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+  }
+
+
+  filterChange(query, colName): void {
+    this.searching = true;
+    // debugger;
+    if (!query) {
+      delete this.criteria[colName];
+      if (Object.keys(this.criteria).length < 1) {
+        this.data = [...this.tempData];
+      } else {
+        for (const key in this.criteria) {
+          if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+            const element = this.criteria[key];
+            if (element.length < 3) {
+              this.data = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+            } else {
+              this.data = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+            }
+          }
+        }
+      }
+    } else {
+      this.data = [...this.tempData];
+      for (const key in this.criteria) {
+        if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+          const element = this.criteria[key];
+          if (element.length < 3) {
+            this.data = this.data.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());
+          } else {
+            this.data = this.data.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
+          }
+        }
+      } // end of for each criteria field
+    }
+    this.searching = false;
   }
 
 

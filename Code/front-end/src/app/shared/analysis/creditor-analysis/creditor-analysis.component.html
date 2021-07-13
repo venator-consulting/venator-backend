@@ -51,7 +51,9 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
+            <span pTooltip="{{ col.header | translate }}">
             {{col.header | translate}}
+            </span>
           </th>
           <th>Actions</th>
         </tr>
@@ -76,7 +78,7 @@
             <span *ngIf="col.field=='totalBalance'">
               {{ row.totalBalance  | currency:'EUR':'' }}
             </span>
-            <span *ngIf="col.field!='totalBalance'">
+            <span *ngIf="col.field!='totalBalance'" pTooltip="{{ row[col.field] }}"> 
               {{ row[col.field] }}
             </span>
           </td>

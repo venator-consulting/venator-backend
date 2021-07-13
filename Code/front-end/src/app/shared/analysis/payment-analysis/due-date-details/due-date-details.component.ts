@@ -15,6 +15,7 @@ export class DueDateDetailsComponent implements OnInit {
   selectedProcedure: number;
   selectedOrganisation: number;
   accountNumber: string;
+  accountName: string;
   waiting: boolean;
   basicOptions: any;
   basicData: any;
@@ -134,7 +135,11 @@ export class DueDateDetailsComponent implements OnInit {
         this.waiting = false;
         this.docDataTable = res.data.docDateReference;
         this.data = res.data.records;
-
+        if (!this.accountName) {
+          if (this.data.length > 0) {
+            this.accountName = this.data[0].accountName;
+          }
+        }
         this.docDataTable.forEach(element => {
           this.docDateLabels.push(element.monthName + '-' + element.yearName);
           this.docPositiveData.push(element.positive);

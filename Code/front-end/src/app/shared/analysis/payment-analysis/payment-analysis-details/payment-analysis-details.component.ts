@@ -31,6 +31,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   labels: any[] = new Array();
   selectedOrganisation: number = 0;
   selectedProcedure: number = 0;
+  accountName: string = '';
   searching: boolean;
   criteria: any = {};
   tempData: any[];
@@ -263,10 +264,19 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       this.blueData = res.data.blue;
       this.redData = res.data.red;
       this.greenData = res.data.green;
+      if (!this.accountName) {
+        if (this.blueData.length > 0) {
+          this.accountName = this.blueData[0].accountName;
+        } else if (this.redData.length > 0) {
+          this.accountName = this.redData[0].accountName;
+        } else if (this.greenData.length>0) {
+          this.accountName = this.greenData[0].accountName;
+        }
+      }
+
       if (!(this.labels.length > 0)) {
         for (let i = 0; i < this.data.length; i++) {
           const element = this.data[i];
-  
           this.labels.push(element.monthName + '-' + element.yearName);
           this.blue.push(Math.abs(element.blue.value));
           this.green.push(Math.abs(element.green.value));

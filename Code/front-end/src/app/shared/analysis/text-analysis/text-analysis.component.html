@@ -3,6 +3,7 @@
 <div class="p-grid">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
+    <h4 class="p-text-center">All Accounts</h4>
   </div>
 </div>
 
@@ -28,14 +29,28 @@
       <ng-template pTemplate="header">
         <tr>
           <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+            <span pTooltip="{{ col.header | translate }}">
             {{col.header | translate}}
+            </span>
           </th>
           <th>{{'AmountAnalysis.details' | translate}}</th>
+        </tr>
+        <tr>
+          <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
+            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
+              *ngIf="col.field=='accountNumber' || col.field=='accountName'" />
+          </th>
+          <th></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">{{ row[col.field] }}</td>
+          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
+            <span  pTooltip="{{ row[col.field] }}">
+            {{ row[col.field] }}
+            </span>
+          </td>
           <td><button type="button" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-warning"
               (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom" ></button>
           </td>

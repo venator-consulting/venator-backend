@@ -69,7 +69,7 @@ export class PaymentAnalysisComponent implements OnInit {
       tooltips: {
         callbacks: {
           label: function (tooltipItem, data) {
-            debugger;
+            // debugger;
             let value = tooltipItem.value;
             let currencyPipe = new CurrencyPipe('de');
             value = currencyPipe.transform(value, 'EURO', '');
@@ -91,7 +91,7 @@ export class PaymentAnalysisComponent implements OnInit {
             minRotation: 0,
             maxRotation: 0,
             callback: function (label, index, values) {
-              debugger;
+              // debugger;
               let currencyPipe = new CurrencyPipe('de');
               label = currencyPipe.transform(label, 'EURO', '');
               return label;
@@ -218,7 +218,7 @@ export class PaymentAnalysisComponent implements OnInit {
         this.top10Red = this.accounts.slice(0, 10);
         this.accounts.sort((a, b) => Math.abs(b.green) - Math.abs(a.green));
         this.top10Green = this.accounts.slice(0, 10);
-        debugger;
+        // debugger;
         this.ready = true;
         this.tempData = [...this.accounts];
       }, er => {
@@ -251,7 +251,7 @@ export class PaymentAnalysisComponent implements OnInit {
 
   filterChange(query, colName): void {
     this.searching = true;
-    debugger;
+    // debugger;
     if (!query) {
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
@@ -285,7 +285,7 @@ export class PaymentAnalysisComponent implements OnInit {
   }
 
   onRowSelect(event): void {
-    debugger;
+    // debugger;
 
     this.selectedMaxAccountNumber = event.data.accountNumber;
     this.selectedMaxAccountName = event.data.accountName;
