@@ -22,6 +22,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   redData: PaymentDetailsRecord[] = new Array();
   greenData: PaymentDetailsRecord[] = new Array();
   relevantData: PaymentAnalysisDetailsData[] = new Array();
+  allRecordData: PaymentAnalysisDetailsData[] = new Array();
   basicOptions: any;
   basicData: any;
   blue: any[] = new Array();
@@ -45,6 +46,17 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   home: MenuItem;
   detailsOptions: { name: string; value: number; }[];
   detailsOption: number;
+
+  // for pagination
+  backCriteria: any;
+  pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
+  limit: number = 25;
+  pageNr: number = 1;
+  maxPageNr: number = 0;
+  filtersNo: number = 0;
+  totalCount: any;
+  displayedDataCount: any;
+  // for pagination ends
 
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
@@ -111,6 +123,11 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       { name: 'User Relevant', value: 2 },
       { name: 'All', value: 3 }
     ];
+
+    this.backCriteria = {
+      limit: this.limit,
+      offset: 0
+    };
 
     this.cols = [
       {
@@ -408,10 +425,12 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   getAllByAccount() {
     this.waiting = true;
     this._analysisService
-      .getPaymentAnalysisDetailsByAccount(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+      .getPaymentAnalysisDetailsByAccount(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, this.backCriteria)
       .subscribe(res => {
-        this.relevantData = res;
-        // this.tempData = res;
+        this.allRecordData = res.rows;
+        this.totalCount = res.count;
+        this.displayedDataCount = this.allRecordData.length;
+        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
         this.waiting = false;
       }, er => {
         this._messageService.add({
@@ -422,6 +441,64 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         });
       });
   }
+
+
+// for pagination starts
+
+filterChangeBack(query, colName): void {
+  this.getAllByAccount();
+}
+
+limitChange(e) {
+  this.limit = e.value
+  this.backCriteria.offset = 0;
+  this.backCriteria.limit = this.limit;
+  this.pageNr = 1;
+  this.getAllByAccount();
+}
+
+firstPage() {
+  this.pageNr = 1;
+  this.backCriteria.offset = 0;
+  this.getAllByAccount();
+}
+
+nextPage() {
+  ++this.pageNr;
+  if (this.pageNr > this.maxPageNr) return;
+  this.backCriteria.offset += +this.limit;
+
+  this.getAllByAccount();
+}
+
+
+lastPage() {
+  this.pageNr = this.maxPageNr;
+  this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
+  this.getAllByAccount();
+}
+
+previousPage() {
+  --this.pageNr;
+  if (this.pageNr <= 0) return;
+  this.backCriteria.offset -= +this.limit;
+  this.getAllByAccount();
+}
+
+pageNrChange(value) {
+  this.backCriteria.offset = (this.pageNr - 1) * this.limit;
+  this.getAllByAccount();
+}
+
+clearFilter() {
+  this.backCriteria = {
+    limit: this.limit,
+    offset: 0
+  };
+  this.pageNr = 1;
+  this.getAllByAccount();
+}
+// for pagination ends
 
 
 
