@@ -17,6 +17,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   prcId: number;
   accountNumber: string;
   data: AmountAnalysisDetails[] = new Array();
+  allRecordData: AmountAnalysisDetails[] = new Array();
   waiting: boolean;
   cols: { header: string; field: string; }[];
   frozenCols: { header: string; field: string; width: string }[];
@@ -30,6 +31,17 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   detailsOption: number = 1;
   items: MenuItem[];
   home: MenuItem;
+
+  // for pagination
+  backCriteria: any;
+  pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
+  limit: number = 25;
+  pageNr: number = 1;
+  maxPageNr: number = 0;
+  filtersNo: number = 0;
+  totalCount: any;
+  displayedDataCount: any;
+  // for pagination ends
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
     private _analysisService: AnalysisService, private prcService: ProcedureService) { }
@@ -50,6 +62,10 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this.prcId = this.prcId ? this.prcId : +localStorage.getItem('currentProcedureId');
     this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+    this.backCriteria = {
+      limit: 25,
+      offset: 0
+    };
     this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.detailsOptions = [
@@ -145,15 +161,6 @@ export class AmountAnalysisDetailsComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
-
-
-    // if (this.prcId && +this.prcId > 0) {
-    //   this.prcService
-    //     .getById(+this.prcId)
-    //     .subscribe(prc => {
-    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-    //     }, er => { });
-    // }
 
   }// end of ng on init
 
@@ -317,10 +324,12 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   getAllByAccount() {
     this.waiting = true;
     this._analysisService
-      .getAmountAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber)
+      .getAmountAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber, this.backCriteria)
       .subscribe(res => {
-        this.data = res;
-        this.tempData = res;
+        this.allRecordData = res.rows;
+        this.totalCount = res.count;
+        this.displayedDataCount = this.allRecordData.length;
+        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
         this.waiting = false;
       }, er => {
         this._messageService.add({
@@ -332,6 +341,63 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       });
   }
 
+
+// for pagination starts
+
+filterChangeBack(query, colName): void {
+  this.getAllByAccount();
+}
+
+limitChange(e) {
+  this.limit = e.value
+  this.backCriteria.offset = 0;
+  this.backCriteria.limit = this.limit;
+  this.pageNr = 1;
+  this.getAllByAccount();
+}
+
+firstPage() {
+  this.pageNr = 1;
+  this.backCriteria.offset = 0;
+  this.getAllByAccount();
+}
+
+nextPage() {
+  ++this.pageNr;
+  if (this.pageNr > this.maxPageNr) return;
+  this.backCriteria.offset += +this.limit;
+
+  this.getAllByAccount();
+}
+
+
+lastPage() {
+  this.pageNr = this.maxPageNr;
+  this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
+  this.getAllByAccount();
+}
+
+previousPage() {
+  --this.pageNr;
+  if (this.pageNr <= 0) return;
+  this.backCriteria.offset -= +this.limit;
+  this.getAllByAccount();
+}
+
+pageNrChange(value) {
+  this.backCriteria.offset = (this.pageNr - 1) * this.limit;
+  this.getAllByAccount();
+}
+
+clearFilter() {
+  this.backCriteria = {
+    limit: this.limit,
+    offset: 0
+  };
+  this.pageNr = 1;
+  this.getAllByAccount();
+}
+// for pagination ends
 
 
 }

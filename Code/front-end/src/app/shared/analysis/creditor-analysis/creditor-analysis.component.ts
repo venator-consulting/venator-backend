@@ -20,8 +20,7 @@ export class CreditorAnalysisComponent implements OnInit {
   home: MenuItem;
   criteria: any = {
     limit: 25,
-    offset: 0,
-    accountNumber: 28
+    offset: 0
   };
   pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
   limit: number = 25;

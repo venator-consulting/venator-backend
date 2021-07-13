@@ -41,8 +41,9 @@ module.exports.amountAnalysisDetails = async (req, res) => {
 
 module.exports.getByAccountNumber = async (req, res) => {
     try {
+        const criteria = req.query;
         const result = await postingRepo
-            .getByAccountNumber(req.params.orgId, req.params.prcId, req.params.accountNumber);
+            .getByAccountNumber(req.params.orgId, req.params.prcId, req.params.accountNumber, criteria);
         res.status(200)
             .json(result);
     } catch (e) {
