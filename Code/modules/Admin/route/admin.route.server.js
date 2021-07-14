@@ -11,6 +11,7 @@ const procedureCtrl = require('../controller/procedure.controller.server');
 const organisationCtrl = require('../controller/organisation.controller.server');
 const docTypeCtrl = require('../controller/documentType.controller.server');
 const postingCtrl = require('../controller/posting.controller.server');
+const accountTypeCtrl = require('../controller/accountType.controler.server');
 
 const multer = require('multer');
 const uploadfiles = multer({
@@ -145,8 +146,12 @@ router
 
 router
     .route('/document-type/posting/:orgId/:prcdrId')
-    .get(postingCtrl.getDocTypes)
-    .put(postingCtrl.updateDoctypes);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), postingCtrl.getDocTypes)
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), postingCtrl.updateDoctypes);
 
 
 router
@@ -154,6 +159,23 @@ router
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), docTypeCtrl.getAll);
+
+
+router
+    .route('/account-type/posting/:orgId/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), accountTypeCtrl.getDocTypes)
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), accountTypeCtrl.updateDoctypes);
+
+
+router
+    .route('/account-type')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }),authorization.authorize('Admin'), accountTypeCtrl.getAll);
 
 
 router

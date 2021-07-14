@@ -1,0 +1,65 @@
+<p-toast></p-toast>
+<div class="p-grid">
+
+  <div class="p-col-10">
+
+
+    <p-table #dt dataKey="accountNumber" [value]="data" [columns]="cols" styleClass="p-datatable-gridlines"
+      [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col *ngFor="let col of cols">
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+            {{col.header | translate}}</th>
+          <th>{{'Account_Type.Action' | translate}}</th>
+        </tr>
+
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr [pEditableRow]="row">
+          <td pEditableColumn pReorderableRowHandle *ngFor="let col of cols">
+            <span *ngIf="col.field != 'StartingBalance' && col.field != 'StartingBalanceDate'">
+              {{ row[col.field] }}
+            </span>
+
+            <span *ngIf="!row.isEditable && col.field == 'StartingBalance'">
+              {{ row[col.field] | currency:'EUR':''}}
+            </span>
+
+            <span *ngIf="!row.isEditable && col.field == 'StartingBalanceDate'">
+                {{ row[col.field] | date:'yyyy.MM.dd'}}
+              </span>
+
+            <p-inputNumber *ngIf="row.isEditable && col.field == 'StartingBalance'" [(ngModel)]="row.StartingBalance"
+              mode="decimal" locale="de-DE" [minFractionDigits]="2" [min]="0" [showButtons]="true"
+              buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="100"
+              decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary"
+              incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [style]="{'width': '50px'}">
+            </p-inputNumber>
+
+            <p-calendar  *ngIf="row.isEditable && col.field == 'StartingBalanceDate'"
+            [(ngModel)]="row.StartingBalanceDate" [monthNavigator]="true"
+              [yearNavigator]="true" yearRange="1900:2100" appendTo="body" 
+              dateFormat="dd.mm.yy"></p-calendar>
+
+          </td>
+          <td><button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(row)"
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
+              pTooltip="{{'Account_Type.Edit' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+            <button type="button" pButton pRipple icon="pi pi-save" (click)="save(row)"
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+              pTooltip="{{'Account_Type.Save' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+            <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+              pTooltip="{{'Account_Type.Cancel' | translate}}" tooltipPosition="bottom"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>

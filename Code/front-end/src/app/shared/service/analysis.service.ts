@@ -39,12 +39,12 @@ export class AnalysisService {
     return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/text/details/' + accountNumber + '/relevant');
   }
 
-  getTextAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string): Observable<TextAnalysisDetails[]> {
-    return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber);
+  getTextAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string, criteria: any): Observable<{ count: number, rows: TextAnalysisDetails[] }> {
+    return this._http.get<{ count: number, rows: TextAnalysisDetails[] }>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber, { params: criteria });
   }
 
-  getAmountAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string): Observable<AmountAnalysisDetails[]> {
-    return this._http.get<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber);
+  getAmountAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string, criteria: any): Observable<{ count: number, rows: AmountAnalysisDetails[] }> {
+    return this._http.get<{ count: number, rows: AmountAnalysisDetails[] }>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber, { params: criteria });
   }
 
   setRelevantTextAnalysis(orgId: number, prcId: number, accountNumber: string, records: TextAnalysisDetails[]): Observable<TextAnalysisDetails[]> {
@@ -52,7 +52,7 @@ export class AnalysisService {
   }
 
   setRelevantAmountAnalysis(orgId: number, prcId: number, accountNumber: string, baseBalance: number, records: AmountAnalysisDetails[]): Observable<AmountAnalysisDetails[]> {
-    return this._http.put<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber+ '/' + baseBalance, records);
+    return this._http.put<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber + '/' + baseBalance, records);
   }
 
   setRelevantPaymentAnalysis(orgId: number, prcId: number, accountNumber: string, records: PaymentAnalysisDetailsData[]): Observable<PaymentAnalysisDetailsData[]> {
@@ -64,7 +64,7 @@ export class AnalysisService {
   }
 
   getPaymentAnalysisDetails(orgId: number, prcId: number, accountNumber: String): Observable<PaymentAnalysisDetails> {
-    return this._http.get<PaymentAnalysisDetails>(this._thisURL + orgId + '/' + prcId + '/payment/details/'+ accountNumber);
+    return this._http.get<PaymentAnalysisDetails>(this._thisURL + orgId + '/' + prcId + '/payment/details/' + accountNumber);
   }
 
   /**
@@ -87,8 +87,8 @@ export class AnalysisService {
    * @param accountNumber 
    * @returns 
    */
-  getPaymentAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string): Observable<PaymentAnalysisDetailsData[]> {
-    return this._http.get<PaymentAnalysisDetailsData[]>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber);
+  getPaymentAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string, criteria: any): Observable<{ count: number, rows: PaymentAnalysisDetailsData[] }> {
+    return this._http.get<{ count: number, rows: PaymentAnalysisDetailsData[] }>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber, { params: criteria });
   }
 
   getDueDateAnalysis(orgId: number, prcId: number): Observable<any> {
@@ -101,7 +101,7 @@ export class AnalysisService {
 
 
   getCreditorAnalysis(orgId: number, prcId: number, criteria: any): Observable<any> {
-    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor',  { params: criteria });
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor', { params: criteria });
   }
 
   getCreditorAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<any> {

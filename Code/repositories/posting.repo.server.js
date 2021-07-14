@@ -89,6 +89,33 @@ module.exports.getDocTypes = async (organisationId, procedureId) => {
     }
 };
 
+
+module.exports.getAccountTypes = async (organisationId, procedureId) => {
+    try {
+        const result = await Posting
+            .getPosting('posting_' + organisationId)
+            .findAll({
+                where: {
+                    ProcedureId: procedureId,
+                    accountType: {
+                        [Op.ne]: null
+                    }
+                },
+                attributes: [
+                    [fn('DISTINCT', col('accountType')), 'accountType'],
+                    'accountTypeNewId',
+                    'accountTypeNewName',
+                    'procedureId'
+                ],
+                distinct: true
+            });
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+
 module.exports.updateDocTypeNew = async (organisationId, procedureId, documentType, documentTypeNewId, documentTypeNewName) => {
     try {
         return await Posting
@@ -106,6 +133,72 @@ module.exports.updateDocTypeNew = async (organisationId, procedureId, documentTy
         throw new Error(error);
     }
 };
+
+
+module.exports.updateAccountTypeNew = async (organisationId, procedureId, accountType, accountTypeNewId, accountTypeNewName) => {
+    try {
+        return await Posting
+            .getPosting('posting_' + organisationId)
+            .update({
+                accountTypeNewId: accountTypeNewId,
+                accountTypeNewName: accountTypeNewName
+            }, {
+                where: {
+                    procedureId: procedureId,
+                    accountType: accountType
+                }
+            });
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+
+module.exports.getStartingBalance = async (organisationId, procedureId) => {
+    try {
+        const result = await Posting
+            .getPosting('posting_' + organisationId)
+            .findAll({
+                where: {
+                    ProcedureId: procedureId,
+                    accountTypeNewName: 'Finanzkonto'
+                },
+                attributes: [
+                    [fn('DISTINCT', col('accountNumber')), 'accountNumber'],
+                    'accountName',
+                    'accountTypeNewId',
+                    'accountTypeNewName',
+                    'procedureId',
+                    'StartingBalance',
+                    'StartingBalanceDate'
+                ],
+                distinct: true
+            });
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+module.exports.updateStartBalance = async (organisationId, procedureId, accountNumber, StartingBalance, StartingBalanceDate) => {
+    try {
+        return await Posting
+            .getPosting('posting_' + organisationId)
+            .update({
+                StartingBalance: StartingBalance,
+                StartingBalanceDate: StartingBalanceDate
+            }, {
+                where: {
+                    procedureId: procedureId,
+                    accountNumber: accountNumber,
+                    accountTypeNewName: 'Finanzkonto'
+                }
+            });
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 
 module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
     try {
@@ -167,15 +260,30 @@ module.exports.amountAnalysisDetails = async (orgId, prcId, baseBalance, account
 };
 
 
-module.exports.getByAccountNumber = async (orgId, procedureId, accountNumber) => {
+module.exports.getByAccountNumber = async (orgId, prcId, accountNumber, criteria) => {
     try {
+        const limit = criteria.limit ? criteria.limit : 25;
+        delete criteria.limit;
+        const offset = criteria.offset ? criteria.offset : 0;
+        delete criteria.offset;
+        for (const key in criteria) {
+            if (Object.hasOwnProperty.call(criteria, key)) {
+                if (criteria[key].toString().length > 2) {
+                    criteria[key] = {
+                        [Op.like]: '%' + criteria[key] + '%'
+                    };
+                }
+                if (!criteria[key]) delete criteria[key];
+            }
+        }
+        criteria.procedureId = prcId;
+        criteria.accountNumber = accountNumber;
         const result = await Posting
             .getPosting('posting_' + orgId)
-            .findAll({
-                where: {
-                    procedureId: procedureId,
-                    accountNumber: accountNumber
-                }
+            .findAndCountAll({
+                where: criteria,
+                offset: +offset,
+                limit: +limit
             });
         return result;
     } catch (error) {
@@ -277,7 +385,7 @@ module.exports.textBulkUpdate = async (orgId, records) => {
  * @param {number} orgId 
  * @param {Posting[]} records 
  */
- module.exports.amountBulkUpdate = async (orgId, records) => {
+module.exports.amountBulkUpdate = async (orgId, records) => {
     try {
         const postings = await Posting
             .getPosting('posting_' + orgId)

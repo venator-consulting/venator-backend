@@ -18,7 +18,7 @@
       </p-chart>
       <span *ngIf="selectedMaxAccountNumber"> {{ selectedMaxAccountName }} </span>
       <p-chart #chart type="bar" height="450" [data]="specificAccountData" [options]="basicOptions"
-      *ngIf="selectedMaxAccountNumber"></p-chart>
+        *ngIf="selectedMaxAccountNumber"></p-chart>
     </div>
   </div>
 
@@ -42,7 +42,9 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
-            {{col.header | translate}}
+            <span pTooltip="{{col.header | translate}}">
+              {{col.header | translate}}
+            </span>
           </th>
         </tr>
       </ng-template>
@@ -52,7 +54,7 @@
             <span *ngIf="col.field=='value'">
               {{ row.blue  | currency:'EUR':'' }}
             </span>
-            <span *ngIf="col.field!='value'">
+            <span *ngIf="col.field!='value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
             </span>
           </td>
@@ -71,7 +73,9 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
-            {{col.header | translate}}
+            <span pTooltip="{{col.header | translate}}">
+              {{col.header | translate}}
+            </span>
           </th>
         </tr>
       </ng-template>
@@ -81,7 +85,7 @@
             <span *ngIf="col.field=='value'">
               {{ row.red  | currency:'EUR':'' }}
             </span>
-            <span *ngIf="col.field!='value'">
+            <span *ngIf="col.field!='value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
             </span>
           </td>
@@ -100,7 +104,9 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
-            {{col.header | translate}}
+            <span pTooltip="{{col.header | translate}}">
+              {{col.header | translate}}
+            </span>
           </th>
         </tr>
       </ng-template>
@@ -110,7 +116,7 @@
             <span *ngIf="col.field=='value'">
               {{ row.green  | currency:'EUR':'' }}
             </span>
-            <span *ngIf="col.field!='value'">
+            <span *ngIf="col.field!='value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
             </span>
           </td>
@@ -134,7 +140,9 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th pReorderableColumn pResizableColumn class="p-text-center" *ngFor="let col of columns">
-            {{col.header | translate}}
+            <span pTooltip="{{col.header | translate}}">
+              {{col.header | translate}}
+            </span>
           </th>
           <th>Details</th>
         </tr>
@@ -153,7 +161,7 @@
             <span *ngIf="col.field!='accountNumber' && col.field!='accountName'">
               {{ row[col.field]  | currency:'EUR':'' }}
             </span>
-            <span *ngIf="col.field=='accountNumber' || col.field=='accountName'">
+            <span *ngIf="col.field=='accountNumber' || col.field=='accountName'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
             </span>
           </td>

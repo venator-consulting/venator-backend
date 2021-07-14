@@ -16,6 +16,7 @@ export class DueDateDetailsComponent implements OnInit {
   selectedProcedure: number;
   selectedOrganisation: number;
   accountNumber: string;
+  accountName: string;
   waiting: boolean;
   basicOptions: any;
   basicData: any;

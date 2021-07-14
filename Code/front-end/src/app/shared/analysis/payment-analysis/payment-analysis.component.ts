@@ -227,6 +227,7 @@ export class PaymentAnalysisComponent implements OnInit {
         this.top10Red = this.accounts.slice(0, 10);
         this.accounts.sort((a, b) => Math.abs(b.green) - Math.abs(a.green));
         this.top10Green = this.accounts.slice(0, 10);
+        // debugger;
         this.ready = true;
         this.tempData = [...this.accounts];
       }, er => {
@@ -259,6 +260,7 @@ export class PaymentAnalysisComponent implements OnInit {
 
   filterChange(query, colName): void {
     this.searching = true;
+    // debugger;
     if (!query) {
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
@@ -292,7 +294,7 @@ export class PaymentAnalysisComponent implements OnInit {
   }
 
   onRowSelect(event): void {
-    debugger;
+    // debugger;
 
     this.selectedMaxAccountNumber = event.data.accountNumber;
     this.selectedMaxAccountName = event.data.accountName;

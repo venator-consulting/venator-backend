@@ -63,7 +63,7 @@
       <ng-template pTemplate="header">
         <tr>
           <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
-            {{col.header | translate}}</th>
+            <span pTooltip="{{ col.header | translate }}">{{col.header | translate}}></span></th>
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
@@ -89,7 +89,9 @@
               *ngIf="(col.field == 'accountType' || col.field == 'accountNumber' || col.field == 'accountName');then withoutFilter else withFilter">
             </div>
             <ng-template #withoutFilter>
+              <span pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
+              </span>
             </ng-template>
             <ng-template #withFilter>
               {{ (col.field == 'outamount'? +row['famount'] + +row['inamount'] : +row[col.field]) | currency:'EUR':''}}

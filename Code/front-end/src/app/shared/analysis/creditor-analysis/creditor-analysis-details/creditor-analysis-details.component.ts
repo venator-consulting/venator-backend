@@ -45,7 +45,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
         this.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
         this.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
         this.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
-        this.accountName = res.text.length > 0 ? res.text[0].accountName : res.amount.length > 0 ? res.amount[0].accountName : res.payment[0]?.accountNumber;
+        this.accountName = res.text.length > 0 ? res.text[0].accountName : res.amount.length > 0 ? res.amount[0].accountName : res.payment[0]?.accountName;
         this.chartData = {
           labels: [elem.amountLabel,elem.textLabel, elem.paymentLabel],
           datasets: [

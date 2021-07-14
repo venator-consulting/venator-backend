@@ -18,6 +18,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
   prcId: number;
   accountNumber: string;
   data: TextAnalysisDetails[] = new Array();
+  allRecordData: TextAnalysisDetails[] = new Array();
   cols: { header: string; field: string; }[];
   frozenCols: { header: string; field: string; width: string}[];
   waiting: boolean = false;
@@ -30,6 +31,17 @@ export class TextAnalysisDetailsComponent implements OnInit {
   detailsOption: number = 1;
   items: MenuItem[];
   home: MenuItem;
+
+    // for pagination
+    backCriteria: any;
+    pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
+    limit: number = 25;
+    pageNr: number = 1;
+    maxPageNr: number = 0;
+    filtersNo: number = 0;
+    totalCount: any;
+    displayedDataCount: any;
+    // for pagination ends
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
     private _analysisService: AnalysisService, private prcService: ProcedureService) { }
@@ -49,6 +61,10 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this.prcId = this.prcId ? this.prcId : +localStorage.getItem('currentProcedureId');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
     this.procedureName = localStorage.getItem('currentProcedureName');
+    this.backCriteria = {
+      limit: 25,
+      offset: 0
+    };
 
     this.detailsOptions = [
       { name: 'Sys-Relevants', value: 1 },
@@ -155,14 +171,6 @@ export class TextAnalysisDetailsComponent implements OnInit {
         });
       });
 
-
-    // if (this.prcId && +this.prcId > 0) {
-    //   this.prcService
-    //     .getById(+this.prcId)
-    //     .subscribe(prc => {
-    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-    //     }, er => { });
-    // }
   }
 
   goBack() {
@@ -323,10 +331,12 @@ export class TextAnalysisDetailsComponent implements OnInit {
   getAllByAccount() {
     this.waiting = true;
     this._analysisService
-      .getTextAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber)
+      .getTextAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber, this.backCriteria)
       .subscribe(res => {
-        this.data = res;
-        this.tempData = res;
+        this.allRecordData = res.rows;
+        this.totalCount = res.count;
+        this.displayedDataCount = this.allRecordData.length;
+        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
         this.waiting = false;
       }, er => {
         this._messageService.add({
@@ -337,6 +347,64 @@ export class TextAnalysisDetailsComponent implements OnInit {
         });
       });
   }
+
+
+// for pagination starts
+
+filterChangeBack(query, colName): void {
+  this.getAllByAccount();
+}
+
+limitChange(e) {
+  this.limit = e.value
+  this.backCriteria.offset = 0;
+  this.backCriteria.limit = this.limit;
+  this.pageNr = 1;
+  this.getAllByAccount();
+}
+
+firstPage() {
+  this.pageNr = 1;
+  this.backCriteria.offset = 0;
+  this.getAllByAccount();
+}
+
+nextPage() {
+  ++this.pageNr;
+  if (this.pageNr > this.maxPageNr) return;
+  this.backCriteria.offset += +this.limit;
+
+  this.getAllByAccount();
+}
+
+
+lastPage() {
+  this.pageNr = this.maxPageNr;
+  this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
+  this.getAllByAccount();
+}
+
+previousPage() {
+  --this.pageNr;
+  if (this.pageNr <= 0) return;
+  this.backCriteria.offset -= +this.limit;
+  this.getAllByAccount();
+}
+
+pageNrChange(value) {
+  this.backCriteria.offset = (this.pageNr - 1) * this.limit;
+  this.getAllByAccount();
+}
+
+clearFilter() {
+  this.backCriteria = {
+    limit: this.limit,
+    offset: 0
+  };
+  this.pageNr = 1;
+  this.getAllByAccount();
+}
+// for pagination ends
 
 
 }

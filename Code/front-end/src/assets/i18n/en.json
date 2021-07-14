@@ -31,6 +31,7 @@
         "addOrganisation": "Add organisation",
         "addAccountType": "Account Typ hinzufügen",
         "addDocumentType": "Add Document Type",
+        "addAccountType": "Add Account Type",
         "addProcedure": "Add procedure",
         "editProcedure": "Edit procedure",
         "resetPassword": "Reset password",
@@ -249,25 +250,23 @@
         "Save": "Save",
         "Cancel": "Cancel"
     },
+
+
     "Account_Type": {
-        "finanzkonto": "Financial account",
-        "sachkonto": "GLA account",
-        "kreditor": "Creditor",
-        "debitor": "Debtor",
+        "Debitor": "Debitor",
+        "Kreditor": "Kreditor",
+        "Sachkonto": "Sachkonto",
+        "Finanzkonto": "Finanzkonto",
         "null": " ",
-        "from": "From ",
-        "to": "To",
-        "accountNumber": "accountnumber",
+
         "accountType": "Account Type",
-        "accountTypeNewName": "AccountType new",
+        "accountTypeNewName": "Account Type new",
         "Action": "Action",
-        "Add": "Add",
         "Edit": "Edit",
         "Save": "Save",
-        "Cancel": "Cancel",
-        "Back": "Back"
-
+        "Cancel": "Cancel"
     },
+
     "Procedure_Registration": {
         "editHeader": "edit procedure ",
         "registrationHeader": "Procedure Registration",

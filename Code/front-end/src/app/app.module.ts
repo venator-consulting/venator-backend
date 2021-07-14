@@ -83,6 +83,8 @@ import { BnNgIdleService } from 'bn-ng-idle';
 import { DueDateDetailsComponent } from './shared/analysis/payment-analysis/due-date-details/due-date-details.component';
 import { CreditorAnalysisComponent } from './shared/analysis/creditor-analysis/creditor-analysis.component';
 import { CreditorAnalysisDetailsComponent } from './shared/analysis/creditor-analysis/creditor-analysis-details/creditor-analysis-details.component';
+import { AccountTypeComponent } from './admin/account-type/account-type.component';
+import { OpeningBalanceComponent } from './shared/liquidity/opening-balance/opening-balance.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -124,6 +126,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DueDateDetailsComponent,
     CreditorAnalysisComponent,
     CreditorAnalysisDetailsComponent,
+    AccountTypeComponent,
+    OpeningBalanceComponent,
   ],
   imports: [
     BrowserModule,

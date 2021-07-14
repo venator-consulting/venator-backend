@@ -27,8 +27,8 @@
         "addUser": "Admin hinzufügen",
         "editUser": "Benutzer bearbeiten",
         "addOrganisation": "Organisation hinzufügen",
-        "addAccountType": "Account Typ hinzufügen",
-        "addDocumentType": "Document Typ hinzufügen",
+        "addDocumentType": "Document Type hinzufügen",
+        "addAccountType": "Account Type hinzufügen",
         "addProcedure": "Verfahren hinzufügen",
         "editProcedure": "Verfahren bearbeiten",
         "resetPassword": "Passwort zurücksetzen",
@@ -247,25 +247,23 @@
         "Save": "Speichern",
         "Cancel": "Abbrechen"
     },
+
     "Account_Type": {
-        "finanzkonto": "Finanzkonto",
-        "sachkonto": "Sachkonto",
-        "kreditor": "kreditor",
-        "debitor": "Debitor",
+        "Debitor": "Debitor",
+        "Kreditor": "Kreditor",
+        "Sachkonto": "Sachkonto",
+        "Finanzkonto": "Finanzkonto",
         "null": " ",
-        "from": "Von ",
-        "to": "Bis",
-        "accountNumber": "Kontonummer",
-        "accountType": "KontoTyp",
-        "accountTypeNewName": "KontoTyp neu",
-        "Add": "Hinzufügen",
+
+        "accountType": "Account Type",
+        "accountTypeNewName": "Account Type new",
         "Action": "Aktionen",
         "Edit": "bearbeiten",
         "Save": "Speichern",
-        "Cancel": "Abbrechen",
-        "Back": "Zurück"
-
+        "Cancel": "Abbrechen"
     },
+
+
     "Procedure_Registration": {
         "editHeader": "Verfahren bearbeiten",
         "addProedurePlaceHolder": "Verfahren hinzufügen",
