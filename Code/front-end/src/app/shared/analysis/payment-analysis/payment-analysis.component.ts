@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AnalysisService } from '../../service/analysis.service';
-import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
 import { PaymentAnalysis, PaymentData } from '../../model/paymentAnalysis';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ProcedureService } from '../../service/procedure.service';
 import { CurrencyPipe } from '@angular/common';
-
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-payment-analysis',
   templateUrl: './payment-analysis.component.html',
@@ -51,144 +50,154 @@ export class PaymentAnalysisComponent implements OnInit {
   selectedMaxAccountName: string;
   items: MenuItem[];
   home: MenuItem;
+  blue: string ;
+  red: string ;
+  green: string ;
 
 
-  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
-    private prcService: ProcedureService) { }
+  constructor(public _translateService: TranslateService, private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
+    private prcService: ProcedureService) { 
+
+    }
 
   ngOnInit(): void {
 
-    this.items = [
-      // { label: 'Analysis' },
-      { label: 'Payment Analysis', routerLink: '/analysis/payment' }
-    ];
+    this._translateService.get('PaymentAnalysis').subscribe( elem => {
+      this.blue = elem.blue;
+      this.red = elem.red ; 
+      this.green = elem.green;
 
-    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };
+      this.items = [
+        { label: elem.label, routerLink: '/analysis/payment' }
+      ];
+  
+      this.home = { icon: 'pi pi-home',  label: elem.data, routerLink: '/shared/data' };
 
-    this.basicOptions = {
-      tooltips: {
-        callbacks: {
-          label: function (tooltipItem, data) {
-            debugger;
-            let value = tooltipItem.value;
-            let currencyPipe = new CurrencyPipe('de');
-            value = currencyPipe.transform(value, 'EURO', '');
-
-            let label = data.datasets[tooltipItem.datasetIndex].label || '';
-            return label + ': ' + value;
-          }
-        }
-      },
-      scales: {
-        xAxes: [{
-          ticks: {
-            minRotation: 40,
-            maxRotation: 90,
-          }
-        }],
-        yAxes: [{
-          ticks: {
-            minRotation: 0,
-            maxRotation: 0,
-            callback: function (label, index, values) {
-              debugger;
+      this.basicOptions = {
+        tooltips: {
+          callbacks: {
+            label: function (tooltipItem, data) {
+              let value = tooltipItem.value;
               let currencyPipe = new CurrencyPipe('de');
-              label = currencyPipe.transform(label, 'EURO', '');
-              return label;
+              value = currencyPipe.transform(value, 'EURO', '');
+  
+              let label = data.datasets[tooltipItem.datasetIndex].label || '';
+              return label + ': ' + value;
             }
           }
-        }],
-      }
-    };
+        },
+        scales: {
+          xAxes: [{
+            ticks: {
+              minRotation: 40,
+              maxRotation: 90,
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              minRotation: 0,
+              maxRotation: 0,
+              callback: function (label, index, values) {
+                debugger;
+                let currencyPipe = new CurrencyPipe('de');
+                label = currencyPipe.transform(label, 'EURO', '');
+                return label;
+              }
+            }
+          }],
+        }
+      };
+  
+      this.top10 = 1;
+  
+      this.paymentOptions = [
+        { name: this.blue, value: 1, color: 'rgb(100,100,255)' },
+        { name: this.red, value: 2, color: 'rgb(255,100,100)' },
+        { name: this.green, value: 3, color: 'rgb(100,255,100)' }
+      ];
+  
+      this.top10Cols = [
+        {
+          header: 'PaymentAnalysis.accountNumber',
+          field: 'accountNumber'
+        },
+        {
+          header: 'PaymentAnalysis.accountName',
+          field: 'accountName'
+        },
+        {
+          header: 'PaymentAnalysis.sum',
+          field: 'value'
+        },
+      ];
+  
+      this.accountsCols = [
+        {
+          header: 'PaymentAnalysis.accountNumber',
+          field: 'accountNumber'
+        },
+        {
+          header: 'PaymentAnalysis.accountName',
+          field: 'accountName'
+        },
+        {
+          header: 'PaymentAnalysis.blue',
+          field: 'blue'
+        },
+        {
+          header: 'PaymentAnalysis.red',
+          field: 'red'
+        },
+        {
+          header: 'PaymentAnalysis.green',
+          field: 'green'
+        },
+      ];
+  
+      this.basicData = {
+        labels: this.labels,
+        datasets: new Array()
+      };
+  
+      this.basicData.datasets.push({
+        label: this.blue ,
+        backgroundColor: `rgb(100,100,255)`,
+        data: this.blueData
+      },
+        {
+          label: this.red,
+          backgroundColor: `rgb(255,100,100)`,
+          data: this.RedData
+        },
+        {
+          label: this.green,
+          backgroundColor: `rgb(100,255,100)`,
+          data: this.GreenData
+        });
+  
+      this.specificAccountData = {
+        labels: this.labels,
+        datasets: new Array()
+      };
+  
+      this.specificAccountData.datasets.push({
+        label: this.blue,
+        backgroundColor: `rgb(100,100,255)`,
+        data: this.specificAccountBlueData
+      },
+        {
+          label: this.red,
+          backgroundColor: `rgb(255,100,100)`,
+          data: this.specificAccountRedData
+        },
+        {
+          label: this.green,
+          backgroundColor: `rgb(100,255,100)`,
+          data: this.specificAccountGreenData
+        });
+    })
 
-    this.top10 = 1;
 
-    this.paymentOptions = [
-      { name: 'Blue', value: 1, color: 'blue !important' },
-      { name: 'Red', value: 2, color: 'red' },
-      { name: 'Green', value: 3, color: 'green' }
-    ];
-
-    this.top10Cols = [
-      {
-        header: 'AmountAnalysis.accountNumber',
-        field: 'accountNumber'
-      },
-      {
-        header: 'AmountAnalysis.accountName',
-        field: 'accountName'
-      },
-      {
-        header: 'AmountAnalysis.Value',
-        field: 'value'
-      },
-    ];
-
-    this.accountsCols = [
-      {
-        header: 'AmountAnalysis.accountNumber',
-        field: 'accountNumber'
-      },
-      {
-        header: 'AmountAnalysis.accountName',
-        field: 'accountName'
-      },
-      {
-        header: 'AmountAnalysis.blue',
-        field: 'blue'
-      },
-      {
-        header: 'AmountAnalysis.red',
-        field: 'red'
-      },
-      {
-        header: 'AmountAnalysis.green',
-        field: 'green'
-      },
-    ];
-
-
-    this.basicData = {
-      labels: this.labels,
-      datasets: new Array()
-    };
-
-    this.basicData.datasets.push({
-      label: 'Blue',
-      backgroundColor: `rgb(100,100,255)`,
-      data: this.blueData
-    },
-      {
-        label: 'Red',
-        backgroundColor: `rgb(255,100,100)`,
-        data: this.RedData
-      },
-      {
-        label: 'Green',
-        backgroundColor: `rgb(100,255,100)`,
-        data: this.GreenData
-      });
-
-    this.specificAccountData = {
-      labels: this.labels,
-      datasets: new Array()
-    };
-
-    this.specificAccountData.datasets.push({
-      label: 'Blue',
-      backgroundColor: `rgb(100,100,255)`,
-      data: this.specificAccountBlueData
-    },
-      {
-        label: 'Red',
-        backgroundColor: `rgb(255,100,100)`,
-        data: this.specificAccountRedData
-      },
-      {
-        label: 'Green',
-        backgroundColor: `rgb(100,255,100)`,
-        data: this.specificAccountGreenData
-      });
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
@@ -218,7 +227,6 @@ export class PaymentAnalysisComponent implements OnInit {
         this.top10Red = this.accounts.slice(0, 10);
         this.accounts.sort((a, b) => Math.abs(b.green) - Math.abs(a.green));
         this.top10Green = this.accounts.slice(0, 10);
-        debugger;
         this.ready = true;
         this.tempData = [...this.accounts];
       }, er => {
@@ -251,7 +259,6 @@ export class PaymentAnalysisComponent implements OnInit {
 
   filterChange(query, colName): void {
     this.searching = true;
-    debugger;
     if (!query) {
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {

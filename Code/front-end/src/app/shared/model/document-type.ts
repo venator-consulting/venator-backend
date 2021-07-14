@@ -11,3 +11,6 @@ export class PostingDocTypes {
     documentTypeNewName: string;
     isEditable: boolean;
 }
+
+
+

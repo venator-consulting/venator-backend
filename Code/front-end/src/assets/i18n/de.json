@@ -27,7 +27,8 @@
         "addUser": "Admin hinzufügen",
         "editUser": "Benutzer bearbeiten",
         "addOrganisation": "Organisation hinzufügen",
-        "addDocumentType": "Document Type hinzufügen",
+        "addAccountType": "Account Typ hinzufügen",
+        "addDocumentType": "Document Typ hinzufügen",
         "addProcedure": "Verfahren hinzufügen",
         "editProcedure": "Verfahren bearbeiten",
         "resetPassword": "Passwort zurücksetzen",
@@ -58,9 +59,9 @@
         "firthStepLabel": "Dateien importieren",
 
         "firstStepHeader": "Dateien hochladen",
-        "selectOrganisation": "Wählen Sie eine Organisation aus",
+        "selectOrganisation": "Wählen Sie eine Organisation aus:",
         "selectOrganisationPlaceholder":"organisation auswählen",
-        "selectProcedure": "Wählen Sie ein Verfahren aus",
+        "selectProcedure": "Wählen Sie ein Verfahren aus     :",
         "selectProcedurePlaceholder": "verfahren auswählen",
         "selectTemplate": "Wählen Sie ein Template aus",
         "SAP_W-mobel": "SAP W-mobel",
@@ -246,6 +247,25 @@
         "Save": "Speichern",
         "Cancel": "Abbrechen"
     },
+    "Account_Type": {
+        "finanzkonto": "Finanzkonto",
+        "sachkonto": "Sachkonto",
+        "kreditor": "kreditor",
+        "debitor": "Debitor",
+        "null": " ",
+        "from": "Von ",
+        "to": "Bis",
+        "accountNumber": "Kontonummer",
+        "accountType": "KontoTyp",
+        "accountTypeNewName": "KontoTyp neu",
+        "Add": "Hinzufügen",
+        "Action": "Aktionen",
+        "Edit": "bearbeiten",
+        "Save": "Speichern",
+        "Cancel": "Abbrechen",
+        "Back": "Zurück"
+
+    },
     "Procedure_Registration": {
         "editHeader": "Verfahren bearbeiten",
         "addProedurePlaceHolder": "Verfahren hinzufügen",
@@ -296,7 +316,9 @@
     }, 
     "Analysis": {
         "back": "Zurück",
-        "export": "Export"
+        "export": "Export",
+        "save": "Speichern",
+        "saveRelevant": "Relevant Speichern"
     },
     "AmountAnalysis": {
         "accountNumber": "Kontonummer",
@@ -316,6 +338,58 @@
         "export": "Export",
         "save": "Speichern"
     }, 
+    "PaymentAnalysis": {
+        "data" : " Daten",
+        "label": "Zahlungsanalyse",
+        "allAccounts": "Alle Konten",
+        "accountNumber" : "Kontonummer",
+        "accountName" : "Kontoname",
+        "sum" : "Summe",
+        "blue": "offene Rechnungen",
+        "red": "überfällige Rechnungen ",
+        "green": "Zahlungen ohne Zuordnung",
+        "comment": "Kommentar",
+        "sysRelevant": "Systemrelevant",
+        "userRelevant": "Benutzerrelevant",
+        "allRelevant" : "Alle Buchungen"
+
+    },
+    "DueDateAnalysis": {
+        "label": " Fälligkeitsanalyse", 
+        "paymentLabel": "Zahlungsanalyse",
+        "data" : " Daten",
+        "backToPayment" : " Zur Zahlungsanalyse",
+        "backtoDueDate": " Zur Fälligkeitsanalyse",
+        "accountNumber" : "Kontonummer",
+        "accountName" : "Kontoname",
+        "positiveDelay": "Zu spät",
+        "negativeDelay": "Zu früh",
+        "notPaid" : "Unbezahlt",
+        "count" : "Anzahl",
+        "firstChartLabel": "Anzahl der Tage",
+        "average": "Durchschnitt",
+        "positive": "Positiv",
+        "negative": "Negativ"
+
+    },
+    "CreditorsAnalysis": {
+        "label": "Kreditorenanalyse",
+        "data": " Daten",
+        "accountNumber" : "Kontonummer",
+        "accountName" : "Kontoname",
+        "count" : "Anzahl",
+        "sum" : "Summe",
+        "amountTotalBalance": "Gesamtsaldo der Betragsanalyse",
+        "textTotalBalance": "Gesamtsaldo der Textanalyse",
+        "paymentTotalBalance": "Gesamtsaldo der Zahlungsanalyse",
+        "amountTotalCount": "Anzahl der Buchungen der Betragsanalyse",
+        "textTotalCount": "Anzahl der Buchungen der Textanalyse",
+        "paymentTotalCount": "Anzahl der Buchungen der Zahlungsanalyse",
+        "showDetails": "Weitere Details ansehen",
+        "amountLabel": "Glattebeträge Analyse",
+        "textLabel" : "Text Analyse",
+        "paymentLabel" : "Zahlungsanalyse"
+    },
     "DataTableColumns": {
         "client": "Mandant",
         "companyCode": "Buchungskreis",

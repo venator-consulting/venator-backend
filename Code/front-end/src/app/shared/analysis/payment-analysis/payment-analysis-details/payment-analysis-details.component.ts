@@ -7,6 +7,7 @@ import { ProcedureService } from 'src/app/shared/service/procedure.service';
 import { PaymentAnalysisDetailsData } from 'src/app/shared/model/paymentAnalysis';
 import * as FileSaver from 'file-saver';
 import { CurrencyPipe } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-payment-analysis-details',
@@ -47,71 +48,107 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   detailsOption: number;
 
 
-  constructor(private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
-    private _route: ActivatedRoute, private prcService: ProcedureService) { }
+  constructor(public _translateService: TranslateService,  private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
+    private _route: ActivatedRoute, private prcService: ProcedureService) { 
+
+    }
 
   ngOnInit(): void {
 
-    this.waiting = true;
-    this.displayData = 1;
-    this.detailsOption = 1;
-    this.items = [
-      // { label: 'Analysis' },
-      { label: 'Payment Analysis', routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
-      { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
-    ];
-    
-    this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/shared/data' };
 
-    this.basicOptions = {
-      tooltips: {
-        callbacks: {
-          label: function (tooltipItem, data) {
-            // debugger;
-            let value = tooltipItem.value;
-            let currencyPipe = new CurrencyPipe('de');
-            value = currencyPipe.transform(value, 'EURO', '');
 
-            let label = data.datasets[tooltipItem.datasetIndex].label || '';
-            return label + ': ' + value;
-          }
-        }
-      },
-      scales: {
-        xAxes: [{
-          ticks: {
-            minRotation: 40,
-            maxRotation: 90,
-          }
-        }],
-        yAxes: [{
-          ticks: {
-            minRotation: 0,
-            maxRotation: 0,
-            callback: function (label, index, values) {
+    this._translateService.get('PaymentAnalysis').subscribe(elem => {
+      this.waiting = true;
+      this.displayData = 1;
+      this.detailsOption = 1;
+
+      this.items = [
+        // { label: 'Analysis' },
+        { label: elem.label, routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
+        { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
+      ];
+      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data' };
+      this.basicOptions = {
+        tooltips: {
+          callbacks: {
+            label: function (tooltipItem, data) {
               // debugger;
+              let value = tooltipItem.value;
               let currencyPipe = new CurrencyPipe('de');
-              label = currencyPipe.transform(label, 'EURO', '');
-              return label;
+              value = currencyPipe.transform(value, 'EURO', '');
+  
+              let label = data.datasets[tooltipItem.datasetIndex].label || '';
+              return label + ': ' + value;
             }
           }
-        }],
-      }
-    };
-
-
-    this.paymentOptions = [
-      { name: 'Blue', value: 1, color: 'blue !important' },
-      { name: 'Red', value: 2, color: 'red' },
-      { name: 'Green', value: 3, color: 'green' }
-    ];
-
-    this.detailsOptions = [
-      { name: 'Sys-Relevants', value: 1 },
-      { name: 'User Relevant', value: 2 },
-      { name: 'All', value: 3 }
-    ];
-
+        },
+        scales: {
+          xAxes: [{
+            ticks: {
+              minRotation: 40,
+              maxRotation: 90,
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              minRotation: 0,
+              maxRotation: 0,
+              callback: function (label, index, values) {
+                // debugger;
+                let currencyPipe = new CurrencyPipe('de');
+                label = currencyPipe.transform(label, 'EURO', '');
+                return label;
+              }
+            }
+          }],
+        }
+      };
+  
+  
+      this.paymentOptions = [
+        { name: elem.blue, value: 1, color: 'blue !important' },
+        { name: elem.red, value: 2, color: 'red' },
+        { name: elem.green, value: 3, color: 'green' }
+      ];
+      this.detailsOptions = [
+        { name: elem.sysRelevant, value: 1 },
+        { name: elem.userRelevant, value: 2 },
+        { name: elem.allRelevant, value: 3 }
+      ];
+   
+      this.frozenCols = [
+        {
+          header: '',
+          field: 'paymentRelevant',
+          width: '6'
+        },
+        {
+          header: elem.comment,
+          field: 'paymentRelevantComment',
+          width: '35'
+        }
+      ];
+      this.basicData = {
+        labels: this.labels,
+        datasets: new Array()
+      };
+  
+      this.basicData.datasets.push({
+        label: elem.blue,
+        backgroundColor: `rgb(100,100,255)`,
+        data: this.blue
+      },
+        {
+          label: elem.red,
+          backgroundColor: `rgb(255,100,100)`,
+          data: this.red
+        },
+        {
+          label: elem.green,
+          backgroundColor: `rgb(100,255,100)`,
+          data: this.green
+        });
+    })
     this.cols = [
       {
         header: 'DataTableColumns.accountNumber',
@@ -170,38 +207,13 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         field: 'dueDate'
       }
     ];
-    this.frozenCols = [
-      {
-        header: '',
-        field: 'paymentRelevant',
-        width: '6'
-      },
-      {
-        header: 'Comment',
-        field: 'paymentRelevantComment',
-        width: '35'
-      }
-    ];
-    this.basicData = {
-      labels: this.labels,
-      datasets: new Array()
-    };
+    
 
-    this.basicData.datasets.push({
-      label: 'Blue',
-      backgroundColor: `rgb(100,100,255)`,
-      data: this.blue
-    },
-      {
-        label: 'Red',
-        backgroundColor: `rgb(255,100,100)`,
-        data: this.red
-      },
-      {
-        label: 'Green',
-        backgroundColor: `rgb(100,255,100)`,
-        data: this.green
-      });
+
+
+
+
+
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     if (!this.selectedOrganisation) {

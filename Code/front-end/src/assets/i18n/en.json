@@ -29,6 +29,7 @@
         "addUser": "Add user",
         "editUser": "Edit user",
         "addOrganisation": "Add organisation",
+        "addAccountType": "Account Typ hinzufügen",
         "addDocumentType": "Add Document Type",
         "addProcedure": "Add procedure",
         "editProcedure": "Edit procedure",
@@ -248,7 +249,25 @@
         "Save": "Save",
         "Cancel": "Cancel"
     },
+    "Account_Type": {
+        "finanzkonto": "Financial account",
+        "sachkonto": "GLA account",
+        "kreditor": "Creditor",
+        "debitor": "Debtor",
+        "null": " ",
+        "from": "From ",
+        "to": "To",
+        "accountNumber": "accountnumber",
+        "accountType": "Account Type",
+        "accountTypeNewName": "AccountType new",
+        "Action": "Action",
+        "Add": "Add",
+        "Edit": "Edit",
+        "Save": "Save",
+        "Cancel": "Cancel",
+        "Back": "Back"
 
+    },
     "Procedure_Registration": {
         "editHeader": "edit procedure ",
         "registrationHeader": "Procedure Registration",
@@ -299,7 +318,9 @@
     }, 
     "Analysis": {
         "back": "Back",
-        "export": "Export"
+        "export": "Export",
+        "save": "Save",
+        "saveRelevant": "Save Relevant"
     },
     "AmountAnalysis": {
         "accountNumber": "Account number",
@@ -319,6 +340,57 @@
         "export": "Export",
         "save": "Save"
     }, 
+    "PaymentAnalysis": {
+        "data" : " Data",
+        "label": "Payment Analysis",
+        "allAccounts": "All Accounts",
+        "accountNumber" : "Accountnumber",
+        "accountName" : "Accountname",
+        "sum" : "Sum",
+        "blue": "open invoices",
+        "red": "overdue invoices ",
+        "green": "Payments without assignment",
+        "sysRelevant": "Systemrelevant",
+        "userRelevant": "Userrelevant",
+        "comment": "Comment",
+        "allRelevant" : "All Records"
+    },
+    "DueDateAnalysis": {
+        "label": " Duedate Analysis" ,
+        "paymentLabel": "Payment Analysis",
+        "data" : " Daten",
+        "backToPayment" : " To Paymentanalysis",
+        "backtoDueDate": " Zur Fälligkeitsanalyse",
+        "accountNumber" : "Accountnumber",
+        "accountName" : "Accountname",
+        "positiveDelay": "To late",
+        "negativeDelay": "To early",
+        "notPaid" : "Notpaid",
+        "count" : "Count",
+        "firstChartLabel": "Number of days",
+        "average": "Average",
+        "positive": "Positive",
+        "negative": "Negative"
+        
+    },
+    "CreditorsAnalysis": {
+        "label": "Creditors analysis",
+        "data": " Data",
+        "accountNumber" : "Kontonummer",
+        "accountName" : "Kontoname",
+        "count" : "Anzahl",
+        "sum" : "Summe",
+        "amountTotalBalance": "Total Balance of the Amount Analysis",
+        "textTotalBalance": "Total Balance of the Text Analysis",
+        "paymentTotalBalance": "Total Balance of the Payment Analysis",
+        "amountTotalCount": "Total Count of the Amount Analysis",
+        "textTotalCount": "Total Count of the Text Analysis",
+        "paymentTotalCount": "Total Count of the Payment Analysis",
+        "showDetails": "Weitere Details ansehen",
+        "amountLabel": "Amount Analysis",
+        "textLabel" : "Text Analysis",
+        "paymentLabel" : "Payment Analysis"
+    },
     "DataTableColumns": {
         "client": "Client",
         "companyCode": "Companycode",

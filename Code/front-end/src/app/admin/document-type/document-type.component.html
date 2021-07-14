@@ -1,12 +1,12 @@
 <p-toast></p-toast>
 <div class="p-grid">
 
-  <div class="p-col-10">
+  <div class="p-col-12">
     <div class="p-grid">
-      <div class="p-col-2">
+
+      <div class="p-col-6 p-sm-offset-3">
         <label class="p-mr-4"> {{'Admin_Import.selectOrganisation' | translate}} </label>
-      </div>
-      <div class="p-col-5">
+
         <p-dropdown [options]="orgs" [(ngModel)]="selectedOrgId"
           placeholder=" {{'Admin_Import.selectOrganisationPlaceholder' | translate}}" optionLabel="name"
           optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required
@@ -16,12 +16,11 @@
     </div>
   </div>
 
-  <div class="p-col-10" *ngIf="selectedOrgId>0">
+  <div class="p-col-12" *ngIf="selectedOrgId>0">
     <div class="p-grid">
-      <div class="p-col-2">
-        <label class="p-mr-4"> {{'Admin_Import.selectProcedure' | translate}} </label>
-      </div>
-      <div class="p-col-5">
+
+      <div class="p-col-6 p-sm-offset-3">
+        <label class="p-mr-6"> {{'Admin_Import.selectProcedure' | translate}} </label>
         <p-dropdown [options]="procedures" [(ngModel)]="selectedPrcId"
           placeholder="{{'Admin_Import.selectProcedurePlaceholder' | translate}}" optionLabel="name" optionValue="id"
           [showClear]="true" [filter]="true" filterBy="name" required (onChange)="prcChangedHandler($event)"
@@ -29,7 +28,7 @@
       </div>
     </div>
   </div>
-  <div class="p-col-10" *ngIf="selectedPrcId>0">
+  <div class="p-col-12" *ngIf="selectedPrcId>0">
 
 
     <p-table #dt dataKey="id" [value]="postingDocTypes" [columns]="cols" styleClass="p-datatable-gridlines"

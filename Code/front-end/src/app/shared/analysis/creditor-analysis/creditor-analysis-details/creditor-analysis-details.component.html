@@ -14,34 +14,34 @@
   <div class="p-col-4">
       <p-card class="p-text-center">
         <ng-template pTemplate="header">
-            Total Balance for Amount Analysis
+            {{ 'CreditorsAnalysis.amountTotalBalance' | translate}}
         </ng-template>
           <h1>{{totalAmount | currency:'EUR':'symbol' }}</h1>
-          <h3>{{totalAmountCount}}</h3>
+          <h3>{{ 'CreditorsAnalysis.amountTotalCount' | translate}}: {{totalAmountCount}}</h3>
           <br>
-          <p class="amountColor" (click)="setDetails(2)"><i class="pi pi-arrow-down"></i> show more Details</p>
+          <p class="amountColor" (click)="setDetails(2)"><i class="pi pi-arrow-down"></i>{{ 'CreditorsAnalysis.showDetails' | translate}} </p>
       </p-card>
   </div>
   <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
-          Total Balance for Text Analysis
+        {{ 'CreditorsAnalysis.textTotalBalance' | translate}}
       </ng-template>
         <h1>{{totalText | currency:'EUR':'symbol' }}</h1>
-        <h3>{{totalTextCount}}</h3>
+        <h3>{{ 'CreditorsAnalysis.textTotalCount' | translate}}: {{totalTextCount}}</h3>
         <br>
-        <p class="textColor" (click)="setDetails(1)"><i class="pi pi-arrow-down"></i> show more Details</p>
+        <p class="textColor" (click)="setDetails(1)"><i class="pi pi-arrow-down"></i> {{ 'CreditorsAnalysis.showDetails' | translate}} </p>
     </p-card>
 </div>
 <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
-          Total Balance for Payment Analysis
+        {{ 'CreditorsAnalysis.paymentTotalBalance' | translate}}
       </ng-template>
         <h1>{{totalPayment | currency:'EUR':'symbol' }}</h1>
-        <h3>{{totalPaymentCount}}</h3>
+        <h3>{{ 'CreditorsAnalysis.paymentTotalCount' | translate}}: {{totalPaymentCount}}</h3>
         <br>
-        <p class="paymentColor" (click)="setDetails(3)"><i class="pi pi-arrow-down"></i> show more Details </p>
+        <p class="paymentColor" (click)="setDetails(3)"><i class="pi pi-arrow-down"></i> {{ 'CreditorsAnalysis.showDetails' | translate}}  </p>
 
     </p-card>
 </div>

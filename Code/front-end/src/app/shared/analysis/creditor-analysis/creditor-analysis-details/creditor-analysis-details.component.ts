@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-creditor-analysis-details',
@@ -25,25 +26,17 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   items: MenuItem[];
   home: MenuItem;
 
-  constructor(private _route: ActivatedRoute, private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
+  constructor(public _translateService: TranslateService, private _route: ActivatedRoute, private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
 
   ngOnInit(): void {
-
-    this.items = [
-      // { label: 'Analysis' },
-      { label: 'Creditor Analysis', routerLink: '/analysis/creditor', routerLinkActiveOptions: { exact: true } },
-      { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
-    ];
-
-    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };
-
-    this.selectedOrganisation = +localStorage.getItem('organisationId');
-    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
-    this.procedureName = localStorage.getItem('currentProcedureName');
-
-    this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
-
-    this._analysisService
+    this._translateService.get('CreditorsAnalysis').subscribe(elem => {
+      this.items = [
+        // { label: 'Analysis' },
+        { label: elem.label, routerLink: '/analysis/creditor', routerLinkActiveOptions: { exact: true } },
+        { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
+      ];
+      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data' };
+      this._analysisService
       .getCreditorAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.totalAmount = res.amount.length > 0 ? res.amount[0].totalBalance : 0;
@@ -54,7 +47,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
         this.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
         this.accountName = res.text.length > 0 ? res.text[0].accountName : res.amount.length > 0 ? res.amount[0].accountName : res.payment[0]?.accountNumber;
         this.chartData = {
-          labels: ['Amount','Text','Payment'],
+          labels: [elem.amountLabel,elem.textLabel, elem.paymentLabel],
           datasets: [
               {
                   data: [this.totalAmount, this.totalText, this.totalPayment],
@@ -78,6 +71,17 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+     })
+
+
+
+    this.selectedOrganisation = +localStorage.getItem('organisationId');
+    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
+    this.procedureName = localStorage.getItem('currentProcedureName');
+
+    this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+
+
 
 
   }

@@ -3,19 +3,17 @@
 <div class="p-grid">
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
-    <button type="button" pButton pRipple icon="pi pi-clock" label="Due Date Analysis"
-      class="p-button-rounded p-button-warning" (click)="goToDueDate()" pTooltip="Due Date Analysis"
+    <button type="button" pButton pRipple icon="pi pi-clock" label=" {{'DueDateAnalysis.label' | translate}}"
+      class="p-button-rounded p-button-warning" (click)="goToDueDate()" pTooltip="{{'DueDateAnalysis.label' | translate}}"
       tooltipPosition="bottom"></button>
     <p-messages></p-messages>
   </div>
 </div>
 <div class="p-grid" *ngIf="basicData && ready">
-  <!-- <div class="p-col-12 p-text-center"><label>{{ 'Susa.from' | translate}} : </label> {{startDate | date: 'dd.MM.yyyy'}}
-    -
-    <label>{{ 'Susa.to' | translate}} : </label>{{endDate | date: 'dd.MM.yyyy'}}</div> -->
+
   <div class="p-col-6">
     <div class="card p-text-center">
-      <span *ngIf="!selectedMaxAccountNumber"> {{ 'All Accounts' | translate }} </span>
+      <span *ngIf="!selectedMaxAccountNumber"> {{'PaymentAnalysis.allAccounts' | translate}} </span>
       <p-chart type="bar" height="450" [data]="basicData" [options]="basicOptions" *ngIf="!selectedMaxAccountNumber">
       </p-chart>
       <span *ngIf="selectedMaxAccountNumber"> {{ selectedMaxAccountName }} </span>
@@ -138,7 +136,7 @@
           <th pReorderableColumn pResizableColumn class="p-text-center" *ngFor="let col of columns">
             {{col.header | translate}}
           </th>
-          <th>Actions</th>
+          <th>Details</th>
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from '../../service/analysis.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-creditor-analysis',
@@ -21,7 +22,7 @@ export class CreditorAnalysisComponent implements OnInit {
   criteria: any = {
     limit: 25,
     offset: 0,
-    accountNumber: 28
+    accountNumber: ""
   };
   pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
   limit: number = 25;
@@ -31,35 +32,37 @@ export class CreditorAnalysisComponent implements OnInit {
   totalCount: any;
   displayedDataCount: any;
 
-  constructor(private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
+  constructor(public _translateService: TranslateService, private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
 
   ngOnInit(): void {
+    this._translateService.get('CreditorsAnalysis').subscribe(elem => {
+      this.items = [
+        { label: elem.label, routerLink: '/analysis/creditor' }
+      ];
+      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data' };
 
-    this.items = [
-      // { label: 'Analysis' },
-      { label: 'Creditor Analysis', routerLink: '/analysis/creditor' }
-    ];
+      this.cols = [
+        {
+          header: elem.accountNumber,
+          field: 'accountNumber'
+        },
+        {
+          header: elem.accountName,
+          field: 'accountName'
+        },
+        {
+          header: elem.count,
+          field: 'totlaCount'
+        },
+        {
+          header: elem.sum,
+          field: 'totalBalance'
+        }
+      ];
+    })
 
-    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };
 
-    this.cols = [
-      {
-        header: 'Account Number',
-        field: 'accountNumber'
-      },
-      {
-        header: 'Account Name',
-        field: 'accountName'
-      },
-      {
-        header: 'Total Count',
-        field: 'totlaCount'
-      },
-      {
-        header: 'Total Balance',
-        field: 'totalBalance'
-      }
-    ];
+
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { CurrencyPipe } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-due-date-details',
@@ -30,7 +31,7 @@ export class DueDateDetailsComponent implements OnInit {
   items: MenuItem[];
   home: MenuItem;
 
-  constructor(private _messageService: MessageService, private _analysisService: AnalysisService,
+  constructor(public _translateService: TranslateService, private _messageService: MessageService, private _analysisService: AnalysisService,
     private _router: Router, private _route: ActivatedRoute) { }
 
 
@@ -38,14 +39,65 @@ export class DueDateDetailsComponent implements OnInit {
 
     this.waiting = true;
 
-    this.items = [
-      // { label: 'Analysis' },
-      { label: 'Payment Analysis', routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
-      { label: 'Due Date Analysis', routerLink: '/analysis/due-date', routerLinkActiveOptions: { exact: true } },
-      { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
-    ];
-    
-    this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/shared/data' };
+    this._translateService.get('DueDateAnalysis').subscribe(elem => {
+      this.items = [
+        // { label: 'Analysis' },
+        { label: elem.paymentLabel, routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
+        { label: elem.label, routerLink: '/analysis/due-date', routerLinkActiveOptions: { exact: true } },
+        { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
+      ];
+      
+      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data' };
+      this._analysisService
+      .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+      .subscribe(res => {
+
+        this.waiting = false;
+        this.docDataTable = res.data.docDateReference;
+        this.data = res.data.records;
+
+        this.docDataTable.forEach(element => {
+          this.docDateLabels.push(element.monthName + '-' + element.yearName);
+          this.docPositiveData.push(element.positive);
+          this.docNegativeData.push(element.negative);
+          this.docData.push(+element.positive + +element.negative);
+        });
+
+        this.docDateData = {
+          labels: this.docDateLabels,
+          datasets: [{
+            type: 'line',
+            label: elem.average,
+            borderColor: '#42A5F5',
+            borderWidth: 2,
+            fill: false,
+            data: this.docData
+          }, {
+            type: 'bar',
+            label: elem.positive,
+            backgroundColor: '#F5B59B',
+            data: this.docPositiveData,
+            borderColor: '#E5A58B',
+            borderWidth: 2
+          }, {
+            type: 'bar',
+            label: elem.negative,
+            backgroundColor: '#FFD795',
+            borderColor: '#EFC785',
+            data: this.docNegativeData
+          }]
+        };
+
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "there is no Account selected!"
+        });
+      });
+    })
+
 
     this.basicData = {
       labels: this.labels,
@@ -53,19 +105,7 @@ export class DueDateDetailsComponent implements OnInit {
     };
 
     this.basicOptions = {
-      // tooltips: {
-      //   callbacks: {
-      //     label: function (tooltipItem, data) {
-      //       debugger;
-      //       let value = tooltipItem.value;
-      //       let currencyPipe = new CurrencyPipe('de');
-      //       value = currencyPipe.transform(value, 'EURO', '');
 
-      //       let label = data.datasets[tooltipItem.datasetIndex].label || '';
-      //       return label + ': ' + value;
-      //     }
-      //   }
-      // },
       scales: {
         xAxes: [{
           ticks: {
@@ -85,39 +125,40 @@ export class DueDateDetailsComponent implements OnInit {
 
     this.delayCols = [
       {
-        header: 'Account Number',
+        header: 'DataTableColumns.accountNumber',
         field: 'accountNumber'
       },
       {
-        header: 'Account Name',
+        header: 'DataTableColumns.accountName',
         field: 'accountName'
       },
       {
-        header: 'Account type',
+        header: 'DataTableColumns.accountType',
         field: 'accountType'
       },
+
       {
-        header: 'document Type',
+        header: 'DataTableColumns.documentType',
         field: 'documentType'
       },
       {
-        header: 'document Type New Name',
-        field: 'documentTypeNewName'
+        header: 'DataTableColumns.documentTypeNew',
+        field: 'documentTypeNew'
       },
       {
-        header: 'balance',
+        header: 'DataTableColumns.balance',
         field: 'balance'
       },
       {
-        header: 'document Date',
+        header: 'DataTableColumns.documentDate',
         field: 'documentDate'
       },
       {
-        header: 'application Date',
-        field: 'applicationDate'
+        header: 'DataTableColumns.executionDate',
+        field: 'executionDate'
       },
       {
-        header: 'due Date',
+        header: 'DataTableColumns.dueDate',
         field: 'dueDate'
       }
     ];
@@ -126,56 +167,6 @@ export class DueDateDetailsComponent implements OnInit {
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
-
-    this._analysisService
-      .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
-      .subscribe(res => {
-
-        this.waiting = false;
-        this.docDataTable = res.data.docDateReference;
-        this.data = res.data.records;
-
-        this.docDataTable.forEach(element => {
-          this.docDateLabels.push(element.monthName + '-' + element.yearName);
-          this.docPositiveData.push(element.positive);
-          this.docNegativeData.push(element.negative);
-          this.docData.push(+element.positive + +element.negative);
-        });
-
-        this.docDateData = {
-          labels: this.docDateLabels,
-          datasets: [{
-            type: 'line',
-            label: 'Average',
-            borderColor: '#42A5F5',
-            borderWidth: 2,
-            fill: false,
-            data: this.docData
-          }, {
-            type: 'bar',
-            label: 'Positive',
-            backgroundColor: '#F5B59B',
-            data: this.docPositiveData,
-            borderColor: '#E5A58B',
-            borderWidth: 2
-          }, {
-            type: 'bar',
-            label: 'Negative',
-            backgroundColor: '#FFD795',
-            borderColor: '#EFC785',
-            data: this.docNegativeData
-          }]
-        };
-
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "there is no Account selected!"
-        });
-      });
-
 
 
   }
