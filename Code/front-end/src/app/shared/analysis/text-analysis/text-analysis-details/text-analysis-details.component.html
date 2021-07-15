@@ -47,8 +47,9 @@
           <!-- <th> -->
           <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
           <!-- </th> -->
-          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
+          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
             {{col.header | translate}}
+            <p-sortIcon field="{{col.field}}"></p-sortIcon>
           </th>
 
         </tr>

@@ -34,6 +34,11 @@ export class CreditorAnalysisComponent implements OnInit {
   constructor(public _translateService: TranslateService, private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
 
   ngOnInit(): void {
+
+    this.selectedOrganisation = +localStorage.getItem('organisationId');
+    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
+    this.procedureName = localStorage.getItem('currentProcedureName');
+    
     this._translateService.get('CreditorsAnalysis').subscribe(elem => {
       this.items = [
         { label: elem.label, routerLink: '/analysis/creditor' }
@@ -60,12 +65,6 @@ export class CreditorAnalysisComponent implements OnInit {
       ];
     })
 
-
-
-
-    this.selectedOrganisation = +localStorage.getItem('organisationId');
-    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
-    this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.getData();
 

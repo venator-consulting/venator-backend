@@ -38,6 +38,11 @@ export class DueDateDetailsComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.selectedOrganisation = +localStorage.getItem('organisationId');
+    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
+    this.procedureName = localStorage.getItem('currentProcedureName');
+    this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+
     this.waiting = true;
 
     this._translateService.get('DueDateAnalysis').subscribe(elem => {
@@ -164,11 +169,7 @@ export class DueDateDetailsComponent implements OnInit {
       }
     ];
 
-    this.selectedOrganisation = +localStorage.getItem('organisationId');
-    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
-    this.procedureName = localStorage.getItem('currentProcedureName');
-    this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
-
+   
 
   }
 

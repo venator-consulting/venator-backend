@@ -15,6 +15,7 @@ export class OrganisationRegistrationComponent implements OnInit {
 
   organisation: Organisation = new Organisation();
   id: number;
+  imageSrc: string | ArrayBuffer;
 
   constructor(private _router: Router, private _messageService: MessageService,
     private _orgService: OrganisationService, public _translateService: TranslateService,
@@ -63,6 +64,14 @@ export class OrganisationRegistrationComponent implements OnInit {
   UploadHandler(event) {
     const selectedFiles: FileList = event.files;
     this.organisation.logo = selectedFiles[0];
+    if (selectedFiles && selectedFiles[0]) {
+      const file = selectedFiles[0];
+
+      const reader = new FileReader();
+      reader.onload = e => this.imageSrc = reader.result;
+
+      reader.readAsDataURL(file);
+  }
   }
 
   submitHandler() {

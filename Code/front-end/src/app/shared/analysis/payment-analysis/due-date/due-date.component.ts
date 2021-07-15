@@ -42,6 +42,12 @@ export class DueDateComponent implements OnInit {
 
   ngOnInit(): void {
 
+
+    this.selectedOrganisation = +localStorage.getItem('organisationId');
+    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
+    this.procedureName = localStorage.getItem('currentProcedureName');
+    
+
     this._translateService.get('DueDateAnalysis').subscribe(elem => {
       this.items = [
       
@@ -186,10 +192,6 @@ export class DueDateComponent implements OnInit {
       }
     ];
 
-    this.selectedOrganisation = +localStorage.getItem('organisationId');
-    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
-    this.procedureName = localStorage.getItem('currentProcedureName');
-    
   }
 
   backToPayment() {

@@ -4,8 +4,8 @@
     <h2 class="p-text-center">{{procedureName}}</h2>
   </div>
 </div>
-<div class="card" style="overflow-x: scroll;">
-  <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="350px" [style]="{width:'10000px'}"
+<div class="card">
+  <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="350px" [style]="{width:'100%'}"
     [resizableColumns]="true" styleClass="p-datatable-gridlines" [reorderableColumns]="true" [loading]="loading">
     <ng-template pTemplate="caption">
       <div class="p-mb-4">
@@ -48,7 +48,7 @@
     </ng-template>
     <ng-template pTemplate="colgroup">
       <colgroup>
-        <col *ngFor="let col of cols">
+        <col *ngFor="let col of cols" [style]="{'width': (col.width? col.width : 150) +'px'}">
       </colgroup>
     </ng-template>
     <ng-template pTemplate="header">

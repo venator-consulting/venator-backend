@@ -139,9 +139,10 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th pReorderableColumn pResizableColumn class="p-text-center" *ngFor="let col of columns">
+          <th pSortableColumn="{{col.field}}" pReorderableColumn pResizableColumn class="p-text-center" *ngFor="let col of columns">
             <span pTooltip="{{col.header | translate}}">
               {{col.header | translate}}
+              <p-sortIcon field="{{col.field}}"></p-sortIcon>
             </span>
           </th>
           <th>Details</th>

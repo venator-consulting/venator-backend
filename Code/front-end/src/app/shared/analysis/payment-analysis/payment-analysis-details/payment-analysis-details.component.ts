@@ -107,7 +107,6 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
               minRotation: 0,
               maxRotation: 0,
               callback: function (label, index, values) {
-                // debugger;
                 let currencyPipe = new CurrencyPipe('de');
                 label = currencyPipe.transform(label, 'EURO', '');
                 return label;
@@ -117,6 +116,10 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         }
       };
   
+      this.backCriteria = {
+        limit: this.limit,
+        offset: 0
+      };
   
       this.paymentOptions = [
         { name: elem.blue, value: 1, color: 'blue !important' },
