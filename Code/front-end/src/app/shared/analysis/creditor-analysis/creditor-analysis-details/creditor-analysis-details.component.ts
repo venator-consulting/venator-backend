@@ -29,6 +29,15 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   constructor(public _translateService: TranslateService, private _route: ActivatedRoute, private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
 
   ngOnInit(): void {
+
+
+    this.selectedOrganisation = +localStorage.getItem('organisationId');
+    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
+    this.procedureName = localStorage.getItem('currentProcedureName');
+
+    this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+
+    
     this._translateService.get('CreditorsAnalysis').subscribe(elem => {
       this.items = [
         // { label: 'Analysis' },
@@ -72,15 +81,6 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
         });
       });
      })
-
-
-
-    this.selectedOrganisation = +localStorage.getItem('organisationId');
-    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
-    this.procedureName = localStorage.getItem('currentProcedureName');
-
-    this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
-
 
 
 

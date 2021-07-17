@@ -202,7 +202,7 @@ export class SAPDataTableComponent implements OnInit {
 
   exportXLSX() {
     this._exportDataService
-      .exportXLSX('posting', this.organisationId, this.procedureId)
+      .exportXLSX('posting', this.organisationId, this.procedureId, this.criteria)
       .subscribe(
         url => {
           // console.log(url);

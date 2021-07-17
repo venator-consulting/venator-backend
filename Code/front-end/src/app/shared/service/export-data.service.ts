@@ -12,8 +12,8 @@ export class ExportDataService {
 
   constructor(private _http: HttpClient) { }
 
-  exportXLSX(tableName, OrganisationId, ProcedureId) {
-    return this._http.get(this._thisURL + '/export/' + tableName + '/' + OrganisationId + '/' + ProcedureId);
+  exportXLSX(tableName, OrganisationId, ProcedureId, criteria: any) {
+    return this._http.get(this._thisURL + '/export/' + tableName + '/' + OrganisationId + '/' + ProcedureId, { params: criteria });
 
   }
 

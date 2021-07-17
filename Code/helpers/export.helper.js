@@ -5,7 +5,7 @@ const env = require('../config/environment');
 const columns = require('../models/columns/columns.server');
 
 
-module.exports.exportFile = async (tableName = 'posting', organisationId = 9, procedureId = 1, cb) => {
+module.exports.exportFile = async (tableName = 'posting', organisationId = 9, procedureId = 1, criteria, cb) => {
     try {
 
         const options = {
@@ -40,7 +40,22 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
         //     worksheet.addRow(row, 'i+').commit();
         // }
 
-        const str = connection.query('SELECT * FROM ' + tableName + '_' + organisationId + ' t WHERE t.procedureId = ' + procedureId).stream();
+        let query = 'SELECT * FROM ' + tableName + '_' + organisationId + ' t WHERE t.procedureId = ' + procedureId;
+
+        if (criteria) {
+            delete criteria.limit;
+            delete criteria.offset;
+            delete criteria.OrganisationId;
+            delete criteria.procedureId;
+            for (const key in criteria) {
+                if (Object.hasOwnProperty.call(criteria, key)) {
+                    const element = criteria[key];
+                    query += ` AND ${key} = '${element}'`
+                }
+            }
+        }
+
+        const str = connection.query(query).stream();
 
         str.on('data', (row) => {
             i++;
