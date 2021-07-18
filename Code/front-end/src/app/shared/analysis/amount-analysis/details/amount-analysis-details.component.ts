@@ -7,6 +7,7 @@ import { ProcedureService } from 'src/app/shared/service/procedure.service';
 import * as FileSaver from 'file-saver';
 import { ExportDataService } from 'src/app/shared/service/export-data.service';
 import { TranslateService } from '@ngx-translate/core';
+import { TableColumn } from 'src/app/shared/model/tableColumn';
 
 @Component({
   selector: 'amount-analysis-details',
@@ -21,8 +22,8 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   data: AmountAnalysisDetails[] = new Array();
   allRecordData: AmountAnalysisDetails[] = new Array();
   waiting: boolean;
-  cols: { header: string; field: string; }[];
-  frozenCols: { header: string; field: string; width: string }[];
+  cols: TableColumn[];
+  frozenCols: TableColumn[];
   baseBalance: number;
   procedureName: any;
   tempData: any[];
@@ -81,71 +82,87 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       {
         header: '',
         field: 'amountRelevant',
-        width: '6'
+        width: '6',
+        align: 'center'
       },
       {
         header: 'Comment',
         field: 'amountRelevantComment',
-        width: '35'
+        width: '35',
+        align: 'left'
       }
     ];
 
     this.cols = [
       {
         header: 'DataTableColumns.accountNumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'DataTableColumns.accountType',
-        field: 'accountType'
+        field: 'accountType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentType',
-        field: 'documentType'
+        field: 'documentType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.balance',
-        field: 'balance'
+        field: 'balance',
+        align: 'right'
       },
       {
         header: 'DataTableColumns.contraAccountNumber',
-        field: 'contraAccountNumber'
+        field: 'contraAccountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.contraAccountName',
-        field: 'contraAccountName'
+        field: 'contraAccountName',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew'
+        field: 'documentTypeNew',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentNumber',
-        field: 'documentNumber'
+        field: 'documentNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentDate',
-        field: 'documentDate'
+        field: 'documentDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.recordNumber',
-        field: 'recordNumber'
+        field: 'recordNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.ledgerId',
-        field: 'ledgerId'
+        field: 'ledgerId',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.executionDate',
-        field: 'executionDate'
+        field: 'executionDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.dueDate',
-        field: 'dueDate'
+        field: 'dueDate',
+        align: 'center'
       }
     ];
 
@@ -370,6 +387,11 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
   getAllByAccount() {
     this.waiting = true;
+    for (const key in this.backCriteria) {
+      if (!this.backCriteria[key]) {
+        delete this.backCriteria[key];
+      }
+     }
     this._analysisService
       .getAmountAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber, this.backCriteria)
       .subscribe(res => {
@@ -403,6 +425,16 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         },
         (error) => console.log(error),
       );
+  }
+
+  sort(event) {
+    // debugger;
+    this.backCriteria.orderBy = event.sortField;
+    this.backCriteria.sortOrder = event.sortOrder;
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    if (!this.waiting)
+      this.getAllByAccount();
   }
 
 

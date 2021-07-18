@@ -19,6 +19,10 @@ module.exports.fetch = async (criteria) => {
         delete criteria.limit;
         const offset = criteria.offset ? criteria.offset : 0;
         delete criteria.offset;
+        const orderBy = criteria.orderBy ? criteria.orderBy : 'id';
+        delete criteria.orderBy;
+        const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
+        delete criteria.sortOrder;
         for (const key in criteria) {
             if (Object.hasOwnProperty.call(criteria, key)) {
                 if (criteria[key].toString().length > 2) {
@@ -33,7 +37,10 @@ module.exports.fetch = async (criteria) => {
             .findAndCountAll({
                 where: criteria,
                 offset: +offset,
-                limit: +limit
+                limit: +limit,
+                order: [
+                    [orderBy, sortOrder]
+                ],
             });
     } catch (err) {
         // TO-DO: set a custom error message in production environment
@@ -269,6 +276,11 @@ module.exports.getByAccountNumber = async (orgId, prcId, accountNumber, criteria
         delete criteria.limit;
         const offset = criteria.offset ? criteria.offset : 0;
         delete criteria.offset;
+        const orderBy = criteria.orderBy ? criteria.orderBy : 'id';
+        delete criteria.orderBy;
+        const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
+        delete criteria.sortOrder;
+
         for (const key in criteria) {
             if (Object.hasOwnProperty.call(criteria, key)) {
                 if (criteria[key].toString().length > 2) {
@@ -286,7 +298,10 @@ module.exports.getByAccountNumber = async (orgId, prcId, accountNumber, criteria
             .findAndCountAll({
                 where: criteria,
                 offset: +offset,
-                limit: +limit
+                limit: +limit,
+                order: [
+                    [orderBy, sortOrder]
+                ],
             });
         return result;
     } catch (error) {
@@ -417,7 +432,8 @@ module.exports.textJustRelevant = async (orgId, prcId, accountNumber) => {
                 attributes: ['id', 'procedureId', 'accountNumber', 'accountName', 'textRelevant',
                     'textRelevantComment', 'accountType', 'documentType', 'balance', 'contraAccountNumber',
                     'contraAccountName', 'documentTypeNew', 'documentNumber', 'documentDate', 'recordNumber',
-                    'ledgerId', 'executionDate', 'dueDate', 'reference', 'textPosting', 'textHeader']
+                    'ledgerId', 'executionDate', 'dueDate', 'reference', 'textPosting', 'textHeader'
+                ]
             });
     } catch (error) {
         throw new Error(error);
@@ -438,7 +454,8 @@ module.exports.amountJustRelevant = async (orgId, prcId, accountNumber) => {
                 attributes: ['id', 'procedureId', 'accountNumber', 'accountName', 'amountRelevant',
                     'amountRelevantComment', 'accountType', 'documentType', 'balance', 'contraAccountNumber',
                     'contraAccountName', 'documentTypeNew', 'documentNumber', 'documentDate', 'recordNumber',
-                    'ledgerId', 'executionDate', 'dueDate']
+                    'ledgerId', 'executionDate', 'dueDate'
+                ]
             });
     } catch (error) {
         throw new Error(error);
@@ -471,7 +488,9 @@ module.exports.susaDateRange = async (orgId, prcId) => {
 module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate, criteria) => {
     try {
 
-        let query = `SELECT DISTINCT pos.accountType, pos.accountNumber, pos.accountName, fromRange.famount, inRange.inamount , credit.creditAmount, debit.debitAmount
+        let query = `SELECT DISTINCT pos.accountType, pos.accountNumber, pos.accountName, 
+        fromRange.famount, inRange.inamount , credit.creditAmount, debit.debitAmount,
+        (fromRange.famount + inRange.inamount) outamount
         FROM posting_${orgId} pos 
         LEFT OUTER JOIN
             ( SELECT p.accountNumber , p.accountName , SUM(p.balance) famount
@@ -525,6 +544,12 @@ module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate, criteria) =
                     pos.procedureId = :procedureId
                     AND pos.accountNumber is not NULL 
                                 `;
+
+        const orderBy = criteria.orderBy ? criteria.orderBy : 'accountNumber';
+        delete criteria.orderBy;
+        const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
+        delete criteria.sortOrder;
+
         for (const key in criteria) {
             if (Object.hasOwnProperty.call(criteria, key)) {
                 if (criteria[key].toString().length > 2) {
@@ -537,6 +562,8 @@ module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate, criteria) =
                 }
             }
         }
+
+        query += ` order by ${orderBy} ${sortOrder}`;
 
         const result = await sequelize.query(
             query, {

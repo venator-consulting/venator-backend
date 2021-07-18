@@ -57,7 +57,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
+          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}">
             <span *ngIf="col.field=='totalBalance'">{{ row[col.field] | currency:'EUR':''}}</span>
             <span *ngIf="col.field!='totalBalance'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}

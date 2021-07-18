@@ -5,10 +5,14 @@ export class dataTableColumns {
 
   field?: string;
   header?: string;
+  align?: string;
+  width?: number;
 
-  constructor(field: string, header: string) {
+  constructor(field: string, header: string, align: string = 'center', width: number = 150) {
     this.field = field;
     this.header = header;
+    this.align = align;
+    this.width = width;
   }
 
   static async getDataTableColumns(translateService: TranslateService): Promise<dataTableColumns[]> {
@@ -23,13 +27,13 @@ export class dataTableColumns {
     result.push(new dataTableColumns("accountName", await translateService.get("DataTableColumns.accountName").toPromise()));
     result.push(new dataTableColumns("contraAccountNumber", await translateService.get("DataTableColumns.contraAccountNumber").toPromise()));
     result.push(new dataTableColumns("contraAccountName", await translateService.get("DataTableColumns.contraAccountName").toPromise()));
-    result.push(new dataTableColumns("balance", await translateService.get("DataTableColumns.balance").toPromise()));
-    result.push(new dataTableColumns("debitAmount", await translateService.get("DataTableColumns.debitAmount").toPromise()));
-    result.push(new dataTableColumns("creditAmount", await translateService.get("DataTableColumns.creditAmount").toPromise()));
+    result.push(new dataTableColumns("balance", await translateService.get("DataTableColumns.balance").toPromise(), 'right'));
+    result.push(new dataTableColumns("debitAmount", await translateService.get("DataTableColumns.debitAmount").toPromise(), 'right'));
+    result.push(new dataTableColumns("creditAmount", await translateService.get("DataTableColumns.creditAmount").toPromise(), 'right'));
     result.push(new dataTableColumns("stackNumber", await translateService.get("DataTableColumns.stackNumber").toPromise()));
     result.push(new dataTableColumns("recordNumber", await translateService.get("DataTableColumns.recordNumber").toPromise()));
     result.push(new dataTableColumns("fiscalYear", await translateService.get("DataTableColumns.fiscalYear").toPromise()));
-    result.push(new dataTableColumns("taxAmount", await translateService.get("DataTableColumns.taxAmount").toPromise()));
+    result.push(new dataTableColumns("taxAmount", await translateService.get("DataTableColumns.taxAmount").toPromise(), 'right'));
     //result.push(new dataTableColumns("identificationNumber", await translateService.get("DataTableColumns.identificationNumber").toPromise()));
     result.push(new dataTableColumns("executionDate", await translateService.get("DataTableColumns.executionDate").toPromise()));
     result.push(new dataTableColumns("dueDate", await translateService.get("DataTableColumns.dueDate").toPromise()));
@@ -71,8 +75,8 @@ export class dataTableColumns {
     result.push(new dataTableColumns("cashDiscount", await translateService.get("DataTableColumns.cashDiscount").toPromise()));
     result.push(new dataTableColumns("textHeader", await translateService.get("DataTableColumns.textHeader").toPromise()));
     result.push(new dataTableColumns("postingKey", await translateService.get("DataTableColumns.postingKey").toPromise()));
-    result.push(new dataTableColumns("taxAmountDebit", await translateService.get("DataTableColumns.taxAmountDebit").toPromise()));
-    result.push(new dataTableColumns("taxAmountCredit", await translateService.get("DataTableColumns.taxAmountCredit").toPromise()));
+    result.push(new dataTableColumns("taxAmountDebit", await translateService.get("DataTableColumns.taxAmountDebit").toPromise(), 'right'));
+    result.push(new dataTableColumns("taxAmountCredit", await translateService.get("DataTableColumns.taxAmountCredit").toPromise(), 'right'));
     result.push(new dataTableColumns("applicationDocument", await translateService.get("DataTableColumns.applicationDocument").toPromise()));
     result.push(new dataTableColumns("applicationDate", await translateService.get("DataTableColumns.applicationDate").toPromise()));
    // result.push(new dataTableColumns("applicationDateNew", await translateService.get("DataTableColumns.applicationDateNew").toPromise()));

@@ -4,6 +4,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { TableColumn } from 'src/app/shared/model/tableColumn';
 
 @Component({
   selector: 'app-due-date-details',
@@ -28,7 +29,7 @@ export class DueDateDetailsComponent implements OnInit {
   docNegativeData: any[] = new Array();
   docData: any[] = new Array();
   docDateData: any = {};
-  delayCols: { header: string; field: string; }[];
+  delayCols: TableColumn[];
   items: MenuItem[];
   home: MenuItem;
 
@@ -132,40 +133,49 @@ export class DueDateDetailsComponent implements OnInit {
     this.delayCols = [
       {
         header: 'DataTableColumns.accountNumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'DataTableColumns.accountType',
-        field: 'accountType'
+        field: 'accountType',
+        align: 'center'
       },
 
       {
         header: 'DataTableColumns.documentType',
-        field: 'documentType'
+        field: 'documentType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew'
+        field: 'documentTypeNew',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.balance',
-        field: 'balance'
+        field: 'balance',
+        align: 'right'
       },
       {
         header: 'DataTableColumns.documentDate',
-        field: 'documentDate'
+        field: 'documentDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.executionDate',
-        field: 'executionDate'
+        field: 'executionDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.dueDate',
-        field: 'dueDate'
+        field: 'dueDate',
+        align: 'center'
       }
     ];
 

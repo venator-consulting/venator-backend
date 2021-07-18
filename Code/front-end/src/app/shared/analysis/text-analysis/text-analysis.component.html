@@ -47,7 +47,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
+          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}">
             <span  pTooltip="{{ row[col.field] }}">
             {{ row[col.field] }}
             </span>

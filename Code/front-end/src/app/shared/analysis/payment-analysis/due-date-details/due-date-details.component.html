@@ -39,7 +39,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr [pSelectableRow]="row">
-          <td *ngFor="let col of columns" class="p-text-right">
+          <td *ngFor="let col of columns" class="p-text-{{col.align}}">
             <span *ngIf="col.field=='balance'">
               {{ row[col.field]  | currency:'EUR':'' }}
             </span>

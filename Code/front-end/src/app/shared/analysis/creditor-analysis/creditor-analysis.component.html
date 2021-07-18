@@ -9,7 +9,7 @@
 
 <p-table #dtmaxb dataKey="accountNumber" [value]="data"
       [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="cols" responsive="true"
-      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" >
+      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="sort($event)">
       <ng-template pTemplate="caption">
         <div class="p-mb-4">
           <!-- Limit options -->
@@ -50,10 +50,11 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
+          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
             <span pTooltip="{{ col.header | translate }}">
             {{col.header | translate}}
             </span>
+            <p-sortIcon field="{{col.field}}"></p-sortIcon>
           </th>
           <th>Details</th>
         </tr>
@@ -74,7 +75,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr [pSelectableRow]="row">
-          <td *ngFor="let col of columns" class="p-text-right">
+          <td *ngFor="let col of columns" class="p-text-{{col.align}}">
             <span *ngIf="col.field=='totalBalance'">
               {{ row.totalBalance  | currency:'EUR':'' }}
             </span>

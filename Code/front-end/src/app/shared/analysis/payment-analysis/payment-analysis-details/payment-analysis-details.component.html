@@ -75,7 +75,7 @@
         <ng-template pTemplate="body" let-row let-columns="columns">
           <tr [pSelectableRow]="row">
 
-            <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">
+            <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-{{col.align}}">
               <span *ngIf="col.field == 'paymentRelevant'">
                 <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.paymentRelevant"></i>
                 <i class="pi pi-star " (click)="selectRow(row)" *ngIf="row.paymentRelevant"></i>
@@ -151,7 +151,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-row let-columns="columns">
           <tr [pSelectableRow]="row">
-            <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">
+            <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-{{col.align}}">
               <span *ngIf="col.field == 'paymentRelevant'">
                 <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.paymentRelevant"></i>
                 <i class="pi pi-star " (click)="selectRow(row)" *ngIf="row.paymentRelevant"></i>
@@ -227,7 +227,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-row let-columns="columns">
           <tr [pSelectableRow]="row">
-            <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">
+            <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-{{col.align}}">
               <span *ngIf="col.field == 'paymentRelevant'">
                 <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.paymentRelevant"></i>
                 <i class="pi pi-star " (click)="selectRow(row)" *ngIf="row.paymentRelevant"></i>
@@ -313,7 +313,7 @@
         <ng-template pTemplate="body" let-row let-columns="columns">
           <tr [pSelectableRow]="row">
 
-            <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">
+            <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-{{col.align}}">
               <span *ngIf="col.field == 'paymentRelevant'">
                 <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.paymentRelevant"></i>
                 <i class="pi pi-star " (click)="selectRow(row)" *ngIf="row.paymentRelevant"></i>
@@ -343,7 +343,8 @@
       </p-table>
       <p-table #dtall dataKey="id" [value]="allRecordData" *ngIf="detailsOption == 3" [resizableColumns]="true"
         styleClass="p-datatable-gridlines" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
-        [reorderableColumns]="true" [frozenColumns]="frozenCols" frozenWidth="500px" [(selection)]="selected">
+        [reorderableColumns]="true" [frozenColumns]="frozenCols" frozenWidth="500px" [(selection)]="selected"
+        [lazy]="true" (onLazyLoad)="sort($event)">
         <ng-template pTemplate="caption">
           <div class="p-grid">
             <div class="p-col-1" *ngIf="!details">
@@ -400,10 +401,11 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
+            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
               <span pTooltip="{{col.header | translate}}">
                 {{col.header | translate}}
               </span>
+              <p-sortIcon field="{{col.field}}"></p-sortIcon>
             </th>
           </tr>
           <tr>
@@ -419,7 +421,7 @@
         <ng-template pTemplate="body" let-row let-columns="columns">
           <tr [pSelectableRow]="row">
 
-            <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-right">
+            <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-{{col.align}}">
               <span *ngIf="col.field == 'paymentRelevant'">
                 <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.paymentRelevant"></i>
                 <i class="pi pi-star " (click)="selectRow(row)" *ngIf="row.paymentRelevant"></i>

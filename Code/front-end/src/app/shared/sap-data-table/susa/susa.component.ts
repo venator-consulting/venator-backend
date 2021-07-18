@@ -6,6 +6,7 @@ import { ProcedureService } from '../../service/procedure.service';
 import { DatePipe } from '@angular/common';
 import * as FileSaver from 'file-saver';
 import { Word } from '../../model/word';
+import { TableColumn } from '../../model/tableColumn';
 
 @Component({
   selector: 'app-susa',
@@ -20,7 +21,7 @@ export class SusaComponent implements OnInit {
   fromDate: Date = new Date();
   toDate: Date = new Date();
   procedureName: string = "";
-  cols: { header, field }[] = new Array();
+  cols: TableColumn[] = new Array();
   data: any[] = new Array();
   waiting: boolean = false;
   criteria: any = {};
@@ -51,7 +52,7 @@ export class SusaComponent implements OnInit {
         this.fromDate = new Date(Date.parse(res[0].mindate));
         this.toDate = new Date(Date.parse(res[0].maxdate));
         let minYear = this.fromDate.getFullYear();
-        debugger;
+        // debugger;
         if (isNaN(minYear)) {
           this.fromDate = this.toDate = new Date();
           this.waiting = false;
@@ -74,46 +75,46 @@ export class SusaComponent implements OnInit {
       });
 
 
-    // if (this.procedureId && +this.procedureId > 0) {
-    //   this.prcService
-    //     .getById(+this.procedureId)
-    //     .subscribe(prc => {
-    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-    //     }, er => { });
-    // }
-
     this.cols = [
       {
         header: 'Susa.accountType',
-        field: 'accountType'
+        field: 'accountType',
+        align: 'center'
       },
       {
         header: 'Susa.accountnumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'center'
       },
       {
         header: 'Susa.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'Susa.startingBalance',
-        field: 'famount'
+        field: 'famount',
+        align: 'right'
       },
       {
         header: 'Susa.sumDebit',
-        field: 'debitAmount'
+        field: 'debitAmount',
+        align: 'right'
       },
       {
         header: 'Susa.sumCredit',
-        field: 'creditAmount'
+        field: 'creditAmount',
+        align: 'right'
       },
       {
         header: 'Susa.balance',
-        field: 'inamount'
+        field: 'inamount',
+        align: 'right'
       },
       {
         header: 'Susa.endingBalance',
-        field: 'outamount'
+        field: 'outamount',
+        align: 'right'
       },
     ];
 
@@ -122,6 +123,11 @@ export class SusaComponent implements OnInit {
   getData() {
     this.waiting = true;
     this.searching = true;
+    for (const key in this.criteria) {
+      if (!this.criteria[key]) {
+        delete this.criteria[key];
+      }
+     }
     let fdate = this.datepipe.transform(this.fromDate, 'yyyy-MM-dd');
     let tdate = this.datepipe.transform(this.toDate, 'yyyy-MM-dd');
     this._postingDataService
@@ -138,6 +144,16 @@ export class SusaComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+  }
+
+  sort(event) {
+    // debugger;
+    this.criteria.orderBy = event.sortField;
+    this.criteria.sortOrder = event.sortOrder;
+    // this.pageNr = 1;
+    this.criteria.offset = 0;
+    if (!this.waiting)
+      this.getData();
   }
 
   goBack() {

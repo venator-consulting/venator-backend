@@ -9,6 +9,7 @@ import * as FileSaver from 'file-saver';
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { ExportDataService } from 'src/app/shared/service/export-data.service';
+import { TableColumn } from 'src/app/shared/model/tableColumn';
 
 @Component({
   selector: 'app-payment-analysis-details',
@@ -42,8 +43,8 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   waiting: boolean = true;
   procedureName: string;
   displayData: number;
-  cols: { header: string; field: string; }[];
-  frozenCols: { header: string; field: string; width: string }[];
+  cols: TableColumn[];
+  frozenCols: TableColumn[];
   selected: PaymentAnalysisDetailsData[] = new Array();
   items: MenuItem[];
   home: MenuItem;
@@ -137,12 +138,14 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         {
           header: '',
           field: 'paymentRelevant',
-          width: '6'
+          width: '6',
+          align: 'center'
         },
         {
           header: elem.comment,
           field: 'paymentRelevantComment',
-          width: '35'
+          width: '35',
+          align: 'left'
         }
       ];
       this.basicData = {
@@ -169,59 +172,73 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     this.cols = [
       {
         header: 'DataTableColumns.accountNumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'DataTableColumns.accountType',
-        field: 'accountType'
+        field: 'accountType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentType',
-        field: 'documentType'
+        field: 'documentType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.balance',
-        field: 'balance'
+        field: 'balance',
+        align: 'right'
       },
       {
         header: 'DataTableColumns.contraAccountNumber',
-        field: 'contraAccountNumber'
+        field: 'contraAccountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.contraAccountName',
-        field: 'contraAccountName'
+        field: 'contraAccountName',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew'
+        field: 'documentTypeNew',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentNumber',
-        field: 'documentNumber'
+        field: 'documentNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentDate',
-        field: 'documentDate'
+        field: 'documentDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.recordNumber',
-        field: 'recordNumber'
+        field: 'recordNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.ledgerId',
-        field: 'ledgerId'
+        field: 'ledgerId',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.executionDate',
-        field: 'executionDate'
+        field: 'executionDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.dueDate',
-        field: 'dueDate'
+        field: 'dueDate',
+        align: 'center'
       }
     ];
 
@@ -424,7 +441,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
           }
           // end of formatting
-          
+
         }
       }
       translatedData.push(translatedRecord);
@@ -487,6 +504,11 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
   getAllByAccount() {
     this.waiting = true;
+    for (const key in this.backCriteria) {
+      if (!this.backCriteria[key]) {
+        delete this.backCriteria[key];
+      }
+    }
     this._analysisService
       .getPaymentAnalysisDetailsByAccount(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, this.backCriteria)
       .subscribe(res => {
@@ -503,6 +525,17 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+  }
+
+
+  sort(event) {
+    // debugger;
+    this.backCriteria.orderBy = event.sortField;
+    this.backCriteria.sortOrder = event.sortOrder;
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    if (!this.waiting)
+      this.getAllByAccount();
   }
 
   // export excel from back-end for all table

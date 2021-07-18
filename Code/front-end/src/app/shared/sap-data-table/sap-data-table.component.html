@@ -6,7 +6,8 @@
 </div>
 <div class="card">
   <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="350px" [style]="{width:'100%'}"
-    [resizableColumns]="true" styleClass="p-datatable-gridlines" [reorderableColumns]="true" [loading]="loading">
+    [resizableColumns]="true" styleClass="p-datatable-gridlines" [reorderableColumns]="true" [loading]="loading"
+    [lazy]="true" (onLazyLoad)="sort($event)">
     <ng-template pTemplate="caption">
       <div class="p-mb-4">
         <!-- Export as excel -->
@@ -41,8 +42,8 @@
           class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
           tooltipPosition="bottom"></button>
 
-        <button type="button" pButton pRipple icon="pi pi-info-circle" (click)="susa()" class="p-ml-6"
-          pTooltip="Susa" tooltipPosition="bottom" label="Susa"></button>
+        <button type="button" pButton pRipple icon="pi pi-info-circle" (click)="susa()" class="p-ml-6" pTooltip="Susa"
+          tooltipPosition="bottom" label="Susa"></button>
 
       </div>
     </ng-template>
@@ -53,8 +54,10 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th pResizableColumn pReorderableColumn *ngFor="let col of cols" class="p-text-center" pTooltip="{{col.header}}"
-          tooltipPosition="bottom">{{col.header}} </th>
+        <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn *ngFor="let col of cols" class="p-text-center" pTooltip="{{col.header}}"
+          tooltipPosition="bottom" >{{col.header}}
+          <p-sortIcon field="{{col.field}}"></p-sortIcon>
+        </th>
       </tr>
       <tr>
         <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
@@ -73,21 +76,21 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowData>
       <tr>
-        <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
+        <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}">
           <div
             *ngIf="(col.field == 'balance' || col.field == 'debitAmount' || col.field == 'creditAmount' || col.field == 'documentDate' || col.field == 'executionDate' || col.field == 'dueDate' || col.field == 'postingDate' || col.field == 'applicationDate');then withFilter else withoutFilter">
           </div>
           <ng-template #withoutFilter>
             <span pTooltip="{{ rowData[col.field] }}">
-            {{ rowData[col.field] }}
-          </span>
+              {{ rowData[col.field] }}
+            </span>
           </ng-template>
           <ng-template #withFilter>
             {{ (col.field == 'balance' || col.field == 'debitAmount' ||
               col.field == 'creditAmount') ? 
               (rowData[col.field] | currency:'EUR':'')  : rowData[col.field] | date:'dd.MM.yyyy'}}
           </ng-template>
-          
+
         </td>
       </tr>
     </ng-template>

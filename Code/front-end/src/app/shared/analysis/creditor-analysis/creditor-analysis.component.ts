@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from '../../service/analysis.service';
 import { TranslateService } from '@ngx-translate/core';
+import { TableColumn } from '../../model/tableColumn';
 
 @Component({
   selector: 'app-creditor-analysis',
@@ -10,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./creditor-analysis.component.sass']
 })
 export class CreditorAnalysisComponent implements OnInit {
-  cols: { header: string; field: string; }[];
+  cols: TableColumn[];
   procedureName: string;
   selectedProcedure: number;
   selectedOrganisation: number;
@@ -48,19 +49,23 @@ export class CreditorAnalysisComponent implements OnInit {
       this.cols = [
         {
           header: elem.accountNumber,
-          field: 'accountNumber'
+          field: 'accountNumber',
+          align: 'center'
         },
         {
           header: elem.accountName,
-          field: 'accountName'
+          field: 'accountName',
+          align: 'left'
         },
         {
           header: elem.count,
-          field: 'totlaCount'
+          field: 'totlaCount',
+          align: 'center'
         },
         {
           header: elem.sum,
-          field: 'totalBalance'
+          field: 'totalBalance',
+          align: 'right'
         }
       ];
     })
@@ -81,6 +86,11 @@ export class CreditorAnalysisComponent implements OnInit {
 
   getData() {
     this.waiting = true;
+    for (const key in this.criteria) {
+      if (!this.criteria[key]) {
+        delete this.criteria[key];
+      }
+    }
     this._analysisService
       .getCreditorAnalysis(this.selectedOrganisation, this.selectedProcedure, this.criteria)
       .subscribe(res => {
@@ -97,6 +107,16 @@ export class CreditorAnalysisComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+  }
+
+  sort(event) {
+    // debugger;
+    this.criteria.orderBy = event.sortField;
+    this.criteria.sortOrder = event.sortOrder;
+    this.pageNr = 1;
+    this.criteria.offset = 0;
+    if (!this.waiting)
+      this.getData();
   }
 
   limitChange(e) {

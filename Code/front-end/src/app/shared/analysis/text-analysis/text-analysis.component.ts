@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { TextAnalysis } from "../../model/textAnalysis";
 import { MenuItem, MessageService } from 'primeng/api';
 import { ProcedureService } from '../../service/procedure.service';
+import { TableColumn } from '../../model/tableColumn';
 
 @Component({
   selector: 'app-text-analysis',
@@ -18,7 +19,7 @@ export class TextAnalysisComponent implements OnInit {
   basicOptions: any;
   basicData: any;
   data: TextAnalysis[] = new Array();
-  cols: { header: string; field: string; }[];
+  cols: TableColumn[];
   waiting: boolean = false;
   procedureName: any;
   items: MenuItem[];
@@ -70,15 +71,18 @@ export class TextAnalysisComponent implements OnInit {
     this.cols = [
       {
         header: 'AmountAnalysis.accountNumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'center'
       },
       {
         header: 'AmountAnalysis.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'AmountAnalysis.NumberOfPostings',
-        field: 'totlaCount'
+        field: 'totlaCount',
+        align: 'center'
       }
     ];
 
