@@ -233,7 +233,10 @@ module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
 module.exports.amountAnalysisDetails = async (orgId, prcId, baseBalance, accountNumber) => {
     try {
 
-        const query = `SELECT *
+        const query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.amountRelevant,
+                                p.amountRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
+                                p.contraAccountName, p.documentTypeNew, p.documentNumber, p.documentDate, p.recordNumber,
+                                p.ledgerId, p.executionDate, p.dueDate
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
@@ -331,7 +334,10 @@ module.exports.textAnalysis = async (orgId, prcId, keys) => {
 module.exports.textAnalysisDetails = async (orgId, prcId, keys, accountNumber) => {
     try {
 
-        let query = `SELECT *
+        let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
+                            p.textRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
+                            p.contraAccountName, p.documentTypeNew, p.documentNumber, p.documentDate, p.recordNumber,
+                            p.ledgerId, p.executionDate, p.dueDate, p.reference, p.textPosting, p.textHeader
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
@@ -408,6 +414,10 @@ module.exports.textJustRelevant = async (orgId, prcId, accountNumber) => {
                     accountNumber: accountNumber,
                     ProcedureId: prcId
                 },
+                attributes: ['id', 'procedureId', 'accountNumber', 'accountName', 'textRelevant',
+                    'textRelevantComment', 'accountType', 'documentType', 'balance', 'contraAccountNumber',
+                    'contraAccountName', 'documentTypeNew', 'documentNumber', 'documentDate', 'recordNumber',
+                    'ledgerId', 'executionDate', 'dueDate', 'reference', 'textPosting', 'textHeader']
             });
     } catch (error) {
         throw new Error(error);
@@ -425,6 +435,10 @@ module.exports.amountJustRelevant = async (orgId, prcId, accountNumber) => {
                     accountNumber: accountNumber,
                     ProcedureId: prcId
                 },
+                attributes: ['id', 'procedureId', 'accountNumber', 'accountName', 'amountRelevant',
+                    'amountRelevantComment', 'accountType', 'documentType', 'balance', 'contraAccountNumber',
+                    'contraAccountName', 'documentTypeNew', 'documentNumber', 'documentDate', 'recordNumber',
+                    'ledgerId', 'executionDate', 'dueDate']
             });
     } catch (error) {
         throw new Error(error);

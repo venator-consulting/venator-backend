@@ -5,6 +5,8 @@ import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
 import * as FileSaver from 'file-saver';
+import { ExportDataService } from 'src/app/shared/service/export-data.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'amount-analysis-details',
@@ -44,7 +46,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   // for pagination ends
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
-    private _analysisService: AnalysisService, private prcService: ProcedureService) { }
+    private _analysisService: AnalysisService, private _exportDataService: ExportDataService, private _translateService: TranslateService) { }
 
   ngOnInit(): void {
     this.items = [
@@ -52,7 +54,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       { label: 'Amount Analysis', routerLink: '/analysis/amount', routerLinkActiveOptions: { exact: true } },
       { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
     ];
-    
+
     this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/shared/data' };
 
     this.waiting = true;
@@ -170,9 +172,54 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   }
 
 
-  exportExcel() {
+  async exportExcel() {
+
+    let translatedData = [];
+    for (let index = 0; index < this.data.length; index++) {
+      let element = this.data[index];
+      let translatedRecord = {};
+      for (const key in element) {
+        if (Object.prototype.hasOwnProperty.call(element, key) && key != 'id' && key != 'procedureId') {
+          let translatedKey = await this._translateService.get('DataTableColumns.' + key).toPromise();
+          translatedRecord[translatedKey] = element[key];
+
+          // formatting
+          if (element[key] &&
+            (key == 'balance' || key == 'debitAmount' || key == 'creditAmount' || key == 'taxAmount' ||
+              key == 'taxAmountDebit' || key == 'taxAmountCredit' || key == 'StartingBalance')) {
+            try {
+              let temp = Number.parseFloat(element[key].toString());
+              if (!Number.isNaN(temp)) {
+                translatedRecord[translatedKey] = temp.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              }
+
+            } catch (e) {
+              // do nothing
+            }
+          } else if (element[key] &&
+            (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' ||
+              key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
+            try {
+              let temp = new Date(Date.parse(element[key].toString()));
+              if (temp instanceof Date)
+                translatedRecord[translatedKey] = temp.toLocaleDateString('de-DE');
+            } catch (e) {
+
+            }
+
+          }
+          // end of formatting
+
+
+
+
+        }
+      }
+      translatedData.push(translatedRecord);
+    }
+
     import("xlsx").then(xlsx => {
-      const worksheet = xlsx.utils.json_to_sheet(this.data);
+      const worksheet = xlsx.utils.json_to_sheet(translatedData);
       const workbook = { Sheets: { 'amount_analysis': worksheet }, SheetNames: ['amount_analysis'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
       this.saveAsExcelFile(excelBuffer, "amount_analysis");
@@ -342,62 +389,79 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   }
 
 
-// for pagination starts
-
-filterChangeBack(query, colName): void {
-  this.getAllByAccount();
-}
-
-limitChange(e) {
-  this.limit = e.value
-  this.backCriteria.offset = 0;
-  this.backCriteria.limit = this.limit;
-  this.pageNr = 1;
-  this.getAllByAccount();
-}
-
-firstPage() {
-  this.pageNr = 1;
-  this.backCriteria.offset = 0;
-  this.getAllByAccount();
-}
-
-nextPage() {
-  ++this.pageNr;
-  if (this.pageNr > this.maxPageNr) return;
-  this.backCriteria.offset += +this.limit;
-
-  this.getAllByAccount();
-}
+  // export excel from back-end for all table
+  exportXLSX() {
+    const lang = localStorage.getItem('lang');
+    let criteriaWithLang = { ...this.backCriteria };
+    criteriaWithLang['lang'] = lang;
+    this._exportDataService
+      .exportXLSX('amount_analysis', this.orgId, this.prcId, criteriaWithLang)
+      .subscribe(
+        url => {
+          // console.log(url);
+          window.open(url.toString(), "_blank");
+        },
+        (error) => console.log(error),
+      );
+  }
 
 
-lastPage() {
-  this.pageNr = this.maxPageNr;
-  this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
-  this.getAllByAccount();
-}
+  // for pagination starts
 
-previousPage() {
-  --this.pageNr;
-  if (this.pageNr <= 0) return;
-  this.backCriteria.offset -= +this.limit;
-  this.getAllByAccount();
-}
+  filterChangeBack(query, colName): void {
+    this.getAllByAccount();
+  }
 
-pageNrChange(value) {
-  this.backCriteria.offset = (this.pageNr - 1) * this.limit;
-  this.getAllByAccount();
-}
+  limitChange(e) {
+    this.limit = e.value
+    this.backCriteria.offset = 0;
+    this.backCriteria.limit = this.limit;
+    this.pageNr = 1;
+    this.getAllByAccount();
+  }
 
-clearFilter() {
-  this.backCriteria = {
-    limit: this.limit,
-    offset: 0
-  };
-  this.pageNr = 1;
-  this.getAllByAccount();
-}
-// for pagination ends
+  firstPage() {
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    this.getAllByAccount();
+  }
+
+  nextPage() {
+    ++this.pageNr;
+    if (this.pageNr > this.maxPageNr) return;
+    this.backCriteria.offset += +this.limit;
+
+    this.getAllByAccount();
+  }
+
+
+  lastPage() {
+    this.pageNr = this.maxPageNr;
+    this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
+    this.getAllByAccount();
+  }
+
+  previousPage() {
+    --this.pageNr;
+    if (this.pageNr <= 0) return;
+    this.backCriteria.offset -= +this.limit;
+    this.getAllByAccount();
+  }
+
+  pageNrChange(value) {
+    this.backCriteria.offset = (this.pageNr - 1) * this.limit;
+    this.getAllByAccount();
+  }
+
+  clearFilter() {
+    this.backCriteria = {
+      limit: this.limit,
+      offset: 0
+    };
+    this.pageNr = 1;
+    this.getAllByAccount();
+  }
+  // for pagination ends
 
 
 }

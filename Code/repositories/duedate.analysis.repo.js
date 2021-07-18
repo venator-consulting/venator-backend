@@ -134,7 +134,7 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate, toDate, mindocda
                 const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
                 const rowindex = getNumberOfDays(fromDate, row.dueDate);
                 diffData[rowindex] = diffData[rowindex] ? diffData[rowindex] + rowDiff : rowDiff;
-                firstChartLabels[rowindex] = firstChartLabels[rowindex] ? firstChartLabels[rowindex] : row.dueDate.toLocaleDateString('de-DE');;
+                firstChartLabels[rowindex] = firstChartLabels[rowindex] ? firstChartLabels[rowindex] : row.dueDate.toLocaleDateString('de-DE');
 
 
                 const i = dueDateRefAccounts.findIndex(x => x.accountNumber == row.accountNumber);

@@ -5,6 +5,8 @@ import { TextAnalysisDetails } from 'src/app/shared/model/textAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
 import * as FileSaver from 'file-saver';
+import { ExportDataService } from 'src/app/shared/service/export-data.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-text-analysis-details',
@@ -44,7 +46,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
     // for pagination ends
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
-    private _analysisService: AnalysisService, private prcService: ProcedureService) { }
+    private _analysisService: AnalysisService, private _translateService: TranslateService, private _exportDataService: ExportDataService) { }
 
   ngOnInit(): void {
     this.items = [
@@ -177,9 +179,51 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this._router.navigate(['/analysis/text/']);
   }
 
-  exportExcel() {
+  async exportExcel() {
+
+    let translatedData = [];
+    for (let index = 0; index < this.data.length; index++) {
+      let element = this.data[index];
+      let translatedRecord = {};
+      for (const key in element) {
+        if (Object.prototype.hasOwnProperty.call(element, key) && key != 'id' && key != 'procedureId') {
+          let translatedKey = await this._translateService.get('DataTableColumns.' + key).toPromise();
+          translatedRecord[translatedKey] = element[key];
+
+          // formatting
+          if (element[key] &&
+            (key == 'balance' || key == 'debitAmount' || key == 'creditAmount' || key == 'taxAmount' ||
+              key == 'taxAmountDebit' || key == 'taxAmountCredit' || key == 'StartingBalance')) {
+            try {
+              let temp = Number.parseFloat(element[key].toString());
+              if (!Number.isNaN(temp)) {
+                translatedRecord[translatedKey] = temp.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              }
+
+            } catch (e) {
+              // do nothing
+            }
+          } else if (element[key] &&
+            (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' ||
+              key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
+            try {
+              let temp = new Date(Date.parse(element[key].toString()));
+              if (temp instanceof Date)
+                translatedRecord[translatedKey] = temp.toLocaleDateString('de-DE');
+            } catch (e) {
+
+            }
+
+          }
+          // end of formatting
+          
+        }
+      }
+      translatedData.push(translatedRecord);
+    }
+
     import("xlsx").then(xlsx => {
-      const worksheet = xlsx.utils.json_to_sheet(this.data);
+      const worksheet = xlsx.utils.json_to_sheet(translatedData);
       const workbook = { Sheets: { 'text_analysis': worksheet }, SheetNames: ['text_analysis'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
       this.saveAsExcelFile(excelBuffer, "text_analysis");
@@ -346,6 +390,23 @@ export class TextAnalysisDetailsComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+  }
+
+
+  // export excel from back-end for all table
+  exportXLSX() {
+    const lang = localStorage.getItem('lang');
+    let criteriaWithLang = {...this.backCriteria};
+    criteriaWithLang['lang'] = lang;
+    this._exportDataService
+      .exportXLSX('text_analysis', this.orgId, this.prcId, criteriaWithLang)
+      .subscribe(
+        url => {
+          // console.log(url);
+          window.open(url.toString(), "_blank");
+        },
+        (error) => console.log(error),
+      );
   }
 
 

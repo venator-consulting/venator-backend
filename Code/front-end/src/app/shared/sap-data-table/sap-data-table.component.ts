@@ -201,8 +201,11 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   exportXLSX() {
+    const lang = localStorage.getItem('lang');
+    let criteriaWithLang = {...this.criteria};
+    criteriaWithLang['lang'] = lang;
     this._exportDataService
-      .exportXLSX('posting', this.organisationId, this.procedureId, this.criteria)
+      .exportXLSX('posting', this.organisationId, this.procedureId, criteriaWithLang)
       .subscribe(
         url => {
           // console.log(url);

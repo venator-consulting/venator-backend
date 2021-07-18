@@ -98,7 +98,7 @@ export class PaymentAnalysisComponent implements OnInit {
               minRotation: 0,
               maxRotation: 0,
               callback: function (label, index, values) {
-                debugger;
+                // debugger;
                 let currencyPipe = new CurrencyPipe('de');
                 label = currencyPipe.transform(label, 'EURO', '');
                 return label;
