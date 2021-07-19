@@ -109,7 +109,9 @@ module.exports.getAccountTypes = async (organisationId, procedureId) => {
                     }
                 },
                 attributes: [
-                    [fn('DISTINCT', col('accountType')), 'accountType'],
+                    [fn('DISTINCT', col('accountNumber')), 'accountNumber'],
+                    'accountName',
+                    'accountType',
                     'accountTypeNewId',
                     'accountTypeNewName',
                     'procedureId'
@@ -142,7 +144,7 @@ module.exports.updateDocTypeNew = async (organisationId, procedureId, documentTy
 };
 
 
-module.exports.updateAccountTypeNew = async (organisationId, procedureId, accountType, accountTypeNewId, accountTypeNewName) => {
+module.exports.updateAccountTypeNew = async (organisationId, procedureId, accountNumber, accountTypeNewId, accountTypeNewName) => {
     try {
         return await Posting
             .getPosting('posting_' + organisationId)
@@ -152,7 +154,7 @@ module.exports.updateAccountTypeNew = async (organisationId, procedureId, accoun
             }, {
                 where: {
                     procedureId: procedureId,
-                    accountType: accountType
+                    accountNumber: accountNumber
                 }
             });
     } catch (error) {

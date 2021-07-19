@@ -54,6 +54,14 @@ export class AccountTypeComponent implements OnInit {
 
     this.cols = [
       {
+        header: 'Account_Type.accountNumber',
+        field: 'accountNumber'
+      },
+      {
+        header: 'Account_Type.accountName',
+        field: 'accountName'
+      },
+      {
         header: 'Account_Type.accountType',
         field: 'accountType'
       },

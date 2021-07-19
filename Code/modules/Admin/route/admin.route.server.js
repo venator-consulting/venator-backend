@@ -165,10 +165,10 @@ router
     .route('/account-type/posting/:orgId/:prcId')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'), accountTypeCtrl.getDocTypes)
+    }), authorization.authorize('Admin'), accountTypeCtrl.getAccountTypes)
     .put(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'), accountTypeCtrl.updateDoctypes);
+    }), authorization.authorize('Admin'), accountTypeCtrl.updateAccountTypes);
 
 
 router
