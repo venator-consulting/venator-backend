@@ -16,6 +16,9 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys, criteria) => {
 
         let limit = criteria.limit ? criteria.limit : 25;
         let offset = criteria.offset ? criteria.offset : 0;
+        const orderBy = criteria.orderBy ? criteria.orderBy : 'accountNumber';
+        const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
+
         let query = `SELECT SQL_CALC_FOUND_ROWS p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, SUM(p.balance) as totalBalance
                             FROM posting_${orgId}  p
                             WHERE p.procedureId = :procedureId 
@@ -55,7 +58,8 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys, criteria) => {
             query += `and p.accountName like '%${criteria.accountName}%' `;
         }
         query += 'GROUP BY p.accountNumber , p.accountName ';
-        query += `LIMIT ${limit} offset ${offset}`;
+        query += ` order by ${orderBy} ${sortOrder} `;
+        query += ` LIMIT ${limit} offset ${offset}`;
 
 
         const result = await sequelize.query(

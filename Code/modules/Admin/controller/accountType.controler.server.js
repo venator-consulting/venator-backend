@@ -19,7 +19,7 @@ module.exports.getAll = async (req, res) => {
     }
 };
 
-module.exports.getDocTypes = async (req, res) => {
+module.exports.getAccountTypes = async (req, res) => {
     try {
         const result = await postingRepo
             .getAccountTypes(req.params.orgId, req.params.prcId);
@@ -34,10 +34,10 @@ module.exports.getDocTypes = async (req, res) => {
     }
 };
 
-module.exports.updateDoctypes = async (req, res) => {
+module.exports.updateAccountTypes = async (req, res) => {
     try {
         const result = await postingRepo
-            .updateAccountTypeNew(req.params.orgId, req.params.prcId, req.body.accountType, req.body.accountTypeNewId, req.body.accountTypeNewName);
+            .updateAccountTypeNew(req.params.orgId, req.params.prcId, req.body.accountNumber, req.body.accountTypeNewId, req.body.accountTypeNewName);
         res.status(201).json(result);
         } catch (e) {
         errorHandler('account type controller: get account types', e);

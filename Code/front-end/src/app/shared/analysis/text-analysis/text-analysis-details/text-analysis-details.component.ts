@@ -5,6 +5,9 @@ import { TextAnalysisDetails } from 'src/app/shared/model/textAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
 import * as FileSaver from 'file-saver';
+import { ExportDataService } from 'src/app/shared/service/export-data.service';
+import { TranslateService } from '@ngx-translate/core';
+import { TableColumn } from 'src/app/shared/model/tableColumn';
 
 @Component({
   selector: 'app-text-analysis-details',
@@ -19,8 +22,8 @@ export class TextAnalysisDetailsComponent implements OnInit {
   accountNumber: string;
   data: TextAnalysisDetails[] = new Array();
   allRecordData: TextAnalysisDetails[] = new Array();
-  cols: { header: string; field: string; }[];
-  frozenCols: { header: string; field: string; width: string}[];
+  cols: TableColumn[];
+  frozenCols: TableColumn[];
   waiting: boolean = false;
   procedureName: string;
   tempData: any[];
@@ -44,7 +47,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
     // for pagination ends
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
-    private _analysisService: AnalysisService, private prcService: ProcedureService) { }
+    private _analysisService: AnalysisService, private _translateService: TranslateService, private _exportDataService: ExportDataService) { }
 
   ngOnInit(): void {
     this.items = [
@@ -75,71 +78,88 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this.cols = [
       {
         header: 'DataTableColumns.accountNumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'DataTableColumns.accountType',
-        field: 'accountType'
+        field: 'accountType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentType',
-        field: 'documentType'
+        field: 'documentType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.balance',
-        field: 'balance'
+        field: 'balance',
+        align: 'right'
       },
       {
         header: 'DataTableColumns.contraAccountNumber',
-        field: 'contraAccountNumber'
+        field: 'contraAccountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.contraAccountName',
-        field: 'contraAccountName'
+        field: 'contraAccountName',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew'
+        field: 'documentTypeNew',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentNumber',
-        field: 'documentNumber'
+        field: 'documentNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentDate',
-        field: 'documentDate'
+        field: 'documentDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.recordNumber',
-        field: 'recordNumber'
+        field: 'recordNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.ledgerId',
-        field: 'ledgerId'
+        field: 'ledgerId',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.executionDate',
-        field: 'executionDate'
+        field: 'executionDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.dueDate',
-        field: 'dueDate'
+        field: 'dueDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.reference',
-        field: 'reference'
+        field: 'reference',
+        align: 'left'
       },
       {
         header: 'DataTableColumns.textPosting',
-        field: 'textPosting'
+        field: 'textPosting',
+        align: 'left'
       },
       {
         header: 'DataTableColumns.textHeader',
-        field: 'textHeader'
+        field: 'textHeader',
+        align: 'left'
       }
     ];
 
@@ -147,12 +167,14 @@ export class TextAnalysisDetailsComponent implements OnInit {
       {
         header: '',
         field: 'textRelevant',
-        width: '6'
+        width: '6',
+        align: 'center'
       },
       {
         header: 'Comment',
         field: 'textRelevantComment',
-        width: '35'
+        width: '35',
+        align: 'left'
       }
     ];
 
@@ -177,9 +199,51 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this._router.navigate(['/analysis/text/']);
   }
 
-  exportExcel() {
+  async exportExcel() {
+
+    let translatedData = [];
+    for (let index = 0; index < this.data.length; index++) {
+      let element = this.data[index];
+      let translatedRecord = {};
+      for (const key in element) {
+        if (Object.prototype.hasOwnProperty.call(element, key) && key != 'id' && key != 'procedureId') {
+          let translatedKey = await this._translateService.get('DataTableColumns.' + key).toPromise();
+          translatedRecord[translatedKey] = element[key];
+
+          // formatting
+          if (element[key] &&
+            (key == 'balance' || key == 'debitAmount' || key == 'creditAmount' || key == 'taxAmount' ||
+              key == 'taxAmountDebit' || key == 'taxAmountCredit' || key == 'StartingBalance')) {
+            try {
+              let temp = Number.parseFloat(element[key].toString());
+              if (!Number.isNaN(temp)) {
+                translatedRecord[translatedKey] = temp.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              }
+
+            } catch (e) {
+              // do nothing
+            }
+          } else if (element[key] &&
+            (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' ||
+              key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
+            try {
+              let temp = new Date(Date.parse(element[key].toString()));
+              if (temp instanceof Date)
+                translatedRecord[translatedKey] = temp.toLocaleDateString('de-DE');
+            } catch (e) {
+
+            }
+
+          }
+          // end of formatting
+          
+        }
+      }
+      translatedData.push(translatedRecord);
+    }
+
     import("xlsx").then(xlsx => {
-      const worksheet = xlsx.utils.json_to_sheet(this.data);
+      const worksheet = xlsx.utils.json_to_sheet(translatedData);
       const workbook = { Sheets: { 'text_analysis': worksheet }, SheetNames: ['text_analysis'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
       this.saveAsExcelFile(excelBuffer, "text_analysis");
@@ -330,6 +394,11 @@ export class TextAnalysisDetailsComponent implements OnInit {
 
   getAllByAccount() {
     this.waiting = true;
+    for (const key in this.backCriteria) {
+      if (!this.backCriteria[key]) {
+        delete this.backCriteria[key];
+      }
+     }
     this._analysisService
       .getTextAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber, this.backCriteria)
       .subscribe(res => {
@@ -346,6 +415,33 @@ export class TextAnalysisDetailsComponent implements OnInit {
           detail: "There is an error occured please try again"
         });
       });
+  }
+
+
+  sort(event) {
+    // debugger;
+    this.backCriteria.orderBy = event.sortField;
+    this.backCriteria.sortOrder = event.sortOrder;
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    if (!this.waiting)
+      this.getAllByAccount();
+  }
+
+  // export excel from back-end for all table
+  exportXLSX() {
+    const lang = localStorage.getItem('lang');
+    let criteriaWithLang = {...this.backCriteria};
+    criteriaWithLang['lang'] = lang;
+    this._exportDataService
+      .exportXLSX('text_analysis', this.orgId, this.prcId, criteriaWithLang)
+      .subscribe(
+        url => {
+          // console.log(url);
+          window.open(url.toString(), "_blank");
+        },
+        (error) => console.log(error),
+      );
   }
 
 

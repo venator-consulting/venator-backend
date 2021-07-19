@@ -12,7 +12,7 @@ export class UserDashboardComponent implements OnInit {
   organisationId = localStorage.getItem('organisationId')
   role = localStorage.getItem('role')
   procedures: [] = [];
-  cols: { header, field }[] = new Array();
+  cols: { header, field , align}[] = new Array();
   check = '<i class="pi pi-check checkIcon"></i>';
 
   constructor(private _userService: UserService, private _router: Router) { }
@@ -23,8 +23,7 @@ export class UserDashboardComponent implements OnInit {
       .subscribe(
         (data) => {
           this.procedures = data;
-          // console.log(this.organisationId)
-          // console.log(data)
+
         },
         (error) => console.log(error),
         () => { }
@@ -33,19 +32,23 @@ export class UserDashboardComponent implements OnInit {
       this.cols = [
         {
           header: 'Procedure_Registration.name',
-          field: 'name'
+          field: 'name',
+          align: 'left'
         },
         {
           header: 'Procedure_Registration.datasource',
-          field: 'dataSource'
+          field: 'dataSource',
+          align: 'center'
         },
         {
           header: 'Procedure_Registration.data',
-          field: 'data'
+          field: 'data',
+          align: 'center'
         },
         {
           header: 'Procedure_Registration.analysis',
-          field: 'analysis'
+          field: 'analysis',
+          align: 'center'
         },
       ];
 

@@ -19,6 +19,10 @@ module.exports.fetch = async (criteria) => {
         delete criteria.limit;
         const offset = criteria.offset ? criteria.offset : 0;
         delete criteria.offset;
+        const orderBy = criteria.orderBy ? criteria.orderBy : 'id';
+        delete criteria.orderBy;
+        const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
+        delete criteria.sortOrder;
         for (const key in criteria) {
             if (Object.hasOwnProperty.call(criteria, key)) {
                 if (criteria[key].toString().length > 2) {
@@ -33,7 +37,10 @@ module.exports.fetch = async (criteria) => {
             .findAndCountAll({
                 where: criteria,
                 offset: +offset,
-                limit: +limit
+                limit: +limit,
+                order: [
+                    [orderBy, sortOrder]
+                ],
             });
     } catch (err) {
         // TO-DO: set a custom error message in production environment
@@ -102,7 +109,9 @@ module.exports.getAccountTypes = async (organisationId, procedureId) => {
                     }
                 },
                 attributes: [
-                    [fn('DISTINCT', col('accountType')), 'accountType'],
+                    [fn('DISTINCT', col('accountNumber')), 'accountNumber'],
+                    'accountName',
+                    'accountType',
                     'accountTypeNewId',
                     'accountTypeNewName',
                     'procedureId'
@@ -135,7 +144,7 @@ module.exports.updateDocTypeNew = async (organisationId, procedureId, documentTy
 };
 
 
-module.exports.updateAccountTypeNew = async (organisationId, procedureId, accountType, accountTypeNewId, accountTypeNewName) => {
+module.exports.updateAccountTypeNew = async (organisationId, procedureId, accountNumber, accountTypeNewId, accountTypeNewName) => {
     try {
         return await Posting
             .getPosting('posting_' + organisationId)
@@ -145,7 +154,7 @@ module.exports.updateAccountTypeNew = async (organisationId, procedureId, accoun
             }, {
                 where: {
                     procedureId: procedureId,
-                    accountType: accountType
+                    accountNumber: accountNumber
                 }
             });
     } catch (error) {
@@ -233,7 +242,10 @@ module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
 module.exports.amountAnalysisDetails = async (orgId, prcId, baseBalance, accountNumber) => {
     try {
 
-        const query = `SELECT *
+        const query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.amountRelevant,
+                                p.amountRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
+                                p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
+                                p.ledgerId, p.executionDate, p.dueDate
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
@@ -266,6 +278,11 @@ module.exports.getByAccountNumber = async (orgId, prcId, accountNumber, criteria
         delete criteria.limit;
         const offset = criteria.offset ? criteria.offset : 0;
         delete criteria.offset;
+        const orderBy = criteria.orderBy ? criteria.orderBy : 'id';
+        delete criteria.orderBy;
+        const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
+        delete criteria.sortOrder;
+
         for (const key in criteria) {
             if (Object.hasOwnProperty.call(criteria, key)) {
                 if (criteria[key].toString().length > 2) {
@@ -283,7 +300,10 @@ module.exports.getByAccountNumber = async (orgId, prcId, accountNumber, criteria
             .findAndCountAll({
                 where: criteria,
                 offset: +offset,
-                limit: +limit
+                limit: +limit,
+                order: [
+                    [orderBy, sortOrder]
+                ],
             });
         return result;
     } catch (error) {
@@ -331,7 +351,10 @@ module.exports.textAnalysis = async (orgId, prcId, keys) => {
 module.exports.textAnalysisDetails = async (orgId, prcId, keys, accountNumber) => {
     try {
 
-        let query = `SELECT *
+        let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
+                            p.textRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
+                            p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
+                            p.ledgerId, p.executionDate, p.dueDate, p.reference, p.textPosting, p.textHeader
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
@@ -408,6 +431,11 @@ module.exports.textJustRelevant = async (orgId, prcId, accountNumber) => {
                     accountNumber: accountNumber,
                     ProcedureId: prcId
                 },
+                attributes: ['id', 'procedureId', 'accountNumber', 'accountName', 'textRelevant',
+                    'textRelevantComment', 'accountType', 'documentType', 'balance', 'contraAccountNumber',
+                    'contraAccountName', 'documentTypeNewName', 'documentNumber', 'documentDate', 'recordNumber',
+                    'ledgerId', 'executionDate', 'dueDate', 'reference', 'textPosting', 'textHeader'
+                ]
             });
     } catch (error) {
         throw new Error(error);
@@ -425,6 +453,11 @@ module.exports.amountJustRelevant = async (orgId, prcId, accountNumber) => {
                     accountNumber: accountNumber,
                     ProcedureId: prcId
                 },
+                attributes: ['id', 'procedureId', 'accountNumber', 'accountName', 'amountRelevant',
+                    'amountRelevantComment', 'accountType', 'documentType', 'balance', 'contraAccountNumber',
+                    'contraAccountName', 'documentTypeNewName', 'documentNumber', 'documentDate', 'recordNumber',
+                    'ledgerId', 'executionDate', 'dueDate'
+                ]
             });
     } catch (error) {
         throw new Error(error);
@@ -457,7 +490,9 @@ module.exports.susaDateRange = async (orgId, prcId) => {
 module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate, criteria) => {
     try {
 
-        let query = `SELECT DISTINCT pos.accountType, pos.accountNumber, pos.accountName, fromRange.famount, inRange.inamount , credit.creditAmount, debit.debitAmount
+        let query = `SELECT DISTINCT pos.accountType, pos.accountNumber, pos.accountName, 
+        fromRange.famount, inRange.inamount , credit.creditAmount, debit.debitAmount,
+        (fromRange.famount + inRange.inamount) outamount
         FROM posting_${orgId} pos 
         LEFT OUTER JOIN
             ( SELECT p.accountNumber , p.accountName , SUM(p.balance) famount
@@ -511,6 +546,12 @@ module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate, criteria) =
                     pos.procedureId = :procedureId
                     AND pos.accountNumber is not NULL 
                                 `;
+
+        const orderBy = criteria.orderBy ? criteria.orderBy : 'accountNumber';
+        delete criteria.orderBy;
+        const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
+        delete criteria.sortOrder;
+
         for (const key in criteria) {
             if (Object.hasOwnProperty.call(criteria, key)) {
                 if (criteria[key].toString().length > 2) {
@@ -523,6 +564,8 @@ module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate, criteria) =
                 }
             }
         }
+
+        query += ` order by ${orderBy} ${sortOrder}`;
 
         const result = await sequelize.query(
             query, {

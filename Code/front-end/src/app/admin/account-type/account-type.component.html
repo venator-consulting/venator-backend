@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 <div class="p-grid">
 
-  <div class="p-col-10" *ngIf="selectedPrcId>0">
+  <div class="p-col-12" *ngIf="selectedPrcId>0">
 
 
     <p-table #dt dataKey="id" [value]="postingAccountTypes" [columns]="cols" styleClass="p-datatable-gridlines"
@@ -13,7 +13,7 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+        <th pResizableColumn pReorderableColumn class="p-text-{{col.align}}" *ngFor="let col of cols">
           {{col.header | translate}}</th>
         <th>{{'Account_Type.Action' | translate}}</th>
       </tr>
@@ -21,7 +21,7 @@
     </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td pReorderableRowHandle *ngFor="let col of cols">
+          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}" >
             {{ col.field != 'accountTypeNewName' ? row[col.field] : '' }}
             <div *ngIf="!row.isEditable && col.field == 'accountTypeNewName'">
               <span  *ngIf="row.accountTypeNewName">
@@ -30,7 +30,7 @@
             </div>
             <div *ngIf="row.isEditable && col.field == 'accountTypeNewName'">
               <p-dropdown [options]="accountTypes" [(ngModel)]="row.accountTypeNewId" optionValue="id" appendTo="body" 
-                placeholder="Account Type new" optionLabel="AccountTypeName" [showClear]="true" [filter]="true"
+                placeholder="{{'Account_Type.accountTypeNewName' | translate}}" optionLabel="AccountTypeName" [showClear]="true" [filter]="true"
                 filterBy="AccountTypeName" (onChange)="accountTypeChangedHandler($event, row)" [style]="{width:'300px'}">
                 <ng-template pTemplate="item" let-item>
                   {{'Account_Type.'+item.AccountTypeName | translate}}

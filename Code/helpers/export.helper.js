@@ -5,7 +5,7 @@ const env = require('../config/environment');
 const columns = require('../models/columns/columns.server');
 
 
-module.exports.exportFile = async (tableName = 'posting', organisationId = 9, procedureId = 1, cb) => {
+module.exports.exportFile = async (tableName = 'posting', organisationId = 9, procedureId = 1, criteria, cb) => {
     try {
 
         const options = {
@@ -21,10 +21,16 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
         workbook.modified = new Date();
         workbook.lastPrinted = new Date();
 
+        let lang = 'de';
+
+        if (criteria && criteria.lang) {
+            lang = criteria.lang;
+            delete criteria.lang;
+        }
 
         const worksheet = workbook.addWorksheet(tableName);
 
-        worksheet.columns = columns[tableName];
+        worksheet.columns = columns[tableName][lang];
 
         let i = 0;
 
@@ -40,7 +46,22 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
         //     worksheet.addRow(row, 'i+').commit();
         // }
 
-        const str = connection.query('SELECT * FROM ' + tableName + '_' + organisationId + ' t WHERE t.procedureId = ' + procedureId).stream();
+        let query = 'SELECT * FROM posting_' + organisationId + ' t WHERE t.procedureId = ' + procedureId;
+
+        if (criteria) {
+            delete criteria.limit;
+            delete criteria.offset;
+            delete criteria.OrganisationId;
+            delete criteria.procedureId;
+            for (const key in criteria) {
+                if (Object.hasOwnProperty.call(criteria, key)) {
+                    const element = criteria[key];
+                    query += element.length > 2 ? ` AND ${key} like '%${element}%'` : ` AND ${key} = '${element}'`
+                }
+            }
+        }
+
+        const str = connection.query(query).stream();
 
         str.on('data', (row) => {
             i++;
@@ -48,6 +69,27 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
                 const used = process.memoryUsage().heapUsed / 1024 / 1024;
                 console.log(`${new Date()}:The Export script uses approximately: ${Math.round(used * 100) / 100} MB`);
                 logger.info(`${new Date()}:The Export script uses approximately: ${Math.round(used * 100) / 100} MB`);
+            }
+            for (const key in row) {
+                if (Object.hasOwnProperty.call(row, key)) {
+                    if (row[key] &&
+                        (key == 'balance' || key == 'debitAmount' || key == 'creditAmount' || key == 'taxAmount' ||
+                            key == 'taxAmountDebit' || key == 'taxAmountCredit' || key == 'StartingBalance')) {
+                        try {
+                            let temp = Number.parseFloat(row[key]);
+                            if (!Number.isNaN(temp)) {
+                                row[key] = temp.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                            }
+
+                        } catch (e) {
+                            // do nothing
+                        }
+                    } else if (row[key] && (row[key] instanceof Date) &&
+                        (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' ||
+                            key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
+                        row[key] = row[key].toLocaleDateString('de-DE');
+                    }
+                }
             }
             worksheet.addRow(row, 'i+').commit();
         });

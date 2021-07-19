@@ -20,7 +20,7 @@ import { ProcedureService } from "../service/procedure.service";
 export class SAPDataTableComponent implements OnInit {
 
   constructor(private _messageService: MessageService, private _dataFilterService: DataFilterService,
-     private _exportDataService: ExportDataService, private _router: Router,
+    private _exportDataService: ExportDataService, private _router: Router,
     private _translateService: TranslateService, private scrollViewport: ElementRef,
     private _autocompleteService: DictionaryService, private prcService: ProcedureService) { }
 
@@ -69,17 +69,15 @@ export class SAPDataTableComponent implements OnInit {
 
     this.procedureName = localStorage.getItem('currentProcedureName');
 
-    // if (this.procedureId && +this.procedureId > 0) {
-    //   this.prcService
-    //     .getById(+this.procedureId)
-    //     .subscribe(prc => {
-    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-    //     }, er => { });
-    // }
-
   }
 
   async getData() {
+    this.loading = true;
+    for (const key in this.criteria) {
+     if (!this.criteria[key]) {
+       delete this.criteria[key];
+     }
+    }
     this._dataFilterService
       .get(this.criteria)
       .subscribe(
@@ -102,6 +100,16 @@ export class SAPDataTableComponent implements OnInit {
           });
         },
       );
+  }
+
+  sort(event) {
+    debugger;
+    this.criteria.orderBy = event.sortField;
+    this.criteria.sortOrder = event.sortOrder;
+    this.pageNr = 1;
+    this.criteria.offset = 0;
+    if (!this.loading)
+      this.getData();
   }
 
   filterChange(value, field) {
@@ -128,7 +136,7 @@ export class SAPDataTableComponent implements OnInit {
     //       this.completeWords = res;
     //     });
     // } else {
-      this.completeWords = new Array();
+    this.completeWords = new Array();
     // }
 
   }
@@ -201,8 +209,11 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   exportXLSX() {
+    const lang = localStorage.getItem('lang');
+    let criteriaWithLang = { ...this.criteria };
+    criteriaWithLang['lang'] = lang;
     this._exportDataService
-      .exportXLSX('posting', this.organisationId, this.procedureId)
+      .exportXLSX('posting', this.organisationId, this.procedureId, criteriaWithLang)
       .subscribe(
         url => {
           // console.log(url);

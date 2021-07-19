@@ -28,10 +28,11 @@
     </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
             <span pTooltip="{{ col.header | translate }}">
             {{col.header | translate}}
             </span>
+            <p-sortIcon field="{{col.field}}"></p-sortIcon>
           </th>
           <th>{{'AmountAnalysis.details' | translate}}</th>
         </tr>
@@ -46,7 +47,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
+          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}">
             <span  pTooltip="{{ row[col.field] }}">
             {{ row[col.field] }}
             </span>

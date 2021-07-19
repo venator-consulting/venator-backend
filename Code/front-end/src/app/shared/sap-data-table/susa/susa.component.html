@@ -35,7 +35,7 @@
 
     <p-table #dt [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
       [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
-      [reorderableColumns]="true">
+      [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="sort($event)">
       <ng-template pTemplate="caption">
         <div class="p-grid">
           <div class="p-col-1">
@@ -57,13 +57,15 @@
       </ng-template>
       <ng-template pTemplate="colgroup">
         <colgroup>
-          <col *ngFor="let col of cols">
+          <col *ngFor="let col of cols" [style]="{'width': (col.width? col.width : 150) +'px'}">
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
-            <span pTooltip="{{ col.header | translate }}">{{col.header | translate}}</span></th>
+          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center"
+           *ngFor="let col of cols">
+            <span pTooltip="{{ col.header | translate }}">{{col.header | translate}}</span>
+            <p-sortIcon field="{{col.field}}"></p-sortIcon></th>
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
@@ -84,7 +86,7 @@
 
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-right">
+          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}">
             <div
               *ngIf="(col.field == 'accountType' || col.field == 'accountNumber' || col.field == 'accountName');then withoutFilter else withFilter">
             </div>

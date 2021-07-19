@@ -288,7 +288,10 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
             }
         }
 
-        let query = `SELECT *
+        let query = `SELECT pos.id, pos.procedureId, pos.accountNumber, pos.accountName, pos.paymentRelevant,
+                        pos.paymentRelevantComment, pos.accountType, pos.documentType, pos.balance, pos.contraAccountNumber,
+                        pos.contraAccountName, pos.documentTypeNewName, pos.documentNumber, pos.documentDate, pos.recordNumber,
+                        pos.ledgerId, pos.executionDate, pos.dueDate
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = ${prcId}
@@ -390,6 +393,10 @@ module.exports.paymentJustRelevant = async (orgId, prcId, accountNumber) => {
                     accountNumber: accountNumber,
                     ProcedureId: prcId
                 },
+                attributes: ['id', 'procedureId', 'accountNumber', 'accountName', 'paymentRelevant',
+                    'paymentRelevantComment', 'accountType', 'documentType', 'balance', 'contraAccountNumber',
+                    'contraAccountName', 'documentTypeNewName', 'documentNumber', 'documentDate', 'recordNumber',
+                    'ledgerId', 'executionDate', 'dueDate']
             });
     } catch (error) {
         throw new Error(error);

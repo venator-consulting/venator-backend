@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     _translateService.setDefaultLang('de');
     const browserLang = _translateService.getBrowserLang();
     _translateService.use(browserLang.match(/de|en/) ? browserLang : 'de');
-    
+    localStorage.setItem('lang', browserLang);
    }
 
   ngOnInit(): void {

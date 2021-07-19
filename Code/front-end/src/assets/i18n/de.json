@@ -255,9 +255,10 @@
         "Sachkonto": "Sachkonto",
         "Finanzkonto": "Finanzkonto",
         "null": " ",
-
-        "accountType": "Account Type",
-        "accountTypeNewName": "Account Type new",
+        "accountNumber": "Kontonummer",
+        "accountName": "Kontoname",
+        "accountType": "Kontotyp",
+        "accountTypeNewName": "Kontotyp neu",
         "Action": "Aktionen",
         "Edit": "Bearbeiten",
         "Save": "Speichern",
@@ -278,7 +279,7 @@
         "datasource": "Datenquelle",
         "datasourceErrorMsg": "Datenquelle ist erforderlich",
         "datasourcePlaceHolder": "Datenquelle auswählen",
-        "data": "Daten",
+        "data": " Daten",
         "analysis": "Analyse",
         "cancelButton": "Abbrechen",
         "confirmButton": "Bestätigen",
@@ -482,7 +483,7 @@
         "sumDebit": "Summe Soll",
         "from": "Von",
         "to": "Bis",
-        "daten": "Daten",
+        "daten": " Daten",
         "search": "Suchen",
         "datenToolTip": "Zurück zur Datentabelle"
     }

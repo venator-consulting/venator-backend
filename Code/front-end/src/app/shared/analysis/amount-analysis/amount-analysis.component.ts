@@ -8,6 +8,7 @@ import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
 import { ProcedureService } from '../../service/procedure.service';
 import { MenuItem } from 'primeng/api';
+import { TableColumn } from '../../model/tableColumn';
 
 @Component({
   selector: 'app-amount-analysis',
@@ -22,7 +23,7 @@ export class AmountAnalysisComponent implements OnInit {
   baseBalance = 500;
   basicOptions: any;
   basicData: any;
-  cols: { header: string; field: string; }[];
+  cols: TableColumn[];
   waiting: boolean = false;
   procedureName: string = "";
   items: MenuItem[];
@@ -68,19 +69,23 @@ export class AmountAnalysisComponent implements OnInit {
     this.cols = [
       {
         header: 'AmountAnalysis.accountNumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'center'
       },
       {
         header: 'AmountAnalysis.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'AmountAnalysis.NumberOfPostings',
-        field: 'totlaCount'
+        field: 'totlaCount',
+        align: 'center'
       },
       {
         header: 'AmountAnalysis.totalBalance',
-        field: 'totalBalance'
+        field: 'totalBalance',
+        align: 'right'
       }
     ];
 

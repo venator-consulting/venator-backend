@@ -37,7 +37,7 @@ export class PostingService {
     return this._http.get<PostingAccountTypes[]>(this._thisURL + 'account-type/posting/' + orgId + '/' + prcId);
   }
 
-  updateNewAccountType(orgId: number, prcId: number, data: {accountType, accountTypeNewId, accountTypeNewName}): Observable<any>{
+  updateNewAccountType(orgId: number, prcId: number, data: {accountNumber, accountTypeNewId, accountTypeNewName}): Observable<any>{
     return this._http.put<any>(this._thisURL + 'account-type/posting/' + orgId + '/' + prcId, data);
   }
   

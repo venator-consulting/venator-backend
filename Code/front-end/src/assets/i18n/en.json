@@ -31,7 +31,6 @@
         "editUser": "Edit user",
         "addOrganisation": "Add organisation",
         "addDocumentType": "Add Document Type",
-        "addAccountType": "Add Account Type",
         "addProcedure": "Add procedure",
         "editProcedure": "Edit procedure",
         "resetPassword": "Reset password",
@@ -258,7 +257,8 @@
         "Sachkonto": "Sachkonto",
         "Finanzkonto": "Finanzkonto",
         "null": " ",
-
+        "accountNumber": "Account Number",
+        "accountName": "Account Name",
         "accountType": "Account Type",
         "accountTypeNewName": "Account Type new",
         "Action": "Action",
@@ -357,7 +357,7 @@
     "DueDateAnalysis": {
         "label": " Duedate Analysis" ,
         "paymentLabel": "Payment Analysis",
-        "data" : " Daten",
+        "data" : " Data",
         "backToPayment" : " To Paymentanalysis",
         "backtoDueDate": " Zur Fälligkeitsanalyse",
         "accountNumber" : "Accountnumber",

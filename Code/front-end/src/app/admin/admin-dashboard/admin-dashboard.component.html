@@ -9,7 +9,7 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+        <th pResizableColumn pReorderableColumn class="p-text-{{col.align}}" *ngFor="let col of cols">
           {{col.header | translate}}</th>
         <th>{{'Data_Table.actions' | translate}}</th>
       </tr>
@@ -18,7 +18,7 @@
 
     <ng-template pTemplate="body" let-organisation>
       <tr>
-        <td pReorderableRowHandle *ngFor="let col of cols">{{organisation[col.field]}}</td>
+        <td pReorderableRowHandle *ngFor="let col of cols"  class="p-text-{{col.align}}">{{organisation[col.field]}}</td>
         <td pReorderableRowHandle>
           <button pButton pRipple type="button" icon="pi pi-bookmark" class="p-button-rounded p-button-warning"
             pTooltip="{{'Admin_Dashboard.show' | translate}}" tooltipPosition="bottom"

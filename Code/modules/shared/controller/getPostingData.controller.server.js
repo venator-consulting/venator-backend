@@ -19,7 +19,7 @@ module.exports.fetch = async (req, res) => {
 
 module.exports.exportAsExcel = async (req, res) => {
     try {
-        const fileUrl = await exportHelper.exportFile(req.params.tableName, req.params.OrganisationId, req.params.ProcedureId, (fileUrl) => {
+        const fileUrl = await exportHelper.exportFile(req.params.tableName, req.params.OrganisationId, req.params.ProcedureId, req.query,(fileUrl) => {
             res
                 .status(200)
                 .json(fileUrl);

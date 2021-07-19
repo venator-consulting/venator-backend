@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { TranslateService } from '@ngx-translate/core';
+import { TableColumn } from 'src/app/shared/model/tableColumn';
 
 @Component({
   selector: 'app-due-date',
@@ -32,8 +33,8 @@ export class DueDateComponent implements OnInit {
   data: any[] = new Array();
   @ViewChild('chart') chart: any;
   // docCols: { header: string; field: string; }[];
-  notPaidCols: { header: string; field: string; }[];
-  delayCols: { header: string; field: string; }[];
+  notPaidCols: TableColumn[];
+  delayCols: TableColumn[];
   delayData: any;
   items: MenuItem[];
   home: MenuItem;
@@ -41,6 +42,12 @@ export class DueDateComponent implements OnInit {
   constructor(public _translateService: TranslateService, private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router) { }
 
   ngOnInit(): void {
+
+
+    this.selectedOrganisation = +localStorage.getItem('organisationId');
+    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
+    this.procedureName = localStorage.getItem('currentProcedureName');
+    
 
     this._translateService.get('DueDateAnalysis').subscribe(elem => {
       this.items = [
@@ -155,41 +162,44 @@ export class DueDateComponent implements OnInit {
     this.delayCols = [
       {
         header: 'DueDateAnalysis.accountNumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'center'
       },
       {
         header: 'DueDateAnalysis.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'DueDateAnalysis.positiveDelay',
-        field: 'delayPos'
+        field: 'delayPos',
+        align: 'center'
       },
       {
         header: 'DueDateAnalysis.negativeDelay',
-        field: 'delayNeg'
+        field: 'delayNeg',
+        align: 'center'
       },
       {
         header: 'DueDateAnalysis.count',
-        field: 'count'
+        field: 'count',
+        align: 'center'
       }
     ];
     
     this.notPaidCols = [
       {
         header: 'DueDateAnalysis.date',
-        field: 'date'
+        field: 'date',
+        align: 'center'
       },
       {
         header: 'DueDateAnalysis.notPaid',
-        field: 'notPaid'
+        field: 'notPaid',
+        align: 'center'
       }
     ];
 
-    this.selectedOrganisation = +localStorage.getItem('organisationId');
-    this.selectedProcedure = +localStorage.getItem('currentProcedureId');
-    this.procedureName = localStorage.getItem('currentProcedureName');
-    
   }
 
   backToPayment() {

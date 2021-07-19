@@ -5,6 +5,9 @@ import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
 import * as FileSaver from 'file-saver';
+import { ExportDataService } from 'src/app/shared/service/export-data.service';
+import { TranslateService } from '@ngx-translate/core';
+import { TableColumn } from 'src/app/shared/model/tableColumn';
 
 @Component({
   selector: 'amount-analysis-details',
@@ -19,8 +22,8 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   data: AmountAnalysisDetails[] = new Array();
   allRecordData: AmountAnalysisDetails[] = new Array();
   waiting: boolean;
-  cols: { header: string; field: string; }[];
-  frozenCols: { header: string; field: string; width: string }[];
+  cols: TableColumn[];
+  frozenCols: TableColumn[];
   baseBalance: number;
   procedureName: any;
   tempData: any[];
@@ -44,7 +47,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   // for pagination ends
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
-    private _analysisService: AnalysisService, private prcService: ProcedureService) { }
+    private _analysisService: AnalysisService, private _exportDataService: ExportDataService, private _translateService: TranslateService) { }
 
   ngOnInit(): void {
     this.items = [
@@ -52,7 +55,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       { label: 'Amount Analysis', routerLink: '/analysis/amount', routerLinkActiveOptions: { exact: true } },
       { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
     ];
-    
+
     this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/shared/data' };
 
     this.waiting = true;
@@ -79,71 +82,87 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       {
         header: '',
         field: 'amountRelevant',
-        width: '6'
+        width: '6',
+        align: 'center'
       },
       {
         header: 'Comment',
         field: 'amountRelevantComment',
-        width: '35'
+        width: '35',
+        align: 'left'
       }
     ];
 
     this.cols = [
       {
         header: 'DataTableColumns.accountNumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'DataTableColumns.accountType',
-        field: 'accountType'
+        field: 'accountType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentType',
-        field: 'documentType'
+        field: 'documentType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.balance',
-        field: 'balance'
+        field: 'balance',
+        align: 'right'
       },
       {
         header: 'DataTableColumns.contraAccountNumber',
-        field: 'contraAccountNumber'
+        field: 'contraAccountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.contraAccountName',
-        field: 'contraAccountName'
+        field: 'contraAccountName',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew'
+        field: 'documentTypeNew',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentNumber',
-        field: 'documentNumber'
+        field: 'documentNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentDate',
-        field: 'documentDate'
+        field: 'documentDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.recordNumber',
-        field: 'recordNumber'
+        field: 'recordNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.ledgerId',
-        field: 'ledgerId'
+        field: 'ledgerId',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.executionDate',
-        field: 'executionDate'
+        field: 'executionDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.dueDate',
-        field: 'dueDate'
+        field: 'dueDate',
+        align: 'center'
       }
     ];
 
@@ -170,9 +189,54 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   }
 
 
-  exportExcel() {
+  async exportExcel() {
+
+    let translatedData = [];
+    for (let index = 0; index < this.data.length; index++) {
+      let element = this.data[index];
+      let translatedRecord = {};
+      for (const key in element) {
+        if (Object.prototype.hasOwnProperty.call(element, key) && key != 'id' && key != 'procedureId') {
+          let translatedKey = await this._translateService.get('DataTableColumns.' + key).toPromise();
+          translatedRecord[translatedKey] = element[key];
+
+          // formatting
+          if (element[key] &&
+            (key == 'balance' || key == 'debitAmount' || key == 'creditAmount' || key == 'taxAmount' ||
+              key == 'taxAmountDebit' || key == 'taxAmountCredit' || key == 'StartingBalance')) {
+            try {
+              let temp = Number.parseFloat(element[key].toString());
+              if (!Number.isNaN(temp)) {
+                translatedRecord[translatedKey] = temp.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              }
+
+            } catch (e) {
+              // do nothing
+            }
+          } else if (element[key] &&
+            (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' ||
+              key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
+            try {
+              let temp = new Date(Date.parse(element[key].toString()));
+              if (temp instanceof Date)
+                translatedRecord[translatedKey] = temp.toLocaleDateString('de-DE');
+            } catch (e) {
+
+            }
+
+          }
+          // end of formatting
+
+
+
+
+        }
+      }
+      translatedData.push(translatedRecord);
+    }
+
     import("xlsx").then(xlsx => {
-      const worksheet = xlsx.utils.json_to_sheet(this.data);
+      const worksheet = xlsx.utils.json_to_sheet(translatedData);
       const workbook = { Sheets: { 'amount_analysis': worksheet }, SheetNames: ['amount_analysis'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
       this.saveAsExcelFile(excelBuffer, "amount_analysis");
@@ -323,6 +387,11 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
   getAllByAccount() {
     this.waiting = true;
+    for (const key in this.backCriteria) {
+      if (!this.backCriteria[key]) {
+        delete this.backCriteria[key];
+      }
+     }
     this._analysisService
       .getAmountAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber, this.backCriteria)
       .subscribe(res => {
@@ -342,62 +411,89 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   }
 
 
-// for pagination starts
+  // export excel from back-end for all table
+  exportXLSX() {
+    const lang = localStorage.getItem('lang');
+    let criteriaWithLang = { ...this.backCriteria };
+    criteriaWithLang['lang'] = lang;
+    this._exportDataService
+      .exportXLSX('amount_analysis', this.orgId, this.prcId, criteriaWithLang)
+      .subscribe(
+        url => {
+          // console.log(url);
+          window.open(url.toString(), "_blank");
+        },
+        (error) => console.log(error),
+      );
+  }
 
-filterChangeBack(query, colName): void {
-  this.getAllByAccount();
-}
-
-limitChange(e) {
-  this.limit = e.value
-  this.backCriteria.offset = 0;
-  this.backCriteria.limit = this.limit;
-  this.pageNr = 1;
-  this.getAllByAccount();
-}
-
-firstPage() {
-  this.pageNr = 1;
-  this.backCriteria.offset = 0;
-  this.getAllByAccount();
-}
-
-nextPage() {
-  ++this.pageNr;
-  if (this.pageNr > this.maxPageNr) return;
-  this.backCriteria.offset += +this.limit;
-
-  this.getAllByAccount();
-}
+  sort(event) {
+    // debugger;
+    this.backCriteria.orderBy = event.sortField;
+    this.backCriteria.sortOrder = event.sortOrder;
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    if (!this.waiting)
+      this.getAllByAccount();
+  }
 
 
-lastPage() {
-  this.pageNr = this.maxPageNr;
-  this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
-  this.getAllByAccount();
-}
+  // for pagination starts
 
-previousPage() {
-  --this.pageNr;
-  if (this.pageNr <= 0) return;
-  this.backCriteria.offset -= +this.limit;
-  this.getAllByAccount();
-}
+  filterChangeBack(query, colName): void {
+    this.getAllByAccount();
+  }
 
-pageNrChange(value) {
-  this.backCriteria.offset = (this.pageNr - 1) * this.limit;
-  this.getAllByAccount();
-}
+  limitChange(e) {
+    this.limit = e.value
+    this.backCriteria.offset = 0;
+    this.backCriteria.limit = this.limit;
+    this.pageNr = 1;
+    this.getAllByAccount();
+  }
 
-clearFilter() {
-  this.backCriteria = {
-    limit: this.limit,
-    offset: 0
-  };
-  this.pageNr = 1;
-  this.getAllByAccount();
-}
-// for pagination ends
+  firstPage() {
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    this.getAllByAccount();
+  }
+
+  nextPage() {
+    ++this.pageNr;
+    if (this.pageNr > this.maxPageNr) return;
+    this.backCriteria.offset += +this.limit;
+
+    this.getAllByAccount();
+  }
+
+
+  lastPage() {
+    this.pageNr = this.maxPageNr;
+    this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
+    this.getAllByAccount();
+  }
+
+  previousPage() {
+    --this.pageNr;
+    if (this.pageNr <= 0) return;
+    this.backCriteria.offset -= +this.limit;
+    this.getAllByAccount();
+  }
+
+  pageNrChange(value) {
+    this.backCriteria.offset = (this.pageNr - 1) * this.limit;
+    this.getAllByAccount();
+  }
+
+  clearFilter() {
+    this.backCriteria = {
+      limit: this.limit,
+      offset: 0
+    };
+    this.pageNr = 1;
+    this.getAllByAccount();
+  }
+  // for pagination ends
 
 
 }

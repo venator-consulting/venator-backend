@@ -16,7 +16,7 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th pResizableColumn pReorderableColumn class= "p-text-center" *ngFor="let col of cols">
+      <th pResizableColumn pReorderableColumn class="p-text-{{col.align}}" *ngFor="let col of cols">
         {{ col.header | translate}} 
       </th>
       <th *ngIf="role!=='User'" style="width: 10em" > </th>
@@ -26,7 +26,7 @@
 
   <ng-template pTemplate="body" let-procedure>
     <tr>
-      <td pReorderableRowHandle *ngFor="let col of cols" class= "p-text-right">
+      <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}" >
         <i *ngIf="procedure[col.field]?.toString().toLowerCase().trim() == 'true'" class="pi pi-check checkIcon"></i> <i
           *ngIf="procedure[col.field]?.toString().toLowerCase().trim() == 'false'" class="pi pi-times closeIcon"></i>
         {{ (procedure[col.field]?.toString().toLowerCase().trim() != 'true' && procedure[col.field]?.toString().toLowerCase().trim() != 'false') ? procedure[col.field] : ''}}

@@ -8,6 +8,8 @@ import { PaymentAnalysisDetailsData } from 'src/app/shared/model/paymentAnalysis
 import * as FileSaver from 'file-saver';
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { ExportDataService } from 'src/app/shared/service/export-data.service';
+import { TableColumn } from 'src/app/shared/model/tableColumn';
 
 @Component({
   selector: 'app-payment-analysis-details',
@@ -41,8 +43,8 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   waiting: boolean = true;
   procedureName: string;
   displayData: number;
-  cols: { header: string; field: string; }[];
-  frozenCols: { header: string; field: string; width: string }[];
+  cols: TableColumn[];
+  frozenCols: TableColumn[];
   selected: PaymentAnalysisDetailsData[] = new Array();
   items: MenuItem[];
   home: MenuItem;
@@ -61,10 +63,10 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   // for pagination ends
 
 
-  constructor(public _translateService: TranslateService,  private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
-    private _route: ActivatedRoute, private prcService: ProcedureService) { 
+  constructor(public _translateService: TranslateService, private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
+    private _route: ActivatedRoute, private _exportDataService: ExportDataService) {
 
-    }
+  }
 
   ngOnInit(): void {
 
@@ -89,7 +91,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
               let value = tooltipItem.value;
               let currencyPipe = new CurrencyPipe('de');
               value = currencyPipe.transform(value, 'EURO', '');
-  
+
               let label = data.datasets[tooltipItem.datasetIndex].label || '';
               return label + ': ' + value;
             }
@@ -107,7 +109,6 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
               minRotation: 0,
               maxRotation: 0,
               callback: function (label, index, values) {
-                // debugger;
                 let currencyPipe = new CurrencyPipe('de');
                 label = currencyPipe.transform(label, 'EURO', '');
                 return label;
@@ -116,8 +117,12 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
           }],
         }
       };
-  
-  
+
+      this.backCriteria = {
+        limit: this.limit,
+        offset: 0
+      };
+
       this.paymentOptions = [
         { name: elem.blue, value: 1, color: 'blue !important' },
         { name: elem.red, value: 2, color: 'red' },
@@ -128,24 +133,26 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         { name: elem.userRelevant, value: 2 },
         { name: elem.allRelevant, value: 3 }
       ];
-   
+
       this.frozenCols = [
         {
           header: '',
           field: 'paymentRelevant',
-          width: '6'
+          width: '6',
+          align: 'center'
         },
         {
           header: elem.comment,
           field: 'paymentRelevantComment',
-          width: '35'
+          width: '35',
+          align: 'left'
         }
       ];
       this.basicData = {
         labels: this.labels,
         datasets: new Array()
       };
-  
+
       this.basicData.datasets.push({
         label: elem.blue,
         backgroundColor: `rgb(100,100,255)`,
@@ -165,62 +172,76 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     this.cols = [
       {
         header: 'DataTableColumns.accountNumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'DataTableColumns.accountType',
-        field: 'accountType'
+        field: 'accountType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentType',
-        field: 'documentType'
+        field: 'documentType',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.balance',
-        field: 'balance'
+        field: 'balance',
+        align: 'right'
       },
       {
         header: 'DataTableColumns.contraAccountNumber',
-        field: 'contraAccountNumber'
+        field: 'contraAccountNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.contraAccountName',
-        field: 'contraAccountName'
+        field: 'contraAccountName',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew'
+        field: 'documentTypeNew',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentNumber',
-        field: 'documentNumber'
+        field: 'documentNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.documentDate',
-        field: 'documentDate'
+        field: 'documentDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.recordNumber',
-        field: 'recordNumber'
+        field: 'recordNumber',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.ledgerId',
-        field: 'ledgerId'
+        field: 'ledgerId',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.executionDate',
-        field: 'executionDate'
+        field: 'executionDate',
+        align: 'center'
       },
       {
         header: 'DataTableColumns.dueDate',
-        field: 'dueDate'
+        field: 'dueDate',
+        align: 'center'
       }
     ];
-    
+
 
 
 
@@ -263,42 +284,42 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
   getData() {
     this._analysisService
-    .getPaymentAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
-    .subscribe(res => {
-      this.data = res.data.data;
-      this.startDate = res.dateRange[0].mindate;
-      this.endDate = res.dateRange[0].maxdate;
-      this.blueData = res.data.blue;
-      this.redData = res.data.red;
-      this.greenData = res.data.green;
-      if (!this.accountName) {
-        if (this.blueData.length > 0) {
-          this.accountName = this.blueData[0].accountName;
-        } else if (this.redData.length > 0) {
-          this.accountName = this.redData[0].accountName;
-        } else if (this.greenData.length>0) {
-          this.accountName = this.greenData[0].accountName;
+      .getPaymentAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+      .subscribe(res => {
+        this.data = res.data.data;
+        this.startDate = res.dateRange[0].mindate;
+        this.endDate = res.dateRange[0].maxdate;
+        this.blueData = res.data.blue;
+        this.redData = res.data.red;
+        this.greenData = res.data.green;
+        if (!this.accountName) {
+          if (this.blueData.length > 0) {
+            this.accountName = this.blueData[0].accountName;
+          } else if (this.redData.length > 0) {
+            this.accountName = this.redData[0].accountName;
+          } else if (this.greenData.length > 0) {
+            this.accountName = this.greenData[0].accountName;
+          }
         }
-      }
 
-      if (!(this.labels.length > 0)) {
-        for (let i = 0; i < this.data.length; i++) {
-          const element = this.data[i];
-          this.labels.push(element.monthName + '-' + element.yearName);
-          this.blue.push(Math.abs(element.blue.value));
-          this.green.push(Math.abs(element.green.value));
-          this.red.push(Math.abs(element.red.value));
+        if (!(this.labels.length > 0)) {
+          for (let i = 0; i < this.data.length; i++) {
+            const element = this.data[i];
+            this.labels.push(element.monthName + '-' + element.yearName);
+            this.blue.push(Math.abs(element.blue.value));
+            this.green.push(Math.abs(element.green.value));
+            this.red.push(Math.abs(element.red.value));
+          }
         }
-      }
-      this.waiting = false;
-    }, er => {
-      this._messageService.add({
-        severity: 'error',
-        summary: 'ERROR',
-        life: 10000,
-        detail: "There is an error occured please try again"
+        this.waiting = false;
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR',
+          life: 10000,
+          detail: "There is an error occured please try again"
+        });
       });
-    });
   }
 
   selectRow(row: PaymentAnalysisDetailsData): void {
@@ -383,9 +404,51 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   }
 
 
-  exportExcel() {
+  async exportExcel(data) {
+
+    let translatedData = [];
+    for (let index = 0; index < data.length; index++) {
+      let element = data[index];
+      let translatedRecord = {};
+      for (const key in element) {
+        if (Object.prototype.hasOwnProperty.call(element, key) && key != 'id' && key != 'procedureId') {
+          let translatedKey = await this._translateService.get('DataTableColumns.' + key).toPromise();
+          translatedRecord[translatedKey] = element[key];
+
+          // formatting
+          if (element[key] &&
+            (key == 'balance' || key == 'debitAmount' || key == 'creditAmount' || key == 'taxAmount' ||
+              key == 'taxAmountDebit' || key == 'taxAmountCredit' || key == 'StartingBalance')) {
+            try {
+              let temp = Number.parseFloat(element[key].toString());
+              if (!Number.isNaN(temp)) {
+                translatedRecord[translatedKey] = temp.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              }
+
+            } catch (e) {
+              // do nothing
+            }
+          } else if (element[key] &&
+            (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' ||
+              key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
+            try {
+              let temp = new Date(Date.parse(element[key].toString()));
+              if (temp instanceof Date)
+                translatedRecord[translatedKey] = temp.toLocaleDateString('de-DE');
+            } catch (e) {
+
+            }
+
+          }
+          // end of formatting
+
+        }
+      }
+      translatedData.push(translatedRecord);
+    }
+
     import("xlsx").then(xlsx => {
-      const worksheet = xlsx.utils.json_to_sheet(this.data);
+      const worksheet = xlsx.utils.json_to_sheet(translatedData);
       const workbook = { Sheets: { 'payment_analysis': worksheet }, SheetNames: ['payment_analysis'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
       this.saveAsExcelFile(excelBuffer, "payment_analysis");
@@ -441,6 +504,11 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
   getAllByAccount() {
     this.waiting = true;
+    for (const key in this.backCriteria) {
+      if (!this.backCriteria[key]) {
+        delete this.backCriteria[key];
+      }
+    }
     this._analysisService
       .getPaymentAnalysisDetailsByAccount(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, this.backCriteria)
       .subscribe(res => {
@@ -460,62 +528,89 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   }
 
 
-// for pagination starts
+  sort(event) {
+    // debugger;
+    this.backCriteria.orderBy = event.sortField;
+    this.backCriteria.sortOrder = event.sortOrder;
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    if (!this.waiting)
+      this.getAllByAccount();
+  }
 
-filterChangeBack(query, colName): void {
-  this.getAllByAccount();
-}
-
-limitChange(e) {
-  this.limit = e.value
-  this.backCriteria.offset = 0;
-  this.backCriteria.limit = this.limit;
-  this.pageNr = 1;
-  this.getAllByAccount();
-}
-
-firstPage() {
-  this.pageNr = 1;
-  this.backCriteria.offset = 0;
-  this.getAllByAccount();
-}
-
-nextPage() {
-  ++this.pageNr;
-  if (this.pageNr > this.maxPageNr) return;
-  this.backCriteria.offset += +this.limit;
-
-  this.getAllByAccount();
-}
+  // export excel from back-end for all table
+  exportXLSX() {
+    const lang = localStorage.getItem('lang');
+    let criteriaWithLang = { ...this.backCriteria };
+    criteriaWithLang['lang'] = lang;
+    this._exportDataService
+      .exportXLSX('payment_analysis', this.selectedOrganisation, this.selectedProcedure, criteriaWithLang)
+      .subscribe(
+        url => {
+          // console.log(url);
+          window.open(url.toString(), "_blank");
+        },
+        (error) => console.log(error),
+      );
+  }
 
 
-lastPage() {
-  this.pageNr = this.maxPageNr;
-  this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
-  this.getAllByAccount();
-}
+  // for pagination starts
 
-previousPage() {
-  --this.pageNr;
-  if (this.pageNr <= 0) return;
-  this.backCriteria.offset -= +this.limit;
-  this.getAllByAccount();
-}
+  filterChangeBack(query, colName): void {
+    this.getAllByAccount();
+  }
 
-pageNrChange(value) {
-  this.backCriteria.offset = (this.pageNr - 1) * this.limit;
-  this.getAllByAccount();
-}
+  limitChange(e) {
+    this.limit = e.value
+    this.backCriteria.offset = 0;
+    this.backCriteria.limit = this.limit;
+    this.pageNr = 1;
+    this.getAllByAccount();
+  }
 
-clearFilter() {
-  this.backCriteria = {
-    limit: this.limit,
-    offset: 0
-  };
-  this.pageNr = 1;
-  this.getAllByAccount();
-}
-// for pagination ends
+  firstPage() {
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    this.getAllByAccount();
+  }
+
+  nextPage() {
+    ++this.pageNr;
+    if (this.pageNr > this.maxPageNr) return;
+    this.backCriteria.offset += +this.limit;
+
+    this.getAllByAccount();
+  }
+
+
+  lastPage() {
+    this.pageNr = this.maxPageNr;
+    this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
+    this.getAllByAccount();
+  }
+
+  previousPage() {
+    --this.pageNr;
+    if (this.pageNr <= 0) return;
+    this.backCriteria.offset -= +this.limit;
+    this.getAllByAccount();
+  }
+
+  pageNrChange(value) {
+    this.backCriteria.offset = (this.pageNr - 1) * this.limit;
+    this.getAllByAccount();
+  }
+
+  clearFilter() {
+    this.backCriteria = {
+      limit: this.limit,
+      offset: 0
+    };
+    this.pageNr = 1;
+    this.getAllByAccount();
+  }
+  // for pagination ends
 
 
 

@@ -41,8 +41,8 @@ export class NavBarComponent implements OnInit {
 
         this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
             this._translateService.use(event.lang);
-            this.getSideBarItems()
-
+            this.getSideBarItems();
+            localStorage.setItem('lang', event.lang);
         })
         this.getSideBarItems()
 

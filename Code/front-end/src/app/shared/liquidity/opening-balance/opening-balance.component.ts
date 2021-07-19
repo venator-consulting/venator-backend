@@ -14,7 +14,7 @@ export class OpeningBalanceComponent implements OnInit {
   orgId: number;
   prcId: number;
   procedureName: string;
-  cols: { header: string; field: string }[];
+  cols: { header: string; field: string, align:string }[];
   originalOpeningBalance: number;
   originalOpeningBalanceDate: Date;
 
@@ -30,23 +30,28 @@ export class OpeningBalanceComponent implements OnInit {
     this.cols = [
       {
         header: 'Account Number',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'left'
       },
       {
         header: 'Account Name',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'accountTypeNewName',
-        field: 'accountTypeNewName'
+        field: 'accountTypeNewName',
+        align: 'left'
       },
       {
         header: 'StartingBalance',
-        field: 'StartingBalance'
+        field: 'StartingBalance',
+        align: 'left'
       },
       {
         header: 'StartingBalanceDate',
-        field: 'StartingBalanceDate'
+        field: 'StartingBalanceDate',
+        align: 'left'
       }
     ];
 

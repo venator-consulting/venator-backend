@@ -6,6 +6,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { ProcedureService } from '../../service/procedure.service';
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { TableColumn } from '../../model/tableColumn';
 @Component({
   selector: 'app-payment-analysis',
   templateUrl: './payment-analysis.component.html',
@@ -39,8 +40,8 @@ export class PaymentAnalysisComponent implements OnInit {
   top10Green: any[];
   top10: number;
   paymentOptions: { name: string; value: number; color: string }[];
-  top10Cols: { header: string; field: string; }[];
-  accountsCols: { header: string; field: string; }[];
+  top10Cols: TableColumn[];
+  accountsCols: TableColumn[];
   searching: boolean;
   criteria: any = {};
   tempData: any[];
@@ -98,7 +99,7 @@ export class PaymentAnalysisComponent implements OnInit {
               minRotation: 0,
               maxRotation: 0,
               callback: function (label, index, values) {
-                debugger;
+                // debugger;
                 let currencyPipe = new CurrencyPipe('de');
                 label = currencyPipe.transform(label, 'EURO', '');
                 return label;
@@ -119,38 +120,53 @@ export class PaymentAnalysisComponent implements OnInit {
       this.top10Cols = [
         {
           header: 'PaymentAnalysis.accountNumber',
-          field: 'accountNumber'
+          field: 'accountNumber',
+          align: 'center'
         },
         {
           header: 'PaymentAnalysis.accountName',
-          field: 'accountName'
+          field: 'accountName',
+          align: 'left'
+
         },
         {
           header: 'PaymentAnalysis.sum',
-          field: 'value'
+          field: 'value',
+          align: 'right'
+
         },
       ];
   
       this.accountsCols = [
         {
           header: 'PaymentAnalysis.accountNumber',
-          field: 'accountNumber'
+          field: 'accountNumber',
+          align: 'center'
+
         },
         {
           header: 'PaymentAnalysis.accountName',
-          field: 'accountName'
+          field: 'accountName',
+          align: 'left'
+
         },
         {
           header: 'PaymentAnalysis.blue',
-          field: 'blue'
+          field: 'blue',
+          align: 'right'
+
         },
         {
           header: 'PaymentAnalysis.red',
-          field: 'red'
+          field: 'red',
+          align: 'right'
+
         },
         {
           header: 'PaymentAnalysis.green',
-          field: 'green'
+          field: 'green',
+          align: 'right'
+
         },
       ];
   
