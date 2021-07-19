@@ -110,7 +110,7 @@
                 class="p-button-rounded p-button-primary" label="{{ 'Analysis.back' | translate}} "
                 pTooltip="{{ 'Analysis.back' | translate}} " tooltipPosition="bottom"></button>
             </div>
-            <div class="p-col-2">
+            <div class="p-col-4">
               <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
                 class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
               <!-- <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
@@ -183,7 +183,7 @@
                 class="p-button-rounded p-button-primary" label="{{ 'Analysis.back' | translate}} "
                 pTooltip="{{ 'Analysis.back' | translate}} " tooltipPosition="bottom"></button>
             </div>
-            <div class="p-col-2">
+            <div class="p-col-4">
               <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
                 class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
               <!-- <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
@@ -265,7 +265,7 @@
                 class="p-button-rounded p-button-primary" label="{{ 'Analysis.back' | translate}} "
                 pTooltip="{{ 'Analysis.back' | translate}} " tooltipPosition="bottom"></button>
             </div>
-            <div class="p-col-2">
+            <div class="p-col-4">
               <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
                 class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
               <!-- <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
@@ -339,16 +339,16 @@
                 class="p-button-rounded p-button-primary" label="{{ 'Analysis.back' | translate}} "
                 pTooltip="{{ 'Analysis.back' | translate}} " tooltipPosition="bottom"></button>
             </div>
-            <div class="p-col-2">
+            <div class="p-col-4">
               <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
                 class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
               <!-- <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
                 class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
                 tooltipPosition="bottom"></button> -->
               <button type="button" pButton pRipple icon="pi pi-check" (click)="saveRelevant()"
-                class="p-button-primary p-mr-2" pTooltip="Save" tooltipPosition="bottom" label="Save Relevant"></button>
+                class="p-button-primary p-mr-2" pTooltip="{{ 'Analysis.save' | translate}}" tooltipPosition="bottom" label="{{ 'Analysis.saveRelevant' | translate}}"></button>
             </div>
-            <div class="p-mb-4">
+            <div class="p-col-7">
               <!-- Limit options -->
               <p-dropdown [options]="pageLimitSizes" optionValue="value" optionLabel="value" [(ngModel)]="limit"
                 (onChange)="limitChange($event)" class="p-mr-2"></p-dropdown>

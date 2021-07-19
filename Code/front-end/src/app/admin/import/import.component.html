@@ -13,13 +13,13 @@
     </div> -->
   <div [hidden]="activeIndex != 0" class="p-sm-12">
     <div class="p-grid">
-      <div class="p-col-4">
-        <h2>{{'Admin_Import.firstStepHeader' | translate}}</h2>
+      <div class="p-col-4 fontStyle">
+        <h2 >{{'Admin_Import.firstStepHeader' | translate}}</h2>
       </div>
       <!-- <div class="p-col-4" *ngIf="waiting">
         <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
       </div> -->
-      <div class="p-col-4">
+      <div class="p-col-4 fontStyle">
         <h3>{{filesList[currentFileIndex]?.orginalName}}</h3>
       </div>
     </div>
@@ -30,7 +30,7 @@
       <div class="p-col-10">
         <div class="p-grid">
           <div class="p-col-2">
-            <label class="p-mr-4"> {{'Admin_Import.selectOrganisation' | translate}} </label>
+            <label class="p-mr-4 fontStyle"> {{'Admin_Import.selectOrganisation' | translate}} </label>
           </div>
           <div class="p-col-5">
             <p-dropdown [options]="orgs" [(ngModel)]="selectedOrgId"
@@ -45,7 +45,7 @@
       <div class="p-col-10" *ngIf="selectedOrgId>0">
         <div class="p-grid">
           <div class="p-col-2">
-            <label class="p-mr-4"> {{'Admin_Import.selectProcedure' | translate}} </label>
+            <label class="p-mr-4 fontStyle"> {{'Admin_Import.selectProcedure' | translate}} </label>
           </div>
           <div class="p-col-5">
             <p-dropdown [options]="procedures" [(ngModel)]="selectedProcedureId"
@@ -59,7 +59,7 @@
       <div class="p-col-10" *ngIf="selectedProcedureId>0">
         <div class="p-grid">
           <div class="p-col-2">
-            <label class="p-mr-4"> {{'Admin_Import.selectTemplate' | translate}} </label>
+            <label class="p-mr-4 fontStyle"> {{'Admin_Import.selectTemplate' | translate}} </label>
           </div>
           <div class="p-col-5">
             <p-dropdown [options]="templates" [(ngModel)]="selectedTemplate"
