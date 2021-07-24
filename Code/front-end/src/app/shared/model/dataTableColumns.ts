@@ -8,7 +8,7 @@ export class dataTableColumns {
   align?: string;
   width?: number;
 
-  constructor(field: string, header: string, align: string = 'center', width: number = 150) {
+  constructor(field: string, header: string, align: string = 'left', width: number = 150) {
     this.field = field;
     this.header = header;
     this.align = align;
@@ -24,9 +24,9 @@ export class dataTableColumns {
     result.push(new dataTableColumns("accountType", await translateService.get("DataTableColumns.accountType").toPromise()));
     result.push(new dataTableColumns("contraAccountType", await translateService.get("DataTableColumns.contraAccountType").toPromise()));
     result.push(new dataTableColumns("accountNumber", await translateService.get("DataTableColumns.accountNumber").toPromise()));
-    result.push(new dataTableColumns("accountName", await translateService.get("DataTableColumns.accountName").toPromise()));
+    result.push(new dataTableColumns("accountName", await translateService.get("DataTableColumns.accountName").toPromise(), 'left'));
     result.push(new dataTableColumns("contraAccountNumber", await translateService.get("DataTableColumns.contraAccountNumber").toPromise()));
-    result.push(new dataTableColumns("contraAccountName", await translateService.get("DataTableColumns.contraAccountName").toPromise()));
+    result.push(new dataTableColumns("contraAccountName", await translateService.get("DataTableColumns.contraAccountName").toPromise(), 'left'));
     result.push(new dataTableColumns("balance", await translateService.get("DataTableColumns.balance").toPromise(), 'right'));
     result.push(new dataTableColumns("debitAmount", await translateService.get("DataTableColumns.debitAmount").toPromise(), 'right'));
     result.push(new dataTableColumns("creditAmount", await translateService.get("DataTableColumns.creditAmount").toPromise(), 'right'));
@@ -44,17 +44,17 @@ export class dataTableColumns {
    // result.push(new dataTableColumns("documentTypeNew", await translateService.get("DataTableColumns.documentTypeNew").toPromise()));
     result.push(new dataTableColumns("postingDate", await translateService.get("DataTableColumns.postingDate").toPromise()));
     result.push(new dataTableColumns("GLAccountNumber", await translateService.get("DataTableColumns.GLAccountNumber").toPromise()));
-    result.push(new dataTableColumns("GLAccountName", await translateService.get("DataTableColumns.GLAccountName").toPromise()));
+    result.push(new dataTableColumns("GLAccountName", await translateService.get("DataTableColumns.GLAccountName").toPromise(), 'left'));
     result.push(new dataTableColumns("debtorNumber", await translateService.get("DataTableColumns.debtorNumber").toPromise()));
-    result.push(new dataTableColumns("debtorName", await translateService.get("DataTableColumns.debtorName").toPromise()));
+    result.push(new dataTableColumns("debtorName", await translateService.get("DataTableColumns.debtorName").toPromise(), 'left'));
     result.push(new dataTableColumns("creditorNumber", await translateService.get("DataTableColumns.creditorNumber").toPromise()));
-    result.push(new dataTableColumns("creditorName", await translateService.get("DataTableColumns.creditorName").toPromise()));
+    result.push(new dataTableColumns("creditorName", await translateService.get("DataTableColumns.creditorName").toPromise(), 'left'));
     result.push(new dataTableColumns("contraAccountGLAccountNo", await translateService.get("DataTableColumns.contraAccountGLAccountNo").toPromise()));
-    result.push(new dataTableColumns("contraAccountGLAccountName", await translateService.get("DataTableColumns.contraAccountGLAccountName").toPromise()));
+    result.push(new dataTableColumns("contraAccountGLAccountName", await translateService.get("DataTableColumns.contraAccountGLAccountName").toPromise(), 'left'));
     result.push(new dataTableColumns("contraAccountDebtorNo", await translateService.get("DataTableColumns.contraAccountDebtorNo").toPromise()));
-    result.push(new dataTableColumns("contraAccountDebtorName", await translateService.get("DataTableColumns.contraAccountDebtorName").toPromise()));
+    result.push(new dataTableColumns("contraAccountDebtorName", await translateService.get("DataTableColumns.contraAccountDebtorName").toPromise(), 'left'));
     result.push(new dataTableColumns("contraAccountCreditorNo", await translateService.get("DataTableColumns.contraAccountCreditorNo").toPromise()));
-    result.push(new dataTableColumns("contraAccountCreditorName", await translateService.get("DataTableColumns.contraAccountCreditorName").toPromise()));
+    result.push(new dataTableColumns("contraAccountCreditorName", await translateService.get("DataTableColumns.contraAccountCreditorName").toPromise(), 'left'));
     result.push(new dataTableColumns("debitCredit", await translateService.get("DataTableColumns.debitCredit").toPromise()));
     result.push(new dataTableColumns("balanceTransactionCurrency", await translateService.get("DataTableColumns.balanceTransactionCurrency").toPromise()));
     result.push(new dataTableColumns("documentNumber2", await translateService.get("DataTableColumns.documentNumber2").toPromise()));

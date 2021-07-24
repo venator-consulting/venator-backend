@@ -21,7 +21,7 @@ export class AccountTypeComponent implements OnInit {
   postingAccountTypes: PostingAccountTypes[];
   accountTypes: AccountTypes[] = new Array();
   originalVal: number = -1;
-  cols: { header, field }[] = new Array();
+  cols: { header, field , align}[] = new Array();
   procedureName: string;
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
@@ -54,19 +54,23 @@ export class AccountTypeComponent implements OnInit {
     this.cols = [
       {
         header: 'Account_Type.accountNumber',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'left'
       },
       {
         header: 'Account_Type.accountName',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'Account_Type.accountType',
-        field: 'accountType'
+        field: 'accountType',
+        align: 'left'
       },
       {
         header: 'Account_Type.accountTypeNewName',
-        field: 'accountTypeNewName'
+        field: 'accountTypeNewName',
+        align: 'left'
       }
     ];
 

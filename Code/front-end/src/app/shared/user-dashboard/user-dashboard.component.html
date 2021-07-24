@@ -16,21 +16,22 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
-        {{col.header | translate}}</th>
-      <th *ngIf="role!=='User'" style="width: 10em"> </th>
+      <th pResizableColumn pReorderableColumn class="p-text-{{col.align}}" *ngFor="let col of cols">
+        {{ col.header | translate}} 
+      </th>
+      <th *ngIf="role!=='User'" style="width: 10em" > </th>
 
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-procedure>
     <tr>
-      <td pReorderableRowHandle *ngFor="let col of cols">
+      <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}" >
         <i *ngIf="procedure[col.field]?.toString().toLowerCase().trim() == 'true'" class="pi pi-check checkIcon"></i> <i
           *ngIf="procedure[col.field]?.toString().toLowerCase().trim() == 'false'" class="pi pi-times closeIcon"></i>
         {{ (procedure[col.field]?.toString().toLowerCase().trim() != 'true' && procedure[col.field]?.toString().toLowerCase().trim() != 'false') ? procedure[col.field] : ''}}
       </td>
-      <td *ngIf="role!=='User'" style="width: 10em">
+      <td *ngIf="role!=='User'" style="width: 10em" class= "p-text-right">
         <button pButton pRipple type="button" icon="pi pi-bookmark"
           class="p-button-rounded p-button-warning headerColor" pTooltip="{{'Admin_Dashboard.show' | translate}}"
           tooltipPosition="bottom" (click)="dataTable(procedure)"></button> &nbsp;

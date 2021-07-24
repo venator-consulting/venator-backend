@@ -13,7 +13,7 @@ export class AdminDashboardComponent implements OnInit {
   organisations: [] = []
   users: [] = []
   organisationRoleId: number;
-  cols: { header, field }[] = new Array();
+  cols: { header, field , align}[] = new Array();
 
   constructor(private _organisationService: OrganisationService, private _router: Router) {
 
@@ -33,31 +33,38 @@ export class AdminDashboardComponent implements OnInit {
     this.cols = [
       {
         header: 'Admin_Dashboard.organisationName',
-        field: 'name'
+        field: 'name',
+        align: 'left'
       },
       {
         header: 'Admin_Dashboard.organisationEmail',
-        field: 'email'
+        field: 'email',
+        align: 'left'
       },
       {
         header: 'Admin_Dashboard.organisationCountry',
-        field: 'country'
+        field: 'country',
+        align: 'left'
       },
       {
         header: 'Admin_Dashboard.organisationCity',
-        field: 'city'
+        field: 'city',
+        align: 'left'
       },
       {
         header: 'Admin_Dashboard.organisationPostCode',
-        field: 'postCode'
+        field: 'postCode',
+        align: 'left'
       },
       {
         header: 'Admin_Dashboard.organisationStreet',
-        field: 'street'
+        field: 'street',
+        align: 'left'
       },
       {
         header: 'Admin_Dashboard.organisationHouseNr',
-        field: 'houseNr'
+        field: 'houseNr',
+        align: 'left'
       }
 
     ];

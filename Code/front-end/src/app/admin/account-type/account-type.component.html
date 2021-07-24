@@ -43,7 +43,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td pReorderableRowHandle *ngFor="let col of cols">
+          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}" >
             {{ col.field != 'accountTypeNewName' ? row[col.field] : '' }}
             <div *ngIf="!row.isEditable && col.field == 'accountTypeNewName'">
               <span *ngIf="row.accountTypeNewName">
@@ -51,10 +51,9 @@
               </span>
             </div>
             <div *ngIf="row.isEditable && col.field == 'accountTypeNewName'">
-              <p-dropdown [options]="accountTypes" [(ngModel)]="row.accountTypeNewId" optionValue="id" appendTo="body"
-                placeholder="Account Type new" optionLabel="AccountTypeName" [showClear]="true" [filter]="true"
-                filterBy="AccountTypeName" (onChange)="accountTypeChangedHandler($event, row)"
-                [style]="{width:'300px'}">
+              <p-dropdown [options]="accountTypes" [(ngModel)]="row.accountTypeNewId" optionValue="id" appendTo="body" 
+                placeholder="{{'Account_Type.accountTypeNewName' | translate}}" optionLabel="AccountTypeName" [showClear]="true" [filter]="true"
+                filterBy="AccountTypeName" (onChange)="accountTypeChangedHandler($event, row)" [style]="{width:'300px'}">
                 <ng-template pTemplate="item" let-item>
                   {{'Account_Type.'+item.AccountTypeName | translate}}
                 </ng-template>

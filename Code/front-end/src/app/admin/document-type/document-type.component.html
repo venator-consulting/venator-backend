@@ -5,7 +5,7 @@
     <div class="p-grid">
 
       <div class="p-col-6 p-sm-offset-3">
-        <label class="p-mr-4"> {{'Admin_Import.selectOrganisation' | translate}} </label>
+        <label class="p-mr-4 fontStyle"> {{'Admin_Import.selectOrganisation' | translate}} </label>
 
         <p-dropdown [options]="orgs" [(ngModel)]="selectedOrgId"
           placeholder=" {{'Admin_Import.selectOrganisationPlaceholder' | translate}}" optionLabel="name"
@@ -20,7 +20,7 @@
     <div class="p-grid">
 
       <div class="p-col-6 p-sm-offset-3">
-        <label class="p-mr-6"> {{'Admin_Import.selectProcedure' | translate}} </label>
+        <label class="p-mr-6 fontStyle" > {{'Admin_Import.selectProcedure' | translate}} </label>
         <p-dropdown [options]="procedures" [(ngModel)]="selectedPrcId"
           placeholder="{{'Admin_Import.selectProcedurePlaceholder' | translate}}" optionLabel="name" optionValue="id"
           [showClear]="true" [filter]="true" filterBy="name" required (onChange)="prcChangedHandler($event)"

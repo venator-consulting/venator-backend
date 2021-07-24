@@ -79,7 +79,7 @@ export class NavBarComponent implements OnInit {
             if (this.role === "Admin") {
                 this.sidebarItems = [
                     {
-                        label: 'Adminstrator',
+                        label: 'Administrator',
                         items: [
                             { label: 'Import', icon: 'pi pi-file', routerLink: ['/admin/import'], command: () => { this.sideBarShow = false } },
                             { label: elem.addUser, icon: 'pi pi-user-plus', routerLink: ['/admin/admin/add'], command: () => { this.sideBarShow = false } },
@@ -93,7 +93,7 @@ export class NavBarComponent implements OnInit {
                     {
                         label: 'Dashboard',
                         items: [
-                            { label: 'Organisations', icon: 'pi  pi-home', routerLink: ['/admin/dashboard'], command: () => { this.sideBarShow = false } },
+                            { label: elem.organisations, icon: 'pi  pi-home', routerLink: ['/admin/dashboard'], command: () => { this.sideBarShow = false } },
                         ]
                     },
                     

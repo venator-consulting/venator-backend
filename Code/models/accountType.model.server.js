@@ -13,9 +13,9 @@ const AccountType = sequelizer.define('AccountType', {
         primaryKey: true,
         autoIncrement: true
     },
-    AccountTypeId: {
+/*     AccountTypeId: {
         type: DataTypes.BIGINT(11),
-    },
+    }, */
     AccountTypeName: {
         type: DataTypes.ENUM("Debitor", "Kreditor", "Sachkonto", "Finanzkonto"),
     }

@@ -31,24 +31,29 @@ export class OpeningBalanceComponent implements OnInit {
     this.cols = [
       {
         header: 'Account Number',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: 'left'
       },
       {
         header: 'Account Name',
-        field: 'accountName'
+        field: 'accountName',
+        align: 'left'
       },
       {
         header: 'accountTypeNewName',
-        field: 'accountTypeNewName'
+        field: 'accountTypeNewName',
+        align: 'left'
       },
       {
         header: 'StartingBalance',
         field: 'StartingBalance',
-        width: '250'
+        width: '250',
+        align: 'left'
       },
       {
         header: 'StartingBalanceDate',
-        field: 'StartingBalanceDate'
+        field: 'StartingBalanceDate',
+        align: 'left'
       }
     ];
 

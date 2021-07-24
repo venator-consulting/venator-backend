@@ -19,7 +19,7 @@
       dateFormat="dd.mm.yy"></p-calendar>
     &nbsp;
     <button type="button" pButton pRipple icon="pi pi-filter" [disabled]="waiting"
-      class="p-button-rounded p-button-primary" label="{{'Susa.search' | translate}}" (click)="getData();"
+      class=" p-button-primary" label="{{'Susa.search' | translate}}" (click)="getData();"
       pTooltip="{{ 'Susa.search' | translate}} " tooltipPosition="bottom">
       <i class="pi pi-spinner pi-spin" *ngIf="waiting"></i>
     </button>
@@ -41,7 +41,7 @@
           <div class="p-col-1">
             <!-- Add Procedure -->
             <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
-              class="p-button-rounded p-button-primary" label="{{ 'Susa.daten' | translate}} "
+              class="p-button-primary" label="{{ 'Susa.daten' | translate}} "
               pTooltip="{{ 'Susa.datenToolTip' | translate}} " tooltipPosition="bottom"></button>
           </div>
           <div class="p-col-2">
