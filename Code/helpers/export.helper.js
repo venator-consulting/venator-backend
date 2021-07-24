@@ -53,6 +53,8 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
             delete criteria.offset;
             delete criteria.OrganisationId;
             delete criteria.procedureId;
+            delete criteria.orderBy;
+            delete criteria.sortOrder;
             for (const key in criteria) {
                 if (Object.hasOwnProperty.call(criteria, key)) {
                     const element = criteria[key];

@@ -6,6 +6,7 @@ const {
     QueryTypes
 } = require("sequelize");
 const Sequelize = require('../config/sequelize.config');
+const { values } = require('../models/analysis/text.analysis.keywords');
 
 const sequelize = Sequelize.getSequelize();
 
@@ -232,6 +233,10 @@ module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
                 type: QueryTypes.SELECT
             }
         );
+        result.forEach(val => {
+            val.totalBalance = +val.totalBalance;
+            val.totlaCount = +val.totlaCount;
+        })
         return result;
     } catch (error) {
         throw new Error(error.message);

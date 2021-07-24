@@ -30,6 +30,7 @@ export class TextAnalysisComponent implements OnInit {
   searching: boolean;
   criteria: any = {};
   tempData: any[];
+  accountName: string;
 
   constructor(private _messageService: MessageService, private _analysisService: AnalysisService,
     private _router: Router, private prcService: ProcedureService) { }
@@ -91,6 +92,9 @@ export class TextAnalysisComponent implements OnInit {
       .getTextAnalysis(this.selectedOrganisation, this.selectedProcedure)
       .subscribe(res => {
         this.data = res;
+        if (this.data.length > 0) {
+          this.accountName = this.data[0].accountName;
+        }
         this.tempData = [...this.data];
         this.basicData = {
           labels: ['Total Count'],

@@ -44,6 +44,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
     filtersNo: number = 0;
     totalCount: any;
     displayedDataCount: any;
+  accountName: string;
     // for pagination ends
 
   constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
@@ -182,6 +183,9 @@ export class TextAnalysisDetailsComponent implements OnInit {
       .getTextAnalysisDetails(this.orgId, this.prcId, this.accountNumber)
       .subscribe(res => {
         this.data = res;
+        if (this.data.length > 0) {
+          this.accountName = this.data[0].accountName;
+        }
         this.tempData = res;
         this.waiting = false;
       }, er => {
