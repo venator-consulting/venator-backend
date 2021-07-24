@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { AccountTypes, PostingAccountTypes } from 'src/app/shared/model/accountType';
+import { Organisation } from 'src/app/shared/model/organisation';
+import { Procedures } from 'src/app/shared/model/procedures';
+import { OrganisationService } from '../service/organisation.service';
 import { PostingService } from '../service/posting.service';
 
 @Component({
@@ -11,6 +14,8 @@ import { PostingService } from '../service/posting.service';
 })
 export class AccountTypeComponent implements OnInit {
 
+  orgs: Organisation[] = new Array();
+  procedures: Procedures[] = new Array();
   selectedOrgId: number = -1;
   selectedPrcId: number = -1;
   postingAccountTypes: PostingAccountTypes[];
@@ -20,18 +25,22 @@ export class AccountTypeComponent implements OnInit {
   procedureName: string;
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
-    private _postingService: PostingService) { }
+    private _postingService: PostingService, private _orgService: OrganisationService) { }
 
   ngOnInit(): void {
-
-    this.selectedOrgId = +localStorage.getItem('organisationId');
-    this.selectedPrcId = +localStorage.getItem('currentProcedureId');
-    this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.accountTypes.push({
       id: 0,
       AccountTypeName: 'null'
     });
+
+    this._orgService.get()
+      .subscribe(
+        (data) => {
+          this.orgs = data;
+        },
+        (error) => console.log(error)
+      );
 
     this._postingService
       .getAccountTypesEnum()
@@ -41,16 +50,6 @@ export class AccountTypeComponent implements OnInit {
         },
         (error) => console.log(error)
       );
-
-    this._postingService
-      .getPostingAccountTypes(this.selectedOrgId, this.selectedPrcId)
-      .subscribe(
-        data => {
-          this.postingAccountTypes = data;
-        },
-        error => console.log(error)
-      );
-
 
     this.cols = [
       {
@@ -75,6 +74,32 @@ export class AccountTypeComponent implements OnInit {
   } // end of ng on init
 
 
+  orgChangedHandler(e) {
+    this.selectedPrcId = 0;
+    if (e.value > 0) {
+      this._orgService.getProcedures(e.value)
+        .subscribe(
+          data => {
+            this.procedures = data;
+          },
+          error => console.log(error)
+        );
+    }
+  }
+
+  prcChangedHandler(e) {
+    if (e.value > 0) {
+      this._postingService
+        .getPostingAccountTypes(this.selectedOrgId, this.selectedPrcId)
+        .subscribe(
+          data => {
+            this.postingAccountTypes = data;
+          },
+          error => console.log(error)
+        );
+    }
+  }
+
   editRow(row) {
     this.postingAccountTypes.filter(row => row.isEditable).map(r => { r.isEditable = false; return r });
     row.isEditable = true;
@@ -90,7 +115,7 @@ export class AccountTypeComponent implements OnInit {
 
 
   save(row) {
-    
+
     this._postingService
       .updateNewAccountType(this.selectedOrgId, this.selectedPrcId, row)
       .subscribe(res => {

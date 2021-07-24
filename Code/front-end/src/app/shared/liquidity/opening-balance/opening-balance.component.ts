@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OpeningBalance } from '../../model/openingBalance';
 import { LiquidityService } from "../../service/liquidity.service";
 import { MessageService } from 'primeng/api';
+import { TableColumn } from '../../model/tableColumn';
 
 @Component({
   selector: 'app-opening-balance',
@@ -14,7 +15,7 @@ export class OpeningBalanceComponent implements OnInit {
   orgId: number;
   prcId: number;
   procedureName: string;
-  cols: { header: string; field: string }[];
+  cols: TableColumn[];
   originalOpeningBalance: number;
   originalOpeningBalanceDate: Date;
 
@@ -42,7 +43,8 @@ export class OpeningBalanceComponent implements OnInit {
       },
       {
         header: 'StartingBalance',
-        field: 'StartingBalance'
+        field: 'StartingBalance',
+        width: '250'
       },
       {
         header: 'StartingBalanceDate',
@@ -53,7 +55,11 @@ export class OpeningBalanceComponent implements OnInit {
     this._liquidityService
       .getOpeningBalance(this.orgId, this.prcId)
       .subscribe(res => {
+        res.forEach(val => {
+          val.StartingBalanceDate = new Date(val.StartingBalanceDate);
+        })
         this.data = res;
+
       }, er => {
         this._messageService.add({
           severity: 'error',

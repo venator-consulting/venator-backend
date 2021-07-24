@@ -6,6 +6,7 @@ const dictRepo = require('../../../repositories/dict.repository.server');
 module.exports.buildDatabaseSchema = async function (req, res, next) {
 
     try {
+        // await require('../../../models/creditLines.model.server').syncCreditLines();
         await require('../../../models/country.model.server').syncCountry();
         await require('../../../models/city.model.server').syncCity();
         await require('../../../models/street.model.server').syncStreet();

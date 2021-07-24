@@ -85,6 +85,7 @@ import { CreditorAnalysisComponent } from './shared/analysis/creditor-analysis/c
 import { CreditorAnalysisDetailsComponent } from './shared/analysis/creditor-analysis/creditor-analysis-details/creditor-analysis-details.component';
 import { AccountTypeComponent } from './admin/account-type/account-type.component';
 import { OpeningBalanceComponent } from './shared/liquidity/opening-balance/opening-balance.component';
+import { CreditLineComponent } from './shared/liquidity/credit-line/credit-line.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -128,6 +129,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreditorAnalysisDetailsComponent,
     AccountTypeComponent,
     OpeningBalanceComponent,
+    CreditLineComponent,
   ],
   imports: [
     BrowserModule,

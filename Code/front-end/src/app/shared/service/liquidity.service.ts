@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { OpeningBalance } from '../model/openingBalance';
+import { CreditLine } from '../model/creditLine';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,15 @@ export class LiquidityService {
 
   updateOpeningBalance(orgId: number, prcId: number, row: OpeningBalance): Observable<any> {
     return this._http.put<any>(this._thisURL + orgId + '/' + prcId + '/openingBalance', row);
+  }
+
+
+  getCreditLine(orgId: number, prcId: number): Observable<CreditLine[]> {
+    return this._http.get<CreditLine[]>(this._thisURL + orgId + '/' + prcId + '/creditLine');
+  }
+
+  updateCreditLine(orgId: number, prcId: number, row: CreditLine): Observable<any> {
+    return this._http.put<any>(this._thisURL + orgId + '/' + prcId + '/creditLine', row);
   }
 
 }

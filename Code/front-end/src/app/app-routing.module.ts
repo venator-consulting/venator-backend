@@ -32,6 +32,7 @@ import { CreditorAnalysisComponent } from "./shared/analysis/creditor-analysis/c
 import { CreditorAnalysisDetailsComponent } from "./shared/analysis/creditor-analysis/creditor-analysis-details/creditor-analysis-details.component";
 import { AccountTypeComponent } from "./admin/account-type/account-type.component";
 import { OpeningBalanceComponent } from "./shared/liquidity/opening-balance/opening-balance.component";
+import { CreditLineComponent } from "./shared/liquidity/credit-line/credit-line.component";
 
 
 const routes: Routes = [
@@ -72,6 +73,7 @@ const routes: Routes = [
 
   { path: 'admin/accountType', component: AccountTypeComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
   { path: 'liquidity/openingBalance', component: OpeningBalanceComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'liquidity/creditLine', component: CreditLineComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },

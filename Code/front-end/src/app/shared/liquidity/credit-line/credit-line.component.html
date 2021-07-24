@@ -1,0 +1,118 @@
+<p-toast></p-toast>
+<div class="p-grid">
+  <div class="p-col-12">
+    <h2 class="p-text-center">
+      {{procedureName}}
+    </h2>
+  </div>
+
+  <div class="p-col-10">
+
+
+    <p-table #dt dataKey="accountNumber" [value]="data" [columns]="cols" styleClass="p-datatable-gridlines"
+      [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col *ngFor="let col of cols" [style]="{'width': (col.width? col.width : 200) +'px'}">
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+            {{col.header | translate}}</th>
+          <th>{{'Account_Type.Action' | translate}}</th>
+        </tr>
+
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr [pEditableRow]="row">
+          <td pEditableColumn pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}">
+            <span
+              *ngIf="col.field != 'creditLine' && col.field != 'creditLineToDate' && col.field != 'creditLineFromDate'">
+              {{ row[col.field] }}
+            </span>
+
+            <span *ngIf="!row.isEditable && col.field == 'creditLine'">
+              {{ row[col.field] | currency:'EUR':''}}
+            </span>
+
+            <span *ngIf="!row.isEditable && (col.field == 'creditLineToDate' || col.field == 'creditLineFromDate')">
+              {{ row[col.field] | date:'yyyy.MM.dd'}}
+            </span>
+
+            <p-inputNumber *ngIf="row.isEditable && col.field == 'creditLine'" [(ngModel)]="row.creditLine"
+              mode="decimal" locale="de-DE" [minFractionDigits]="2" [min]="0" [showButtons]="true"
+              buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="100"
+              decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary"
+              incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [style]="{'width': '50%'}" size='10'>
+            </p-inputNumber>
+
+            <p-calendar *ngIf="row.isEditable && col.field == 'creditLineFromDate'" [(ngModel)]="row.creditLineFromDate"
+              [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
+              dateFormat="dd.mm.yy"></p-calendar>
+            <p-calendar *ngIf="row.isEditable && col.field == 'creditLineToDate'" [(ngModel)]="row.creditLineToDate"
+              [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
+              dateFormat="dd.mm.yy"></p-calendar>
+
+          </td>
+          <td>
+            <button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(row)"
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
+              pTooltip="{{'Account_Type.Edit' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+            <button type="button" pButton pRipple icon="pi pi-save" (click)="save(row)"
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+              pTooltip="{{'Account_Type.Save' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+            <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+              pTooltip="{{'Account_Type.Cancel' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+            <button type="button" pButton pRipple icon="pi pi-plus" (click)="addRow(row)"
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable && row.creditLine"
+              pTooltip="{{'Account_Type.Add' | translate}}" tooltipPosition="bottom"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>
+
+
+<p-dialog [(visible)]="newDialog" [style]="{width: '450px'}" header="Add new Credit Line" [modal]="true"
+  styleClass="p-fluid">
+  <ng-template pTemplate="content">
+
+    <div class="p-field">
+      <label for="number">Account Number: {{newRecord.accountNumber}}</label>
+    </div>
+    <div class="p-field">
+      <label for="name">Account Name: {{newRecord.accountName}}</label>
+    </div>
+    <div class="p-field">
+      <label for="CreditLine">Credit Line</label>
+      <p-inputNumber [(ngModel)]="newRecord.creditLine" mode="decimal" locale="de-DE" [minFractionDigits]="2" [min]="0"
+        [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="100"
+        decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary"
+        incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [style]="{'width': '50%'}" size='10'>
+      </p-inputNumber>
+    </div>
+
+    <div class="p-field">
+      <label for="creditLineFromDate">From Date</label>
+      <p-calendar [(ngModel)]="newRecord.creditLineFromDate" [monthNavigator]="true" [yearNavigator]="true"
+        yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy"></p-calendar>
+    </div>
+
+    <div class="p-field">
+      <label for="creditLineToDate">To Date</label>
+      <p-calendar [(ngModel)]="newRecord.creditLineToDate" [monthNavigator]="true" [yearNavigator]="true"
+        yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy"></p-calendar>
+    </div>
+
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveCreditLie()"></button>
+  </ng-template>
+</p-dialog>
