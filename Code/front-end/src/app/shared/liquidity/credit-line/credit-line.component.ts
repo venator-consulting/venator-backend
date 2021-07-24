@@ -41,7 +41,7 @@ export class CreditLineComponent implements OnInit {
       {
         header: 'creditLine',
         field: 'creditLine',
-        width: '200',
+        width: '250',
         align: 'right'
       },
       {
