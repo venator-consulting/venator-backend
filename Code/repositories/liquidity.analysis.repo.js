@@ -77,6 +77,8 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb
                     labels: chartLabels
                 }
             };
+
+            let accounts = new Array();
     
             let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, 
                             pos.StartingBalanceDate,
@@ -92,6 +94,16 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb
             const str = connection.getConnection().query(query).stream();
     
             str.on('data', (row) => {
+
+                // store account
+                const i = accounts.findIndex(x => x.accountNumber == row.accountNumber);
+                if (i == -1) {
+                    accounts.push({
+                        accountNumber: row.accountNumber,
+                        accountName: row.accountName,
+                        count: 0
+                    });
+                }
     
                 const rowindex = getNumberOfDays(fromDate, row.documentDate);
     
@@ -156,9 +168,14 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb
                         }
                     }
                 }
+
+                // get total count for accounts
+                accounts.forEach(val => {
+                    val.count = data[val.accountNumber]? data[val.accountNumber].length : 0;
+                });
     
     
-                finalResult.accounts = data;
+                finalResult.accounts = accounts;
                 finalResult.bankBalances = bankBalancesArray;
                 finalResult.labels = chartLabels.filter(Boolean);
                 // cb(finalResult);
