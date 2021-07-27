@@ -9,20 +9,21 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 // import { AutocompleteService } from '../service/autocomplete.service';
 import { Word } from '../model/word';
 import { DictionaryService } from '../service/dictionary.service';
-import { ProcedureService } from "../service/procedure.service";
+// import { DatePipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-sap-data-table',
   templateUrl: './sap-data-table.component.html',
-  styleUrls: ['./sap-data-table.component.sass']
+  styleUrls: ['./sap-data-table.component.sass'],
+  // providers: [DatePipe]
 })
 export class SAPDataTableComponent implements OnInit {
 
   constructor(private _messageService: MessageService, private _dataFilterService: DataFilterService,
     private _exportDataService: ExportDataService, private _router: Router,
     private _translateService: TranslateService, private scrollViewport: ElementRef,
-    private _autocompleteService: DictionaryService, private prcService: ProcedureService) { }
+    private _autocompleteService: DictionaryService) { }
 
 
   organisationId = localStorage.getItem('organisationId');
@@ -72,11 +73,12 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   async getData() {
+    // debugger;
     this.loading = true;
     for (const key in this.criteria) {
-     if (!this.criteria[key]) {
-       delete this.criteria[key];
-     }
+      if (!this.criteria[key]) {
+        delete this.criteria[key];
+      }
     }
     this._dataFilterService
       .get(this.criteria)
@@ -103,7 +105,7 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   sort(event) {
-    debugger;
+    // debugger;
     this.criteria.orderBy = event.sortField;
     this.criteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
@@ -114,7 +116,10 @@ export class SAPDataTableComponent implements OnInit {
 
   filterChange(value, field) {
     if (value) {
-      this.criteria[field] = value;
+      // if (value instanceof Date) {
+      //   this.criteria[field] = this.datepipe.transform(value, 'yyyy-MM-dd');
+      // } else
+        this.criteria[field] = value;
       ++this.filtersNo;
     } else {
       delete this.criteria[field];
@@ -162,6 +167,9 @@ export class SAPDataTableComponent implements OnInit {
     ++this.pageNr;
     if (this.pageNr > this.maxPageNr) return;
     this.loading = true;
+    if (!this.criteria.offset) {
+      this.criteria.offset = 0;
+    }
     this.criteria.offset += +this.limit;
 
     this.getData();

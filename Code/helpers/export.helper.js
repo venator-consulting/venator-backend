@@ -89,7 +89,11 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
                     } else if (row[key] && (row[key] instanceof Date) &&
                         (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' ||
                             key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
-                        row[key] = row[key].toLocaleDateString('de-DE');
+                        row[key] = row[key].toLocaleDateString('de-DE', {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                        });
                     }
                 }
             }

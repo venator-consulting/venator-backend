@@ -138,7 +138,11 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
                         }
                         let thisDate = new Date();
                         thisDate.setDate(fromDate.getDate() + index);
-                        chartLabels[index] = chartLabels[index] ? chartLabels[index] : thisDate.toLocaleDateString('de-DE');
+                        chartLabels[index] = chartLabels[index] ? chartLabels[index] : thisDate.toLocaleDateString('de-DE', {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                        });
                     }
                 }
                 // bank balnces ends
@@ -300,7 +304,11 @@ module.exports.liquidityAnalysisDetails = async (orgId, prcId, accountNumber, fr
                         }
                         let thisDate = new Date();
                         thisDate.setDate(fromDate.getDate() + index);
-                        chartLabels[index] = chartLabels[index] ? chartLabels[index] : thisDate.toLocaleDateString('de-DE');
+                        chartLabels[index] = chartLabels[index] ? chartLabels[index] : thisDate.toLocaleDateString('de-DE', {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                        });
                     }
                 }
                 // bank balnces ends
