@@ -33,4 +33,8 @@ router
     }), authorization.canDisplayAnalysis(), liquidityAnalysisCtrl.getAnalysisMainData);
 
 
+router
+    .route('/:orgId/:prcId/liquidity/:accountNumber')
+    .get(liquidityAnalysisCtrl.getAnalysisDetailsData);
+
 module.exports = router;

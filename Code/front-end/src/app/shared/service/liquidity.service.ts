@@ -35,4 +35,8 @@ export class LiquidityService {
     return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity');
   }
 
+  getFreeLiquidityDetails(orgId: number, prcId: number, accountNumber: string) {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity/' + accountNumber);
+  }
+
 }

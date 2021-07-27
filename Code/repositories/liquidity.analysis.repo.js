@@ -54,7 +54,7 @@ function getNumberOfDays(start, end) {
 
 
 
-module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb1) => {
+module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
     return new Promise((resolve, reject) => {
         try {
 
@@ -67,10 +67,10 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb
             if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
                 throw new Error('Document Date and Starting Balance Date must be Date!');
             }
-    
+
             let data = {};
             let chartLabels = new Array();
-    
+
             const finalResult = {
                 bankBalances: {
                     data: data,
@@ -79,7 +79,7 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb
             };
 
             let accounts = new Array();
-    
+
             let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, 
                             pos.StartingBalanceDate,
                             pos.accountTypeNewName, pos.balance, pos.StartingBalance
@@ -90,9 +90,9 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb
                             AND pos.documentDate is not NULL 
                             AND UPPER(pos.accountTypeNewName) = 'FINANZKONTO'
                             ORDER BY pos.documentDate`;
-    
+
             const str = connection.getConnection().query(query).stream();
-    
+
             str.on('data', (row) => {
 
                 // store account
@@ -104,26 +104,26 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb
                         count: 0
                     });
                 }
-    
+
                 const rowindex = getNumberOfDays(fromDate, row.documentDate);
-    
+
                 // bank balances starts
                 {
                     let startingBalanceIncluded = 0;
                     if (row.StartingBalanceDate) {
                         startingBalanceIncluded = getNumberOfDays(fromDate, row.StartingBalanceDate);
                     }
-    
+
                     if (!data[row.accountNumber]) {
                         data[row.accountNumber] = new Array();
                     }
-    
+
                     row.StartingBalance = row.StartingBalance ? +row.StartingBalance : 0;
-    
+
                     // index ==0 and value == 0 then starting balance
                     // index != row index and !value then value = previous value 
                     // index == row index then value = balance + previous value
-    
+
                     for (let index = 0; index <= rowindex; index++) {
                         if (index == 0 && !data[row.accountNumber][index] && index >= startingBalanceIncluded) {
                             data[row.accountNumber][index] = +row.StartingBalance;
@@ -142,19 +142,19 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb
                     }
                 }
                 // bank balnces ends
-    
-    
-    
-    
+
+
+
+
             }); // end of on stream return row
-    
-    
+
+
             str.on('end', async () => {
-    
+
                 const diffirence = getNumberOfDays(fromDate, toDate);
-    
+
                 let bankBalancesArray = new Array();
-    
+
                 for (let index = 0; index <= diffirence; index++) {
                     if (!bankBalancesArray[index]) {
                         bankBalancesArray[index] = 0;
@@ -171,18 +171,18 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, cb, cb
 
                 // get total count for accounts
                 accounts.forEach(val => {
-                    val.count = data[val.accountNumber]? data[val.accountNumber].length : 0;
+                    val.count = data[val.accountNumber] ? data[val.accountNumber].length : 0;
                 });
-    
-    
+
+
                 finalResult.accounts = accounts;
                 finalResult.bankBalances = bankBalancesArray;
                 finalResult.labels = chartLabels.filter(Boolean);
                 // cb(finalResult);
                 resolve(finalResult);
             });
-    
-    
+
+
         } catch (error) {
             reject(error.message);
         }
@@ -207,7 +207,7 @@ module.exports.creditLinnes = async (orgId, prcId, fromDate, toDate) => {
 
     // foreach day
     for (let index = 0; index < diffirence; index++) {
-        if (! creditLinesArray[index]) {
+        if (!creditLinesArray[index]) {
             creditLinesArray[index] = 0;
         }
         // calculate date for this day
@@ -215,7 +215,142 @@ module.exports.creditLinnes = async (orgId, prcId, fromDate, toDate) => {
         thisDate.setDate(fromDate.getDate() + index);
         // get included credit lines
         const creditLinesForThisDay = creditLines
-                                .filter(val => thisDate >= new Date(val.creditLineFromDate) && thisDate <= new Date(val.creditLineToDate));
+            .filter(val => thisDate >= new Date(val.creditLineFromDate) && thisDate <= new Date(val.creditLineToDate));
+        creditLinesForThisDay.forEach(element => {
+            creditLinesArray[index] += +element.creditLine;
+        });
+    } // end of foreach day
+
+    return creditLinesArray;
+
+};
+
+
+module.exports.liquidityAnalysisDetails = async (orgId, prcId, accountNumber, fromDate, toDate) => {
+    return new Promise((resolve, reject) => {
+        try {
+
+            if (!fromDate) {
+                throw new Error('Document Date is null for this procedure!');
+            }
+            if (!toDate) {
+                throw new Error('Document Date is null for this procedure!');
+            }
+            if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
+                throw new Error('Document Date and Starting Balance Date must be Date!');
+            }
+
+            let data = new Array();
+            let chartLabels = new Array();
+            let accountName;
+
+            const finalResult = {
+                bankBalances: {
+                    data: data,
+                    labels: chartLabels
+                }
+            };
+
+            let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, 
+                            pos.StartingBalanceDate,
+                            pos.accountTypeNewName, pos.balance, pos.StartingBalance
+                        FROM posting_${orgId} pos
+                        WHERE
+                            pos.procedureId = ${prcId}
+                            AND pos.accountNumber = ${accountNumber}
+                            AND pos.documentDate is not NULL 
+                            AND UPPER(pos.accountTypeNewName) = 'FINANZKONTO'
+                            ORDER BY pos.documentDate`;
+
+            const str = connection.getConnection().query(query).stream();
+
+            str.on('data', (row) => {
+
+                if (!accountName) {
+                    accountName = row.accountName;
+                }
+
+                const rowindex = getNumberOfDays(fromDate, row.documentDate);
+
+                // bank balances starts
+                {
+                    let startingBalanceIncluded = 0;
+                    if (row.StartingBalanceDate) {
+                        startingBalanceIncluded = getNumberOfDays(fromDate, row.StartingBalanceDate);
+                    }
+
+
+                    row.StartingBalance = row.StartingBalance ? +row.StartingBalance : 0;
+
+                    // index ==0 and value == 0 then starting balance
+                    // index != row index and !value then value = previous value 
+                    // index == row index then value = balance + previous value
+
+                    for (let index = 0; index <= rowindex; index++) {
+                        if (index == 0 && !data[index] && index >= startingBalanceIncluded) {
+                            data[index] = +row.StartingBalance;
+                        }
+                        if (index != 0 && !data[index] && index >= startingBalanceIncluded) {
+                            data[index] = data[index - 1];
+                        }
+                        if (index == rowindex && index != 0 && index >= startingBalanceIncluded) {
+                            data[index] = +row.balance + data[index - 1];
+                        } else if (index == rowindex && index == 0) {
+                            data[index] += +row.balance;
+                        }
+                        let thisDate = new Date();
+                        thisDate.setDate(fromDate.getDate() + index);
+                        chartLabels[index] = chartLabels[index] ? chartLabels[index] : thisDate.toLocaleDateString('de-DE');
+                    }
+                }
+                // bank balnces ends
+
+            }); // end of on stream return row
+
+
+            str.on('end', async () => {
+
+                finalResult.bankBalances = data;
+                finalResult.labels = chartLabels.filter(Boolean);
+                finalResult.accountName = accountName;
+                // cb(finalResult);
+                resolve(finalResult);
+            });
+
+
+        } catch (error) {
+            reject(error.message);
+        }
+    });
+};
+
+
+module.exports.creditLinnesDetails = async (orgId, prcId, accountNumber, fromDate, toDate) => {
+    /**
+     * get credit lines
+     * calculate difference
+     * foreach day
+     *      sum credit lines that day included in it
+     */
+    // get credit lines
+    const creditLines = await CreditLineRepo.getByAccountNumber(orgId, prcId, accountNumber);
+
+    // calculate difference
+    const diffirence = getNumberOfDays(fromDate, toDate);
+
+    const creditLinesArray = new Array();
+
+    // foreach day
+    for (let index = 0; index < diffirence; index++) {
+        if (!creditLinesArray[index]) {
+            creditLinesArray[index] = 0;
+        }
+        // calculate date for this day
+        let thisDate = new Date();
+        thisDate.setDate(fromDate.getDate() + index);
+        // get included credit lines
+        const creditLinesForThisDay = creditLines
+            .filter(val => thisDate >= new Date(val.creditLineFromDate) && thisDate <= new Date(val.creditLineToDate));
         creditLinesForThisDay.forEach(element => {
             creditLinesArray[index] += +element.creditLine;
         });
