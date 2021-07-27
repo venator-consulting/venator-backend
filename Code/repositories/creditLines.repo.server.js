@@ -37,6 +37,21 @@ module.exports.getCreditLines = async (orgId, prcId) => {
 };
 
 
+module.exports.getAll = async (orgId, prcId) => {
+    try {
+        return await CreditLines
+            .getCreditLines('creditLines_' + orgId)
+            .findAll({
+                where: {
+                    procedureId: prcId
+                }
+            });
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
 module.exports.insert = async (orgId, prcId, creditLine) => {
     try {
         if (!creditLine.procedureId) creditLine.procedureId = prcId;

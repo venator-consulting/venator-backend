@@ -31,4 +31,8 @@ export class LiquidityService {
     return this._http.put<any>(this._thisURL + orgId + '/' + prcId + '/creditLine', row);
   }
 
+  getFreeLiquidity(orgId: number, prcId: number) {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity');
+  }
+
 }
