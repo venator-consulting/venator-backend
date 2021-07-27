@@ -3,6 +3,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
 import { LiquidityService } from '../../service/liquidity.service';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-free-liquidity',
@@ -29,13 +30,25 @@ export class FreeLiquidityComponent implements OnInit {
     this.prcId = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
 
-    
+
     this.items = [
       { label: 'Free Liquidity', routerLink: '/liquidity/freeLiquidity' }
     ];
 
     this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data' };
     this.basicOptions = {
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            let value = tooltipItem.value;
+            let currencyPipe = new CurrencyPipe('de');
+            value = currencyPipe.transform(value, 'EURO', '');
+
+            let label = data.datasets[tooltipItem.datasetIndex].label || '';
+            return label + ': ' + value;
+          }
+        }
+      },
       scales: {
         xAxes: [{
           ticks: {
@@ -47,7 +60,12 @@ export class FreeLiquidityComponent implements OnInit {
           ticks: {
             minRotation: 0,
             maxRotation: 0,
-            stepSize: 50
+            callback: function (label, index, values) {
+              // debugger;
+              let currencyPipe = new CurrencyPipe('de');
+              label = currencyPipe.transform(label, 'EURO', '');
+              return label;
+            }
           }
         }],
       }
@@ -74,15 +92,15 @@ export class FreeLiquidityComponent implements OnInit {
           }, {
             type: 'line',
             label: 'Free Liquidity',
-            backgroundColor: '#F5B59B',
+            fill: false,
             data: res.freeLiquidity,
             borderColor: '#E5A58B',
             borderWidth: 2
           }, {
             type: 'bar',
             label: 'Bank Balances',
-            backgroundColor: '#FFD795',
-            borderColor: '#EFC785',
+            backgroundColor: '#88FF88',
+            borderColor: '#58dF58',
             data: res.bankBalances.bankBalances
           }]
         };
