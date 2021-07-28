@@ -68,10 +68,10 @@
             (onClear)="filterChange($event.query, col.field)" (onSelect)="filterChange($event.word, col.field)"
             field="word" [minLength]="1" [inputStyle]="{width:'90%'}" [style]="{width:'90%'}" appendTo="body"
             [(ngModel)]="criteria[col.field]"
-            *ngIf="col.field != 'documentDate' && col.field != 'dueDate' && col.field != 'applicationDate' && col.field != 'postingDate'">
+            *ngIf="col.field != 'documentDate' && col.field != 'dueDate' && col.field != 'applicationDate' && col.field != 'postingDate' && col.field != 'executionDate'">
           </p-autoComplete>
 
-          <p-calendar *ngIf="col.field == 'documentDate' || col.field == 'dueDate' || col.field == 'applicationDate' || col.field == 'postingDate'"
+          <p-calendar *ngIf="col.field == 'documentDate' || col.field == 'dueDate' || col.field == 'applicationDate' || col.field == 'postingDate' || col.field == 'executionDate'"
             [(ngModel)]="criteria[col.field]" (onSelect)="filterChange($event, col.field)" [monthNavigator]="true"
             [yearNavigator]="true" yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy">
           </p-calendar>

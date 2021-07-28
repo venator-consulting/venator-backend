@@ -6,14 +6,15 @@ const Sequelize = require('../config/sequelize.config');
 const sequelize = Sequelize.getSequelize();
 const CreditLineRepo = require('./creditLines.repo.server');
 
+// AND UPPER(pos.accountType) = 'K'
+// ALTER TABLE venator.posting_1 MODIFY COLUMN StartingBalanceDate DATETIME NULL;
 
 module.exports.liquiditytDateRange = async (orgId, prcId) => {
     try {
-        let query = `SELECT MIN(pos.StartingBalance) mindate, MAX(pos.documentDate) maxdate, MIN(pos.documentDate) mindocdate 
+        let query = `SELECT MIN(pos.StartingBalanceDate) mindate, MAX(pos.documentDate) maxdate, MIN(pos.documentDate) mindocdate 
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = :procedureId
-                        AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.documentDate is not NULL 
                         AND UPPER(pos.accountTypeNewName) = 'FINANZKONTO'`;
@@ -111,7 +112,10 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
                 {
                     let startingBalanceIncluded = 0;
                     if (row.StartingBalanceDate) {
-                        startingBalanceIncluded = getNumberOfDays(fromDate, row.StartingBalanceDate);
+                        if (row.StartingBalanceDate > fromDate) {
+                            startingBalanceIncluded = getNumberOfDays(fromDate, row.StartingBalanceDate);    
+                        } else startingBalanceIncluded = 0;
+                        
                     }
 
                     if (!data[row.accountNumber]) {
@@ -136,7 +140,7 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
                         } else if (index == rowindex && index == 0) {
                             data[row.accountNumber][index] += +row.balance;
                         }
-                        let thisDate = new Date();
+                        let thisDate = new Date(fromDate);
                         thisDate.setDate(fromDate.getDate() + index);
                         chartLabels[index] = chartLabels[index] ? chartLabels[index] : thisDate.toLocaleDateString('de-DE', {
                             year: "numeric",
@@ -215,7 +219,7 @@ module.exports.creditLinnes = async (orgId, prcId, fromDate, toDate) => {
             creditLinesArray[index] = 0;
         }
         // calculate date for this day
-        let thisDate = new Date();
+        let thisDate = new Date(fromDate);
         thisDate.setDate(fromDate.getDate() + index);
         // get included credit lines
         const creditLinesForThisDay = creditLines
@@ -302,7 +306,7 @@ module.exports.liquidityAnalysisDetails = async (orgId, prcId, accountNumber, fr
                         } else if (index == rowindex && index == 0) {
                             data[index] += +row.balance;
                         }
-                        let thisDate = new Date();
+                        let thisDate = new Date(fromDate);
                         thisDate.setDate(fromDate.getDate() + index);
                         chartLabels[index] = chartLabels[index] ? chartLabels[index] : thisDate.toLocaleDateString('de-DE', {
                             year: "numeric",
@@ -354,7 +358,7 @@ module.exports.creditLinnesDetails = async (orgId, prcId, accountNumber, fromDat
             creditLinesArray[index] = 0;
         }
         // calculate date for this day
-        let thisDate = new Date();
+        let thisDate = new Date(fromDate);
         thisDate.setDate(fromDate.getDate() + index);
         // get included credit lines
         const creditLinesForThisDay = creditLines

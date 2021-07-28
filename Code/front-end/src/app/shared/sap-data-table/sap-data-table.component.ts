@@ -158,6 +158,7 @@ export class SAPDataTableComponent implements OnInit {
       limit: this.limit,
       offset: 0
     };
+    this.filtersNo = 0;
     this.pageNr = 1;
     this.getData();
   }
