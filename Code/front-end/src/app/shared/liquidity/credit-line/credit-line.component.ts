@@ -31,25 +31,25 @@ export class CreditLineComponent implements OnInit {
 
     this.cols = [
       {
-        header: 'accountNumber',
+        header: 'Liquidity.accountNumber',
         field: 'accountNumber'
       },
       {
-        header: 'accountName',
+        header: 'Liquidity.accountName',
         field: 'accountName'
       },
       {
-        header: 'creditLine',
+        header: 'Liquidity.creditLine',
         field: 'creditLine',
         width: '250',
         align: 'right'
       },
       {
-        header: 'creditLineFromDate',
+        header: 'Liquidity.creditLineFromDate',
         field: 'creditLineFromDate'
       },
       {
-        header: 'creditLineToDate',
+        header: 'Liquidity.creditLineToDate',
         field: 'creditLineToDate'
       }
     ];

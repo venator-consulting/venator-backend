@@ -58,7 +58,8 @@
             <input required #city="ngModel" name="city" type="text" pinputtext
               class="p-inputtext p-component ng-untouched ng-pristine ng-valid" [(ngModel)]="organisation.city">
             <small *ngIf="city.invalid && city.touched"
-              class="spanCss ">{{'Organisation_Registration.cityErrorMsg' | translate}}</small>
+              class="spanCss ">{{'Organisation_Registration.cityErrorMsg' | translate}}
+            </small>
           </div>
         </div>
         <div class="p-field p-grid">
@@ -85,15 +86,15 @@
           <label for="logo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Organisation_Registration.logo' | translate}}
           </label>
           <div class="p-col-12 p-md-10">
-            <p-fileUpload name="logo" name="logo" chooseLabel="{{'Organisation_Registration.searchButton' | translate}}"
+            <p-fileUpload name="logo" name="logo" 
               customUpload="true" [auto]="true" mode="basic" accept="image/*" styleClass="logoCss p-cancelButton "
-              (uploadHandler)="UploadHandler($event)" class="p-ripple" [style]="{'width':'100px', 'padding': '8px'}">
+              (uploadHandler)="UploadHandler($event)" class="p-ripple" [style]="{'width':'50px', 'padding': '8px'}">
             </p-fileUpload>
-            <div *ngIf="organisation.id && organisation.logo">
-              <img src="{{organisation.logo}}" alt="organisation logo" width="30">
+            <div *ngIf="organisation.id && organisation.logo" class="p-mt-2">
+              <img src="{{organisation.logo}}" alt="organisation logo" width="80">
             </div>
-            <div *ngIf="!organisation.id && organisation.logo">
-              <img src="{{imageSrc}}" alt="organisation logo" width="30">
+            <div *ngIf="!organisation.id && organisation.logo" class="p-mt-2">
+              <img src="{{imageSrc}}" alt="organisation logo" width="80">
             </div>
           </div>
         </div>

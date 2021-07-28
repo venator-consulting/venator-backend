@@ -1,6 +1,6 @@
 {
     "ErrorHandler": {
-        "badRequest_400": "der Server kann die gesendete Anfrage nicht verarbeiten",
+        "badRequest_400": "Der Server kann die gesendete Anfrage nicht verarbeiten",
         "unauthorized_401": "Eine Authentifizierung ist erforderlich, bitte überprüfen Sie den Benutzernamen und das Passwort",
         "forbidden_403": "Der Zugriff auf die angeforderte Ressource ist nicht erlaubt",
         "NotFound_404": "Der Server kann die angeforderte Ressource nicht finden",
@@ -19,6 +19,7 @@
     "sideBarMenu": {
         "data": "Daten",
         "table": "Tabelle",
+        "organisations": "Organisationen",
         "analysis": "Analyse",
         "amountAnalyisis": "Betragsanalyse",
         "textAnalysis": "Textanalyse",
@@ -28,6 +29,7 @@
         "editUser": "Benutzer bearbeiten",
         "addOrganisation": "Organisation hinzufügen",
         "addDocumentType": "Document Type hinzufügen",
+        "addAccountType": "Account Type hinzufügen",
         "addProcedure": "Verfahren hinzufügen",
         "editProcedure": "Verfahren bearbeiten",
         "resetPassword": "Passwort zurücksetzen",
@@ -58,14 +60,14 @@
         "firthStepLabel": "Dateien importieren",
 
         "firstStepHeader": "Dateien hochladen",
-        "selectOrganisation": "Wählen Sie eine Organisation aus",
-        "selectOrganisationPlaceholder":"organisation auswählen",
-        "selectProcedure": "Wählen Sie ein Verfahren aus",
-        "selectProcedurePlaceholder": "verfahren auswählen",
+        "selectOrganisation": "Wählen Sie eine Organisation aus:",
+        "selectOrganisationPlaceholder":"Organisation auswählen",
+        "selectProcedure": "Wählen Sie ein Verfahren aus     :",
+        "selectProcedurePlaceholder": "Verfahren auswählen",
         "selectTemplate": "Wählen Sie ein Template aus",
         "SAP_W-mobel": "SAP W-mobel",
         "SAP_Cinram": "SAP Cinram",
-        "selectTemplatePlaceholder": "template auswählen",
+        "selectTemplatePlaceholder": "Template auswählen",
         "selectFileFormat": "Dateiformat",
         "Excel": "Excel",
         "Csv": "Csv",
@@ -198,13 +200,13 @@
         "mobileNr": "Handy-Nr",
         "mobileNrErrorMsg": "Handy-Nr ist erforderlich",
         "street": "Straße",
-        "streetErrorMsg": "straße ist erforderlich",
+        "streetErrorMsg": "Straße ist erforderlich",
         "houseNr": "Haus-Nr",
         "houseNrErrorMsg": "Haus-Nr ist erforderlich",
         "city": "Stadt",
         "cityErrorMsg": "Stadt ist erforderlich",
         "postcode": "Plz",
-        "postcodeErrorMsg": "plz ist erforderlich",
+        "postcodeErrorMsg": "Plz ist erforderlich",
         "country": "Land",
         "countryErrorMsg": "Land ist erforderlich",
         "cancelButton": "Abbrechen",
@@ -219,7 +221,7 @@
         "email": "Email",
         "emailErrorMsg": "Email ist erforderlich",
         "street": "Straße",
-        "streetErrorMsg": "straße ist erforderlich",
+        "streetErrorMsg": "Straße ist erforderlich",
         "houseNr": "Haus-Nr",
         "houseNrErrorMsg": "Haus-Nr ist erforderlich",
         "city": "Stadt",
@@ -238,17 +240,36 @@
     "Document_Type": {
         "Zahlung": "Zahlung",
         "Rechnung": "Rechnung",
+        "null": " ",
         "documentType": "Belegart",
         "documentTypeNewName": "Belegart neu",
         "Action": "Aktionen",
-        "Edit": "bearbeiten",
+        "Edit": "Bearbeiten",
         "Save": "Speichern",
         "Cancel": "Abbrechen"
     },
+
+    "Account_Type": {
+        "Debitor": "Debitor",
+        "Kreditor": "Kreditor",
+        "Sachkonto": "Sachkonto",
+        "Finanzkonto": "Finanzkonto",
+        "null": " ",
+        "accountNumber": "Kontonummer",
+        "accountName": "Kontoname",
+        "accountType": "Kontotyp",
+        "accountTypeNewName": "Kontotyp neu",
+        "Action": "Aktionen",
+        "Edit": "Bearbeiten",
+        "Save": "Speichern",
+        "Cancel": "Abbrechen"
+    },
+
+
     "Procedure_Registration": {
         "editHeader": "Verfahren bearbeiten",
         "addProedurePlaceHolder": "Verfahren hinzufügen",
-        "editProedurePlaceHolder": "bearbeiten",
+        "editProedurePlaceHolder": "Bearbeiten",
         "registrationHeader": "Verfahren Registrieren",
         "name": "Name",
         "nameErrorMsg": "Name ist erforderlich",
@@ -258,7 +279,7 @@
         "datasource": "Datenquelle",
         "datasourceErrorMsg": "Datenquelle ist erforderlich",
         "datasourcePlaceHolder": "Datenquelle auswählen",
-        "data": "Daten",
+        "data": " Daten",
         "analysis": "Analyse",
         "cancelButton": "Abbrechen",
         "confirmButton": "Bestätigen",
@@ -284,23 +305,91 @@
 
     },
     "Data_Table": {
-        "firstPage": "erste Seite",
-        "lastPage":  "letzte Seite",
-        "previous": "vorherige Seite",
-        "next": "nächste Seite",
+        "firstPage": "Erste Seite",
+        "lastPage":  "Letzte Seite",
+        "previous": "Vorherige Seite",
+        "next": "Nächste Seite",
         "clearFilter": "Filter löschen",
         "filter": "Filter",
         "actions": "Aktionen"
 
     }, 
+    "Analysis": {
+        "back": "Zurück",
+        "export": "Export",
+        "save": "Speichern",
+        "saveRelevant": "Relevant Speichern"
+    },
     "AmountAnalysis": {
-        "creditorNumber": "Kreditornummer",
-        "creditorName": "Kreditorname",
+        "accountNumber": "Kontonummer",
+        "accountName": "Kontobezeichnung",
         "NumberOfPostings": "Anzahl der Buchungen",
         "totalBalance": "Gesamtsaldo",
-        "details": "Details"
-
+        "details": "Details",
+        "baseBalance" : "Basis Saldo"
     }, 
+    "TextAnalysis": {
+        "accountNumber": "Kontonummer",
+        "accountName": "Kontobezeichnung",
+        "NumberOfPostings": "Anzahl der Buchungen",
+        "totalBalance": "Gesamtsaldo",
+        "details": "Details",
+        "back": "Zurück",
+        "export": "Export",
+        "save": "Speichern"
+    }, 
+    "PaymentAnalysis": {
+        "data" : " Daten",
+        "label": "Zahlungsanalyse",
+        "allAccounts": "Alle Konten",
+        "accountNumber" : "Kontonummer",
+        "accountName" : "Kontoname",
+        "sum" : "Summe",
+        "blue": "Offene Rechnungen",
+        "red": "überfällige Rechnungen ",
+        "green": "Zahlungen ohne Zuordnung",
+        "comment": "Kommentar",
+        "sysRelevant": "Systemrelevant",
+        "userRelevant": "Benutzerrelevant",
+        "allRelevant" : "Alle Buchungen"
+
+    },
+    "DueDateAnalysis": {
+        "label": " Fälligkeitsanalyse", 
+        "paymentLabel": "Zahlungsanalyse",
+        "data" : " Daten",
+        "backToPayment" : " Zur Zahlungsanalyse",
+        "backtoDueDate": " Zur Fälligkeitsanalyse",
+        "accountNumber" : "Kontonummer",
+        "accountName" : "Kontoname",
+        "positiveDelay": "Zu spät",
+        "negativeDelay": "Zu früh",
+        "notPaid" : "Unbezahlt",
+        "count" : "Anzahl",
+        "firstChartLabel": "Anzahl der Tage",
+        "average": "Durchschnitt",
+        "positive": "Positiv",
+        "negative": "Negativ"
+
+    },
+    "CreditorsAnalysis": {
+        "label": "Kreditorenanalyse",
+        "data": " Daten",
+        "accountNumber" : "Kontonummer",
+        "accountName" : "Kontoname",
+        "count" : "Anzahl",
+        "sum" : "Summe",
+        "amountTotalBalance": "Gesamtsaldo der Betragsanalyse",
+        "textTotalBalance": "Gesamtsaldo der Textanalyse",
+        "paymentTotalBalance": "Gesamtsaldo der Zahlungsanalyse",
+        "amountTotalCount": "Anzahl der Buchungen der Betragsanalyse",
+        "textTotalCount": "Anzahl der Buchungen der Textanalyse",
+        "paymentTotalCount": "Anzahl der Buchungen der Zahlungsanalyse",
+        "showDetails": "Weitere Details ansehen",
+        "amountLabel": "Glattebeträge Analyse",
+        "textLabel" : "Text Analyse",
+        "paymentLabel" : "Zahlungsanalyse"
+    },
     "DataTableColumns": {
         "client": "Mandant",
         "companyCode": "Buchungskreis",
@@ -319,7 +408,7 @@
         "stackNumber": "Stapelnummer",
         "recordNumber": "Buchungssatznummer",
         "fiscalYear": "Geschäftsjahr",
-        "identificationNumber": "identificationNumber",
+        "identificationNumber": "IdentificationNumber",
         "executionDate": "Leistungsdatum",
         "dueDate": "Faelligkeitsdatum",
         "assignment": "Zuordnung",
@@ -344,7 +433,7 @@
         "creditAmountTransactionCurrency": "Umsatz Haben Belegwährung",
         "transactionCurrency": "Belegwährung",
         "documentNumber2": "Belegfeld 2",
-        "bookingAmount": "bookingAmount",
+        "bookingAmount": "BookingAmount",
         "exchangeRate": "Umrechnungskurs",
         "cashDiscount": "Skonto EUR",
         "costCenter1": "Kostenstelle 1",
@@ -358,10 +447,10 @@
         "taxAmount": "Steuerbetrag",
         "taxAmountDebit": "Steuerbetrag Soll",
         "taxAmountCredit": "Steuerbetrag Haben",
-        "costQuantityField": "costQuantityField",
+        "costQuantityField": "CostQuantityField",
         "identifierBalanceCarryforward": "Kennung EB-Buchung",
         "postingPeriod": "Buchungsperiode",
-        "differentTaxationType": "differentTaxationType",
+        "differentTaxationType": "DifferentTaxationType",
         "applicationDocument": "Ausgleichsbeleg",
         "applicationDate": "Datum des Ausgleichs",
         "applicationDateNew": "Ausgleichsdatum angepasst",
@@ -384,8 +473,9 @@
 
     },
     "Susa": {
-        "creditornumber": "Kreditornumber",
-        "creditorName": "Kreditorname",
+        "accountType": "Kontotyp",
+        "accountnumber": "Kontonummer",
+        "accountName": "Kontobezeichnung",
         "startingBalance": "Anfangssaldo",
         "balance": "Saldo" ,
         "endingBalance": "Endsaldo",
@@ -393,9 +483,26 @@
         "sumDebit": "Summe Soll",
         "from": "Von",
         "to": "Bis",
-        "daten": "Daten",
+        "daten": " Daten",
         "search": "Suchen",
         "datenToolTip": "Zurück zur Datentabelle"
+    },
+    "Liquidity": {
+        "accountType": "Kontotyp",
+        "accountNumber": "Kontonummer",
+        "accountName": "Kontobezeichnung",
+        "accountTypeNewName": "Kontotyp neu",
+        "startingBalance": " Startsaldo",
+        "startingBalanceDate": " Startsaldodatum",
+        "creditLine": "Kreditlinie",
+        "creditLineFromDate": "Kreditlinie Von-Datum",
+        "creditLineToDate": "Kreditlinie Bis-Datum",
+
+        "from": "Von",
+        "to": "Bis",
+        "daten": " Daten",
+        "search": "Suchen"
+   
     }
 
   }

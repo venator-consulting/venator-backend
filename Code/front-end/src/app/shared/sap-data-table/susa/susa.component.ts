@@ -79,12 +79,12 @@ export class SusaComponent implements OnInit {
       {
         header: 'Susa.accountType',
         field: 'accountType',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'Susa.accountnumber',
         field: 'accountNumber',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'Susa.accountName',

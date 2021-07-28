@@ -36,7 +36,10 @@
         "setting": "Einstellung",
         "logout": "Logout",
         "procedures": "Verfahren",
-        "users": "Benutzer"
+        "users": "Benutzer",
+        "liquidity": "Liquidität",
+        "openingBalance" : "Startsaldo",
+        "creditLine": "Kreditlinie"
 
     },
     "Admin_Dashboard": {
@@ -486,6 +489,23 @@
         "daten": " Daten",
         "search": "Suchen",
         "datenToolTip": "Zurück zur Datentabelle"
+    },
+    "Liquidity": {
+        "accountType": "Kontotyp",
+        "accountNumber": "Kontonummer",
+        "accountName": "Kontobezeichnung",
+        "accountTypeNewName": "Kontotyp neu",
+        "startingBalance": " Startsaldo",
+        "startingBalanceDate": " Startsaldodatum",
+        "creditLine": "Kreditlinie",
+        "creditLineFromDate": "Kreditlinie Von-Datum",
+        "creditLineToDate": "Kreditlinie Bis-Datum",
+
+        "from": "Von",
+        "to": "Bis",
+        "daten": " Daten",
+        "search": "Suchen"
+   
     }
 
   }
