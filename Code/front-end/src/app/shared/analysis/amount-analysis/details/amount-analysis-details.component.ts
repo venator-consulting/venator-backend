@@ -424,6 +424,8 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     const lang = localStorage.getItem('lang');
     let criteriaWithLang = { ...this.backCriteria };
     criteriaWithLang['lang'] = lang;
+    criteriaWithLang['accountNumber'] = this.accountNumber;
+    criteriaWithLang['procedureId'] = this.prcId;
     this._exportDataService
       .exportXLSX('amount_analysis', this.orgId, this.prcId, criteriaWithLang)
       .subscribe(

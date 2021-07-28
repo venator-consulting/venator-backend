@@ -547,6 +547,8 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     const lang = localStorage.getItem('lang');
     let criteriaWithLang = { ...this.backCriteria };
     criteriaWithLang['lang'] = lang;
+    criteriaWithLang['accountNumber'] = this.accountNumber;
+    criteriaWithLang['procedureId'] = this.selectedProcedure;
     this._exportDataService
       .exportXLSX('payment_analysis', this.selectedOrganisation, this.selectedProcedure, criteriaWithLang)
       .subscribe(
