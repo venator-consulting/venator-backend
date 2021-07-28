@@ -17,7 +17,8 @@
             {{ 'CreditorsAnalysis.amountTotalBalance' | translate}}
         </ng-template>
           <h1>{{totalAmount | currency:'EUR':'symbol' }}</h1>
-          <h3>{{ 'CreditorsAnalysis.amountTotalCount' | translate}}: {{totalAmountCount}}</h3>
+          <h3>{{ 'CreditorsAnalysis.amountTotalCount' | translate}}</h3>
+          <h1>  {{totalAmountCount}} </h1>
           <br>
           <p class="amountColor" (click)="setDetails(2)"><i class="pi pi-arrow-down"></i>{{ 'CreditorsAnalysis.showDetails' | translate}} </p>
       </p-card>
@@ -28,7 +29,8 @@
         {{ 'CreditorsAnalysis.textTotalBalance' | translate}}
       </ng-template>
         <h1>{{totalText | currency:'EUR':'symbol' }}</h1>
-        <h3>{{ 'CreditorsAnalysis.textTotalCount' | translate}}: {{totalTextCount}}</h3>
+        <h3>{{ 'CreditorsAnalysis.textTotalCount' | translate}}</h3>
+        <h1>  {{totalTextCount}}</h1>
         <br>
         <p class="textColor" (click)="setDetails(1)"><i class="pi pi-arrow-down"></i> {{ 'CreditorsAnalysis.showDetails' | translate}} </p>
     </p-card>
@@ -39,7 +41,8 @@
         {{ 'CreditorsAnalysis.paymentTotalBalance' | translate}}
       </ng-template>
         <h1>{{totalPayment | currency:'EUR':'symbol' }}</h1>
-        <h3>{{ 'CreditorsAnalysis.paymentTotalCount' | translate}}: {{totalPaymentCount}}</h3>
+        <h3>{{ 'CreditorsAnalysis.paymentTotalCount' | translate}}</h3>
+        <h1>  {{totalPaymentCount}}</h1>
         <br>
         <p class="paymentColor" (click)="setDetails(3)"><i class="pi pi-arrow-down"></i> {{ 'CreditorsAnalysis.showDetails' | translate}}  </p>
 

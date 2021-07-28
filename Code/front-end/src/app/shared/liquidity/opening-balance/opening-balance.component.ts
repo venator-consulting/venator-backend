@@ -30,28 +30,28 @@ export class OpeningBalanceComponent implements OnInit {
 
     this.cols = [
       {
-        header: 'Account Number',
+        header: 'Liquidity.accountNumber',
         field: 'accountNumber',
         align: 'left'
       },
       {
-        header: 'Account Name',
+        header: 'Liquidity.accountName',
         field: 'accountName',
         align: 'left'
       },
       {
-        header: 'accountTypeNewName',
+        header: 'Liquidity.accountTypeNewName',
         field: 'accountTypeNewName',
         align: 'left'
       },
       {
-        header: 'StartingBalance',
+        header: 'Liquidity.startingBalance',
         field: 'StartingBalance',
         width: '250',
         align: 'left'
       },
       {
-        header: 'StartingBalanceDate',
+        header: 'Liquidity.startingBalanceDate',
         field: 'StartingBalanceDate',
         align: 'left'
       }

@@ -8,7 +8,7 @@ export class dataTableColumns {
   align?: string;
   width?: number;
 
-  constructor(field: string, header: string, align: string = 'left', width: number = 150) {
+  constructor(field: string, header: string, align: string = 'center', width: number = 150) {
     this.field = field;
     this.header = header;
     this.align = align;

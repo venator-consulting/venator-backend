@@ -96,7 +96,12 @@ export class NavBarComponent implements OnInit {
                             { label: elem.organisations, icon: 'pi  pi-home', routerLink: ['/admin/dashboard'], command: () => { this.sideBarShow = false } },
                         ]
                     },
-                    
+                    {
+                        label: elem.data,
+                        items: [
+                            { label: elem.data, icon: 'pi  pi-table', routerLink: ['/shared/data'], command: () => { this.sideBarShow = false } },
+                        ]
+                    },
                     {
                         label: elem.analysis,
                         items: [
@@ -109,13 +114,13 @@ export class NavBarComponent implements OnInit {
                         ]
                     },
                     {
-                        label: 'Liquidity',
+                        label: elem.liquidity,
                         items: [
-                            { label: 'Opening Balance', icon: 'pi  pi-euro', routerLink: ['/liquidity/openingBalance'], command: () => { this.sideBarShow = false } },
-                            { label: 'Credit Line', icon: 'pi  pi-euro', routerLink: ['/liquidity/creditLine'], command: () => { this.sideBarShow = false } },
-                            { label: 'Free Liquidity', icon: 'pi  pi-euro', routerLink: ['/liquidity/freeLiquidity'], command: () => { this.sideBarShow = false } },
+                            { label: elem.openingBalance, icon: 'pi  pi-plus-circle', routerLink: ['/liquidity/openingBalance'], command: () => { this.sideBarShow = false } },
+                            { label: elem.creditLine, icon: 'pi  pi-plus-circle', routerLink: ['/liquidity/creditLine'], command: () => { this.sideBarShow = false } },
+                            { label: elem.freeLiquidity, icon: 'pi  pi-chart-line', routerLink: ['/liquidity/freeLiquidity'], command: () => { this.sideBarShow = false } },
                         ]
-                    }
+                    } 
                 ];
 
                 this.userPages = [
@@ -139,12 +144,12 @@ export class NavBarComponent implements OnInit {
                             { label: elem.users, icon: 'pi pi-users', routerLink: ['/shared/user/users'], command: () => { this.sideBarShow = false } }
                         ]
                     },
-                    /*             {
+                    {
                                     label: elem.data,
                                     items: [
                                         {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
                                     ]
-                                }, */
+                    }, 
 
                 ];
 
@@ -165,12 +170,12 @@ export class NavBarComponent implements OnInit {
                             { label: elem.procedures, icon: 'pi  pi-home', routerLink: ['/shared/user/procedures'], command: () => { this.sideBarShow = false } },
                         ]
                     },
-                    /*             {
+                                {
                                     label: elem.data,
                                     items: [
                                         {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
                                     ]
-                                }, */
+                                }, 
 
                 ];
 

@@ -7,10 +7,11 @@
       </colgroup>
     </ng-template>
 
-    <ng-template pTemplate="header">
+    <ng-template pTemplate="header" >
       <tr>
-        <th pResizableColumn pReorderableColumn class="p-text-{{col.align}}" *ngFor="let col of cols">
-          {{col.header | translate}}</th>
+        <th pResizableColumn pReorderableColumn  *ngFor="let col of cols" class="p-text-{{col.align}}">
+          {{col.header | translate}}
+        </th>
         <th>{{'Data_Table.actions' | translate}}</th>
       </tr>
 

@@ -44,27 +44,27 @@ export class AdminDashboardComponent implements OnInit {
       {
         header: 'Admin_Dashboard.organisationCountry',
         field: 'country',
-        align: 'left'
+        align: 'center'
       },
       {
         header: 'Admin_Dashboard.organisationCity',
         field: 'city',
-        align: 'left'
+        align: 'center'
       },
       {
         header: 'Admin_Dashboard.organisationPostCode',
         field: 'postCode',
-        align: 'left'
+        align: 'center'
       },
       {
         header: 'Admin_Dashboard.organisationStreet',
         field: 'street',
-        align: 'left'
+        align: 'center'
       },
       {
         header: 'Admin_Dashboard.organisationHouseNr',
         field: 'houseNr',
-        align: 'left'
+        align: 'center'
       }
 
     ];
