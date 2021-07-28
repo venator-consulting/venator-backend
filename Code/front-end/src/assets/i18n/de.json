@@ -39,7 +39,8 @@
         "users": "Benutzer",
         "liquidity": "Liquidität",
         "openingBalance" : "Startsaldo",
-        "creditLine": "Kreditlinie"
+        "creditLine": "Kreditlinie",
+        "freeLiquidity": "Freie Liquidität"
 
     },
     "Admin_Dashboard": {

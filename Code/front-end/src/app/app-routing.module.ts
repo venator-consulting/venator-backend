@@ -33,6 +33,8 @@ import { CreditorAnalysisDetailsComponent } from "./shared/analysis/creditor-ana
 import { AccountTypeComponent } from "./admin/account-type/account-type.component";
 import { OpeningBalanceComponent } from "./shared/liquidity/opening-balance/opening-balance.component";
 import { CreditLineComponent } from "./shared/liquidity/credit-line/credit-line.component";
+import { FreeLiquidityComponent } from './shared/liquidity/free-liquidity/free-liquidity.component';
+import { FreeLiquidityDetailsComponent } from "./shared/liquidity/free-liquidity/free-liquidity-details/free-liquidity-details.component";
 
 
 const routes: Routes = [
@@ -74,6 +76,8 @@ const routes: Routes = [
   { path: 'admin/accountType', component: AccountTypeComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
   { path: 'liquidity/openingBalance', component: OpeningBalanceComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'liquidity/creditLine', component: CreditLineComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'liquidity/freeLiquidity', component: FreeLiquidityComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'liquidity/freeLiquidity/details/:accountNumber', component: FreeLiquidityDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
 
   { path: 'unauthorized', component: UnauthComponent },
   { path: 'resetPassword', component: ResetPasswordComponent },

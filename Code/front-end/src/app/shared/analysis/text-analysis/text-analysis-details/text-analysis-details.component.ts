@@ -233,7 +233,11 @@ export class TextAnalysisDetailsComponent implements OnInit {
             try {
               let temp = new Date(Date.parse(element[key].toString()));
               if (temp instanceof Date)
-                translatedRecord[translatedKey] = temp.toLocaleDateString('de-DE');
+                translatedRecord[translatedKey] = temp.toLocaleDateString('de-DE', {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+              });
             } catch (e) {
 
             }

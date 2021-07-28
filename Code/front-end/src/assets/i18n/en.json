@@ -41,7 +41,8 @@
         "users": "Users",
         "liquidity": "Liquidity",
         "openingBalance" : "Starting Balance",
-        "creditLine": "CreditLine"
+        "creditLine": "CreditLine",
+        "freeLiquidity": "Freie Liquidität"
     },
     "Admin_Dashboard": {
         "organisationEmail": "Email",

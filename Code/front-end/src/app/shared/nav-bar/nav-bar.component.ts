@@ -116,8 +116,9 @@ export class NavBarComponent implements OnInit {
                     {
                         label: elem.liquidity,
                         items: [
-                            { label: elem.openingBalance, icon: 'pi  pi-euro', routerLink: ['/liquidity/openingBalance'], command: () => { this.sideBarShow = false } },
-                            { label: elem.creditLine, icon: 'pi  pi-euro', routerLink: ['/liquidity/creditLine'], command: () => { this.sideBarShow = false } },
+                            { label: elem.openingBalance, icon: 'pi  pi-plus-circle', routerLink: ['/liquidity/openingBalance'], command: () => { this.sideBarShow = false } },
+                            { label: elem.creditLine, icon: 'pi  pi-plus-circle', routerLink: ['/liquidity/creditLine'], command: () => { this.sideBarShow = false } },
+                            { label: elem.freeLiquidity, icon: 'pi  pi-chart-line', routerLink: ['/liquidity/freeLiquidity'], command: () => { this.sideBarShow = false } },
                         ]
                     } 
                 ];

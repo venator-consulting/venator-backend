@@ -4,6 +4,7 @@ const passport = require('passport');
 const authorization = require('../../../config/authorization.config');
 const liquidityCtrl = require('../controller/opiningBalance.controller');
 const creditLineCtrl = require('../controller/creditLine.controller');
+const liquidityAnalysisCtrl = require('../controller/liquidityAnalysis.controller');
 
 
 router
@@ -25,6 +26,15 @@ router
         session: false
     }), authorization.canDisplayAnalysis(), creditLineCtrl.saveCreditLine);
 
+router
+    .route('/:orgId/:prcId/liquidity')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), liquidityAnalysisCtrl.getAnalysisMainData);
 
+
+router
+    .route('/:orgId/:prcId/liquidity/:accountNumber')
+    .get(liquidityAnalysisCtrl.getAnalysisDetailsData);
 
 module.exports = router;
