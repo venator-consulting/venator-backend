@@ -113,6 +113,16 @@ export class CreditLineComponent implements OnInit {
     this.newDialog = true;
   }
 
+  deleteRow(row: CreditLine) {
+    this._liquidityService
+      .deleteCreditLine(this.orgId, this.prcId, row)
+      .subscribe(res => {
+        this.data = this.data.filter(val  => val.id != row.id);
+      }, er => {
+
+      });
+  }
+
   hideDialog() {
     this.newDialog = false;
     this.newRecord = new CreditLine();

@@ -1,4 +1,5 @@
 export class CreditLine {
+    id: number;
     accountNumber: string;
     accountName: string;
     procedureId: number;

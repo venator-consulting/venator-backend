@@ -18,7 +18,9 @@ module.exports.getCreditLines = async (orgId, prcId) => {
                         left outer join
                         creditLines_${orgId} c
                         on p.accountNumber = c.accountNumber
-                        WHERE p.procedureId = :procedureId and (c.procedureId = :procedureId OR c.procedureId is null)`;
+                        WHERE p.procedureId = :procedureId 
+                        AND UPPER(p.accountTypeNewName) = 'FINANZKONTO'
+                        and (c.procedureId = :procedureId OR c.procedureId is null)`;
 
 
         const result = sequelize.query(
@@ -104,11 +106,15 @@ module.exports.save = async (orgId, prcId, creditLine) => {
     }
 };
 
-module.exports.delete = async (orgId, creditLine) => {
+module.exports.delete = async (orgId, id) => {
     try {
         return await CreditLines
             .getCreditLines('creditLines_' + orgId)
-            .destroy(creditLine);
+            .destroy({
+                where: {
+                    id: id
+                }
+            });
     } catch (error) {
         throw new Error(error.message);
     }

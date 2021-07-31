@@ -25,6 +25,11 @@ router
     .put(passport.authenticate('jwt', {
         session: false
     }), authorization.canDisplayAnalysis(), creditLineCtrl.saveCreditLine);
+    router
+    .route('/:orgId/:prcId/creditLine/:id')
+    .delete(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), creditLineCtrl.deleteCreditLine);
 
 router
     .route('/:orgId/:prcId/liquidity')
@@ -35,6 +40,8 @@ router
 
 router
     .route('/:orgId/:prcId/liquidity/:accountNumber')
-    .get(liquidityAnalysisCtrl.getAnalysisDetailsData);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.canDisplayAnalysis(), liquidityAnalysisCtrl.getAnalysisDetailsData);
 
 module.exports = router;
