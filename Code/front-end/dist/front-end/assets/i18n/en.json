@@ -38,8 +38,11 @@
         "setting": "Setting",
         "logout": "Logout",
         "procedures": "Procedures",
-        "users": "Users"
-
+        "users": "Users",
+        "liquidity": "Liquidity",
+        "openingBalance" : "Starting Balance",
+        "creditLine": "CreditLine",
+        "freeLiquidity": "Freie Liquidität"
     },
     "Admin_Dashboard": {
         "organisationEmail": "Email",

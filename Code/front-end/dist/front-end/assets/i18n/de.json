@@ -36,7 +36,11 @@
         "setting": "Einstellung",
         "logout": "Logout",
         "procedures": "Verfahren",
-        "users": "Benutzer"
+        "users": "Benutzer",
+        "liquidity": "Liquidität",
+        "openingBalance" : "Startsaldo",
+        "creditLine": "Kreditlinie",
+        "freeLiquidity": "Freie Liquidität"
 
     },
     "Admin_Dashboard": {

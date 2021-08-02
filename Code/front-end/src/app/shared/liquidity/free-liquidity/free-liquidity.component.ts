@@ -80,15 +80,20 @@ export class FreeLiquidityComponent implements OnInit {
     this.cols = [
       {
         header: 'Account Number',
-        field: 'accountNumber'
+        field: 'accountNumber',
+        align: "left"
       },
       {
         header: 'Account Name',
-        field: 'accountName'
+        field: 'accountName',
+        align: "left"
+
       },
       {
         header: 'Count',
-        field: 'count'
+        field: 'count',
+        align: "center"
+
       }
     ];
 

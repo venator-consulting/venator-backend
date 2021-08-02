@@ -4650,6 +4650,44 @@
                       _this13.sideBarShow = false;
                     }
                   }]
+                }, {
+                  label: elem.data,
+                  items: [{
+                    label: elem.table,
+                    icon: 'pi pi-table',
+                    routerLink: ['/data']
+                  }]
+                }, {
+                  label: elem.analysis,
+                  items: [{
+                    label: elem.amountAnalyisis,
+                    icon: 'pi pi-euro',
+                    routerLink: ['/analysis/amount'],
+                    command: function command() {
+                      _this13.sideBarShow = false;
+                    }
+                  }, {
+                    label: elem.textAnalysis,
+                    icon: 'pi pi-inbox',
+                    routerLink: ['/analysis/text'],
+                    command: function command() {
+                      _this13.sideBarShow = false;
+                    }
+                  }, {
+                    label: elem.paymentAnalyse,
+                    icon: 'pi pi-credit-card',
+                    routerLink: ['/analysis/payment'],
+                    command: function command() {
+                      _this13.sideBarShow = false;
+                    }
+                  }, {
+                    label: elem.creditorsAnalyse,
+                    icon: 'pi pi-chart-bar',
+                    routerLink: ['/analysis/creditor'],
+                    command: function command() {
+                      _this13.sideBarShow = false;
+                    }
+                  }]
                 }];
                 _this13.userPages = [{
                   label: elem.setting,
@@ -4668,6 +4706,44 @@
                     label: elem.procedures,
                     icon: 'pi  pi-home',
                     routerLink: ['/shared/user/procedures'],
+                    command: function command() {
+                      _this13.sideBarShow = false;
+                    }
+                  }]
+                }, {
+                  label: elem.data,
+                  items: [{
+                    label: elem.table,
+                    icon: 'pi pi-table',
+                    routerLink: ['/data']
+                  }]
+                }, {
+                  label: elem.analysis,
+                  items: [{
+                    label: elem.amountAnalyisis,
+                    icon: 'pi pi-euro',
+                    routerLink: ['/analysis/amount'],
+                    command: function command() {
+                      _this13.sideBarShow = false;
+                    }
+                  }, {
+                    label: elem.textAnalysis,
+                    icon: 'pi pi-inbox',
+                    routerLink: ['/analysis/text'],
+                    command: function command() {
+                      _this13.sideBarShow = false;
+                    }
+                  }, {
+                    label: elem.paymentAnalyse,
+                    icon: 'pi pi-credit-card',
+                    routerLink: ['/analysis/payment'],
+                    command: function command() {
+                      _this13.sideBarShow = false;
+                    }
+                  }, {
+                    label: elem.creditorsAnalyse,
+                    icon: 'pi pi-chart-bar',
+                    routerLink: ['/analysis/creditor'],
                     command: function command() {
                       _this13.sideBarShow = false;
                     }
@@ -6636,7 +6712,11 @@
                       } else if (element[key] && (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' || key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
                         try {
                           _temp = new Date(Date.parse(element[key].toString()));
-                          if (_temp instanceof Date) translatedRecord[translatedKey] = _temp.toLocaleDateString('de-DE');
+                          if (_temp instanceof Date) translatedRecord[translatedKey] = _temp.toLocaleDateString('de-DE', {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit"
+                          });
                         } catch (e) {}
                       } // end of formatting
 
@@ -13027,7 +13107,11 @@
                       } else if (element[key] && (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' || key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
                         try {
                           _temp2 = new Date(Date.parse(element[key].toString()));
-                          if (_temp2 instanceof Date) translatedRecord[translatedKey] = _temp2.toLocaleDateString('de-DE');
+                          if (_temp2 instanceof Date) translatedRecord[translatedKey] = _temp2.toLocaleDateString('de-DE', {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit"
+                          });
                         } catch (e) {}
                       } // end of formatting
 
@@ -13866,6 +13950,260 @@
     },
 
     /***/
+    "Lscj":
+    /*!************************************************************************************************************!*\
+      !*** ./src/app/shared/liquidity/free-liquidity/free-liquidity-details/free-liquidity-details.component.ts ***!
+      \************************************************************************************************************/
+
+    /*! exports provided: FreeLiquidityDetailsComponent */
+
+    /***/
+    function Lscj(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "FreeLiquidityDetailsComponent", function () {
+        return FreeLiquidityDetailsComponent;
+      });
+      /* harmony import */
+
+
+      var _angular_common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! @angular/common */
+      "ofXK");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! @angular/core */
+      "fXoL");
+      /* harmony import */
+
+
+      var src_app_shared_service_liquidity_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! src/app/shared/service/liquidity.service */
+      "wkBi");
+      /* harmony import */
+
+
+      var primeng_api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      /*! primeng/api */
+      "7zfz");
+      /* harmony import */
+
+
+      var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! @angular/router */
+      "tyNb");
+      /* harmony import */
+
+
+      var primeng_toast__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+      /*! primeng/toast */
+      "Gxio");
+      /* harmony import */
+
+
+      var primeng_breadcrumb__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+      /*! primeng/breadcrumb */
+      "URcr");
+      /* harmony import */
+
+
+      var primeng_chart__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
+      /*! primeng/chart */
+      "I5S5");
+
+      var FreeLiquidityDetailsComponent = /*#__PURE__*/function () {
+        function FreeLiquidityDetailsComponent(_liquidityService, _messageService, _router, _route) {
+          _classCallCheck(this, FreeLiquidityDetailsComponent);
+
+          this._liquidityService = _liquidityService;
+          this._messageService = _messageService;
+          this._router = _router;
+          this._route = _route;
+          this.labels = new Array();
+        }
+
+        _createClass(FreeLiquidityDetailsComponent, [{
+          key: "ngOnInit",
+          value: function ngOnInit() {
+            this.orgId = +localStorage.getItem('organisationId');
+            this.prcId = +localStorage.getItem('currentProcedureId');
+            this.procedureName = localStorage.getItem('currentProcedureName');
+            this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+            this.items = [{
+              label: 'Free Liquidity',
+              routerLink: '/liquidity/freeLiquidity',
+              routerLinkActiveOptions: {
+                exact: true
+              }
+            }, {
+              label: 'Details',
+              routerLink: this._router.url,
+              routerLinkActiveOptions: {
+                exact: true
+              }
+            }];
+            this.home = {
+              icon: 'pi pi-home',
+              label: ' Data',
+              routerLink: '/shared/data'
+            };
+            this.basicOptions = {
+              tooltips: {
+                callbacks: {
+                  label: function label(tooltipItem, data) {
+                    var value = tooltipItem.value;
+                    var currencyPipe = new _angular_common__WEBPACK_IMPORTED_MODULE_0__["CurrencyPipe"]('de');
+                    value = currencyPipe.transform(value, 'EURO', '');
+                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                    return label + ': ' + value;
+                  }
+                }
+              },
+              scales: {
+                xAxes: [{
+                  ticks: {
+                    minRotation: 40,
+                    maxRotation: 90
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    minRotation: 0,
+                    maxRotation: 0,
+                    callback: function callback(label, index, values) {
+                      // debugger;
+                      var currencyPipe = new _angular_common__WEBPACK_IMPORTED_MODULE_0__["CurrencyPipe"]('de');
+                      label = currencyPipe.transform(label, 'EURO', '');
+                      return label;
+                    }
+                  }
+                }]
+              }
+            };
+            this.getData();
+          } // end of ng on init
+
+        }, {
+          key: "getData",
+          value: function getData() {
+            var _this33 = this;
+
+            this._liquidityService.getFreeLiquidityDetails(this.orgId, this.prcId, this.accountNumber).subscribe(function (res) {
+              _this33.accountName = res.bankBalances.accountName;
+              _this33.basicData = {
+                labels: res.bankBalances.labels,
+                datasets: [{
+                  type: 'line',
+                  label: 'Credit Lines',
+                  borderColor: '#42A5F5',
+                  borderWidth: 2,
+                  fill: false,
+                  data: res.creditLines
+                }, {
+                  type: 'line',
+                  label: 'Free Liquidity',
+                  fill: false,
+                  data: res.freeLiquidity,
+                  borderColor: '#E5A58B',
+                  borderWidth: 2
+                }, {
+                  type: 'bar',
+                  label: 'Bank Balances',
+                  backgroundColor: '#88FF88',
+                  borderColor: '#58dF58',
+                  data: res.bankBalances.bankBalances
+                }]
+              };
+            }, function (er) {});
+          } // end of ng on init
+
+        }]);
+
+        return FreeLiquidityDetailsComponent;
+      }();
+
+      FreeLiquidityDetailsComponent.ɵfac = function FreeLiquidityDetailsComponent_Factory(t) {
+        return new (t || FreeLiquidityDetailsComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_shared_service_liquidity_service__WEBPACK_IMPORTED_MODULE_2__["LiquidityService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](primeng_api__WEBPACK_IMPORTED_MODULE_3__["MessageService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"]));
+      };
+
+      FreeLiquidityDetailsComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({
+        type: FreeLiquidityDetailsComponent,
+        selectors: [["app-free-liquidity-details"]],
+        decls: 12,
+        vars: 6,
+        consts: [[3, "model", "home"], [1, "p-grid"], [1, "p-col-12"], [1, "p-text-center"], [1, "card"], ["type", "bar", "height", "350px", 3, "data", "options"]],
+        template: function FreeLiquidityDetailsComponent_Template(rf, ctx) {
+          if (rf & 1) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "p-toast");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "p-breadcrumb", 0);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "div", 1);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "div", 2);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "h2", 3);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](5);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](6, "h4", 3);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](7);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](8, "div", 1);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](9, "div", 2);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](10, "div", 4);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](11, "p-chart", 5);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+          }
+
+          if (rf & 2) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("model", ctx.items)("home", ctx.home);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](4);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](ctx.procedureName);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](ctx.accountName);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](4);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("data", ctx.basicData)("options", ctx.basicOptions);
+          }
+        },
+        directives: [primeng_toast__WEBPACK_IMPORTED_MODULE_5__["Toast"], primeng_breadcrumb__WEBPACK_IMPORTED_MODULE_6__["Breadcrumb"], primeng_chart__WEBPACK_IMPORTED_MODULE_7__["UIChart"]],
+        styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJmcmVlLWxpcXVpZGl0eS1kZXRhaWxzLmNvbXBvbmVudC5zYXNzIn0= */"]
+      });
+      /***/
+    },
+
+    /***/
     "MB6t":
     /*!**************************************************************!*\
       !*** ./src/app/shared/sap-data-table/susa/susa.component.ts ***!
@@ -14395,7 +14733,7 @@
         _createClass(SusaComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this33 = this;
+            var _this34 = this;
 
             this.waiting = true;
             this.items = [{
@@ -14418,27 +14756,27 @@
             this.procedureName = localStorage.getItem('currentProcedureName');
 
             this._postingDataService.getDefaultSusaDateRange(this.organisationId, this.procedureId).subscribe(function (res) {
-              _this33.fromDate = new Date(Date.parse(res[0].mindate));
-              _this33.toDate = new Date(Date.parse(res[0].maxdate));
+              _this34.fromDate = new Date(Date.parse(res[0].mindate));
+              _this34.toDate = new Date(Date.parse(res[0].maxdate));
 
-              var minYear = _this33.fromDate.getFullYear(); // debugger;
+              var minYear = _this34.fromDate.getFullYear(); // debugger;
 
 
               if (isNaN(minYear)) {
-                _this33.fromDate = _this33.toDate = new Date();
-                _this33.waiting = false;
+                _this34.fromDate = _this34.toDate = new Date();
+                _this34.waiting = false;
 
-                _this33._messageService.add({
+                _this34._messageService.add({
                   severity: 'error',
                   summary: 'ERROR',
                   life: 10000,
                   detail: "There is no dates in this procedure"
                 });
               } else {
-                _this33.getData();
+                _this34.getData();
               }
             }, function (er) {
-              _this33._messageService.add({
+              _this34._messageService.add({
                 severity: 'error',
                 summary: 'ERROR',
                 life: 10000,
@@ -14484,7 +14822,7 @@
         }, {
           key: "getData",
           value: function getData() {
-            var _this34 = this;
+            var _this35 = this;
 
             this.waiting = true;
             this.searching = true;
@@ -14499,11 +14837,11 @@
             var tdate = this.datepipe.transform(this.toDate, 'yyyy-MM-dd');
 
             this._postingDataService.getSusa(this.organisationId, this.procedureId, fdate, tdate, this.criteria).subscribe(function (res) {
-              _this34.data = res;
-              _this34.waiting = false;
-              _this34.searching = false;
+              _this35.data = res;
+              _this35.waiting = false;
+              _this35.searching = false;
             }, function (er) {
-              _this34._messageService.add({
+              _this35._messageService.add({
                 severity: 'error',
                 summary: 'ERROR',
                 life: 10000,
@@ -14529,14 +14867,14 @@
         }, {
           key: "exportExcel",
           value: function exportExcel() {
-            var _this35 = this;
+            var _this36 = this;
 
             __webpack_require__.e(
             /*! import() | xlsx */
             "xlsx").then(__webpack_require__.t.bind(null,
             /*! xlsx */
             "EUZL", 7)).then(function (xlsx) {
-              var worksheet = xlsx.utils.json_to_sheet(_this35.data);
+              var worksheet = xlsx.utils.json_to_sheet(_this36.data);
               var workbook = {
                 Sheets: {
                   'susa': worksheet
@@ -14548,7 +14886,7 @@
                 type: 'array'
               });
 
-              _this35.saveAsExcelFile(excelBuffer, "SuSa");
+              _this36.saveAsExcelFile(excelBuffer, "SuSa");
             });
           }
         }, {
@@ -14940,10 +15278,10 @@
         _createClass(ProcedureRegistrationComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this36 = this;
+            var _this37 = this;
 
             this._orgService.get().subscribe(function (data) {
-              _this36.orgs = data;
+              _this37.orgs = data;
             }, function (error) {
               return console.log(error);
             });
@@ -14951,17 +15289,17 @@
         }, {
           key: "submitHandler",
           value: function submitHandler() {
-            var _this37 = this;
+            var _this38 = this;
 
             this._roleServiceService.addProcedure(this.procedureModel).subscribe(function (res) {
               // console.dir('done: ' + res);
-              _this37._messageService.add({
+              _this38._messageService.add({
                 severity: 'success',
                 summary: 'Registered successfully!',
                 detail: 'Registered successfully'
               });
             }, function (err) {
-              _this37._translateService.get("ErrorHandler").subscribe(function (elem) {
+              _this38._translateService.get("ErrorHandler").subscribe(function (elem) {
                 var errorMsg = "";
 
                 if (err.status === 400) {
@@ -14976,7 +15314,7 @@
                   errorMsg = elem.internalServerError_500;
                 }
 
-                _this37._messageService.add({
+                _this38._messageService.add({
                   severity: 'error',
                   summary: 'ERROR',
                   life: 10000,
@@ -20968,33 +21306,33 @@
         _createClass(ImportComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this38 = this;
+            var _this39 = this;
 
             this._translateService.get('Admin_Import').subscribe(function (elem) {
-              _this38.items = [{
+              _this39.items = [{
                 label: elem.firstStepLabel,
                 command: function command(event) {
-                  _this38.activeIndex = 0; // this._messageService.add({severity:'info', summary:'First Step', detail: event.item.label});
+                  _this39.activeIndex = 0; // this._messageService.add({severity:'info', summary:'First Step', detail: event.item.label});
                 }
               }, {
                 label: elem.secondStepLabel,
                 command: function command(event) {
-                  _this38.activeIndex = 1;
+                  _this39.activeIndex = 1;
                 }
               }, {
                 label: elem.thirdStepLabel,
                 command: function command(event) {
-                  _this38.activeIndex = 2;
+                  _this39.activeIndex = 2;
                 }
               }, {
                 label: elem.firthStepLabel,
                 command: function command(event) {
-                  _this38.activeIndex = 3;
+                  _this39.activeIndex = 3;
                 }
               }];
 
-              _this38._orgService.get().subscribe(function (data) {
-                _this38.orgs = data;
+              _this39._orgService.get().subscribe(function (data) {
+                _this39.orgs = data;
               }, function (error) {
                 return console.log(error);
               });
@@ -21004,11 +21342,11 @@
         }, {
           key: "orgChangedHandler",
           value: function orgChangedHandler(e) {
-            var _this39 = this;
+            var _this40 = this;
 
             if (e.value > 0) {
               this._orgService.getProcedures(e.value).subscribe(function (data) {
-                _this39.procedures = data;
+                _this40.procedures = data;
               }, function (error) {
                 return console.log(error);
               });
@@ -21058,7 +21396,7 @@
         }, {
           key: "deleteFileFromServer",
           value: function deleteFileFromServer(f, index) {
-            var _this40 = this;
+            var _this41 = this;
 
             this.waiting = true;
             var nameOnServer = f === null || f === void 0 ? void 0 : f.nameOnServer;
@@ -21067,24 +21405,24 @@
               this._importService.deleteFile({
                 nameOnServer: nameOnServer
               }).subscribe(function (res) {
-                _this40.waiting = false;
+                _this41.waiting = false;
 
-                _this40._messageService.add({
+                _this41._messageService.add({
                   severity: 'success',
                   summary: 'File Deleted!',
-                  detail: 'the file ' + _this40.filesList[index].orginalName + ' deleted successfuly!'
+                  detail: 'the file ' + _this41.filesList[index].orginalName + ' deleted successfuly!'
                 });
 
                 debugger;
 
-                _this40.removeFormData(index);
+                _this41.removeFormData(index);
               }, function (err) {
-                _this40.waiting = false;
+                _this41.waiting = false;
 
-                _this40._messageService.add({
+                _this41._messageService.add({
                   severity: 'warning',
                   summary: 'File not Deleted!',
-                  detail: 'the file ' + _this40.filesList[index].orginalName + ' not found on the server!'
+                  detail: 'the file ' + _this41.filesList[index].orginalName + ' not found on the server!'
                 });
               });
             } else {
@@ -21099,7 +21437,7 @@
         }, {
           key: "uploadFirstStep",
           value: function uploadFirstStep(f, index) {
-            var _this41 = this;
+            var _this42 = this;
 
             var _a, _b, _c;
 
@@ -21137,8 +21475,8 @@
 
             this._importService.uploadFile(formData).subscribe(function (res) {
               // console.dir('done: ' + res);
-              _this41.waiting = false;
-              _this41.tempheader = res.headers;
+              _this42.waiting = false;
+              _this42.tempheader = res.headers;
               f.fileHeader = new Array();
 
               for (var _index = 0; _index < res.headers.length; _index++) {
@@ -21154,26 +21492,26 @@
               f.defaultTemplate = res.defaultTemplate;
 
               if (fileClass === 1) {
-                _this41.accountsCustomTemplate = res.defaultTemplate;
+                _this42.accountsCustomTemplate = res.defaultTemplate;
               } else if (fileClass === 2) {
-                _this41.postingCustomTemplate = res.defaultTemplate;
+                _this42.postingCustomTemplate = res.defaultTemplate;
               } else if (fileClass === 3) {
-                _this41.headCustomTemplate = res.defaultTemplate;
+                _this42.headCustomTemplate = res.defaultTemplate;
               }
 
               f.uploaded = true;
-              _this41.currentFileIndex = index; // console.dir(this.filesList);
+              _this42.currentFileIndex = index; // console.dir(this.filesList);
 
-              _this41._messageService.add({
+              _this42._messageService.add({
                 severity: 'success',
                 summary: 'File uploaded!',
-                detail: 'the file ' + _this41.filesList[_this41.currentFileIndex].orginalName + ' uploaded successfuly! you can upload another file now'
+                detail: 'the file ' + _this42.filesList[_this42.currentFileIndex].orginalName + ' uploaded successfuly! you can upload another file now'
               });
             }, function (err) {
               // console.log('error: ' + err);
-              _this41.waiting = false;
+              _this42.waiting = false;
 
-              _this41._messageService.add({
+              _this42._messageService.add({
                 severity: 'error',
                 summary: 'ERROR!',
                 detail: 'There is an error occured, please try again!'
@@ -21192,7 +21530,7 @@
         }, {
           key: "importThisFile",
           value: function importThisFile() {
-            var _this42 = this;
+            var _this43 = this;
 
             var _a, _b, _c, _d;
 
@@ -21231,20 +21569,20 @@
 
             this._importService.importFile(data).subscribe(function (res) {
               // console.dir('done: ' + res);
-              _this42.waiting = false;
-              _this42.filesList[_this42.currentFileIndex].imported = true; // console.dir(this.filesList);
+              _this43.waiting = false;
+              _this43.filesList[_this43.currentFileIndex].imported = true; // console.dir(this.filesList);
 
-              _this42._messageService.add({
+              _this43._messageService.add({
                 severity: 'success',
                 summary: 'File imported!',
-                detail: 'the file ' + _this42.filesList[_this42.currentFileIndex].orginalName + ' imported successfuly! you can import another file now'
+                detail: 'the file ' + _this43.filesList[_this43.currentFileIndex].orginalName + ' imported successfuly! you can import another file now'
               });
             }, function (err) {
               // debugger;
               // console.log('error: ' + err.error.error);
-              _this42.waiting = false;
+              _this43.waiting = false;
 
-              _this42._messageService.add({
+              _this43._messageService.add({
                 severity: 'error',
                 summary: 'ERROR!',
                 detail: err.error.error
@@ -21789,17 +22127,17 @@
         }, {
           key: "submitHandler",
           value: function submitHandler() {
-            var _this43 = this;
+            var _this44 = this;
 
             this._roleServiceService.editProcedure(this.procedureModel).subscribe(function (res) {
               // console.dir('done: ' + res);
-              _this43._messageService.add({
+              _this44._messageService.add({
                 severity: 'success',
                 summary: 'updated successfully!',
                 detail: 'updated successfully'
               });
             }, function (err) {
-              _this43._translateService.get("ErrorHandler").subscribe(function (elem) {
+              _this44._translateService.get("ErrorHandler").subscribe(function (elem) {
                 var errorMsg = "";
 
                 if (err.status === 400) {
@@ -21814,7 +22152,7 @@
                   errorMsg = elem.internalServerError_500;
                 }
 
-                _this43._messageService.add({
+                _this44._messageService.add({
                   severity: 'error',
                   summary: 'ERROR',
                   life: 10000,
@@ -22210,7 +22548,7 @@
         _createClass(CreditorAnalysisDetailsComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this44 = this;
+            var _this45 = this;
 
             this.selectedOrganisation = +localStorage.getItem('organisationId');
             this.selectedProcedure = +localStorage.getItem('currentProcedureId');
@@ -22218,7 +22556,7 @@
             this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
 
             this._translateService.get('CreditorsAnalysis').subscribe(function (elem) {
-              _this44.items = [// { label: 'Analysis' },
+              _this45.items = [// { label: 'Analysis' },
               {
                 label: elem.label,
                 routerLink: '/analysis/creditor',
@@ -22227,37 +22565,37 @@
                 }
               }, {
                 label: 'Details',
-                routerLink: _this44._router.url,
+                routerLink: _this45._router.url,
                 routerLinkActiveOptions: {
                   exact: true
                 }
               }];
-              _this44.home = {
+              _this45.home = {
                 icon: 'pi pi-home',
                 label: elem.data,
                 routerLink: '/shared/data'
               };
 
-              _this44._analysisService.getCreditorAnalysisDetails(_this44.selectedOrganisation, _this44.selectedProcedure, _this44.accountNumber).subscribe(function (res) {
+              _this45._analysisService.getCreditorAnalysisDetails(_this45.selectedOrganisation, _this45.selectedProcedure, _this45.accountNumber).subscribe(function (res) {
                 var _a;
 
-                _this44.totalAmount = res.amount.length > 0 ? res.amount[0].totalBalance : 0;
-                _this44.totalAmountCount = res.amount.length > 0 ? res.amount[0].totlaCount : 0;
-                _this44.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
-                _this44.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
-                _this44.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
-                _this44.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
-                _this44.accountName = res.text.length > 0 ? res.text[0].accountName : res.amount.length > 0 ? res.amount[0].accountName : (_a = res.payment[0]) === null || _a === void 0 ? void 0 : _a.accountName;
-                _this44.chartData = {
+                _this45.totalAmount = res.amount.length > 0 ? res.amount[0].totalBalance : 0;
+                _this45.totalAmountCount = res.amount.length > 0 ? res.amount[0].totlaCount : 0;
+                _this45.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
+                _this45.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
+                _this45.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
+                _this45.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
+                _this45.accountName = res.text.length > 0 ? res.text[0].accountName : res.amount.length > 0 ? res.amount[0].accountName : (_a = res.payment[0]) === null || _a === void 0 ? void 0 : _a.accountName;
+                _this45.chartData = {
                   labels: [elem.amountLabel, elem.textLabel, elem.paymentLabel],
                   datasets: [{
-                    data: [_this44.totalAmount, _this44.totalText, _this44.totalPayment],
+                    data: [_this45.totalAmount, _this45.totalText, _this45.totalPayment],
                     backgroundColor: ["#95ca14", "#587bc7", "#fc6521"],
                     hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
                   }]
                 };
               }, function (er) {
-                _this44._messageService.add({
+                _this45._messageService.add({
                   severity: 'error',
                   summary: 'ERROR',
                   life: 10000,
@@ -23106,7 +23444,7 @@
         _createClass(DocumentTypeComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this45 = this;
+            var _this46 = this;
 
             this.docTypes.push({
               id: 0,
@@ -23114,15 +23452,15 @@
             });
 
             this._orgService.get().subscribe(function (data) {
-              _this45.orgs = data;
+              _this46.orgs = data;
             }, function (error) {
               return console.log(error);
             });
 
             this._docTypesService.getDocTypesEnum().subscribe(function (data) {
-              var _this45$docTypes;
+              var _this46$docTypes;
 
-              (_this45$docTypes = _this45.docTypes).push.apply(_this45$docTypes, _toConsumableArray(data));
+              (_this46$docTypes = _this46.docTypes).push.apply(_this46$docTypes, _toConsumableArray(data));
             }, function (error) {
               return console.log(error);
             });
@@ -23152,33 +23490,33 @@
         }, {
           key: "cancel",
           value: function cancel(row) {
-            var _this46 = this;
+            var _this47 = this;
 
             var _a;
 
             row.documentTypeNewId = this.originalVal;
             row.documentTypeNewName = (_a = this.docTypes.filter(function (row) {
-              return row.id == _this46.originalVal;
+              return row.id == _this47.originalVal;
             })[0]) === null || _a === void 0 ? void 0 : _a.documentTypeName;
             row.isEditable = false;
           }
         }, {
           key: "save",
           value: function save(row) {
-            var _this47 = this;
+            var _this48 = this;
 
             // alert(JSON.stringify(row));
             this._docTypesService.updateNewDocType(this.selectedOrgId, this.selectedPrcId, row).subscribe(function (res) {
               row.isEditable = false;
               var numOfRecords = res.length > 0 ? res[0] : 0;
 
-              _this47._messageService.add({
+              _this48._messageService.add({
                 severity: 'success',
                 summary: 'DONE!',
                 detail: "Document new type is updated successfully in the targeted posting data, \n ".concat(numOfRecords, " updated.")
               });
             }, function (er) {
-              _this47._messageService.add({
+              _this48._messageService.add({
                 severity: 'error',
                 summary: 'ERROR!',
                 detail: er.error.error
@@ -23188,13 +23526,13 @@
         }, {
           key: "orgChangedHandler",
           value: function orgChangedHandler(e) {
-            var _this48 = this;
+            var _this49 = this;
 
             this.selectedPrcId = 0;
 
             if (e.value > 0) {
               this._orgService.getProcedures(e.value).subscribe(function (data) {
-                _this48.procedures = data;
+                _this49.procedures = data;
               }, function (error) {
                 return console.log(error);
               });
@@ -23203,11 +23541,11 @@
         }, {
           key: "prcChangedHandler",
           value: function prcChangedHandler(e) {
-            var _this49 = this;
+            var _this50 = this;
 
             if (e.value > 0) {
               this._docTypesService.getPostingDocTypes(this.selectedOrgId, e.value).subscribe(function (data) {
-                _this49.postingDocTypes = data;
+                _this50.postingDocTypes = data;
               }, function (error) {
                 return console.log(error);
               });
@@ -23860,7 +24198,7 @@
         _createClass(AccountTypeComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this50 = this;
+            var _this51 = this;
 
             this.accountTypes.push({
               id: 0,
@@ -23868,15 +24206,15 @@
             });
 
             this._orgService.get().subscribe(function (data) {
-              _this50.orgs = data;
+              _this51.orgs = data;
             }, function (error) {
               return console.log(error);
             });
 
             this._postingService.getAccountTypesEnum().subscribe(function (data) {
-              var _this50$accountTypes;
+              var _this51$accountTypes;
 
-              (_this50$accountTypes = _this50.accountTypes).push.apply(_this50$accountTypes, _toConsumableArray(data));
+              (_this51$accountTypes = _this51.accountTypes).push.apply(_this51$accountTypes, _toConsumableArray(data));
             }, function (error) {
               return console.log(error);
             });
@@ -23903,13 +24241,13 @@
         }, {
           key: "orgChangedHandler",
           value: function orgChangedHandler(e) {
-            var _this51 = this;
+            var _this52 = this;
 
             this.selectedPrcId = 0;
 
             if (e.value > 0) {
               this._orgService.getProcedures(e.value).subscribe(function (data) {
-                _this51.procedures = data;
+                _this52.procedures = data;
               }, function (error) {
                 return console.log(error);
               });
@@ -23918,11 +24256,11 @@
         }, {
           key: "prcChangedHandler",
           value: function prcChangedHandler(e) {
-            var _this52 = this;
+            var _this53 = this;
 
             if (e.value > 0) {
               this._postingService.getPostingAccountTypes(this.selectedOrgId, this.selectedPrcId).subscribe(function (data) {
-                _this52.postingAccountTypes = data;
+                _this53.postingAccountTypes = data;
               }, function (error) {
                 return console.log(error);
               });
@@ -23944,32 +24282,32 @@
         }, {
           key: "cancel",
           value: function cancel(row) {
-            var _this53 = this;
+            var _this54 = this;
 
             var _a;
 
             row.accountTypeNewId = this.originalVal;
             row.accountTypeNewName = (_a = this.accountTypes.filter(function (row) {
-              return row.id == _this53.originalVal;
+              return row.id == _this54.originalVal;
             })[0]) === null || _a === void 0 ? void 0 : _a.AccountTypeName;
             row.isEditable = false;
           }
         }, {
           key: "save",
           value: function save(row) {
-            var _this54 = this;
+            var _this55 = this;
 
             this._postingService.updateNewAccountType(this.selectedOrgId, this.selectedPrcId, row).subscribe(function (res) {
               row.isEditable = false;
               var numOfRecords = res.length > 0 ? res[0] : 0;
 
-              _this54._messageService.add({
+              _this55._messageService.add({
                 severity: 'success',
                 summary: 'DONE!',
                 detail: "Account new type is updated successfully in the targeted posting data, \n ".concat(numOfRecords, " updated.")
               });
             }, function (er) {
-              _this54._messageService.add({
+              _this55._messageService.add({
                 severity: 'error',
                 summary: 'ERROR!',
                 detail: er.error.error
@@ -24392,10 +24730,10 @@
         _createClass(OrganisationUsersComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this55 = this;
+            var _this56 = this;
 
             this._userService.getUsers(this.organisationId).subscribe(function (data) {
-              _this55.users = data; // console.log(data)
+              _this56.users = data; // console.log(data)
             }, function (error) {
               return console.log(error);
             }, function () {});
@@ -25202,63 +25540,63 @@
       /* harmony import */
 
 
-      var _service_procedure_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(
-      /*! ../service/procedure.service */
-      "RjVw");
-      /* harmony import */
-
-
-      var primeng_toast__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
+      var primeng_toast__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(
       /*! primeng/toast */
       "Gxio");
       /* harmony import */
 
 
-      var primeng_table__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
+      var primeng_table__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
       /*! primeng/table */
       "rEr+");
       /* harmony import */
 
 
-      var primeng_button__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
+      var primeng_button__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
       /*! primeng/button */
       "jIHw");
       /* harmony import */
 
 
-      var primeng_tooltip__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
+      var primeng_tooltip__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
       /*! primeng/tooltip */
       "xlun");
       /* harmony import */
 
 
-      var primeng_dropdown__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(
+      var primeng_dropdown__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
       /*! primeng/dropdown */
       "arFO");
       /* harmony import */
 
 
-      var _angular_forms__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(
+      var _angular_forms__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(
       /*! @angular/forms */
       "3Pt+");
       /* harmony import */
 
 
-      var primeng_inputtext__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(
+      var primeng_inputtext__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(
       /*! primeng/inputtext */
       "7kUa");
       /* harmony import */
 
 
-      var _angular_common__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(
+      var _angular_common__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(
       /*! @angular/common */
       "ofXK");
       /* harmony import */
 
 
-      var primeng_autocomplete__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(
+      var primeng_autocomplete__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(
       /*! primeng/autocomplete */
       "V5BG");
+      /* harmony import */
+
+
+      var primeng_calendar__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(
+      /*! primeng/calendar */
+      "eO1q");
 
       function SAPDataTableComponent_ng_template_7_button_13_Template(rf, ctx) {
         if (rf & 1) {
@@ -25522,63 +25860,103 @@
         };
       };
 
-      function SAPDataTableComponent_ng_template_9_th_3_Template(rf, ctx) {
+      function SAPDataTableComponent_ng_template_9_th_3_p_autoComplete_1_Template(rf, ctx) {
         if (rf & 1) {
-          var _r25 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵgetCurrentView"]();
+          var _r28 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵgetCurrentView"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "th", 26);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "p-autoComplete", 29);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "p-autoComplete", 27);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("completeMethod", function SAPDataTableComponent_ng_template_9_th_3_p_autoComplete_1_Template_p_autoComplete_completeMethod_0_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r28);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("completeMethod", function SAPDataTableComponent_ng_template_9_th_3_Template_p_autoComplete_completeMethod_1_listener($event) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r25);
-
-            var col_r23 = ctx.$implicit;
-
-            var ctx_r24 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
-
-            return ctx_r24.filterChange($event.query, col_r23.field);
-          })("onClear", function SAPDataTableComponent_ng_template_9_th_3_Template_p_autoComplete_onClear_1_listener($event) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r25);
-
-            var col_r23 = ctx.$implicit;
+            var col_r23 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
 
             var ctx_r26 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
 
             return ctx_r26.filterChange($event.query, col_r23.field);
-          })("onSelect", function SAPDataTableComponent_ng_template_9_th_3_Template_p_autoComplete_onSelect_1_listener($event) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r25);
+          })("onClear", function SAPDataTableComponent_ng_template_9_th_3_p_autoComplete_1_Template_p_autoComplete_onClear_0_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r28);
 
-            var col_r23 = ctx.$implicit;
-
-            var ctx_r27 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
-
-            return ctx_r27.filterChange($event.word, col_r23.field);
-          })("ngModelChange", function SAPDataTableComponent_ng_template_9_th_3_Template_p_autoComplete_ngModelChange_1_listener($event) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r25);
-
-            var col_r23 = ctx.$implicit;
-
-            var ctx_r28 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
-
-            return ctx_r28.criteria[col_r23.field] = $event;
-          });
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](2, "i", 28);
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("click", function SAPDataTableComponent_ng_template_9_th_3_Template_i_click_2_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r25);
+            var col_r23 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
 
             var ctx_r29 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
 
-            return ctx_r29.submitFilter();
+            return ctx_r29.filterChange($event.query, col_r23.field);
+          })("onSelect", function SAPDataTableComponent_ng_template_9_th_3_p_autoComplete_1_Template_p_autoComplete_onSelect_0_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r28);
+
+            var col_r23 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
+
+            var ctx_r31 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
+
+            return ctx_r31.filterChange($event.word, col_r23.field);
+          })("ngModelChange", function SAPDataTableComponent_ng_template_9_th_3_p_autoComplete_1_Template_p_autoComplete_ngModelChange_0_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r28);
+
+            var col_r23 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
+
+            var ctx_r33 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
+
+            return ctx_r33.criteria[col_r23.field] = $event;
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpipe"](3, "translate");
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+        }
+
+        if (rf & 2) {
+          var col_r23 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
+
+          var ctx_r24 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵstyleMap"](_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpureFunction0"](6, _c1));
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("suggestions", ctx_r24.completeWords)("minLength", 1)("inputStyle", _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpureFunction0"](7, _c1))("ngModel", ctx_r24.criteria[col_r23.field]);
+        }
+      }
+
+      function SAPDataTableComponent_ng_template_9_th_3_p_calendar_2_Template(rf, ctx) {
+        if (rf & 1) {
+          var _r37 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵgetCurrentView"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "p-calendar", 30);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵlistener"]("ngModelChange", function SAPDataTableComponent_ng_template_9_th_3_p_calendar_2_Template_p_calendar_ngModelChange_0_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r37);
+
+            var col_r23 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
+
+            var ctx_r36 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
+
+            return ctx_r36.criteria[col_r23.field] = $event;
+          })("onSelect", function SAPDataTableComponent_ng_template_9_th_3_p_calendar_2_Template_p_calendar_onSelect_0_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵrestoreView"](_r37);
+
+            var col_r23 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
+
+            var ctx_r39 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
+
+            return ctx_r39.filterChange($event, col_r23.field);
+          });
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
+        }
+
+        if (rf & 2) {
+          var col_r23 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
+
+          var ctx_r25 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngModel", ctx_r25.criteria[col_r23.field])("monthNavigator", true)("yearNavigator", true);
+        }
+      }
+
+      function SAPDataTableComponent_ng_template_9_th_3_Template(rf, ctx) {
+        if (rf & 1) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "th", 26);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, SAPDataTableComponent_ng_template_9_th_3_p_autoComplete_1_Template, 1, 8, "p-autoComplete", 27);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](2, SAPDataTableComponent_ng_template_9_th_3_p_calendar_2_Template, 1, 3, "p-calendar", 28);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         }
@@ -25586,17 +25964,13 @@
         if (rf & 2) {
           var col_r23 = ctx.$implicit;
 
-          var ctx_r21 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"](2);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](1);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngIf", col_r23.field != "documentDate" && col_r23.field != "dueDate" && col_r23.field != "applicationDate" && col_r23.field != "postingDate" && col_r23.field != "executionDate");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](1);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵstyleMap"](_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpureFunction0"](9, _c1));
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("suggestions", ctx_r21.completeWords)("minLength", 1)("inputStyle", _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpureFunction0"](10, _c1))("ngModel", ctx_r21.criteria[col_r23.field]);
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](1);
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpropertyInterpolate"]("pTooltip", _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpipeBind1"](3, 7, "Data_Table.filter"));
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngIf", col_r23.field == "documentDate" || col_r23.field == "dueDate" || col_r23.field == "applicationDate" || col_r23.field == "postingDate" || col_r23.field == "executionDate");
         }
       }
 
@@ -25610,7 +25984,7 @@
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](2, "tr");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](3, SAPDataTableComponent_ng_template_9_th_3_Template, 4, 11, "th", 23);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](3, SAPDataTableComponent_ng_template_9_th_3_Template, 3, 2, "th", 23);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         }
@@ -25636,7 +26010,7 @@
 
       function SAPDataTableComponent_ng_template_10_td_1_ng_template_2_Template(rf, ctx) {
         if (rf & 1) {
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "span", 34);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "span", 36);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtext"](1);
 
@@ -25644,15 +26018,15 @@
         }
 
         if (rf & 2) {
-          var col_r32 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
+          var col_r44 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
 
-          var rowData_r30 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
+          var rowData_r42 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpropertyInterpolate"]("pTooltip", rowData_r30[col_r32.field]);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpropertyInterpolate"]("pTooltip", rowData_r42[col_r44.field]);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](1);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtextInterpolate1"](" ", rowData_r30[col_r32.field], " ");
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtextInterpolate1"](" ", rowData_r42[col_r44.field], " ");
         }
       }
 
@@ -25666,39 +26040,39 @@
         }
 
         if (rf & 2) {
-          var col_r32 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
+          var col_r44 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
 
-          var rowData_r30 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
+          var rowData_r42 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵnextContext"]().$implicit;
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtextInterpolate1"](" ", col_r32.field == "balance" || col_r32.field == "debitAmount" || col_r32.field == "creditAmount" ? _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpipeBind3"](1, 1, rowData_r30[col_r32.field], "EUR", "") : _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpipeBind2"](2, 5, rowData_r30[col_r32.field], "dd.MM.yyyy"), " ");
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtextInterpolate1"](" ", col_r44.field == "balance" || col_r44.field == "debitAmount" || col_r44.field == "creditAmount" ? _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpipeBind3"](1, 1, rowData_r42[col_r44.field], "EUR", "") : _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵpipeBind2"](2, 5, rowData_r42[col_r44.field], "dd.MM.yyyy"), " ");
         }
       }
 
       function SAPDataTableComponent_ng_template_10_td_1_Template(rf, ctx) {
         if (rf & 1) {
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "td", 30);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "td", 32);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, SAPDataTableComponent_ng_template_10_td_1_div_1_Template, 1, 0, "div", 31);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, SAPDataTableComponent_ng_template_10_td_1_div_1_Template, 1, 0, "div", 33);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](2, SAPDataTableComponent_ng_template_10_td_1_ng_template_2_Template, 2, 2, "ng-template", null, 32, _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplateRefExtractor"]);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](2, SAPDataTableComponent_ng_template_10_td_1_ng_template_2_Template, 2, 2, "ng-template", null, 34, _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplateRefExtractor"]);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](4, SAPDataTableComponent_ng_template_10_td_1_ng_template_4_Template, 3, 8, "ng-template", null, 33, _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplateRefExtractor"]);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](4, SAPDataTableComponent_ng_template_10_td_1_ng_template_4_Template, 3, 8, "ng-template", null, 35, _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplateRefExtractor"]);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         }
 
         if (rf & 2) {
-          var col_r32 = ctx.$implicit;
+          var col_r44 = ctx.$implicit;
 
-          var _r34 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵreference"](3);
+          var _r46 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵreference"](3);
 
-          var _r36 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵreference"](5);
+          var _r48 = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵreference"](5);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵclassMapInterpolate1"]("p-text-", col_r32.align, "");
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵclassMapInterpolate1"]("p-text-", col_r44.align, "");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](1);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngIf", col_r32.field == "balance" || col_r32.field == "debitAmount" || col_r32.field == "creditAmount" || col_r32.field == "documentDate" || col_r32.field == "executionDate" || col_r32.field == "dueDate" || col_r32.field == "postingDate" || col_r32.field == "applicationDate")("ngIfThen", _r36)("ngIfElse", _r34);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngIf", col_r44.field == "balance" || col_r44.field == "debitAmount" || col_r44.field == "creditAmount" || col_r44.field == "documentDate" || col_r44.field == "executionDate" || col_r44.field == "dueDate" || col_r44.field == "postingDate" || col_r44.field == "applicationDate")("ngIfThen", _r48)("ngIfElse", _r46);
         }
       }
 
@@ -25706,7 +26080,7 @@
         if (rf & 1) {
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "tr");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, SAPDataTableComponent_ng_template_10_td_1_Template, 6, 6, "td", 29);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtemplate"](1, SAPDataTableComponent_ng_template_10_td_1_Template, 6, 6, "td", 31);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         }
@@ -25724,7 +26098,7 @@
         if (rf & 1) {
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "tr");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "td", 35);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "td", 37);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵtext"](2, "No postings found.");
 
@@ -25738,10 +26112,11 @@
         return {
           width: "100%"
         };
-      };
+      }; // import { DatePipe } from '@angular/common';
+
 
       var SAPDataTableComponent = /*#__PURE__*/function () {
-        function SAPDataTableComponent(_messageService, _dataFilterService, _exportDataService, _router, _translateService, scrollViewport, _autocompleteService, prcService) {
+        function SAPDataTableComponent(_messageService, _dataFilterService, _exportDataService, _router, _translateService, scrollViewport, _autocompleteService) {
           _classCallCheck(this, SAPDataTableComponent);
 
           this._messageService = _messageService;
@@ -25751,7 +26126,6 @@
           this._translateService = _translateService;
           this.scrollViewport = scrollViewport;
           this._autocompleteService = _autocompleteService;
-          this.prcService = prcService;
           this.organisationId = localStorage.getItem('organisationId');
           this.procedureId = localStorage.getItem('currentProcedureId');
           this.procedureName = "";
@@ -25783,21 +26157,21 @@
         _createClass(SAPDataTableComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this56 = this;
+            var _this57 = this;
 
             // this._translateService.setDefaultLang('de');
             // this._translateService.
             _model_dataTableColumns__WEBPACK_IMPORTED_MODULE_1__["dataTableColumns"].getDataTableColumns(this._translateService).then(function (cols) {
               // debugger;
-              _this56.cols = cols;
+              _this57.cols = cols;
 
-              _this56.getData();
+              _this57.getData();
             });
 
             this._translateService.onLangChange.subscribe(function (event) {
-              _model_dataTableColumns__WEBPACK_IMPORTED_MODULE_1__["dataTableColumns"].getDataTableColumns(_this56._translateService).then(function (cols) {
+              _model_dataTableColumns__WEBPACK_IMPORTED_MODULE_1__["dataTableColumns"].getDataTableColumns(_this57._translateService).then(function (cols) {
                 // debugger;
-                _this56.cols = cols; // this.getData();
+                _this57.cols = cols; // this.getData();
               });
             });
 
@@ -25807,13 +26181,14 @@
           key: "getData",
           value: function getData() {
             return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-              var _this57 = this;
+              var _this58 = this;
 
               var key;
               return regeneratorRuntime.wrap(function _callee3$(_context3) {
                 while (1) {
                   switch (_context3.prev = _context3.next) {
                     case 0:
+                      // debugger;
                       this.loading = true;
 
                       for (key in this.criteria) {
@@ -25823,16 +26198,16 @@
                       }
 
                       this._dataFilterService.get(this.criteria).subscribe(function (data) {
-                        _this57.data = data;
-                        _this57.postings = _this57.data.rows;
-                        _this57.totalCount = _this57.data.count;
-                        _this57.displayedDataCount = _this57.totalCount > _this57.limit ? _this57.limit : _this57.totalCount;
-                        _this57.maxPageNr = Math.ceil(_this57.totalCount / _this57.limit);
-                        _this57.loading = false;
+                        _this58.data = data;
+                        _this58.postings = _this58.data.rows;
+                        _this58.totalCount = _this58.data.count;
+                        _this58.displayedDataCount = _this58.totalCount > _this58.limit ? _this58.limit : _this58.totalCount;
+                        _this58.maxPageNr = Math.ceil(_this58.totalCount / _this58.limit);
+                        _this58.loading = false;
                       }, function (error) {
-                        _this57.loading = false;
+                        _this58.loading = false;
 
-                        _this57._messageService.add({
+                        _this58._messageService.add({
                           severity: 'error',
                           summary: 'ERROR',
                           life: 10000,
@@ -25851,7 +26226,7 @@
         }, {
           key: "sort",
           value: function sort(event) {
-            debugger;
+            // debugger;
             this.criteria.orderBy = event.sortField;
             this.criteria.sortOrder = event.sortOrder;
             this.pageNr = 1;
@@ -25862,6 +26237,9 @@
           key: "filterChange",
           value: function filterChange(value, field) {
             if (value) {
+              // if (value instanceof Date) {
+              //   this.criteria[field] = this.datepipe.transform(value, 'yyyy-MM-dd');
+              // } else
               this.criteria[field] = value;
               ++this.filtersNo;
             } else {
@@ -25903,6 +26281,7 @@
               limit: this.limit,
               offset: 0
             };
+            this.filtersNo = 0;
             this.pageNr = 1;
             this.getData();
           }
@@ -25912,6 +26291,11 @@
             ++this.pageNr;
             if (this.pageNr > this.maxPageNr) return;
             this.loading = true;
+
+            if (!this.criteria.offset) {
+              this.criteria.offset = 0;
+            }
+
             this.criteria.offset += +this.limit;
             this.getData();
           }
@@ -25991,7 +26375,7 @@
       }();
 
       SAPDataTableComponent.ɵfac = function SAPDataTableComponent_Factory(t) {
-        return new (t || SAPDataTableComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](primeng_api__WEBPACK_IMPORTED_MODULE_3__["MessageService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_service_data_filter_service__WEBPACK_IMPORTED_MODULE_4__["DataFilterService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_service_export_data_service__WEBPACK_IMPORTED_MODULE_5__["ExportDataService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_ngx_translate_core__WEBPACK_IMPORTED_MODULE_7__["TranslateService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_2__["ElementRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_service_dictionary_service__WEBPACK_IMPORTED_MODULE_8__["DictionaryService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_service_procedure_service__WEBPACK_IMPORTED_MODULE_9__["ProcedureService"]));
+        return new (t || SAPDataTableComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](primeng_api__WEBPACK_IMPORTED_MODULE_3__["MessageService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_service_data_filter_service__WEBPACK_IMPORTED_MODULE_4__["DataFilterService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_service_export_data_service__WEBPACK_IMPORTED_MODULE_5__["ExportDataService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_ngx_translate_core__WEBPACK_IMPORTED_MODULE_7__["TranslateService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_2__["ElementRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdirectiveInject"](_service_dictionary_service__WEBPACK_IMPORTED_MODULE_8__["DictionaryService"]));
       };
 
       SAPDataTableComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineComponent"]({
@@ -25999,7 +26383,7 @@
         selectors: [["app-sap-data-table"]],
         decls: 12,
         vars: 11,
-        consts: [[1, "p-grid"], [1, "p-col-12"], [1, "p-text-center"], [1, "card"], ["scrollHeight", "350px", "styleClass", "p-datatable-gridlines", 3, "value", "columns", "scrollable", "resizableColumns", "reorderableColumns", "loading", "lazy", "onLazyLoad"], ["pTemplate", "caption"], ["pTemplate", "colgroup"], ["pTemplate", "header"], ["pTemplate", "body"], ["pTemplate", "emptymessage"], [1, "p-mb-4"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-file-excel", "pTooltip", "Xlsx", "tooltipPosition", "bottom", 1, "p-mr-2", "p-button-warning", 3, "click"], ["optionValue", "value", "optionLabel", "value", 1, "p-mr-2", 3, "options", "ngModel", "ngModelChange", "onChange"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-angle-double-left", "tooltipPosition", "bottom", 1, "p-mr-2", 3, "disabled", "pTooltip", "click"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-angle-left", "tooltipPosition", "bottom", 1, "p-mr-2", 3, "disabled", "pTooltip", "click"], ["pInputText", "", "type", "number", "min", "1", 1, "pageNrInput", "p-mr-2", 3, "disabled", "value", "placeholder", "change"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-angle-right", "tooltipPosition", "bottom", 1, "p-mr-2", 3, "disabled", "pTooltip", "click"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-angle-double-right", "tooltipPosition", "bottom", 1, "p-mr-2", 3, "disabled", "pTooltip", "click"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-filter-slash", "class", "p-ml-6 clearFilter", "tooltipPosition", "bottom", 3, "pTooltip", "click", 4, "ngIf"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-info-circle", "pTooltip", "Susa", "tooltipPosition", "bottom", "label", "Susa", 1, "p-ml-6", 3, "click"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-filter-slash", "tooltipPosition", "bottom", 1, "p-ml-6", "clearFilter", 3, "pTooltip", "click"], [3, "style", 4, "ngFor", "ngForOf"], ["pResizableColumn", "", "pReorderableColumn", "", "class", "p-text-center", "tooltipPosition", "bottom", 3, "pSortableColumn", "pTooltip", 4, "ngFor", "ngForOf"], ["pResizableColumn", "", "class", "autocomplete", 4, "ngFor", "ngForOf"], ["pResizableColumn", "", "pReorderableColumn", "", "tooltipPosition", "bottom", 1, "p-text-center", 3, "pSortableColumn", "pTooltip"], [3, "field"], ["pResizableColumn", "", 1, "autocomplete"], ["field", "word", "appendTo", "body", 3, "suggestions", "minLength", "inputStyle", "ngModel", "completeMethod", "onClear", "onSelect", "ngModelChange"], ["tooltipPosition", "bottom", 1, "pi", "pi-filter", "p-ml-2", "iconColor", 3, "pTooltip", "click"], ["pReorderableRowHandle", "", 3, "class", 4, "ngFor", "ngForOf"], ["pReorderableRowHandle", ""], [4, "ngIf", "ngIfThen", "ngIfElse"], ["withoutFilter", ""], ["withFilter", ""], [3, "pTooltip"], ["colspan", "7"]],
+        consts: [[1, "p-grid"], [1, "p-col-12"], [1, "p-text-center"], [1, "card"], ["scrollHeight", "350px", "styleClass", "p-datatable-gridlines", 3, "value", "columns", "scrollable", "resizableColumns", "reorderableColumns", "loading", "lazy", "onLazyLoad"], ["pTemplate", "caption"], ["pTemplate", "colgroup"], ["pTemplate", "header"], ["pTemplate", "body"], ["pTemplate", "emptymessage"], [1, "p-mb-4"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-file-excel", "pTooltip", "Xlsx", "tooltipPosition", "bottom", 1, "p-mr-2", "p-button-warning", 3, "click"], ["optionValue", "value", "optionLabel", "value", 1, "p-mr-2", 3, "options", "ngModel", "ngModelChange", "onChange"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-angle-double-left", "tooltipPosition", "bottom", 1, "p-mr-2", 3, "disabled", "pTooltip", "click"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-angle-left", "tooltipPosition", "bottom", 1, "p-mr-2", 3, "disabled", "pTooltip", "click"], ["pInputText", "", "type", "number", "min", "1", 1, "pageNrInput", "p-mr-2", 3, "disabled", "value", "placeholder", "change"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-angle-right", "tooltipPosition", "bottom", 1, "p-mr-2", 3, "disabled", "pTooltip", "click"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-angle-double-right", "tooltipPosition", "bottom", 1, "p-mr-2", 3, "disabled", "pTooltip", "click"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-filter-slash", "class", "p-ml-6 clearFilter", "tooltipPosition", "bottom", 3, "pTooltip", "click", 4, "ngIf"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-info-circle", "pTooltip", "Susa", "tooltipPosition", "bottom", "label", "Susa", 1, "p-ml-6", 3, "click"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-filter-slash", "tooltipPosition", "bottom", 1, "p-ml-6", "clearFilter", 3, "pTooltip", "click"], [3, "style", 4, "ngFor", "ngForOf"], ["pResizableColumn", "", "pReorderableColumn", "", "class", "p-text-center", "tooltipPosition", "bottom", 3, "pSortableColumn", "pTooltip", 4, "ngFor", "ngForOf"], ["pResizableColumn", "", "class", "autocomplete", 4, "ngFor", "ngForOf"], ["pResizableColumn", "", "pReorderableColumn", "", "tooltipPosition", "bottom", 1, "p-text-center", 3, "pSortableColumn", "pTooltip"], [3, "field"], ["pResizableColumn", "", 1, "autocomplete"], ["field", "word", "appendTo", "body", 3, "suggestions", "minLength", "inputStyle", "style", "ngModel", "completeMethod", "onClear", "onSelect", "ngModelChange", 4, "ngIf"], ["yearRange", "1900:2100", "appendTo", "body", "dateFormat", "dd.mm.yy", 3, "ngModel", "monthNavigator", "yearNavigator", "ngModelChange", "onSelect", 4, "ngIf"], ["field", "word", "appendTo", "body", 3, "suggestions", "minLength", "inputStyle", "ngModel", "completeMethod", "onClear", "onSelect", "ngModelChange"], ["yearRange", "1900:2100", "appendTo", "body", "dateFormat", "dd.mm.yy", 3, "ngModel", "monthNavigator", "yearNavigator", "ngModelChange", "onSelect"], ["pReorderableRowHandle", "", 3, "class", 4, "ngFor", "ngForOf"], ["pReorderableRowHandle", ""], [4, "ngIf", "ngIfThen", "ngIfElse"], ["withoutFilter", ""], ["withFilter", ""], [3, "pTooltip"], ["colspan", "7"]],
         template: function SAPDataTableComponent_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](0, "p-toast");
@@ -26053,8 +26437,8 @@
             _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("value", ctx.postings)("columns", ctx.cols)("scrollable", true)("resizableColumns", true)("reorderableColumns", true)("loading", ctx.loading)("lazy", true);
           }
         },
-        directives: [primeng_toast__WEBPACK_IMPORTED_MODULE_10__["Toast"], primeng_table__WEBPACK_IMPORTED_MODULE_11__["Table"], primeng_api__WEBPACK_IMPORTED_MODULE_3__["PrimeTemplate"], primeng_button__WEBPACK_IMPORTED_MODULE_12__["ButtonDirective"], primeng_tooltip__WEBPACK_IMPORTED_MODULE_13__["Tooltip"], primeng_dropdown__WEBPACK_IMPORTED_MODULE_14__["Dropdown"], _angular_forms__WEBPACK_IMPORTED_MODULE_15__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_15__["NgModel"], primeng_inputtext__WEBPACK_IMPORTED_MODULE_16__["InputText"], _angular_common__WEBPACK_IMPORTED_MODULE_17__["NgIf"], _angular_common__WEBPACK_IMPORTED_MODULE_17__["NgForOf"], primeng_table__WEBPACK_IMPORTED_MODULE_11__["ResizableColumn"], primeng_table__WEBPACK_IMPORTED_MODULE_11__["ReorderableColumn"], primeng_table__WEBPACK_IMPORTED_MODULE_11__["SortableColumn"], primeng_table__WEBPACK_IMPORTED_MODULE_11__["SortIcon"], primeng_autocomplete__WEBPACK_IMPORTED_MODULE_18__["AutoComplete"], primeng_table__WEBPACK_IMPORTED_MODULE_11__["ReorderableRowHandle"]],
-        pipes: [_ngx_translate_core__WEBPACK_IMPORTED_MODULE_7__["TranslatePipe"], _angular_common__WEBPACK_IMPORTED_MODULE_17__["CurrencyPipe"], _angular_common__WEBPACK_IMPORTED_MODULE_17__["DatePipe"]],
+        directives: [primeng_toast__WEBPACK_IMPORTED_MODULE_9__["Toast"], primeng_table__WEBPACK_IMPORTED_MODULE_10__["Table"], primeng_api__WEBPACK_IMPORTED_MODULE_3__["PrimeTemplate"], primeng_button__WEBPACK_IMPORTED_MODULE_11__["ButtonDirective"], primeng_tooltip__WEBPACK_IMPORTED_MODULE_12__["Tooltip"], primeng_dropdown__WEBPACK_IMPORTED_MODULE_13__["Dropdown"], _angular_forms__WEBPACK_IMPORTED_MODULE_14__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_14__["NgModel"], primeng_inputtext__WEBPACK_IMPORTED_MODULE_15__["InputText"], _angular_common__WEBPACK_IMPORTED_MODULE_16__["NgIf"], _angular_common__WEBPACK_IMPORTED_MODULE_16__["NgForOf"], primeng_table__WEBPACK_IMPORTED_MODULE_10__["ResizableColumn"], primeng_table__WEBPACK_IMPORTED_MODULE_10__["ReorderableColumn"], primeng_table__WEBPACK_IMPORTED_MODULE_10__["SortableColumn"], primeng_table__WEBPACK_IMPORTED_MODULE_10__["SortIcon"], primeng_autocomplete__WEBPACK_IMPORTED_MODULE_17__["AutoComplete"], primeng_calendar__WEBPACK_IMPORTED_MODULE_18__["Calendar"], primeng_table__WEBPACK_IMPORTED_MODULE_10__["ReorderableRowHandle"]],
+        pipes: [_ngx_translate_core__WEBPACK_IMPORTED_MODULE_7__["TranslatePipe"], _angular_common__WEBPACK_IMPORTED_MODULE_16__["CurrencyPipe"], _angular_common__WEBPACK_IMPORTED_MODULE_16__["DatePipe"]],
         styles: [".filterInputCss[_ngcontent-%COMP%] {\n  width: 80%;\n}\n\n.iconColor[_ngcontent-%COMP%] {\n  color: #58585a;\n  cursor: pointer;\n}\n\n.pageNrInput[_ngcontent-%COMP%] {\n  width: 5%;\n}\n\n.clearFilter[_ngcontent-%COMP%] {\n  background-color: #ffffff !important;\n  color: #58585a;\n}\n\n.ui-resizable-column[_ngcontent-%COMP%] {\n  text-align: right !important;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uXFwuLlxcLi5cXC4uXFxzYXAtZGF0YS10YWJsZS5jb21wb25lbnQuc2FzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFJQTtFQUNJLFVBQUE7QUFISjs7QUFLQTtFQUNJLGNBTlE7RUFPUixlQUFBO0FBRko7O0FBSUE7RUFDSSxTQUFBO0FBREo7O0FBR0E7RUFDSSxvQ0FBQTtFQUNBLGNBZFE7QUFjWjs7QUFHQTtFQUNJLDRCQUFBO0FBQUoiLCJmaWxlIjoic2FwLWRhdGEtdGFibGUuY29tcG9uZW50LnNhc3MiLCJzb3VyY2VzQ29udGVudCI6WyIkcHJpbWFyeUNvbG9yOiAjZTc1MTEzXHJcbiRwcmltYXJ5SG92ZXI6ICNmNzUxMjNcclxuJHNlY29uZGFyeTogIzU4NTg1YVxyXG5cclxuLmZpbHRlcklucHV0Q3NzXHJcbiAgICB3aWR0aDogODAlXHJcblxyXG4uaWNvbkNvbG9yXHJcbiAgICBjb2xvcjogJHNlY29uZGFyeVxyXG4gICAgY3Vyc29yOiBwb2ludGVyXHJcblxyXG4ucGFnZU5ySW5wdXRcclxuICAgIHdpZHRoOiA1JVxyXG4gICAgXHJcbi5jbGVhckZpbHRlclxyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2ZmZmZmZiAhaW1wb3J0YW50XHJcbiAgICBjb2xvcjogJHNlY29uZGFyeVxyXG5cclxuXHJcbi51aS1yZXNpemFibGUtY29sdW1uXHJcbiAgICB0ZXh0LWFsaWduOiByaWdodCAhaW1wb3J0YW50XHJcblxyXG5cclxuIl19 */"]
       });
       /***/
@@ -26122,14 +26506,14 @@
         _createClass(AppComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this58 = this;
+            var _this59 = this;
 
             this.primengConfig.ripple = true;
             this.bnIdle.startWatching(900).subscribe(function (isTimedOut) {
               console.log('session expired');
               localStorage.clear();
 
-              _this58._router.navigate(['/']);
+              _this59._router.navigate(['/']);
             });
           }
         }]);
@@ -26544,77 +26928,77 @@
         _createClass(DueDateComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this59 = this;
+            var _this60 = this;
 
             this.selectedOrganisation = +localStorage.getItem('organisationId');
             this.selectedProcedure = +localStorage.getItem('currentProcedureId');
             this.procedureName = localStorage.getItem('currentProcedureName');
 
             this._translateService.get('DueDateAnalysis').subscribe(function (elem) {
-              _this59.items = [{
+              _this60.items = [{
                 label: elem.paymentLabel,
                 routerLink: '/analysis/payment'
               }, {
                 label: elem.label,
                 routerLink: '/analysis/due-date'
               }];
-              _this59.home = {
+              _this60.home = {
                 icon: 'pi pi-home',
                 label: elem.data,
                 routerLink: '/shared/data'
               };
 
-              _this59._analysisService.getDueDateAnalysis(_this59.selectedOrganisation, _this59.selectedProcedure).subscribe(function (res) {
+              _this60._analysisService.getDueDateAnalysis(_this60.selectedOrganisation, _this60.selectedProcedure).subscribe(function (res) {
                 // debugger;
-                _this59.data = res.data.dueDateReference.data;
-                _this59.labels = res.data.dueDateReference.labels;
-                _this59.waiting = false;
-                _this59.basicData = {
-                  labels: _this59.labels,
+                _this60.data = res.data.dueDateReference.data;
+                _this60.labels = res.data.dueDateReference.labels;
+                _this60.waiting = false;
+                _this60.basicData = {
+                  labels: _this60.labels,
                   datasets: new Array()
                 };
 
-                _this59.basicData.datasets.push({
+                _this60.basicData.datasets.push({
                   label: elem.firstChartLabel,
                   borderColor: "rgb(100,100,255)",
-                  data: _this59.data,
+                  data: _this60.data,
                   fill: false
                 }); // this.chart.refresh();
                 // this.chart.reinit();
 
 
-                _this59.docDataTable = res.data.docDateReference; // this.notPaidDataTable = res.data.docDateReference;
+                _this60.docDataTable = res.data.docDateReference; // this.notPaidDataTable = res.data.docDateReference;
 
-                _this59.delayData = res.data.dueDateRefAccounts;
+                _this60.delayData = res.data.dueDateRefAccounts;
 
-                _this59.docDataTable.forEach(function (element) {
-                  _this59.docDateLabels.push(element.monthName + '-' + element.yearName);
+                _this60.docDataTable.forEach(function (element) {
+                  _this60.docDateLabels.push(element.monthName + '-' + element.yearName);
 
-                  _this59.notPaidLabels.push(element.monthName + '-' + element.yearName);
+                  _this60.notPaidLabels.push(element.monthName + '-' + element.yearName);
 
-                  _this59.docPositiveData.push(element.positive);
+                  _this60.docPositiveData.push(element.positive);
 
-                  _this59.docNegativeData.push(element.negative);
+                  _this60.docNegativeData.push(element.negative);
 
-                  _this59.docData.push(+element.positive + +element.negative);
+                  _this60.docData.push(+element.positive + +element.negative);
 
-                  _this59.notPaidData.push(+element.notPaid);
+                  _this60.notPaidData.push(+element.notPaid);
                 });
 
-                _this59.docDateData = {
-                  labels: _this59.docDateLabels,
+                _this60.docDateData = {
+                  labels: _this60.docDateLabels,
                   datasets: [{
                     type: 'line',
                     label: elem.average,
                     borderColor: '#42A5F5',
                     borderWidth: 2,
                     fill: false,
-                    data: _this59.docData
+                    data: _this60.docData
                   }, {
                     type: 'bar',
                     label: elem.positive,
                     backgroundColor: '#F5B59B',
-                    data: _this59.docPositiveData,
+                    data: _this60.docPositiveData,
                     borderColor: '#E5A58B',
                     borderWidth: 2
                   }, {
@@ -26622,19 +27006,19 @@
                     label: elem.negative,
                     backgroundColor: '#FFD795',
                     borderColor: '#EFC785',
-                    data: _this59.docNegativeData
+                    data: _this60.docNegativeData
                   }]
                 };
-                _this59.notPaidChartData = {
-                  labels: _this59.notPaidLabels,
+                _this60.notPaidChartData = {
+                  labels: _this60.notPaidLabels,
                   datasets: [{
                     label: elem.notPaid,
                     backgroundColor: '#42A5F5',
-                    data: _this59.notPaidData
+                    data: _this60.notPaidData
                   }]
                 };
               }, function (er) {
-                _this59._messageService.add({
+                _this60._messageService.add({
                   severity: 'error',
                   summary: 'ERROR',
                   life: 10000,
@@ -27455,6 +27839,18 @@
       var _shared_liquidity_credit_line_credit_line_component__WEBPACK_IMPORTED_MODULE_83__ = __webpack_require__(
       /*! ./shared/liquidity/credit-line/credit-line.component */
       "3mNa");
+      /* harmony import */
+
+
+      var _shared_liquidity_free_liquidity_free_liquidity_component__WEBPACK_IMPORTED_MODULE_84__ = __webpack_require__(
+      /*! ./shared/liquidity/free-liquidity/free-liquidity.component */
+      "otCA");
+      /* harmony import */
+
+
+      var _shared_liquidity_free_liquidity_free_liquidity_details_free_liquidity_details_component__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(
+      /*! ./shared/liquidity/free-liquidity/free-liquidity-details/free-liquidity-details.component */
+      "Lscj");
 
       Object(_angular_common__WEBPACK_IMPORTED_MODULE_61__["registerLocaleData"])(_angular_common_locales_de__WEBPACK_IMPORTED_MODULE_62___default.a, 'de');
 
@@ -27493,7 +27889,7 @@
 
       (function () {
         (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵsetNgModuleScope"](AppModule, {
-          declarations: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"], _shared_nav_bar_nav_bar_component__WEBPACK_IMPORTED_MODULE_8__["NavBarComponent"], _shared_footer_footer_component__WEBPACK_IMPORTED_MODULE_9__["FooterComponent"], _admin_import_import_component__WEBPACK_IMPORTED_MODULE_11__["ImportComponent"], _shared_unauth_unauth_component__WEBPACK_IMPORTED_MODULE_13__["UnauthComponent"], _shared_notfound_notfound_component__WEBPACK_IMPORTED_MODULE_14__["NotfoundComponent"], _shared_login_login_component__WEBPACK_IMPORTED_MODULE_27__["LoginComponent"], _admin_admin_registration_admin_registration_component__WEBPACK_IMPORTED_MODULE_28__["AdminRegistrationComponent"], _shared_reset_password_reset_password_component__WEBPACK_IMPORTED_MODULE_29__["ResetPasswordComponent"], _shared_layout_layout_component__WEBPACK_IMPORTED_MODULE_32__["LayoutComponent"], _shared_sap_data_table_sap_data_table_component__WEBPACK_IMPORTED_MODULE_45__["SAPDataTableComponent"], _shared_reset_password_new_user_reset_password_new_user_component__WEBPACK_IMPORTED_MODULE_47__["ResetPasswordNewUserComponent"], _admin_procedure_registration_procedure_registration_component__WEBPACK_IMPORTED_MODULE_48__["ProcedureRegistrationComponent"], _shared_analysis_amount_analysis_amount_analysis_component__WEBPACK_IMPORTED_MODULE_50__["AmountAnalysisComponent"], _admin_organisation_registration_organisation_registration_component__WEBPACK_IMPORTED_MODULE_53__["OrganisationRegistrationComponent"], _shared_user_registration_user_registration_component__WEBPACK_IMPORTED_MODULE_54__["UserRegistrationComponent"], _shared_user_edit_user_edit_component__WEBPACK_IMPORTED_MODULE_55__["UserEditComponent"], _shared_user_dashboard_user_dashboard_component__WEBPACK_IMPORTED_MODULE_56__["UserDashboardComponent"], _shared_organisation_users_organisation_users_component__WEBPACK_IMPORTED_MODULE_57__["OrganisationUsersComponent"], _admin_procedure_edit_procedure_edit_component__WEBPACK_IMPORTED_MODULE_58__["ProcedureEditComponent"], _admin_admin_dashboard_admin_dashboard_component__WEBPACK_IMPORTED_MODULE_60__["AdminDashboardComponent"], _admin_document_type_document_type_component__WEBPACK_IMPORTED_MODULE_65__["DocumentTypeComponent"], _shared_analysis_amount_analysis_details_amount_analysis_details_component__WEBPACK_IMPORTED_MODULE_66__["AmountAnalysisDetailsComponent"], _shared_analysis_text_analysis_text_analysis_component__WEBPACK_IMPORTED_MODULE_67__["TextAnalysisComponent"], _shared_analysis_text_analysis_text_analysis_details_text_analysis_details_component__WEBPACK_IMPORTED_MODULE_68__["TextAnalysisDetailsComponent"], _shared_sap_data_table_susa_susa_component__WEBPACK_IMPORTED_MODULE_70__["SusaComponent"], _shared_analysis_payment_analysis_payment_analysis_component__WEBPACK_IMPORTED_MODULE_71__["PaymentAnalysisComponent"], _shared_pipes_highlight_pipe__WEBPACK_IMPORTED_MODULE_72__["HighlightPipe"], _shared_analysis_payment_analysis_payment_analysis_details_payment_analysis_details_component__WEBPACK_IMPORTED_MODULE_74__["PaymentAnalysisDetailsComponent"], _shared_analysis_payment_analysis_due_date_due_date_component__WEBPACK_IMPORTED_MODULE_75__["DueDateComponent"], _shared_analysis_payment_analysis_due_date_details_due_date_details_component__WEBPACK_IMPORTED_MODULE_78__["DueDateDetailsComponent"], _shared_analysis_creditor_analysis_creditor_analysis_component__WEBPACK_IMPORTED_MODULE_79__["CreditorAnalysisComponent"], _shared_analysis_creditor_analysis_creditor_analysis_details_creditor_analysis_details_component__WEBPACK_IMPORTED_MODULE_80__["CreditorAnalysisDetailsComponent"], _admin_account_type_account_type_component__WEBPACK_IMPORTED_MODULE_81__["AccountTypeComponent"], _shared_liquidity_opening_balance_opening_balance_component__WEBPACK_IMPORTED_MODULE_82__["OpeningBalanceComponent"], _shared_liquidity_credit_line_credit_line_component__WEBPACK_IMPORTED_MODULE_83__["CreditLineComponent"]],
+          declarations: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"], _shared_nav_bar_nav_bar_component__WEBPACK_IMPORTED_MODULE_8__["NavBarComponent"], _shared_footer_footer_component__WEBPACK_IMPORTED_MODULE_9__["FooterComponent"], _admin_import_import_component__WEBPACK_IMPORTED_MODULE_11__["ImportComponent"], _shared_unauth_unauth_component__WEBPACK_IMPORTED_MODULE_13__["UnauthComponent"], _shared_notfound_notfound_component__WEBPACK_IMPORTED_MODULE_14__["NotfoundComponent"], _shared_login_login_component__WEBPACK_IMPORTED_MODULE_27__["LoginComponent"], _admin_admin_registration_admin_registration_component__WEBPACK_IMPORTED_MODULE_28__["AdminRegistrationComponent"], _shared_reset_password_reset_password_component__WEBPACK_IMPORTED_MODULE_29__["ResetPasswordComponent"], _shared_layout_layout_component__WEBPACK_IMPORTED_MODULE_32__["LayoutComponent"], _shared_sap_data_table_sap_data_table_component__WEBPACK_IMPORTED_MODULE_45__["SAPDataTableComponent"], _shared_reset_password_new_user_reset_password_new_user_component__WEBPACK_IMPORTED_MODULE_47__["ResetPasswordNewUserComponent"], _admin_procedure_registration_procedure_registration_component__WEBPACK_IMPORTED_MODULE_48__["ProcedureRegistrationComponent"], _shared_analysis_amount_analysis_amount_analysis_component__WEBPACK_IMPORTED_MODULE_50__["AmountAnalysisComponent"], _admin_organisation_registration_organisation_registration_component__WEBPACK_IMPORTED_MODULE_53__["OrganisationRegistrationComponent"], _shared_user_registration_user_registration_component__WEBPACK_IMPORTED_MODULE_54__["UserRegistrationComponent"], _shared_user_edit_user_edit_component__WEBPACK_IMPORTED_MODULE_55__["UserEditComponent"], _shared_user_dashboard_user_dashboard_component__WEBPACK_IMPORTED_MODULE_56__["UserDashboardComponent"], _shared_organisation_users_organisation_users_component__WEBPACK_IMPORTED_MODULE_57__["OrganisationUsersComponent"], _admin_procedure_edit_procedure_edit_component__WEBPACK_IMPORTED_MODULE_58__["ProcedureEditComponent"], _admin_admin_dashboard_admin_dashboard_component__WEBPACK_IMPORTED_MODULE_60__["AdminDashboardComponent"], _admin_document_type_document_type_component__WEBPACK_IMPORTED_MODULE_65__["DocumentTypeComponent"], _shared_analysis_amount_analysis_details_amount_analysis_details_component__WEBPACK_IMPORTED_MODULE_66__["AmountAnalysisDetailsComponent"], _shared_analysis_text_analysis_text_analysis_component__WEBPACK_IMPORTED_MODULE_67__["TextAnalysisComponent"], _shared_analysis_text_analysis_text_analysis_details_text_analysis_details_component__WEBPACK_IMPORTED_MODULE_68__["TextAnalysisDetailsComponent"], _shared_sap_data_table_susa_susa_component__WEBPACK_IMPORTED_MODULE_70__["SusaComponent"], _shared_analysis_payment_analysis_payment_analysis_component__WEBPACK_IMPORTED_MODULE_71__["PaymentAnalysisComponent"], _shared_pipes_highlight_pipe__WEBPACK_IMPORTED_MODULE_72__["HighlightPipe"], _shared_analysis_payment_analysis_payment_analysis_details_payment_analysis_details_component__WEBPACK_IMPORTED_MODULE_74__["PaymentAnalysisDetailsComponent"], _shared_analysis_payment_analysis_due_date_due_date_component__WEBPACK_IMPORTED_MODULE_75__["DueDateComponent"], _shared_analysis_payment_analysis_due_date_details_due_date_details_component__WEBPACK_IMPORTED_MODULE_78__["DueDateDetailsComponent"], _shared_analysis_creditor_analysis_creditor_analysis_component__WEBPACK_IMPORTED_MODULE_79__["CreditorAnalysisComponent"], _shared_analysis_creditor_analysis_creditor_analysis_details_creditor_analysis_details_component__WEBPACK_IMPORTED_MODULE_80__["CreditorAnalysisDetailsComponent"], _admin_account_type_account_type_component__WEBPACK_IMPORTED_MODULE_81__["AccountTypeComponent"], _shared_liquidity_opening_balance_opening_balance_component__WEBPACK_IMPORTED_MODULE_82__["OpeningBalanceComponent"], _shared_liquidity_credit_line_credit_line_component__WEBPACK_IMPORTED_MODULE_83__["CreditLineComponent"], _shared_liquidity_free_liquidity_free_liquidity_component__WEBPACK_IMPORTED_MODULE_84__["FreeLiquidityComponent"], _shared_liquidity_free_liquidity_free_liquidity_details_free_liquidity_details_component__WEBPACK_IMPORTED_MODULE_85__["FreeLiquidityDetailsComponent"]],
           imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_5__["AppRoutingModule"], _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_7__["BrowserAnimationsModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"], primeng_menubar__WEBPACK_IMPORTED_MODULE_10__["MenubarModule"], primeng_divider__WEBPACK_IMPORTED_MODULE_39__["DividerModule"], primeng_steps__WEBPACK_IMPORTED_MODULE_12__["StepsModule"], primeng_chart__WEBPACK_IMPORTED_MODULE_51__["ChartModule"], primeng_checkbox__WEBPACK_IMPORTED_MODULE_49__["CheckboxModule"], primeng_toast__WEBPACK_IMPORTED_MODULE_15__["ToastModule"], primeng_menubar__WEBPACK_IMPORTED_MODULE_10__["MenubarModule"], primeng_table__WEBPACK_IMPORTED_MODULE_40__["TableModule"], primeng_fileupload__WEBPACK_IMPORTED_MODULE_17__["FileUploadModule"], primeng_calendar__WEBPACK_IMPORTED_MODULE_41__["CalendarModule"], primeng_multiselect__WEBPACK_IMPORTED_MODULE_42__["MultiSelectModule"], primeng_tooltip__WEBPACK_IMPORTED_MODULE_46__["TooltipModule"], primeng_tree__WEBPACK_IMPORTED_MODULE_38__["TreeModule"], primeng_selectbutton__WEBPACK_IMPORTED_MODULE_59__["SelectButtonModule"], primeng_inputtext__WEBPACK_IMPORTED_MODULE_44__["InputTextModule"], primeng_progressbar__WEBPACK_IMPORTED_MODULE_43__["ProgressBarModule"], primeng_dropdown__WEBPACK_IMPORTED_MODULE_19__["DropdownModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_18__["HttpClientModule"], _ngx_translate_core__WEBPACK_IMPORTED_MODULE_3__["TranslateModule"], primeng_sidebar__WEBPACK_IMPORTED_MODULE_36__["SidebarModule"], primeng_listbox__WEBPACK_IMPORTED_MODULE_37__["ListboxModule"], primeng_panelmenu__WEBPACK_IMPORTED_MODULE_35__["PanelMenuModule"], primeng_menu__WEBPACK_IMPORTED_MODULE_31__["MenuModule"], primeng_button__WEBPACK_IMPORTED_MODULE_20__["ButtonModule"], primeng_card__WEBPACK_IMPORTED_MODULE_21__["CardModule"], primeng_progressspinner__WEBPACK_IMPORTED_MODULE_22__["ProgressSpinnerModule"], primeng_dialog__WEBPACK_IMPORTED_MODULE_23__["DialogModule"], primeng_dynamicdialog__WEBPACK_IMPORTED_MODULE_52__["DynamicDialogModule"], primeng_contextmenu__WEBPACK_IMPORTED_MODULE_34__["ContextMenuModule"], primeng_accordion__WEBPACK_IMPORTED_MODULE_24__["AccordionModule"], primeng_messages__WEBPACK_IMPORTED_MODULE_25__["MessagesModule"], primeng_message__WEBPACK_IMPORTED_MODULE_26__["MessageModule"], primeng_password__WEBPACK_IMPORTED_MODULE_30__["PasswordModule"], primeng_megamenu__WEBPACK_IMPORTED_MODULE_33__["MegaMenuModule"], primeng_autocomplete__WEBPACK_IMPORTED_MODULE_69__["AutoCompleteModule"], primeng_inputnumber__WEBPACK_IMPORTED_MODULE_73__["InputNumberModule"], primeng_breadcrumb__WEBPACK_IMPORTED_MODULE_76__["BreadcrumbModule"]]
         });
       })();
@@ -28518,7 +28914,7 @@
         }, {
           key: "login",
           value: function login() {
-            var _this60 = this;
+            var _this61 = this;
 
             var data = {
               username: this.username,
@@ -28540,12 +28936,12 @@
               }
 
               if (localStorage.getItem('role') === "Admin") {
-                _this60._router.navigate(['/admin/dashboard']);
+                _this61._router.navigate(['/admin/dashboard']);
               } else {
-                _this60._router.navigate(['/shared/user/procedures']);
+                _this61._router.navigate(['/shared/user/procedures']);
               }
             }, function (err) {
-              _this60._translateService.get("ErrorHandler").subscribe(function (elem) {
+              _this61._translateService.get("ErrorHandler").subscribe(function (elem) {
                 var errorMsg = "";
 
                 if (err.status === 400) {
@@ -28560,7 +28956,7 @@
                   errorMsg = elem.internalServerError_500;
                 }
 
-                _this60._messageService.add({
+                _this61._messageService.add({
                   severity: 'error',
                   summary: 'ERROR',
                   life: 10000,
@@ -29009,17 +29405,17 @@
         _createClass(OrganisationRegistrationComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this61 = this;
+            var _this62 = this;
 
             this.id = +this._route.snapshot.paramMap.get('id');
 
             if (this.id > 0) {
               this._orgService.getOne(this.id).subscribe(function (res) {
                 if (res.length > 0) {
-                  _this61.organisation = res[0];
+                  _this62.organisation = res[0];
                 }
               }, function (err) {
-                _this61._translateService.get("ErrorHandler").subscribe(function (elem) {
+                _this62._translateService.get("ErrorHandler").subscribe(function (elem) {
                   var errorMsg = "";
 
                   if (err.status === 400) {
@@ -29034,7 +29430,7 @@
                     errorMsg = elem.internalServerError_500;
                   }
 
-                  _this61._messageService.add({
+                  _this62._messageService.add({
                     severity: 'error',
                     summary: 'ERROR',
                     life: 10000,
@@ -29048,7 +29444,7 @@
         }, {
           key: "UploadHandler",
           value: function UploadHandler(event) {
-            var _this62 = this;
+            var _this63 = this;
 
             var selectedFiles = event.files;
             this.organisation.logo = selectedFiles[0];
@@ -29058,7 +29454,7 @@
               var reader = new FileReader();
 
               reader.onload = function (e) {
-                return _this62.imageSrc = reader.result;
+                return _this63.imageSrc = reader.result;
               };
 
               reader.readAsDataURL(file);
@@ -29067,7 +29463,7 @@
         }, {
           key: "submitHandler",
           value: function submitHandler() {
-            var _this63 = this;
+            var _this64 = this;
 
             var formData = new FormData();
             formData.append('logo', this.organisation.logo);
@@ -29075,13 +29471,13 @@
 
             if (this.organisation && this.organisation.id > 0) {
               this._orgService.update(formData, this.organisation.id).subscribe(function (res) {
-                _this63._messageService.add({
+                _this64._messageService.add({
                   severity: 'success',
                   summary: 'SUCCESS!',
                   detail: 'Organisation updated successfully!'
                 });
               }, function (err) {
-                _this63._translateService.get("ErrorHandler").subscribe(function (elem) {
+                _this64._translateService.get("ErrorHandler").subscribe(function (elem) {
                   var errorMsg = "";
 
                   if (err.status === 400) {
@@ -29096,7 +29492,7 @@
                     errorMsg = elem.internalServerError_500;
                   }
 
-                  _this63._messageService.add({
+                  _this64._messageService.add({
                     severity: 'error',
                     summary: 'ERROR',
                     life: 10000,
@@ -29106,15 +29502,15 @@
               });
             } else {
               this._orgService.insert(formData).subscribe(function (res) {
-                _this63.organisation = res;
+                _this64.organisation = res;
 
-                _this63._messageService.add({
+                _this64._messageService.add({
                   severity: 'success',
                   summary: 'SUCCESS!',
                   detail: 'Organisation inserted successfully!'
                 });
               }, function (err) {
-                _this63._translateService.get("ErrorHandler").subscribe(function (elem) {
+                _this64._translateService.get("ErrorHandler").subscribe(function (elem) {
                   var errorMsg = "";
 
                   if (err.status === 400) {
@@ -29129,7 +29525,7 @@
                     errorMsg = elem.internalServerError_500;
                   }
 
-                  _this63._messageService.add({
+                  _this64._messageService.add({
                     severity: 'error',
                     summary: 'ERROR',
                     life: 10000,
@@ -30065,7 +30461,7 @@
         _createClass(OpeningBalanceComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this64 = this;
+            var _this65 = this;
 
             this.orgId = +localStorage.getItem('organisationId');
             this.prcId = +localStorage.getItem('currentProcedureId');
@@ -30097,9 +30493,9 @@
               res.forEach(function (val) {
                 val.StartingBalanceDate = new Date(val.StartingBalanceDate);
               });
-              _this64.data = res;
+              _this65.data = res;
             }, function (er) {
-              _this64._messageService.add({
+              _this65._messageService.add({
                 severity: 'error',
                 summary: 'ERROR!',
                 detail: er.error.error
@@ -30123,19 +30519,19 @@
         }, {
           key: "save",
           value: function save(row) {
-            var _this65 = this;
+            var _this66 = this;
 
             this._liquidityService.updateOpeningBalance(this.orgId, this.prcId, row).subscribe(function (res) {
               row.isEditable = false;
               var numOfRecords = res.length > 0 ? res[0] : 0;
 
-              _this65._messageService.add({
+              _this66._messageService.add({
                 severity: 'success',
                 summary: 'DONE!',
                 detail: "opening balance is updated successfully in the targeted posting data, \n ".concat(numOfRecords, " updated.")
               });
             }, function (er) {
-              _this65._messageService.add({
+              _this66._messageService.add({
                 severity: 'error',
                 summary: 'ERROR!',
                 detail: er.error.error
@@ -30319,17 +30715,17 @@
         }, {
           key: "submitHandler",
           value: function submitHandler() {
-            var _this66 = this;
+            var _this67 = this;
 
             this._userService.editUser(this.userModel).subscribe(function (res) {
               // console.dir('done: ' + res);
-              _this66._messageService.add({
+              _this67._messageService.add({
                 severity: 'success',
                 summary: 'Updated successfully!',
                 detail: 'Updated successfully'
               });
             }, function (err) {
-              _this66._translateService.get("ErrorHandler").subscribe(function (elem) {
+              _this67._translateService.get("ErrorHandler").subscribe(function (elem) {
                 var errorMsg = "";
 
                 if (err.status === 400) {
@@ -30344,7 +30740,7 @@
                   errorMsg = elem.internalServerError_500;
                 }
 
-                _this66._messageService.add({
+                _this67._messageService.add({
                   severity: 'error',
                   summary: 'ERROR',
                   life: 10000,
@@ -32474,7 +32870,7 @@
         _createClass(TextAnalysisDetailsComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this67 = this;
+            var _this68 = this;
 
             this.items = [// { label: 'Analysis' },
             {
@@ -32598,16 +32994,16 @@
             }];
 
             this._analysisService.getTextAnalysisDetails(this.orgId, this.prcId, this.accountNumber).subscribe(function (res) {
-              _this67.data = res;
+              _this68.data = res;
 
-              if (_this67.data.length > 0) {
-                _this67.accountName = _this67.data[0].accountName;
+              if (_this68.data.length > 0) {
+                _this68.accountName = _this68.data[0].accountName;
               }
 
-              _this67.tempData = res;
-              _this67.waiting = false;
+              _this68.tempData = res;
+              _this68.waiting = false;
             }, function (er) {
-              _this67._messageService.add({
+              _this68._messageService.add({
                 severity: 'error',
                 summary: 'ERROR',
                 life: 10000,
@@ -32624,7 +33020,7 @@
           key: "exportExcel",
           value: function exportExcel() {
             return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-              var _this68 = this;
+              var _this69 = this;
 
               var translatedData, index, element, translatedRecord, key, translatedKey, temp, _temp3;
 
@@ -32680,7 +33076,11 @@
                       } else if (element[key] && (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' || key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
                         try {
                           _temp3 = new Date(Date.parse(element[key].toString()));
-                          if (_temp3 instanceof Date) translatedRecord[translatedKey] = _temp3.toLocaleDateString('de-DE');
+                          if (_temp3 instanceof Date) translatedRecord[translatedKey] = _temp3.toLocaleDateString('de-DE', {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit"
+                          });
                         } catch (e) {}
                       } // end of formatting
 
@@ -32715,7 +33115,7 @@
                           type: 'array'
                         });
 
-                        _this68.saveAsExcelFile(excelBuffer, "text_analysis");
+                        _this69.saveAsExcelFile(excelBuffer, "text_analysis");
                       });
 
                     case 21:
@@ -32740,7 +33140,7 @@
         }, {
           key: "filterChange",
           value: function filterChange(query, colName) {
-            var _this69 = this;
+            var _this70 = this;
 
             this.searching = true;
             debugger;
@@ -32752,17 +33152,17 @@
                 this.data = _toConsumableArray(this.tempData);
               } else {
                 var _loop7 = function _loop7(key) {
-                  if (Object.prototype.hasOwnProperty.call(_this69.criteria, key)) {
-                    var element = _this69.criteria[key];
+                  if (Object.prototype.hasOwnProperty.call(_this70.criteria, key)) {
+                    var element = _this70.criteria[key];
 
                     if (element.length < 3) {
-                      _this69.data = _this69.tempData.filter(function (value) {
+                      _this70.data = _this70.tempData.filter(function (value) {
                         var _a;
 
                         return ((_a = value[key]) === null || _a === void 0 ? void 0 : _a.toLowerCase()) == element.toLowerCase();
                       });
                     } else {
-                      _this69.data = _this69.tempData.filter(function (value) {
+                      _this70.data = _this70.tempData.filter(function (value) {
                         var _a;
 
                         return (_a = value[key]) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(element.toLowerCase());
@@ -32779,17 +33179,17 @@
               this.data = _toConsumableArray(this.tempData);
 
               var _loop8 = function _loop8(_key4) {
-                if (Object.prototype.hasOwnProperty.call(_this69.criteria, _key4)) {
-                  var element = _this69.criteria[_key4];
+                if (Object.prototype.hasOwnProperty.call(_this70.criteria, _key4)) {
+                  var element = _this70.criteria[_key4];
 
                   if (element.length < 3) {
-                    _this69.data = _this69.data.filter(function (value) {
+                    _this70.data = _this70.data.filter(function (value) {
                       var _a;
 
                       return ((_a = value[_key4]) === null || _a === void 0 ? void 0 : _a.toLowerCase()) == element.toLowerCase();
                     });
                   } else {
-                    _this69.data = _this69.data.filter(function (value) {
+                    _this70.data = _this70.data.filter(function (value) {
                       var _a;
 
                       return (_a = value[_key4]) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(element.toLowerCase());
@@ -32839,19 +33239,19 @@
         }, {
           key: "saveRelevant",
           value: function saveRelevant() {
-            var _this70 = this;
+            var _this71 = this;
 
             console.log(this.selected);
 
             this._analysisService.setRelevantTextAnalysis(this.orgId, this.prcId, this.accountNumber, this.selected).subscribe(function (res) {
-              _this70._messageService.add({
+              _this71._messageService.add({
                 severity: 'success',
                 summary: 'SUCCESS',
                 life: 10000,
                 detail: "records set as relevant successfully!"
               });
             }, function (er) {
-              _this70._messageService.add({
+              _this71._messageService.add({
                 severity: 'error',
                 summary: 'ERROR',
                 life: 10000,
@@ -32883,31 +33283,11 @@
         }, {
           key: "getSysRelevant",
           value: function getSysRelevant() {
-            var _this71 = this;
-
-            this.waiting = true;
-
-            this._analysisService.getTextAnalysisDetails(this.orgId, this.prcId, this.accountNumber).subscribe(function (res) {
-              _this71.data = res;
-              _this71.tempData = res;
-              _this71.waiting = false;
-            }, function (er) {
-              _this71._messageService.add({
-                severity: 'error',
-                summary: 'ERROR',
-                life: 10000,
-                detail: "There is an error occured please try again"
-              });
-            });
-          }
-        }, {
-          key: "getUserRelevant",
-          value: function getUserRelevant() {
             var _this72 = this;
 
             this.waiting = true;
 
-            this._analysisService.getTextAnalysisDetailsRelevant(this.orgId, this.prcId, this.accountNumber).subscribe(function (res) {
+            this._analysisService.getTextAnalysisDetails(this.orgId, this.prcId, this.accountNumber).subscribe(function (res) {
               _this72.data = res;
               _this72.tempData = res;
               _this72.waiting = false;
@@ -32921,9 +33301,29 @@
             });
           }
         }, {
+          key: "getUserRelevant",
+          value: function getUserRelevant() {
+            var _this73 = this;
+
+            this.waiting = true;
+
+            this._analysisService.getTextAnalysisDetailsRelevant(this.orgId, this.prcId, this.accountNumber).subscribe(function (res) {
+              _this73.data = res;
+              _this73.tempData = res;
+              _this73.waiting = false;
+            }, function (er) {
+              _this73._messageService.add({
+                severity: 'error',
+                summary: 'ERROR',
+                life: 10000,
+                detail: "There is an error occured please try again"
+              });
+            });
+          }
+        }, {
           key: "getAllByAccount",
           value: function getAllByAccount() {
-            var _this73 = this;
+            var _this74 = this;
 
             this.waiting = true;
 
@@ -32934,13 +33334,13 @@
             }
 
             this._analysisService.getTextAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber, this.backCriteria).subscribe(function (res) {
-              _this73.allRecordData = res.rows;
-              _this73.totalCount = res.count;
-              _this73.displayedDataCount = _this73.allRecordData.length;
-              _this73.maxPageNr = Math.ceil(_this73.totalCount / _this73.limit);
-              _this73.waiting = false;
+              _this74.allRecordData = res.rows;
+              _this74.totalCount = res.count;
+              _this74.displayedDataCount = _this74.allRecordData.length;
+              _this74.maxPageNr = Math.ceil(_this74.totalCount / _this74.limit);
+              _this74.waiting = false;
             }, function (er) {
-              _this73._messageService.add({
+              _this74._messageService.add({
                 severity: 'error',
                 summary: 'ERROR',
                 life: 10000,
@@ -34327,22 +34727,22 @@
         _createClass(PaymentAnalysisComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this74 = this;
+            var _this75 = this;
 
             this._translateService.get('PaymentAnalysis').subscribe(function (elem) {
-              _this74.blue = elem.blue;
-              _this74.red = elem.red;
-              _this74.green = elem.green;
-              _this74.items = [{
+              _this75.blue = elem.blue;
+              _this75.red = elem.red;
+              _this75.green = elem.green;
+              _this75.items = [{
                 label: elem.label,
                 routerLink: '/analysis/payment'
               }];
-              _this74.home = {
+              _this75.home = {
                 icon: 'pi pi-home',
                 label: elem.data,
                 routerLink: '/shared/data'
               };
-              _this74.basicOptions = {
+              _this75.basicOptions = {
                 tooltips: {
                   callbacks: {
                     label: function label(tooltipItem, data) {
@@ -34375,21 +34775,21 @@
                   }]
                 }
               };
-              _this74.top10 = 1;
-              _this74.paymentOptions = [{
-                name: _this74.blue,
+              _this75.top10 = 1;
+              _this75.paymentOptions = [{
+                name: _this75.blue,
                 value: 1,
                 color: 'rgb(100,100,255)'
               }, {
-                name: _this74.red,
+                name: _this75.red,
                 value: 2,
                 color: 'rgb(255,100,100)'
               }, {
-                name: _this74.green,
+                name: _this75.green,
                 value: 3,
                 color: 'rgb(100,255,100)'
               }];
-              _this74.top10Cols = [{
+              _this75.top10Cols = [{
                 header: 'PaymentAnalysis.accountNumber',
                 field: 'accountNumber',
                 align: 'center'
@@ -34402,7 +34802,7 @@
                 field: 'value',
                 align: 'right'
               }];
-              _this74.accountsCols = [{
+              _this75.accountsCols = [{
                 header: 'PaymentAnalysis.accountNumber',
                 field: 'accountNumber',
                 align: 'center'
@@ -34423,42 +34823,42 @@
                 field: 'green',
                 align: 'right'
               }];
-              _this74.basicData = {
-                labels: _this74.labels,
+              _this75.basicData = {
+                labels: _this75.labels,
                 datasets: new Array()
               };
 
-              _this74.basicData.datasets.push({
-                label: _this74.blue,
+              _this75.basicData.datasets.push({
+                label: _this75.blue,
                 backgroundColor: "rgb(100,100,255)",
-                data: _this74.blueData
+                data: _this75.blueData
               }, {
-                label: _this74.red,
+                label: _this75.red,
                 backgroundColor: "rgb(255,100,100)",
-                data: _this74.RedData
+                data: _this75.RedData
               }, {
-                label: _this74.green,
+                label: _this75.green,
                 backgroundColor: "rgb(100,255,100)",
-                data: _this74.GreenData
+                data: _this75.GreenData
               });
 
-              _this74.specificAccountData = {
-                labels: _this74.labels,
+              _this75.specificAccountData = {
+                labels: _this75.labels,
                 datasets: new Array()
               };
 
-              _this74.specificAccountData.datasets.push({
-                label: _this74.blue,
+              _this75.specificAccountData.datasets.push({
+                label: _this75.blue,
                 backgroundColor: "rgb(100,100,255)",
-                data: _this74.specificAccountBlueData
+                data: _this75.specificAccountBlueData
               }, {
-                label: _this74.red,
+                label: _this75.red,
                 backgroundColor: "rgb(255,100,100)",
-                data: _this74.specificAccountRedData
+                data: _this75.specificAccountRedData
               }, {
-                label: _this74.green,
+                label: _this75.green,
                 backgroundColor: "rgb(100,255,100)",
-                data: _this74.specificAccountGreenData
+                data: _this75.specificAccountGreenData
               });
             });
 
@@ -34467,46 +34867,46 @@
             this.procedureName = localStorage.getItem('currentProcedureName');
 
             this._analysisService.getPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure).subscribe(function (res) {
-              _this74.data = res.data.res;
-              _this74.accounts = res.data.accounts;
-              _this74.startDate = res.dateRange[0].mindate;
-              _this74.endDate = res.dateRange[0].maxdate;
+              _this75.data = res.data.res;
+              _this75.accounts = res.data.accounts;
+              _this75.startDate = res.dateRange[0].mindate;
+              _this75.endDate = res.dateRange[0].maxdate;
 
-              for (var i = 0; i < _this74.data.length; i++) {
-                var element = _this74.data[i];
+              for (var i = 0; i < _this75.data.length; i++) {
+                var element = _this75.data[i];
 
-                _this74.labels.push(element.monthName + '-' + element.yearName);
+                _this75.labels.push(element.monthName + '-' + element.yearName);
 
-                _this74.blueData.push(Math.abs(element.blue.value));
+                _this75.blueData.push(Math.abs(element.blue.value));
 
-                _this74.GreenData.push(Math.abs(element.green.value));
+                _this75.GreenData.push(Math.abs(element.green.value));
 
-                _this74.RedData.push(Math.abs(element.red.value));
+                _this75.RedData.push(Math.abs(element.red.value));
               } // get top 10
 
 
-              _this74.accounts.sort(function (a, b) {
+              _this75.accounts.sort(function (a, b) {
                 return Math.abs(b.blue) - Math.abs(a.blue);
               });
 
-              _this74.top10Blue = _this74.accounts.slice(0, 10);
+              _this75.top10Blue = _this75.accounts.slice(0, 10);
 
-              _this74.accounts.sort(function (a, b) {
+              _this75.accounts.sort(function (a, b) {
                 return Math.abs(b.red) - Math.abs(a.red);
               });
 
-              _this74.top10Red = _this74.accounts.slice(0, 10);
+              _this75.top10Red = _this75.accounts.slice(0, 10);
 
-              _this74.accounts.sort(function (a, b) {
+              _this75.accounts.sort(function (a, b) {
                 return Math.abs(b.green) - Math.abs(a.green);
               });
 
-              _this74.top10Green = _this74.accounts.slice(0, 10); // debugger;
+              _this75.top10Green = _this75.accounts.slice(0, 10); // debugger;
 
-              _this74.ready = true;
-              _this74.tempData = _toConsumableArray(_this74.accounts);
+              _this75.ready = true;
+              _this75.tempData = _toConsumableArray(_this75.accounts);
             }, function (er) {
-              _this74._messageService.add({
+              _this75._messageService.add({
                 severity: 'error',
                 summary: 'ERROR',
                 life: 10000,
@@ -34535,7 +34935,7 @@
         }, {
           key: "filterChange",
           value: function filterChange(query, colName) {
-            var _this75 = this;
+            var _this76 = this;
 
             this.searching = true; // debugger;
 
@@ -34546,17 +34946,17 @@
                 this.accounts = _toConsumableArray(this.tempData);
               } else {
                 var _loop9 = function _loop9(key) {
-                  if (Object.prototype.hasOwnProperty.call(_this75.criteria, key)) {
-                    var element = _this75.criteria[key];
+                  if (Object.prototype.hasOwnProperty.call(_this76.criteria, key)) {
+                    var element = _this76.criteria[key];
 
                     if (element.length < 3) {
-                      _this75.accounts = _this75.tempData.filter(function (value) {
+                      _this76.accounts = _this76.tempData.filter(function (value) {
                         var _a;
 
                         return ((_a = value[key]) === null || _a === void 0 ? void 0 : _a.toLowerCase()) == element.toLowerCase();
                       });
                     } else {
-                      _this75.accounts = _this75.tempData.filter(function (value) {
+                      _this76.accounts = _this76.tempData.filter(function (value) {
                         var _a;
 
                         return (_a = value[key]) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(element.toLowerCase());
@@ -34573,17 +34973,17 @@
               this.accounts = _toConsumableArray(this.tempData);
 
               var _loop10 = function _loop10(_key5) {
-                if (Object.prototype.hasOwnProperty.call(_this75.criteria, _key5)) {
-                  var element = _this75.criteria[_key5];
+                if (Object.prototype.hasOwnProperty.call(_this76.criteria, _key5)) {
+                  var element = _this76.criteria[_key5];
 
                   if (element.length < 3) {
-                    _this75.accounts = _this75.accounts.filter(function (value) {
+                    _this76.accounts = _this76.accounts.filter(function (value) {
                       var _a;
 
                       return ((_a = value[_key5]) === null || _a === void 0 ? void 0 : _a.toString().toLowerCase()) == element.toLowerCase();
                     });
                   } else {
-                    _this75.accounts = _this75.accounts.filter(function (value) {
+                    _this76.accounts = _this76.accounts.filter(function (value) {
                       var _a;
 
                       return (_a = value[_key5]) === null || _a === void 0 ? void 0 : _a.toString().toLowerCase().includes(element.toLowerCase());
@@ -34603,7 +35003,7 @@
         }, {
           key: "onRowSelect",
           value: function onRowSelect(event) {
-            var _this76 = this;
+            var _this77 = this;
 
             // debugger;
             this.selectedMaxAccountNumber = event.data.accountNumber;
@@ -34616,7 +35016,7 @@
                 var total = 0;
                 element.blue.accounts.forEach(function (b) {
                   // if the account is selected account add the value to the total
-                  if (b.accountNumber == _this76.selectedMaxAccountNumber) {
+                  if (b.accountNumber == _this77.selectedMaxAccountNumber) {
                     total += b.value;
                   }
                 }); // end of for each account
@@ -34628,7 +35028,7 @@
                 var _total = 0;
                 element.red.accounts.forEach(function (r) {
                   // if the account is selected account add the value to the total
-                  if (r.accountNumber == _this76.selectedMaxAccountNumber) {
+                  if (r.accountNumber == _this77.selectedMaxAccountNumber) {
                     _total += r.value;
                   }
                 }); // end of for each account
@@ -34640,7 +35040,7 @@
                 var _total2 = 0;
                 element.green.accounts.forEach(function (g) {
                   // if the account is selected account add the value to the total
-                  if (g.accountNumber == _this76.selectedMaxAccountNumber) {
+                  if (g.accountNumber == _this77.selectedMaxAccountNumber) {
                     _total2 += g.value;
                   }
                 }); // end of for each account
@@ -35198,7 +35598,7 @@
         _createClass(TextAnalysisComponent, [{
           key: "ngOnInit",
           value: function ngOnInit() {
-            var _this77 = this;
+            var _this78 = this;
 
             this.items = [// { label: 'Analysis' },
             {
@@ -35246,27 +35646,22 @@
             }];
 
             this._analysisService.getTextAnalysis(this.selectedOrganisation, this.selectedProcedure).subscribe(function (res) {
-              _this77.data = res;
-
-              if (_this77.data.length > 0) {
-                _this77.accountName = _this77.data[0].accountName;
-              }
-
-              _this77.tempData = _toConsumableArray(_this77.data);
-              _this77.basicData = {
+              _this78.data = res;
+              _this78.tempData = _toConsumableArray(_this78.data);
+              _this78.basicData = {
                 labels: ['Total Count'],
                 datasets: new Array()
               };
 
-              for (var i = 0; i < _this77.data.length; i++) {
-                var element = _this77.data[i];
+              for (var i = 0; i < _this78.data.length; i++) {
+                var element = _this78.data[i];
 
-                _this77.basicData.datasets.push(new _model_bar__WEBPACK_IMPORTED_MODULE_0__["Bar"](element.accountName, "rgb(".concat(Math.random() * 25500 % 255, ", ").concat(Math.random() * 25500 % 255, ",").concat(Math.random() * 25500 % 255, ")"), element.totlaCount));
+                _this78.basicData.datasets.push(new _model_bar__WEBPACK_IMPORTED_MODULE_0__["Bar"](element.accountName, "rgb(".concat(Math.random() * 25500 % 255, ", ").concat(Math.random() * 25500 % 255, ",").concat(Math.random() * 25500 % 255, ")"), element.totlaCount));
               }
 
-              _this77.waiting = false;
+              _this78.waiting = false;
             }, function (er) {
-              _this77._messageService.add({
+              _this78._messageService.add({
                 severity: 'error',
                 summary: 'ERROR',
                 life: 10000,
@@ -35283,7 +35678,7 @@
         }, {
           key: "filterChange",
           value: function filterChange(query, colName) {
-            var _this78 = this;
+            var _this79 = this;
 
             this.searching = true; // debugger;
 
@@ -35294,17 +35689,17 @@
                 this.data = _toConsumableArray(this.tempData);
               } else {
                 var _loop11 = function _loop11(key) {
-                  if (Object.prototype.hasOwnProperty.call(_this78.criteria, key)) {
-                    var element = _this78.criteria[key];
+                  if (Object.prototype.hasOwnProperty.call(_this79.criteria, key)) {
+                    var element = _this79.criteria[key];
 
                     if (element.length < 3) {
-                      _this78.data = _this78.tempData.filter(function (value) {
+                      _this79.data = _this79.tempData.filter(function (value) {
                         var _a;
 
                         return ((_a = value[key]) === null || _a === void 0 ? void 0 : _a.toLowerCase()) == element.toLowerCase();
                       });
                     } else {
-                      _this78.data = _this78.tempData.filter(function (value) {
+                      _this79.data = _this79.tempData.filter(function (value) {
                         var _a;
 
                         return (_a = value[key]) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(element.toLowerCase());
@@ -35321,17 +35716,17 @@
               this.data = _toConsumableArray(this.tempData);
 
               var _loop12 = function _loop12(_key6) {
-                if (Object.prototype.hasOwnProperty.call(_this78.criteria, _key6)) {
-                  var element = _this78.criteria[_key6];
+                if (Object.prototype.hasOwnProperty.call(_this79.criteria, _key6)) {
+                  var element = _this79.criteria[_key6];
 
                   if (element.length < 3) {
-                    _this78.data = _this78.data.filter(function (value) {
+                    _this79.data = _this79.data.filter(function (value) {
                       var _a;
 
                       return ((_a = value[_key6]) === null || _a === void 0 ? void 0 : _a.toString().toLowerCase()) == element.toLowerCase();
                     });
                   } else {
-                    _this78.data = _this78.data.filter(function (value) {
+                    _this79.data = _this79.data.filter(function (value) {
                       var _a;
 
                       return (_a = value[_key6]) === null || _a === void 0 ? void 0 : _a.toString().toLowerCase().includes(element.toLowerCase());
@@ -35620,6 +36015,656 @@
         },
         pipes: [_ngx_translate_core__WEBPACK_IMPORTED_MODULE_1__["TranslatePipe"]],
         styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJ1bmF1dGguY29tcG9uZW50LnNhc3MifQ== */"]
+      });
+      /***/
+    },
+
+    /***/
+    "otCA":
+    /*!*****************************************************************************!*\
+      !*** ./src/app/shared/liquidity/free-liquidity/free-liquidity.component.ts ***!
+      \*****************************************************************************/
+
+    /*! exports provided: FreeLiquidityComponent */
+
+    /***/
+    function otCA(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "FreeLiquidityComponent", function () {
+        return FreeLiquidityComponent;
+      });
+      /* harmony import */
+
+
+      var _angular_common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! @angular/common */
+      "ofXK");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! @angular/core */
+      "fXoL");
+      /* harmony import */
+
+
+      var _service_liquidity_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! ../../service/liquidity.service */
+      "wkBi");
+      /* harmony import */
+
+
+      var primeng_api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      /*! primeng/api */
+      "7zfz");
+      /* harmony import */
+
+
+      var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! @angular/router */
+      "tyNb");
+      /* harmony import */
+
+
+      var primeng_toast__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+      /*! primeng/toast */
+      "Gxio");
+      /* harmony import */
+
+
+      var primeng_breadcrumb__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+      /*! primeng/breadcrumb */
+      "URcr");
+      /* harmony import */
+
+
+      var primeng_chart__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
+      /*! primeng/chart */
+      "I5S5");
+      /* harmony import */
+
+
+      var primeng_table__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(
+      /*! primeng/table */
+      "rEr+");
+      /* harmony import */
+
+
+      var primeng_progressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(
+      /*! primeng/progressbar */
+      "+DzE");
+      /* harmony import */
+
+
+      var primeng_tooltip__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(
+      /*! primeng/tooltip */
+      "xlun");
+      /* harmony import */
+
+
+      var _angular_forms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(
+      /*! @angular/forms */
+      "3Pt+");
+      /* harmony import */
+
+
+      var primeng_inputtext__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
+      /*! primeng/inputtext */
+      "7kUa");
+      /* harmony import */
+
+
+      var primeng_button__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
+      /*! primeng/button */
+      "jIHw");
+      /* harmony import */
+
+
+      var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(
+      /*! @ngx-translate/core */
+      "sYmb");
+
+      var _c0 = function _c0() {
+        return {
+          "height": "5px"
+        };
+      };
+
+      function FreeLiquidityComponent_p_progressBar_14_Template(rf, ctx) {
+        if (rf & 1) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "p-progressBar", 13);
+        }
+
+        if (rf & 2) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleMap"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpureFunction0"](2, _c0));
+        }
+      }
+
+      function FreeLiquidityComponent_ng_template_17_col_1_Template(rf, ctx) {
+        if (rf & 1) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "col");
+        }
+      }
+
+      function FreeLiquidityComponent_ng_template_17_Template(rf, ctx) {
+        if (rf & 1) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "colgroup");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, FreeLiquidityComponent_ng_template_17_col_1_Template, 1, 0, "col", 14);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](2, "col");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        }
+
+        if (rf & 2) {
+          var columns_r5 = ctx.$implicit;
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", columns_r5);
+        }
+      }
+
+      function FreeLiquidityComponent_ng_template_18_th_1_Template(rf, ctx) {
+        if (rf & 1) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "th", 17);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "span", 18);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](2, "translate");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](3);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipe"](4, "translate");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](5, "p-sortIcon", 19);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        }
+
+        if (rf & 2) {
+          var col_r11 = ctx.$implicit;
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpropertyInterpolate"]("pSortableColumn", col_r11.field);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpropertyInterpolate"]("pTooltip", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind1"](2, 4, col_r11.header));
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpipeBind1"](4, 6, col_r11.header), " ");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpropertyInterpolate"]("field", col_r11.field);
+        }
+      }
+
+      var _c1 = function _c1() {
+        return {
+          width: "90%"
+        };
+      };
+
+      function FreeLiquidityComponent_ng_template_18_th_5_input_1_Template(rf, ctx) {
+        if (rf & 1) {
+          var _r15 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "input", 22);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngModelChange", function FreeLiquidityComponent_ng_template_18_th_5_input_1_Template_input_ngModelChange_0_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r15);
+
+            var col_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]().$implicit;
+
+            var ctx_r14 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](2);
+
+            return ctx_r14.criteria[col_r12.field] = $event;
+          })("input", function FreeLiquidityComponent_ng_template_18_th_5_input_1_Template_input_input_0_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r15);
+
+            var col_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]().$implicit;
+
+            var ctx_r17 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](2);
+
+            return ctx_r17.filterChange($event.target.value, col_r12.field);
+          });
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        }
+
+        if (rf & 2) {
+          var col_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]().$implicit;
+
+          var ctx_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"](2);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵstyleMap"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpureFunction0"](3, _c1));
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngModel", ctx_r13.criteria[col_r12.field]);
+        }
+      }
+
+      function FreeLiquidityComponent_ng_template_18_th_5_Template(rf, ctx) {
+        if (rf & 1) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "th", 20);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, FreeLiquidityComponent_ng_template_18_th_5_input_1_Template, 1, 4, "input", 21);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        }
+
+        if (rf & 2) {
+          var col_r12 = ctx.$implicit;
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", col_r12.field == "accountNumber" || col_r12.field == "accountName");
+        }
+      }
+
+      function FreeLiquidityComponent_ng_template_18_Template(rf, ctx) {
+        if (rf & 1) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "tr");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, FreeLiquidityComponent_ng_template_18_th_1_Template, 6, 8, "th", 15);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "th");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](3, "Details");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "tr");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](5, FreeLiquidityComponent_ng_template_18_th_5_Template, 2, 1, "th", 16);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](6, "th");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        }
+
+        if (rf & 2) {
+          var columns_r8 = ctx.$implicit;
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", columns_r8);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](4);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", columns_r8);
+        }
+      }
+
+      function FreeLiquidityComponent_ng_template_19_td_1_Template(rf, ctx) {
+        if (rf & 1) {
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "td");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "span", 18);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        }
+
+        if (rf & 2) {
+          var col_r23 = ctx.$implicit;
+
+          var row_r20 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]().$implicit;
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵclassMapInterpolate1"]("p-text-", col_r23.align, "");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵpropertyInterpolate"]("pTooltip", row_r20[col_r23.field]);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", row_r20[col_r23.field], " ");
+        }
+      }
+
+      function FreeLiquidityComponent_ng_template_19_Template(rf, ctx) {
+        if (rf & 1) {
+          var _r26 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵgetCurrentView"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "tr");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](1, FreeLiquidityComponent_ng_template_19_td_1_Template, 3, 5, "td", 23);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "td");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "button", 24);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function FreeLiquidityComponent_ng_template_19_Template_button_click_3_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵrestoreView"](_r26);
+
+            var row_r20 = ctx.$implicit;
+
+            var ctx_r25 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+
+            return ctx_r25.goToDetails(row_r20);
+          });
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        }
+
+        if (rf & 2) {
+          var columns_r21 = ctx.columns;
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", columns_r21);
+        }
+      }
+
+      var FreeLiquidityComponent = /*#__PURE__*/function () {
+        function FreeLiquidityComponent(_liquidityService, _messageService, _router) {
+          _classCallCheck(this, FreeLiquidityComponent);
+
+          this._liquidityService = _liquidityService;
+          this._messageService = _messageService;
+          this._router = _router;
+          this.accounts = new Array();
+          this.labels = new Array();
+          this.procedureName = "";
+          this.cols = new Array();
+          this.criteria = {};
+        }
+
+        _createClass(FreeLiquidityComponent, [{
+          key: "ngOnInit",
+          value: function ngOnInit() {
+            this.orgId = +localStorage.getItem('organisationId');
+            this.prcId = +localStorage.getItem('currentProcedureId');
+            this.procedureName = localStorage.getItem('currentProcedureName');
+            this.items = [{
+              label: 'Free Liquidity',
+              routerLink: '/liquidity/freeLiquidity'
+            }];
+            this.home = {
+              icon: 'pi pi-home',
+              label: ' Data',
+              routerLink: '/shared/data'
+            };
+            this.basicOptions = {
+              tooltips: {
+                callbacks: {
+                  label: function label(tooltipItem, data) {
+                    var value = tooltipItem.value;
+                    var currencyPipe = new _angular_common__WEBPACK_IMPORTED_MODULE_0__["CurrencyPipe"]('de');
+                    value = currencyPipe.transform(value, 'EURO', '');
+                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                    return label + ': ' + value;
+                  }
+                }
+              },
+              scales: {
+                xAxes: [{
+                  ticks: {
+                    minRotation: 40,
+                    maxRotation: 90
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    minRotation: 0,
+                    maxRotation: 0,
+                    callback: function callback(label, index, values) {
+                      // debugger;
+                      var currencyPipe = new _angular_common__WEBPACK_IMPORTED_MODULE_0__["CurrencyPipe"]('de');
+                      label = currencyPipe.transform(label, 'EURO', '');
+                      return label;
+                    }
+                  }
+                }]
+              }
+            };
+            this.cols = [{
+              header: 'Account Number',
+              field: 'accountNumber'
+            }, {
+              header: 'Account Name',
+              field: 'accountName'
+            }, {
+              header: 'Count',
+              field: 'count'
+            }];
+            this.getData();
+          } // end of ng on init
+
+        }, {
+          key: "getData",
+          value: function getData() {
+            var _this80 = this;
+
+            this.searching = true;
+
+            this._liquidityService.getFreeLiquidity(this.orgId, this.prcId).subscribe(function (res) {
+              _this80.accounts = res.bankBalances.accounts;
+              _this80.tempData = res.bankBalances.accounts;
+              _this80.basicData = {
+                labels: res.bankBalances.labels,
+                datasets: [{
+                  type: 'line',
+                  label: 'Credit Lines',
+                  borderColor: '#42A5F5',
+                  borderWidth: 2,
+                  fill: false,
+                  data: res.creditLines
+                }, {
+                  type: 'line',
+                  label: 'Free Liquidity',
+                  fill: false,
+                  data: res.freeLiquidity,
+                  borderColor: '#E5A58B',
+                  borderWidth: 2
+                }, {
+                  type: 'bar',
+                  label: 'Bank Balances',
+                  backgroundColor: '#88FF88',
+                  borderColor: '#58dF58',
+                  data: res.bankBalances.bankBalances
+                }]
+              };
+              _this80.searching = false;
+            }, function (er) {});
+          }
+        }, {
+          key: "filterChange",
+          value: function filterChange(query, colName) {
+            var _this81 = this;
+
+            this.searching = true; // debugger;
+
+            if (!query) {
+              delete this.criteria[colName];
+
+              if (Object.keys(this.criteria).length < 1) {
+                this.accounts = _toConsumableArray(this.tempData);
+              } else {
+                var _loop13 = function _loop13(key) {
+                  if (Object.prototype.hasOwnProperty.call(_this81.criteria, key)) {
+                    var element = _this81.criteria[key];
+
+                    if (element.length < 3) {
+                      _this81.accounts = _this81.tempData.filter(function (value) {
+                        var _a;
+
+                        return ((_a = value[key]) === null || _a === void 0 ? void 0 : _a.toLowerCase()) == element.toLowerCase();
+                      });
+                    } else {
+                      _this81.accounts = _this81.tempData.filter(function (value) {
+                        var _a;
+
+                        return (_a = value[key]) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(element.toLowerCase());
+                      });
+                    }
+                  }
+                };
+
+                for (var key in this.criteria) {
+                  _loop13(key);
+                }
+              }
+            } else {
+              this.accounts = _toConsumableArray(this.tempData);
+
+              var _loop14 = function _loop14(_key7) {
+                if (Object.prototype.hasOwnProperty.call(_this81.criteria, _key7)) {
+                  var element = _this81.criteria[_key7];
+
+                  if (element.length < 3) {
+                    _this81.accounts = _this81.accounts.filter(function (value) {
+                      var _a;
+
+                      return ((_a = value[_key7]) === null || _a === void 0 ? void 0 : _a.toString().toLowerCase()) == element.toLowerCase();
+                    });
+                  } else {
+                    _this81.accounts = _this81.accounts.filter(function (value) {
+                      var _a;
+
+                      return (_a = value[_key7]) === null || _a === void 0 ? void 0 : _a.toString().toLowerCase().includes(element.toLowerCase());
+                    });
+                  }
+                }
+              };
+
+              for (var _key7 in this.criteria) {
+                _loop14(_key7);
+              } // end of for each criteria field
+
+            }
+
+            this.searching = false;
+          }
+        }, {
+          key: "goToDetails",
+          value: function goToDetails(row) {
+            this._router.navigate(['liquidity/freeLiquidity/details/' + row.accountNumber]);
+          }
+        }]);
+
+        return FreeLiquidityComponent;
+      }();
+
+      FreeLiquidityComponent.ɵfac = function FreeLiquidityComponent_Factory(t) {
+        return new (t || FreeLiquidityComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_service_liquidity_service__WEBPACK_IMPORTED_MODULE_2__["LiquidityService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](primeng_api__WEBPACK_IMPORTED_MODULE_3__["MessageService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]));
+      };
+
+      FreeLiquidityComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({
+        type: FreeLiquidityComponent,
+        selectors: [["app-free-liquidity"]],
+        decls: 20,
+        vars: 12,
+        consts: [[3, "model", "home"], [1, "p-grid"], [1, "p-col-12"], [1, "p-text-center"], [1, "card"], ["type", "bar", "height", "400px", 3, "data", "options"], [1, "p-col-12", 3, "hidden"], ["mode", "indeterminate", 3, "style", 4, "ngIf"], ["dataKey", "accountNumber", "styleClass", "p-datatable-gridlines", "responsive", "true", "scrollHeight", "350px", 3, "value", "columns", "scrollable", "reorderableColumns", "resizableColumns"], ["dt", ""], ["pTemplate", "colgroup"], ["pTemplate", "header"], ["pTemplate", "body"], ["mode", "indeterminate"], [4, "ngFor", "ngForOf"], ["pReorderableColumn", "", "pResizableColumn", "", "class", "p-text-center", 3, "pSortableColumn", 4, "ngFor", "ngForOf"], ["pResizableColumn", "", "class", "autocomplete", 4, "ngFor", "ngForOf"], ["pReorderableColumn", "", "pResizableColumn", "", 1, "p-text-center", 3, "pSortableColumn"], [3, "pTooltip"], [3, "field"], ["pResizableColumn", "", 1, "autocomplete"], ["pInputText", "", "type", "text", "class", "filterInputCss", 3, "ngModel", "style", "ngModelChange", "input", 4, "ngIf"], ["pInputText", "", "type", "text", 1, "filterInputCss", 3, "ngModel", "ngModelChange", "input"], [3, "class", 4, "ngFor", "ngForOf"], ["type", "button", "pButton", "", "pRipple", "", "icon", "pi pi-list", "pTooltip", "Details", "tooltipPosition", "bottom", 1, "p-button-rounded", "p-button-warning", 3, "click"]],
+        template: function FreeLiquidityComponent_Template(rf, ctx) {
+          if (rf & 1) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "p-toast");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "p-breadcrumb", 0);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "div", 1);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "div", 2);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "h2", 3);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](5);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](6, "h4", 3);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](7, "All Accounts");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](8, "div", 1);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](9, "div", 2);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](10, "div", 4);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](11, "p-chart", 5);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](12, "div", 1);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](13, "div", 6);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](14, FreeLiquidityComponent_p_progressBar_14_Template, 1, 3, "p-progressBar", 7);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](15, "p-table", 8, 9);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](17, FreeLiquidityComponent_ng_template_17_Template, 3, 1, "ng-template", 10);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](18, FreeLiquidityComponent_ng_template_18_Template, 7, 2, "ng-template", 11);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](19, FreeLiquidityComponent_ng_template_19_Template, 4, 1, "ng-template", 12);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+          }
+
+          if (rf & 2) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("model", ctx.items)("home", ctx.home);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](4);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](ctx.procedureName);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](6);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("data", ctx.basicData)("options", ctx.basicOptions);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("hidden", !ctx.prcId);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.searching);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("value", ctx.accounts)("columns", ctx.cols)("scrollable", true)("reorderableColumns", true)("resizableColumns", true);
+          }
+        },
+        directives: [primeng_toast__WEBPACK_IMPORTED_MODULE_5__["Toast"], primeng_breadcrumb__WEBPACK_IMPORTED_MODULE_6__["Breadcrumb"], primeng_chart__WEBPACK_IMPORTED_MODULE_7__["UIChart"], _angular_common__WEBPACK_IMPORTED_MODULE_0__["NgIf"], primeng_table__WEBPACK_IMPORTED_MODULE_8__["Table"], primeng_api__WEBPACK_IMPORTED_MODULE_3__["PrimeTemplate"], primeng_progressbar__WEBPACK_IMPORTED_MODULE_9__["ProgressBar"], _angular_common__WEBPACK_IMPORTED_MODULE_0__["NgForOf"], primeng_table__WEBPACK_IMPORTED_MODULE_8__["ReorderableColumn"], primeng_table__WEBPACK_IMPORTED_MODULE_8__["ResizableColumn"], primeng_table__WEBPACK_IMPORTED_MODULE_8__["SortableColumn"], primeng_tooltip__WEBPACK_IMPORTED_MODULE_10__["Tooltip"], primeng_table__WEBPACK_IMPORTED_MODULE_8__["SortIcon"], _angular_forms__WEBPACK_IMPORTED_MODULE_11__["DefaultValueAccessor"], primeng_inputtext__WEBPACK_IMPORTED_MODULE_12__["InputText"], _angular_forms__WEBPACK_IMPORTED_MODULE_11__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_11__["NgModel"], primeng_button__WEBPACK_IMPORTED_MODULE_13__["ButtonDirective"]],
+        pipes: [_ngx_translate_core__WEBPACK_IMPORTED_MODULE_14__["TranslatePipe"]],
+        styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJmcmVlLWxpcXVpZGl0eS5jb21wb25lbnQuc2FzcyJ9 */"]
       });
       /***/
     },
@@ -36328,7 +37373,19 @@
       /* harmony import */
 
 
-      var _angular_core__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(
+      var _shared_liquidity_free_liquidity_free_liquidity_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(
+      /*! ./shared/liquidity/free-liquidity/free-liquidity.component */
+      "otCA");
+      /* harmony import */
+
+
+      var _shared_liquidity_free_liquidity_free_liquidity_details_free_liquidity_details_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(
+      /*! ./shared/liquidity/free-liquidity/free-liquidity-details/free-liquidity-details.component */
+      "Lscj");
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(
       /*! @angular/core */
       "fXoL");
 
@@ -36534,6 +37591,20 @@
           roles: ['Admin', 'Manager', 'User']
         }
       }, {
+        path: 'liquidity/freeLiquidity',
+        component: _shared_liquidity_free_liquidity_free_liquidity_component__WEBPACK_IMPORTED_MODULE_33__["FreeLiquidityComponent"],
+        canActivate: [_auth_guard__WEBPACK_IMPORTED_MODULE_1__["AuthGuard"]],
+        data: {
+          roles: ['Admin', 'Manager', 'User']
+        }
+      }, {
+        path: 'liquidity/freeLiquidity/details/:accountNumber',
+        component: _shared_liquidity_free_liquidity_free_liquidity_details_free_liquidity_details_component__WEBPACK_IMPORTED_MODULE_34__["FreeLiquidityDetailsComponent"],
+        canActivate: [_auth_guard__WEBPACK_IMPORTED_MODULE_1__["AuthGuard"]],
+        data: {
+          roles: ['Admin', 'Manager', 'User']
+        }
+      }, {
         path: 'unauthorized',
         component: _shared_unauth_unauth_component__WEBPACK_IMPORTED_MODULE_3__["UnauthComponent"]
       }, {
@@ -36551,10 +37622,10 @@
         _classCallCheck(this, AppRoutingModule);
       };
 
-      AppRoutingModule.ɵmod = _angular_core__WEBPACK_IMPORTED_MODULE_33__["ɵɵdefineNgModule"]({
+      AppRoutingModule.ɵmod = _angular_core__WEBPACK_IMPORTED_MODULE_35__["ɵɵdefineNgModule"]({
         type: AppRoutingModule
       });
-      AppRoutingModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_33__["ɵɵdefineInjector"]({
+      AppRoutingModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_35__["ɵɵdefineInjector"]({
         factory: function AppRoutingModule_Factory(t) {
           return new (t || AppRoutingModule)();
         },
@@ -36562,7 +37633,7 @@
       });
 
       (function () {
-        (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_33__["ɵɵsetNgModuleScope"](AppRoutingModule, {
+        (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_35__["ɵɵsetNgModuleScope"](AppRoutingModule, {
           imports: [_angular_router__WEBPACK_IMPORTED_MODULE_0__["RouterModule"]],
           exports: [_angular_router__WEBPACK_IMPORTED_MODULE_0__["RouterModule"]]
         });
@@ -36636,6 +37707,16 @@
           key: "updateCreditLine",
           value: function updateCreditLine(orgId, prcId, row) {
             return this._http.put(this._thisURL + orgId + '/' + prcId + '/creditLine', row);
+          }
+        }, {
+          key: "getFreeLiquidity",
+          value: function getFreeLiquidity(orgId, prcId) {
+            return this._http.get(this._thisURL + orgId + '/' + prcId + '/liquidity');
+          }
+        }, {
+          key: "getFreeLiquidityDetails",
+          value: function getFreeLiquidityDetails(orgId, prcId, accountNumber) {
+            return this._http.get(this._thisURL + orgId + '/' + prcId + '/liquidity/' + accountNumber);
           }
         }]);
 
@@ -36783,7 +37864,7 @@
         }, {
           key: "submitHandle",
           value: function submitHandle() {
-            var _this79 = this;
+            var _this82 = this;
 
             console.log(this.passwordObj);
 
@@ -36795,7 +37876,7 @@
                 token: this.token
               }).subscribe(function (res) {
                 // if(res.message === "successfully"){
-                _this79._router.navigate(['/']); // } else {
+                _this82._router.navigate(['/']); // } else {
                 //   this._messageService.add({
                 //     severity: 'error',
                 //     summary: 'ERROR!',
@@ -36804,7 +37885,7 @@
                 // }
 
               }, function (err) {
-                _this79._translateService.get("ErrorHandler").subscribe(function (elem) {
+                _this82._translateService.get("ErrorHandler").subscribe(function (elem) {
                   var errorMsg = "";
 
                   if (err.status === 400) {
@@ -36819,7 +37900,7 @@
                     errorMsg = elem.internalServerError_500;
                   }
 
-                  _this79._messageService.add({
+                  _this82._messageService.add({
                     severity: 'error',
                     summary: 'ERROR',
                     life: 10000,
@@ -36829,7 +37910,7 @@
               });
             } else {
               this._translateService.get("ErrorHandler").subscribe(function (elem) {
-                _this79._messageService.add({
+                _this82._messageService.add({
                   severity: 'error',
                   summary: 'ERROR!',
                   detail: elem.passwordsMatch

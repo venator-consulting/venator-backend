@@ -113,14 +113,14 @@ export class NavBarComponent implements OnInit {
 
                         ]
                     },
-                    {
+                     {
                         label: elem.liquidity,
                         items: [
                             { label: elem.openingBalance, icon: 'pi  pi-plus-circle', routerLink: ['/liquidity/openingBalance'], command: () => { this.sideBarShow = false } },
                             { label: elem.creditLine, icon: 'pi  pi-plus-circle', routerLink: ['/liquidity/creditLine'], command: () => { this.sideBarShow = false } },
                             { label: elem.freeLiquidity, icon: 'pi  pi-chart-line', routerLink: ['/liquidity/freeLiquidity'], command: () => { this.sideBarShow = false } },
                         ]
-                    } 
+                    }  
                 ];
 
                 this.userPages = [
@@ -150,6 +150,18 @@ export class NavBarComponent implements OnInit {
                                         {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
                                     ]
                     }, 
+                    
+                    {
+                        label: elem.analysis,
+                        items: [
+                            { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/analysis/amount'], command: () => { this.sideBarShow = false } },
+                            { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/analysis/text'], command: () => { this.sideBarShow = false } },
+                            { label: elem.paymentAnalyse, icon: 'pi pi-credit-card', routerLink: ['/analysis/payment'], command: () => { this.sideBarShow = false } },
+                           { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' , routerLink: ['/analysis/creditor'], command: () => {this.sideBarShow = false}},
+
+
+                        ]
+                    },
 
                 ];
 
@@ -170,12 +182,24 @@ export class NavBarComponent implements OnInit {
                             { label: elem.procedures, icon: 'pi  pi-home', routerLink: ['/shared/user/procedures'], command: () => { this.sideBarShow = false } },
                         ]
                     },
-                                {
-                                    label: elem.data,
-                                    items: [
-                                        {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
-                                    ]
-                                }, 
+                    {
+                        label: elem.data,
+                        items: [
+                                {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
+                        ]
+                    }, 
+                                
+                    {
+                        label: elem.analysis,
+                        items: [
+                            { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/analysis/amount'], command: () => { this.sideBarShow = false } },
+                            { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/analysis/text'], command: () => { this.sideBarShow = false } },
+                            { label: elem.paymentAnalyse, icon: 'pi pi-credit-card', routerLink: ['/analysis/payment'], command: () => { this.sideBarShow = false } },
+                           { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' , routerLink: ['/analysis/creditor'], command: () => {this.sideBarShow = false}},
+
+
+                        ]
+                    },
 
                 ];
 
