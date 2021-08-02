@@ -31,6 +31,10 @@ export class LiquidityService {
     return this._http.put<any>(this._thisURL + orgId + '/' + prcId + '/creditLine', row);
   }
 
+  deleteCreditLine(orgId: number, prcId: number, row: CreditLine): Observable<any> {
+    return this._http.delete<any>(this._thisURL + orgId + '/' + prcId + '/creditLine/' + row.id);
+  }
+
   getFreeLiquidity(orgId: number, prcId: number) {
     return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity');
   }

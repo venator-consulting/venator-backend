@@ -441,6 +441,9 @@ export class TextAnalysisDetailsComponent implements OnInit {
     const lang = localStorage.getItem('lang');
     let criteriaWithLang = {...this.backCriteria};
     criteriaWithLang['lang'] = lang;
+    criteriaWithLang['accountNumber'] = this.accountNumber;
+    criteriaWithLang['procedureId'] = this.prcId;
+    // debugger;
     this._exportDataService
       .exportXLSX('text_analysis', this.orgId, this.prcId, criteriaWithLang)
       .subscribe(
