@@ -713,7 +713,7 @@ module.exports = {
             },
             {
                 header: 'Account Name',
-                key: 'AccountName',
+                key: 'accountName',
                 width: 25
             },
             {
@@ -879,7 +879,7 @@ module.exports = {
             },
             {
                 header: 'Account Name',
-                key: 'AccountName',
+                key: 'accountName',
                 width: 25
             },
             {
@@ -976,7 +976,7 @@ module.exports = {
             },
             {
                 header: 'Kontoname',
-                key: 'AccountName',
+                key: 'accountName',
                 width: 25
             },
             {
@@ -1075,7 +1075,7 @@ module.exports = {
             },
             {
                 header: 'Account Name',
-                key: 'AccountName',
+                key: 'accountName',
                 width: 25
             },
             {
@@ -1157,7 +1157,7 @@ module.exports = {
             },
             {
                 header: 'Kontoname',
-                key: 'AccountName',
+                key: 'accountName',
                 width: 25
             },
             {

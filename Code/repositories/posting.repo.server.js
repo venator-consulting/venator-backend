@@ -20,7 +20,8 @@ module.exports.fetch = async (criteria) => {
         delete criteria.limit;
         const offset = criteria.offset ? criteria.offset : 0;
         delete criteria.offset;
-        const orderBy = criteria.orderBy ? criteria.orderBy : 'id';
+        let orderBy = criteria.orderBy ? criteria.orderBy : 'id';
+        orderBy = orderBy == 'accountNumber'? sequelize.fn('LPAD', sequelize.col('accountNumber'), 10,0) : orderBy;
         delete criteria.orderBy;
         const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
         delete criteria.sortOrder;
@@ -283,7 +284,8 @@ module.exports.getByAccountNumber = async (orgId, prcId, accountNumber, criteria
         delete criteria.limit;
         const offset = criteria.offset ? criteria.offset : 0;
         delete criteria.offset;
-        const orderBy = criteria.orderBy ? criteria.orderBy : 'id';
+        let orderBy = criteria.orderBy ? criteria.orderBy : 'id';
+        orderBy = orderBy == 'accountNumber'? sequelize.fn('LPAD', sequelize.col('accountNumber'), 10,0) : orderBy;
         delete criteria.orderBy;
         const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
         delete criteria.sortOrder;
@@ -552,7 +554,8 @@ module.exports.susaAnalysis = async (orgId, prcId, fromDate, toDate, criteria) =
                     AND pos.accountNumber is not NULL 
                                 `;
 
-        const orderBy = criteria.orderBy ? criteria.orderBy : 'accountNumber';
+        let orderBy = criteria.orderBy ? criteria.orderBy : 'accountNumber';
+        orderBy = orderBy == 'accountNumber' ? 'LPAD(LOWER(pos.accountNumber), 10,0) ' : orderBy;
         delete criteria.orderBy;
         const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
         delete criteria.sortOrder;

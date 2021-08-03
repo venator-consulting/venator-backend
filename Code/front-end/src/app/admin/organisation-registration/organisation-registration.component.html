@@ -93,10 +93,10 @@
 
               </ng-template>
             </p-fileUpload>
-            <div *ngIf="organisation.id && organisation.logo" class="p-mt-2">
+            <div *ngIf="!fromFront" class="p-mt-2">
               <img src="{{organisation.logo}}" alt="organisation logo" width="80">
             </div>
-            <div *ngIf="!organisation.id && organisation.logo" class="p-mt-2">
+            <div *ngIf="fromFront" class="p-mt-2">
               <img src="{{imageSrc}}" alt="organisation logo" width="80">
             </div>
           </div>
