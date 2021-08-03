@@ -1,5 +1,5 @@
 module.exports = {
-    domain: 'http://venalytics.de:8000/',
+    domain: 'http://localhost:8000/',
     port: 8000,
     jwtSecret: 'IT\'s just a secret For JWT token so use some special @#$%!1',
     uploadPath: './modules/Admin/files/',
@@ -17,7 +17,7 @@ module.exports = {
     mailerPort: 587,
     mailerUser: 'elza.tillman13@ethereal.email',
     mailerPassword: 'JdRqgGeAb5HeDqp3Ny',
-    resetPassLink: 'http://venalytics.de/reset/', 
+    resetPassLink: 'http://localhost/reset/', 
     developerMail: 'mohamad.hamad@venator-consulting.de'
     
 };

@@ -62,16 +62,16 @@
           <td>
             <button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(row)"
               class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
-              pTooltip="{{'Account_Type.Edit' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+              pTooltip="{{'Account_Type.Edit' | translate}}" tooltipPosition="bottom"></button>&nbsp;
             <button type="button" pButton pRipple icon="pi pi-save" (click)="save(row)"
               class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
-              pTooltip="{{'Account_Type.Save' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+              pTooltip="{{'Account_Type.Save' | translate}}" tooltipPosition="bottom"></button>&nbsp;
             <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
               class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
-              pTooltip="{{'Account_Type.Cancel' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+              pTooltip="{{'Account_Type.Cancel' | translate}}" tooltipPosition="bottom"></button>&nbsp;
             <button type="button" pButton pRipple icon="pi pi-plus" (click)="addRow(row)"
               class="p-button-rounded p-button-warning" *ngIf="!row.isEditable && row.creditLine"
-              pTooltip="{{'Account_Type.Add' | translate}}" tooltipPosition="bottom"></button>
+              pTooltip="{{'Account_Type.Add' | translate}}" tooltipPosition="bottom"></button>&nbsp;
             <button type="button" pButton pRipple icon="pi pi-trash" (click)="deleteRow(row)"
               class="p-button-rounded p-button-warning" *ngIf="!row.isEditable && row.creditLine"
               pTooltip="{{'Account_Type.delete' | translate}}" tooltipPosition="bottom"></button>
