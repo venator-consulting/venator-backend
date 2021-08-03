@@ -133,7 +133,7 @@
       responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [resizableColumns]="true">
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns">
+          <col *ngFor="let col of columns" sorter="number">
           <col>
         </colgroup>
       </ng-template>
@@ -158,7 +158,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr>
-          <td *ngFor="let col of columns" class="p-text-{{col.align}}">
+          <td *ngFor="let col of columns" class="p-text-{{col.align}}" >
             <span *ngIf="col.field!='accountNumber' && col.field!='accountName'">
               {{ row[col.field]  | currency:'EUR':'' }}
             </span>

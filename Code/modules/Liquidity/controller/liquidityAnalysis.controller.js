@@ -28,6 +28,7 @@ module.exports.getAnalysisMainData = async (req, res) => {
             }
         }
 
+        // not needed
         if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
             res.status(400)
                 .json({
