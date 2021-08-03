@@ -28,8 +28,8 @@ app.use(cors({ origin: '*' }));
 
 app.set('port', config.port);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
+app.use(express.json());
+app.use(express.urlencoded({
     extended: true
 }));
 app.use(bearerToken());

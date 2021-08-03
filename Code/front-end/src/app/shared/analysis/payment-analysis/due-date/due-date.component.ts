@@ -80,6 +80,12 @@ export class DueDateComponent implements OnInit {
         this.docDataTable = res.data.docDateReference;
         // this.notPaidDataTable = res.data.docDateReference;
         this.delayData = res.data.dueDateRefAccounts;
+
+        this.delayData.forEach(account => {
+          let accountNumber = parseInt(account.accountNumber, 10);
+          account.accountNumber = isNaN(accountNumber)? account.accountNumber : accountNumber;
+        });
+
         this.docDataTable.forEach(element => {
           this.docDateLabels.push(element.monthName + '-' + element.yearName);
           this.notPaidLabels.push(element.monthName + '-' + element.yearName);

@@ -96,6 +96,10 @@ export class CreditorAnalysisComponent implements OnInit {
       .subscribe(res => {
         this.waiting = false;
         this.data = res.data;
+        // this.data.forEach(account => {
+        //   let accountNumber = parseInt(account.accountNumber.toString(), 10);
+        //   account.accountNumber = isNaN(accountNumber)? account.accountNumber : accountNumber;
+        // });
         this.totalCount = res.count[0]['FOUND_ROWS()'];
         this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
         this.maxPageNr = Math.ceil(this.totalCount / this.limit);

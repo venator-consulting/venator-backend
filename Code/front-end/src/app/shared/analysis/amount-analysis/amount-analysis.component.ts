@@ -107,6 +107,10 @@ export class AmountAnalysisComponent implements OnInit {
       .getAmountAnalysis(this.selectedOrganisation, this.selectedProcedure, this.baseBalance)
       .subscribe(res => {
         this.data = res;
+        this.data.forEach(account => {
+          let accountNumber = parseInt(account.accountNumber.toString(), 10);
+          account.accountNumber = isNaN(accountNumber)? account.accountNumber : accountNumber;
+        });
         this.tempData = [...this.data];
         this.basicData = {
           labels: ['Total Count'],

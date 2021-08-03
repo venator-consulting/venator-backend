@@ -1,5 +1,5 @@
 export class TextAnalysis {
-    accountNumber: string;
+    accountNumber: string | number;
     accountName: string;
     totlaCount: number;
 }

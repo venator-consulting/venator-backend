@@ -57,7 +57,10 @@ export class CreditLineComponent implements OnInit {
     this._liquidityService
       .getCreditLine(this.orgId, this.prcId)
       .subscribe(res => {
-
+        res.forEach(val => {
+          val.creditLineFromDate = val.creditLineFromDate? new Date(val.creditLineFromDate) : null;
+          val.creditLineToDate = val.creditLineToDate? new Date(val.creditLineToDate) : null;
+        })
         this.data = res;
       }, er => {
         this._messageService.add({
@@ -118,8 +121,17 @@ export class CreditLineComponent implements OnInit {
       .deleteCreditLine(this.orgId, this.prcId, row)
       .subscribe(res => {
         this.data = this.data.filter(val  => val.id != row.id);
+        this._messageService.add({
+          severity: 'success',
+          summary: 'DONE!',
+          detail: `Credit line is deleted successfully`
+        });
       }, er => {
-
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR!',
+          detail: `There is an Error occured, please try again later!`
+        });
       });
   }
 

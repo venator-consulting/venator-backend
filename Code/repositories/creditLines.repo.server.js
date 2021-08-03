@@ -41,13 +41,25 @@ module.exports.getCreditLines = async (orgId, prcId) => {
 
 module.exports.getAll = async (orgId, prcId) => {
     try {
-        return await CreditLines
-            .getCreditLines('creditLines_' + orgId)
-            .findAll({
-                where: {
+        let query = `SELECT DISTINCT p.accountNumber, p.accountName, c.procedureId, c.creditLineFromDate , c.id, c.creditLineToDate , c.creditLine FROM 
+                        posting_${orgId} p
+                        join
+                        creditLines_${orgId} c
+                        on p.accountNumber = c.accountNumber
+                        WHERE p.procedureId = :procedureId 
+                        AND UPPER(p.accountTypeNewName) = 'FINANZKONTO'
+                        and (c.procedureId = :procedureId OR c.procedureId = :procedureId)`;
+
+
+        const result = sequelize.query(
+            query, {
+                replacements: {
                     procedureId: prcId
-                }
-            });
+                },
+                type: QueryTypes.SELECT
+            }
+        );
+        return result;
     } catch (error) {
         throw new Error(error.message);
     }

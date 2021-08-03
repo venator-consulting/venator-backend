@@ -91,6 +91,10 @@ export class TextAnalysisComponent implements OnInit {
       .getTextAnalysis(this.selectedOrganisation, this.selectedProcedure)
       .subscribe(res => {
         this.data = res;
+        this.data.forEach(account => {
+          let accountNumber = parseInt(account.accountNumber.toString(), 10);
+          account.accountNumber = isNaN(accountNumber)? account.accountNumber : accountNumber;
+        });
         this.tempData = [...this.data];
         this.basicData = {
           labels: ['Total Count'],

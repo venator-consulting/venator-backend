@@ -16,6 +16,7 @@ export class OrganisationRegistrationComponent implements OnInit {
   organisation: Organisation = new Organisation();
   id: number;
   imageSrc: string | ArrayBuffer;
+  fromFront: boolean = false;
 
   constructor(private _router: Router, private _messageService: MessageService,
     private _orgService: OrganisationService, public _translateService: TranslateService,
@@ -29,6 +30,7 @@ export class OrganisationRegistrationComponent implements OnInit {
         .subscribe(res => {
           if (res.length > 0) {
             this.organisation = res[0];
+            this.fromFront = this.organisation.logo? false : true;
           }
         }, err => {
           this._translateService.get("ErrorHandler").subscribe(elem => {
@@ -64,6 +66,7 @@ export class OrganisationRegistrationComponent implements OnInit {
   UploadHandler(event) {
     const selectedFiles: FileList = event.files;
     this.organisation.logo = selectedFiles[0];
+    this.fromFront = true;
     if (selectedFiles && selectedFiles[0]) {
       const file = selectedFiles[0];
 
@@ -122,6 +125,7 @@ export class OrganisationRegistrationComponent implements OnInit {
         .insert(formData)
         .subscribe(res => {
           this.organisation = res;
+          this.fromFront = false;
           this._messageService.add({
             severity: 'success',
             summary: 'SUCCESS!',

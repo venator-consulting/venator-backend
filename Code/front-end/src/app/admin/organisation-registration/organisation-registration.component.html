@@ -86,14 +86,17 @@
           <label for="logo" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Organisation_Registration.logo' | translate}}
           </label>
           <div class="p-col-12 p-md-10">
-            <p-fileUpload name="logo" name="logo" 
-              customUpload="true" [auto]="true" mode="basic" accept="image/*" styleClass="logoCss p-cancelButton "
-              (uploadHandler)="UploadHandler($event)" class="p-ripple" [style]="{'width':'50px', 'padding': '8px'}">
+            <p-fileUpload name="logo" mode="advanced" [showUploadButton]="false" customUpload="true"
+              (uploadHandler)="UploadHandler($event)" uploadLabel="Set Logo" [auto]="true"
+              accept="image/*">
+              <ng-template pTemplate="content">
+
+              </ng-template>
             </p-fileUpload>
-            <div *ngIf="organisation.id && organisation.logo" class="p-mt-2">
+            <div *ngIf="!fromFront" class="p-mt-2">
               <img src="{{organisation.logo}}" alt="organisation logo" width="80">
             </div>
-            <div *ngIf="!organisation.id && organisation.logo" class="p-mt-2">
+            <div *ngIf="fromFront" class="p-mt-2">
               <img src="{{imageSrc}}" alt="organisation logo" width="80">
             </div>
           </div>

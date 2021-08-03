@@ -208,13 +208,13 @@ module.exports.creditLinnes = async (orgId, prcId, fromDate, toDate) => {
     // get credit lines
     const creditLines = await CreditLineRepo.getAll(orgId, prcId);
 
-    // calculate difference
+    // calculate difference between fromDAte and toDate
     const diffirence = getNumberOfDays(fromDate, toDate);
 
     const creditLinesArray = new Array();
 
     // foreach day
-    for (let index = 0; index < diffirence; index++) {
+    for (let index = 0; index <= diffirence; index++) {
         if (!creditLinesArray[index]) {
             creditLinesArray[index] = 0;
         }
@@ -222,8 +222,15 @@ module.exports.creditLinnes = async (orgId, prcId, fromDate, toDate) => {
         let thisDate = new Date(fromDate);
         thisDate.setDate(fromDate.getDate() + index);
         // get included credit lines
+        // if toDate or fromDate is null? should be manipulated
         const creditLinesForThisDay = creditLines
-            .filter(val => thisDate >= new Date(val.creditLineFromDate) && thisDate <= new Date(val.creditLineToDate));
+            .filter(val => 
+                // between date range
+                (thisDate >= new Date(val.creditLineFromDate) && thisDate <= new Date(val.creditLineToDate)) ||
+                // start date is null and little than end date
+                (!val.creditLineFromDate && thisDate <= new Date(val.creditLineToDate)) ||
+                // bigger than end date and start date is null
+                (thisDate >= new Date(val.creditLineFromDate) && !val.creditLineToDate));
         creditLinesForThisDay.forEach(element => {
             creditLinesArray[index] += +element.creditLine;
         });
@@ -362,7 +369,13 @@ module.exports.creditLinnesDetails = async (orgId, prcId, accountNumber, fromDat
         thisDate.setDate(fromDate.getDate() + index);
         // get included credit lines
         const creditLinesForThisDay = creditLines
-            .filter(val => thisDate >= new Date(val.creditLineFromDate) && thisDate <= new Date(val.creditLineToDate));
+            .filter(val => 
+                // between date range
+                (thisDate >= new Date(val.creditLineFromDate) && thisDate <= new Date(val.creditLineToDate)) ||
+                // start date is null and little than end date
+                (!val.creditLineFromDate && thisDate <= new Date(val.creditLineToDate)) ||
+                // bigger than end date and start date is null
+                (thisDate >= new Date(val.creditLineFromDate) && !val.creditLineToDate));
         creditLinesForThisDay.forEach(element => {
             creditLinesArray[index] += +element.creditLine;
         });
