@@ -244,6 +244,10 @@ export class PaymentAnalysisComponent implements OnInit {
         this.accounts.sort((a, b) => Math.abs(b.green) - Math.abs(a.green));
         this.top10Green = this.accounts.slice(0, 10);
         // debugger;
+        this.accounts.forEach(account => {
+          let accountNumber = parseInt(account.accountNumber, 10);
+          account.accountNumber = isNaN(accountNumber)? account.accountNumber : accountNumber;
+        });
         this.ready = true;
         this.tempData = [...this.accounts];
       }, er => {

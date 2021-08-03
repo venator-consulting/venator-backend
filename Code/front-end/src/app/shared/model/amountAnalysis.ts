@@ -1,5 +1,5 @@
 export class AmountAnalysis {
-    accountNumber: string;
+    accountNumber: string | number;
     accountName: string;
     totlaCount: number;
     totalBalance: number;

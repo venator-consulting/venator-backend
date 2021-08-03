@@ -16,7 +16,8 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys, criteria) => {
 
         let limit = criteria.limit ? criteria.limit : 25;
         let offset = criteria.offset ? criteria.offset : 0;
-        const orderBy = criteria.orderBy ? criteria.orderBy : 'accountNumber';
+        let orderBy = criteria.orderBy ? criteria.orderBy : 'accountNumber';
+        orderBy = orderBy == 'accountNumber' ? 'LPAD(LOWER(p.accountNumber), 10,0) ' : orderBy;
         const sortOrder = criteria.sortOrder == -1 ? 'DESC' : 'ASC';
 
         let query = `SELECT SQL_CALC_FOUND_ROWS p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, SUM(p.balance) as totalBalance
