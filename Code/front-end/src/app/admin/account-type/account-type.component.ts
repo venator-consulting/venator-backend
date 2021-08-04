@@ -23,6 +23,11 @@ export class AccountTypeComponent implements OnInit {
   originalVal: number = -1;
   cols: { header, field , align}[] = new Array();
   procedureName: string;
+ 
+  // for filter
+  searching: boolean;
+  criteria: any = {};
+  tempData: any[];
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
     private _postingService: PostingService, private _orgService: OrganisationService) { }
@@ -97,7 +102,12 @@ export class AccountTypeComponent implements OnInit {
         .getPostingAccountTypes(this.selectedOrgId, this.selectedPrcId)
         .subscribe(
           data => {
+            data.forEach(account => {
+              let accountNumber = parseInt(account.accountNumber.toString(), 10);
+              account.accountNumber = isNaN(accountNumber)? account.accountNumber : accountNumber;
+            });
             this.postingAccountTypes = data;
+            this.tempData = data;
           },
           error => console.log(error)
         );
@@ -146,6 +156,41 @@ export class AccountTypeComponent implements OnInit {
     row.accountTypeNewName = this.accountTypes.filter(row => row.id == e.value)[0].AccountTypeName;
   }
 
+
+  filterChange(query, colName): void {
+    this.searching = true;
+    // debugger;
+    if (!query) {
+      delete this.criteria[colName];
+      if (Object.keys(this.criteria).length < 1) {
+        this.postingAccountTypes = [...this.tempData];
+      } else {
+        for (const key in this.criteria) {
+          if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+            const element = this.criteria[key];
+            if (element.length < 3) {
+              this.postingAccountTypes = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+            } else {
+              this.postingAccountTypes = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+            }
+          }
+        }
+      }
+    } else {
+      this.postingAccountTypes = [...this.tempData];
+      for (const key in this.criteria) {
+        if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+          const element = this.criteria[key];
+          if (element.length < 3) {
+            this.postingAccountTypes = this.postingAccountTypes.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());
+          } else {
+            this.postingAccountTypes = this.postingAccountTypes.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
+          }
+        }
+      } // end of for each criteria field
+    }
+    this.searching = false;
+  }
 
 
 }

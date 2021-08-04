@@ -5,6 +5,8 @@ export class AccountTypes {
 
 export class PostingAccountTypes {
     id: number;
+    accountNumber: number | string;
+    accountName: string;
     procedureId: number;
     accountType: string;
     accountTypeNewId: number;

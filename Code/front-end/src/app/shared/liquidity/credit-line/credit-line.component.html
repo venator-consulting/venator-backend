@@ -40,7 +40,7 @@
             </span>
 
             <span *ngIf="!row.isEditable && (col.field == 'creditLineToDate' || col.field == 'creditLineFromDate')">
-              {{ row[col.field] | date:'yyyy.MM.dd'}}
+              {{ row[col.field] | date:'dd.MM.yyyy'}}
             </span>
 
             <p-inputNumber *ngIf="row.isEditable && col.field == 'creditLine'" [(ngModel)]="row.creditLine"

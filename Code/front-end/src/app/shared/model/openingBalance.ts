@@ -1,5 +1,5 @@
 export class OpeningBalance {
-    accountNumber: string;
+    accountNumber: string | number;
     accountName: string;
     accountTypeNewId: number;
     accountTypeNewName: string;

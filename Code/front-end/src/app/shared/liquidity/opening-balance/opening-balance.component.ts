@@ -18,6 +18,11 @@ export class OpeningBalanceComponent implements OnInit {
   cols: TableColumn[];
   originalOpeningBalance: number;
   originalOpeningBalanceDate: Date;
+  // for filter
+  searching: boolean;
+  criteria: any = {};
+  tempData: any[];
+  filtersNo: number = 0;
 
 
   constructor(private _liquidityService: LiquidityService, private _messageService: MessageService) { }
@@ -62,9 +67,13 @@ export class OpeningBalanceComponent implements OnInit {
       .subscribe(res => {
         res.forEach(val => {
           val.StartingBalanceDate = new Date(val.StartingBalanceDate);
+          let accountNumber = parseInt(val.accountNumber.toString(), 10);
+          val.accountNumber = isNaN(accountNumber) ? val.accountNumber : accountNumber;
+          let StartingBalance = parseFloat(val.StartingBalance.toString());
+          val.StartingBalance = isNaN(StartingBalance) ? val.StartingBalance : StartingBalance;
         })
         this.data = res;
-
+        this.tempData = res;
       }, er => {
         this._messageService.add({
           severity: 'error',
@@ -85,23 +94,23 @@ export class OpeningBalanceComponent implements OnInit {
 
   save(row: OpeningBalance) {
     this._liquidityService
-    .updateOpeningBalance(this.orgId, this.prcId, row)
-    .subscribe(res => {
-      row.isEditable = false;
-      let numOfRecords = res.length > 0 ? res[0] : 0;
+      .updateOpeningBalance(this.orgId, this.prcId, row)
+      .subscribe(res => {
+        row.isEditable = false;
+        let numOfRecords = res.length > 0 ? res[0] : 0;
 
-      this._messageService.add({
-        severity: 'success',
-        summary: 'DONE!',
-        detail: `opening balance is updated successfully in the targeted posting data, \n ${numOfRecords} updated.`
+        this._messageService.add({
+          severity: 'success',
+          summary: 'DONE!',
+          detail: `opening balance is updated successfully in the targeted posting data, \n ${numOfRecords} updated.`
+        });
+      }, er => {
+        this._messageService.add({
+          severity: 'error',
+          summary: 'ERROR!',
+          detail: er.error.error
+        });
       });
-    }, er => {
-      this._messageService.add({
-        severity: 'error',
-        summary: 'ERROR!',
-        detail: er.error.error
-      });
-    });
   }
 
   cancel(row: OpeningBalance) {
@@ -109,5 +118,66 @@ export class OpeningBalanceComponent implements OnInit {
     row.StartingBalanceDate = this.originalOpeningBalanceDate;
     row.isEditable = false;
   }
+
+
+  filterChange(query, colName): void {
+    this.searching = true;
+    // debugger;
+    if (!query) {
+      delete this.criteria[colName];
+      this.filtersNo--;
+      if (Object.keys(this.criteria).length < 1) {
+        this.data = [...this.tempData];
+      } else {
+        for (const key in this.criteria) {
+          if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+            const element = this.criteria[key];
+            if (key == 'StartingBalanceDate') {
+              debugger;
+              this.data = this.tempData.filter(value => value['StartingBalanceDate']?.getDate() == element.getDate() &&
+                value['StartingBalanceDate']?.getMonth() == element.getMonth() &&
+                value['StartingBalanceDate']?.getDay.getFullYear() == element.getFullYear());
+            } else {
+              if (element.length < 3) {
+                this.data = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+              } else {
+                this.data = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+              }
+            }
+
+          }
+        }
+      }
+    } else {
+      this.filtersNo++;
+      this.data = [...this.tempData];
+      for (const key in this.criteria) {
+        if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+          const element = this.criteria[key];
+          if (key == 'StartingBalanceDate') {
+            debugger;
+            this.data = this.tempData.filter(value => value['StartingBalanceDate']?.getDate() == element.getDate() &&
+              value['StartingBalanceDate']?.getMonth() == element.getMonth() &&
+              value['StartingBalanceDate']?.getDay.getFullYear() == element.getFullYear());
+          } else {
+            if (element.length < 3) {
+              this.data = this.data.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());
+            } else {
+              this.data = this.data.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
+            }
+          }
+        }
+      } // end of for each criteria field
+    }
+    this.searching = false;
+  }
+
+
+  clearFilter() {
+    this.criteria = {};
+    this.data = [...this.tempData];
+    this.filtersNo = 0;
+  }
+
 
 }

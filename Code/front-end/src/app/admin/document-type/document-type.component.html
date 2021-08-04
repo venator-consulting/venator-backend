@@ -20,7 +20,7 @@
     <div class="p-grid">
 
       <div class="p-col-6 p-sm-offset-3">
-        <label class="p-mr-6 fontStyle" > {{'Admin_Import.selectProcedure' | translate}} </label>
+        <label class="p-mr-6 fontStyle"> {{'Admin_Import.selectProcedure' | translate}} </label>
         <p-dropdown [options]="procedures" [(ngModel)]="selectedPrcId"
           placeholder="{{'Admin_Import.selectProcedurePlaceholder' | translate}}" optionLabel="name" optionValue="id"
           [showClear]="true" [filter]="true" filterBy="name" required (onChange)="prcChangedHandler($event)"
@@ -32,31 +32,43 @@
 
 
     <p-table #dt dataKey="id" [value]="postingDocTypes" [columns]="cols" styleClass="p-datatable-gridlines"
-    [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
-    <ng-template pTemplate="colgroup">
-      <colgroup>
-        <col *ngFor="let col of cols">
-      </colgroup>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
-          {{col.header | translate}}</th>
-        <th>{{'Document_Type.Action' | translate}}</th>
-      </tr>
-
-    </ng-template>
+      [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col *ngFor="let col of cols">
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center"
+            *ngFor="let col of cols">
+            {{col.header | translate}}
+            <p-sortIcon field="{{col.field}}"></p-sortIcon>
+          </th>
+          <th>{{'Document_Type.Action' | translate}}
+          </th>
+        </tr>
+        <tr>
+          <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
+            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
+              />
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
           <td pReorderableRowHandle *ngFor="let col of cols">
             {{ col.field != 'documentTypeNewName' ? row[col.field] : '' }}
             <div *ngIf="!row.isEditable && col.field == 'documentTypeNewName'">
-              <span  *ngIf="row.documentTypeNewName && (row.documentTypeNewName.toLowerCase() == 'zahlung' || row.documentTypeNewName.toLowerCase() == 'rechnung')">
+              <span
+                *ngIf="row.documentTypeNewName && (row.documentTypeNewName.toLowerCase() == 'zahlung' || row.documentTypeNewName.toLowerCase() == 'rechnung')">
                 {{'Document_Type.'+row.documentTypeNewName | translate}}
               </span>
             </div>
             <div *ngIf="row.isEditable && col.field == 'documentTypeNewName'">
-              <p-dropdown [options]="docTypes" [(ngModel)]="row.documentTypeNewId" optionValue="id" appendTo="body" 
+              <p-dropdown [options]="docTypes" [(ngModel)]="row.documentTypeNewId" optionValue="id" appendTo="body"
                 placeholder="Document Type new" optionLabel="documentTypeName" [showClear]="true" [filter]="true"
                 filterBy="documentTypeName" (onChange)="docTypeChangedHandler($event, row)" [style]="{width:'300px'}">
                 <ng-template pTemplate="item" let-item>
@@ -69,14 +81,14 @@
             </div>
           </td>
           <td><button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(row)"
-              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable" pTooltip="{{'Document_Type.Edit' | translate}}"
-              tooltipPosition="bottom"></button> &nbsp;
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
+              pTooltip="{{'Document_Type.Edit' | translate}}" tooltipPosition="bottom"></button> &nbsp;
             <button type="button" pButton pRipple icon="pi pi-save" (click)="save(row)"
-              class="p-button-rounded p-button-warning" *ngIf="row.isEditable" pTooltip="{{'Document_Type.Save' | translate}}"
-              tooltipPosition="bottom"></button> &nbsp;
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+              pTooltip="{{'Document_Type.Save' | translate}}" tooltipPosition="bottom"></button> &nbsp;
             <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
-              class="p-button-rounded p-button-warning" *ngIf="row.isEditable" pTooltip="{{'Document_Type.Cancel' | translate}}"
-              tooltipPosition="bottom"></button>
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+              pTooltip="{{'Document_Type.Cancel' | translate}}" tooltipPosition="bottom"></button>
           </td>
         </tr>
       </ng-template>

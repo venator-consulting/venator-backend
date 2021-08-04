@@ -23,6 +23,11 @@ export class DocumentTypeComponent implements OnInit {
   originalVal: number = -1;
   cols: { header, field }[] = new Array();
 
+  // for filter
+  searching: boolean;
+  criteria: any = {};
+  tempData: any[];
+
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
     private _orgService: OrganisationService, private _docTypesService: PostingService) { }
 
@@ -120,6 +125,7 @@ export class DocumentTypeComponent implements OnInit {
         .subscribe(
           data => {
             this.postingDocTypes = data;
+            this.tempData = data;
           },
           error => console.log(error)
         );
@@ -131,5 +137,73 @@ export class DocumentTypeComponent implements OnInit {
     row.documentTypeNewName = this.docTypes.filter(row => row.id == e.value)[0].documentTypeName;
   }
 
+
+  async filterChange(query, colName) {
+    this.searching = true;
+    // debugger;
+    if (!query) {
+      delete this.criteria[colName];
+      if (Object.keys(this.criteria).length < 1) {
+        this.postingDocTypes = [...this.tempData];
+      } else {
+        for (const key in this.criteria) {
+          if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+            const element = this.criteria[key];
+            if (element.length < 3) {
+              // debugger;
+              // if (colName == 'documentTypeNewName') {
+              //   this.postingDocTypes = this.tempData.filter(async value => { 
+              //     if (!value[key]) {
+              //       return false;
+              //     }
+              //     let translatedValue = await this._translateService.get(value[key]).toPromise();
+              //     return element.toLowerCase() == translatedValue.toLowerCase() });
+              // } else
+                this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+            } else {
+              // if (colName == 'documentTypeNewName') {
+              //   this.postingDocTypes = this.tempData.filter(async value => { 
+              //     if (!value[key]) {
+              //       return false;
+              //     }
+              //     let translatedValue = await this._translateService.get(value[key]).toPromise();
+              //     return element.toLowerCase().includes(translatedValue.toLowerCase()) });
+              // } else
+                this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+            }
+          }
+        }
+      }
+    } else {
+      this.postingDocTypes = [...this.tempData];
+      for (const key in this.criteria) {
+        if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+          const element = this.criteria[key];
+          if (element.length < 3) {
+            // if (colName == 'documentTypeNewName') {
+            //   this.postingDocTypes = this.tempData.filter(async value => { 
+            //     if (!value[key]) {
+            //       return false;
+            //     }
+            //     let translatedValue = await this._translateService.get(value[key]).toPromise();
+            //     return element.toLowerCase() == translatedValue.toLowerCase() });
+            // } else
+              this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());
+          } else {
+            // if (colName == 'documentTypeNewName') {
+            //   this.postingDocTypes = this.tempData.filter(async value => { 
+            //     if (!value[key]) {
+            //       return false;
+            //     }
+            //     let translatedValue = await this._translateService.get(value[key]).toPromise();
+            //     return element.toLowerCase().includes(translatedValue.toLowerCase()) });
+            // } else
+              this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
+          }
+        }
+      } // end of for each criteria field
+    }
+    this.searching = false;
+  }
 
 }

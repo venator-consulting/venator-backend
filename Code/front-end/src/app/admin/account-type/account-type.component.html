@@ -35,15 +35,24 @@
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
-            {{col.header | translate}}</th>
+          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+            {{col.header | translate}}
+            <p-sortIcon field="{{col.field}}"></p-sortIcon>
+          </th>
           <th>{{'Account_Type.Action' | translate}}</th>
         </tr>
-
+        <tr>
+          <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
+            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
+              />
+          </th>
+          <th></th>
+        </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr>
-          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}" >
+          <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}">
             {{ col.field != 'accountTypeNewName' ? row[col.field] : '' }}
             <div *ngIf="!row.isEditable && col.field == 'accountTypeNewName'">
               <span *ngIf="row.accountTypeNewName">
@@ -51,9 +60,10 @@
               </span>
             </div>
             <div *ngIf="row.isEditable && col.field == 'accountTypeNewName'">
-              <p-dropdown [options]="accountTypes" [(ngModel)]="row.accountTypeNewId" optionValue="id" appendTo="body" 
-                placeholder="{{'Account_Type.accountTypeNewName' | translate}}" optionLabel="AccountTypeName" [showClear]="true" [filter]="true"
-                filterBy="AccountTypeName" (onChange)="accountTypeChangedHandler($event, row)" [style]="{width:'300px'}">
+              <p-dropdown [options]="accountTypes" [(ngModel)]="row.accountTypeNewId" optionValue="id" appendTo="body"
+                placeholder="{{'Account_Type.accountTypeNewName' | translate}}" optionLabel="AccountTypeName"
+                [showClear]="true" [filter]="true" filterBy="AccountTypeName"
+                (onChange)="accountTypeChangedHandler($event, row)" [style]="{width:'300px'}">
                 <ng-template pTemplate="item" let-item>
                   {{'Account_Type.'+item.AccountTypeName | translate}}
                 </ng-template>
