@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
-import { ProcedureService } from 'src/app/shared/service/procedure.service';
 import * as FileSaver from 'file-saver';
 import { ExportDataService } from 'src/app/shared/service/export-data.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -51,13 +50,16 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     private _analysisService: AnalysisService, private _exportDataService: ExportDataService, private _translateService: TranslateService) { }
 
   ngOnInit(): void {
-    this.items = [
-      // { label: 'Analysis' },
-      { label: 'Amount Analysis', routerLink: '/analysis/amount', routerLinkActiveOptions: { exact: true } },
-      { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
-    ];
+    this._translateService.get('AmountAnalysis').subscribe( elem => { 
+      this.items = [
+        // {label: 'Analysis'},
+        {label: elem.label, routerLink: '/analysis/amount'},
+        { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
 
-    this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/shared/data' };
+      ];
+      this.home = {icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data'};
+
+    })
 
     this.waiting = true;
     this.orgId = +this._route.snapshot.paramMap.get('orgId');

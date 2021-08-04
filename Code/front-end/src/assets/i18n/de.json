@@ -325,6 +325,8 @@
         "saveRelevant": "Relevant Speichern"
     },
     "AmountAnalysis": {
+        "label": "Betragsanalyse",
+        "data" : " Daten",
         "accountNumber": "Kontonummer",
         "accountName": "Kontobezeichnung",
         "NumberOfPostings": "Anzahl der Buchungen",

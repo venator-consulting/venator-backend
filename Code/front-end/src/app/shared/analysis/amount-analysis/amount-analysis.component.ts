@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AmountAnalysis } from '../../model/amountAnalysis';
 import { AnalysisService } from '../../service/analysis.service';
-import { Procedures } from 'src/app/shared/model/procedures';
-import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { Bar } from '../../model/bar';
 import { Router } from '@angular/router';
-import { ProcedureService } from '../../service/procedure.service';
 import { MenuItem } from 'primeng/api';
 import { TableColumn } from '../../model/tableColumn';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-amount-analysis',
@@ -34,17 +32,19 @@ export class AmountAnalysisComponent implements OnInit {
   criteria: any = {};
   tempData: any[];
 
-  constructor(private _messageService: MessageService, private _analysisService: AnalysisService,
-    private _router: Router, private prcService: ProcedureService) { }
+  constructor(public _translateService: TranslateService, private _messageService: MessageService, private _analysisService: AnalysisService,
+    private _router: Router) { }
 
   ngOnInit(): void {
 
-    this.items = [
-      // {label: 'Analysis'},
-      {label: 'Amount Analysis', routerLink: '/analysis/amount'}
-  ];
-  
-  this.home = {icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data'};
+    this._translateService.get('AmountAnalysis').subscribe( elem => { 
+      this.items = [
+
+        {label: elem.label, routerLink: '/analysis/amount'}
+      ];
+      this.home = {icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data'};
+
+    })
 
     this.waiting = true;
     this.basicOptions = {
@@ -70,7 +70,7 @@ export class AmountAnalysisComponent implements OnInit {
       {
         header: 'AmountAnalysis.accountNumber',
         field: 'accountNumber',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'AmountAnalysis.accountName',
@@ -94,14 +94,6 @@ export class AmountAnalysisComponent implements OnInit {
     this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.getData();
-
-    // if (this.selectedProcedure && +this.selectedProcedure > 0) {
-    //   this.prcService
-    //     .getById(+this.selectedProcedure)
-    //     .subscribe(prc => {
-    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-    //     }, er => { });
-    // }
 
   }// end of ng on init
 

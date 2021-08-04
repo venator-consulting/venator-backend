@@ -326,6 +326,8 @@
         "saveRelevant": "Save Relevant"
     },
     "AmountAnalysis": {
+        "label": "Amount Analysis",
+        "data" : " Data",
         "accountNumber": "Account number",
         "accountName": "Account name",
         "NumberOfPostings": "Number of postings",
