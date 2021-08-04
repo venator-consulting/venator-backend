@@ -75,7 +75,10 @@
               pTooltip="{{'Account_Type.Save' | translate}}" tooltipPosition="bottom"></button> &nbsp;
             <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
               class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
-              pTooltip="{{'Account_Type.Cancel' | translate}}" tooltipPosition="bottom"></button>
+              pTooltip="{{'Account_Type.Cancel' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+              <button type="button" pButton pRipple icon="pi pi-trash" (click)="resetStartingBalance(row)"
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
+              pTooltip="{{'Account_Type.delete' | translate}}" tooltipPosition="bottom"></button>
           </td>
         </tr>
       </ng-template>

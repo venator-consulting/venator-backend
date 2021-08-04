@@ -66,10 +66,10 @@ export class OpeningBalanceComponent implements OnInit {
       .getOpeningBalance(this.orgId, this.prcId)
       .subscribe(res => {
         res.forEach(val => {
-          val.StartingBalanceDate = new Date(val.StartingBalanceDate);
-          let accountNumber = parseInt(val.accountNumber.toString(), 10);
+          val.StartingBalanceDate = val.StartingBalanceDate? new Date(val.StartingBalanceDate) : null;
+          let accountNumber = parseInt(val.accountNumber?.toString(), 10);
           val.accountNumber = isNaN(accountNumber) ? val.accountNumber : accountNumber;
-          let StartingBalance = parseFloat(val.StartingBalance.toString());
+          let StartingBalance = parseFloat(val?.StartingBalance?.toString());
           val.StartingBalance = isNaN(StartingBalance) ? val.StartingBalance : StartingBalance;
         })
         this.data = res;
@@ -90,6 +90,12 @@ export class OpeningBalanceComponent implements OnInit {
     row.isEditable = true;
     this.originalOpeningBalance = row.StartingBalance;
     this.originalOpeningBalanceDate = row.StartingBalanceDate;
+  }
+
+  resetStartingBalance(row: OpeningBalance) {
+    row.StartingBalance = null;
+    row.StartingBalanceDate = null;
+    this.save(row);
   }
 
   save(row: OpeningBalance) {
