@@ -142,7 +142,7 @@ export class OpeningBalanceComponent implements OnInit {
               debugger;
               this.data = this.tempData.filter(value => value['StartingBalanceDate']?.getDate() == element.getDate() &&
                 value['StartingBalanceDate']?.getMonth() == element.getMonth() &&
-                value['StartingBalanceDate']?.getDay.getFullYear() == element.getFullYear());
+                value['StartingBalanceDate']?.getFullYear() == element.getFullYear());
             } else {
               if (element.length < 3) {
                 this.data = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
@@ -164,7 +164,7 @@ export class OpeningBalanceComponent implements OnInit {
             debugger;
             this.data = this.tempData.filter(value => value['StartingBalanceDate']?.getDate() == element.getDate() &&
               value['StartingBalanceDate']?.getMonth() == element.getMonth() &&
-              value['StartingBalanceDate']?.getDay.getFullYear() == element.getFullYear());
+              value['StartingBalanceDate']?.getFullYear() == element.getFullYear());
           } else {
             if (element.length < 3) {
               this.data = this.data.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());

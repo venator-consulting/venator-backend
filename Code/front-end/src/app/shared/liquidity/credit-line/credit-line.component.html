@@ -16,16 +16,35 @@
           <col *ngFor="let col of cols" [style]="{'width': (col.width? col.width : 200) +'px'}">
         </colgroup>
       </ng-template>
+      <ng-template pTemplate="caption">
+        <div class="p-mb-4">
+          <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+          class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
+          tooltipPosition="bottom"></button>
+        </div>
+      </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
             {{col.header | translate}}
+            <p-sortIcon field="{{col.field}}"></p-sortIcon>
           </th>
           <th>
             {{'Account_Type.Action' | translate}}
           </th>
         </tr>
-
+        <tr>
+          <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
+            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
+              *ngIf="col.field != 'creditLineFromDate' && col.field != 'creditLineToDate'" />
+            <p-calendar *ngIf="col.field == 'creditLineFromDate' || col.field == 'creditLineToDate'" [(ngModel)]="criteria[col.field]"
+              (onSelect)="filterChange($event, col.field)" [monthNavigator]="true" [yearNavigator]="true"
+              yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy">
+            </p-calendar>
+          </th>
+          <th></th>
+        </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr [pEditableRow]="row">

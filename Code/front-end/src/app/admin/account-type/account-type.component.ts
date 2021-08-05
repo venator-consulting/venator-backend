@@ -20,6 +20,7 @@ export class AccountTypeComponent implements OnInit {
   selectedPrcId: number = -1;
   postingAccountTypes: PostingAccountTypes[];
   accountTypes: AccountTypes[] = new Array();
+  accountTypesFilter: AccountTypes[] = new Array();
   originalVal: number = -1;
   cols: { header, field , align}[] = new Array();
   procedureName: string;
@@ -28,6 +29,7 @@ export class AccountTypeComponent implements OnInit {
   searching: boolean;
   criteria: any = {};
   tempData: any[];
+  filtersNo: number = 0;
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
     private _postingService: PostingService, private _orgService: OrganisationService) { }
@@ -52,6 +54,7 @@ export class AccountTypeComponent implements OnInit {
       .subscribe(
         (data) => {
           this.accountTypes.push(...data);
+          this.accountTypesFilter = data;
         },
         (error) => console.log(error)
       );
@@ -157,10 +160,17 @@ export class AccountTypeComponent implements OnInit {
   }
 
 
+  clearFilter() {
+    this.criteria = {};
+    this.postingAccountTypes = [...this.tempData];
+    this.filtersNo = 0;
+  }
+
   filterChange(query, colName): void {
     this.searching = true;
     // debugger;
     if (!query) {
+      this.filtersNo--;
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
         this.postingAccountTypes = [...this.tempData];
@@ -177,6 +187,7 @@ export class AccountTypeComponent implements OnInit {
         }
       }
     } else {
+      this.filtersNo++;
       this.postingAccountTypes = [...this.tempData];
       for (const key in this.criteria) {
         if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {

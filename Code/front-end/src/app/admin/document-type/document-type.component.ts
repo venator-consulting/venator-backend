@@ -20,6 +20,7 @@ export class DocumentTypeComponent implements OnInit {
   selectedPrcId: number = -1;
   postingDocTypes: PostingDocTypes[];
   docTypes: DocumentTypes[] = new Array();
+  docTypesFilter: DocumentTypes[] = new Array();
   originalVal: number = -1;
   cols: { header, field }[] = new Array();
 
@@ -27,6 +28,7 @@ export class DocumentTypeComponent implements OnInit {
   searching: boolean;
   criteria: any = {};
   tempData: any[];
+  filtersNo: number = 0;
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
     private _orgService: OrganisationService, private _docTypesService: PostingService) { }
@@ -50,6 +52,7 @@ export class DocumentTypeComponent implements OnInit {
       .subscribe(
         (data) => {
           this.docTypes.push(...data);
+          this.docTypesFilter = data;
         },
         (error) => console.log(error)
       );
@@ -137,11 +140,17 @@ export class DocumentTypeComponent implements OnInit {
     row.documentTypeNewName = this.docTypes.filter(row => row.id == e.value)[0].documentTypeName;
   }
 
+  clearFilter() {
+    this.criteria = {};
+    this.postingDocTypes = [...this.tempData];
+    this.filtersNo = 0;
+  }
+  
 
   async filterChange(query, colName) {
     this.searching = true;
-    // debugger;
     if (!query) {
+      this.filtersNo--;
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
         this.postingDocTypes = [...this.tempData];
@@ -150,54 +159,22 @@ export class DocumentTypeComponent implements OnInit {
           if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
             const element = this.criteria[key];
             if (element.length < 3) {
-              // debugger;
-              // if (colName == 'documentTypeNewName') {
-              //   this.postingDocTypes = this.tempData.filter(async value => { 
-              //     if (!value[key]) {
-              //       return false;
-              //     }
-              //     let translatedValue = await this._translateService.get(value[key]).toPromise();
-              //     return element.toLowerCase() == translatedValue.toLowerCase() });
-              // } else
                 this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
             } else {
-              // if (colName == 'documentTypeNewName') {
-              //   this.postingDocTypes = this.tempData.filter(async value => { 
-              //     if (!value[key]) {
-              //       return false;
-              //     }
-              //     let translatedValue = await this._translateService.get(value[key]).toPromise();
-              //     return element.toLowerCase().includes(translatedValue.toLowerCase()) });
-              // } else
                 this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
             }
           }
         }
       }
     } else {
+      this.filtersNo++;
       this.postingDocTypes = [...this.tempData];
       for (const key in this.criteria) {
         if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
           const element = this.criteria[key];
           if (element.length < 3) {
-            // if (colName == 'documentTypeNewName') {
-            //   this.postingDocTypes = this.tempData.filter(async value => { 
-            //     if (!value[key]) {
-            //       return false;
-            //     }
-            //     let translatedValue = await this._translateService.get(value[key]).toPromise();
-            //     return element.toLowerCase() == translatedValue.toLowerCase() });
-            // } else
               this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());
           } else {
-            // if (colName == 'documentTypeNewName') {
-            //   this.postingDocTypes = this.tempData.filter(async value => { 
-            //     if (!value[key]) {
-            //       return false;
-            //     }
-            //     let translatedValue = await this._translateService.get(value[key]).toPromise();
-            //     return element.toLowerCase().includes(translatedValue.toLowerCase()) });
-            // } else
               this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
           }
         }

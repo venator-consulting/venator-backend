@@ -38,6 +38,13 @@
           <col *ngFor="let col of cols">
         </colgroup>
       </ng-template>
+      <ng-template pTemplate="caption">
+        <div class="p-mb-4">
+          <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+          class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
+          tooltipPosition="bottom"></button>
+        </div>
+      </ng-template>
       <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center"
@@ -52,7 +59,19 @@
           <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
             <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
               (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
-              />
+              *ngIf="col.field != 'documentTypeNewName'"/>
+
+              <p-dropdown [options]="docTypesFilter" [(ngModel)]="criteria[col.field]" optionValue="documentTypeName" appendTo="body"
+                placeholder="Document Type new" optionLabel="documentTypeName" [showClear]="true"
+                filterBy="documentTypeName" (onChange)="filterChange($event, col.field)" [style]="{width:'100%'}"
+                *ngIf="col.field == 'documentTypeNewName'">
+                <ng-template pTemplate="item" let-item>
+                  {{'Document_Type.'+item.documentTypeName | translate}}
+                </ng-template>
+                <ng-template pTemplate="selectedItem" let-item>
+                  {{'Document_Type.'+item.documentTypeName | translate}}
+                </ng-template>
+              </p-dropdown>
           </th>
           <th></th>
         </tr>

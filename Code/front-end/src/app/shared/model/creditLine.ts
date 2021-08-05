@@ -1,6 +1,6 @@
 export class CreditLine {
     id: number;
-    accountNumber: string;
+    accountNumber: string | number;
     accountName: string;
     procedureId: number;
     creditLineFromDate: Date;
