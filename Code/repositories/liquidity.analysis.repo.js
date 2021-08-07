@@ -265,10 +265,7 @@ module.exports.liquidityAnalysisDetails = async (
 ) => {
   return new Promise((resolve, reject) => {
     try {
-      if (!fromDate) {
-        throw new Error("Document Date is null for this procedure!");
-      }
-      if (!toDate) {
+      if (!fromDate || !toDate) {
         throw new Error("Document Date is null for this procedure!");
       }
       if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
@@ -325,28 +322,28 @@ module.exports.liquidityAnalysisDetails = async (
           // index == row index then value = balance + previous value
 
           for (let index = 0; index <= rowindex; index++) {
-            if (
-              index == 0 &&
-              !data[index] &&
-              index >= startingBalanceIncluded
-            ) {
+            if (!data[index] && index < startingBalanceIncluded) {
+              data[index] = 0;
+            }
+            if (!data[index] && index == startingBalanceIncluded) {
               data[index] = +row.StartingBalance;
             }
             if (
-              index != 0 &&
+              index == rowindex &&
+              index > 0 &&
+              index > startingBalanceIncluded
+            ) {
+              if (data[index]) {
+                data[index] += +row.balance;
+              } else data[index] = +row.balance + data[index - 1];
+            } else if (index == rowindex && index == startingBalanceIncluded) {
+              data[index] += +row.balance;
+            } else if (
+              index > 0 &&
               !data[index] &&
               index >= startingBalanceIncluded
             ) {
               data[index] = data[index - 1];
-            }
-            if (
-              index == rowindex &&
-              index != 0 &&
-              index >= startingBalanceIncluded
-            ) {
-              data[index] = +row.balance + data[index - 1];
-            } else if (index == rowindex && index == 0) {
-              data[index] += +row.balance;
             }
             let thisDate = new Date(fromDate);
             thisDate.setDate(fromDate.getDate() + index);
@@ -363,6 +360,16 @@ module.exports.liquidityAnalysisDetails = async (
       }); // end of on stream return row
 
       str.on("end", async () => {
+        const diffirence = getNumberOfDays(fromDate, toDate);
+
+        for (
+          let index = data.length;
+          index <= diffirence;
+          index++
+        ) {
+          data[index] = index > 0 && data[index - 1] ? data[index - 1] : 0;
+        }
+
         finalResult.bankBalances = data;
         finalResult.labels = chartLabels.filter(Boolean);
         finalResult.accountName = accountName;
