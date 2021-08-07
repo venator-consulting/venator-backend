@@ -134,7 +134,7 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
                             data[row.accountNumber][index] = +row.StartingBalance;
                         }
                         if (index == rowindex && index > 0 && index > startingBalanceIncluded) {
-                            data[row.accountNumber][index] = +row.balance + data[row.accountNumber][index - 1];
+                            data[row.accountNumber][index] += +row.balance + data[row.accountNumber][index - 1];
                         } else if (index == rowindex && index == startingBalanceIncluded) {
                             data[row.accountNumber][index] += +row.balance;
                         } else if (index > 0 && !data[row.accountNumber][index] && index >= startingBalanceIncluded) {
