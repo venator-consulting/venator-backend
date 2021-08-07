@@ -53,10 +53,10 @@ module.exports.getAnalysisMainData = async (req, res) => {
 
         finalResult[2] = new Array();
 
-        if (finalResult[1] && finalResult[1].length > 0) {
-            for (let index = 0; index < finalResult[1].length; index++) {
+        if (finalResult[1] && finalResult[1].creditLines && finalResult[1].creditLines.length > 0) {
+            for (let index = 0; index < finalResult[1].creditLines.length; index++) {
                 const bankBalance = finalResult[0].bankBalances[index] ? finalResult[0].bankBalances[index] : 0;
-                const creditLine = finalResult[1][index] ? finalResult[1][index] : 0;
+                const creditLine = finalResult[1].creditLines[index] ? finalResult[1].creditLines[index] : 0;
                 finalResult[2][index] = +bankBalance + +creditLine;
             }
         }

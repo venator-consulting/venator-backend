@@ -226,12 +226,13 @@ module.exports.creditLinnes = async (orgId, prcId, fromDate, toDate) => {
   const diffirence = getNumberOfDays(fromDate, toDate);
 
   const creditLinesArray = new Array();
-
+  let accounts = {};
   // foreach day
   for (let index = 0; index <= diffirence; index++) {
     if (!creditLinesArray[index]) {
       creditLinesArray[index] = 0;
     }
+
     // calculate date for this day
     let thisDate = new Date(fromDate);
     thisDate.setDate(fromDate.getDate() + index);
@@ -250,10 +251,16 @@ module.exports.creditLinnes = async (orgId, prcId, fromDate, toDate) => {
     );
     creditLinesForThisDay.forEach((element) => {
       creditLinesArray[index] += +element.creditLine;
+      if (!accounts[element.accountNumber]) {
+        accounts[element.accountNumber] = new Array();
+      }
+      accounts[element.accountNumber][index] = !accounts[element.accountNumber][index]
+        ? +element.creditLine
+        : accounts[element.accountNumber][index] + +element.creditLine;
     });
   } // end of foreach day
 
-  return creditLinesArray;
+  return {creditLines: creditLinesArray, accounts: accounts};
 };
 
 module.exports.liquidityAnalysisDetails = async (
@@ -362,11 +369,7 @@ module.exports.liquidityAnalysisDetails = async (
       str.on("end", async () => {
         const diffirence = getNumberOfDays(fromDate, toDate);
 
-        for (
-          let index = data.length;
-          index <= diffirence;
-          index++
-        ) {
+        for (let index = data.length; index <= diffirence; index++) {
           data[index] = index > 0 && data[index - 1] ? data[index - 1] : 0;
         }
 
