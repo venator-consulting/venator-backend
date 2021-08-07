@@ -494,20 +494,26 @@
         "datenToolTip": "Back to Datatable"
     },
     "Liquidity": {
-        "accountType": "Kontotyp",
-        "accountNumber": "Kontonummer",
-        "accountName": "Kontobezeichnung",
-        "accountTypeNewName": "Kontotyp neu",
-        "startingBalance": " Startsaldo",
-        "startingBalanceDate": " Startsaldodatum",
-        "creditLine": "Kreditlinie",
-        "creditLineFromDate": "Kreditlinie Von-Datum",
-        "creditLineToDate": "Kreditlinie Bis-Datum",
-        
-        "from": "Von",
-        "to": "Bis",
-        "daten": " Daten",
-        "search": "Suchen"
+        "accountType": "Accounttype",
+        "accountNumber": "Accountnumber",
+        "accountName": "Accountname",
+        "accountTypeNewName": "Accounttype New",
+        "startingBalance": "Starting Balance",
+        "startingBalanceDate": "Starting Balancedate",
+        "creditLine": "Creditline",
+        "creditLineFromDate": "Creditline from-Date",
+        "creditLineToDate": "Creditline to-Date",
+        "creditLineLabel": "Creditline",
+        "from": "From",
+        "to": "To",
+        "daten": " Data",
+        "search": "Search",
+        "save": "Save",
+        "cancel":"Cancel",
+        "edit": "Edit",
+        "add": "Add",
+        "delete": "Delete",
+        "action": "Actions"
    
     }
   }
