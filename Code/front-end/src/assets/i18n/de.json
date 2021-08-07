@@ -503,11 +503,17 @@
         "creditLine": "Kreditlinie",
         "creditLineFromDate": "Kreditlinie Von-Datum",
         "creditLineToDate": "Kreditlinie Bis-Datum",
-
+        "creditLineLabel": "Kreditlinie",
         "from": "Von",
         "to": "Bis",
         "daten": " Daten",
-        "search": "Suchen"
+        "search": "Suchen",
+        "save": "Speichern",
+        "cancel":"Abbrechen",
+        "edit": "Bearbeiten",
+        "add": "Hinzufügen",
+        "delete": "Löschen",
+        "action": "Aktionen"
    
     }
 

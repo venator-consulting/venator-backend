@@ -21,11 +21,11 @@ module.exports.liquiditytDateRange = async (orgId, prcId) => {
 
         const result = await sequelize.query(
             query, {
-                replacements: {
-                    procedureId: prcId
-                },
-                type: QueryTypes.SELECT
-            }
+            replacements: {
+                procedureId: prcId
+            },
+            type: QueryTypes.SELECT
+        }
         );
         return result;
     } catch (error) {
@@ -111,9 +111,9 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
                     let startingBalanceIncluded = 0;
                     if (row.StartingBalanceDate) {
                         if (row.StartingBalanceDate > fromDate) {
-                            startingBalanceIncluded = getNumberOfDays(fromDate, row.StartingBalanceDate);    
+                            startingBalanceIncluded = getNumberOfDays(fromDate, row.StartingBalanceDate);
                         }
-                        
+
                     }
 
                     if (!data[row.accountNumber]) {
@@ -134,7 +134,10 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
                             data[row.accountNumber][index] = +row.StartingBalance;
                         }
                         if (index == rowindex && index > 0 && index > startingBalanceIncluded) {
-                            data[row.accountNumber][index] += +row.balance + data[row.accountNumber][index - 1];
+                            if (data[row.accountNumber][index]) {
+                                data[row.accountNumber][index] += +row.balance ;
+                            } else data[row.accountNumber][index] = +row.balance + data[row.accountNumber][index - 1];
+
                         } else if (index == rowindex && index == startingBalanceIncluded) {
                             data[row.accountNumber][index] += +row.balance;
                         } else if (index > 0 && !data[row.accountNumber][index] && index >= startingBalanceIncluded) {
@@ -186,6 +189,7 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
                 finalResult.accounts = accounts;
                 finalResult.bankBalances = bankBalancesArray;
                 finalResult.labels = chartLabels.filter(Boolean);
+                finalResult.data = data;
                 // cb(finalResult);
                 resolve(finalResult);
             });
@@ -224,7 +228,7 @@ module.exports.creditLinnes = async (orgId, prcId, fromDate, toDate) => {
         // get included credit lines
         // if toDate or fromDate is null? should be manipulated
         const creditLinesForThisDay = creditLines
-            .filter(val => 
+            .filter(val =>
                 // between date range
                 (thisDate >= new Date(val.creditLineFromDate) && thisDate <= new Date(val.creditLineToDate)) ||
                 // start date is null and little than end date
@@ -369,7 +373,7 @@ module.exports.creditLinnesDetails = async (orgId, prcId, accountNumber, fromDat
         thisDate.setDate(fromDate.getDate() + index);
         // get included credit lines
         const creditLinesForThisDay = creditLines
-            .filter(val => 
+            .filter(val =>
                 // between date range
                 (thisDate >= new Date(val.creditLineFromDate) && thisDate <= new Date(val.creditLineToDate)) ||
                 // start date is null and little than end date
