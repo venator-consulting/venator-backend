@@ -187,6 +187,8 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
               } else {
                 bankBalancesArray[index] +=
                   index > 0 && element[index - 1] ? element[index - 1] : 0;
+                element[index] +=
+                  index > 0 && element[index - 1] ? element[index - 1] : 0;
               }
             }
           }
@@ -254,13 +256,15 @@ module.exports.creditLinnes = async (orgId, prcId, fromDate, toDate) => {
       if (!accounts[element.accountNumber]) {
         accounts[element.accountNumber] = new Array();
       }
-      accounts[element.accountNumber][index] = !accounts[element.accountNumber][index]
+      accounts[element.accountNumber][index] = !accounts[element.accountNumber][
+        index
+      ]
         ? +element.creditLine
         : accounts[element.accountNumber][index] + +element.creditLine;
     });
   } // end of foreach day
 
-  return {creditLines: creditLinesArray, accounts: accounts};
+  return { creditLines: creditLinesArray, accounts: accounts };
 };
 
 module.exports.liquidityAnalysisDetails = async (
