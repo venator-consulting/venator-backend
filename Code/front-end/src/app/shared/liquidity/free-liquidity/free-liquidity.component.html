@@ -20,11 +20,25 @@
   </div>
 </div>
 
-<div class="p-grid">
-  <div class="p-col-12" *ngIf="selectedDate">
-    <h2 class="p-text-center">{{ selectedDate }}</h2>
+<div class="p-grid" *ngIf="selectedDate">
+  <div class="p-col-7">
+    <h2 class="p-text-right">{{ selectedDate }}</h2>
   </div>
-  <div class="p-col-12" >
+  <div class="p-col-5 p-text-right">
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="All Accounts"
+        icon="pi pi-times"
+        class="p-button-rounded p-button-warning"
+        (click)="selectedDate = null"
+        pTooltip="All"
+        tooltipPosition="bottom"
+        style="margin-top: 20px;"
+      ></button>
+  </div>
+  <div class="p-col-12">
     <p-progressBar
       mode="indeterminate"
       [style]="{ height: '5px' }"
@@ -85,13 +99,24 @@
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr>
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
-            <span *ngIf="col.field!='accountNumber' && col.field!='accountName' && col.field!='freeLiaquidity'">
-              {{ row[col.field]  | currency:'EUR':'' }}
+            <span
+              *ngIf="
+                col.field != 'accountNumber' &&
+                col.field != 'accountName' &&
+                col.field != 'freeLiaquidity'
+              "
+            >
+              {{ row[col.field] | currency: "EUR":"" }}
             </span>
-            <span *ngIf="col.field=='freeLiaquidity'">
-              {{ +row['bankBalance'] + +row['creditLine']  | currency:'EUR':'' }}
+            <span *ngIf="col.field == 'freeLiaquidity'">
+              {{
+                +row["bankBalance"] + +row["creditLine"] | currency: "EUR":""
+              }}
             </span>
-            <span pTooltip="{{ row[col.field] }}"  *ngIf="col.field=='accountNumber' || col.field=='accountName'">
+            <span
+              pTooltip="{{ row[col.field] }}"
+              *ngIf="col.field == 'accountNumber' || col.field == 'accountName'"
+            >
               {{ row[col.field] }}
             </span>
           </td>
@@ -111,19 +136,25 @@
       </ng-template>
       <ng-template pTemplate="footer">
         <tr>
-            <td colspan="2" class="p-text-right">Totals</td>
-            <td class="p-text-right">{{bankBalancesTotal | currency:'EUR':''}}</td>
-            <td class="p-text-right">{{creditLinesTotal | currency:'EUR':''}}</td>
-            <td class="p-text-right">{{freeLiquidityTotal | currency:'EUR':''}}</td>
-            <td></td>
+          <td colspan="2" class="p-text-right">Totals</td>
+          <td class="p-text-right">
+            {{ bankBalancesTotal | currency: "EUR":"" }}
+          </td>
+          <td class="p-text-right">
+            {{ creditLinesTotal | currency: "EUR":"" }}
+          </td>
+          <td class="p-text-right">
+            {{ freeLiquidityTotal | currency: "EUR":"" }}
+          </td>
+          <td></td>
         </tr>
-    </ng-template>
+      </ng-template>
     </p-table>
   </div>
 </div>
-<br><br>
-<!-- 
-<div class="p-grid">
+<br /><br />
+
+<div class="p-grid" *ngIf="!selectedDate">
   <div class="p-col-12" [hidden]="!prcId">
     <p-progressBar
       mode="indeterminate"
@@ -185,9 +216,11 @@
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr>
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
-             <span *ngIf="col.field!='accountNumber' && col.field!='accountName'">
-                {{ row[col.field]  | currency:'EUR':'' }}
-              </span> 
+            <span
+              *ngIf="col.field != 'accountNumber' && col.field != 'accountName'"
+            >
+              {{ row[col.field] | currency: "EUR":"" }}
+            </span>
             <span pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
             </span>
@@ -208,4 +241,4 @@
       </ng-template>
     </p-table>
   </div>
-</div> -->
+</div>

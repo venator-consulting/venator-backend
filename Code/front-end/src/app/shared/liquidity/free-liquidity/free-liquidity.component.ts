@@ -103,11 +103,11 @@ export class FreeLiquidityComponent implements OnInit {
         field: 'accountName',
         align: 'left',
       },
-      {
-        header: 'Count',
-        field: 'count',
-        align: 'center',
-      },
+      // {
+      //   header: 'Count',
+      //   field: 'count',
+      //   align: 'center',
+      // },
     ];
 
     this.selectedDateCols = [

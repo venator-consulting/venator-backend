@@ -441,3 +441,26 @@ module.exports.creditLinnesDetails = async (
 
   return creditLinesArray;
 };
+
+module.exports.selectedDate = async (
+  orgId,
+  prcId,
+  accountNumber,
+  selectedDate
+) => {
+  let query = `SELECT * FROM posting_${orgId} p
+                  WHERE p.procedureId = :procedureId
+                  AND p.accountNumber = :accountNumber
+                  AND p.documentDate = :selectedDate
+                  AND p.documentDate >= p.StartingBalanceDate`;
+
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+      accountNumber: accountNumber,
+      selectedDate: selectedDate
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
+};
