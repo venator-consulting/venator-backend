@@ -147,6 +147,7 @@ export class FreeLiquidityComponent implements OnInit {
       (res) => {
         this.accounts = res.bankBalances.accounts;
         this.tempData = res.bankBalances.accounts;
+        this.labels = res.bankBalances.labels;
         this.basicData = {
           labels: res.bankBalances.labels,
           datasets: [
@@ -188,8 +189,10 @@ export class FreeLiquidityComponent implements OnInit {
     this.selectedDateData = new Array();
     // console.log(e.element._index);
     // console.log(e.element._model.label);
-    this.selectedDate = e?.element?._model?.label;
+    // this.selectedDate = e?.element?._model?.label;
     let index = e?.element?._index;
+    this.selectedDate = this.labels[index];
+    // debugger;
     for (const key in this.allAccountsDataBankBalances) {
       if (Object.prototype.hasOwnProperty.call(this.allAccountsDataBankBalances, key)) {
         const element = this.allAccountsDataBankBalances[key];

@@ -187,7 +187,7 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
               } else {
                 bankBalancesArray[index] +=
                   index > 0 && element[index - 1] ? element[index - 1] : 0;
-                element[index] +=
+                element[index] =
                   index > 0 && element[index - 1] ? element[index - 1] : 0;
               }
             }
