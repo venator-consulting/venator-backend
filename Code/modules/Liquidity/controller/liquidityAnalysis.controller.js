@@ -183,7 +183,7 @@ module.exports.getAnalysisDetailsData = async (req, res) => {
 
 module.exports.getDetailsForSelectedDate = async (req, res) => {
   try {
-    const result = liquidityRepo.selectedDate(
+    const result = await liquidityRepo.selectedDate(
       req.params.orgId,
       req.params.prcId,
       req.params.accountNumber,

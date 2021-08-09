@@ -2,14 +2,121 @@
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <div class="p-grid">
   <div class="p-col-12">
-    <h2 class="p-text-center">{{procedureName}}</h2>
-    <h4 class="p-text-center">{{accountName}}</h4>
+    <h2 class="p-text-center">{{ procedureName }}</h2>
+    <h4 class="p-text-center">{{ accountName }}</h4>
   </div>
 </div>
 <div class="p-grid">
   <div class="p-col-12">
-    <div class="card ">
-      <p-chart type="bar" [data]="basicData" [options]="basicOptions" height="350px"></p-chart>
+    <div class="card">
+      <p-chart
+        type="bar"
+        [data]="basicData"
+        [options]="basicOptions"
+        height="350px"
+        (onDataSelect)="selectBarData($event)"
+      ></p-chart>
     </div>
   </div>
 </div>
+
+<div class="p-grid">
+  <div class="p-col-12">
+    <h2 class="p-text-center" *ngIf="selectedDate">{{ selectedDate }}</h2>
+  </div>
+  <div class="p-col-12">
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="searching"
+    ></p-progressBar>
+    <p-table
+      #dt
+      dataKey="id"
+      [value]="selectedDateData"
+      styleClass="p-datatable-gridlines"
+      [columns]="cols"
+      responsive="true"
+      [scrollable]="true"
+      scrollHeight="350px"
+      [reorderableColumns]="true"
+      [resizableColumns]="true"
+    >
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" [style]="{'width': (col.width? col.width : 200) +'px'}"/>
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th
+            pSortableColumn="{{ col.field }}"
+            pReorderableColumn
+            pResizableColumn
+            class="p-text-{{ col.align }}"
+            *ngFor="let col of columns"
+          >
+            <span
+              pTooltip="{{ col.header | translate }} "
+              class="p-text-{{ col.align }}"
+            >
+              {{ col.header | translate }}
+              <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+            </span>
+          </th>
+        </tr>
+        <tr>
+          <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
+            <input
+              pInputText
+              type="text"
+              [(ngModel)]="criteria[col.field]"
+              [style]="{ width: '90%' }"
+              (input)="filterChange($any($event.target).value, col.field)"
+              class="filterInputCss"
+              *ngIf="col.field != 'accountNumber' || col.field != 'accountName'"
+            />
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr>
+          <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
+            <span *ngIf="col.field == 'balance'">
+              {{ row[col.field] | currency: "EUR":"" }}
+            </span>
+            <span
+              *ngIf="
+                col.field == 'documentDate' ||
+                col.field == 'executionDate' ||
+                col.field == 'dueDate'
+              "
+            >
+              {{ row[col.field] | date: "dd.MM.yyyy" }}
+            </span>
+            <span pTooltip="{{ row[col.field] }}"
+              *ngIf="col.field!='balance' && col.field !='documentDate' && col.field !='executionDate' && col.field!='dueDate' && col.field!='amountRelevantComment' && col.field!='amountRelevant'">
+              {{ row[col.field] }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+      <!-- <ng-template pTemplate="footer">
+        <tr>
+          <td colspan="2" class="p-text-right">Totals</td>
+          <td class="p-text-right">
+            {{ bankBalancesTotal | currency: "EUR":"" }}
+          </td>
+          <td class="p-text-right">
+            {{ creditLinesTotal | currency: "EUR":"" }}
+          </td>
+          <td class="p-text-right">
+            {{ freeLiquidityTotal | currency: "EUR":"" }}
+          </td>
+          <td></td>
+        </tr>
+      </ng-template> -->
+    </p-table>
+  </div>
+</div>
+<br /><br />
