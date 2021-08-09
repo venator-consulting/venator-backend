@@ -31,6 +31,10 @@ export class AnalysisService {
     return this._http.get<TextAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/text');
   }
 
+  getTextAnalysisWord(orgId: number, prcId: number): Observable<any[]> {
+    return this._http.get<any[]>(this._thisURL + orgId + '/' + prcId + '/text-word');
+  }
+
   getTextAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<TextAnalysisDetails[]> {
     return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/text/details/' + accountNumber);
   }

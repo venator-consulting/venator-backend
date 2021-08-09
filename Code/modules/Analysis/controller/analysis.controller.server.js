@@ -91,6 +91,24 @@ module.exports.textAnalysis = async (req, res) => {
     }
 };
 
+module.exports.textAnalysisByWord = async (req, res) => {
+    try {
+        let fileKeywords = await nlpHelper.getsynonyms(keywords);
+        const result = await postingRepo
+            .textAnalysisByWord(req.params.orgId, req.params.prcId, fileKeywords);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: Amount analysis', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+
 module.exports.textAnalysisDetails = async (req, res) => {
     try {
         let fileKeywords = await nlpHelper.getsynonyms(keywords);
