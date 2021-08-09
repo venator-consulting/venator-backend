@@ -381,11 +381,14 @@ module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
                     p.accountNumber ,
                     count(p.accountNumber) totalCount
                 from
-                    posting_1 p
+                    posting_${orgId} p
                 WHERE
+                    p.procedureId = :procedureId
+                    AND (
                     UPPER(p.textPosting) ${key}
                     OR UPPER(p.reference) ${key}
                     OR UPPER(p.textHeader) ${key}
+                    )
                 GROUP by
                     p.accountNumber) pos
             `;
