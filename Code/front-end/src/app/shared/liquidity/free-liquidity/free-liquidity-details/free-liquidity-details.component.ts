@@ -27,6 +27,9 @@ export class FreeLiquidityDetailsComponent implements OnInit {
   tempData: any;
   searching: boolean;
   criteria: any = {};
+  creditLinesTotal: number;
+  bankBalancesTotal: number;
+  freeLiquidityTotal: number;
 
   constructor(
     private _liquidityService: LiquidityService,
@@ -230,11 +233,19 @@ export class FreeLiquidityDetailsComponent implements OnInit {
       this.selectedDateData = res;
       this.tempData = res;
     }, er => {});
-    // this.selectedDateData = [...this.selectedDateData];
-    this.calculateTotals();
+    // this.calculateTotals();
   }
 
-  calculateTotals() {}
+  // calculateTotals() {
+  //   this.creditLinesTotal = 0;
+  //   this.bankBalancesTotal = 0;
+  //   this.freeLiquidityTotal = 0;
+  //   for(let data of this.selectedDateData) {
+  //     this.bankBalancesTotal += data.bankBalance;
+  //     this.creditLinesTotal += data.creditLine;
+  //     this.freeLiquidityTotal += data.bankBalance + data.creditLine;
+  // }
+  // }
 
 
   filterChange(query, colName): void {

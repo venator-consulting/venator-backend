@@ -47,7 +47,7 @@
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center"
+          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-{{col.align}}"
             *ngFor="let col of cols">
             {{col.header | translate}}
             <p-sortIcon field="{{col.field}}"></p-sortIcon>
@@ -108,6 +108,9 @@
             <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
               class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
               pTooltip="{{'Document_Type.Cancel' | translate}}" tooltipPosition="bottom"></button>
+              <button type="button" pButton pRipple icon="pi pi-trash" (click)="reset(row)"
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable && row.documentTypeNewId"
+              pTooltip="{{'Account_Type.delete' | translate}}" tooltipPosition="bottom"></button>
           </td>
         </tr>
       </ng-template>

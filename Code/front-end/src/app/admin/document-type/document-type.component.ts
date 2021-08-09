@@ -135,6 +135,13 @@ export class DocumentTypeComponent implements OnInit {
     }
   }
 
+
+  reset(row) {
+    row.documentTypeNewId = null;
+    row.documentTypeNewName = null;
+    this.save(row);
+  }
+
   docTypeChangedHandler(e, row) {
     row.documentTypeNewId = e.value;
     row.documentTypeNewName = this.docTypes.filter(row => row.id == e.value)[0].documentTypeName;

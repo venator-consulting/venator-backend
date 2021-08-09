@@ -160,6 +160,12 @@ export class AccountTypeComponent implements OnInit {
   }
 
 
+  reset(row) {
+    row.accountTypeNewId = null;
+    row.accountTypeNewName = null;
+    this.save(row);
+  }
+
   clearFilter() {
     this.criteria = {};
     this.postingAccountTypes = [...this.tempData];
