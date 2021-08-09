@@ -327,11 +327,21 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     if (row.paymentRelevant) {
       row.paymentRelevant = false;
       row.paymentRelevantComment = '';
+      if (index == -1) {
+        this.selected.push(row);
+      } else {
+        // update the old one
+        this.selected[index]['paymentRelevant'] = false;
+        this.selected[index]['paymentRelevantComment'] = '';
+      }
     } else {
       row.paymentRelevant = true;
-    }
-    if (index == -1) {
-      this.selected.push(row);
+      if (index == -1) {
+        this.selected.push(row);
+      } else {
+        // update the old one
+        this.selected[index]['paymentRelevant'] = true;
+      }
     }
   }
 
@@ -340,6 +350,10 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     row.paymentRelevant = true;
     if (index == -1) {
       this.selected.push(row);
+    } else {
+      // update the old one
+      this.selected[index]['paymentRelevant'] = true;
+      this.selected[index]['paymentRelevantComment'] = row.paymentRelevantComment;
     }
   }
 

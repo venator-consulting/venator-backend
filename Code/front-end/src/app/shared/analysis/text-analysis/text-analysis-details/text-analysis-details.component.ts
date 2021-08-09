@@ -309,11 +309,21 @@ export class TextAnalysisDetailsComponent implements OnInit {
     if (row.textRelevant) {
       row.textRelevant = false;
       row.textRelevantComment = '';
+      if (index == -1) {
+        this.selected.push(row);
+      } else {
+        // update the old one
+        this.selected[index]['textRelevant'] = false;
+        this.selected[index]['textRelevantComment'] = '';
+      }
     } else {
       row.textRelevant = true;
-    }
-    if (index == -1) {
-      this.selected.push(row);
+      if (index == -1) {
+        this.selected.push(row);
+      } else {
+        // update the old one
+        this.selected[index]['textRelevant'] = true;
+      }
     }
   }
 
@@ -322,6 +332,10 @@ export class TextAnalysisDetailsComponent implements OnInit {
     row.textRelevant = true;
     if (index == -1) {
       this.selected.push(row);
+    } else {
+      // update the old one
+      this.selected[index]['textRelevant'] = true;
+      this.selected[index]['textRelevantComment'] = row.textRelevantComment;
     }
   }
 

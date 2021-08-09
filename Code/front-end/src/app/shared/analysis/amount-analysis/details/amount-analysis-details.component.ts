@@ -11,7 +11,7 @@ import { TableColumn } from 'src/app/shared/model/tableColumn';
 @Component({
   selector: 'amount-analysis-details',
   templateUrl: './amount-analysis-details.html',
-  styleUrls: ['./amount-analysis-details.sass']
+  styleUrls: ['./amount-analysis-details.sass'],
 })
 export class AmountAnalysisDetailsComponent implements OnInit {
   @Input('details') details: boolean = false;
@@ -29,7 +29,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   criteria: any = {};
   searching: boolean = false;
   selected: AmountAnalysisDetails[] = new Array();
-  detailsOptions: { name: string; value: number; }[];
+  detailsOptions: { name: string; value: number }[];
   detailsOption: number = 1;
   items: MenuItem[];
   home: MenuItem;
@@ -46,223 +46,269 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   accountName: string;
   // for pagination ends
 
-  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
-    private _analysisService: AnalysisService, private _exportDataService: ExportDataService, private _translateService: TranslateService) { }
+  constructor(
+    private _router: Router,
+    private _messageService: MessageService,
+    private _route: ActivatedRoute,
+    private _analysisService: AnalysisService,
+    private _exportDataService: ExportDataService,
+    private _translateService: TranslateService
+  ) {}
 
   ngOnInit(): void {
-    this._translateService.get('AmountAnalysis').subscribe( elem => { 
+    this._translateService.get('AmountAnalysis').subscribe((elem) => {
       this.items = [
         // {label: 'Analysis'},
-        {label: elem.label, routerLink: '/analysis/amount'},
-        { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
-
+        { label: elem.label, routerLink: '/analysis/amount' },
+        {
+          label: 'Details',
+          routerLink: this._router.url,
+          routerLinkActiveOptions: { exact: true },
+        },
       ];
-      this.home = {icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data'};
-
-    })
+      this.home = {
+        icon: 'pi pi-home',
+        label: elem.data,
+        routerLink: '/shared/data',
+      };
+    });
 
     this.waiting = true;
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
-    this.orgId = this.orgId ? this.orgId : +localStorage.getItem('organisationId');
+    this.orgId = this.orgId
+      ? this.orgId
+      : +localStorage.getItem('organisationId');
     this.prcId = +this._route.snapshot.paramMap.get('prcId');
-    this.prcId = this.prcId ? this.prcId : +localStorage.getItem('currentProcedureId');
+    this.prcId = this.prcId
+      ? this.prcId
+      : +localStorage.getItem('currentProcedureId');
     this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
     this.backCriteria = {
       limit: 25,
-      offset: 0
+      offset: 0,
     };
     this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.detailsOptions = [
       { name: 'Sys-Relevants', value: 1 },
       { name: 'User Relevant', value: 2 },
-      { name: 'All', value: 3 }
+      { name: 'All', value: 3 },
     ];
-
 
     this.frozenCols = [
       {
         header: '',
         field: 'amountRelevant',
         width: '6',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'Comment',
         field: 'amountRelevantComment',
         width: '35',
-        align: 'left'
-      }
+        align: 'left',
+      },
     ];
 
     this.cols = [
       {
         header: 'DataTableColumns.accountNumber',
         field: 'accountNumber',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.accountName',
         field: 'accountName',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.accountType',
         field: 'accountType',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.documentType',
         field: 'documentType',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.balance',
         field: 'balance',
-        align: 'right'
+        align: 'right',
       },
       {
         header: 'DataTableColumns.contraAccountNumber',
         field: 'contraAccountNumber',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.contraAccountName',
         field: 'contraAccountName',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.documentTypeNew',
         field: 'documentTypeNew',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.documentNumber',
         field: 'documentNumber',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.documentDate',
         field: 'documentDate',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.recordNumber',
         field: 'recordNumber',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.ledgerId',
         field: 'ledgerId',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.executionDate',
         field: 'executionDate',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.dueDate',
         field: 'dueDate',
-        align: 'center'
-      }
+        align: 'center',
+      },
     ];
 
     this._analysisService
-      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber, this.baseBalance)
-      .subscribe(res => {
-        this.data = res;
-        if (this.data.length > 0) {
-          this.accountName = this.data[0].accountName;
+      .getAmountAnalysisDetails(
+        this.orgId,
+        this.prcId,
+        this.accountNumber,
+        this.baseBalance
+      )
+      .subscribe(
+        (res) => {
+          this.data = res;
+          if (this.data.length > 0) {
+            this.accountName = this.data[0].accountName;
+          }
+          this.tempData = res;
+          this.waiting = false;
+        },
+        (er) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'ERROR',
+            life: 10000,
+            detail: 'There is an error occured please try again',
+          });
         }
-        this.tempData = res;
-        this.waiting = false;
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
-
-  }// end of ng on init
-
+      );
+  } // end of ng on init
 
   goBack() {
     this._router.navigate(['/analysis/amount/']);
   }
 
-
   async exportExcel() {
-
     let translatedData = [];
     for (let index = 0; index < this.data.length; index++) {
       let element = this.data[index];
       let translatedRecord = {};
       for (const key in element) {
-        if (Object.prototype.hasOwnProperty.call(element, key) && key != 'id' && key != 'procedureId') {
-          let translatedKey = await this._translateService.get('DataTableColumns.' + key).toPromise();
+        if (
+          Object.prototype.hasOwnProperty.call(element, key) &&
+          key != 'id' &&
+          key != 'procedureId'
+        ) {
+          let translatedKey = await this._translateService
+            .get('DataTableColumns.' + key)
+            .toPromise();
           translatedRecord[translatedKey] = element[key];
 
           // formatting
-          if (element[key] &&
-            (key == 'balance' || key == 'debitAmount' || key == 'creditAmount' || key == 'taxAmount' ||
-              key == 'taxAmountDebit' || key == 'taxAmountCredit' || key == 'StartingBalance')) {
+          if (
+            element[key] &&
+            (key == 'balance' ||
+              key == 'debitAmount' ||
+              key == 'creditAmount' ||
+              key == 'taxAmount' ||
+              key == 'taxAmountDebit' ||
+              key == 'taxAmountCredit' ||
+              key == 'StartingBalance')
+          ) {
             try {
               let temp = Number.parseFloat(element[key].toString());
               if (!Number.isNaN(temp)) {
-                translatedRecord[translatedKey] = temp.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                translatedRecord[translatedKey] = temp.toLocaleString('de-DE', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                });
               }
-
             } catch (e) {
               // do nothing
             }
-          } else if (element[key] &&
-            (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' ||
-              key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
+          } else if (
+            element[key] &&
+            (key == 'documentDate' ||
+              key == 'postingDate' ||
+              key == 'dueDate' ||
+              key == 'dueDateNew' ||
+              key == 'executionDate' ||
+              key == 'applicationDate' ||
+              key == 'StartingBalanceDate')
+          ) {
             try {
               let temp = new Date(Date.parse(element[key].toString()));
               if (temp instanceof Date)
-                translatedRecord[translatedKey] = temp.toLocaleDateString('de-DE', {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-              });
-            } catch (e) {
-
-            }
-
+                translatedRecord[translatedKey] = temp.toLocaleDateString(
+                  'de-DE',
+                  {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  }
+                );
+            } catch (e) {}
           }
           // end of formatting
-
-
-
-
         }
       }
       translatedData.push(translatedRecord);
     }
 
-    import("xlsx").then(xlsx => {
+    import('xlsx').then((xlsx) => {
       const worksheet = xlsx.utils.json_to_sheet(translatedData);
-      const workbook = { Sheets: { 'amount_analysis': worksheet }, SheetNames: ['amount_analysis'] };
-      const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-      this.saveAsExcelFile(excelBuffer, "amount_analysis");
+      const workbook = {
+        Sheets: { amount_analysis: worksheet },
+        SheetNames: ['amount_analysis'],
+      };
+      const excelBuffer: any = xlsx.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+      });
+      this.saveAsExcelFile(excelBuffer, 'amount_analysis');
     });
   }
 
   saveAsExcelFile(buffer: any, fileName: string): void {
-    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_TYPE =
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     let EXCEL_EXTENSION = '.xlsx';
     const d: Blob = new Blob([buffer], {
-      type: EXCEL_TYPE
+      type: EXCEL_TYPE,
     });
     // FileSaver.saveAs(file);
-    FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    FileSaver.saveAs(
+      d,
+      fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
+    );
   }
-
 
   filterChange(query, colName): void {
     this.searching = true;
@@ -275,9 +321,13 @@ export class AmountAnalysisDetailsComponent implements OnInit {
           if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
             const element = this.criteria[key];
             if (element.length < 3) {
-              this.data = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+              this.data = this.tempData.filter(
+                (value) => value[key]?.toLowerCase() == element.toLowerCase()
+              );
             } else {
-              this.data = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+              this.data = this.tempData.filter((value) =>
+                value[key]?.toLowerCase().includes(element.toLowerCase())
+              );
             }
           }
         }
@@ -288,9 +338,13 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
           const element = this.criteria[key];
           if (element.length < 3) {
-            this.data = this.data.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+            this.data = this.data.filter(
+              (value) => value[key]?.toLowerCase() == element.toLowerCase()
+            );
           } else {
-            this.data = this.data.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+            this.data = this.data.filter((value) =>
+              value[key]?.toLowerCase().includes(element.toLowerCase())
+            );
           }
         }
       } // end of for each criteria field
@@ -298,47 +352,70 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this.searching = false;
   }
 
-
   selectRow(row: AmountAnalysisDetails): void {
-    const index = this.selected.map(item => item.id).indexOf(row.id);
+    debugger;
+    const index = this.selected.map((item) => item.id).indexOf(row.id);
     if (row.amountRelevant) {
       row.amountRelevant = false;
       row.amountRelevantComment = '';
+      if (index == -1) {
+        this.selected.push(row);
+      } else {
+        // update the old one
+        this.selected[index]['amountRelevant'] = false;
+        this.selected[index]['amountRelevantComment'] = '';
+      }
     } else {
       row.amountRelevant = true;
-    }
-    if (index == -1) {
-      this.selected.push(row);
+      if (index == -1) {
+        this.selected.push(row);
+      } else {
+        // update the old one
+        this.selected[index]['amountRelevant'] = true;
+      }
     }
   }
 
   commentChanged(row: AmountAnalysisDetails): void {
-    const index = this.selected.map(item => item.id).indexOf(row.id);
+    const index = this.selected.map((item) => item.id).indexOf(row.id);
     row.amountRelevant = true;
     if (index == -1) {
       this.selected.push(row);
+    } else {
+      // update the old one
+      this.selected[index]['amountRelevant'] = true;
+      this.selected[index]['amountRelevantComment'] = row.amountRelevantComment;
     }
   }
 
   saveRelevant() {
     console.log(this.selected);
     this._analysisService
-      .setRelevantAmountAnalysis(this.orgId, this.prcId, this.accountNumber, this.baseBalance, this.selected)
-      .subscribe(res => {
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          life: 10000,
-          detail: "records set as relevant successfully!"
-        });
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
+      .setRelevantAmountAnalysis(
+        this.orgId,
+        this.prcId,
+        this.accountNumber,
+        this.baseBalance,
+        this.selected
+      )
+      .subscribe(
+        (res) => {
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: 'records updated successfully!',
+          });
+        },
+        (er) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'ERROR',
+            life: 10000,
+            detail: 'There is an error occured please try again',
+          });
+        }
+      );
   }
 
   changeData(option: number): void {
@@ -361,39 +438,53 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   getSysRelevant() {
     this.waiting = true;
     this._analysisService
-      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber, this.baseBalance)
-      .subscribe(res => {
-        this.data = res;
-        this.tempData = res;
-        this.waiting = false;
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
+      .getAmountAnalysisDetails(
+        this.orgId,
+        this.prcId,
+        this.accountNumber,
+        this.baseBalance
+      )
+      .subscribe(
+        (res) => {
+          this.data = res;
+          this.tempData = res;
+          this.waiting = false;
+        },
+        (er) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'ERROR',
+            life: 10000,
+            detail: 'There is an error occured please try again',
+          });
+        }
+      );
   }
 
   getUserRelevant() {
     this.waiting = true;
     this._analysisService
-      .getAmountAnalysisDetailsRelevant(this.orgId, this.prcId, this.accountNumber)
-      .subscribe(res => {
-        this.data = res;
-        this.tempData = res;
-        this.waiting = false;
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
+      .getAmountAnalysisDetailsRelevant(
+        this.orgId,
+        this.prcId,
+        this.accountNumber
+      )
+      .subscribe(
+        (res) => {
+          this.data = res;
+          this.tempData = res;
+          this.waiting = false;
+        },
+        (er) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'ERROR',
+            life: 10000,
+            detail: 'There is an error occured please try again',
+          });
+        }
+      );
   }
-
 
   getAllByAccount() {
     this.waiting = true;
@@ -401,25 +492,32 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       if (!this.backCriteria[key]) {
         delete this.backCriteria[key];
       }
-     }
+    }
     this._analysisService
-      .getAmountAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber, this.backCriteria)
-      .subscribe(res => {
-        this.allRecordData = res.rows;
-        this.totalCount = res.count;
-        this.displayedDataCount = this.allRecordData.length;
-        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
-        this.waiting = false;
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
+      .getAmountAnalysisDetailsByAccount(
+        this.orgId,
+        this.prcId,
+        this.accountNumber,
+        this.backCriteria
+      )
+      .subscribe(
+        (res) => {
+          this.allRecordData = res.rows;
+          this.totalCount = res.count;
+          this.displayedDataCount = this.allRecordData.length;
+          this.maxPageNr = Math.ceil(this.totalCount / this.limit);
+          this.waiting = false;
+        },
+        (er) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'ERROR',
+            life: 10000,
+            detail: 'There is an error occured please try again',
+          });
+        }
+      );
   }
-
 
   // export excel from back-end for all table
   exportXLSX() {
@@ -431,11 +529,11 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this._exportDataService
       .exportXLSX('amount_analysis', this.orgId, this.prcId, criteriaWithLang)
       .subscribe(
-        url => {
+        (url) => {
           // console.log(url);
-          window.open(url.toString(), "_blank");
+          window.open(url.toString(), '_blank');
         },
-        (error) => console.log(error),
+        (error) => console.log(error)
       );
   }
 
@@ -445,10 +543,8 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this.backCriteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.backCriteria.offset = 0;
-    if (!this.waiting)
-      this.getAllByAccount();
+    if (!this.waiting) this.getAllByAccount();
   }
-
 
   // for pagination starts
 
@@ -457,7 +553,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   }
 
   limitChange(e) {
-    this.limit = e.value
+    this.limit = e.value;
     this.backCriteria.offset = 0;
     this.backCriteria.limit = this.limit;
     this.pageNr = 1;
@@ -477,7 +573,6 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
     this.getAllByAccount();
   }
-
 
   lastPage() {
     this.pageNr = this.maxPageNr;
@@ -500,12 +595,10 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   clearFilter() {
     this.backCriteria = {
       limit: this.limit,
-      offset: 0
+      offset: 0,
     };
     this.pageNr = 1;
     this.getAllByAccount();
   }
   // for pagination ends
-
-
 }
