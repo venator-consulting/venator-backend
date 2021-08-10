@@ -24,6 +24,7 @@ import { DocumentTypeComponent } from "./admin/document-type/document-type.compo
 import { AmountAnalysisDetailsComponent } from "./shared/analysis/amount-analysis/details/amount-analysis-details.component";
 import { TextAnalysisComponent } from "./shared/analysis/text-analysis/text-analysis.component";
 import { TextAnalysisDetailsComponent } from "./shared/analysis/text-analysis/text-analysis-details/text-analysis-details.component";
+import { TextAnalysisWordDetailsComponent } from "./shared/analysis/text-analysis/text-analysis-word-details/text-analysis-word-details.component";
 import { PaymentAnalysisComponent } from "./shared/analysis/payment-analysis/payment-analysis.component";
 import { PaymentAnalysisDetailsComponent } from "./shared/analysis/payment-analysis/payment-analysis-details/payment-analysis-details.component";
 import { DueDateComponent } from "./shared/analysis/payment-analysis/due-date/due-date.component";
@@ -64,14 +65,15 @@ const routes: Routes = [
   { path: 'analysis/amount', component: AmountAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/amount/:orgId/:prcId/:accountNumber/:baseBalance', component: AmountAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/text', component: TextAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/text/:by-word', component: TextAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/text/:orgId/:prcId/:accountNumber', component: TextAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
+  { path: 'analysis/text/word/:key', component: TextAnalysisWordDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/payment', component: PaymentAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/payment/:orgId/:prcId/:accountNumber', component: PaymentAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/due-date', component: DueDateComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/due-date/deails/:accountNumber', component: DueDateDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/creditor', component: CreditorAnalysisComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
   { path: 'analysis/creditor/deails/:accountNumber', component: CreditorAnalysisDetailsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },
-
 
   { path: 'admin/accountType', component: AccountTypeComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] } },
   { path: 'liquidity/openingBalance', component: OpeningBalanceComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'Manager', 'User'] } },

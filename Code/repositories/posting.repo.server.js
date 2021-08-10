@@ -361,14 +361,14 @@ module.exports.textAnalysis = async (orgId, prcId, keys) => {
 
 module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
   try {
-      let query = ' ';
+    let query = " ";
     for (let index = 0; index < keys.length; index++) {
       const key = keys[index];
       let originalKey = keys[index];
-      originalKey = originalKey.replace('like \'%', '');
-      originalKey = originalKey.replace('%\'', '');
-      originalKey = originalKey.replace('REGEXP \'(\\b|[^a-zA-Z]+)', '');
-      originalKey = originalKey.replace('([^a-zA-Z]+|\\s*)\'', '');
+      originalKey = originalKey.replace("like '%", "");
+      originalKey = originalKey.replace("%'", "");
+      originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
+      originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
       query += `  
             SELECT
                 SUM(pos.totalCount) recordsCount,
@@ -392,16 +392,18 @@ module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
                 GROUP by
                     p.accountNumber) pos
             `;
-            query += index < keys.length-1 ? ' UNION ' : '';
+      query += index < keys.length - 1 ? " UNION " : "";
     }
 
-
-    const result = await sequelize.query(query, {
+    let result = await sequelize.query(query, {
       replacements: {
         procedureId: prcId,
       },
       type: QueryTypes.SELECT,
     });
+    if (result.length && result.length > 0) {
+      result = result.filter((rec) => +rec.recordsCount > 0);
+    }
     return result;
   } catch (error) {
     throw new Error(error.message);
@@ -438,6 +440,41 @@ module.exports.textAnalysisDetails = async (
       replacements: {
         procedureId: prcId,
         accountNumber: accountNumber,
+      },
+      type: QueryTypes.SELECT,
+    });
+    return result;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+module.exports.textAnalysisWordDetails = async (orgId, prcId, key) => {
+  try {
+    if (key.length <= 3 && key.length > 0) {
+      key = "REGEXP '(\\b|[^a-zA-Z]+)" + key + "([^a-zA-Z]+|\\s*)'";
+    } else if (key.length > 3) {
+      key = "like '%" + key + "%'";
+    } else {
+      throw new Error("invalid key!");
+    }
+    let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
+                            p.textRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
+                            p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
+                            p.ledgerId, p.executionDate, p.dueDate, p.reference, p.textPosting, p.textHeader
+                            FROM posting_${orgId}  p
+                            WHERE
+                            p.procedureId = :procedureId
+                            AND (
+                            UPPER(p.textPosting) ${key}
+                            OR UPPER(p.reference) ${key}
+                            OR UPPER(p.textHeader) ${key}
+                            )
+                                `;
+
+    const result = await sequelize.query(query, {
+      replacements: {
+        procedureId: prcId,
       },
       type: QueryTypes.SELECT,
     });

@@ -88,6 +88,7 @@ import { OpeningBalanceComponent } from './shared/liquidity/opening-balance/open
 import { CreditLineComponent } from './shared/liquidity/credit-line/credit-line.component';
 import { FreeLiquidityComponent } from './shared/liquidity/free-liquidity/free-liquidity.component';
 import { FreeLiquidityDetailsComponent } from './shared/liquidity/free-liquidity/free-liquidity-details/free-liquidity-details.component';
+import { TextAnalysisWordDetailsComponent } from './shared/analysis/text-analysis/text-analysis-word-details/text-analysis-word-details.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -134,6 +135,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreditLineComponent,
     FreeLiquidityComponent,
     FreeLiquidityDetailsComponent,
+    TextAnalysisWordDetailsComponent,
   ],
   imports: [
     BrowserModule,

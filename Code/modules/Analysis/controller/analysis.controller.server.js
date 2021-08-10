@@ -117,7 +117,23 @@ module.exports.textAnalysisDetails = async (req, res) => {
         res.status(200)
             .json(result);
     } catch (e) {
-        errorHandler('Analysis controller: Amount analysis - get details', e);
+        errorHandler('Analysis controller: text analysis - get details', e);
+        res
+            .status(500)
+            .json({
+                error: e
+            });
+    }
+};
+
+module.exports.textAnalysisWordDetails = async (req, res) => {
+    try {
+        const result = await postingRepo
+            .textAnalysisWordDetails(req.params.orgId, req.params.prcId, req.params.key);
+        res.status(200)
+            .json(result);
+    } catch (e) {
+        errorHandler('Analysis controller: Text analysis - get details by keyword', e);
         res
             .status(500)
             .json({

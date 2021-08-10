@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AnalysisService } from '../../service/analysis.service';
 import { Bar } from '../../model/bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TextAnalysis } from '../../model/textAnalysis';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ProcedureService } from '../../service/procedure.service';
@@ -44,7 +44,8 @@ export class TextAnalysisComponent implements OnInit {
     private _messageService: MessageService,
     private _analysisService: AnalysisService,
     private _router: Router,
-    private prcService: ProcedureService
+    private prcService: ProcedureService,
+    private _route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -104,7 +105,7 @@ export class TextAnalysisComponent implements OnInit {
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
-
+    this.byAccount = this._route.snapshot.paramMap.get('by-word') ? false : true;
     this.cols = [
       {
         header: 'AmountAnalysis.accountNumber',
@@ -249,7 +250,10 @@ export class TextAnalysisComponent implements OnInit {
   }
 
   goToDetailsWord(row) {
-    
+    this._router.navigate([
+      '/analysis/text/word/' +
+        row.word,
+    ]);
   }
 
   filterChange(query, colName): void {

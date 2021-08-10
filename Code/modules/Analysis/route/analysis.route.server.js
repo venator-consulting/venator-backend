@@ -69,6 +69,14 @@ router.route("/:orgId/:prcId/text/details/:accountNumber/relevant").get(
   analysisCtrl.textJustRelevant
 );
 
+router.route("/:orgId/:prcId/text-word/details/:key").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.textAnalysisWordDetails
+);
+
 router
   .route("/:orgId/:prcId/text/details/:accountNumber")
   .get(
