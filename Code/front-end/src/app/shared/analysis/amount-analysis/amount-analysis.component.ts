@@ -40,9 +40,9 @@ export class AmountAnalysisComponent implements OnInit {
     this._translateService.get('AmountAnalysis').subscribe( elem => { 
       this.items = [
 
-        {label: elem.label, routerLink: '/analysis/amount'}
+        {label: elem.label, routerLink: '/dashboard/analysis/amount'}
       ];
-      this.home = {icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data'};
+      this.home = {icon: 'pi pi-home', label: elem.data, routerLink: '/dashboard/shared/data'};
 
     })
 
@@ -98,7 +98,7 @@ export class AmountAnalysisComponent implements OnInit {
   }// end of ng on init
 
   goToDetails(row: AmountAnalysis) {
-    this._router.navigate(['/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber + '/' + this.baseBalance]);
+    this._router.navigate(['/dashboard/analysis/amount/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber + '/' + this.baseBalance]);
   }
 
   getData() {

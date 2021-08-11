@@ -61,7 +61,7 @@ export class UserRegistrationComponent implements OnInit {
       });
   }
   cancelHandle() {
-    this._router.navigate(['/shared/user/users']);
+    this._router.navigate(['/dashboard/shared/user/users']);
 
   }
 }

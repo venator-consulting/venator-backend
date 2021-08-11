@@ -80,7 +80,7 @@ export class ResetPasswordNewUserComponent implements OnInit {
     }
 
   }
-  cancelHandle() {
-    this._router.navigate(['/shared/user/procedures']);
-  }
+  // cancelHandle() {
+  //   this._router.navigate(['/dashboard/shared/user/procedures']);
+  // }
 }

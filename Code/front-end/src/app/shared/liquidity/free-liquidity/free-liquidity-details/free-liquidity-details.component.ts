@@ -47,7 +47,7 @@ export class FreeLiquidityDetailsComponent implements OnInit {
     this.items = [
       {
         label: 'Free Liquidity',
-        routerLink: '/liquidity/freeLiquidity',
+        routerLink: '/dashboard/liquidity/freeLiquidity',
         routerLinkActiveOptions: { exact: true },
       },
       {
@@ -59,7 +59,7 @@ export class FreeLiquidityDetailsComponent implements OnInit {
     this.home = {
       icon: 'pi pi-home',
       label: ' Data',
-      routerLink: '/shared/data',
+      routerLink: '/dashboard/shared/data',
     };
     this.basicOptions = {
       tooltips: {

@@ -53,9 +53,9 @@ export class LoginComponent implements OnInit {
         }
 
         if(localStorage.getItem('role') === "Admin") {
-          this._router.navigate(['/admin/dashboard']);
+          this._router.navigate(['/dashboard/admin/dashboard']);
         } else {
-          this._router.navigate(['/shared/user/procedures']);
+          this._router.navigate(['/dashboard/shared/user/procedures']);
         }
 
       }, err => {

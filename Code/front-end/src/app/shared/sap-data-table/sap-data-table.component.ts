@@ -245,7 +245,7 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   susa() {
-    this._router.navigate(['/shared/data/susa']);
+    this._router.navigate(['/dashboard/shared/data/susa']);
   }
 
 }

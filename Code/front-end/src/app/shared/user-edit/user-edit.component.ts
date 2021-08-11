@@ -77,7 +77,7 @@ export class UserEditComponent implements OnInit {
       });
   }
   cancelHandle(){
-    this._router.navigate(['/shared/user/users']); 
+    this._router.navigate(['/dashboard/shared/user/users']); 
     localStorage.removeItem("selectedUser_userId");
     localStorage.removeItem("selectedUser_roleId");
     localStorage.removeItem("selectedUser_username");

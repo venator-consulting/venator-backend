@@ -60,7 +60,7 @@ export class UserDashboardComponent implements OnInit {
   dataTable(prc) {
     localStorage.setItem('currentProcedureId', prc.id);
     localStorage.setItem('currentProcedureName', prc.name);
-    this._router.navigate(['/shared/data']);
+    this._router.navigate(['/dashboard/shared/data']);
 
   }
   editProcedure(id, name, data, analysis) {
@@ -69,11 +69,11 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedureData', data);
     localStorage.setItem('currentProcedureAnalysis', analysis);
 
-    this._router.navigate(['/admin/procedure/edit']);
+    this._router.navigate(['/dashboard/admin/procedure/edit']);
 
   }
   addProcedure() {
-    this._router.navigate(['/admin/procedure/add']);
+    this._router.navigate(['/dashboard/admin/procedure/add']);
 
   }
 }

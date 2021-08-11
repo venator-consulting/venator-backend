@@ -99,10 +99,10 @@ export class OrganisationUsersComponent implements OnInit {
     localStorage.setItem('selectedUser_city', user.city);
     localStorage.setItem('selectedUser_country', user.country);
 
-    this._router.navigate(['/shared/user/edit']); 
+    this._router.navigate(['/dashboard/shared/user/edit']); 
   }
   addUser(){
-    this._router.navigate(['/shared/user/add']); 
+    this._router.navigate(['/dashboard/shared/user/add']); 
 
   }
 }

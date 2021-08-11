@@ -53,11 +53,11 @@ export class TextAnalysisDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       // { label: 'Analysis' },
-      { label: 'Text Analysis', routerLink: '/analysis/text', routerLinkActiveOptions: { exact: true } },
+      { label: 'Text Analysis', routerLink: '/dashboard/analysis/text', routerLinkActiveOptions: { exact: true } },
       { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
     ];
     
-    this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/shared/data' };
+    this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/dashboard/shared/data' };
     this.waiting = true;
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
     this.orgId = this.orgId? this.orgId : +localStorage.getItem('organisationId');
@@ -200,7 +200,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
   }
 
   goBack() {
-    this._router.navigate(['/analysis/text/']);
+    this._router.navigate(['/dashboard/analysis/text/']);
   }
 
   async exportExcel() {

@@ -52,7 +52,7 @@ export class NavBarComponent implements OnInit {
         this.sidebarItems.push({
             label: 'Data',
             items: [
-                { label: 'Data table', icon: 'pi pi-table', routerLink: ['/shared/data'], visible: !!this.orgId && !!this.prcId },
+                { label: 'Data table', icon: 'pi pi-table', routerLink: ['/dashboard/shared/data'], visible: !!this.orgId && !!this.prcId },
             ],
         });
         debugger;
@@ -81,34 +81,34 @@ export class NavBarComponent implements OnInit {
                     {
                         label: 'Administrator',
                         items: [
-                            { label: 'Import', icon: 'pi pi-file', routerLink: ['/admin/import'], command: () => { this.sideBarShow = false } },
-                            { label: elem.addUser, icon: 'pi pi-user-plus', routerLink: ['/admin/admin/add'], command: () => { this.sideBarShow = false } },
-                            { label: elem.addOrganisation, icon: 'pi pi-plus-circle', routerLink: ['admin/organisation/add'], command: () => { this.sideBarShow = false } },
-                            { label: elem.addDocumentType, icon: 'pi pi-plus-circle', routerLink: ['admin/document-type'], command: () => { this.sideBarShow = false } },
-                            { label: elem.addAccountType, icon: 'pi pi-plus-circle', routerLink: ['admin/accountType'], command: () => { this.sideBarShow = false } },
+                            { label: 'Import', icon: 'pi pi-file', routerLink: ['/dashboard/admin/import'], command: () => { this.sideBarShow = false } },
+                            { label: elem.addUser, icon: 'pi pi-user-plus', routerLink: ['/dashboard/admin/admin/add'], command: () => { this.sideBarShow = false } },
+                            { label: elem.addOrganisation, icon: 'pi pi-plus-circle', routerLink: ['/dashboard/admin/organisation/add'], command: () => { this.sideBarShow = false } },
+                            { label: elem.addDocumentType, icon: 'pi pi-plus-circle', routerLink: ['/dashboard/admin/document-type'], command: () => { this.sideBarShow = false } },
+                            { label: elem.addAccountType, icon: 'pi pi-plus-circle', routerLink: ['/dashboard/admin/accountType'], command: () => { this.sideBarShow = false } },
                             
-                            { label: elem.resetPassword, icon: 'pi pi-lock', routerLink: ['/resetPassword'], command: () => { this.sideBarShow = false } },
+                            { label: elem.resetPassword, icon: 'pi pi-lock', routerLink: ['/dashboard/resetPassword'], command: () => { this.sideBarShow = false } },
                         ]
                     },
                     {
                         label: 'Dashboard',
                         items: [
-                            { label: elem.organisations, icon: 'pi  pi-home', routerLink: ['/admin/dashboard'], command: () => { this.sideBarShow = false } },
+                            { label: elem.organisations, icon: 'pi  pi-home', routerLink: ['/dashboard/admin/dashboard'], command: () => { this.sideBarShow = false } },
                         ]
                     },
                     {
                         label: elem.data,
                         items: [
-                            { label: elem.data, icon: 'pi  pi-table', routerLink: ['/shared/data'], command: () => { this.sideBarShow = false } },
+                            { label: elem.data, icon: 'pi  pi-table', routerLink: ['/dashboard/shared/data'], command: () => { this.sideBarShow = false } },
                         ]
                     },
                     {
                         label: elem.analysis,
                         items: [
-                            { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/analysis/amount'], command: () => { this.sideBarShow = false } },
-                            { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/analysis/text'], command: () => { this.sideBarShow = false } },
-                            { label: elem.paymentAnalyse, icon: 'pi pi-credit-card', routerLink: ['/analysis/payment'], command: () => { this.sideBarShow = false } },
-                           { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' , routerLink: ['/analysis/creditor'], command: () => {this.sideBarShow = false}},
+                            { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/dashboard/analysis/amount'], command: () => { this.sideBarShow = false } },
+                            { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/dashboard/analysis/text'], command: () => { this.sideBarShow = false } },
+                            { label: elem.paymentAnalyse, icon: 'pi pi-credit-card', routerLink: ['/dashboard/analysis/payment'], command: () => { this.sideBarShow = false } },
+                           { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' , routerLink: ['/dashboard/analysis/creditor'], command: () => {this.sideBarShow = false}},
 
 
                         ]
@@ -116,9 +116,9 @@ export class NavBarComponent implements OnInit {
                      {
                         label: elem.liquidity,
                         items: [
-                            { label: elem.openingBalance, icon: 'pi  pi-plus-circle', routerLink: ['/liquidity/openingBalance'], command: () => { this.sideBarShow = false } },
-                            { label: elem.creditLine, icon: 'pi  pi-plus-circle', routerLink: ['/liquidity/creditLine'], command: () => { this.sideBarShow = false } },
-                            { label: elem.freeLiquidity, icon: 'pi  pi-chart-line', routerLink: ['/liquidity/freeLiquidity'], command: () => { this.sideBarShow = false } },
+                            { label: elem.openingBalance, icon: 'pi  pi-plus-circle', routerLink: ['/dashboard/liquidity/openingBalance'], command: () => { this.sideBarShow = false } },
+                            { label: elem.creditLine, icon: 'pi  pi-plus-circle', routerLink: ['/dashboard/liquidity/creditLine'], command: () => { this.sideBarShow = false } },
+                            { label: elem.freeLiquidity, icon: 'pi  pi-chart-line', routerLink: ['/dashboard/liquidity/freeLiquidity'], command: () => { this.sideBarShow = false } },
                         ]
                     }  
                 ];
@@ -140,24 +140,24 @@ export class NavBarComponent implements OnInit {
                     {
                         label: 'Dashboard',
                         items: [
-                            { label: elem.procedures, icon: 'pi  pi-home', routerLink: ['/shared/user/procedures'], command: () => { this.sideBarShow = false } },
-                            { label: elem.users, icon: 'pi pi-users', routerLink: ['/shared/user/users'], command: () => { this.sideBarShow = false } }
+                            { label: elem.procedures, icon: 'pi  pi-home', routerLink: ['/dashboard/shared/user/procedures'], command: () => { this.sideBarShow = false } },
+                            { label: elem.users, icon: 'pi pi-users', routerLink: ['/dashboard/shared/user/users'], command: () => { this.sideBarShow = false } }
                         ]
                     },
                     {
                                     label: elem.data,
                                     items: [
-                                        {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
+                                        {label: elem.table, icon: 'pi pi-table', routerLink: ['/dashboard/data'] },
                                     ]
                     }, 
                     
                     {
                         label: elem.analysis,
                         items: [
-                            { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/analysis/amount'], command: () => { this.sideBarShow = false } },
-                            { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/analysis/text'], command: () => { this.sideBarShow = false } },
-                            { label: elem.paymentAnalyse, icon: 'pi pi-credit-card', routerLink: ['/analysis/payment'], command: () => { this.sideBarShow = false } },
-                           { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' , routerLink: ['/analysis/creditor'], command: () => {this.sideBarShow = false}},
+                            { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/dashboard/analysis/amount'], command: () => { this.sideBarShow = false } },
+                            { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/dashboard/analysis/text'], command: () => { this.sideBarShow = false } },
+                            { label: elem.paymentAnalyse, icon: 'pi pi-credit-card', routerLink: ['/dashboard/analysis/payment'], command: () => { this.sideBarShow = false } },
+                           { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' , routerLink: ['/dashboard/analysis/creditor'], command: () => {this.sideBarShow = false}},
 
 
                         ]
@@ -179,23 +179,23 @@ export class NavBarComponent implements OnInit {
                     {
                         label: 'Dashboard',
                         items: [
-                            { label: elem.procedures, icon: 'pi  pi-home', routerLink: ['/shared/user/procedures'], command: () => { this.sideBarShow = false } },
+                            { label: elem.procedures, icon: 'pi  pi-home', routerLink: ['/dashboard/shared/user/procedures'], command: () => { this.sideBarShow = false } },
                         ]
                     },
                     {
                         label: elem.data,
                         items: [
-                                {label: elem.table, icon: 'pi pi-table', routerLink: ['/data'] },
+                                {label: elem.table, icon: 'pi pi-table', routerLink: ['/dashboard/data'] },
                         ]
                     }, 
                                 
                     {
                         label: elem.analysis,
                         items: [
-                            { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/analysis/amount'], command: () => { this.sideBarShow = false } },
-                            { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/analysis/text'], command: () => { this.sideBarShow = false } },
-                            { label: elem.paymentAnalyse, icon: 'pi pi-credit-card', routerLink: ['/analysis/payment'], command: () => { this.sideBarShow = false } },
-                           { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' , routerLink: ['/analysis/creditor'], command: () => {this.sideBarShow = false}},
+                            { label: elem.amountAnalyisis, icon: 'pi pi-euro', routerLink: ['/dashboard/analysis/amount'], command: () => { this.sideBarShow = false } },
+                            { label: elem.textAnalysis, icon: 'pi pi-inbox', routerLink: ['/dashboard/analysis/text'], command: () => { this.sideBarShow = false } },
+                            { label: elem.paymentAnalyse, icon: 'pi pi-credit-card', routerLink: ['/dashboard/analysis/payment'], command: () => { this.sideBarShow = false } },
+                           { label: elem.creditorsAnalyse, icon: 'pi pi-chart-bar' , routerLink: ['/dashboard/analysis/creditor'], command: () => {this.sideBarShow = false}},
 
 
                         ]

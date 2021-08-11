@@ -37,10 +37,10 @@ export class SusaComponent implements OnInit {
   ngOnInit(): void {
     this.waiting = true;
     this.items = [
-      { label: 'SUSA', routerLink: '/shared/data/susa', routerLinkActiveOptions: { exact: true } }
+      { label: 'SUSA', routerLink: '/dashboard/shared/data/susa', routerLinkActiveOptions: { exact: true } }
     ];
 
-    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/shared/data', routerLinkActiveOptions: { exact: true } };
+    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/dashboard/shared/data', routerLinkActiveOptions: { exact: true } };
 
     this.organisationId = +localStorage.getItem('organisationId');
     this.procedureId = +localStorage.getItem('currentProcedureId');
@@ -157,7 +157,7 @@ export class SusaComponent implements OnInit {
   }
 
   goBack() {
-    this._router.navigate(['/shared/data']);
+    this._router.navigate(['/dashboard/shared/data']);
   }
 
 

@@ -41,7 +41,7 @@ export class TextAnalysisWordDetailsComponent implements OnInit {
       // { label: 'Analysis' },
       {
         label: 'Text Analysis',
-        routerLink: '/analysis/text/true',
+        routerLink: '/dashboard/analysis/text/true',
         routerLinkActiveOptions: { exact: true },
       },
       {
@@ -54,7 +54,7 @@ export class TextAnalysisWordDetailsComponent implements OnInit {
     this.home = {
       icon: 'pi pi-home',
       label: 'Data',
-      routerLink: '/shared/data',
+      routerLink: '/dashboard/shared/data',
     };
     this.waiting = true;
     this.orgId = this.orgId
@@ -190,7 +190,7 @@ export class TextAnalysisWordDetailsComponent implements OnInit {
   } // end of ng on init
 
   goBack() {
-    this._router.navigate(['/analysis/text/true']);
+    this._router.navigate(['/dashboard/analysis/text/true']);
   }
 
 

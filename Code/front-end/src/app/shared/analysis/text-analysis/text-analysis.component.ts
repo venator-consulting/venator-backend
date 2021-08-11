@@ -51,13 +51,13 @@ export class TextAnalysisComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       // { label: 'Analysis' },
-      { label: 'Text Analysis', routerLink: '/analysis/text' },
+      { label: 'Text Analysis', routerLink: '/dashboard/analysis/text' },
     ];
 
     this.home = {
       icon: 'pi pi-home',
       label: ' Data',
-      routerLink: '/shared/data',
+      routerLink: '/dashboard/shared/data',
     };
 
     this.waiting = true;
@@ -240,7 +240,7 @@ export class TextAnalysisComponent implements OnInit {
 
   goToDetails(row: TextAnalysis) {
     this._router.navigate([
-      '/analysis/text/' +
+      '/dashboard/analysis/text/' +
         this.selectedOrganisation +
         '/' +
         this.selectedProcedure +
@@ -251,7 +251,7 @@ export class TextAnalysisComponent implements OnInit {
 
   goToDetailsWord(row) {
     this._router.navigate([
-      '/analysis/text/word/' +
+      '/dashboard/analysis/text/word/' +
         row.word,
     ]);
   }

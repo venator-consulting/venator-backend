@@ -69,10 +69,10 @@ export class PaymentAnalysisComponent implements OnInit {
       this.green = elem.green;
 
       this.items = [
-        { label: elem.label, routerLink: '/analysis/payment' }
+        { label: elem.label, routerLink: '/dashboard/analysis/payment' }
       ];
   
-      this.home = { icon: 'pi pi-home',  label: elem.data, routerLink: '/shared/data' };
+      this.home = { icon: 'pi pi-home',  label: elem.data, routerLink: '/dashboard/shared/data' };
 
       this.basicOptions = {
         tooltips: {
@@ -270,11 +270,11 @@ export class PaymentAnalysisComponent implements OnInit {
 
 
   goToDetails(row: any) {
-    this._router.navigate(['/analysis/payment/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
+    this._router.navigate(['/dashboard/analysis/payment/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
   }
 
   goToDueDate() {
-    this._router.navigate(['/analysis/due-date']);
+    this._router.navigate(['/dashboard/analysis/due-date']);
   }
 
 

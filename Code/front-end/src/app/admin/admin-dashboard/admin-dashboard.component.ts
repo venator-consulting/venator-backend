@@ -75,19 +75,19 @@ export class AdminDashboardComponent implements OnInit {
   showProcedures(id) {
     // console.log(id)
     localStorage.setItem('organisationId', id);
-    this._router.navigate(['/shared/user/procedures']);
+    this._router.navigate(['/dashboard/shared/user/procedures']);
 
 
   }
   showUsers(id) {
     // console.log(id)
     localStorage.setItem('organisationId', id);
-    this._router.navigate(['/shared/user/users']);
+    this._router.navigate(['/dashboard/shared/user/users']);
 
   }
 
   editOrg(id) {
-    this._router.navigate(['/admin/organisation/edit/' + id]);
+    this._router.navigate(['/dashboard/admin/organisation/edit/' + id]);
   }
 
 

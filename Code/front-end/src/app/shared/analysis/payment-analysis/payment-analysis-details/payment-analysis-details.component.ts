@@ -79,10 +79,10 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
       this.items = [
         // { label: 'Analysis' },
-        { label: elem.label, routerLink: '/analysis/payment', routerLinkActiveOptions: { exact: true } },
+        { label: elem.label, routerLink: '/dashboard/analysis/payment', routerLinkActiveOptions: { exact: true } },
         { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
       ];
-      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data' };
+      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/dashboard/shared/data' };
       this.basicOptions = {
         tooltips: {
           callbacks: {
@@ -414,7 +414,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   }
 
   goBack() {
-    this._router.navigate(['/analysis/payment/']);
+    this._router.navigate(['/dashboard/analysis/payment/']);
   }
 
 

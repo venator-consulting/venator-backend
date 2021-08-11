@@ -41,10 +41,10 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
     this._translateService.get('CreditorsAnalysis').subscribe(elem => {
       this.items = [
         // { label: 'Analysis' },
-        { label: elem.label, routerLink: '/analysis/creditor', routerLinkActiveOptions: { exact: true } },
+        { label: elem.label, routerLink: '/dashboard/analysis/creditor', routerLinkActiveOptions: { exact: true } },
         { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
       ];
-      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data' };
+      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/dashboard/shared/data' };
       this._analysisService
       .getCreditorAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {

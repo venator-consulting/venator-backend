@@ -52,11 +52,11 @@ export class DueDateComponent implements OnInit {
     this._translateService.get('DueDateAnalysis').subscribe(elem => {
       this.items = [
       
-        { label: elem.paymentLabel, routerLink: '/analysis/payment' },
-        { label: elem.label, routerLink: '/analysis/due-date' }
+        { label: elem.paymentLabel, routerLink: '/dashboard/analysis/payment' },
+        { label: elem.label, routerLink: '/dashboard/analysis/due-date' }
       ];
 
-      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data' };
+      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/dashboard/shared/data' };
 
       this._analysisService
       .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure)
@@ -209,11 +209,11 @@ export class DueDateComponent implements OnInit {
   }
 
   backToPayment() {
-    this._router.navigate(['/analysis/payment/']);
+    this._router.navigate(['/dashboard/analysis/payment/']);
   }
 
   goToDetails(row) {
-    this._router.navigate(['analysis/due-date/deails/' + row.accountNumber]);
+    this._router.navigate(['/dashboard/analysis/due-date/deails/' + row.accountNumber]);
   }
 
 }

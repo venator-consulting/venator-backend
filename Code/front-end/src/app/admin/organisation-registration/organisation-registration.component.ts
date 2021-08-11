@@ -165,7 +165,7 @@ export class OrganisationRegistrationComponent implements OnInit {
 
 
   cancelHandle() {
-    this._router.navigate(['/admin/dashboard']);
+    this._router.navigate(['/dashboard/admin/dashboard']);
   }
 
 }

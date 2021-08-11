@@ -1,10 +1,12 @@
  <div class="p-grid">
     <div class="p-mb-6 p-col-12">
-        <app-nav-bar *ngIf="username"></app-nav-bar>
+        <app-nav-bar></app-nav-bar>
     
     </div>
-    <div class="p-mt-6 p-col-12">
+    <div class="p-mt-6 p-col-12 dashboard">
         <router-outlet></router-outlet>
     </div> 
-    
+    <div class="p-mb-6 p-col-12">
+        <app-footer></app-footer>
+    </div>
  </div>

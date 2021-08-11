@@ -42,9 +42,9 @@ export class CreditorAnalysisComponent implements OnInit {
     
     this._translateService.get('CreditorsAnalysis').subscribe(elem => {
       this.items = [
-        { label: elem.label, routerLink: '/analysis/creditor' }
+        { label: elem.label, routerLink: '/dashboard/analysis/creditor' }
       ];
-      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/shared/data' };
+      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/dashboard/shared/data' };
 
       this.cols = [
         {
@@ -81,7 +81,7 @@ export class CreditorAnalysisComponent implements OnInit {
   }
 
   goToDetails(row) {
-    this._router.navigate(['/analysis/creditor/deails/' + row.accountNumber]);
+    this._router.navigate(['/dashboard/analysis/creditor/deails/' + row.accountNumber]);
   }
 
   getData() {

@@ -45,13 +45,13 @@ export class FreeLiquidityComponent implements OnInit {
     this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.items = [
-      { label: 'Free Liquidity', routerLink: '/liquidity/freeLiquidity' },
+      { label: 'Free Liquidity', routerLink: '/dashboard/liquidity/freeLiquidity' },
     ];
 
     this.home = {
       icon: 'pi pi-home',
       label: ' Data',
-      routerLink: '/shared/data',
+      routerLink: '/dashboard/shared/data',
     };
     this.basicOptions = {
       tooltips: {
@@ -259,7 +259,7 @@ export class FreeLiquidityComponent implements OnInit {
 
   goToDetails(row: any) {
     this._router.navigate([
-      'liquidity/freeLiquidity/details/' + row.accountNumber,
+      '/dashboard/liquidity/freeLiquidity/details/' + row.accountNumber,
     ]);
   }
 

@@ -59,7 +59,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this._translateService.get('AmountAnalysis').subscribe((elem) => {
       this.items = [
         // {label: 'Analysis'},
-        { label: elem.label, routerLink: '/analysis/amount' },
+        { label: elem.label, routerLink: '/dashboard/analysis/amount' },
         {
           label: 'Details',
           routerLink: this._router.url,
@@ -69,7 +69,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       this.home = {
         icon: 'pi pi-home',
         label: elem.data,
-        routerLink: '/shared/data',
+        routerLink: '/dashboard/shared/data',
       };
     });
 
@@ -212,7 +212,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   } // end of ng on init
 
   goBack() {
-    this._router.navigate(['/analysis/amount/']);
+    this._router.navigate(['/dashboard/analysis/amount/']);
   }
 
   async exportExcel() {

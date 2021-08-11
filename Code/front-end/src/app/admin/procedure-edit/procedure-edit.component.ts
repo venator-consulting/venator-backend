@@ -64,7 +64,7 @@ export class ProcedureEditComponent implements OnInit {
       }); 
   } 
   cancelHandle(){
-    this._router.navigate(['/shared/user/procedures']);
+    this._router.navigate(['/dashboard/shared/user/procedures']);
     localStorage.removeItem("currentProcedureId");
     localStorage.removeItem("currentProcedureName");
     localStorage.removeItem("currentProcedureData");
