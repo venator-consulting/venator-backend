@@ -15,10 +15,22 @@ module.exports.fetch = async (criteria) => {
     const offset = criteria.offset ? criteria.offset : 0;
     delete criteria.offset;
     let orderBy = criteria.orderBy ? criteria.orderBy : "id";
-    orderBy =
-      orderBy == "accountNumber"
-        ? sequelize.fn("LPAD", sequelize.col("accountNumber"), 10, 0)
-        : orderBy;
+    if (
+      orderBy == "accountNumber" ||
+      orderBy == "GLAccountNumber" ||
+      orderBy == "contraAccountNumber" ||
+      orderBy == "debtorNumber" ||
+      orderBy == "creditorNumber" ||
+      orderBy == "contraAccountGLAccountNo" ||
+      orderBy == "contraAccountDebtorNo" ||
+      orderBy == "contraAccountCreditorNo"
+    ) {
+      orderBy = sequelize.fn("LPAD", sequelize.col(orderBy), 10, 0);
+    }
+    // orderBy =
+    //   orderBy == "accountNumber"
+    //     ? sequelize.fn("LPAD", sequelize.col("accountNumber"), 10, 0)
+    //     : orderBy;
     delete criteria.orderBy;
     const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
     delete criteria.sortOrder;
@@ -293,10 +305,22 @@ module.exports.getByAccountNumber = async (
     const offset = criteria.offset ? criteria.offset : 0;
     delete criteria.offset;
     let orderBy = criteria.orderBy ? criteria.orderBy : "id";
-    orderBy =
-      orderBy == "accountNumber"
-        ? sequelize.fn("LPAD", sequelize.col("accountNumber"), 10, 0)
-        : orderBy;
+    if (
+      orderBy == "accountNumber" ||
+      orderBy == "GLAccountNumber" ||
+      orderBy == "contraAccountNumber" ||
+      orderBy == "debtorNumber" ||
+      orderBy == "creditorNumber" ||
+      orderBy == "contraAccountGLAccountNo" ||
+      orderBy == "contraAccountDebtorNo" ||
+      orderBy == "contraAccountCreditorNo"
+    ) {
+      orderBy = sequelize.fn("LPAD", sequelize.col(orderBy), 10, 0);
+    }
+    // orderBy =
+    //   orderBy == "accountNumber"
+    //     ? sequelize.fn("LPAD", sequelize.col("accountNumber"), 10, 0)
+    //     : orderBy;
     delete criteria.orderBy;
     const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
     delete criteria.sortOrder;

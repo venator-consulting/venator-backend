@@ -2,45 +2,94 @@
 <p-breadcrumb *ngIf="!details" [model]="items" [home]="home"></p-breadcrumb>
 <div class="p-grid" *ngIf="!details">
   <div class="p-col-12">
-    <h2 class="p-text-center">{{procedureName}}</h2>
-    <h3 class="p-text-center">{{accountName}}</h3>
+    <h2 class="p-text-center">{{ procedureName }}</h2>
+    <h3 class="p-text-center">{{ accountName }}</h3>
   </div>
 </div>
 <div class="p-grid">
   <!-- <div class="card"> -->
   <div class="p-col-12">
     <span class="p-text-center">
-      <p-selectButton [options]="detailsOptions" (onChange)="changeData($event.value)" optionLabel="name"
-        optionValue="value" [(ngModel)]="detailsOption">
+      <p-selectButton
+        [options]="detailsOptions"
+        (onChange)="changeData($event.value)"
+        optionLabel="name"
+        optionValue="value"
+        [(ngModel)]="detailsOption"
+      >
       </p-selectButton>
     </span>
-    <p-progressBar mode="indeterminate" [style]="{'height': '5px'}" *ngIf="searching"></p-progressBar>
-    <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id" *ngIf="detailsOption != 3"
-      styleClass="p-datatable-gridlines" [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true"
-      scrollHeight="350px" [style]="{width:'100%'}" [reorderableColumns]="true" [frozenColumns]="frozenCols"
-      frozenWidth="500px" [(selection)]="selected">
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="searching"
+    ></p-progressBar>
+    <p-table
+      #dt
+      dataKey="id"
+      [value]="data"
+      [resizableColumns]="true"
+      dataKey="id"
+      *ngIf="detailsOption != 3"
+      styleClass="p-datatable-gridlines"
+      [loading]="waiting"
+      [columns]="cols"
+      responsive="true"
+      [scrollable]="true"
+      scrollHeight="350px"
+      [style]="{ width: '100%' }"
+      [reorderableColumns]="true"
+      [frozenColumns]="frozenCols"
+      frozenWidth="500px"
+      [(selection)]="selected"
+    >
       <ng-template pTemplate="caption">
         <div class="p-grid">
           <div class="p-col-1" *ngIf="!details">
-            <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
-              class="p-button-rounded p-button-primary" label="{{ 'TextAnalysis.back' | translate}} "
-              pTooltip="{{ 'TextAnalysis.back' | translate}} " tooltipPosition="bottom"></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-arrow-left"
+              (click)="goBack()"
+              class="p-button-rounded p-button-primary"
+              label="{{ 'TextAnalysis.back' | translate }} "
+              pTooltip="{{ 'TextAnalysis.back' | translate }} "
+              tooltipPosition="bottom"
+            ></button>
           </div>
           <div class="p-col-4">
-            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
-              class="p-button-warning p-mr-2" pTooltip="{{ 'TextAnalysis.export' | translate}}"
-              tooltipPosition="bottom"></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-file-excel"
+              (click)="exportExcel()"
+              class="p-button-warning p-mr-2"
+              pTooltip="{{ 'TextAnalysis.export' | translate }}"
+              tooltipPosition="bottom"
+            ></button>
 
-            <button type="button" pButton pRipple icon="pi pi-check" (click)="saveRelevant()"
-              class="p-button-primary p-mr-2" pTooltip="{{ 'Analysis.save' | translate}}" tooltipPosition="bottom"
-              label="{{ 'Analysis.saveRelevant' | translate}}"></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-check"
+              (click)="saveRelevant()"
+              class="p-button-primary p-mr-2"
+              pTooltip="{{ 'Analysis.save' | translate }}"
+              tooltipPosition="bottom"
+              label="{{ 'Analysis.saveRelevant' | translate }}"
+            ></button>
           </div>
-
         </div>
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" [style]="{'width': (col.width? col.width : 200) +'px'}">
+          <col
+            *ngFor="let col of columns"
+            [style]="{ width: (col.width ? col.width : 200) + 'px' }"
+          />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
@@ -48,19 +97,33 @@
           <!-- <th> -->
           <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
           <!-- </th> -->
-          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
-            {{col.header | translate}}
-            <p-sortIcon field="{{col.field}}"></p-sortIcon>
+          <th
+            pSortableColumn="{{ col.field }}"
+            pResizableColumn
+            pReorderableColumn
+            class="p-text-center"
+            *ngFor="let col of columns"
+          >
+            {{ col.header | translate }}
+            <p-sortIcon field="{{ col.field }}"></p-sortIcon>
           </th>
-
         </tr>
         <tr>
           <!-- <th></th> -->
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-            <input *ngIf="col.field != 'textRelevant' && col.field != 'accountNumber' && col.field != 'accountName'"
-             pInputText type="text" [(ngModel)]="criteria[col.field]"
-              [style]="{width:'90%'}" (input)="filterChange($any($event.target).value, col.field)"
-              class="filterInputCss" />
+            <input
+              *ngIf="
+                col.field != 'textRelevant' &&
+                col.field != 'accountNumber' &&
+                col.field != 'accountName'
+              "
+              pInputText
+              type="text"
+              [(ngModel)]="criteria[col.field]"
+              [style]="{ width: '90%' }"
+              (input)="filterChange($any($event.target).value, col.field)"
+              class="filterInputCss"
+            />
           </th>
         </tr>
       </ng-template>
@@ -74,31 +137,74 @@
           <!-- <td pEditableColumn>
             
         </td> -->
-          <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-{{col.align}}">
+          <td
+            pEditableColumn
+            pReorderableRowHandle
+            *ngFor="let col of columns"
+            class="p-text-{{ col.align }}"
+          >
             <span *ngIf="col.field == 'textRelevant'">
-              <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.textRelevant"></i>
-              <i class="pi pi-star " (click)="selectRow(row)" *ngIf="row.textRelevant"></i>
+              <i
+                class="pi pi-star-o"
+                (click)="selectRow(row)"
+                *ngIf="!row.textRelevant"
+              ></i>
+              <i
+                class="pi pi-star"
+                (click)="selectRow(row)"
+                *ngIf="row.textRelevant"
+              ></i>
             </span>
             <p-cellEditor *ngIf="col.field == 'textRelevantComment'">
               <ng-template pTemplate="input">
-                <input pInputText type="text" [(ngModel)]="row.textRelevantComment" style="width: 100%; padding: 5px;"
-                  (change)="commentChanged(row)">
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="row.textRelevantComment"
+                  style="width: 100%; padding: 5px"
+                  (change)="commentChanged(row)"
+                />
               </ng-template>
               <ng-template pTemplate="output">
-                {{row.textRelevantComment}}
+                {{ row.textRelevantComment }}
               </ng-template>
             </p-cellEditor>
-            <span *ngIf="col.field=='balance'">
-              {{ row[col.field]  | currency:'EUR':'' }}
+            <span *ngIf="col.field == 'balance'">
+              {{ row[col.field] | currency: "EUR":"" }}
             </span>
-            <span *ngIf="col.field=='documentDate' || col.field=='executionDate' || col.field=='dueDate'">
-              {{ row[col.field]  | date: 'dd.MM.yyyy' }}
+            <span
+              *ngIf="
+                col.field == 'documentDate' ||
+                col.field == 'executionDate' ||
+                col.field == 'dueDate'
+              "
+            >
+              {{ row[col.field] | date: "dd.MM.yyyy" }}
             </span>
-            <span *ngIf="col.field=='reference' || col.field=='textPosting' || col.field=='textHeader'"
-              [innerHTML]="row[col.field] | highlight" pTooltip="{{ row[col.field] }}">
+            <span
+              *ngIf="
+                col.field == 'reference' ||
+                col.field == 'textPosting' ||
+                col.field == 'textHeader'
+              "
+              [innerHTML]="row[col.field] | highlight"
+              pTooltip="{{ row[col.field] }}"
+            >
             </span>
-            <span pTooltip="{{ row[col.field] }}"
-              *ngIf="col.field!='balance' && col.field !='documentDate' && col.field !='executionDate' && col.field!='dueDate' && col.field!='reference' && col.field!='textPosting' && col.field!='textHeader' && col.field != 'textRelevantComment' && col.field != 'textRelevant'">
+            <span
+              pTooltip="{{ row[col.field] }}"
+              *ngIf="
+                col.field != 'balance' &&
+                col.field != 'documentDate' &&
+                col.field != 'executionDate' &&
+                col.field != 'dueDate' &&
+                col.field != 'reference' &&
+                col.field != 'textPosting' &&
+                col.field != 'textHeader' &&
+                col.field != 'textRelevantComment' &&
+                col.field != 'textRelevant'
+              "
+            >
               {{ row[col.field] }}
             </span>
           </td>
@@ -106,86 +212,195 @@
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns>
         <tr>
-          <td [attr.colspan]="columns.length">
-            No records found
-          </td>
+          <td [attr.colspan]="columns.length">No records found</td>
         </tr>
       </ng-template>
     </p-table>
-    <p-table #dtall dataKey="id" [value]="allRecordData" [resizableColumns]="true" dataKey="id"
-      *ngIf="detailsOption == 3" styleClass="p-datatable-gridlines" [loading]="waiting" [columns]="cols"
-      responsive="true" [scrollable]="true" scrollHeight="350px" [style]="{width:'100%'}" [reorderableColumns]="true"
-      [frozenColumns]="frozenCols" frozenWidth="500px" [(selection)]="selected" [lazy]="true" (onLazyLoad)="sort($event)">
+    <p-table
+      #dtall
+      dataKey="id"
+      [value]="allRecordData"
+      [resizableColumns]="true"
+      dataKey="id"
+      *ngIf="detailsOption == 3"
+      styleClass="p-datatable-gridlines"
+      [loading]="waiting"
+      [columns]="cols"
+      responsive="true"
+      [scrollable]="true"
+      scrollHeight="350px"
+      [style]="{ width: '100%' }"
+      [reorderableColumns]="true"
+      [frozenColumns]="frozenCols"
+      frozenWidth="500px"
+      [(selection)]="selected"
+      [lazy]="true"
+      (onLazyLoad)="sort($event)"
+    >
       <ng-template pTemplate="caption">
         <div class="p-grid">
           <div class="p-col-1" *ngIf="!details">
-            <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
-              class="p-button-rounded p-button-primary" label="{{ 'TextAnalysis.back' | translate}} "
-              pTooltip="{{ 'TextAnalysis.back' | translate}} " tooltipPosition="bottom"></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-arrow-left"
+              (click)="goBack()"
+              class="p-button-rounded p-button-primary"
+              label="{{ 'TextAnalysis.back' | translate }} "
+              pTooltip="{{ 'TextAnalysis.back' | translate }} "
+              tooltipPosition="bottom"
+            ></button>
           </div>
           <div class="p-col-4">
-<!--             <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"></button>
- -->         
-             <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportXLSX()"
-              class="p-button-warning p-mr-2" pTooltip="{{ 'TextAnalysis.export' | translate}}"
-              tooltipPosition="bottom"></button>
+            <!--             <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"></button>
+ -->
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-file-excel"
+              (click)="exportXLSX()"
+              class="p-button-warning p-mr-2"
+              pTooltip="{{ 'TextAnalysis.export' | translate }}"
+              tooltipPosition="bottom"
+            ></button>
 
-            <button type="button" pButton pRipple icon="pi pi-check" (click)="saveRelevant()"
-              class="p-button-primary p-mr-2" pTooltip="{{ 'Analysis.save' | translate}}" tooltipPosition="bottom"
-              label="{{ 'Analysis.saveRelevant' | translate}}"></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-check"
+              (click)="saveRelevant()"
+              class="p-button-primary p-mr-2"
+              pTooltip="{{ 'Analysis.save' | translate }}"
+              tooltipPosition="bottom"
+              label="{{ 'Analysis.saveRelevant' | translate }}"
+            ></button>
           </div>
           <div class="p-col-7">
             <!-- Limit options -->
-            <p-dropdown [options]="pageLimitSizes" optionValue="value" optionLabel="value" [(ngModel)]="limit"
-              (onChange)="limitChange($event)" class="p-mr-2"></p-dropdown>
+            <p-dropdown
+              [options]="pageLimitSizes"
+              optionValue="value"
+              optionLabel="value"
+              [(ngModel)]="limit"
+              (onChange)="limitChange($event)"
+              class="p-mr-2"
+            ></p-dropdown>
             <!-- Go to First page -->
-            <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-double-left"
-              (click)="firstPage()" class="p-mr-2" pTooltip="{{'Data_Table.firstPage' | translate}}"
-              tooltipPosition="bottom"></button>
+            <button
+              type="button"
+              [disabled]="pageNr === 1"
+              pButton
+              pRipple
+              icon="pi pi-angle-double-left"
+              (click)="firstPage()"
+              class="p-mr-2"
+              pTooltip="{{ 'Data_Table.firstPage' | translate }}"
+              tooltipPosition="bottom"
+            ></button>
             <!-- Go previous -->
-            <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-left"
-              (click)="previousPage()" class=" p-mr-2" pTooltip="{{'Data_Table.previous' | translate}}"
-              tooltipPosition="bottom"></button>
+            <button
+              type="button"
+              [disabled]="pageNr === 1"
+              pButton
+              pRipple
+              icon="pi pi-angle-left"
+              (click)="previousPage()"
+              class="p-mr-2"
+              pTooltip="{{ 'Data_Table.previous' | translate }}"
+              tooltipPosition="bottom"
+            ></button>
             <!-- Page number -->
-            <input pInputText type="number" min="1" class="pageNrInput p-mr-2" [disabled]="true"
-              (change)="pageNrChange($any($event.target).value)" [value]="pageNr" [placeholder]="pageNr" />
+            <input
+              pInputText
+              type="number"
+              min="1"
+              class="pageNrInput p-mr-2"
+              [disabled]="true"
+              (change)="pageNrChange($any($event.target).value)"
+              [value]="pageNr"
+              [placeholder]="pageNr"
+            />
             <!-- Go to next Page -->
-            <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-right"
-              (click)="nextPage()" class="p-mr-2" pTooltip="{{'Data_Table.next' | translate}}"
-              tooltipPosition="bottom"></button>
+            <button
+              type="button"
+              [disabled]="pageNr >= maxPageNr"
+              pButton
+              pRipple
+              icon="pi pi-angle-right"
+              (click)="nextPage()"
+              class="p-mr-2"
+              pTooltip="{{ 'Data_Table.next' | translate }}"
+              tooltipPosition="bottom"
+            ></button>
             <!-- Go to last page -->
-            <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-double-right"
-              (click)="lastPage()" class="p-mr-2" pTooltip="{{'Data_Table.lastPage' | translate}}"
-              tooltipPosition="bottom"></button>
+            <button
+              type="button"
+              [disabled]="pageNr >= maxPageNr"
+              pButton
+              pRipple
+              icon="pi pi-angle-double-right"
+              (click)="lastPage()"
+              class="p-mr-2"
+              pTooltip="{{ 'Data_Table.lastPage' | translate }}"
+              tooltipPosition="bottom"
+            ></button>
 
             <!-- dispalyed data of total count -->
-            {{displayedDataCount}} of {{totalCount}}
+            {{ displayedDataCount }} of {{ totalCount }}
             <!-- Clear filter -->
-            <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
-              class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
-              tooltipPosition="bottom"></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-filter-slash"
+              (click)="clearFilter()"
+              class="p-ml-6 clearFilter"
+              pTooltip="{{ 'Data_Table.clearFilter' | translate }}"
+              *ngIf="filtersNo > 0"
+              tooltipPosition="bottom"
+            ></button>
           </div>
         </div>
-     
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" [style]="{'width': (col.width? col.width : 200) +'px'}">
+          <col
+            *ngFor="let col of columns"
+            [style]="{ width: (col.width ? col.width : 200) + 'px' }"
+          />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn  class="p-text-{{col.align}}" *ngFor="let col of columns">
-            {{col.header | translate}}
-            <p-sortIcon field="{{col.field}}"></p-sortIcon>
+          <th
+            pSortableColumn="{{ col.field }}"
+            pResizableColumn
+            pReorderableColumn
+            class="p-text-{{ col.align }}"
+            *ngFor="let col of columns"
+          >
+            {{ col.header | translate }}
+            <p-sortIcon field="{{ col.field }}"></p-sortIcon>
           </th>
-
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-            <input *ngIf="col.field != 'textRelevant' && col.field != 'accountNumber' && col.field != 'accountName'"
-              pInputText type="text" [(ngModel)]="backCriteria[col.field]" [style]="{width:'90%'}"
-              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
+            <input
+              *ngIf="
+                col.field != 'textRelevant' &&
+                col.field != 'accountNumber' &&
+                col.field != 'accountName'
+              "
+              pInputText
+              type="text"
+              [(ngModel)]="backCriteria[col.field]"
+              [style]="{ width: '90%' }"
+              (input)="filterChangeBack($any($event.target).value, col.field)"
+              class="filterInputCss"
+            />
           </th>
         </tr>
       </ng-template>
@@ -199,31 +414,74 @@
           <!-- <td pEditableColumn>
             
         </td> -->
-          <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns" class="p-text-{{col.align}}">
+          <td
+            pEditableColumn
+            pReorderableRowHandle
+            *ngFor="let col of columns"
+            class="p-text-{{ col.align }}"
+          >
             <span *ngIf="col.field == 'textRelevant'">
-              <i class="pi pi-star-o " (click)="selectRow(row)" *ngIf="!row.textRelevant"></i>
-              <i class="pi pi-star " (click)="selectRow(row)" *ngIf="row.textRelevant"></i>
+              <i
+                class="pi pi-star-o"
+                (click)="selectRow(row)"
+                *ngIf="!row.textRelevant"
+              ></i>
+              <i
+                class="pi pi-star"
+                (click)="selectRow(row)"
+                *ngIf="row.textRelevant"
+              ></i>
             </span>
             <p-cellEditor *ngIf="col.field == 'textRelevantComment'">
               <ng-template pTemplate="input">
-                <input pInputText type="text" [(ngModel)]="row.textRelevantComment" style="width: 100%; padding: 5px;"
-                  (change)="commentChanged(row)">
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="row.textRelevantComment"
+                  style="width: 100%; padding: 5px"
+                  (change)="commentChanged(row)"
+                />
               </ng-template>
               <ng-template pTemplate="output">
-                {{row.textRelevantComment}}
+                {{ row.textRelevantComment }}
               </ng-template>
             </p-cellEditor>
-            <span *ngIf="col.field=='balance'">
-              {{ row[col.field]  | currency:'EUR':'' }}
+            <span *ngIf="col.field == 'balance'">
+              {{ row[col.field] | currency: "EUR":"" }}
             </span>
-            <span *ngIf="col.field=='documentDate' || col.field=='executionDate' || col.field=='dueDate'">
-              {{ row[col.field]  | date: 'dd.MM.yyyy' }}
+            <span
+              *ngIf="
+                col.field == 'documentDate' ||
+                col.field == 'executionDate' ||
+                col.field == 'dueDate'
+              "
+            >
+              {{ row[col.field] | date: "dd.MM.yyyy" }}
             </span>
-            <span *ngIf="col.field=='reference' || col.field=='textPosting' || col.field=='textHeader'"
-              [innerHTML]="row[col.field] | highlight" pTooltip="{{ row[col.field] }}">
+            <span
+              *ngIf="
+                col.field == 'reference' ||
+                col.field == 'textPosting' ||
+                col.field == 'textHeader'
+              "
+              [innerHTML]="row[col.field] | highlight"
+              pTooltip="{{ row[col.field] }}"
+            >
             </span>
-            <span pTooltip="{{ row[col.field] }}"
-              *ngIf="col.field!='balance' && col.field !='documentDate' && col.field !='executionDate' && col.field!='dueDate' && col.field!='reference' && col.field!='textPosting' && col.field!='textHeader' && col.field != 'textRelevantComment' && col.field != 'textRelevant'">
+            <span
+              pTooltip="{{ row[col.field] }}"
+              *ngIf="
+                col.field != 'balance' &&
+                col.field != 'documentDate' &&
+                col.field != 'executionDate' &&
+                col.field != 'dueDate' &&
+                col.field != 'reference' &&
+                col.field != 'textPosting' &&
+                col.field != 'textHeader' &&
+                col.field != 'textRelevantComment' &&
+                col.field != 'textRelevant'
+              "
+            >
               {{ row[col.field] }}
             </span>
           </td>
@@ -231,13 +489,10 @@
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns>
         <tr>
-          <td [attr.colspan]="columns.length">
-            No records found
-          </td>
+          <td [attr.colspan]="columns.length">No records found</td>
         </tr>
       </ng-template>
     </p-table>
   </div>
   <!-- </div> -->
-
 </div>

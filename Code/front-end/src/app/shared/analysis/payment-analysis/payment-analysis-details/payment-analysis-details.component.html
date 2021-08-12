@@ -412,7 +412,7 @@
               <input
                 *ngIf="col.field != 'paymentRelevant' && col.field != 'accountNumber' && col.field != 'accountName'"
                 pInputText type="text" [(ngModel)]="backCriteria[col.field]" [style]="{width:'90%'}"
-                (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
+                (input)="filterChangeBack($any($event.target).value, col.field)" class="filterInputCss" />
 
             </th>
           </tr>
