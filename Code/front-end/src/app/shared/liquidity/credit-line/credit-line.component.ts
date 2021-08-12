@@ -40,10 +40,12 @@ export class CreditLineComponent implements OnInit {
       {
         header: 'Liquidity.accountNumber',
         field: 'accountNumber',
+        align: 'left'
       },
       {
         header: 'Liquidity.accountName',
         field: 'accountName',
+        align: 'left'
       },
       {
         header: 'Liquidity.creditLine',
@@ -54,10 +56,12 @@ export class CreditLineComponent implements OnInit {
       {
         header: 'Liquidity.creditLineFromDate',
         field: 'creditLineFromDate',
+        align: 'center'
       },
       {
         header: 'Liquidity.creditLineToDate',
         field: 'creditLineToDate',
+        align: 'center'
       },
     ];
 

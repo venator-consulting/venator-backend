@@ -50,7 +50,7 @@ export class CreditorAnalysisComponent implements OnInit {
         {
           header: elem.accountNumber,
           field: 'accountNumber',
-          align: 'center'
+          align: 'left'
         },
         {
           header: elem.accountName,

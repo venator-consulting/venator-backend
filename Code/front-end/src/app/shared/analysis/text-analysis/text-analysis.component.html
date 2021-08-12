@@ -63,7 +63,7 @@
               pSortableColumn="{{ col.field }}"
               pResizableColumn
               pReorderableColumn
-              class="p-text-center"
+              class="p-text-{{col.align}}"
               *ngFor="let col of cols"
             >
               <span pTooltip="{{ col.header | translate }}">
@@ -162,7 +162,7 @@
               pSortableColumn="{{ col.field }}"
               pResizableColumn
               pReorderableColumn
-              class="p-text-center"
+              class="p-text-{{col.align}}"
               *ngFor="let col of colsWord"
             >
               <span pTooltip="{{ col.header | translate }}">

@@ -134,7 +134,7 @@ export class DueDateDetailsComponent implements OnInit {
       {
         header: 'DataTableColumns.accountNumber',
         field: 'accountNumber',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'DataTableColumns.accountName',

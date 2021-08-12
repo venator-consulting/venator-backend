@@ -169,7 +169,7 @@ export class DueDateComponent implements OnInit {
       {
         header: 'DueDateAnalysis.accountNumber',
         field: 'accountNumber',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'DueDateAnalysis.accountName',

@@ -31,11 +31,11 @@
 
 <div class="p-grid">
   <div class="p-col-12">
-    <p-progressBar mode="indeterminate" [style]="{'height': '5px'}" *ngIf="searching"></p-progressBar>
+    <p-progressBar mode="indeterminate" [style]="{'height': '5px'}" *ngIf="waiting"></p-progressBar>
 
     <p-table #dt [value]="data" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines"
       [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
-      [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="sort($event)">
+      [reorderableColumns]="true" >
       <ng-template pTemplate="caption">
         <div class="p-grid">
           <div class="p-col-1">
@@ -62,7 +62,7 @@
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-{{col.align}}"
+          <th  pSortableColumn="{{col.field}}"  pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-{{col.align}}"
            *ngFor="let col of cols">
             <span pTooltip="{{ col.header | translate }}">{{col.header | translate}}</span>
             <p-sortIcon field="{{col.field}}"></p-sortIcon></th>
@@ -96,7 +96,7 @@
               </span>
             </ng-template>
             <ng-template #withFilter>
-              {{ (col.field == 'outamount'? +row['famount'] + +row['inamount'] : +row[col.field]) | currency:'EUR':''}}
+              {{ +row[col.field] | currency:'EUR':''}}
             </ng-template>
           </td>
         </tr>

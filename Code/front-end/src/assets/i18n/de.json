@@ -491,7 +491,12 @@
         "to": "Bis",
         "daten": " Daten",
         "search": "Suchen",
-        "datenToolTip": "Zurück zur Datentabelle"
+        "datenToolTip": "Zurück zur Datentabelle",
+        "inamount": "Saldo" ,
+        "famount": "Anfangssaldo",
+        "outamount": "Endsaldo",
+        "creditAmount": "Summe Haben",
+        "debitAmount": "Summe Soll"
     },
     "Liquidity": {
         "accountType": "Kontotyp",

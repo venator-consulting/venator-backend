@@ -173,7 +173,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       {
         header: 'DataTableColumns.accountNumber',
         field: 'accountNumber',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'DataTableColumns.accountName',
@@ -198,22 +198,22 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       {
         header: 'DataTableColumns.contraAccountNumber',
         field: 'contraAccountNumber',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'DataTableColumns.contraAccountName',
         field: 'contraAccountName',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'DataTableColumns.documentTypeNew',
         field: 'documentTypeNew',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'DataTableColumns.documentNumber',
         field: 'documentNumber',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'DataTableColumns.documentDate',
@@ -223,7 +223,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       {
         header: 'DataTableColumns.recordNumber',
         field: 'recordNumber',
-        align: 'center'
+        align: 'left'
       },
       {
         header: 'DataTableColumns.ledgerId',

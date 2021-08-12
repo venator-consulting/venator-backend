@@ -110,7 +110,7 @@ export class TextAnalysisComponent implements OnInit {
       {
         header: 'AmountAnalysis.accountNumber',
         field: 'accountNumber',
-        align: 'center',
+        align: 'left',
       },
       {
         header: 'AmountAnalysis.accountName',
@@ -128,7 +128,7 @@ export class TextAnalysisComponent implements OnInit {
       {
         header: 'Key Word',
         field: 'word',
-        align: 'center',
+        align: 'left',
       },
       {
         header: "Accounts' Count",

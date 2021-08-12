@@ -121,7 +121,7 @@ export class PaymentAnalysisComponent implements OnInit {
         {
           header: 'PaymentAnalysis.accountNumber',
           field: 'accountNumber',
-          align: 'center'
+          align: 'left'
         },
         {
           header: 'PaymentAnalysis.accountName',
@@ -141,7 +141,7 @@ export class PaymentAnalysisComponent implements OnInit {
         {
           header: 'PaymentAnalysis.accountNumber',
           field: 'accountNumber',
-          align: 'center'
+          align: 'left'
 
         },
         {

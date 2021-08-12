@@ -54,7 +54,7 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center"
+            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn  class="p-text-{{col.align}}"
               *ngFor="let col of columns">
               <span pTooltip="{{col.header | translate}}">
                 {{col.header | translate}}
@@ -131,7 +131,7 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center"
+            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn  class="p-text-{{col.align}}"
               *ngFor="let col of columns">
               <span pTooltip="{{col.header | translate}}">
                 {{col.header | translate}}
@@ -207,7 +207,7 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center"
+            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn  class="p-text-{{col.align}}"
               *ngFor="let col of columns">
               <span pTooltip="{{ col.header | translate }}">
                 {{col.header | translate}}
@@ -292,7 +292,7 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center"
+            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn  class="p-text-{{col.align}}"
               *ngFor="let col of columns">
               <span pTooltip="{{ col.header | translate }}">
                 {{col.header | translate}}
@@ -400,7 +400,7 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of columns">
+            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn  class="p-text-{{col.align}}" *ngFor="let col of columns">
               <span pTooltip="{{col.header | translate}}">
                 {{col.header | translate}}
               </span>

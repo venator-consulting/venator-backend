@@ -86,7 +86,7 @@
             pSortableColumn="{{ col.field }}"
             pResizableColumn
             pReorderableColumn
-            class="p-text-center"
+            class="p-text-{{col.align}}"
             *ngFor="let col of columns"
           >
             {{ col.header | translate }}

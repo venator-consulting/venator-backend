@@ -49,7 +49,7 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
 
-          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center"
+          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn  class="p-text-{{col.align}}"
             *ngFor="let col of columns">
             {{col.header | translate}}<p-sortIcon field="{{col.field}}"></p-sortIcon>
           </th>
@@ -164,7 +164,7 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
 
-          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-center"
+          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn  class="p-text-{{col.align}}"
             *ngFor="let col of columns">
             {{col.header | translate}}
             <p-sortIcon field="{{col.field}}"></p-sortIcon>

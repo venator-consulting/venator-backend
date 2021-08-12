@@ -491,7 +491,12 @@
         "to": "To",
         "daten": "Data",
         "search": "Search",
-        "datenToolTip": "Back to Datatable"
+        "datenToolTip": "Back to Datatable",
+        "inamount": "Balance" ,
+        "famount": "Startingbalance",
+        "outamount": "Endingbalance",
+        "creditAmount": "Sum Credit",
+        "debitAmount": "Sum Debit"
     },
     "Liquidity": {
         "accountType": "Accounttype",

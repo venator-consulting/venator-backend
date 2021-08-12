@@ -53,12 +53,12 @@ export class OpeningBalanceComponent implements OnInit {
         header: 'Liquidity.startingBalance',
         field: 'StartingBalance',
         width: '250',
-        align: 'left'
+        align: 'right'
       },
       {
         header: 'Liquidity.startingBalanceDate',
         field: 'StartingBalanceDate',
-        align: 'left'
+        align: 'center'
       }
     ];
 

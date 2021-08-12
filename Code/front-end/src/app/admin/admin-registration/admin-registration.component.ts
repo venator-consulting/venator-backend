@@ -80,7 +80,7 @@ export class AdminRegistrationComponent implements OnInit {
       });
   }
   cancelHandle(){
-    this._router.navigate(['/dashboard/shared/user/users']); 
+    this._router.navigate(['/dashboard/admin/dashboard']); 
 
   }
 }
