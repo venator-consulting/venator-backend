@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const config = require('../../../config/environment');
-const errorHandler = require('../../../helpers/error.handler.server').errorHandler;
 
 
 module.exports.loginAuthenticate = function (req, res, next) {

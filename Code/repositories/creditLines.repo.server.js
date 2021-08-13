@@ -1,19 +1,11 @@
-const {
-    Op,
-    fn,
-    col,
-    QueryTypes
-} = require("sequelize");
-const Sequelize = require('../config/sequelize.config');
+const { Op, fn, col, QueryTypes } = require("sequelize");
+const Sequelize = require("../config/sequelize.config");
 
 const sequelize = Sequelize.getSequelize();
-const CreditLines = require('../models/creditLines.model.server');
-
+const CreditLines = require("../models/creditLines.model.server");
 
 module.exports.getCreditLines = async (orgId, prcId) => {
-    try {
-
-        let query = `SELECT DISTINCT p.accountNumber, p.accountName, c.procedureId, c.creditLineFromDate , c.id, c.creditLineToDate , c.creditLine FROM 
+  let query = `SELECT DISTINCT p.accountNumber, p.accountName, c.procedureId, c.creditLineFromDate , c.id, c.creditLineToDate , c.creditLine FROM 
                         posting_${orgId} p
                         left outer join
                         creditLines_${orgId} c
@@ -22,26 +14,17 @@ module.exports.getCreditLines = async (orgId, prcId) => {
                         AND UPPER(p.accountTypeNewName) = 'FINANZKONTO'
                         and (c.procedureId = :procedureId OR c.procedureId is null)`;
 
-
-        const result = sequelize.query(
-            query, {
-                replacements: {
-                    procedureId: prcId
-                },
-                type: QueryTypes.SELECT
-            }
-        );
-        return result;
-
-    } catch (error) {
-        throw new Error(error.message);
-    }
+  const result = sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
 };
 
-
 module.exports.getAll = async (orgId, prcId) => {
-    try {
-        let query = `SELECT DISTINCT p.accountNumber, p.accountName, c.procedureId, c.creditLineFromDate , c.id, c.creditLineToDate , c.creditLine FROM 
+  let query = `SELECT DISTINCT p.accountNumber, p.accountName, c.procedureId, c.creditLineFromDate , c.id, c.creditLineToDate , c.creditLine FROM 
                         posting_${orgId} p
                         join
                         creditLines_${orgId} c
@@ -50,84 +33,52 @@ module.exports.getAll = async (orgId, prcId) => {
                         AND UPPER(p.accountTypeNewName) = 'FINANZKONTO'
                         and (c.procedureId = :procedureId OR c.procedureId = :procedureId)`;
 
-
-        const result = sequelize.query(
-            query, {
-                replacements: {
-                    procedureId: prcId
-                },
-                type: QueryTypes.SELECT
-            }
-        );
-        return result;
-    } catch (error) {
-        throw new Error(error.message);
-    }
+  const result = sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
 };
 
 module.exports.getByAccountNumber = async (orgId, prcId, accountNumber) => {
-    try {
-        return await CreditLines
-            .getCreditLines('creditLines_' + orgId)
-            .findAll({
-                where: {
-                    procedureId: prcId,
-                    accountNumber: accountNumber
-                }
-            });
-    } catch (error) {
-        throw new Error(error.message);
-    }
+  return await CreditLines.getCreditLines("creditLines_" + orgId).findAll({
+    where: {
+      procedureId: prcId,
+      accountNumber: accountNumber,
+    },
+  });
 };
 
-
 module.exports.insert = async (orgId, prcId, creditLine) => {
-    try {
-        if (!creditLine.procedureId) creditLine.procedureId = prcId;
+  if (!creditLine.procedureId) creditLine.procedureId = prcId;
 
-        return await CreditLines
-            .getCreditLines('creditLines_' + orgId)
-            .create(creditLine);
-    } catch (error) {
-        throw new Error(error.message);
-    }
+  return await CreditLines.getCreditLines("creditLines_" + orgId).create(
+    creditLine
+  );
 };
 
 module.exports.update = async (orgId, prcId, creditLine) => {
-    try {
-        if (!creditLine.procedureId) creditLine.procedureId = prcId;
+  if (!creditLine.procedureId) creditLine.procedureId = prcId;
 
-        return await CreditLines
-            .getCreditLines('creditLines_' + orgId)
-            .update(creditLine);
-    } catch (error) {
-        throw new Error(error.message);
-    }
+  return await CreditLines.getCreditLines("creditLines_" + orgId).update(
+    creditLine
+  );
 };
 
-
 module.exports.save = async (orgId, prcId, creditLine) => {
-    try {
-        if (!creditLine.procedureId) creditLine.procedureId = prcId;
+  if (!creditLine.procedureId) creditLine.procedureId = prcId;
 
-        return await CreditLines
-            .getCreditLines('creditLines_' + orgId)
-            .upsert(creditLine);
-    } catch (error) {
-        throw new Error(error.message);
-    }
+  return await CreditLines.getCreditLines("creditLines_" + orgId).upsert(
+    creditLine
+  );
 };
 
 module.exports.delete = async (orgId, id) => {
-    try {
-        return await CreditLines
-            .getCreditLines('creditLines_' + orgId)
-            .destroy({
-                where: {
-                    id: id
-                }
-            });
-    } catch (error) {
-        throw new Error(error.message);
-    }
+  return await CreditLines.getCreditLines("creditLines_" + orgId).destroy({
+    where: {
+      id: id,
+    },
+  });
 };

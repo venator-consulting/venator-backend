@@ -6,125 +6,102 @@ const { values } = require("../models/analysis/text.analysis.keywords");
 const sequelize = Sequelize.getSequelize();
 
 module.exports.fetch = async (criteria) => {
-  try {
-    const OrganisationId = criteria.OrganisationId;
-    if (!OrganisationId) throw new Error("Organisation_id_is_mandatory");
-    delete criteria.OrganisationId;
-    const limit = criteria.limit ? criteria.limit : 25;
-    delete criteria.limit;
-    const offset = criteria.offset ? criteria.offset : 0;
-    delete criteria.offset;
-    let orderBy = criteria.orderBy ? criteria.orderBy : "id";
-    if (
-      orderBy == "accountNumber" ||
-      orderBy == "GLAccountNumber" ||
-      orderBy == "contraAccountNumber" ||
-      orderBy == "debtorNumber" ||
-      orderBy == "creditorNumber" ||
-      orderBy == "contraAccountGLAccountNo" ||
-      orderBy == "contraAccountDebtorNo" ||
-      orderBy == "contraAccountCreditorNo"
-    ) {
-      orderBy = sequelize.fn("LPAD", sequelize.col(orderBy), 10, 0);
-    }
-    // orderBy =
-    //   orderBy == "accountNumber"
-    //     ? sequelize.fn("LPAD", sequelize.col("accountNumber"), 10, 0)
-    //     : orderBy;
-    delete criteria.orderBy;
-    const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
-    delete criteria.sortOrder;
-    for (const key in criteria) {
-      if (Object.hasOwnProperty.call(criteria, key)) {
-        if (criteria[key].toString().length > 2) {
-          criteria[key] = {
-            [Op.like]: "%" + criteria[key] + "%",
-          };
-        }
+  const OrganisationId = criteria.OrganisationId;
+  if (!OrganisationId) throw new Error("Organisation_id_is_mandatory");
+  delete criteria.OrganisationId;
+  const limit = criteria.limit ? criteria.limit : 25;
+  delete criteria.limit;
+  const offset = criteria.offset ? criteria.offset : 0;
+  delete criteria.offset;
+  let orderBy = criteria.orderBy ? criteria.orderBy : "id";
+  if (
+    orderBy == "accountNumber" ||
+    orderBy == "GLAccountNumber" ||
+    orderBy == "contraAccountNumber" ||
+    orderBy == "debtorNumber" ||
+    orderBy == "creditorNumber" ||
+    orderBy == "contraAccountGLAccountNo" ||
+    orderBy == "contraAccountDebtorNo" ||
+    orderBy == "contraAccountCreditorNo"
+  ) {
+    orderBy = sequelize.fn("LPAD", sequelize.col(orderBy), 10, 0);
+  }
+  // orderBy =
+  //   orderBy == "accountNumber"
+  //     ? sequelize.fn("LPAD", sequelize.col("accountNumber"), 10, 0)
+  //     : orderBy;
+  delete criteria.orderBy;
+  const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
+  delete criteria.sortOrder;
+  for (const key in criteria) {
+    if (Object.hasOwnProperty.call(criteria, key)) {
+      if (criteria[key].toString().length > 2) {
+        criteria[key] = {
+          [Op.like]: "%" + criteria[key] + "%",
+        };
       }
     }
-    return await Posting.getPosting(
-      "posting_" + OrganisationId
-    ).findAndCountAll({
-      where: criteria,
-      offset: +offset,
-      limit: +limit,
-      order: [[orderBy, sortOrder]],
-    });
-  } catch (err) {
-    // TO-DO: set a custom error message in production environment
-    throw new Error(err.message);
   }
+  return await Posting.getPosting("posting_" + OrganisationId).findAndCountAll({
+    where: criteria,
+    offset: +offset,
+    limit: +limit,
+    order: [[orderBy, sortOrder]],
+  });
 };
 
 module.exports.fetchAll = function (companyCode, offset, limit) {
   return new Promise(async (resolve, reject) => {
-    try {
-      const postings = await Posting.getPosting().findAll({
-        where: {
-          companyCode: companyCode,
-        },
-        offset: offset,
-        limit: limit,
-        order: [["id", "ASC"]],
-      });
-      resolve(postings);
-    } catch (err) {
-      reject(err);
-    }
+    const postings = await Posting.getPosting().findAll({
+      where: {
+        companyCode: companyCode,
+      },
+      offset: offset,
+      limit: limit,
+      order: [["id", "ASC"]],
+    });
+    resolve(postings);
   });
 };
 
 module.exports.getDocTypes = async (organisationId, procedureId) => {
-  try {
-    const result = await Posting.getPosting(
-      "posting_" + organisationId
-    ).findAll({
-      where: {
-        ProcedureId: procedureId,
-        documentType: {
-          [Op.ne]: null,
-        },
+  const result = await Posting.getPosting("posting_" + organisationId).findAll({
+    where: {
+      ProcedureId: procedureId,
+      documentType: {
+        [Op.ne]: null,
       },
-      attributes: [
-        [fn("DISTINCT", col("documentType")), "documentType"],
-        "documentTypeNewId",
-        "documentTypeNewName",
-        "procedureId",
-      ],
-      distinct: true,
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error);
-  }
+    },
+    attributes: [
+      [fn("DISTINCT", col("documentType")), "documentType"],
+      "documentTypeNewId",
+      "documentTypeNewName",
+      "procedureId",
+    ],
+    distinct: true,
+  });
+  return result;
 };
 
 module.exports.getAccountTypes = async (organisationId, procedureId) => {
-  try {
-    const result = await Posting.getPosting(
-      "posting_" + organisationId
-    ).findAll({
-      where: {
-        ProcedureId: procedureId,
-        accountType: {
-          [Op.ne]: null,
-        },
+  const result = await Posting.getPosting("posting_" + organisationId).findAll({
+    where: {
+      ProcedureId: procedureId,
+      accountType: {
+        [Op.ne]: null,
       },
-      attributes: [
-        [fn("DISTINCT", col("accountNumber")), "accountNumber"],
-        "accountName",
-        "accountType",
-        "accountTypeNewId",
-        "accountTypeNewName",
-        "procedureId",
-      ],
-      distinct: true,
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error);
-  }
+    },
+    attributes: [
+      [fn("DISTINCT", col("accountNumber")), "accountNumber"],
+      "accountName",
+      "accountType",
+      "accountTypeNewId",
+      "accountTypeNewName",
+      "procedureId",
+    ],
+    distinct: true,
+  });
+  return result;
 };
 
 module.exports.updateDocTypeNew = async (
@@ -134,22 +111,18 @@ module.exports.updateDocTypeNew = async (
   documentTypeNewId,
   documentTypeNewName
 ) => {
-  try {
-    return await Posting.getPosting("posting_" + organisationId).update(
-      {
-        documentTypeNewId: documentTypeNewId,
-        documentTypeNewName: documentTypeNewName,
+  return await Posting.getPosting("posting_" + organisationId).update(
+    {
+      documentTypeNewId: documentTypeNewId,
+      documentTypeNewName: documentTypeNewName,
+    },
+    {
+      where: {
+        procedureId: procedureId,
+        documentType: documentType,
       },
-      {
-        where: {
-          procedureId: procedureId,
-          documentType: documentType,
-        },
-      }
-    );
-  } catch (error) {
-    throw new Error(error);
-  }
+    }
+  );
 };
 
 module.exports.updateAccountTypeNew = async (
@@ -159,48 +132,38 @@ module.exports.updateAccountTypeNew = async (
   accountTypeNewId,
   accountTypeNewName
 ) => {
-  try {
-    return await Posting.getPosting("posting_" + organisationId).update(
-      {
-        accountTypeNewId: accountTypeNewId,
-        accountTypeNewName: accountTypeNewName,
+  return await Posting.getPosting("posting_" + organisationId).update(
+    {
+      accountTypeNewId: accountTypeNewId,
+      accountTypeNewName: accountTypeNewName,
+    },
+    {
+      where: {
+        procedureId: procedureId,
+        accountNumber: accountNumber,
       },
-      {
-        where: {
-          procedureId: procedureId,
-          accountNumber: accountNumber,
-        },
-      }
-    );
-  } catch (error) {
-    throw new Error(error);
-  }
+    }
+  );
 };
 
 module.exports.getStartingBalance = async (organisationId, procedureId) => {
-  try {
-    const result = await Posting.getPosting(
-      "posting_" + organisationId
-    ).findAll({
-      where: {
-        ProcedureId: procedureId,
-        accountTypeNewName: "Finanzkonto",
-      },
-      attributes: [
-        [fn("DISTINCT", col("accountNumber")), "accountNumber"],
-        "accountName",
-        "accountTypeNewId",
-        "accountTypeNewName",
-        "procedureId",
-        "StartingBalance",
-        "StartingBalanceDate",
-      ],
-      distinct: true,
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error);
-  }
+  const result = await Posting.getPosting("posting_" + organisationId).findAll({
+    where: {
+      ProcedureId: procedureId,
+      accountTypeNewName: "Finanzkonto",
+    },
+    attributes: [
+      [fn("DISTINCT", col("accountNumber")), "accountNumber"],
+      "accountName",
+      "accountTypeNewId",
+      "accountTypeNewName",
+      "procedureId",
+      "StartingBalance",
+      "StartingBalanceDate",
+    ],
+    distinct: true,
+  });
+  return result;
 };
 
 module.exports.updateStartBalance = async (
@@ -210,28 +173,23 @@ module.exports.updateStartBalance = async (
   StartingBalance,
   StartingBalanceDate
 ) => {
-  try {
-    return await Posting.getPosting("posting_" + organisationId).update(
-      {
-        StartingBalance: StartingBalance,
-        StartingBalanceDate: StartingBalanceDate,
+  return await Posting.getPosting("posting_" + organisationId).update(
+    {
+      StartingBalance: StartingBalance,
+      StartingBalanceDate: StartingBalanceDate,
+    },
+    {
+      where: {
+        procedureId: procedureId,
+        accountNumber: accountNumber,
+        accountTypeNewName: "Finanzkonto",
       },
-      {
-        where: {
-          procedureId: procedureId,
-          accountNumber: accountNumber,
-          accountTypeNewName: "Finanzkonto",
-        },
-      }
-    );
-  } catch (error) {
-    throw new Error(error);
-  }
+    }
+  );
 };
 
 module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
-  try {
-    const query = `SELECT p.accountNumber , p.accountName , SUM(p.balance) as totalBalance, COUNT(p.id) as totlaCount
+  const query = `SELECT p.accountNumber , p.accountName , SUM(p.balance) as totalBalance, COUNT(p.id) as totlaCount
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
@@ -242,21 +200,18 @@ module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
                                 AND p.balance = ROUND(p.balance)
                                 AND balance >= :baseBalance
                             GROUP BY p.accountNumber , p.accountName`;
-    const result = await sequelize.query(query, {
-      replacements: {
-        procedureId: prcId,
-        baseBalance: baseBalance,
-      },
-      type: QueryTypes.SELECT,
-    });
-    result.forEach((val) => {
-      val.totalBalance = +val.totalBalance;
-      val.totlaCount = +val.totlaCount;
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+      baseBalance: baseBalance,
+    },
+    type: QueryTypes.SELECT,
+  });
+  result.forEach((val) => {
+    val.totalBalance = +val.totalBalance;
+    val.totlaCount = +val.totlaCount;
+  });
+  return result;
 };
 
 module.exports.amountAnalysisDetails = async (
@@ -265,8 +220,7 @@ module.exports.amountAnalysisDetails = async (
   baseBalance,
   accountNumber
 ) => {
-  try {
-    const query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.amountRelevant,
+  const query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.amountRelevant,
                                 p.amountRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
                                 p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
                                 p.ledgerId, p.executionDate, p.dueDate
@@ -279,18 +233,15 @@ module.exports.amountAnalysisDetails = async (
                                     UPPER(p.documentTypeNewName) = 'ZAHLUNG')
                                 AND p.balance = ROUND(p.balance)
                                 AND balance >= :baseBalance`;
-    const result = await sequelize.query(query, {
-      replacements: {
-        procedureId: prcId,
-        baseBalance: baseBalance,
-        accountNumber: accountNumber,
-      },
-      type: QueryTypes.SELECT,
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+      baseBalance: baseBalance,
+      accountNumber: accountNumber,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
 };
 
 module.exports.getByAccountNumber = async (
@@ -299,101 +250,90 @@ module.exports.getByAccountNumber = async (
   accountNumber,
   criteria
 ) => {
-  try {
-    const limit = criteria.limit ? criteria.limit : 25;
-    delete criteria.limit;
-    const offset = criteria.offset ? criteria.offset : 0;
-    delete criteria.offset;
-    let orderBy = criteria.orderBy ? criteria.orderBy : "id";
-    if (
-      orderBy == "accountNumber" ||
-      orderBy == "GLAccountNumber" ||
-      orderBy == "contraAccountNumber" ||
-      orderBy == "debtorNumber" ||
-      orderBy == "creditorNumber" ||
-      orderBy == "contraAccountGLAccountNo" ||
-      orderBy == "contraAccountDebtorNo" ||
-      orderBy == "contraAccountCreditorNo"
-    ) {
-      orderBy = sequelize.fn("LPAD", sequelize.col(orderBy), 10, 0);
-    }
-    // orderBy =
-    //   orderBy == "accountNumber"
-    //     ? sequelize.fn("LPAD", sequelize.col("accountNumber"), 10, 0)
-    //     : orderBy;
-    delete criteria.orderBy;
-    const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
-    delete criteria.sortOrder;
-
-    for (const key in criteria) {
-      if (Object.hasOwnProperty.call(criteria, key)) {
-        if (criteria[key].toString().length > 2) {
-          criteria[key] = {
-            [Op.like]: "%" + criteria[key] + "%",
-          };
-        }
-        if (!criteria[key]) delete criteria[key];
-      }
-    }
-    criteria.procedureId = prcId;
-    criteria.accountNumber = accountNumber;
-    const result = await Posting.getPosting("posting_" + orgId).findAndCountAll(
-      {
-        where: criteria,
-        offset: +offset,
-        limit: +limit,
-        order: [[orderBy, sortOrder]],
-      }
-    );
-    return result;
-  } catch (error) {
-    throw new Error(error.message);
+  const limit = criteria.limit ? criteria.limit : 25;
+  delete criteria.limit;
+  const offset = criteria.offset ? criteria.offset : 0;
+  delete criteria.offset;
+  let orderBy = criteria.orderBy ? criteria.orderBy : "id";
+  if (
+    orderBy == "accountNumber" ||
+    orderBy == "GLAccountNumber" ||
+    orderBy == "contraAccountNumber" ||
+    orderBy == "debtorNumber" ||
+    orderBy == "creditorNumber" ||
+    orderBy == "contraAccountGLAccountNo" ||
+    orderBy == "contraAccountDebtorNo" ||
+    orderBy == "contraAccountCreditorNo"
+  ) {
+    orderBy = sequelize.fn("LPAD", sequelize.col(orderBy), 10, 0);
   }
+  // orderBy =
+  //   orderBy == "accountNumber"
+  //     ? sequelize.fn("LPAD", sequelize.col("accountNumber"), 10, 0)
+  //     : orderBy;
+  delete criteria.orderBy;
+  const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
+  delete criteria.sortOrder;
+
+  for (const key in criteria) {
+    if (Object.hasOwnProperty.call(criteria, key)) {
+      if (criteria[key].toString().length > 2) {
+        criteria[key] = {
+          [Op.like]: "%" + criteria[key] + "%",
+        };
+      }
+      if (!criteria[key]) delete criteria[key];
+    }
+  }
+  criteria.procedureId = prcId;
+  criteria.accountNumber = accountNumber;
+  const result = await Posting.getPosting("posting_" + orgId).findAndCountAll({
+    where: criteria,
+    offset: +offset,
+    limit: +limit,
+    order: [[orderBy, sortOrder]],
+  });
+  return result;
 };
 
 module.exports.textAnalysis = async (orgId, prcId, keys) => {
-  try {
-    let query = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount
+  let query = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
                                 AND p.accountNumber is not NULL 
                                 `;
-    query += keys.length > 0 ? " AND ( " : "";
+  query += keys.length > 0 ? " AND ( " : "";
 
-    for (let index = 0; index < keys.length; index++) {
-      const key = keys[index];
-      query += `  p.reference ${key}
+  for (let index = 0; index < keys.length; index++) {
+    const key = keys[index];
+    query += `  p.reference ${key}
                         OR p.textPosting ${key}
                         OR p.textHeader ${key} OR`;
-    }
-    query += keys.length > 0 ? " 1 <> 1) " : "";
-
-    query += "GROUP BY p.accountNumber , p.accountName";
-
-    const result = await sequelize.query(query, {
-      replacements: {
-        procedureId: prcId,
-      },
-      type: QueryTypes.SELECT,
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error.message);
   }
+  query += keys.length > 0 ? " 1 <> 1) " : "";
+
+  query += "GROUP BY p.accountNumber , p.accountName";
+
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
 };
 
 module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
-  try {
-    let query = " ";
-    for (let index = 0; index < keys.length; index++) {
-      const key = keys[index];
-      let originalKey = keys[index];
-      originalKey = originalKey.replace("like '%", "");
-      originalKey = originalKey.replace("%'", "");
-      originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
-      originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
-      query += `  
+  let query = " ";
+  for (let index = 0; index < keys.length; index++) {
+    const key = keys[index];
+    let originalKey = keys[index];
+    originalKey = originalKey.replace("like '%", "");
+    originalKey = originalKey.replace("%'", "");
+    originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
+    originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
+    query += `  
             SELECT
                 SUM(pos.totalCount) recordsCount,
                 COUNT(pos.accountNumber) accountsCount,
@@ -416,22 +356,19 @@ module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
                 GROUP by
                     p.accountNumber) pos
             `;
-      query += index < keys.length - 1 ? " UNION " : "";
-    }
-
-    let result = await sequelize.query(query, {
-      replacements: {
-        procedureId: prcId,
-      },
-      type: QueryTypes.SELECT,
-    });
-    if (result.length && result.length > 0) {
-      result = result.filter((rec) => +rec.recordsCount > 0);
-    }
-    return result;
-  } catch (error) {
-    throw new Error(error.message);
+    query += index < keys.length - 1 ? " UNION " : "";
   }
+
+  let result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+    },
+    type: QueryTypes.SELECT,
+  });
+  if (result.length && result.length > 0) {
+    result = result.filter((rec) => +rec.recordsCount > 0);
+  }
+  return result;
 };
 
 module.exports.textAnalysisDetails = async (
@@ -440,8 +377,7 @@ module.exports.textAnalysisDetails = async (
   keys,
   accountNumber
 ) => {
-  try {
-    let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
+  let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
                             p.textRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
                             p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
                             p.ledgerId, p.executionDate, p.dueDate, p.reference, p.textPosting, p.textHeader
@@ -450,39 +386,35 @@ module.exports.textAnalysisDetails = async (
                                 AND UPPER(p.accountType) = 'K' 
                                 AND p.accountNumber = :accountNumber
                                 `;
-    query += keys.length > 0 ? " AND ( " : "";
+  query += keys.length > 0 ? " AND ( " : "";
 
-    for (let index = 0; index < keys.length; index++) {
-      const key = keys[index];
-      query += `  p.reference ${key}
+  for (let index = 0; index < keys.length; index++) {
+    const key = keys[index];
+    query += `  p.reference ${key}
                         OR p.textPosting ${key}
                         OR p.textHeader ${key} OR`;
-    }
-    query += keys.length > 0 ? " 1 <> 1) " : "";
-
-    const result = await sequelize.query(query, {
-      replacements: {
-        procedureId: prcId,
-        accountNumber: accountNumber,
-      },
-      type: QueryTypes.SELECT,
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error.message);
   }
+  query += keys.length > 0 ? " 1 <> 1) " : "";
+
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+      accountNumber: accountNumber,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
 };
 
 module.exports.textAnalysisWordDetails = async (orgId, prcId, key) => {
-  try {
-    if (key.length <= 3 && key.length > 0) {
-      key = "REGEXP '(\\b|[^a-zA-Z]+)" + key + "([^a-zA-Z]+|\\s*)'";
-    } else if (key.length > 3) {
-      key = "like '%" + key + "%'";
-    } else {
-      throw new Error("invalid key!");
-    }
-    let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
+  if (key.length <= 3 && key.length > 0) {
+    key = "REGEXP '(\\b|[^a-zA-Z]+)" + key + "([^a-zA-Z]+|\\s*)'";
+  } else if (key.length > 3) {
+    key = "like '%" + key + "%'";
+  } else {
+    throw new Error("invalid key!");
+  }
+  let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
                             p.textRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
                             p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
                             p.ledgerId, p.executionDate, p.dueDate, p.reference, p.textPosting, p.textHeader
@@ -496,16 +428,13 @@ module.exports.textAnalysisWordDetails = async (orgId, prcId, key) => {
                             )
                                 `;
 
-    const result = await sequelize.query(query, {
-      replacements: {
-        procedureId: prcId,
-      },
-      type: QueryTypes.SELECT,
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
 };
 
 /**
@@ -514,17 +443,13 @@ module.exports.textAnalysisWordDetails = async (orgId, prcId, key) => {
  * @param {Posting[]} records
  */
 module.exports.textBulkUpdate = async (orgId, records) => {
-  try {
-    const postings = await Posting.getPosting("posting_" + orgId).bulkCreate(
-      records,
-      {
-        updateOnDuplicate: ["textRelevant", "textRelevantComment"],
-      }
-    );
-    return postings;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  const postings = await Posting.getPosting("posting_" + orgId).bulkCreate(
+    records,
+    {
+      updateOnDuplicate: ["textRelevant", "textRelevantComment"],
+    }
+  );
+  return postings;
 };
 
 /**
@@ -533,107 +458,91 @@ module.exports.textBulkUpdate = async (orgId, records) => {
  * @param {Posting[]} records
  */
 module.exports.amountBulkUpdate = async (orgId, records) => {
-  try {
-    const postings = await Posting.getPosting("posting_" + orgId).bulkCreate(
-      records,
-      {
-        updateOnDuplicate: ["amountRelevant", "amountRelevantComment"],
-      }
-    );
-    return postings;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  const postings = await Posting.getPosting("posting_" + orgId).bulkCreate(
+    records,
+    {
+      updateOnDuplicate: ["amountRelevant", "amountRelevantComment"],
+    }
+  );
+  return postings;
 };
 
 module.exports.textJustRelevant = async (orgId, prcId, accountNumber) => {
-  try {
-    return await Posting.getPosting("posting_" + orgId).findAll({
-      where: {
-        textRelevant: true,
-        accountNumber: accountNumber,
-        ProcedureId: prcId,
-      },
-      attributes: [
-        "id",
-        "procedureId",
-        "accountNumber",
-        "accountName",
-        "textRelevant",
-        "textRelevantComment",
-        "accountType",
-        "documentType",
-        "balance",
-        "contraAccountNumber",
-        "contraAccountName",
-        "documentTypeNewName",
-        "documentNumber",
-        "documentDate",
-        "recordNumber",
-        "ledgerId",
-        "executionDate",
-        "dueDate",
-        "reference",
-        "textPosting",
-        "textHeader",
-      ],
-    });
-  } catch (error) {
-    throw new Error(error);
-  }
+  return await Posting.getPosting("posting_" + orgId).findAll({
+    where: {
+      textRelevant: true,
+      accountNumber: accountNumber,
+      ProcedureId: prcId,
+    },
+    attributes: [
+      "id",
+      "procedureId",
+      "accountNumber",
+      "accountName",
+      "textRelevant",
+      "textRelevantComment",
+      "accountType",
+      "documentType",
+      "balance",
+      "contraAccountNumber",
+      "contraAccountName",
+      "documentTypeNewName",
+      "documentNumber",
+      "documentDate",
+      "recordNumber",
+      "ledgerId",
+      "executionDate",
+      "dueDate",
+      "reference",
+      "textPosting",
+      "textHeader",
+    ],
+  });
 };
 
 module.exports.amountJustRelevant = async (orgId, prcId, accountNumber) => {
-  try {
-    return await Posting.getPosting("posting_" + orgId).findAll({
-      where: {
-        amountRelevant: true,
-        accountNumber: accountNumber,
-        ProcedureId: prcId,
-      },
-      attributes: [
-        "id",
-        "procedureId",
-        "accountNumber",
-        "accountName",
-        "amountRelevant",
-        "amountRelevantComment",
-        "accountType",
-        "documentType",
-        "balance",
-        "contraAccountNumber",
-        "contraAccountName",
-        "documentTypeNewName",
-        "documentNumber",
-        "documentDate",
-        "recordNumber",
-        "ledgerId",
-        "executionDate",
-        "dueDate",
-      ],
-    });
-  } catch (error) {
-    throw new Error(error);
-  }
+  return await Posting.getPosting("posting_" + orgId).findAll({
+    where: {
+      amountRelevant: true,
+      accountNumber: accountNumber,
+      ProcedureId: prcId,
+    },
+    attributes: [
+      "id",
+      "procedureId",
+      "accountNumber",
+      "accountName",
+      "amountRelevant",
+      "amountRelevantComment",
+      "accountType",
+      "documentType",
+      "balance",
+      "contraAccountNumber",
+      "contraAccountName",
+      "documentTypeNewName",
+      "documentNumber",
+      "documentDate",
+      "recordNumber",
+      "ledgerId",
+      "executionDate",
+      "dueDate",
+    ],
+  });
 };
 
 module.exports.susaDateRange = async (orgId, prcId) => {
-  try {
-    let query = `SELECT MAX(documentDate)  maxdate, MIN(documentDate) mindate from posting_${orgId} pos
+  let query = `SELECT MAX(documentDate)  maxdate, MIN(documentDate) mindate from posting_${orgId} pos
                         WHERE
                             pos.procedureId = :procedureId
                             AND pos.accountNumber is not NULL`;
 
-    const result = await sequelize.query(query, {
-      replacements: {
-        procedureId: prcId,
-      },
-      type: QueryTypes.SELECT,
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
 };
 
 module.exports.susaAnalysis = async (
@@ -643,8 +552,7 @@ module.exports.susaAnalysis = async (
   toDate,
   criteria
 ) => {
-  try {
-    let query = `SELECT DISTINCT pos.accountType, pos.accountNumber, pos.accountName, 
+  let query = `SELECT DISTINCT pos.accountType, pos.accountNumber, pos.accountName, 
         fromRange.famount, inRange.inamount , credit.creditAmount, debit.debitAmount,
         (fromRange.famount + inRange.inamount) outamount
         FROM posting_${orgId} pos 
@@ -701,40 +609,37 @@ module.exports.susaAnalysis = async (
                     AND pos.accountNumber is not NULL 
                                 `;
 
-    let orderBy = criteria.orderBy ? criteria.orderBy : "accountNumber";
-    orderBy =
-      orderBy == "accountNumber"
-        ? "LPAD(LOWER(pos.accountNumber), 10,0) "
-        : orderBy;
-    delete criteria.orderBy;
-    const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
-    delete criteria.sortOrder;
+  let orderBy = criteria.orderBy ? criteria.orderBy : "accountNumber";
+  orderBy =
+    orderBy == "accountNumber"
+      ? "LPAD(LOWER(pos.accountNumber), 10,0) "
+      : orderBy;
+  delete criteria.orderBy;
+  const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
+  delete criteria.sortOrder;
 
-    for (const key in criteria) {
-      if (Object.hasOwnProperty.call(criteria, key)) {
-        if (criteria[key].toString().length > 2) {
-          query += ` AND pos.${key} like '%${criteria[key]}%'`;
-          criteria[key] = {
-            [Op.like]: "%" + criteria[key] + "%",
-          };
-        } else {
-          query += ` AND pos.${key} = '${criteria[key]}'`;
-        }
+  for (const key in criteria) {
+    if (Object.hasOwnProperty.call(criteria, key)) {
+      if (criteria[key].toString().length > 2) {
+        query += ` AND pos.${key} like '%${criteria[key]}%'`;
+        criteria[key] = {
+          [Op.like]: "%" + criteria[key] + "%",
+        };
+      } else {
+        query += ` AND pos.${key} = '${criteria[key]}'`;
       }
     }
-
-    query += ` order by ${orderBy} ${sortOrder}`;
-
-    const result = await sequelize.query(query, {
-      replacements: {
-        procedureId: prcId,
-        fromDate: fromDate,
-        toDate: toDate,
-      },
-      type: QueryTypes.SELECT,
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error.message);
   }
+
+  query += ` order by ${orderBy} ${sortOrder}`;
+
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+      fromDate: fromDate,
+      toDate: toDate,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
 };

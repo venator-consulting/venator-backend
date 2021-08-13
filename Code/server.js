@@ -9,6 +9,7 @@ const bearerToken = require('express-bearer-token');
 const sharedRoutes = require('./modules/shared/route/shared.route.server');
 const analysisRoutes = require('./modules/Analysis/route/analysis.route.server');
 const liquidityRoutes = require('./modules/Liquidity/route/liquidity.route.server');
+const Exception = require('./helpers/errorHandlers/Exception');
 
 
 // require('./helpers/csv.stream.helper.server').detectDelemeter('./modules/Admin/files/0ade1068d7fee672d55ed779c3fdb370')
@@ -22,6 +23,7 @@ const liquidityRoutes = require('./modules/Liquidity/route/liquidity.route.serve
 
 const cors = require('cors');
 const app = express();
+require('express-async-errors');
 app.use(helmet());
 // // delete next middleware before deployment!!!!!!!!!!!!!!!!
 app.use(cors({ origin: '*' }));
@@ -38,6 +40,7 @@ app.use('/api/shared', sharedRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/analysis', analysisRoutes);
 app.use('/api/liquidity', liquidityRoutes);
+app.use(Exception.requestDefaultHandler);
 
 app.use("/public", express.static(path.join("public")));  
 

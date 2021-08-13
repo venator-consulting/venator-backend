@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const UsersRepo = require('../../../repositories/user.repo.server');
-const errorHandler = require('../../../helpers/error.handler.server').errorHandler;
 
 module.exports.changePassword = function (req, res, next) {
     const userID = req.userinfo.id;

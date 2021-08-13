@@ -4,12 +4,8 @@ const Sequelize = require("../config/sequelize.config");
 const sequelize = Sequelize.getSequelize();
 const CreditLineRepo = require("./creditLines.repo.server");
 
-// AND UPPER(pos.accountType) = 'K'
-// ALTER TABLE venator.posting_1 MODIFY COLUMN StartingBalanceDate DATETIME NULL;
-
 module.exports.liquiditytDateRange = async (orgId, prcId) => {
-  try {
-    let query = `SELECT MIN(pos.StartingBalanceDate) mindate, MAX(pos.documentDate) maxdate, MIN(pos.documentDate) mindocdate 
+  let query = `SELECT MIN(pos.StartingBalanceDate) mindate, MAX(pos.documentDate) maxdate, MIN(pos.documentDate) mindocdate 
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = :procedureId
@@ -17,16 +13,13 @@ module.exports.liquiditytDateRange = async (orgId, prcId) => {
                         AND pos.documentDate is not NULL 
                         AND UPPER(pos.accountTypeNewName) = 'FINANZKONTO'`;
 
-    const result = await sequelize.query(query, {
-      replacements: {
-        procedureId: prcId,
-      },
-      type: QueryTypes.SELECT,
-    });
-    return result;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
 };
 
 /**
@@ -50,7 +43,6 @@ function getNumberOfDays(start, end) {
 
 module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
   return new Promise((resolve, reject) => {
-    try {
       if (!fromDate || !toDate) {
         throw new Error("Document Date is null for this procedure!");
       }
@@ -208,9 +200,6 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
         // cb(finalResult);
         resolve(finalResult);
       });
-    } catch (error) {
-      reject(error.message);
-    }
   });
 };
 
@@ -275,7 +264,6 @@ module.exports.liquidityAnalysisDetails = async (
   toDate
 ) => {
   return new Promise((resolve, reject) => {
-    try {
       if (!fromDate || !toDate) {
         throw new Error("Document Date is null for this procedure!");
       }
@@ -383,9 +371,6 @@ module.exports.liquidityAnalysisDetails = async (
         // cb(finalResult);
         resolve(finalResult);
       });
-    } catch (error) {
-      reject(error.message);
-    }
   });
 };
 
@@ -458,7 +443,7 @@ module.exports.selectedDate = async (
     replacements: {
       procedureId: prcId,
       accountNumber: accountNumber,
-      selectedDate: selectedDate
+      selectedDate: selectedDate,
     },
     type: QueryTypes.SELECT,
   });

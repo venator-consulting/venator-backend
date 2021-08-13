@@ -1,161 +1,39 @@
-const env = require('../../../config/environment');
-const orgRepo = require('../../../repositories/organisation.repo.server');
-const sendMail = require('../../../config/mailer.config').sendMail;
-const logger = require('../../../config/logger.config').logger;
-
+const env = require("../../../config/environment");
+const orgRepo = require("../../../repositories/organisation.repo.server");
 
 module.exports.fetchAll = async function (req, res, next) {
-    try {
-        const orgs = await orgRepo
-            .fetchAll();
-        res
-            .status(200)
-            .json(orgs);
-    } catch (error) {
-        await sendMail({
-            from: 'Venator, Bug reporting',
-            to: env.developerMail,
-            subject: 'exception stack trace',
-            html: ` 
-            <div>
-            <h3> Organisation controller </h3 >
-            <p> fetch all </p>
-            <p> -----------------------------------------------------------------------------------------</p>
-            <p> ${error} </p>
-            </div>`,
-        });
-        logger.error(`${new Date()}: ${error}`);
-        res
-            .status(500)
-            .json({
-                error: error
-            });
-    }
+  const orgs = await orgRepo.fetchAll();
+  res.status(200).json(orgs);
 };
-
 
 module.exports.fetchOne = async function (req, res) {
-    try {
-        const org = await orgRepo
-            .fetchOne(req.params.id);
-        res
-            .status(200)
-            .json(org);
-    } catch (error) {
-        await sendMail({
-            from: 'Venator, Bug reporting',
-            to: env.developerMail,
-            subject: 'exception stack trace',
-            html: ` 
-            <div>
-            <h3> organization controller </h3 >
-            <p> fetch one </p>
-            <p> -----------------------------------------------------------------------------------------</p>
-            <p> ${error} </p>
-            </div>`,
-        });
-        logger.error(`${new Date()}: ${error}`);
-        res
-            .status(500)
-            .json({
-                error: error
-            });
-    }
+  const org = await orgRepo.fetchOne(req.params.id);
+  res.status(200).json(org);
 };
 
-
 module.exports.insert = async function (req, res) {
-    try {
-        const file = req.file;
-        const org = JSON.parse(req.body.data);
-        if (file) {
-            const filePath = file.path;
-            org.logo = env.domain + filePath;
-        }
-        const result = await orgRepo
-            .insert(org);
-        res.status(201)
-            .json(result);
-    } catch (error) {
-        await sendMail({
-            from: 'Venator, Bug reporting',
-            to: env.developerMail,
-            subject: 'exception stack trace',
-            html: ` 
-            <div>
-            <h3> organisation controller </h3 >
-            <p> insert new one </p>
-            <p> -----------------------------------------------------------------------------------------</p>
-            <p> ${error} </p>
-            </div>`,
-        });
-        logger.error(`${new Date()}: ${error}`);
-        res
-            .status(500)
-            .json({
-                error: error
-            });
-    }
+  const file = req.file;
+  const org = JSON.parse(req.body.data);
+  if (file) {
+    const filePath = file.path;
+    org.logo = env.domain + filePath;
+  }
+  const result = await orgRepo.insert(org);
+  res.status(201).json(result);
 };
 
 module.exports.update = async function (req, res) {
-    try {
-        const file = req.file;
-        const org = JSON.parse(req.body.data);
-        if (file) {
-            const filePath = file.path;
-            org.logo = env.domain + filePath;
-        }
-        const result = await orgRepo
-            .update(org, req.params.id);
-        res.status(201)
-            .json(result);
-    } catch (error) {
-        await sendMail({
-            from: 'Venator, Bug reporting',
-            to: env.developerMail,
-            subject: 'exception stack trace',
-            html: ` 
-            <div>
-            <h3> organisation controller </h3 >
-            <p> update </p>
-            <p> -----------------------------------------------------------------------------------------</p>
-            <p> ${error} </p>
-            </div>`,
-        });
-        logger.error(`${new Date()}: ${error}`);
-        res
-            .status(500)
-            .json({
-                error: error
-            });
-    }
+  const file = req.file;
+  const org = JSON.parse(req.body.data);
+  if (file) {
+    const filePath = file.path;
+    org.logo = env.domain + filePath;
+  }
+  const result = await orgRepo.update(org, req.params.id);
+  res.status(201).json(result);
 };
 
 module.exports.delete = async function (req, res) {
-    try {
-        const result = await orgRepo
-            .softDelete(req.params.id);
-        res.status(204)
-            .json(result);
-    } catch (error) {
-        await sendMail({
-            from: 'Venator, Bug reporting',
-            to: env.developerMail,
-            subject: 'exception stack trace',
-            html: ` 
-            <div>
-            <h3> organisation controller </h3 >
-            <p> delete </p>
-            <p> -----------------------------------------------------------------------------------------</p>
-            <p> ${error} </p>
-            </div>`,
-        });
-        logger.error(`${new Date()}: ${error}`);
-        res
-            .status(500)
-            .json({
-                error: error
-            });
-    }
+  const result = await orgRepo.softDelete(req.params.id);
+  res.status(204).json(result);
 };

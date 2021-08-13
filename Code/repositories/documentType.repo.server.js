@@ -1,83 +1,45 @@
-const DocType = require('../models/documentType.model.server');
-const {
-    Op
-} = require("sequelize");
+const DocType = require("../models/documentType.model.server");
+const { Op } = require("sequelize");
 
 module.exports.fetchAll = async () => {
-    try {
-        return await DocType
-            .getDocumentType()
-            .findAll();
-    } catch (err) {
-        throw new Error(err);
-    }
+  return await DocType.getDocumentType().findAll();
 };
 
 module.exports.getByProcedureId = async (procedureId) => {
-    try {
-        return await DocType
-            .getDocumentType()
-            .findAll({
-                where: {
-                    ProcedureId: procedureId
-                }
-            });
-    } catch (error) {
-        throw new Error(error);
-    }
+  return await DocType.getDocumentType().findAll({
+    where: {
+      ProcedureId: procedureId,
+    },
+  });
 };
 
 module.exports.insert = async (docType) => {
-    try {
-        return await DocType
-            .getDocumentType()
-            .create(docType);
-    } catch (error) {
-        throw new Error(error);
-    }
+  return await DocType.getDocumentType().create(docType);
 };
 
 module.exports.update = async (docType) => {
-    try {
-        return await DocType
-            .getDocumentType()
-            .update(docType, {
-                where: {
-                    id: docType.id
-                }
-            });
-    } catch (error) {
-        throw new Error(error);
-    }
+  return await DocType.getDocumentType().update(docType, {
+    where: {
+      id: docType.id,
+    },
+  });
 };
 
-module.exports.delete = async(id) => {
-    try {
-        return await DocType
-            .getDocumentType()
-            .destroy({
-                where: {
-                    id: id
-                }
-            });
-    } catch (error) {
-        throw new Error(error);
-    }
+module.exports.delete = async (id) => {
+  return await DocType.getDocumentType().destroy({
+    where: {
+      id: id,
+    },
+  });
 };
 
 module.exports.createDefault = async () => {
-    try {
-        return await DocType
-            .getDocumentType()
-            .bulkCreate([
-                {
-                    documentTypeName: 'Rechnung'
-                },
-                {
-                    documentTypeName: 'Zahlung'
-                }
-            ]);
-    } catch (error) {
-        throw new Error(error);
-    }
+  return await DocType.getDocumentType().bulkCreate([
+    {
+      documentTypeName: "Rechnung",
+    },
+    {
+      documentTypeName: "Zahlung",
+    },
+  ]);
 };

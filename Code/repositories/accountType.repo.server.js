@@ -1,89 +1,51 @@
-const AccountType = require('../models/accountType.model.server');
-const {
-    Op
-} = require("sequelize");
+const AccountType = require("../models/accountType.model.server");
+const { Op } = require("sequelize");
 
 module.exports.fetchAll = async () => {
-    try {
-        return await AccountType
-            .getAccountType()
-            .findAll();
-    } catch (err) {
-        throw new Error(err);
-    }
+  return await AccountType.getAccountType().findAll();
 };
 
 module.exports.getByProcedureId = async (procedureId) => {
-    try {
-        return await AccountType
-            .getAccountType()
-            .findAll({
-                where: {
-                    ProcedureId: procedureId
-                }
-            });
-    } catch (error) {
-        throw new Error(error);
-    }
+  return await AccountType.getAccountType().findAll({
+    where: {
+      ProcedureId: procedureId,
+    },
+  });
 };
 
 module.exports.insert = async (docType) => {
-    try {
-        return await AccountType
-            .getAccountType()
-            .create(docType);
-    } catch (error) {
-        throw new Error(error);
-    }
+  return await AccountType.getAccountType().create(docType);
 };
 
 module.exports.update = async (docType) => {
-    try {
-        return await AccountType
-            .getAccountType()
-            .update(docType, {
-                where: {
-                    id: docType.id
-                }
-            });
-    } catch (error) {
-        throw new Error(error);
-    }
+  return await AccountType.getAccountType().update(docType, {
+    where: {
+      id: docType.id,
+    },
+  });
 };
 
-module.exports.delete = async(id) => {
-    try {
-        return await AccountType
-            .getAccountType()
-            .destroy({
-                where: {
-                    id: id
-                }
-            });
-    } catch (error) {
-        throw new Error(error);
-    }
+module.exports.delete = async (id) => {
+  return await AccountType.getAccountType().destroy({
+    where: {
+      id: id,
+    },
+  });
 };
 
 module.exports.createDefault = async () => {
-    try {
-        return await AccountType
-            .getAccountType()
-            .bulkCreate([
-                {
-                    AccountTypeName: 'Debitor'
-                },
-                {
-                    AccountTypeName: 'Kreditor'
-                },
-                {
-                    AccountTypeName: 'Sachkonto'
-                },
-                {
-                    AccountTypeName: 'Finanzkonto'
-                }
-            ]);
-    } catch (error) {
-        throw new Error(error);
-    }
+  return await AccountType.getAccountType().bulkCreate([
+    {
+      AccountTypeName: "Debitor",
+    },
+    {
+      AccountTypeName: "Kreditor",
+    },
+    {
+      AccountTypeName: "Sachkonto",
+    },
+    {
+      AccountTypeName: "Finanzkonto",
+    },
+  ]);
 };
