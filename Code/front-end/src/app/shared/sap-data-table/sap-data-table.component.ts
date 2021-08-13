@@ -3,7 +3,7 @@ import { PostingDataService } from '../service/posting-data.service';
 import { DataFilterService } from '../service/data-filter.service';
 import { ExportDataService } from '../service/export-data.service';
 import { dataTableColumns } from "../model/dataTableColumns";
-import { MessageService } from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 // import { AutocompleteService } from '../service/autocomplete.service';
@@ -94,17 +94,17 @@ export class SAPDataTableComponent implements OnInit {
         },
         error => {
           this.loading = false;
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: "There is an error occured please try again"
-          });
+          // this._messageService.add({
+          //   severity: 'error',
+          //   summary: 'ERROR',
+          //   life: 10000,
+          //   detail: "There is an error occured please try again"
+          // });
         },
       );
   }
 
-  sort(event) {
+  sort(event: LazyLoadEvent) {
     // debugger;
     this.criteria.orderBy = event.sortField;
     this.criteria.sortOrder = event.sortOrder;

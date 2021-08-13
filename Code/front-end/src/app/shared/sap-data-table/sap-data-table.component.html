@@ -7,7 +7,7 @@
 <div class="card">
   <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="350px" [style]="{width:'100%'}"
     [resizableColumns]="true" styleClass="p-datatable-gridlines" [reorderableColumns]="true" [loading]="loading"
-    [lazy]="true" (onLazyLoad)="sort($event)">
+    sortable="custom" (sortFunction)="sort($event)">
     <ng-template pTemplate="caption">
       <div class="p-mb-4">
         <!-- Export as excel -->
@@ -55,7 +55,7 @@
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn *ngFor="let col of cols"
-          class="p-text-center" pTooltip="{{col.header}}" tooltipPosition="bottom">{{col.header}}
+          class="p-text-center" pTooltip="{{col.header}}" tooltipPosition="bottom" >{{col.header}}
           <p-sortIcon field="{{col.field}}"></p-sortIcon>
         </th>
       </tr>

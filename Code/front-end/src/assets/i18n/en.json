@@ -5,8 +5,10 @@
         "forbidden_403": "The access to the requested resource is forbidden",
         "notFound_404": "Server cannot find the requested resource !",
         "internalServerError_500": "Something went wrong on the server , we will fix the problem very soon",
-        "passwordsMatch": "The password don't match"
-
+        "passwordsMatch": "The password don't match",
+        "organisation_id_is_required": "Please select an organisation",
+        "procedure_id_is_required": "Please select a procedure",
+        "procedure_analysis_disabled": "Analysis feature is disabled for this procedure"
     },
     "LOGIN": {
         "welcomeMsg": "Please log in ",

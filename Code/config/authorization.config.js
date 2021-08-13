@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("./environment");
+const Exception = require("../helpers/errorHandlers/Exception");
+const httpStatus = require("../models/enums/httpStatus");
 
 module.exports.authorize = function (...allowed) {
   let authorized = false;
@@ -17,16 +19,10 @@ module.exports.authorize = function (...allowed) {
         }
 
         if (!authorized) {
-          console.log("unauthorized!!!");
-          res.status(403).json({
-            message: "Forbidden",
-          });
+          throw new Exception(httpStatus.FORBIDDEN, "forbidden_403");
         }
       } else {
-        errorHandler("Authorization config: authorize middle-ware", err);
-        res.status(403).json({
-          message: "Forbidden",
-        });
+        throw new Exception(httpStatus.FORBIDDEN, "forbidden_403");
       }
     });
   };
@@ -35,6 +31,7 @@ module.exports.authorize = function (...allowed) {
 module.exports.extractUserInfo = function () {
   return (req, res, next) => {
     jwt.verify(req.token, config.jwtSecret, function (err, decoded) {
+      if (err) throw new Exception(httpStatus.FORBIDDEN, "unauthorized_401");
       req.userinfo = decoded.userinfo;
     });
     next();
@@ -44,6 +41,7 @@ module.exports.extractUserInfo = function () {
 module.exports.belongToOrganisation = function () {
   return (req, res, next) => {
     jwt.verify(req.token, config.jwtSecret, function (err, decoded) {
+      if (err) throw new Exception(httpStatus.FORBIDDEN, "unauthorized_401");
       const userinfo = decoded.userinfo;
       if (
         ((req.params.id && userinfo.OrganisationId != req.params.id) ||
@@ -51,10 +49,7 @@ module.exports.belongToOrganisation = function () {
             userinfo.OrganisationId != req.query.OrganisationId)) &&
         userinfo.Role != "Admin"
       ) {
-        console.log("unauthorized!!!");
-        res.status(403).json({
-          message: "Forbidden, the user doesn't belong to this organisation",
-        });
+        throw new Exception(httpStatus.FORBIDDEN, "unauthorized_401");
       } else {
         next();
       }
@@ -70,39 +65,30 @@ module.exports.belongToOrganisation = function () {
 module.exports.canDisplayAnalysis = function () {
   return (req, res, next) => {
     jwt.verify(req.token, config.jwtSecret, async function (err, decoded) {
+      if (err) throw new Exception(httpStatus.FORBIDDEN, "unauthorized_401");
       const userinfo = decoded.userinfo;
-
-      if (!req.params.orgId || !req.params.prcId) {
-        console.log(
-          "bad request, there is no Analysis with determine organisation nor procedure!!!"
+      if (!req.params.orgId)
+        throw new Exception(
+          httpStatus.BAD_REQUEST,
+          "organisation_id_is_required"
         );
-        res.status(400).json({
-          message:
-            "Bad request, there is no Analysis with determine organisation nor procedure!!!",
-        });
-      } else if (
+      if (!req.params.prcId)
+        throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+      if (
         userinfo.OrganisationId != req.params.orgId &&
         userinfo.Role != "Admin"
-      ) {
-        console.log("unauthorized!!!");
-        res.status(403).json({
-          message: "Forbidden, the user doesn't belong to this organisation",
-        });
-      } else {
-        const prcs =
-          await require("../repositories/procedure.repo.server").fetchOne(
-            req.params.prcId
-          );
-        if (prcs.length !== 1 || !prcs[0].analysis) {
-          console.log("unauthorized!!!");
-          res.status(403).json({
-            message:
-              "Bad request, Procedure not found or doesn't have an analysis permission!!",
-          });
-        } else {
-          next();
-        }
-      }
+      )
+        throw new Exception(httpStatus.FORBIDDEN, "unauthorized_401");
+      const prcs =
+        await require("../repositories/procedure.repo.server").fetchOne(
+          req.params.prcId
+        );
+      if (prcs.length !== 1 || !prcs[0].analysis)
+        throw new Exception(
+          httpStatus.UNAUTHORIZED,
+          "procedure_analysis_disabled"
+        );
+      next();
     });
   };
 };
