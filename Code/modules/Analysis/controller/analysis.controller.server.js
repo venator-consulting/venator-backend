@@ -4,6 +4,8 @@ const keywords = require("../../../models/analysis/text.analysis.keywords");
 const paymentAnalysisRepo = require("../../../repositories/payment.analysis.repo");
 const dueDateAnalysisRepo = require("../../../repositories/duedate.analysis.repo");
 const criteorAnalysisRepo = require("../../../repositories/creditor.analysis.repo");
+const Exception = require("../../../helpers/errorHandlers/Exception");
+const httpStatus = require("../../../models/enums/httpStatus");
 
 module.exports.amountAnalysis = async (req, res) => {
   const result = await postingRepo.amountAnalysis(
@@ -117,26 +119,16 @@ module.exports.paymentAnalysis = async (req, res) => {
     +req.params.prcId
   );
   if (dateRange.length < 1) {
-    res.status(500).json({
-      messsage: "Can not get Date range!",
-      dateRange: dateRange,
-    });
+    throw new Exception(httpStatus.BAD_REQUEST, "no_date_range");
   }
   if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
-    res.status(400).json({
-      messsage: "this procedure has no document date! please re-import it",
-      dateRange: dateRange,
-    });
+    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
   }
   const fromDate = dateRange[0].mindate;
   let toDate = new Date();
   if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
     if (!dateRange[0].maxdue || !(dateRange[0].maxdue instanceof Date)) {
-      res.status(400).json({
-        messsage:
-          "this procedure has no application date nor dueDate! please re-import it",
-        dateRange: dateRange,
-      });
+      throw new Exception(httpStatus.BAD_REQUEST, "no_application_date");
     } else {
       toDate = dateRange[0].maxdue;
     }
@@ -155,12 +147,6 @@ module.exports.paymentAnalysis = async (req, res) => {
         data: data,
         dateRange: dateRange,
       });
-    },
-    (err) => {
-      res.status(500).json({
-        messsage: err,
-        dateRange: dateRange,
-      });
     }
   );
 };
@@ -171,26 +157,16 @@ module.exports.paymentAnalysisDetails = async (req, res) => {
     +req.params.prcId
   );
   if (dateRange.length < 1) {
-    res.status(500).json({
-      messsage: "Can not get Date range!",
-      dateRange: dateRange,
-    });
+    throw new Exception(httpStatus.BAD_REQUEST, "no_date_range");
   }
   if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
-    res.status(400).json({
-      messsage: "this procedure has no document date! please re-import it",
-      dateRange: dateRange,
-    });
+    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
   }
   const fromDate = dateRange[0].mindate;
   let toDate = new Date();
   if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
     if (!dateRange[0].maxdue || !(dateRange[0].maxdue instanceof Date)) {
-      res.status(400).json({
-        messsage:
-          "this procedure has no application date nor dueDate! please re-import it",
-        dateRange: dateRange,
-      });
+      throw new Exception(httpStatus.BAD_REQUEST, "no_application_date");
     } else {
       toDate = dateRange[0].maxdue;
     }
@@ -208,12 +184,6 @@ module.exports.paymentAnalysisDetails = async (req, res) => {
       // result = data;
       res.status(200).json({
         data: data,
-        dateRange: dateRange,
-      });
-    },
-    (err) => {
-      res.status(500).json({
-        messsage: err,
         dateRange: dateRange,
       });
     }
@@ -243,34 +213,18 @@ module.exports.dueDateAnalysis = async (req, res) => {
     +req.params.prcId
   );
   if (dateRange.length < 1) {
-    res.status(500).json({
-      messsage: "Can not get Date range!",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_date_range");
   }
   if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
-    res.status(400).json({
-      messsage: "this procedure has no due date! please re-import it",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
   }
   const fromDate = dateRange[0].mindate;
   if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    res.status(400).json({
-      messsage: "this procedure has no due date! please re-import it",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
   }
   const toDate = dateRange[0].maxdate;
   if (!dateRange[0].mindocdate || !(dateRange[0].mindocdate instanceof Date)) {
-    res.status(400).json({
-      messsage: "this procedure has no due date! please re-import it",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
   }
   const mindocdate = dateRange[0].mindocdate;
   const maxappdate = dateRange[0].maxappdate;
@@ -291,12 +245,6 @@ module.exports.dueDateAnalysis = async (req, res) => {
         data: data,
         dateRange: dateRange,
       });
-    },
-    (err) => {
-      res.status(500).json({
-        messsage: err,
-        dateRange: dateRange,
-      });
     }
   );
 };
@@ -307,26 +255,14 @@ module.exports.dueDateDetailsAnalysis = async (req, res) => {
     +req.params.prcId
   );
   if (dateRange.length < 1) {
-    res.status(500).json({
-      messsage: "Can not get Date range!",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_date_range");
   }
 
   if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    res.status(400).json({
-      messsage: "this procedure has no due date! please re-import it",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
   }
   if (!dateRange[0].mindocdate || !(dateRange[0].mindocdate instanceof Date)) {
-    res.status(400).json({
-      messsage: "this procedure has no due date! please re-import it",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
   }
   const mindocdate = dateRange[0].mindocdate;
   const maxappdate = dateRange[0].maxappdate;
@@ -344,12 +280,6 @@ module.exports.dueDateDetailsAnalysis = async (req, res) => {
       // result = data;
       res.status(200).json({
         data: data,
-        dateRange: dateRange,
-      });
-    },
-    (err) => {
-      res.status(500).json({
-        messsage: err,
         dateRange: dateRange,
       });
     }

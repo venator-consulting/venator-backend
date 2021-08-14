@@ -24,8 +24,7 @@ export class OrganisationUsersComponent implements OnInit {
         this.users = data;
         // console.log(data)
         },
-      (error) => console.log(error),
-      () => { }
+      (err) =>  { }
     );
 
     this.cols = [

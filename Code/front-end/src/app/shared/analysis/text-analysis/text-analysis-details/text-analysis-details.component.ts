@@ -12,10 +12,9 @@ import { TableColumn } from 'src/app/shared/model/tableColumn';
 @Component({
   selector: 'app-text-analysis-details',
   templateUrl: './text-analysis-details.component.html',
-  styleUrls: ['./text-analysis-details.component.sass']
+  styleUrls: ['./text-analysis-details.component.sass'],
 })
 export class TextAnalysisDetailsComponent implements OnInit {
-
   @Input('details') details: boolean = false;
   orgId: number;
   prcId: number;
@@ -30,138 +29,160 @@ export class TextAnalysisDetailsComponent implements OnInit {
   criteria: any = {};
   searching: boolean = false;
   selected: TextAnalysisDetails[] = new Array();
-  detailsOptions: { name: string; value: number; }[];
+  detailsOptions: { name: string; value: number }[];
   detailsOption: number = 1;
   items: MenuItem[];
   home: MenuItem;
 
-    // for pagination
-    backCriteria: any;
-    pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
-    limit: number = 25;
-    pageNr: number = 1;
-    maxPageNr: number = 0;
-    filtersNo: number = 0;
-    totalCount: any;
-    displayedDataCount: any;
+  // for pagination
+  backCriteria: any;
+  pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
+  limit: number = 25;
+  pageNr: number = 1;
+  maxPageNr: number = 0;
+  filtersNo: number = 0;
+  totalCount: any;
+  displayedDataCount: any;
   accountName: string;
-    // for pagination ends
+  // for pagination ends
 
-  constructor(private _router: Router, private _messageService: MessageService, private _route: ActivatedRoute,
-    private _analysisService: AnalysisService, private _translateService: TranslateService, private _exportDataService: ExportDataService) { }
+  constructor(
+    private _router: Router,
+    private _messageService: MessageService,
+    private _route: ActivatedRoute,
+    private _analysisService: AnalysisService,
+    private _translateService: TranslateService,
+    private _exportDataService: ExportDataService
+  ) {}
 
   ngOnInit(): void {
     this.items = [
       // { label: 'Analysis' },
-      { label: 'Text Analysis', routerLink: '/dashboard/analysis/text', routerLinkActiveOptions: { exact: true } },
-      { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
+      {
+        label: 'Text Analysis',
+        routerLink: '/dashboard/analysis/text',
+        routerLinkActiveOptions: { exact: true },
+      },
+      {
+        label: 'Details',
+        routerLink: this._router.url,
+        routerLinkActiveOptions: { exact: true },
+      },
     ];
-    
-    this.home = { icon: 'pi pi-home', label: 'Data', routerLink: '/dashboard/shared/data' };
+
+    this.home = {
+      icon: 'pi pi-home',
+      label: 'Data',
+      routerLink: '/dashboard/shared/data',
+    };
     this.waiting = true;
     this.orgId = +this._route.snapshot.paramMap.get('orgId');
-    this.orgId = this.orgId? this.orgId : +localStorage.getItem('organisationId');
+    this.orgId = this.orgId
+      ? this.orgId
+      : +localStorage.getItem('organisationId');
     this.prcId = +this._route.snapshot.paramMap.get('prcId');
-    this.prcId = this.prcId ? this.prcId : +localStorage.getItem('currentProcedureId');
+    this.prcId = this.prcId
+      ? this.prcId
+      : +localStorage.getItem('currentProcedureId');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
     this.procedureName = localStorage.getItem('currentProcedureName');
     this.backCriteria = {
       limit: 25,
-      offset: 0
+      offset: 0,
     };
 
     this.detailsOptions = [
       { name: 'Sys-Relevants', value: 1 },
       { name: 'Marked', value: 2 },
-      { name: 'All', value: 3 }
+      { name: 'All', value: 3 },
     ];
 
     this.cols = [
       {
         header: 'DataTableColumns.accountNumber',
         field: 'accountNumber',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.accountName',
         field: 'accountName',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.accountType',
         field: 'accountType',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.documentType',
         field: 'documentType',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.balance',
         field: 'balance',
-        align: 'right'
+        align: 'right',
       },
       {
         header: 'DataTableColumns.contraAccountNumber',
         field: 'contraAccountNumber',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.contraAccountName',
         field: 'contraAccountName',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.documentTypeNew',
         field: 'documentTypeNew',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.documentNumber',
         field: 'documentNumber',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.documentDate',
         field: 'documentDate',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.recordNumber',
         field: 'recordNumber',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.ledgerId',
         field: 'ledgerId',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.executionDate',
         field: 'executionDate',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.dueDate',
         field: 'dueDate',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.reference',
         field: 'reference',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.textPosting',
         field: 'textPosting',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.textHeader',
         field: 'textHeader',
-        align: 'left'
-      }
+        align: 'left',
+      },
     ];
 
     this.frozenCols = [
@@ -169,34 +190,31 @@ export class TextAnalysisDetailsComponent implements OnInit {
         header: '',
         field: 'textRelevant',
         width: '6',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'Comment',
         field: 'textRelevantComment',
         width: '35',
-        align: 'left'
-      }
+        align: 'left',
+      },
     ];
 
     this._analysisService
       .getTextAnalysisDetails(this.orgId, this.prcId, this.accountNumber)
-      .subscribe(res => {
-        this.data = res;
-        if (this.data.length > 0) {
-          this.accountName = this.data[0].accountName;
+      .subscribe(
+        (res) => {
+          this.data = res;
+          if (this.data.length > 0) {
+            this.accountName = this.data[0].accountName;
+          }
+          this.tempData = res;
+          this.waiting = false;
+        },
+        (er) => {
+          this.waiting = false;
         }
-        this.tempData = res;
-        this.waiting = false;
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
-
+      );
   }
 
   goBack() {
@@ -204,70 +222,99 @@ export class TextAnalysisDetailsComponent implements OnInit {
   }
 
   async exportExcel() {
-
     let translatedData = [];
     for (let index = 0; index < this.data.length; index++) {
       let element = this.data[index];
       let translatedRecord = {};
       for (const key in element) {
-        if (Object.prototype.hasOwnProperty.call(element, key) && key != 'id' && key != 'procedureId') {
-          let translatedKey = await this._translateService.get('DataTableColumns.' + key).toPromise();
+        if (
+          Object.prototype.hasOwnProperty.call(element, key) &&
+          key != 'id' &&
+          key != 'procedureId'
+        ) {
+          let translatedKey = await this._translateService
+            .get('DataTableColumns.' + key)
+            .toPromise();
           translatedRecord[translatedKey] = element[key];
 
           // formatting
-          if (element[key] &&
-            (key == 'balance' || key == 'debitAmount' || key == 'creditAmount' || key == 'taxAmount' ||
-              key == 'taxAmountDebit' || key == 'taxAmountCredit' || key == 'StartingBalance')) {
+          if (
+            element[key] &&
+            (key == 'balance' ||
+              key == 'debitAmount' ||
+              key == 'creditAmount' ||
+              key == 'taxAmount' ||
+              key == 'taxAmountDebit' ||
+              key == 'taxAmountCredit' ||
+              key == 'StartingBalance')
+          ) {
             try {
               let temp = Number.parseFloat(element[key].toString());
               if (!Number.isNaN(temp)) {
-                translatedRecord[translatedKey] = temp.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                translatedRecord[translatedKey] = temp.toLocaleString('de-DE', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                });
               }
-
             } catch (e) {
               // do nothing
             }
-          } else if (element[key] &&
-            (key == 'documentDate' || key == 'postingDate' || key == 'dueDate' || key == 'dueDateNew' ||
-              key == 'executionDate' || key == 'applicationDate' || key == 'StartingBalanceDate')) {
+          } else if (
+            element[key] &&
+            (key == 'documentDate' ||
+              key == 'postingDate' ||
+              key == 'dueDate' ||
+              key == 'dueDateNew' ||
+              key == 'executionDate' ||
+              key == 'applicationDate' ||
+              key == 'StartingBalanceDate')
+          ) {
             try {
               let temp = new Date(Date.parse(element[key].toString()));
               if (temp instanceof Date)
-                translatedRecord[translatedKey] = temp.toLocaleDateString('de-DE', {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-              });
-            } catch (e) {
-
-            }
-
+                translatedRecord[translatedKey] = temp.toLocaleDateString(
+                  'de-DE',
+                  {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  }
+                );
+            } catch (e) {}
           }
           // end of formatting
-          
         }
       }
       translatedData.push(translatedRecord);
     }
 
-    import("xlsx").then(xlsx => {
+    import('xlsx').then((xlsx) => {
       const worksheet = xlsx.utils.json_to_sheet(translatedData);
-      const workbook = { Sheets: { 'text_analysis': worksheet }, SheetNames: ['text_analysis'] };
-      const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-      this.saveAsExcelFile(excelBuffer, "text_analysis");
+      const workbook = {
+        Sheets: { text_analysis: worksheet },
+        SheetNames: ['text_analysis'],
+      };
+      const excelBuffer: any = xlsx.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+      });
+      this.saveAsExcelFile(excelBuffer, 'text_analysis');
     });
   }
 
   saveAsExcelFile(buffer: any, fileName: string): void {
-    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_TYPE =
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     let EXCEL_EXTENSION = '.xlsx';
     const d: Blob = new Blob([buffer], {
-      type: EXCEL_TYPE
+      type: EXCEL_TYPE,
     });
     // FileSaver.saveAs(file);
-    FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    FileSaver.saveAs(
+      d,
+      fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
+    );
   }
-
 
   filterChange(query, colName): void {
     this.searching = true;
@@ -281,9 +328,13 @@ export class TextAnalysisDetailsComponent implements OnInit {
           if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
             const element = this.criteria[key];
             if (element.length < 3) {
-              this.data = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+              this.data = this.tempData.filter(
+                (value) => value[key]?.toLowerCase() == element.toLowerCase()
+              );
             } else {
-              this.data = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+              this.data = this.tempData.filter((value) =>
+                value[key]?.toLowerCase().includes(element.toLowerCase())
+              );
             }
           }
         }
@@ -294,9 +345,13 @@ export class TextAnalysisDetailsComponent implements OnInit {
         if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
           const element = this.criteria[key];
           if (element.length < 3) {
-            this.data = this.data.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+            this.data = this.data.filter(
+              (value) => value[key]?.toLowerCase() == element.toLowerCase()
+            );
           } else {
-            this.data = this.data.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+            this.data = this.data.filter((value) =>
+              value[key]?.toLowerCase().includes(element.toLowerCase())
+            );
           }
         }
       } // end of for each criteria field
@@ -305,7 +360,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
   }
 
   selectRow(row: TextAnalysisDetails): void {
-    const index = this.selected.map(item => item.id).indexOf(row.id);
+    const index = this.selected.map((item) => item.id).indexOf(row.id);
     if (row.textRelevant) {
       row.textRelevant = false;
       row.textRelevantComment = '';
@@ -328,7 +383,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
   }
 
   commentChanged(row: TextAnalysisDetails): void {
-    const index = this.selected.map(item => item.id).indexOf(row.id);
+    const index = this.selected.map((item) => item.id).indexOf(row.id);
     row.textRelevant = true;
     if (index == -1) {
       this.selected.push(row);
@@ -342,22 +397,25 @@ export class TextAnalysisDetailsComponent implements OnInit {
   saveRelevant() {
     console.log(this.selected);
     this._analysisService
-      .setRelevantTextAnalysis(this.orgId, this.prcId, this.accountNumber, this.selected)
-      .subscribe(res => {
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          life: 10000,
-          detail: "records set as relevant successfully!"
-        });
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
+      .setRelevantTextAnalysis(
+        this.orgId,
+        this.prcId,
+        this.accountNumber,
+        this.selected
+      )
+      .subscribe(
+        (res) => {
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: 'records set as relevant successfully!',
+          });
+        },
+        (er) => {
+          this.waiting = false;
+        }
+      );
   }
 
   changeData(option: number): void {
@@ -381,38 +439,37 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this.waiting = true;
     this._analysisService
       .getTextAnalysisDetails(this.orgId, this.prcId, this.accountNumber)
-      .subscribe(res => {
-        this.data = res;
-        this.tempData = res;
-        this.waiting = false;
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
+      .subscribe(
+        (res) => {
+          this.data = res;
+          this.tempData = res;
+          this.waiting = false;
+        },
+        (er) => {
+          this.waiting = false;
+        }
+      );
   }
 
   getUserRelevant() {
     this.waiting = true;
     this._analysisService
-      .getTextAnalysisDetailsRelevant(this.orgId, this.prcId, this.accountNumber)
-      .subscribe(res => {
-        this.data = res;
-        this.tempData = res;
-        this.waiting = false;
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
+      .getTextAnalysisDetailsRelevant(
+        this.orgId,
+        this.prcId,
+        this.accountNumber
+      )
+      .subscribe(
+        (res) => {
+          this.data = res;
+          this.tempData = res;
+          this.waiting = false;
+        },
+        (er) => {
+          this.waiting = false;
+        }
+      );
   }
-
 
   getAllByAccount() {
     this.waiting = true;
@@ -420,25 +477,27 @@ export class TextAnalysisDetailsComponent implements OnInit {
       if (!this.backCriteria[key]) {
         delete this.backCriteria[key];
       }
-     }
+    }
     this._analysisService
-      .getTextAnalysisDetailsByAccount(this.orgId, this.prcId, this.accountNumber, this.backCriteria)
-      .subscribe(res => {
-        this.allRecordData = res.rows;
-        this.totalCount = res.count;
-        this.displayedDataCount = this.allRecordData.length;
-        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
-        this.waiting = false;
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
+      .getTextAnalysisDetailsByAccount(
+        this.orgId,
+        this.prcId,
+        this.accountNumber,
+        this.backCriteria
+      )
+      .subscribe(
+        (res) => {
+          this.allRecordData = res.rows;
+          this.totalCount = res.count;
+          this.displayedDataCount = this.allRecordData.length;
+          this.maxPageNr = Math.ceil(this.totalCount / this.limit);
+          this.waiting = false;
+        },
+        (er) => {
+          this.waiting = false;
+        }
+      );
   }
-
 
   sort(event) {
     // debugger;
@@ -446,14 +505,13 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this.backCriteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.backCriteria.offset = 0;
-    if (!this.waiting)
-      this.getAllByAccount();
+    if (!this.waiting) this.getAllByAccount();
   }
 
   // export excel from back-end for all table
   exportXLSX() {
     const lang = localStorage.getItem('lang');
-    let criteriaWithLang = {...this.backCriteria};
+    let criteriaWithLang = { ...this.backCriteria };
     criteriaWithLang['lang'] = lang;
     criteriaWithLang['accountNumber'] = this.accountNumber;
     criteriaWithLang['procedureId'] = this.prcId;
@@ -461,71 +519,67 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this._exportDataService
       .exportXLSX('text_analysis', this.orgId, this.prcId, criteriaWithLang)
       .subscribe(
-        url => {
+        (url) => {
           // console.log(url);
-          window.open(url.toString(), "_blank");
+          window.open(url.toString(), '_blank');
         },
-        (error) => console.log(error),
+        (err) => {}
       );
   }
 
+  // for pagination starts
 
-// for pagination starts
+  filterChangeBack(query, colName): void {
+    this.getAllByAccount();
+  }
 
-filterChangeBack(query, colName): void {
-  this.getAllByAccount();
-}
+  limitChange(e) {
+    this.limit = e.value;
+    this.backCriteria.offset = 0;
+    this.backCriteria.limit = this.limit;
+    this.pageNr = 1;
+    this.getAllByAccount();
+  }
 
-limitChange(e) {
-  this.limit = e.value
-  this.backCriteria.offset = 0;
-  this.backCriteria.limit = this.limit;
-  this.pageNr = 1;
-  this.getAllByAccount();
-}
+  firstPage() {
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    this.getAllByAccount();
+  }
 
-firstPage() {
-  this.pageNr = 1;
-  this.backCriteria.offset = 0;
-  this.getAllByAccount();
-}
+  nextPage() {
+    ++this.pageNr;
+    if (this.pageNr > this.maxPageNr) return;
+    this.backCriteria.offset += +this.limit;
 
-nextPage() {
-  ++this.pageNr;
-  if (this.pageNr > this.maxPageNr) return;
-  this.backCriteria.offset += +this.limit;
+    this.getAllByAccount();
+  }
 
-  this.getAllByAccount();
-}
+  lastPage() {
+    this.pageNr = this.maxPageNr;
+    this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
+    this.getAllByAccount();
+  }
 
+  previousPage() {
+    --this.pageNr;
+    if (this.pageNr <= 0) return;
+    this.backCriteria.offset -= +this.limit;
+    this.getAllByAccount();
+  }
 
-lastPage() {
-  this.pageNr = this.maxPageNr;
-  this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
-  this.getAllByAccount();
-}
+  pageNrChange(value) {
+    this.backCriteria.offset = (this.pageNr - 1) * this.limit;
+    this.getAllByAccount();
+  }
 
-previousPage() {
-  --this.pageNr;
-  if (this.pageNr <= 0) return;
-  this.backCriteria.offset -= +this.limit;
-  this.getAllByAccount();
-}
-
-pageNrChange(value) {
-  this.backCriteria.offset = (this.pageNr - 1) * this.limit;
-  this.getAllByAccount();
-}
-
-clearFilter() {
-  this.backCriteria = {
-    limit: this.limit,
-    offset: 0
-  };
-  this.pageNr = 1;
-  this.getAllByAccount();
-}
-// for pagination ends
-
-
+  clearFilter() {
+    this.backCriteria = {
+      limit: this.limit,
+      offset: 0,
+    };
+    this.pageNr = 1;
+    this.getAllByAccount();
+  }
+  // for pagination ends
 }

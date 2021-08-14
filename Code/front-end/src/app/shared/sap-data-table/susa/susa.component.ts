@@ -67,28 +67,23 @@ export class SusaComponent implements OnInit {
         (res) => {
           this.fromDate = new Date(Date.parse(res[0].mindate));
           this.toDate = new Date(Date.parse(res[0].maxdate));
-          let minYear = this.fromDate.getFullYear();
+          // let minYear = this.fromDate.getFullYear();
           // debugger;
-          if (isNaN(minYear)) {
-            this.fromDate = this.toDate = new Date();
-            this.waiting = false;
-            this._messageService.add({
-              severity: 'error',
-              summary: 'ERROR',
-              life: 10000,
-              detail: 'There is no dates in this procedure',
-            });
-          } else {
+          // if (isNaN(minYear)) {
+          //   this.fromDate = this.toDate = new Date();
+          //   this.waiting = false;
+          //   this._messageService.add({
+          //     severity: 'error',
+          //     summary: 'ERROR',
+          //     life: 10000,
+          //     detail: 'There is no dates in this procedure',
+          //   });
+          // } else {
             this.getData();
-          }
+          // }
         },
         (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: 'There is an error occured please try again',
-          });
+          this.waiting = false;
         }
       );
 
@@ -180,12 +175,7 @@ export class SusaComponent implements OnInit {
           this.waiting = false;
         },
         (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: 'There is an error occured please try again',
-          });
+          this.waiting = false;
         }
       );
   }

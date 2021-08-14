@@ -83,10 +83,13 @@ module.exports.canDisplayAnalysis = function () {
         await require("../repositories/procedure.repo.server").fetchOne(
           req.params.prcId
         );
-      if (prcs.length !== 1 || !prcs[0].analysis)
-        throw new Exception(
-          httpStatus.UNAUTHORIZED,
-          "procedure_analysis_disabled"
+      if (prcs.length !== 1)
+        next(
+          new Exception(httpStatus.UNAUTHORIZED, "procedure_id_is_required")
+        );
+      if (!prcs[0].analysis)
+        next(
+          new Exception(httpStatus.UNAUTHORIZED, "procedure_analysis_disabled")
         );
       next();
     });

@@ -61,7 +61,7 @@ export class OpeningBalanceComponent implements OnInit {
         align: 'center'
       }
     ];
-
+    this.searching = true;
     this._liquidityService
       .getOpeningBalance(this.orgId, this.prcId)
       .subscribe(res => {
@@ -75,11 +75,7 @@ export class OpeningBalanceComponent implements OnInit {
         this.data = res;
         this.tempData = res;
       }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR!',
-          detail: er.error.error
-        });
+        this.searching = false;
       });
 
   } // end of ng on init
@@ -99,6 +95,7 @@ export class OpeningBalanceComponent implements OnInit {
   }
 
   save(row: OpeningBalance) {
+    this.searching = true;
     this._liquidityService
       .updateOpeningBalance(this.orgId, this.prcId, row)
       .subscribe(res => {
@@ -111,11 +108,7 @@ export class OpeningBalanceComponent implements OnInit {
           detail: `opening balance is updated successfully in the targeted posting data, \n ${numOfRecords} updated.`
         });
       }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR!',
-          detail: er.error.error
-        });
+        this.searching = false;
       });
   }
 

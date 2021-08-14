@@ -5,8 +5,14 @@
         "forbidden_403": "Der Zugriff auf die angeforderte Ressource ist nicht erlaubt",
         "NotFound_404": "Der Server kann die angeforderte Ressource nicht finden",
         "internalServerError_500": "Auf dem Server ist ein Fehler aufgetreten. Wir werden das Problem sehr bald beheben",
-        "passwordsMatch": "Die Passwörter stimmen nicht überein"
-
+        "passwordsMatch": "Die Passwörter stimmen nicht überein",
+        "organisation_id_is_required": "Please select an organisation",
+        "procedure_id_is_required": "Please select a procedure",
+        "procedure_analysis_disabled": "Analysis feature is disabled for this procedure",
+        "no_date_range": "Can't get date range for this procedure",
+        "no_document_date": "This Procedure has no document date! please re-import it correctly",
+        "no_application_date": "This Procedure has no application date! please re-import it correctly",
+        "no_due_date": "This Procedure has no due date! please re-import it correctly"
     },
     "LOGIN": {
         "welcomeMsg": "Bitte loggen Sie sich ein",

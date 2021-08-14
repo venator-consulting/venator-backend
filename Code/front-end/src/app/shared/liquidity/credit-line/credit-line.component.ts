@@ -87,11 +87,7 @@ export class CreditLineComponent implements OnInit {
         this.tempData = res;
       },
       (er) => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR!',
-          detail: er.error.error,
-        });
+        this.searching = false;
       }
     );
   } // end of ng on init
@@ -110,6 +106,7 @@ export class CreditLineComponent implements OnInit {
   }
 
   save(row: CreditLine) {
+    this.searching = true;
     this._liquidityService
       .updateCreditLine(this.orgId, this.prcId, row)
       .subscribe(
@@ -124,11 +121,7 @@ export class CreditLineComponent implements OnInit {
           });
         },
         (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR!',
-            detail: er.error.error,
-          });
+          this.searching = false;
         }
       );
   }
@@ -148,6 +141,7 @@ export class CreditLineComponent implements OnInit {
   }
 
   deleteRow(row: CreditLine) {
+    this.searching = true;
     this._liquidityService
       .deleteCreditLine(this.orgId, this.prcId, row)
       .subscribe(
@@ -160,11 +154,7 @@ export class CreditLineComponent implements OnInit {
           });
         },
         (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR!',
-            detail: `There is an Error occured, please try again later!`,
-          });
+          this.searching = false;
         }
       );
   }
@@ -175,6 +165,7 @@ export class CreditLineComponent implements OnInit {
   }
 
   saveCreditLie() {
+    this.searching = true;
     this._liquidityService
       .updateCreditLine(this.orgId, this.prcId, this.newRecord)
       .subscribe(
@@ -190,11 +181,7 @@ export class CreditLineComponent implements OnInit {
           });
         },
         (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR!',
-            detail: er.error.error,
-          });
+          this.searching = false;
         }
       );
   }

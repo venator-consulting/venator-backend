@@ -201,12 +201,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
           this.waiting = false;
         },
         (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: 'There is an error occured please try again',
-          });
+          this.waiting = false;
         }
       );
   } // end of ng on init
@@ -407,14 +402,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
             detail: 'records updated successfully!',
           });
         },
-        (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: 'There is an error occured please try again',
-          });
-        }
+        (er) => {}
       );
   }
 
@@ -451,12 +439,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
           this.waiting = false;
         },
         (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: 'There is an error occured please try again',
-          });
+          this.waiting = false;
         }
       );
   }
@@ -476,12 +459,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
           this.waiting = false;
         },
         (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: 'There is an error occured please try again',
-          });
+          this.waiting = false;
         }
       );
   }
@@ -509,12 +487,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
           this.waiting = false;
         },
         (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: 'There is an error occured please try again',
-          });
+          this.waiting = false;
         }
       );
   }
@@ -533,7 +506,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
           // console.log(url);
           window.open(url.toString(), '_blank');
         },
-        (error) => console.log(error)
+        (error) => {}
       );
   }
 

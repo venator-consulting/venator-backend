@@ -343,7 +343,8 @@
       <p-table #dtall dataKey="id" [value]="allRecordData" *ngIf="detailsOption == 3" [resizableColumns]="true"
         styleClass="p-datatable-gridlines" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
         [reorderableColumns]="true" [frozenColumns]="frozenCols" frozenWidth="500px" [(selection)]="selected"
-        [lazy]="true" (onLazyLoad)="sort($event)">
+        sortable="custom"
+      (sortFunction)="sort($event)">
         <ng-template pTemplate="caption">
           <div class="p-grid">
             <div class="p-col-1" *ngIf="!details">

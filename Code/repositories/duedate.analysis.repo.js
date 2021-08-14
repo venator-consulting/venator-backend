@@ -59,8 +59,7 @@ module.exports.dueDateAnalysis = async (
   toDate,
   mindocdate,
   maxappdate,
-  cb,
-  cb1
+  cb
 ) => {
   if (!fromDate) {
     throw new Error("Due Date is null for this procedure!");
@@ -206,8 +205,7 @@ module.exports.dueDateAnalysisDetails = async (
   mindocdate,
   maxappdate,
   accountNumber,
-  cb,
-  cb1
+  cb
 ) => {
   if (!mindocdate) {
     throw new Error("Due Date is null for this procedure!");

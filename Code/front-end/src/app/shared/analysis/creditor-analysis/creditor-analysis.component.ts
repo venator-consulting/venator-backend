@@ -104,12 +104,7 @@ export class CreditorAnalysisComponent implements OnInit {
         this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
         this.maxPageNr = Math.ceil(this.totalCount / this.limit);
       }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
+        this.waiting = false;
       });
   }
 

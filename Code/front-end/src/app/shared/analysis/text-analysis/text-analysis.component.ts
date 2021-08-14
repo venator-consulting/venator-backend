@@ -228,12 +228,7 @@ export class TextAnalysisComponent implements OnInit {
             );
         },
         (er) => {
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: 'There is an error occured please try again',
-          });
+          this.waiting = false;
         }
       );
   } // end of ng on init

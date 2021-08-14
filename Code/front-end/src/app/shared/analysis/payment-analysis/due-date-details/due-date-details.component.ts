@@ -96,12 +96,7 @@ export class DueDateDetailsComponent implements OnInit {
         };
 
       }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "there is no Account selected!"
-        });
+        this.waiting = false;
       });
     })
 

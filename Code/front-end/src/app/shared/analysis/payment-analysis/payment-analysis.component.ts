@@ -10,10 +10,9 @@ import { TableColumn } from '../../model/tableColumn';
 @Component({
   selector: 'app-payment-analysis',
   templateUrl: './payment-analysis.component.html',
-  styleUrls: ['./payment-analysis.component.sass']
+  styleUrls: ['./payment-analysis.component.sass'],
 })
 export class PaymentAnalysisComponent implements OnInit {
-
   selectedOrganisation: number = 0;
   selectedProcedure: number = 0;
   basicOptions: any;
@@ -51,28 +50,33 @@ export class PaymentAnalysisComponent implements OnInit {
   selectedMaxAccountName: string;
   items: MenuItem[];
   home: MenuItem;
-  blue: string ;
-  red: string ;
-  green: string ;
+  blue: string;
+  red: string;
+  green: string;
 
-
-  constructor(public _translateService: TranslateService, private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router,
-    private prcService: ProcedureService) { 
-
-    }
+  constructor(
+    public _translateService: TranslateService,
+    private _messageService: MessageService,
+    private _analysisService: AnalysisService,
+    private _router: Router,
+    private prcService: ProcedureService
+  ) {}
 
   ngOnInit(): void {
-
-    this._translateService.get('PaymentAnalysis').subscribe( elem => {
+    this._translateService.get('PaymentAnalysis').subscribe((elem) => {
       this.blue = elem.blue;
-      this.red = elem.red ; 
+      this.red = elem.red;
       this.green = elem.green;
 
       this.items = [
-        { label: elem.label, routerLink: '/dashboard/analysis/payment' }
+        { label: elem.label, routerLink: '/dashboard/analysis/payment' },
       ];
-  
-      this.home = { icon: 'pi pi-home',  label: elem.data, routerLink: '/dashboard/shared/data' };
+
+      this.home = {
+        icon: 'pi pi-home',
+        label: elem.data,
+        routerLink: '/dashboard/shared/data',
+      };
 
       this.basicOptions = {
         tooltips: {
@@ -81,139 +85,138 @@ export class PaymentAnalysisComponent implements OnInit {
               let value = tooltipItem.value;
               let currencyPipe = new CurrencyPipe('de');
               value = currencyPipe.transform(value, 'EURO', '');
-  
+
               let label = data.datasets[tooltipItem.datasetIndex].label || '';
               return label + ': ' + value;
-            }
-          }
+            },
+          },
         },
         scales: {
-          xAxes: [{
-            ticks: {
-              minRotation: 40,
-              maxRotation: 90,
-            }
-          }],
-          yAxes: [{
-            ticks: {
-              minRotation: 0,
-              maxRotation: 0,
-              callback: function (label, index, values) {
-                // debugger;
-                let currencyPipe = new CurrencyPipe('de');
-                label = currencyPipe.transform(label, 'EURO', '');
-                return label;
-              }
-            }
-          }],
-        }
+          xAxes: [
+            {
+              ticks: {
+                minRotation: 40,
+                maxRotation: 90,
+              },
+            },
+          ],
+          yAxes: [
+            {
+              ticks: {
+                minRotation: 0,
+                maxRotation: 0,
+                callback: function (label, index, values) {
+                  // debugger;
+                  let currencyPipe = new CurrencyPipe('de');
+                  label = currencyPipe.transform(label, 'EURO', '');
+                  return label;
+                },
+              },
+            },
+          ],
+        },
       };
-  
+
       this.top10 = 1;
-  
+
       this.paymentOptions = [
         { name: this.blue, value: 1, color: 'rgb(100,100,255)' },
         { name: this.red, value: 2, color: 'rgb(255,100,100)' },
-        { name: this.green, value: 3, color: 'rgb(100,255,100)' }
+        { name: this.green, value: 3, color: 'rgb(100,255,100)' },
       ];
-  
+
       this.top10Cols = [
         {
           header: 'PaymentAnalysis.accountNumber',
           field: 'accountNumber',
-          align: 'left'
+          align: 'left',
         },
         {
           header: 'PaymentAnalysis.accountName',
           field: 'accountName',
-          align: 'left'
-
+          align: 'left',
         },
         {
           header: 'PaymentAnalysis.sum',
           field: 'value',
-          align: 'right'
-
+          align: 'right',
         },
       ];
-  
+
       this.accountsCols = [
         {
           header: 'PaymentAnalysis.accountNumber',
           field: 'accountNumber',
-          align: 'left'
-
+          align: 'left',
         },
         {
           header: 'PaymentAnalysis.accountName',
           field: 'accountName',
-          align: 'left'
-
+          align: 'left',
         },
         {
           header: 'PaymentAnalysis.blue',
           field: 'blue',
-          align: 'right'
-
+          align: 'right',
         },
         {
           header: 'PaymentAnalysis.red',
           field: 'red',
-          align: 'right'
-
+          align: 'right',
         },
         {
           header: 'PaymentAnalysis.green',
           field: 'green',
-          align: 'right'
-
+          align: 'right',
         },
       ];
-  
+
       this.basicData = {
         labels: this.labels,
-        datasets: new Array()
+        datasets: new Array(),
       };
-  
-      this.basicData.datasets.push({
-        label: this.blue ,
-        backgroundColor: `rgb(100,100,255)`,
-        data: this.blueData
-      },
+
+      this.basicData.datasets.push(
+        {
+          label: this.blue,
+          backgroundColor: `rgb(100,100,255)`,
+          data: this.blueData,
+        },
         {
           label: this.red,
           backgroundColor: `rgb(255,100,100)`,
-          data: this.RedData
+          data: this.RedData,
         },
         {
           label: this.green,
           backgroundColor: `rgb(100,255,100)`,
-          data: this.GreenData
-        });
-  
+          data: this.GreenData,
+        }
+      );
+
       this.specificAccountData = {
         labels: this.labels,
-        datasets: new Array()
+        datasets: new Array(),
       };
-  
-      this.specificAccountData.datasets.push({
-        label: this.blue,
-        backgroundColor: `rgb(100,100,255)`,
-        data: this.specificAccountBlueData
-      },
+
+      this.specificAccountData.datasets.push(
+        {
+          label: this.blue,
+          backgroundColor: `rgb(100,100,255)`,
+          data: this.specificAccountBlueData,
+        },
         {
           label: this.red,
           backgroundColor: `rgb(255,100,100)`,
-          data: this.specificAccountRedData
+          data: this.specificAccountRedData,
         },
         {
           label: this.green,
           backgroundColor: `rgb(100,255,100)`,
-          data: this.specificAccountGreenData
-        });
-    })
-
-
+          data: this.specificAccountGreenData,
+        }
+      );
+    });
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
@@ -221,62 +224,57 @@ export class PaymentAnalysisComponent implements OnInit {
 
     this._analysisService
       .getPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure)
-      .subscribe(res => {
-        this.data = res.data.res;
-        this.accounts = res.data.accounts;
-        this.startDate = res.dateRange[0].mindate;
-        this.endDate = res.dateRange[0].maxdate;
+      .subscribe(
+        (res) => {
+          this.data = res.data.res;
+          this.accounts = res.data.accounts;
+          this.startDate = res.dateRange[0].mindate;
+          this.endDate = res.dateRange[0].maxdate;
 
-        for (let i = 0; i < this.data.length; i++) {
-          const element = this.data[i];
+          for (let i = 0; i < this.data.length; i++) {
+            const element = this.data[i];
 
-          this.labels.push(element.monthName + '-' + element.yearName);
-          this.blueData.push(Math.abs(element.blue.value));
-          this.GreenData.push(Math.abs(element.green.value));
-          this.RedData.push(Math.abs(element.red.value));
-        }
+            this.labels.push(element.monthName + '-' + element.yearName);
+            this.blueData.push(Math.abs(element.blue.value));
+            this.GreenData.push(Math.abs(element.green.value));
+            this.RedData.push(Math.abs(element.red.value));
+          }
 
-        // get top 10
-        this.accounts.sort((a, b) => Math.abs(b.blue) - Math.abs(a.blue));
-        this.top10Blue = this.accounts.slice(0, 10);
-        this.accounts.sort((a, b) => Math.abs(b.red) - Math.abs(a.red));
-        this.top10Red = this.accounts.slice(0, 10);
-        this.accounts.sort((a, b) => Math.abs(b.green) - Math.abs(a.green));
-        this.top10Green = this.accounts.slice(0, 10);
-        // debugger;
-        this.accounts.forEach(account => {
-          let accountNumber = parseInt(account.accountNumber, 10);
-          account.accountNumber = isNaN(accountNumber)? account.accountNumber : accountNumber;
-        });
-        this.ready = true;
-        this.tempData = [...this.accounts];
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
-
-    // if (this.selectedProcedure && +this.selectedProcedure > 0) {
-    //   this.prcService
-    //     .getById(+this.selectedProcedure)
-    //     .subscribe(prc => {
-    //       this.procedureName = prc && prc.length > 0 ? prc[0].name : "";
-    //     }, er => { });
-    // }
+          // get top 10
+          this.accounts.sort((a, b) => Math.abs(b.blue) - Math.abs(a.blue));
+          this.top10Blue = this.accounts.slice(0, 10);
+          this.accounts.sort((a, b) => Math.abs(b.red) - Math.abs(a.red));
+          this.top10Red = this.accounts.slice(0, 10);
+          this.accounts.sort((a, b) => Math.abs(b.green) - Math.abs(a.green));
+          this.top10Green = this.accounts.slice(0, 10);
+          // debugger;
+          this.accounts.forEach((account) => {
+            let accountNumber = parseInt(account.accountNumber, 10);
+            account.accountNumber = isNaN(accountNumber)
+              ? account.accountNumber
+              : accountNumber;
+          });
+          this.ready = true;
+          this.tempData = [...this.accounts];
+        },
+        (er) => {}
+      );
   } // end of init function
 
-
   goToDetails(row: any) {
-    this._router.navigate(['/dashboard/analysis/payment/' + this.selectedOrganisation + '/' + this.selectedProcedure + '/' + row.accountNumber]);
+    this._router.navigate([
+      '/dashboard/analysis/payment/' +
+        this.selectedOrganisation +
+        '/' +
+        this.selectedProcedure +
+        '/' +
+        row.accountNumber,
+    ]);
   }
 
   goToDueDate() {
     this._router.navigate(['/dashboard/analysis/due-date']);
   }
-
 
   filterChange(query, colName): void {
     this.searching = true;
@@ -290,9 +288,13 @@ export class PaymentAnalysisComponent implements OnInit {
           if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
             const element = this.criteria[key];
             if (element.length < 3) {
-              this.accounts = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+              this.accounts = this.tempData.filter(
+                (value) => value[key]?.toLowerCase() == element.toLowerCase()
+              );
             } else {
-              this.accounts = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+              this.accounts = this.tempData.filter((value) =>
+                value[key]?.toLowerCase().includes(element.toLowerCase())
+              );
             }
           }
         }
@@ -303,9 +305,17 @@ export class PaymentAnalysisComponent implements OnInit {
         if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
           const element = this.criteria[key];
           if (element.length < 3) {
-            this.accounts = this.accounts.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());
+            this.accounts = this.accounts.filter(
+              (value) =>
+                value[key]?.toString().toLowerCase() == element.toLowerCase()
+            );
           } else {
-            this.accounts = this.accounts.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
+            this.accounts = this.accounts.filter((value) =>
+              value[key]
+                ?.toString()
+                .toLowerCase()
+                .includes(element.toLowerCase())
+            );
           }
         }
       } // end of for each criteria field
@@ -325,7 +335,7 @@ export class PaymentAnalysisComponent implements OnInit {
       // for each account
       if (element.blue.accounts) {
         let total = 0;
-        element.blue.accounts.forEach(b => {
+        element.blue.accounts.forEach((b) => {
           // if the account is selected account add the value to the total
           if (b.accountNumber == this.selectedMaxAccountNumber) {
             total += b.value;
@@ -335,7 +345,7 @@ export class PaymentAnalysisComponent implements OnInit {
       }
       if (element.red.accounts) {
         let total = 0;
-        element.red.accounts.forEach(r => {
+        element.red.accounts.forEach((r) => {
           // if the account is selected account add the value to the total
           if (r.accountNumber == this.selectedMaxAccountNumber) {
             total += r.value;
@@ -345,7 +355,7 @@ export class PaymentAnalysisComponent implements OnInit {
       }
       if (element.green.accounts) {
         let total = 0;
-        element.green.accounts.forEach(g => {
+        element.green.accounts.forEach((g) => {
           // if the account is selected account add the value to the total
           if (g.accountNumber == this.selectedMaxAccountNumber) {
             total += g.value;
@@ -360,7 +370,5 @@ export class PaymentAnalysisComponent implements OnInit {
 
   onRowUnselect(event) {
     this.selectedMaxAccountNumber = null;
-
   }
-
 }

@@ -6,11 +6,7 @@ module.exports.getAnalysisMainData = async (req, res) => {
     +req.params.prcId
   );
   if (dateRange.length < 1) {
-    res.status(500).json({
-      messsage: "Can not get Date range!",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_date_range");
   }
   let fromDate = dateRange[0].mindate;
   if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
@@ -18,11 +14,7 @@ module.exports.getAnalysisMainData = async (req, res) => {
       !dateRange[0].mindocdate ||
       !(dateRange[0].mindocdate instanceof Date)
     ) {
-      res.status(400).json({
-        messsage: "this procedure has no document date! please re-import it",
-        dateRange: dateRange,
-      });
-      return;
+      throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
     } else {
       fromDate = dateRange[0].mindocdate;
     }
@@ -30,11 +22,7 @@ module.exports.getAnalysisMainData = async (req, res) => {
 
   // not needed
   if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    res.status(400).json({
-      messsage: "this procedure has no document date! please re-import it",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
   }
   const toDate = dateRange[0].maxdate;
 
@@ -91,11 +79,7 @@ module.exports.getAnalysisDetailsData = async (req, res) => {
     +req.params.prcId
   );
   if (dateRange.length < 1) {
-    res.status(500).json({
-      messsage: "Can not get Date range!",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_date_range");
   }
   let fromDate = dateRange[0].mindate;
   if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
@@ -103,22 +87,14 @@ module.exports.getAnalysisDetailsData = async (req, res) => {
       !dateRange[0].mindocdate ||
       !(dateRange[0].mindocdate instanceof Date)
     ) {
-      res.status(400).json({
-        messsage: "this procedure has no document date! please re-import it",
-        dateRange: dateRange,
-      });
-      return;
+      throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
     } else {
       fromDate = dateRange[0].mindocdate;
     }
   }
 
   if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    res.status(400).json({
-      messsage: "this procedure has no document date! please re-import it",
-      dateRange: dateRange,
-    });
-    return;
+    throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
   }
   const toDate = dateRange[0].maxdate;
 

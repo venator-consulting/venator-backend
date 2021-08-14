@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { PostingDataService } from '../service/posting-data.service';
 import { DataFilterService } from '../service/data-filter.service';
 import { ExportDataService } from '../service/export-data.service';
-import { dataTableColumns } from "../model/dataTableColumns";
+import { dataTableColumns } from '../model/dataTableColumns';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
@@ -11,7 +11,6 @@ import { Word } from '../model/word';
 import { DictionaryService } from '../service/dictionary.service';
 // import { DatePipe } from '@angular/common';
 
-
 @Component({
   selector: 'app-sap-data-table',
   templateUrl: './sap-data-table.component.html',
@@ -19,23 +18,26 @@ import { DictionaryService } from '../service/dictionary.service';
   // providers: [DatePipe]
 })
 export class SAPDataTableComponent implements OnInit {
-
-  constructor(private _messageService: MessageService, private _dataFilterService: DataFilterService,
-    private _exportDataService: ExportDataService, private _router: Router,
-    private _translateService: TranslateService, private scrollViewport: ElementRef,
-    private _autocompleteService: DictionaryService) { }
-
+  constructor(
+    private _messageService: MessageService,
+    private _dataFilterService: DataFilterService,
+    private _exportDataService: ExportDataService,
+    private _router: Router,
+    private _translateService: TranslateService,
+    private scrollViewport: ElementRef,
+    private _autocompleteService: DictionaryService
+  ) {}
 
   organisationId = localStorage.getItem('organisationId');
   procedureId = localStorage.getItem('currentProcedureId');
-  procedureName: string = "";
+  procedureName: string = '';
   filtersNo: number = 0;
   loading: boolean = false;
   selectLastPage: boolean = false;
   data: any;
   postings: [] = [];
   cols: dataTableColumns[];
-  pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 },];
+  pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
   limit: number = 25;
   pageNr: number = 1;
   maxPageNr: number = 0;
@@ -44,32 +46,33 @@ export class SAPDataTableComponent implements OnInit {
     OrganisationId: this.organisationId,
     procedureId: this.procedureId,
     limit: this.limit,
-    offset: 0
+    offset: 0,
   };
   totalCount: number = 0;
   completeWords: Word[] = new Array();
 
   ngOnInit(): void {
-
     // this._translateService.setDefaultLang('de');
     // this._translateService.
-    dataTableColumns.getDataTableColumns(this._translateService).then(cols => {
-      // debugger;
-      this.cols = cols;
-      this.getData();
-    });
-
-
-    this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-      dataTableColumns.getDataTableColumns(this._translateService).then(cols => {
+    dataTableColumns
+      .getDataTableColumns(this._translateService)
+      .then((cols) => {
         // debugger;
         this.cols = cols;
-        // this.getData();
+        this.getData();
       });
+
+    this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      dataTableColumns
+        .getDataTableColumns(this._translateService)
+        .then((cols) => {
+          // debugger;
+          this.cols = cols;
+          // this.getData();
+        });
     });
 
     this.procedureName = localStorage.getItem('currentProcedureName');
-
   }
 
   async getData() {
@@ -80,28 +83,20 @@ export class SAPDataTableComponent implements OnInit {
         delete this.criteria[key];
       }
     }
-    this._dataFilterService
-      .get(this.criteria)
-      .subscribe(
-        data => {
-          this.data = data;
-          this.postings = this.data.rows;
-          this.totalCount = this.data.count;
-          this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
-          this.maxPageNr = Math.ceil(this.totalCount / this.limit);
-          this.loading = false;
-
-        },
-        error => {
-          this.loading = false;
-          // this._messageService.add({
-          //   severity: 'error',
-          //   summary: 'ERROR',
-          //   life: 10000,
-          //   detail: "There is an error occured please try again"
-          // });
-        },
-      );
+    this._dataFilterService.get(this.criteria).subscribe(
+      (data) => {
+        this.data = data;
+        this.postings = this.data.rows;
+        this.totalCount = this.data.count;
+        this.displayedDataCount =
+          this.totalCount > this.limit ? this.limit : this.totalCount;
+        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
+        this.loading = false;
+      },
+      (err) => {
+        this.loading = false;
+      }
+    );
   }
 
   sort(event: LazyLoadEvent) {
@@ -110,8 +105,7 @@ export class SAPDataTableComponent implements OnInit {
     this.criteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.criteria.offset = 0;
-    if (!this.loading)
-      this.getData();
+    if (!this.loading) this.getData();
   }
 
   filterChange(value, field) {
@@ -119,7 +113,7 @@ export class SAPDataTableComponent implements OnInit {
       // if (value instanceof Date) {
       //   this.criteria[field] = this.datepipe.transform(value, 'yyyy-MM-dd');
       // } else
-        this.criteria[field] = value;
+      this.criteria[field] = value;
       ++this.filtersNo;
     } else {
       delete this.criteria[field];
@@ -143,7 +137,6 @@ export class SAPDataTableComponent implements OnInit {
     // } else {
     this.completeWords = new Array();
     // }
-
   }
 
   submitFilter() {
@@ -156,13 +149,12 @@ export class SAPDataTableComponent implements OnInit {
       OrganisationId: this.organisationId,
       procedureId: this.procedureId,
       limit: this.limit,
-      offset: 0
+      offset: 0,
     };
     this.filtersNo = 0;
     this.pageNr = 1;
     this.getData();
   }
-
 
   nextPage() {
     ++this.pageNr;
@@ -175,7 +167,6 @@ export class SAPDataTableComponent implements OnInit {
 
     this.getData();
   }
-
 
   lastPage() {
     this.pageNr = this.maxPageNr;
@@ -209,7 +200,7 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   limitChange(e) {
-    this.limit = e.value
+    this.limit = e.value;
     this.criteria.offset = 0;
     this.criteria.limit = this.limit;
     this.pageNr = 1;
@@ -222,30 +213,30 @@ export class SAPDataTableComponent implements OnInit {
     let criteriaWithLang = { ...this.criteria };
     criteriaWithLang['lang'] = lang;
     this._exportDataService
-      .exportXLSX('posting', this.organisationId, this.procedureId, criteriaWithLang)
+      .exportXLSX(
+        'posting',
+        this.organisationId,
+        this.procedureId,
+        criteriaWithLang
+      )
       .subscribe(
-        url => {
-          // console.log(url);
-          window.open(url.toString(), "_blank");
+        (url) => {
+          window.open(url.toString(), '_blank');
         },
-        (error) => console.log(error),
+        (err) => {}
       );
   }
   exportPDF() {
-    this._exportDataService
-      .exportPDF(this.postings)
-      .subscribe(
-        (data) => {
-
-          // console.log(data);
-        },
-        (error) => console.log(error),
-        () => { }
-      );
+    this._exportDataService.exportPDF(this.postings).subscribe(
+      (data) => {
+        // console.log(data);
+      },
+      (err) => {},
+      () => {}
+    );
   }
 
   susa() {
     this._router.navigate(['/dashboard/shared/data/susa']);
   }
-
 }

@@ -8,7 +8,7 @@ import { TableColumn } from 'src/app/shared/model/tableColumn';
 @Component({
   selector: 'app-due-date',
   templateUrl: './due-date.component.html',
-  styleUrls: ['./due-date.component.sass']
+  styleUrls: ['./due-date.component.sass'],
 })
 export class DueDateComponent implements OnInit {
   procedureName: string;
@@ -39,173 +39,188 @@ export class DueDateComponent implements OnInit {
   items: MenuItem[];
   home: MenuItem;
 
-  constructor(public _translateService: TranslateService, private _messageService: MessageService, private _analysisService: AnalysisService, private _router: Router) { }
+  constructor(
+    public _translateService: TranslateService,
+    private _messageService: MessageService,
+    private _analysisService: AnalysisService,
+    private _router: Router
+  ) {}
 
   ngOnInit(): void {
-
-
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
-    
 
-    this._translateService.get('DueDateAnalysis').subscribe(elem => {
+    this._translateService.get('DueDateAnalysis').subscribe((elem) => {
       this.items = [
-      
         { label: elem.paymentLabel, routerLink: '/dashboard/analysis/payment' },
-        { label: elem.label, routerLink: '/dashboard/analysis/due-date' }
+        { label: elem.label, routerLink: '/dashboard/analysis/due-date' },
       ];
 
-      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/dashboard/shared/data' };
-
-      this._analysisService
-      .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure)
-      .subscribe(res => {
-        // debugger;
-        this.data = res.data.dueDateReference.data;
-        this.labels = res.data.dueDateReference.labels;
-        this.waiting = false;
-        this.basicData = {
-          labels: this.labels,
-          datasets: new Array(),
-        };
-        this.basicData.datasets.push({
-          label: elem.firstChartLabel,
-          borderColor: `rgb(100,100,255)`,
-          data: this.data,
-          fill: false,
-        });
-        // this.chart.refresh();
-        // this.chart.reinit();
-        this.docDataTable = res.data.docDateReference;
-        // this.notPaidDataTable = res.data.docDateReference;
-        this.delayData = res.data.dueDateRefAccounts;
-
-        this.delayData.forEach(account => {
-          let accountNumber = parseInt(account.accountNumber, 10);
-          account.accountNumber = isNaN(accountNumber)? account.accountNumber : accountNumber;
-        });
-
-        this.docDataTable.forEach(element => {
-          this.docDateLabels.push(element.monthName + '-' + element.yearName);
-          this.notPaidLabels.push(element.monthName + '-' + element.yearName);
-          this.docPositiveData.push(element.positive);
-          this.docNegativeData.push(element.negative);
-          this.docData.push(+element.positive + +element.negative);
-          this.notPaidData.push(+element.notPaid);
-        });
-
-        this.docDateData = {
-          labels: this.docDateLabels,
-          datasets: [{
-              type: 'line',
-              label: elem.average,
-              borderColor: '#42A5F5',
-              borderWidth: 2,
-              fill: false,
-              data: this.docData
-          }, {
-              type: 'bar',
-              label: elem.positive,
-              backgroundColor: '#F5B59B',
-              data: this.docPositiveData,
-              borderColor: '#E5A58B',
-              borderWidth: 2
-          }, {
-              type: 'bar',
-              label: elem.negative,
-              backgroundColor: '#FFD795',
-              borderColor: '#EFC785',
-              data: this.docNegativeData
-          }]
+      this.home = {
+        icon: 'pi pi-home',
+        label: elem.data,
+        routerLink: '/dashboard/shared/data',
       };
 
-      this.notPaidChartData = {
-        labels: this.notPaidLabels,
-        datasets: [{
-            label: elem.notPaid,
-            backgroundColor: '#42A5F5',
-            data: this.notPaidData
-        }]
-    };
+      this._analysisService
+        .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure)
+        .subscribe(
+          (res) => {
+            // debugger;
+            this.data = res.data.dueDateReference.data;
+            this.labels = res.data.dueDateReference.labels;
+            this.waiting = false;
+            this.basicData = {
+              labels: this.labels,
+              datasets: new Array(),
+            };
+            this.basicData.datasets.push({
+              label: elem.firstChartLabel,
+              borderColor: `rgb(100,100,255)`,
+              data: this.data,
+              fill: false,
+            });
+            // this.chart.refresh();
+            // this.chart.reinit();
+            this.docDataTable = res.data.docDateReference;
+            // this.notPaidDataTable = res.data.docDateReference;
+            this.delayData = res.data.dueDateRefAccounts;
 
-      }, er => {
-        this._messageService.add({
-          severity: 'error',
-          summary: 'ERROR',
-          life: 10000,
-          detail: "There is an error occured please try again"
-        });
-      });
-    })
+            this.delayData.forEach((account) => {
+              let accountNumber = parseInt(account.accountNumber, 10);
+              account.accountNumber = isNaN(accountNumber)
+                ? account.accountNumber
+                : accountNumber;
+            });
+
+            this.docDataTable.forEach((element) => {
+              this.docDateLabels.push(
+                element.monthName + '-' + element.yearName
+              );
+              this.notPaidLabels.push(
+                element.monthName + '-' + element.yearName
+              );
+              this.docPositiveData.push(element.positive);
+              this.docNegativeData.push(element.negative);
+              this.docData.push(+element.positive + +element.negative);
+              this.notPaidData.push(+element.notPaid);
+            });
+
+            this.docDateData = {
+              labels: this.docDateLabels,
+              datasets: [
+                {
+                  type: 'line',
+                  label: elem.average,
+                  borderColor: '#42A5F5',
+                  borderWidth: 2,
+                  fill: false,
+                  data: this.docData,
+                },
+                {
+                  type: 'bar',
+                  label: elem.positive,
+                  backgroundColor: '#F5B59B',
+                  data: this.docPositiveData,
+                  borderColor: '#E5A58B',
+                  borderWidth: 2,
+                },
+                {
+                  type: 'bar',
+                  label: elem.negative,
+                  backgroundColor: '#FFD795',
+                  borderColor: '#EFC785',
+                  data: this.docNegativeData,
+                },
+              ],
+            };
+
+            this.notPaidChartData = {
+              labels: this.notPaidLabels,
+              datasets: [
+                {
+                  label: elem.notPaid,
+                  backgroundColor: '#42A5F5',
+                  data: this.notPaidData,
+                },
+              ],
+            };
+          },
+          (er) => {
+            this.waiting = false;
+          }
+        );
+    });
     this.basicData = {
       labels: this.labels,
-      datasets: new Array()
+      datasets: new Array(),
     };
 
     this.basicOptions = {
       scales: {
-          xAxes: [{
-                ticks: {
-                  minRotation: 40,
-                  maxRotation: 90,
-                }
-          }],
-          yAxes: [{
+        xAxes: [
+          {
+            ticks: {
+              minRotation: 40,
+              maxRotation: 90,
+            },
+          },
+        ],
+        yAxes: [
+          {
             ticks: {
               minRotation: 0,
               maxRotation: 0,
-              stepSize: 50
-            }
-      }],
-      }
-  };
-
+              stepSize: 50,
+            },
+          },
+        ],
+      },
+    };
 
     this.waiting = true;
-
 
     this.delayCols = [
       {
         header: 'DueDateAnalysis.accountNumber',
         field: 'accountNumber',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DueDateAnalysis.accountName',
         field: 'accountName',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DueDateAnalysis.positiveDelay',
         field: 'delayPos',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DueDateAnalysis.negativeDelay',
         field: 'delayNeg',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DueDateAnalysis.count',
         field: 'count',
-        align: 'center'
-      }
+        align: 'center',
+      },
     ];
-    
+
     this.notPaidCols = [
       {
         header: 'DueDateAnalysis.date',
         field: 'date',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DueDateAnalysis.notPaid',
         field: 'notPaid',
-        align: 'center'
-      }
+        align: 'center',
+      },
     ];
-
   }
 
   backToPayment() {
@@ -213,7 +228,8 @@ export class DueDateComponent implements OnInit {
   }
 
   goToDetails(row) {
-    this._router.navigate(['/dashboard/analysis/due-date/deails/' + row.accountNumber]);
+    this._router.navigate([
+      '/dashboard/analysis/due-date/deails/' + row.accountNumber,
+    ]);
   }
-
 }

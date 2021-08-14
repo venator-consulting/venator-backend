@@ -37,14 +37,7 @@ monthDiff = (d1, d2) => {
   return months <= 0 ? 0 : months;
 };
 
-module.exports.paymentAnalysis = async (
-  orgId,
-  prcId,
-  fromDate,
-  toDate,
-  cb,
-  cb1
-) => {
+module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
   if (!fromDate) {
     throw new Error("Document Date is null for this procedure!");
   }
@@ -272,8 +265,7 @@ module.exports.paymentAnalysisDetails = async (
   fromDate,
   toDate,
   accountNumber,
-  cb,
-  cb1
+  cb
 ) => {
   if (!fromDate) {
     throw new Error("Document Date is null for this procedure!");

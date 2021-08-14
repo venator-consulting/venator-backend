@@ -1,5 +1,6 @@
 {
     "ErrorHandler": {
+        "incorrect_username_or_password": "The username or password is incorrect",
         "badRequest_400": "hTe server is unable to process the sent request",
         "unauthorized_401": "Authentication is required, please check the username and password",
         "forbidden_403": "The access to the requested resource is forbidden",
@@ -8,7 +9,11 @@
         "passwordsMatch": "The password don't match",
         "organisation_id_is_required": "Please select an organisation",
         "procedure_id_is_required": "Please select a procedure",
-        "procedure_analysis_disabled": "Analysis feature is disabled for this procedure"
+        "procedure_analysis_disabled": "Analysis feature is disabled for this procedure",
+        "no_date_range": "Can't get date range for this procedure",
+        "no_document_date": "This Procedure has no document date! please re-import it correctly",
+        "no_application_date": "This Procedure has no application date! please re-import it correctly",
+        "no_due_date": "This Procedure has no due date! please re-import it correctly"
     },
     "LOGIN": {
         "welcomeMsg": "Please log in ",
