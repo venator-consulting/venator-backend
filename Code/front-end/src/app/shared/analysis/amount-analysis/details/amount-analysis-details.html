@@ -185,7 +185,6 @@
 
     <p-table
       #dtall
-      dataKey="id"
       [value]="allRecordData"
       [resizableColumns]="true"
       dataKey="id"
@@ -200,7 +199,7 @@
       [frozenColumns]="frozenCols"
       frozenWidth="500px"
       [(selection)]="selected"
-      sortable="custom"
+      [customSort]="true"
       (sortFunction)="sort($event)"
     >
       <ng-template pTemplate="caption">

@@ -87,6 +87,8 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this.backCriteria = {
       limit: 25,
       offset: 0,
+      orderBy: 'id',
+      sortOrder: 1,
     };
     this.procedureName = localStorage.getItem('currentProcedureName');
 
@@ -467,10 +469,11 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   getAllByAccount() {
     this.waiting = true;
     for (const key in this.backCriteria) {
-      if (!this.backCriteria[key]) {
+      if (!this.backCriteria[key] && key != 'offset') {
         delete this.backCriteria[key];
       }
     }
+    this.filtersNo = Object.keys(this.backCriteria).length - 4;
     this._analysisService
       .getAmountAnalysisDetailsByAccount(
         this.orgId,
@@ -511,12 +514,26 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   }
 
   sort(event) {
-    // debugger;
-    this.backCriteria.orderBy = event.sortField;
-    this.backCriteria.sortOrder = event.sortOrder;
-    this.pageNr = 1;
-    this.backCriteria.offset = 0;
-    if (!this.waiting) this.getAllByAccount();
+    event.data.sort((data1, data2) => {
+      debugger;
+      this.backCriteria.orderBy = event.sortField;
+      this.backCriteria.sortOrder = event.sortOrder;
+      this.pageNr = 1;
+      this.backCriteria.offset = 0;
+      this.getAllByAccount();
+      let value1 = data1[event.field];
+      let value2 = data2[event.field];
+      let result = null;
+
+      if (value1 == null && value2 != null) result = -1;
+      else if (value1 != null && value2 == null) result = 1;
+      else if (value1 == null && value2 == null) result = 0;
+      else if (typeof value1 === 'string' && typeof value2 === 'string')
+        result = value1.localeCompare(value2);
+      else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+
+      return event.order * result;
+    });
   }
 
   // for pagination starts
@@ -569,7 +586,10 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this.backCriteria = {
       limit: this.limit,
       offset: 0,
+      orderBy: 'id',
+      sortOrder: 1,
     };
+    this.filtersNo = 0;
     this.pageNr = 1;
     this.getAllByAccount();
   }
