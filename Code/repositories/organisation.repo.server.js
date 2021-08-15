@@ -10,7 +10,6 @@ module.exports.fetchAll = async () => {
       deleted: false,
     },
   });
-  console.log("orgs: ", orgs);
   return orgs;
 };
 

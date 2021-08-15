@@ -503,7 +503,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
   }
 
   sort(event) {
-    this.backCriteria.orderBy = event.sortField;
+    this.backCriteria.orderBy = event.sortField? event.sortField : 'id';
     this.backCriteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.backCriteria.offset = 0;
