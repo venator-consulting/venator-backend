@@ -8,7 +8,7 @@ import { TableColumn } from '../../model/tableColumn';
 @Component({
   selector: 'app-creditor-analysis',
   templateUrl: './creditor-analysis.component.html',
-  styleUrls: ['./creditor-analysis.component.sass']
+  styleUrls: ['./creditor-analysis.component.sass'],
 })
 export class CreditorAnalysisComponent implements OnInit {
   cols: TableColumn[];
@@ -22,9 +22,11 @@ export class CreditorAnalysisComponent implements OnInit {
   home: MenuItem;
   criteria: any = {
     limit: 25,
-    offset: 0
+    offset: 0,
+    orderBy: 'accountNumber',
+    sortOrder: 1,
   };
-  pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
+  pageLimitSizes = [{ value: 25, label: '25' }, { value: 50, label: '50' }, { value: 100, label: '100' }];
   limit: number = 25;
   pageNr: number = 1;
   maxPageNr: number = 0;
@@ -32,94 +34,105 @@ export class CreditorAnalysisComponent implements OnInit {
   totalCount: any;
   displayedDataCount: any;
 
-  constructor(public _translateService: TranslateService, private _analysisService: AnalysisService, private _messageService: MessageService, private _router: Router) { }
+  constructor(
+    public _translateService: TranslateService,
+    private _analysisService: AnalysisService,
+    private _messageService: MessageService,
+    private _router: Router
+  ) {}
 
   ngOnInit(): void {
-
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
-    
-    this._translateService.get('CreditorsAnalysis').subscribe(elem => {
+
+    this._translateService.get('CreditorsAnalysis').subscribe((elem) => {
       this.items = [
-        { label: elem.label, routerLink: '/dashboard/analysis/creditor' }
+        { label: elem.label, routerLink: '/dashboard/analysis/creditor' },
       ];
-      this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/dashboard/shared/data' };
+      this.home = {
+        icon: 'pi pi-home',
+        label: elem.data,
+        routerLink: '/dashboard/shared/data',
+      };
 
       this.cols = [
         {
           header: elem.accountNumber,
           field: 'accountNumber',
-          align: 'left'
+          align: 'left',
         },
         {
           header: elem.accountName,
           field: 'accountName',
-          align: 'left'
+          align: 'left',
         },
         {
           header: elem.count,
           field: 'totlaCount',
-          align: 'center'
+          align: 'center',
         },
         {
           header: elem.sum,
           field: 'totalBalance',
-          align: 'right'
-        }
+          align: 'right',
+        },
       ];
-    })
+    });
 
-
-    this.getData();
-
-  }// end of ng o0n init
-
+    // this.getData();
+  } // end of ng o0n init
 
   filterChange(query, colName): void {
     this.getData();
   }
 
   goToDetails(row) {
-    this._router.navigate(['/dashboard/analysis/creditor/deails/' + row.accountNumber]);
+    this._router.navigate([
+      '/dashboard/analysis/creditor/deails/' + row.accountNumber,
+    ]);
   }
 
   getData() {
     this.waiting = true;
     for (const key in this.criteria) {
-      if (!this.criteria[key]) {
+      if (!this.criteria[key] && key != 'offset') {
         delete this.criteria[key];
       }
     }
+    this.filtersNo = Object.keys(this.criteria).length - 4;
     this._analysisService
-      .getCreditorAnalysis(this.selectedOrganisation, this.selectedProcedure, this.criteria)
-      .subscribe(res => {
-        this.waiting = false;
-        this.data = res.data;
-        // this.data.forEach(account => {
-        //   let accountNumber = parseInt(account.accountNumber.toString(), 10);
-        //   account.accountNumber = isNaN(accountNumber)? account.accountNumber : accountNumber;
-        // });
-        this.totalCount = res.count[0]['FOUND_ROWS()'];
-        this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
-        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
-      }, er => {
-        this.waiting = false;
-      });
+      .getCreditorAnalysis(
+        this.selectedOrganisation,
+        this.selectedProcedure,
+        this.criteria
+      )
+      .subscribe(
+        (res) => {
+          this.waiting = false;
+          this.data = res.data;
+          this.totalCount = res.count[0]['FOUND_ROWS()'];
+          this.displayedDataCount =
+            this.totalCount > this.limit ? this.limit : this.totalCount;
+          this.maxPageNr = Math.ceil(this.totalCount / this.limit);
+        },
+        (er) => {
+          this.waiting = false;
+        }
+      );
   }
 
   sort(event) {
     // debugger;
-    this.criteria.orderBy = event.sortField;
+    this.criteria.orderBy = event.sortField? event.sortField : 'accountNumber';
     this.criteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.criteria.offset = 0;
-    if (!this.waiting)
-      this.getData();
+    this.getData();
   }
 
   limitChange(e) {
-    this.limit = e.value
+    this.limit = e.value;
     this.criteria.offset = 0;
     this.criteria.limit = this.limit;
     this.pageNr = 1;
@@ -139,7 +152,6 @@ export class CreditorAnalysisComponent implements OnInit {
 
     this.getData();
   }
-
 
   lastPage() {
     this.pageNr = this.maxPageNr;
@@ -162,10 +174,9 @@ export class CreditorAnalysisComponent implements OnInit {
   clearFilter() {
     this.criteria = {
       limit: this.limit,
-      offset: 0
+      offset: 0,
     };
     this.pageNr = 1;
     this.getData();
   }
-
 }

@@ -417,7 +417,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         this.getUserRelevant();
         break;
       case 3:
-        this.getAllByAccount();
+        // this.getAllByAccount();
         break;
       default:
         this.getSysRelevant();
@@ -514,31 +514,18 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   }
 
   sort(event) {
-    event.data.sort((data1, data2) => {
-      debugger;
-      this.backCriteria.orderBy = event.sortField;
-      this.backCriteria.sortOrder = event.sortOrder;
-      this.pageNr = 1;
-      this.backCriteria.offset = 0;
-      this.getAllByAccount();
-      let value1 = data1[event.field];
-      let value2 = data2[event.field];
-      let result = null;
-
-      if (value1 == null && value2 != null) result = -1;
-      else if (value1 != null && value2 == null) result = 1;
-      else if (value1 == null && value2 == null) result = 0;
-      else if (typeof value1 === 'string' && typeof value2 === 'string')
-        result = value1.localeCompare(value2);
-      else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-      return event.order * result;
-    });
+    this.backCriteria.orderBy = event.sortField? event.sortField : 'id';
+    this.backCriteria.sortOrder = event.sortOrder;
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    this.getAllByAccount();
   }
 
   // for pagination starts
 
   filterChangeBack(query, colName): void {
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
     this.getAllByAccount();
   }
 

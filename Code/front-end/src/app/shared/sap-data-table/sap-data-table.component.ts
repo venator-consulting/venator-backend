@@ -1,5 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
-import { PostingDataService } from '../service/posting-data.service';
+import { Component, OnInit } from '@angular/core';
 import { DataFilterService } from '../service/data-filter.service';
 import { ExportDataService } from '../service/export-data.service';
 import { dataTableColumns } from '../model/dataTableColumns';
@@ -9,7 +8,6 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 // import { AutocompleteService } from '../service/autocomplete.service';
 import { Word } from '../model/word';
 import { DictionaryService } from '../service/dictionary.service';
-// import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-sap-data-table',
@@ -24,7 +22,6 @@ export class SAPDataTableComponent implements OnInit {
     private _exportDataService: ExportDataService,
     private _router: Router,
     private _translateService: TranslateService,
-    private scrollViewport: ElementRef,
     private _autocompleteService: DictionaryService
   ) {}
 
@@ -47,28 +44,24 @@ export class SAPDataTableComponent implements OnInit {
     procedureId: this.procedureId,
     limit: this.limit,
     offset: 0,
+    orderBy: 'id',
+    sortOrder: 1,
   };
   totalCount: number = 0;
   completeWords: Word[] = new Array();
 
   ngOnInit(): void {
-    // this._translateService.setDefaultLang('de');
-    // this._translateService.
     dataTableColumns
       .getDataTableColumns(this._translateService)
       .then((cols) => {
-        // debugger;
         this.cols = cols;
-        this.getData();
       });
 
     this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
       dataTableColumns
         .getDataTableColumns(this._translateService)
         .then((cols) => {
-          // debugger;
           this.cols = cols;
-          // this.getData();
         });
     });
 
@@ -76,13 +69,14 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   async getData() {
-    // debugger;
-    this.loading = true;
     for (const key in this.criteria) {
-      if (!this.criteria[key]) {
+      if (!this.criteria[key] && key != 'offset') {
         delete this.criteria[key];
       }
     }
+    debugger;
+    this.filtersNo = Object.keys(this.criteria).length - 6;
+    this.loading = true;
     this._dataFilterService.get(this.criteria).subscribe(
       (data) => {
         this.data = data;
@@ -101,7 +95,7 @@ export class SAPDataTableComponent implements OnInit {
 
   sort(event: LazyLoadEvent) {
     // debugger;
-    this.criteria.orderBy = event.sortField;
+    this.criteria.orderBy = event.sortField? event.sortField : 'id';
     this.criteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.criteria.offset = 0;
@@ -109,19 +103,8 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   filterChange(value, field) {
-    if (value) {
-      // if (value instanceof Date) {
-      //   this.criteria[field] = this.datepipe.transform(value, 'yyyy-MM-dd');
-      // } else
-      this.criteria[field] = value;
-      ++this.filtersNo;
-    } else {
-      delete this.criteria[field];
-      --this.filtersNo;
-    }
     this.pageNr = 1;
     this.criteria.offset = 0;
-    this.loading = true;
     this.autoComplete(value);
     this.getData();
   }

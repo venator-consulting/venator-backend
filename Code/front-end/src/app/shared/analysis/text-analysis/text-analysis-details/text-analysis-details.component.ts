@@ -89,6 +89,8 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this.backCriteria = {
       limit: 25,
       offset: 0,
+      orderBy: 'id',
+      sortOrder: 1,
     };
 
     this.detailsOptions = [
@@ -427,7 +429,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
         this.getUserRelevant();
         break;
       case 3:
-        this.getAllByAccount();
+        // this.getAllByAccount();
         break;
       default:
         this.getSysRelevant();
@@ -474,10 +476,11 @@ export class TextAnalysisDetailsComponent implements OnInit {
   getAllByAccount() {
     this.waiting = true;
     for (const key in this.backCriteria) {
-      if (!this.backCriteria[key]) {
+      if (!this.backCriteria[key] && key != 'offset') {
         delete this.backCriteria[key];
       }
     }
+    this.filtersNo = Object.keys(this.backCriteria).length - 4;
     this._analysisService
       .getTextAnalysisDetailsByAccount(
         this.orgId,
@@ -500,12 +503,11 @@ export class TextAnalysisDetailsComponent implements OnInit {
   }
 
   sort(event) {
-    // debugger;
     this.backCriteria.orderBy = event.sortField;
     this.backCriteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.backCriteria.offset = 0;
-    if (!this.waiting) this.getAllByAccount();
+    this.getAllByAccount();
   }
 
   // export excel from back-end for all table
@@ -530,6 +532,8 @@ export class TextAnalysisDetailsComponent implements OnInit {
   // for pagination starts
 
   filterChangeBack(query, colName): void {
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
     this.getAllByAccount();
   }
 

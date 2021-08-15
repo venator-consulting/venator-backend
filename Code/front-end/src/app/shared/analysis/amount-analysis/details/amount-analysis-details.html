@@ -199,8 +199,9 @@
       [frozenColumns]="frozenCols"
       frozenWidth="500px"
       [(selection)]="selected"
+      [lazy]="true"
       [customSort]="true"
-      (sortFunction)="sort($event)"
+      (onLazyLoad)="sort($event)"
     >
       <ng-template pTemplate="caption">
         <div class="p-grid">
