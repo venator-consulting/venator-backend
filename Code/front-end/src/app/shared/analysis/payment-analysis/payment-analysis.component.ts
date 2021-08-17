@@ -53,6 +53,7 @@ export class PaymentAnalysisComponent implements OnInit {
   blue: string;
   red: string;
   green: string;
+  waiting: boolean = true;
 
   constructor(
     public _translateService: TranslateService,
@@ -63,6 +64,7 @@ export class PaymentAnalysisComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.waiting = true;
     this._translateService.get('PaymentAnalysis').subscribe((elem) => {
       this.blue = elem.blue;
       this.red = elem.red;
@@ -255,9 +257,12 @@ export class PaymentAnalysisComponent implements OnInit {
               : accountNumber;
           });
           this.ready = true;
+          this.waiting = false;
           this.tempData = [...this.accounts];
         },
-        (er) => {}
+        (er) => {
+          this.waiting = false;
+        }
       );
   } // end of init function
 
@@ -325,7 +330,7 @@ export class PaymentAnalysisComponent implements OnInit {
 
   onRowSelect(event): void {
     // debugger;
-
+    // this.waiting = true;
     this.selectedMaxAccountNumber = event.data.accountNumber;
     this.selectedMaxAccountName = event.data.accountName;
 
@@ -365,6 +370,7 @@ export class PaymentAnalysisComponent implements OnInit {
       }
     }
     this.chart.refresh();
+    // this.waiting = false;
     // this.chart.reinit();
   }
 

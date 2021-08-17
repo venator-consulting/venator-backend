@@ -2,52 +2,98 @@
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <div class="p-grid">
   <div class="p-col-12">
-    <h2 class="p-text-center">{{procedureName}}</h2>
-    <button type="button" pButton pRipple icon="pi pi-clock" label="{{'DueDateAnalysis.backtoDueDate' | translate}}"
-      class="p-button-rounded p-button-warning" (click)="backToPayment()" pTooltip="{{'DueDateAnalysis.backtoDueDate' | translate}}"
-      tooltipPosition="bottom"></button>
+    <h2 class="p-text-center">{{ procedureName }}</h2>
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="waiting"
+    ></p-progressBar>
+    <button
+      type="button"
+      pButton
+      pRipple
+      icon="pi pi-clock"
+      label="{{ 'DueDateAnalysis.backtoDueDate' | translate }}"
+      class="p-button-rounded p-button-warning"
+      (click)="backToPayment()"
+      pTooltip="{{ 'DueDateAnalysis.backtoDueDate' | translate }}"
+      tooltipPosition="bottom"
+    ></button>
   </div>
 </div>
 
 <div class="p-col-12">
-  <h4 class="p-text-center">{{accountName}}</h4>
+  <h4 class="p-text-center">{{ accountName }}</h4>
   <div class="card p-text-center">
-    <p-chart #chart2 type="bar" height="350" [data]="docDateData" [options]="basicOptions">
+    <p-chart
+      #chart2
+      type="bar"
+      height="350"
+      [data]="docDateData"
+      [options]="basicOptions"
+    >
     </p-chart>
   </div>
 </div>
 
-
 <div class="p-col-12">
   <div class="card p-text-center">
-    <p-table [value]="data" [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="delayCols"
-      responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true">
+    <p-table
+      [value]="data"
+      [resizableColumns]="true"
+      styleClass="p-datatable-gridlines"
+      [columns]="delayCols"
+      responsive="true"
+      [scrollable]="true"
+      scrollHeight="350px"
+      [reorderableColumns]="true"
+      [loading]="waiting"
+    >
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns">
+          <col *ngFor="let col of columns" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn  class="p-text-{{col.align}}" *ngFor="let col of columns">
+          <th
+            pSortableColumn="{{ col.field }}"
+            pResizableColumn
+            pReorderableColumn
+            class="p-text-{{ col.align }}"
+            *ngFor="let col of columns"
+          >
             <span pTooltip="{{ col.header | translate }}">
-              {{col.header | translate}}
+              {{ col.header | translate }}
             </span>
-            <p-sortIcon field="{{col.field}}"></p-sortIcon>
+            <p-sortIcon field="{{ col.field }}"></p-sortIcon>
           </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr [pSelectableRow]="row">
-          <td *ngFor="let col of columns" class="p-text-{{col.align}}">
-            <span *ngIf="col.field=='balance'">
-              {{ row[col.field]  | currency:'EUR':'' }}
+          <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
+            <span *ngIf="col.field == 'balance'">
+              {{ row[col.field] | currency: "EUR":"" }}
             </span>
-            <span *ngIf="col.field=='dueDate' || col.field=='applicationDate' || col.field=='documentDate'">
-              {{ row[col.field]  | date:'dd.MM.yyyy' }}
+            <span
+              *ngIf="
+                col.field == 'dueDate' ||
+                col.field == 'applicationDate' ||
+                col.field == 'documentDate'
+              "
+            >
+              {{ row[col.field] | date: "dd.MM.yyyy" }}
             </span>
-            <span pTooltip="{{ row[col.field] }}"
-              *ngIf="col.field!='balance' && col.field!='documentDate' && col.field!='dueDate' && col.field!='applicationDate'">
+            <span
+              pTooltip="{{ row[col.field] }}"
+              *ngIf="
+                col.field != 'balance' &&
+                col.field != 'documentDate' &&
+                col.field != 'dueDate' &&
+                col.field != 'applicationDate'
+              "
+            >
               {{ row[col.field] }}
             </span>
           </td>

@@ -4,6 +4,11 @@
   <div class="p-col-12">
     <h2 class="p-text-center">{{procedureName}}</h2>
     <h4 class="p-text-center">All Accounts</h4>
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="waiting"
+    ></p-progressBar>
   </div>
 </div>
 <div class="p-grid" *ngIf="this.basicData">

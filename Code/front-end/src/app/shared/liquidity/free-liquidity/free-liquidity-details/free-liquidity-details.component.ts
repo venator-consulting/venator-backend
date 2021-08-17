@@ -25,7 +25,7 @@ export class FreeLiquidityDetailsComponent implements OnInit {
   selectedDate: string;
   cols: TableColumn[];
   tempData: any;
-  searching: boolean;
+  searching: boolean = true;
   criteria: any = {};
   creditLinesTotal: number;
   bankBalancesTotal: number;
@@ -106,78 +106,78 @@ export class FreeLiquidityDetailsComponent implements OnInit {
       {
         header: 'DataTableColumns.accountNumber',
         field: 'accountNumber',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.accountName',
         field: 'accountName',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'DataTableColumns.accountType',
         field: 'accountType',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.documentType',
         field: 'documentType',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.balance',
         field: 'balance',
-        align: 'right'
+        align: 'right',
       },
       {
         header: 'DataTableColumns.contraAccountNumber',
         field: 'contraAccountNumber',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.contraAccountName',
         field: 'contraAccountName',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.documentTypeNew',
         field: 'documentTypeNew',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.documentNumber',
         field: 'documentNumber',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.documentDate',
         field: 'documentDate',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.recordNumber',
         field: 'recordNumber',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.ledgerId',
         field: 'ledgerId',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.executionDate',
         field: 'executionDate',
-        align: 'center'
+        align: 'center',
       },
       {
         header: 'DataTableColumns.dueDate',
         field: 'dueDate',
-        align: 'center'
-      }
+        align: 'center',
+      },
     ];
-    
   } // end of ng on init
 
   getData() {
+    this.searching = true;
     this._liquidityService
       .getFreeLiquidityDetails(this.orgId, this.prcId, this.accountNumber)
       .subscribe(
@@ -212,27 +212,44 @@ export class FreeLiquidityDetailsComponent implements OnInit {
               },
             ],
           };
+          this.searching = false;
         },
-        (er) => {}
+        (er) => {
+          this.searching = false;
+        }
       );
   } // end of ng on init
 
   // on clock on a bar in the chart
   selectBarData(e) {
+    this.searching = true;
     this.selectedDateData = new Array();
     let index = e?.element?._index;
     this.selectedDate = this.labels[index];
-    let tempDate = this.selectedDate.slice(this.selectedDate.length-4) + '-'+ this.selectedDate.slice(3,5) + '-' + this.selectedDate.slice(0,2);
+    let tempDate =
+      this.selectedDate.slice(this.selectedDate.length - 4) +
+      '-' +
+      this.selectedDate.slice(3, 5) +
+      '-' +
+      this.selectedDate.slice(0, 2);
     // debugger;
-    this._liquidityService.getFreeLiquidityDetailsRecords(
-      this.orgId,
-      this.prcId,
-      this.accountNumber,
-      tempDate
-    ).subscribe(res => {
-      this.selectedDateData = res;
-      this.tempData = res;
-    }, er => {});
+    this._liquidityService
+      .getFreeLiquidityDetailsRecords(
+        this.orgId,
+        this.prcId,
+        this.accountNumber,
+        tempDate
+      )
+      .subscribe(
+        (res) => {
+          this.selectedDateData = res;
+          this.tempData = res;
+          this.searching = false;
+        },
+        (er) => {
+          this.searching = false;
+        }
+      );
     // this.calculateTotals();
   }
 
@@ -246,7 +263,6 @@ export class FreeLiquidityDetailsComponent implements OnInit {
   //     this.freeLiquidityTotal += data.bankBalance + data.creditLine;
   // }
   // }
-
 
   filterChange(query, colName): void {
     this.searching = true;
@@ -294,6 +310,4 @@ export class FreeLiquidityDetailsComponent implements OnInit {
     }
     this.searching = false;
   }
-
-
 }

@@ -4,6 +4,11 @@
   <div class="p-col-12">
     <h2 class="p-text-center">{{ procedureName }}</h2>
     <h4 class="p-text-center">All Accounts</h4>
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="searching"
+    ></p-progressBar>
   </div>
 </div>
 <div class="p-grid">
@@ -55,6 +60,7 @@
       scrollHeight="350px"
       [reorderableColumns]="true"
       [resizableColumns]="true"
+      [loading]="searching"
     >
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
@@ -172,6 +178,7 @@
       scrollHeight="350px"
       [reorderableColumns]="true"
       [resizableColumns]="true"
+      [loading]="searching"
     >
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>

@@ -1,40 +1,86 @@
 <p-toast></p-toast>
 <div class="p-grid">
+  <div class="p-col-12">
+    <h2 class="p-text-center">
+      {{ procedureName }}
+    </h2>
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="searching"
+    ></p-progressBar>
+  </div>
+
 
   <div class="p-col-12">
-
-
-    <p-table #dt dataKey="accountNumber" [value]="data" [columns]="cols" styleClass="p-datatable-gridlines"
-      [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
+    <p-table
+      #dt
+      dataKey="accountNumber"
+      [value]="data"
+      [columns]="cols"
+      styleClass="p-datatable-gridlines"
+      [resizableColumns]="true"
+      responsive="true"
+      [scrollable]="true"
+      scrollHeight="400px"
+      [reorderableColumns]="true"
+      [loading]="searching"
+    >
       <ng-template pTemplate="colgroup">
         <colgroup>
-          <col *ngFor="let col of cols">
+          <col *ngFor="let col of cols" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="caption">
         <div class="p-mb-4">
-          <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
-          class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
-          tooltipPosition="bottom"></button>
+          <button
+            type="button"
+            pButton
+            pRipple
+            icon="pi pi-filter-slash"
+            (click)="clearFilter()"
+            class="p-ml-6 clearFilter"
+            pTooltip="{{ 'Data_Table.clearFilter' | translate }}"
+            *ngIf="filtersNo > 0"
+            tooltipPosition="bottom"
+          ></button>
         </div>
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-{{col.align}}"
-            *ngFor="let col of cols">
-            {{col.header | translate}}
-            <p-sortIcon field="{{col.field}}"></p-sortIcon>
+          <th
+            pSortableColumn="{{ col.field }}"
+            pResizableColumn
+            pReorderableColumn
+            class="p-text-{{ col.align }}"
+            *ngFor="let col of cols"
+          >
+            {{ col.header | translate }}
+            <p-sortIcon field="{{ col.field }}"></p-sortIcon>
           </th>
-          <th>{{'Account_Type.Action' | translate}}</th>
+          <th>{{ "Account_Type.Action" | translate }}</th>
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
-            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
-              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
-              *ngIf="col.field != 'StartingBalanceDate'" />
-            <p-calendar *ngIf="col.field == 'StartingBalanceDate'" [(ngModel)]="criteria[col.field]"
-              (onSelect)="filterChange($event, col.field)" [monthNavigator]="true" [yearNavigator]="true"
-              yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy">
+            <input
+              pInputText
+              type="text"
+              [(ngModel)]="criteria[col.field]"
+              [style]="{ width: '90%' }"
+              (input)="filterChange($any($event.target).value, col.field)"
+              class="filterInputCss"
+              *ngIf="col.field != 'StartingBalanceDate'"
+            />
+            <p-calendar
+              *ngIf="col.field == 'StartingBalanceDate'"
+              [(ngModel)]="criteria[col.field]"
+              (onSelect)="filterChange($event, col.field)"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              yearRange="1900:2100"
+              appendTo="body"
+              dateFormat="dd.mm.yy"
+            >
             </p-calendar>
           </th>
           <th></th>
@@ -42,47 +88,109 @@
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr [pEditableRow]="row">
-          <td pEditableColumn pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{col.align}}">
-            <span *ngIf="col.field != 'StartingBalance' && col.field != 'StartingBalanceDate'">
+          <td
+            pEditableColumn
+            pReorderableRowHandle
+            *ngFor="let col of cols"
+            class="p-text-{{ col.align }}"
+          >
+            <span
+              *ngIf="
+                col.field != 'StartingBalance' &&
+                col.field != 'StartingBalanceDate'
+              "
+            >
               {{ row[col.field] }}
             </span>
 
             <span *ngIf="!row.isEditable && col.field == 'StartingBalance'">
-              {{ row[col.field] | currency:'EUR':''}}
+              {{ row[col.field] | currency: "EUR":"" }}
             </span>
 
             <span *ngIf="!row.isEditable && col.field == 'StartingBalanceDate'">
-              {{ row[col.field] | date:'dd.MM.yyyy'}}
+              {{ row[col.field] | date: "dd.MM.yyyy" }}
             </span>
 
-            <p-inputNumber *ngIf="row.isEditable && col.field == 'StartingBalance'" [(ngModel)]="row.StartingBalance"
-              mode="decimal" locale="de-DE" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal"
-              spinnerMode="horizontal" [step]="100" decrementButtonClass="p-button-secondary"
-              incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus"
-              decrementButtonIcon="pi pi-minus" [style]="{'margin-right': '10px'}" size='8'>
+            <p-inputNumber
+              *ngIf="row.isEditable && col.field == 'StartingBalance'"
+              [(ngModel)]="row.StartingBalance"
+              mode="decimal"
+              locale="de-DE"
+              [showButtons]="true"
+              buttonLayout="horizontal"
+              inputId="horizontal"
+              spinnerMode="horizontal"
+              [step]="100"
+              decrementButtonClass="p-button-secondary"
+              incrementButtonClass="p-button-secondary"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+              [style]="{ 'margin-right': '10px' }"
+              size="8"
+            >
             </p-inputNumber>
 
-            <p-calendar *ngIf="row.isEditable && col.field == 'StartingBalanceDate'"
-              [(ngModel)]="row.StartingBalanceDate" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"
-              appendTo="body" dateFormat="dd.mm.yy"></p-calendar>
-
+            <p-calendar
+              *ngIf="row.isEditable && col.field == 'StartingBalanceDate'"
+              [(ngModel)]="row.StartingBalanceDate"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              yearRange="1900:2100"
+              appendTo="body"
+              dateFormat="dd.mm.yy"
+            ></p-calendar>
           </td>
-          <td><button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(row)"
-              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
-              pTooltip="{{'Account_Type.Edit' | translate}}" tooltipPosition="bottom"></button> &nbsp;
-            <button type="button" pButton pRipple icon="pi pi-save" (click)="save(row)"
-              class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
-              pTooltip="{{'Account_Type.Save' | translate}}" tooltipPosition="bottom"></button> &nbsp;
-            <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
-              class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
-              pTooltip="{{'Account_Type.Cancel' | translate}}" tooltipPosition="bottom"></button> &nbsp;
-              <button type="button" pButton pRipple icon="pi pi-trash" (click)="resetStartingBalance(row)"
-              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
-              pTooltip="{{'Account_Type.delete' | translate}}" tooltipPosition="bottom"></button>
+          <td>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-pencil"
+              (click)="editRow(row)"
+              class="p-button-rounded p-button-warning"
+              *ngIf="!row.isEditable"
+              pTooltip="{{ 'Account_Type.Edit' | translate }}"
+              tooltipPosition="bottom"
+            ></button>
+            &nbsp;
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-save"
+              (click)="save(row)"
+              class="p-button-rounded p-button-warning"
+              *ngIf="row.isEditable"
+              pTooltip="{{ 'Account_Type.Save' | translate }}"
+              tooltipPosition="bottom"
+            ></button>
+            &nbsp;
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-times"
+              (click)="cancel(row)"
+              class="p-button-rounded p-button-warning"
+              *ngIf="row.isEditable"
+              pTooltip="{{ 'Account_Type.Cancel' | translate }}"
+              tooltipPosition="bottom"
+            ></button>
+            &nbsp;
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-trash"
+              (click)="resetStartingBalance(row)"
+              class="p-button-rounded p-button-warning"
+              *ngIf="!row.isEditable"
+              pTooltip="{{ 'Account_Type.delete' | translate }}"
+              tooltipPosition="bottom"
+            ></button>
           </td>
         </tr>
       </ng-template>
     </p-table>
   </div>
-
 </div>

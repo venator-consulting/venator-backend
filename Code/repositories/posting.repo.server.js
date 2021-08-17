@@ -64,7 +64,7 @@ module.exports.fetchAll = function (companyCode, offset, limit) {
 };
 
 module.exports.getDocTypes = async (organisationId, procedureId) => {
-  if (isNaN(OrganisationId))
+  if (isNaN(organisationId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(procedureId))
     throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
@@ -87,7 +87,7 @@ module.exports.getDocTypes = async (organisationId, procedureId) => {
 };
 
 module.exports.getAccountTypes = async (organisationId, procedureId) => {
-  if (isNaN(OrganisationId))
+  if (isNaN(organisationId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(procedureId))
     throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
@@ -118,7 +118,7 @@ module.exports.updateDocTypeNew = async (
   documentTypeNewId,
   documentTypeNewName
 ) => {
-  if (isNaN(OrganisationId))
+  if (isNaN(organisationId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(procedureId))
     throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
@@ -143,7 +143,7 @@ module.exports.updateAccountTypeNew = async (
   accountTypeNewId,
   accountTypeNewName
 ) => {
-  if (isNaN(OrganisationId))
+  if (isNaN(organisationId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(procedureId))
     throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
@@ -192,7 +192,7 @@ module.exports.updateStartBalance = async (
   StartingBalance,
   StartingBalanceDate
 ) => {
-  if (isNaN(OrganisationId))
+  if (isNaN(organisationId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(procedureId))
     throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");

@@ -115,7 +115,7 @@ export class AmountAnalysisComponent implements OnInit {
   }
 
   getData() {
-    this.waiting = false;
+    this.waiting = true;
     this._analysisService
       .getAmountAnalysis(
         this.selectedOrganisation,

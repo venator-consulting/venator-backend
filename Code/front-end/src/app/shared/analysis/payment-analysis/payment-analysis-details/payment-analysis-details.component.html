@@ -5,6 +5,11 @@
     <h2 class="p-text-center">{{ procedureName }}</h2>
     <h4 class="p-text-center">{{ accountName }}</h4>
     <!-- <p-messages></p-messages> -->
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="waiting"
+    ></p-progressBar>
   </div>
 </div>
 <div class="p-grid">
@@ -56,6 +61,7 @@
         [frozenColumns]="frozenCols"
         frozenWidth="500px"
         [(selection)]="selected"
+        [loading]="waiting"
       >
         <ng-template pTemplate="caption">
           <div class="p-grid">
@@ -222,6 +228,7 @@
         [frozenColumns]="frozenCols"
         frozenWidth="500px"
         [(selection)]="selected"
+        [loading]="waiting"
       >
         <ng-template pTemplate="caption">
           <div class="p-grid">
@@ -388,6 +395,7 @@
         [frozenColumns]="frozenCols"
         frozenWidth="500px"
         [(selection)]="selected"
+        [loading]="waiting"
       >
         <ng-template pTemplate="caption">
           <div class="p-grid">
@@ -730,6 +738,7 @@
         [lazy]="true"
         [customSort]="true"
         (onLazyLoad)="sort($event)"
+        [loading]="waiting"
       >
         <ng-template pTemplate="caption">
           <div class="p-grid">

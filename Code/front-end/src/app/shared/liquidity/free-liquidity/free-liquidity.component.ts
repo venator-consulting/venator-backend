@@ -45,7 +45,10 @@ export class FreeLiquidityComponent implements OnInit {
     this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.items = [
-      { label: 'Free Liquidity', routerLink: '/dashboard/liquidity/freeLiquidity' },
+      {
+        label: 'Free Liquidity',
+        routerLink: '/dashboard/liquidity/freeLiquidity',
+      },
     ];
 
     this.home = {
@@ -134,8 +137,8 @@ export class FreeLiquidityComponent implements OnInit {
       {
         header: 'Free Liquidity',
         field: 'freeLiaquidity',
-        align: 'right'
-      }
+        align: 'right',
+      },
     ];
 
     this.getData();
@@ -180,12 +183,15 @@ export class FreeLiquidityComponent implements OnInit {
         this.allAccountsDataBankBalances = res.bankBalances.data;
         this.allAccountsDataCreditLines = res.creditLines.accounts;
       },
-      (er) => {}
+      (er) => {
+        this.searching = false;
+      }
     );
   }
 
   // on clock on a bar in the chart
   selectBarData(e) {
+    this.searching = true;
     this.selectedDateData = new Array();
     // console.log(e.element._index);
     // console.log(e.element._model.label);
@@ -194,20 +200,32 @@ export class FreeLiquidityComponent implements OnInit {
     this.selectedDate = this.labels[index];
     // debugger;
     for (const key in this.allAccountsDataBankBalances) {
-      if (Object.prototype.hasOwnProperty.call(this.allAccountsDataBankBalances, key)) {
+      if (
+        Object.prototype.hasOwnProperty.call(
+          this.allAccountsDataBankBalances,
+          key
+        )
+      ) {
         const element = this.allAccountsDataBankBalances[key];
-        const creditLine = (this.allAccountsDataCreditLines[key] && this.allAccountsDataCreditLines[key][index]) ? this.allAccountsDataCreditLines[key][index] : 0;
+        const creditLine =
+          this.allAccountsDataCreditLines[key] &&
+          this.allAccountsDataCreditLines[key][index]
+            ? this.allAccountsDataCreditLines[key][index]
+            : 0;
         let accountNumber = parseInt(key);
         this.selectedDateData.push({
-          accountNumber: isNaN(accountNumber)? key: accountNumber,
-          bankBalance: element[index]? element[index] : 0,
+          accountNumber: isNaN(accountNumber) ? key : accountNumber,
+          bankBalance: element[index] ? element[index] : 0,
           creditLine: creditLine,
-          accountName: this.accounts.filter(account => account.accountNumber == key)[0]?.accountName
+          accountName: this.accounts.filter(
+            (account) => account.accountNumber == key
+          )[0]?.accountName,
         });
       }
     }
     // this.selectedDateData = [...this.selectedDateData];
     this.calculateTotals();
+    this.searching = false;
   }
 
   filterChange(query, colName): void {
@@ -267,12 +285,10 @@ export class FreeLiquidityComponent implements OnInit {
     this.creditLinesTotal = 0;
     this.bankBalancesTotal = 0;
     this.freeLiquidityTotal = 0;
-    for(let data of this.selectedDateData) {
+    for (let data of this.selectedDateData) {
       this.bankBalancesTotal += data.bankBalance;
       this.creditLinesTotal += data.creditLine;
       this.freeLiquidityTotal += data.bankBalance + data.creditLine;
+    }
   }
-  }
-
-
 }

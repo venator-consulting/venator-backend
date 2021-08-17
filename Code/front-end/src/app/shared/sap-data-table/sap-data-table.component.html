@@ -5,6 +5,11 @@
   </div>
 </div>
 <div class="card">
+  <p-progressBar
+    mode="indeterminate"
+    [style]="{ height: '5px' }"
+    *ngIf="loading"
+  ></p-progressBar>
   <p-table
     [value]="postings"
     [columns]="cols"
