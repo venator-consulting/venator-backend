@@ -62,7 +62,7 @@ export class NavBarComponent implements OnInit {
 
   getSideBarItems() {
     this.sideBarShow = true;
-    debugger;
+    // debugger;
     this._translateService.get('sideBarMenu').subscribe((elem) => {
       if (this.role === 'Admin') {
         this.sidebarItems = [

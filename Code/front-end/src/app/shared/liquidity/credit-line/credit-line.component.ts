@@ -32,6 +32,7 @@ export class CreditLineComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // debugger;
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
@@ -50,7 +51,7 @@ export class CreditLineComponent implements OnInit {
       {
         header: 'Liquidity.creditLine',
         field: 'creditLine',
-        width: '250',
+        // width: '250',
         align: 'right',
       },
       {
@@ -85,6 +86,7 @@ export class CreditLineComponent implements OnInit {
         });
         this.data = res;
         this.tempData = res;
+        // debugger;
       },
       (er) => {
         this.searching = false;

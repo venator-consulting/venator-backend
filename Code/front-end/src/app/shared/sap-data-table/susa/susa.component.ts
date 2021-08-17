@@ -198,7 +198,7 @@ export class SusaComponent implements OnInit {
     for (let index = 0; index < this.data.length; index++) {
       let element = this.data[index];
       let translatedRecord = {};
-      debugger;
+      // debugger;
       for (const key in element) {
         if (Object.prototype.hasOwnProperty.call(element, key)) {
           let translatedKey = await this._translateService
@@ -268,10 +268,14 @@ export class SusaComponent implements OnInit {
 
   filterChange(query, colName): void {
     this.waiting = true;
-    debugger;
+    for (const key in this.criteria) {
+      if (!this.criteria[key]) {
+        delete this.criteria[key];
+      }
+    }
+    // debugger;
+    this.filtersNo = Object.keys(this.criteria).length;
     if (!query) {
-      this.filtersNo ? this.filtersNo-- : (this.filtersNo = 0);
-      delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
         this.data = [...this.tempData];
       } else {
@@ -291,7 +295,6 @@ export class SusaComponent implements OnInit {
         }
       }
     } else {
-      this.filtersNo++;
       this.data = [...this.tempData];
       for (const key in this.criteria) {
         if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {

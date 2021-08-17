@@ -13,7 +13,7 @@
       [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
       <ng-template pTemplate="colgroup">
         <colgroup>
-          <col *ngFor="let col of cols" [style]="{'width': (col.width? col.width : 350) +'px'}">
+          <col *ngFor="let col of cols" >
         </colgroup>
       </ng-template>
       <ng-template pTemplate="caption">

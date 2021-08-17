@@ -162,7 +162,7 @@ module.exports.updateAccountTypeNew = async (
 };
 
 module.exports.getStartingBalance = async (organisationId, procedureId) => {
-  if (isNaN(OrganisationId))
+  if (isNaN(organisationId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(procedureId))
     throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
