@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import { LiquidityService } from 'src/app/shared/service/liquidity.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-free-liquidity-details',
@@ -32,6 +33,7 @@ export class FreeLiquidityDetailsComponent implements OnInit {
   freeLiquidityTotal: number;
 
   constructor(
+    public _translateService: TranslateService,
     private _liquidityService: LiquidityService,
     private _messageService: MessageService,
     private _router: Router,
@@ -43,24 +45,28 @@ export class FreeLiquidityDetailsComponent implements OnInit {
     this.prcId = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+    this._translateService.get('Liquidity').subscribe((elem) => {
 
-    this.items = [
-      {
-        label: 'Free Liquidity',
-        routerLink: '/dashboard/liquidity/freeLiquidity',
-        routerLinkActiveOptions: { exact: true },
-      },
-      {
-        label: 'Details',
-        routerLink: this._router.url,
-        routerLinkActiveOptions: { exact: true },
-      },
-    ];
-    this.home = {
-      icon: 'pi pi-home',
-      label: ' Data',
-      routerLink: '/dashboard/shared/data',
-    };
+      this.items = [
+        {
+          label: elem.freeLiquidity,
+          routerLink: '/dashboard/liquidity/freeLiquidity',
+          routerLinkActiveOptions: { exact: true },
+        },
+        {
+          label: 'Details',
+          routerLink: this._router.url,
+          routerLinkActiveOptions: { exact: true },
+        },
+      ];
+      this.home = {
+        icon: 'pi pi-home',
+        label: elem.data,
+        routerLink: '/dashboard/shared/data',
+      };
+    })
+
+
     this.basicOptions = {
       tooltips: {
         callbacks: {

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { LiquidityService } from '../../service/liquidity.service';
 import { CurrencyPipe } from '@angular/common';
 import { TableColumn } from '../../model/tableColumn';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-free-liquidity',
@@ -34,6 +35,7 @@ export class FreeLiquidityComponent implements OnInit {
   freeLiquidityTotal: number = 0;
 
   constructor(
+    public _translateService: TranslateService,
     private _liquidityService: LiquidityService,
     private _messageService: MessageService,
     private _router: Router
@@ -44,15 +46,19 @@ export class FreeLiquidityComponent implements OnInit {
     this.prcId = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
 
-    this.items = [
-      { label: 'Free Liquidity', routerLink: '/dashboard/liquidity/freeLiquidity' },
-    ];
+    this._translateService.get('Liquidity').subscribe((elem) => {
+      this.items = [
+        { label: elem.freeLiquidity, routerLink: '/dashboard/liquidity/freeLiquidity' },
+      ];
+      this.home = {
+        icon: 'pi pi-home',
+        label: elem.data,
+        routerLink: '/dashboard/shared/data',
+      };
+    })
 
-    this.home = {
-      icon: 'pi pi-home',
-      label: ' Data',
-      routerLink: '/dashboard/shared/data',
-    };
+
+
     this.basicOptions = {
       tooltips: {
         callbacks: {
@@ -94,45 +100,41 @@ export class FreeLiquidityComponent implements OnInit {
 
     this.cols = [
       {
-        header: 'Account Number',
+        header: 'Liquidity.accountNumber',
         field: 'accountNumber',
         align: 'left',
       },
       {
-        header: 'Account Name',
+        header: 'Liquidity.accountName',
         field: 'accountName',
         align: 'left',
       },
-      // {
-      //   header: 'Count',
-      //   field: 'count',
-      //   align: 'center',
-      // },
+
     ];
 
     this.selectedDateCols = [
       {
-        header: 'Account Number',
+        header: 'Liquidity.accountNumber',
         field: 'accountNumber',
         align: 'left',
       },
       {
-        header: 'Account Name',
+        header: 'Liquidity.accountName',
         field: 'accountName',
         align: 'left',
       },
       {
-        header: 'Bank Balance',
+        header: 'Liquidity.bankBalance',
         field: 'bankBalance',
         align: 'right',
       },
       {
-        header: 'Credit Line',
+        header: 'Liquidity.creditLine',
         field: 'creditLine',
         align: 'right',
       },
       {
-        header: 'Free Liquidity',
+        header: 'Liquidity.freeLiquidity',
         field: 'freeLiaquidity',
         align: 'right'
       }
@@ -153,7 +155,7 @@ export class FreeLiquidityComponent implements OnInit {
           datasets: [
             {
               type: 'line',
-              label: 'Credit Lines',
+              label: 'Credit Line',
               borderColor: '#42A5F5',
               borderWidth: 2,
               fill: false,
@@ -169,7 +171,7 @@ export class FreeLiquidityComponent implements OnInit {
             },
             {
               type: 'bar',
-              label: 'Bank Balances',
+              label: 'Bank Balance' ,
               backgroundColor: '#88FF88',
               borderColor: '#58dF58',
               data: res.bankBalances.bankBalances,

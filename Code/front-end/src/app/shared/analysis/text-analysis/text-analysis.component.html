@@ -3,8 +3,8 @@
 <div class="p-grid">
   <div class="p-col-12">
     <h2 class="p-text-center">{{ procedureName }}</h2>
-    <h4 class="p-text-center">All Accounts</h4>
-    <h4 class="p-text-right">
+    <h4 class="p-text-center">{{'PaymentAnalysis.allAccounts' | translate}}</h4>
+    <h4 class="p-text-left">
       <button
         type="button"
         pButton
@@ -14,7 +14,7 @@
         (click)="byAccount = !byAccount"
         pTooltip="Details"
         tooltipPosition="bottom"
-        label="{{ byAccount? 'By Word' : 'By Account' }}"
+        label="{{ byAccount?  'By Word' : 'By Account' }}"
       ></button>
       <!-- <button (click)="byAccount = !byAccount">ByWord</button> -->
     </h4>
