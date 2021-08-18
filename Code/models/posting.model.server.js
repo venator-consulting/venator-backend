@@ -4,58 +4,6 @@ const {
 const sequelize = require('../config/sequelize.config');
 
 
-// account name
-// accountType from posting(kontoart) to accounttype from accounts
-//  bukr = bukr
-// accountnumber == accountnumber
-// procedureid = procedureid
-
-
-// glaaccount name
-// accounttype = s
-// procedureid = procedureid
-// glaaccountnumber = accountnumber
-// bukr = bukr
-
-
-// contra glaaccount name
-// accounttype = s
-// procedureid = procedureid
-// contraAccountGLAccountNo = accountnumber
-// bukr = bukr
-
-
-// creditor name
-// accounttype = k
-// procedureid = procedureid
-// contraAccountCrieditorNo = accountnumber
-// bukr = bukr
-
-
-
-// contra creditor name
-// accounttype = k
-// procedureid = procedureid
-// contraAccountCrieditorNo = accountnumber
-// bukr = bukr
-
-
-// debitor name
-// accounttype = d
-// procedureid = procedureid
-// contraAccountCrieditorNo = accountnumber
-// bukr = bukr
-
-
-// contra debitor name 
-// accounttype = d
-// procedureid = procedureid
-// contraAccountCrieditorNo = accountnumber
-// bukr = bukr
-
-
-
-
 
 const sequelizer = sequelize.getSequelize();
 
@@ -70,7 +18,8 @@ module.exports.getPosting = function (tableName = 'Posting') {
             autoIncrement: true
         },
         procedureId: {
-            type: DataTypes.BIGINT(11)
+            type: DataTypes.BIGINT(11),
+            primaryKey: true,
         },
         client: {
             type: DataTypes.STRING(10)

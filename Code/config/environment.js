@@ -20,6 +20,6 @@ module.exports = {
     mailerPassword: 'JdRqgGeAb5HeDqp3Ny',
     // used for register new user to generate link to reset the password
     resetPassLink: 'http://venalytics.de/reset/', 
-    developerMail: 'mohamad.hamad@venator-consulting.de'
-    
+    developerMail: 'mohamad.hamad@venator-consulting.de',
+    partitionCount: 10
 };
