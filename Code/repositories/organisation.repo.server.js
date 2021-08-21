@@ -3,7 +3,7 @@ const Accounts = require("../models/accounts.model.server");
 const CreditLines = require("../models/creditLines.model.server");
 const Organisation = require("../models/organisation.model.server");
 const { Op, QueryTypes } = require("sequelize");
-const config = require('../config/environment');
+const config = require("../config/environment");
 
 module.exports.fetchAll = async () => {
   const orgs = await Organisation.getOrganisation().findAll({
@@ -60,12 +60,11 @@ module.exports.insert = async (org) => {
   await CreditLines.syncCreditLines("creditLines_" + result.dataValues.id);
 
   const connection = require("../config/mysql.config");
-
-  let query = `ALTER  table posting_${result.dataValues.id} PARTITION BY HASH(procedureId) PARTITIONS ${config.partitionCount}`;
-
-  const str = connection
-    .getConnection()
-    .execute(query, (er, res) => console.log(er));
+  // partition table after create
+  // let query = `ALTER  table posting_${result.dataValues.id} PARTITION BY HASH(procedureId) PARTITIONS ${config.partitionCount}`;
+  // const str = connection
+  //   .getConnection()
+  //   .execute(query, (er, res) => console.log(er));
   return result;
 }; // end of create new organisation
 

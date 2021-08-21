@@ -304,6 +304,7 @@ module.exports.getPosting = function (tableName = "Posting") {
           unique: false,
           fields: ["accountNumber"],
         },
+        // { type: "FULLTEXT", name: "text_idx", fields: ["reference", "textPosting", "textHeader"] },
       ],
     }
   );

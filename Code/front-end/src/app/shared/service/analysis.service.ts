@@ -31,8 +31,16 @@ export class AnalysisService {
     return this._http.get<TextAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/text');
   }
 
+  getTextAnalysisIndex(orgId: number, prcId: number): Observable<TextAnalysis[]> {
+    return this._http.get<TextAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/text-index');
+  }
+
   getTextAnalysisWord(orgId: number, prcId: number): Observable<any[]> {
     return this._http.get<any[]>(this._thisURL + orgId + '/' + prcId + '/text-word');
+  }
+
+  getTextAnalysisWordIndex(orgId: number, prcId: number): Observable<any[]> {
+    return this._http.get<any[]>(this._thisURL + orgId + '/' + prcId + '/text-word-indexed');
   }
 
   getTextAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<TextAnalysisDetails[]> {

@@ -56,9 +56,29 @@ module.exports.textAnalysis = async (req, res) => {
   res.status(200).json(result);
 };
 
+module.exports.textAnalysisIndex = async (req, res) => {
+  let fileKeywords = await nlpHelper.getsynonyms(keywords);
+  const result = await postingRepo.textAnalysisIndexed(
+    req.params.orgId,
+    req.params.prcId,
+    fileKeywords
+  );
+  res.status(200).json(result);
+};
+
 module.exports.textAnalysisByWord = async (req, res) => {
   let fileKeywords = await nlpHelper.getsynonyms(keywords);
   const result = await postingRepo.textAnalysisByWord(
+    req.params.orgId,
+    req.params.prcId,
+    fileKeywords
+  );
+  res.status(200).json(result);
+};
+
+module.exports.textAnalysisByWordIndexed = async (req, res) => {
+  let fileKeywords = await nlpHelper.getsynonyms(keywords);
+  const result = await postingRepo.textAnalysisByWordFullTextIndex(
     req.params.orgId,
     req.params.prcId,
     fileKeywords
