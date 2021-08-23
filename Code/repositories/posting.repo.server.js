@@ -363,6 +363,48 @@ module.exports.textAnalysis = async (orgId, prcId, keys) => {
   return result;
 };
 
+module.exports.textAnalysisIndexed = async (orgId, prcId, keys) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount
+                            FROM posting_${orgId}  p
+                            WHERE procedureId = :procedureId 
+                                AND UPPER(p.accountType) = 'K' 
+                                AND p.accountNumber is not NULL 
+                                `;
+  query += keys.length > 0 ? " AND ( " : "";
+
+  for (let index = 0; index < keys.length; index++) {
+    const key = keys[index];
+
+    let originalKey = keys[index];
+    originalKey = originalKey.replace("like '%", "");
+    originalKey = originalKey.replace("%'", "");
+
+    if (keys[index].includes("REGEXP")) {
+      query += `  p.reference ${key}
+      OR p.textPosting ${key}
+      OR p.textHeader ${key} OR`;
+    } else {
+      query += ` MATCH (p.reference, p.textPosting, p.textHeader)
+                against("${originalKey}") OR `;
+    }
+  }
+  query += keys.length > 0 ? " 1 <> 1) " : "";
+
+  query += "GROUP BY p.accountNumber , p.accountName";
+
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
+};
+
 module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
@@ -402,6 +444,80 @@ module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
     query += index < keys.length - 1 ? " UNION " : "";
   }
 
+  let result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+    },
+    type: QueryTypes.SELECT,
+  });
+  if (result.length && result.length > 0) {
+    result = result.filter((rec) => +rec.recordsCount > 0);
+  }
+  return result;
+};
+
+module.exports.textAnalysisByWordFullTextIndex = async (orgId, prcId, keys) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = " ";
+  for (let index = 0; index < keys.length; index++) {
+    const key = keys[index];
+    let originalKey = keys[index];
+    originalKey = originalKey.replace("like '%", "");
+    originalKey = originalKey.replace("%'", "");
+    originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
+    originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
+    if (keys[index].includes("REGEXP")) {
+      query += `  
+            SELECT
+                SUM(pos.totalCount) recordsCount,
+                COUNT(pos.accountNumber) accountsCount,
+                IF(1 = 1,
+                    '${originalKey}',
+                    '${originalKey}') word
+            from
+                (SELECT
+                    p.accountNumber ,
+                    count(p.accountNumber) totalCount
+                from
+                    posting_${orgId} p
+                WHERE
+                    p.procedureId = :procedureId
+                    AND (
+                    UPPER(p.textPosting) ${key}
+                    OR UPPER(p.reference) ${key}
+                    OR UPPER(p.textHeader) ${key}
+                    )
+                GROUP by
+                    p.accountNumber) pos
+            `;
+      query += index < keys.length - 1 ? " UNION " : "";
+    } else {
+      query += `  
+      SELECT
+          SUM(pos.totalCount) recordsCount,
+          COUNT(pos.accountNumber) accountsCount,
+          IF(1 = 1,
+              '${originalKey}',
+              '${originalKey}') word
+      from
+          (SELECT
+              p.accountNumber ,
+              count(p.accountNumber) totalCount
+          from
+              posting_${orgId} p
+          WHERE
+              p.procedureId = :procedureId
+              AND MATCH (p.reference, p.textPosting, p.textHeader)
+               against("${originalKey}")
+          GROUP by
+              p.accountNumber) pos
+      `;
+      query += index < keys.length - 1 ? " UNION " : "";
+    }
+  }
   let result = await sequelize.query(query, {
     replacements: {
       procedureId: prcId,

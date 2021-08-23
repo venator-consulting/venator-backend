@@ -89,6 +89,7 @@ import { CreditLineComponent } from './shared/liquidity/credit-line/credit-line.
 import { FreeLiquidityComponent } from './shared/liquidity/free-liquidity/free-liquidity.component';
 import { FreeLiquidityDetailsComponent } from './shared/liquidity/free-liquidity/free-liquidity-details/free-liquidity-details.component';
 import { TextAnalysisWordDetailsComponent } from './shared/analysis/text-analysis/text-analysis-word-details/text-analysis-word-details.component';
+import { TextAnalysisIndexedComponent } from './shared/analysis/text-analysis/text-analysis-indexed/text-analysis-indexed.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -136,6 +137,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FreeLiquidityComponent,
     FreeLiquidityDetailsComponent,
     TextAnalysisWordDetailsComponent,
+    TextAnalysisIndexedComponent,
   ],
   imports: [
     BrowserModule,

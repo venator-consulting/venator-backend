@@ -169,6 +169,14 @@ export class NavBarComponent implements OnInit {
                 },
               },
               {
+                label: 'Text Analysis with index',
+                icon: 'pi pi-file',
+                routerLink: ['/dashboard/analysis/text-indexed'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
                 label: elem.paymentAnalyse,
                 icon: 'pi pi-credit-card',
                 routerLink: ['/dashboard/analysis/payment'],

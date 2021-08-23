@@ -53,12 +53,28 @@ router.route("/:orgId/:prcId/text").get(
   analysisCtrl.textAnalysis
 );
 
+router.route("/:orgId/:prcId/text-index").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.textAnalysisIndex
+);
+
 router.route("/:orgId/:prcId/text-word").get(
   passport.authenticate("jwt", {
     session: false,
   }),
   authorization.canDisplayAnalysis(),
   analysisCtrl.textAnalysisByWord
+);
+
+router.route("/:orgId/:prcId/text-word-indexed").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.textAnalysisByWordIndexed
 );
 
 router.route("/:orgId/:prcId/text/details/:accountNumber/relevant").get(
