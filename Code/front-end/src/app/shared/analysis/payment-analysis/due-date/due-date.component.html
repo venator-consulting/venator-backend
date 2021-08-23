@@ -2,10 +2,22 @@
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <div class="p-grid">
   <div class="p-col-12">
-    <h2 class="p-text-center">{{procedureName}}</h2>
-    <button type="button" pButton pRipple label="{{'DueDateAnalysis.backToPayment' | translate}}"
-      class="p-button-rounded p-button-warning" (click)="backToPayment()" pTooltip="{{'PaymentAnalysis.backToPayment' | translate}}"
-      tooltipPosition="bottom"></button>
+    <h2 class="p-text-center">{{ procedureName }}</h2>
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="waiting"
+    ></p-progressBar>
+    <button
+      type="button"
+      pButton
+      pRipple
+      label="{{ 'DueDateAnalysis.backToPayment' | translate }}"
+      class="p-button-rounded p-button-warning"
+      (click)="backToPayment()"
+      pTooltip="{{ 'PaymentAnalysis.backToPayment' | translate }}"
+      tooltipPosition="bottom"
+    ></button>
   </div>
 </div>
 
@@ -13,45 +25,70 @@
   <div class="p-col-12">
     <h4 class="p-text-center">All Accounts</h4>
     <div class="card p-text-center">
-      <p-chart #chart type="line" height="350" [data]="basicData" [options]="basicOptions">
+      <p-chart
+        #chart
+        type="line"
+        height="350"
+        [data]="basicData"
+        [options]="basicOptions"
+      >
       </p-chart>
     </div>
   </div>
-
 
   <div class="p-col-12">
     <h4 class="p-text-center">All Accounts</h4>
     <div class="card p-text-center">
-      <p-chart #chart2 type="bar" height="350" [data]="docDateData" [options]="basicOptions">
+      <p-chart
+        #chart2
+        type="bar"
+        height="350"
+        [data]="docDateData"
+        [options]="basicOptions"
+      >
       </p-chart>
     </div>
   </div>
 
-
   <div class="p-col-12">
     <div class="card p-text-center">
-      <p-table [value]="delayData" [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="delayCols"
-        responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true">
+      <p-table
+        [value]="delayData"
+        [resizableColumns]="true"
+        styleClass="p-datatable-gridlines"
+        [columns]="delayCols"
+        responsive="true"
+        [scrollable]="true"
+        scrollHeight="350px"
+        [reorderableColumns]="true"
+        [loading]="waiting"
+      >
         <ng-template pTemplate="colgroup" let-columns>
           <colgroup>
-            <col *ngFor="let col of columns">
-            <col>
+            <col *ngFor="let col of columns" />
+            <col />
           </colgroup>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn  class="p-text-{{col.align}}" *ngFor="let col of columns">
+            <th
+              pSortableColumn="{{ col.field }}"
+              pResizableColumn
+              pReorderableColumn
+              class="p-text-{{ col.align }}"
+              *ngFor="let col of columns"
+            >
               <span pTooltip="{{ col.header | translate }}">
-              {{col.header | translate}}
+                {{ col.header | translate }}
               </span>
-              <p-sortIcon field="{{col.field}}"></p-sortIcon>
+              <p-sortIcon field="{{ col.field }}"></p-sortIcon>
             </th>
             <th>Details</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row let-columns="columns">
           <tr [pSelectableRow]="row">
-            <td *ngFor="let col of columns" class="p-text-{{col.align}}">
+            <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
               <!-- <span *ngIf="col.field=='delayPos' || col.field=='delayNeg'">
                 {{ row[col.field]  | currency:'EUR':'' }}
               </span> -->
@@ -59,9 +96,18 @@
                 {{ row[col.field] }}
               </span>
             </td>
-            <td><button type="button" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-warning"
-              (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom"></button>
-          </td>
+            <td>
+              <button
+                type="button"
+                pButton
+                pRipple
+                icon="pi pi-list"
+                class="p-button-rounded p-button-warning"
+                (click)="goToDetails(row)"
+                pTooltip="Details"
+                tooltipPosition="bottom"
+              ></button>
+            </td>
           </tr>
         </ng-template>
       </p-table>
@@ -74,7 +120,6 @@
       </p-chart>
     </div>
   </div> -->
-
 
   <!-- <div class="p-col-10">
     <div class="card p-text-center">
@@ -110,5 +155,4 @@
       </p-table>
     </div>
   </div> -->
-
 </div>

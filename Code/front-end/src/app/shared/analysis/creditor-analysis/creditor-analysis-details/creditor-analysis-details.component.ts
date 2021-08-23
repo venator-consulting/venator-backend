@@ -25,6 +25,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   totalTextCount: any;
   items: MenuItem[];
   home: MenuItem;
+  waiting: boolean = true;
 
   constructor(
     public _translateService: TranslateService,
@@ -60,6 +61,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
         label: elem.data,
         routerLink: '/dashboard/shared/data',
       };
+      this.waiting = true;
       this._analysisService
         .getCreditorAnalysisDetails(
           this.selectedOrganisation,
@@ -95,8 +97,11 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
                 },
               ],
             };
+            this.waiting = false;
           },
-          (er) => {}
+          (er) => {
+            this.waiting = false;
+          }
         );
     });
   }

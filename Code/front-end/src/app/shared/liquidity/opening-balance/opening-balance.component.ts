@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { OpeningBalance } from '../../model/openingBalance';
-import { LiquidityService } from "../../service/liquidity.service";
+import { LiquidityService } from '../../service/liquidity.service';
 import { MessageService } from 'primeng/api';
 import { TableColumn } from '../../model/tableColumn';
 
 @Component({
   selector: 'app-opening-balance',
   templateUrl: './opening-balance.component.html',
-  styleUrls: ['./opening-balance.component.sass']
+  styleUrls: ['./opening-balance.component.sass'],
 })
 export class OpeningBalanceComponent implements OnInit {
-
   data: OpeningBalance[] = new Array();
   orgId: number;
   prcId: number;
@@ -24,11 +23,12 @@ export class OpeningBalanceComponent implements OnInit {
   tempData: any[];
   filtersNo: number = 0;
 
-
-  constructor(private _liquidityService: LiquidityService, private _messageService: MessageService) { }
+  constructor(
+    private _liquidityService: LiquidityService,
+    private _messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
-
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
@@ -37,52 +37,63 @@ export class OpeningBalanceComponent implements OnInit {
       {
         header: 'Liquidity.accountNumber',
         field: 'accountNumber',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'Liquidity.accountName',
         field: 'accountName',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'Liquidity.accountTypeNewName',
         field: 'accountTypeNewName',
-        align: 'left'
+        align: 'left',
       },
       {
         header: 'Liquidity.startingBalance',
         field: 'StartingBalance',
         width: '250',
-        align: 'right'
+        align: 'right',
       },
       {
         header: 'Liquidity.startingBalanceDate',
         field: 'StartingBalanceDate',
-        align: 'center'
-      }
+        align: 'center',
+      },
     ];
     this.searching = true;
-    this._liquidityService
-      .getOpeningBalance(this.orgId, this.prcId)
-      .subscribe(res => {
-        res.forEach(val => {
-          val.StartingBalanceDate = val.StartingBalanceDate? new Date(val.StartingBalanceDate) : null;
+    this._liquidityService.getOpeningBalance(this.orgId, this.prcId).subscribe(
+      (res) => {
+        res.forEach((val) => {
+          val.StartingBalanceDate = val.StartingBalanceDate
+            ? new Date(val.StartingBalanceDate)
+            : null;
           let accountNumber = parseInt(val.accountNumber?.toString(), 10);
-          val.accountNumber = isNaN(accountNumber) ? val.accountNumber : accountNumber;
+          val.accountNumber = isNaN(accountNumber)
+            ? val.accountNumber
+            : accountNumber;
           let StartingBalance = parseFloat(val?.StartingBalance?.toString());
-          val.StartingBalance = isNaN(StartingBalance) ? val.StartingBalance : StartingBalance;
-        })
+          val.StartingBalance = isNaN(StartingBalance)
+            ? val.StartingBalance
+            : StartingBalance;
+        });
         this.data = res;
         this.tempData = res;
-      }, er => {
         this.searching = false;
-      });
-
+      },
+      (er) => {
+        this.searching = false;
+      }
+    );
   } // end of ng on init
 
-
   editRow(row: OpeningBalance) {
-    this.data.filter(row => row.isEditable).map(r => { r.isEditable = false; return r });
+    this.data
+      .filter((row) => row.isEditable)
+      .map((r) => {
+        r.isEditable = false;
+        return r;
+      });
     row.isEditable = true;
     this.originalOpeningBalance = row.StartingBalance;
     this.originalOpeningBalanceDate = row.StartingBalanceDate;
@@ -98,18 +109,22 @@ export class OpeningBalanceComponent implements OnInit {
     this.searching = true;
     this._liquidityService
       .updateOpeningBalance(this.orgId, this.prcId, row)
-      .subscribe(res => {
-        row.isEditable = false;
-        let numOfRecords = res.length > 0 ? res[0] : 0;
+      .subscribe(
+        (res) => {
+          row.isEditable = false;
+          let numOfRecords = res.length > 0 ? res[0] : 0;
 
-        this._messageService.add({
-          severity: 'success',
-          summary: 'DONE!',
-          detail: `opening balance is updated successfully in the targeted posting data, \n ${numOfRecords} updated.`
-        });
-      }, er => {
-        this.searching = false;
-      });
+          this._messageService.add({
+            severity: 'success',
+            summary: 'DONE!',
+            detail: `opening balance is updated successfully in the targeted posting data, \n ${numOfRecords} updated.`,
+          });
+          this.searching = false;
+        },
+        (er) => {
+          this.searching = false;
+        }
+      );
   }
 
   cancel(row: OpeningBalance) {
@@ -117,7 +132,6 @@ export class OpeningBalanceComponent implements OnInit {
     row.StartingBalanceDate = this.originalOpeningBalanceDate;
     row.isEditable = false;
   }
-
 
   filterChange(query, colName): void {
     this.searching = true;
@@ -133,17 +147,26 @@ export class OpeningBalanceComponent implements OnInit {
             const element = this.criteria[key];
             if (key == 'StartingBalanceDate') {
               debugger;
-              this.data = this.tempData.filter(value => value['StartingBalanceDate']?.getDate() == element.getDate() &&
-                value['StartingBalanceDate']?.getMonth() == element.getMonth() &&
-                value['StartingBalanceDate']?.getFullYear() == element.getFullYear());
+              this.data = this.tempData.filter(
+                (value) =>
+                  value['StartingBalanceDate']?.getDate() ==
+                    element.getDate() &&
+                  value['StartingBalanceDate']?.getMonth() ==
+                    element.getMonth() &&
+                  value['StartingBalanceDate']?.getFullYear() ==
+                    element.getFullYear()
+              );
             } else {
               if (element.length < 3) {
-                this.data = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+                this.data = this.tempData.filter(
+                  (value) => value[key]?.toLowerCase() == element.toLowerCase()
+                );
               } else {
-                this.data = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+                this.data = this.tempData.filter((value) =>
+                  value[key]?.toLowerCase().includes(element.toLowerCase())
+                );
               }
             }
-
           }
         }
       }
@@ -155,14 +178,27 @@ export class OpeningBalanceComponent implements OnInit {
           const element = this.criteria[key];
           if (key == 'StartingBalanceDate') {
             debugger;
-            this.data = this.tempData.filter(value => value['StartingBalanceDate']?.getDate() == element.getDate() &&
-              value['StartingBalanceDate']?.getMonth() == element.getMonth() &&
-              value['StartingBalanceDate']?.getFullYear() == element.getFullYear());
+            this.data = this.tempData.filter(
+              (value) =>
+                value['StartingBalanceDate']?.getDate() == element.getDate() &&
+                value['StartingBalanceDate']?.getMonth() ==
+                  element.getMonth() &&
+                value['StartingBalanceDate']?.getFullYear() ==
+                  element.getFullYear()
+            );
           } else {
             if (element.length < 3) {
-              this.data = this.data.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());
+              this.data = this.data.filter(
+                (value) =>
+                  value[key]?.toString().toLowerCase() == element.toLowerCase()
+              );
             } else {
-              this.data = this.data.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
+              this.data = this.data.filter((value) =>
+                value[key]
+                  ?.toString()
+                  .toLowerCase()
+                  .includes(element.toLowerCase())
+              );
             }
           }
         }
@@ -171,12 +207,9 @@ export class OpeningBalanceComponent implements OnInit {
     this.searching = false;
   }
 
-
   clearFilter() {
     this.criteria = {};
     this.data = [...this.tempData];
     this.filtersNo = 0;
   }
-
-
 }

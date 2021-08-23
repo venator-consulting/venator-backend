@@ -1,12 +1,19 @@
 {
     "ErrorHandler": {
+        "incorrect_username_or_password": "The username or password is incorrect",
         "badRequest_400": "hTe server is unable to process the sent request",
         "unauthorized_401": "Authentication is required, please check the username and password",
         "forbidden_403": "The access to the requested resource is forbidden",
         "notFound_404": "Server cannot find the requested resource !",
         "internalServerError_500": "Something went wrong on the server , we will fix the problem very soon",
-        "passwordsMatch": "The password don't match"
-
+        "passwordsMatch": "The password don't match",
+        "organisation_id_is_required": "Please select an organisation",
+        "procedure_id_is_required": "Please select a procedure",
+        "procedure_analysis_disabled": "Analysis feature is disabled for this procedure",
+        "no_date_range": "Can't get date range for this procedure",
+        "no_document_date": "This Procedure has no document date! please re-import it correctly",
+        "no_application_date": "This Procedure has no application date! please re-import it correctly",
+        "no_due_date": "This Procedure has no due date! please re-import it correctly"
     },
     "LOGIN": {
         "welcomeMsg": "Please log in ",
@@ -326,6 +333,8 @@
         "saveRelevant": "Save Relevant"
     },
     "AmountAnalysis": {
+        "label": "Amount Analysis",
+        "data" : " Data",
         "accountNumber": "Account number",
         "accountName": "Account name",
         "NumberOfPostings": "Number of postings",
@@ -489,23 +498,37 @@
         "to": "To",
         "daten": "Data",
         "search": "Search",
-        "datenToolTip": "Back to Datatable"
+        "datenToolTip": "Back to Datatable",
+        "inamount": "Balance" ,
+        "famount": "Startingbalance",
+        "outamount": "Endingbalance",
+        "creditAmount": "Sum Credit",
+        "debitAmount": "Sum Debit"
     },
     "Liquidity": {
-        "accountType": "Kontotyp",
-        "accountNumber": "Kontonummer",
-        "accountName": "Kontobezeichnung",
-        "accountTypeNewName": "Kontotyp neu",
-        "startingBalance": " Startsaldo",
-        "startingBalanceDate": " Startsaldodatum",
-        "creditLine": "Kreditlinie",
-        "creditLineFromDate": "Kreditlinie Von-Datum",
-        "creditLineToDate": "Kreditlinie Bis-Datum",
-        
-        "from": "Von",
-        "to": "Bis",
-        "daten": " Daten",
-        "search": "Suchen"
+        "accountType": "Accounttype",
+        "accountNumber": "Accountnumber",
+        "accountName": "Accountname",
+        "accountTypeNewName": "Accounttype New",
+        "startingBalance": "Starting Balance",
+        "startingBalanceDate": "Starting Balancedate",
+        "bankBalance": "Bank Balances",
+        "freeLiquidity": "Free Liquidity",
+        "data": " Data",
+        "creditLine": "Creditline",
+        "creditLineFromDate": "Creditline from-Date",
+        "creditLineToDate": "Creditline to-Date",
+        "creditLineLabel": "Creditline",
+        "from": "From",
+        "to": "To",
+        "daten": " Data",
+        "search": "Search",
+        "save": "Save",
+        "cancel":"Cancel",
+        "edit": "Edit",
+        "add": "Add",
+        "delete": "Delete",
+        "action": "Actions"
    
     }
   }

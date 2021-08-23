@@ -45,12 +45,12 @@ module.exports.readHeader = async function (excelFilePath) {
  * @param {CellModel}
  * @returns {Date}
  */
-getDate = function(cell) {
-    if(cell.type === Excel.ValueType.Date) {
+getDate = function (cell) {
+    if (cell.type === Excel.ValueType.Date) {
         return cell.value;
-    }else if(cell.type === Excel.ValueType.Number) {
+    } else if (cell.type === Excel.ValueType.Number) {
         return getJsDateFromExcel(cell.value);
-    } else if(cell.type === Excel.ValueType.String || cell.type === Excel.ValueType.SharedString) {
+    } else if (cell.type === Excel.ValueType.String || cell.type === Excel.ValueType.SharedString) {
         return chrono.parseDate(cell.value);
     } else {
         // throw error!
@@ -588,6 +588,7 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
 
 
             let accountNumberIndex = -1;
+            let accountTypeIndex = -1;
             let companyCodeIndex = -1;
             let accountNameIndex = -1;
             let accountTypeIdIndex = -1;
@@ -648,6 +649,7 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
                         accountNumberIndex = getHeaderIndex(template, fileHeaders, 'accountNumber');
                         companyCodeIndex = getHeaderIndex(template, fileHeaders, 'companyCode');
                         accountNameIndex = getHeaderIndex(template, fileHeaders, 'accountName');
+                        accountTypeIndex = getHeaderIndex(template, fileHeaders, 'accountType');
                         accountTypeIdIndex = getHeaderIndex(template, fileHeaders, 'accountTypeId');
                         accountTypeIdInternalIndex = getHeaderIndex(template, fileHeaders, 'accountTypeIdInternal');
                         nameAffix1Index = getHeaderIndex(template, fileHeaders, 'nameAffix1');
@@ -687,7 +689,7 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
                             accountNumber: accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null,
                             companyCode: companyCodeIndex >= 0 ? row.model.cells[companyCodeIndex].value : null,
                             accountName: accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null,
-                            accountType: AccountTypeEnum[accountType] ? AccountTypeEnum[accountType] : row.model.cells[accountTypeIndex].value ,
+                            accountType: AccountTypeEnum[accountType] ? AccountTypeEnum[accountType] : row.model.cells[accountTypeIndex].value,
                             procedureId: procedureId
                         });
 

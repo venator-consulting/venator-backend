@@ -21,7 +21,7 @@ export class CreditLineComponent implements OnInit {
   newDialog: boolean;
   newRecord: CreditLine;
   // for filter
-  searching: boolean;
+  searching: boolean = true;
   criteria: any = {};
   tempData: any[];
   filtersNo: number = 0;
@@ -65,7 +65,7 @@ export class CreditLineComponent implements OnInit {
         align: 'center'
       },
     ];
-
+    this.searching = true;
     this._liquidityService.getCreditLine(this.orgId, this.prcId).subscribe(
       (res) => {
         res.forEach((val) => {
@@ -87,6 +87,7 @@ export class CreditLineComponent implements OnInit {
         this.data = res;
         this.tempData = res;
         // debugger;
+        this.searching = false;
       },
       (er) => {
         this.searching = false;
@@ -121,6 +122,7 @@ export class CreditLineComponent implements OnInit {
             summary: 'DONE!',
             detail: `Credit line is updated successfully in the targeted posting data, \n ${numOfRecords} updated.`,
           });
+          this.searching = false;
         },
         (er) => {
           this.searching = false;
