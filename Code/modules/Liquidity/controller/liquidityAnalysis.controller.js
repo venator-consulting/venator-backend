@@ -1,4 +1,6 @@
 const liquidityRepo = require("../../../repositories/liquidity.analysis.repo");
+const Exception = require("../../../helpers/errorHandlers/Exception");
+const httpStatus = require("../../../models/enums/httpStatus");
 
 module.exports.getAnalysisMainData = async (req, res) => {
   const dateRange = await liquidityRepo.liquiditytDateRange(

@@ -69,7 +69,7 @@ module.exports.getPosting = function (tableName = "Posting") {
         type: DataTypes.STRING(25),
       },
       postingPeriod: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(25),
       },
       executionDate: {
         type: DataTypes.DATE,

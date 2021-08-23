@@ -16,6 +16,7 @@ const getHeaderIndex = require('./index.finder.helper.server').getHeaderIndex;
 const chrono = require('chrono-node');
 const env = require('../config/environment');
 const logger = require('../config/logger.config').logger;
+const { error } = require("console");
 
 const sequelizer = sequelize.getSequelize();
 
@@ -190,7 +191,7 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
 
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
-
+            console.error(err);
             // const rgx = / at row (.*)/g;
             // const arr = rgx.exec(err.message);
             const splitedMsg = err.message.split(" at row ");
@@ -205,7 +206,7 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
                 console.log("ERROR on row number: " + index);
                 reject(err.message);
             }
-
+            logger.error(`${new Date()}: ${err}`);
         }
     });
 };
@@ -550,14 +551,14 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     reject(`There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
                     return;
                 }
-                const postingPeriod = decimalParser(row[Standardtemplate.postingPeriod]);
-                if (isNaN(postingPeriod)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, postingPeriod/${Standardtemplate.postingPeriod} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, postingPeriod/${Standardtemplate.postingPeriod} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, postingPeriod/${Standardtemplate.postingPeriod} should be number!`);
+                // const postingPeriod = decimalParser(row[Standardtemplate.postingPeriod]);
+                // if (isNaN(postingPeriod)) {
+                //     console.log(`${new Date()}: There is an ERROR on row ${index + 1}, postingPeriod/${Standardtemplate.postingPeriod} should be number!`);
+                //     logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, postingPeriod/${Standardtemplate.postingPeriod} should be number!`);
+                //     reject(`There is an ERROR on row ${index + 1}, postingPeriod/${Standardtemplate.postingPeriod} should be number!`);
 
-                    return;
-                }
+                //     return;
+                // }
 
                 const documentTypeNumber = decimalParser(row[Standardtemplate.documentTypeNumber]);
                 if (isNaN(documentTypeNumber)) {
@@ -685,7 +686,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     postingDate: chrono.parseDate(row[Standardtemplate.postingDate]),
                     companyCode: companyCode,
                     fiscalYear: row[Standardtemplate.fiscalYear],
-                    postingPeriod: postingPeriod,
+                    postingPeriod: row[Standardtemplate.postingPeriod],
                     executionDate: chrono.parseDate(row[Standardtemplate.executionDate]),
                     accountType: accountType,
                     accountNumber: accountNumber,
@@ -793,7 +794,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
             resolve(true);
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
-
+            console.error(err);
             const splitedMsg = err.message.split(" at row ");
             if (splitedMsg.length > 1) {
                 const rowNum = splitedMsg[1];
@@ -806,6 +807,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 console.log("ERROR on row number: " + index + 1);
                 reject(err.message);
             }
+            logger.error(`${new Date()}: ${err}`);
         }
 
     });

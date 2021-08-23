@@ -537,7 +537,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
 
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
-
+            console.error(err);
             const splitedMsg = err.message.split(" at row ");
             if (splitedMsg.length > 1) {
                 const rowNum = splitedMsg[1];
@@ -550,6 +550,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                 console.log("ERROR on row number: " + index);
                 reject(err.message);
             }
+            logger.error(`${new Date()}: ${err}`);
         }
 
 
@@ -690,7 +691,40 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
                             companyCode: companyCodeIndex >= 0 ? row.model.cells[companyCodeIndex].value : null,
                             accountName: accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null,
                             accountType: AccountTypeEnum[accountType] ? AccountTypeEnum[accountType] : row.model.cells[accountTypeIndex].value,
-                            procedureId: procedureId
+                            procedureId: procedureId,
+                            accountTypeId: accountTypeIdIndex >= 0 ? row.model.cells[accountTypeIdIndex].value : null,
+                            accountTypeIdInternal: accountTypeIdInternalIndex >= 0 ? row.model.cells[accountTypeIdInternalIndex].value : null,
+                            nameAffix1: nameAffix1Index >= 0 ? row.model.cells[nameAffix1Index].value : null,
+                            nameAffix2: nameAffix2Index >= 0 ? row.model.cells[nameAffix2Index].value : null,
+                            VATId: VATIdIndex >= 0 ? row.model.cells[VATIdIndex].value : null,
+                            taxNumber: taxNumberIndex >= 0 ? row.model.cells[taxNumberIndex].value : null,
+                            street: streetIndex >= 0 ? row.model.cells[streetIndex].value : null,
+                            postCode: postCodeIndex >= 0 ? row.model.cells[postCodeIndex].value : null,
+                            city: cityIndex >= 0 ? row.model.cells[cityIndex].value : null,
+                            country: countryIndex >= 0 ? row.model.cells[countryIndex].value : null,
+                            contactPerson: contactPersonIndex >= 0 ? row.model.cells[contactPersonIndex].value : null,
+                            phone: phoneIndex >= 0 ? row.model.cells[phoneIndex].value : null,
+                            email: emailIndex >= 0 ? row.model.cells[emailIndex].value : null,
+                            bankName1: bankName1Index >= 0 ? row.model.cells[bankName1Index].value : null,
+                            bankSortCode1: bankSortCode1Index >= 0 ? row.model.cells[bankSortCode1Index].value : null,
+                            bankAccountNo1: bankAccountNo1Index >= 0 ? row.model.cells[bankAccountNo1Index].value : null,
+                            countryCode1: countryCode1Index >= 0 ? row.model.cells[countryCode1Index].value : null,
+                            iBAN_No1: iBAN_No1Index >= 0 ? row.model.cells[iBAN_No1Index].value : null,
+                            swift_code1: swift_code1Index >= 0 ? row.model.cells[swift_code1Index].value : null,
+                            differentAccountHolder1: differentAccountHolder1Index >= 0 ? row.model.cells[differentAccountHolder1Index].value : null,
+                            bankSortCode2: bankSortCode2Index >= 0 ? row.model.cells[bankSortCode2Index].value : null,
+                            bankName2: bankName2Index >= 0 ? row.model.cells[bankName2Index].value : null,
+                            bankAccountNo2: bankAccountNo2Index >= 0 ? row.model.cells[bankAccountNo2Index].value : null,
+                            countryCode2: countryCode2Index >= 0 ? row.model.cells[countryCode2Index].value : null,
+                            iBAN_No2: iBAN_No2Index >= 0 ? row.model.cells[iBAN_No2Index].value : null,
+                            swift_code2: swift_code2Index >= 0 ? row.model.cells[swift_code2Index].value : null,
+                            differentAccountHolder2: differentAccountHolder2Index >= 0 ? row.model.cells[differentAccountHolder2Index].value : null,
+                            bankName3: bankName3Index >= 0 ? row.model.cells[bankName3Index].value : null,
+                            bankAccountNo3: bankAccountNo3Index >= 0 ? row.model.cells[bankAccountNo3Index].value : null,
+                            countryCode3: countryCode3Index >= 0 ? row.model.cells[countryCode3Index].value : null,
+                            iBAN_No3: iBAN_No3Index >= 0 ? row.model.cells[iBAN_No3Index].value : null,
+                            swift_code3: swift_code3Index >= 0 ? row.model.cells[swift_code3Index].value : null,
+                            differentAccountHolder3: differentAccountHolder3Index >= 0 ? row.model.cells[differentAccountHolder3Index].value : null,
                         });
 
 
@@ -741,7 +775,7 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
 
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
-
+            console.error(err);
             const splitedMsg = err.message.split(" at row ");
             if (splitedMsg.length > 1) {
                 const rowNum = splitedMsg[1];
@@ -754,6 +788,7 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
                 console.log("ERROR on row number: " + index);
                 reject(err.message);
             }
+            logger.error(`${new Date()}: ${err}`);
         }
     });
 
