@@ -9,6 +9,9 @@ const AccountTypeEnum = require('../models/enums/account.type');
 const getHeaderIndex = require('./index.finder.helper.server').getHeaderIndex;
 const { getJsDateFromExcel } = require("excel-date-to-js");
 
+const Exception = require("./errorHandlers/Exception");
+const httpStatus = require("../models/enums/httpStatus");
+
 const chrono = require('chrono-node');
 
 const env = require('../config/environment');
@@ -22,7 +25,6 @@ const sequelizer = sequelize.getSequelize();
 
 module.exports.readHeader = async function (excelFilePath) {
 
-    try {
         let fileHeaders = [];
         const workbookReader = new Excel.stream.xlsx.WorkbookReader(excelFilePath);
 
@@ -35,10 +37,6 @@ module.exports.readHeader = async function (excelFilePath) {
             }
         }
         return fileHeaders;
-    } catch (e) {
-        console.error(e);
-        throw e;
-    }
 }
 
 /**
@@ -545,10 +543,10 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                 const errorMsg = splitedMsg[0] + ' at row ' + theRealRowNum;
                 logger.error(`${new Date()}: ${splitedMsg[0]} at row ${theRealRowNum}`);
                 console.log("ERROR on row number: " + theRealRowNum);
-                reject(errorMsg);
+                reject(new Exception(httpStatus.BAD_REQUEST, errorMsg, true));
             } else {
                 console.log("ERROR on row number: " + index);
-                reject(err.message);
+                reject(new Exception(httpStatus.BAD_REQUEST, err.message, true));
             }
             logger.error(`${new Date()}: ${err}`);
         }
@@ -783,10 +781,10 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
                 const errorMsg = splitedMsg[0] + ' at row ' + theRealRowNum;
                 logger.error(`${new Date()}: ${splitedMsg[0]} at row ${theRealRowNum}`);
                 console.log("ERROR on row number: " + theRealRowNum);
-                reject(errorMsg);
+                reject(new Exception(httpStatus.BAD_REQUEST, errorMsg, true));
             } else {
                 console.log("ERROR on row number: " + index);
-                reject(err.message);
+                reject(new Exception(httpStatus.BAD_REQUEST, err.message, true));
             }
             logger.error(`${new Date()}: ${err}`);
         }

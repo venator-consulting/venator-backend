@@ -4,11 +4,11 @@ const wMobelTemplate = require("../../../models/templates/sap.wmobel.template");
 const cinramTemplate = require("../../../models/templates/sap.cinram.template");
 const defaultAccountTemplate = require("../../../models/templates/accounts.default.template");
 
-const sendMail = require("../../../config/mailer.config").sendMail;
-const logger = require("../../../config/logger.config").logger;
-const env = require("../../../config/environment");
-
 const fs = require("fs");
+
+
+const Exception = require("../../../helpers/errorHandlers/Exception");
+const httpStatus = require("../../../models/enums/httpStatus");
 
 module.exports.getTemplateTypes = async function (req, res) {
   const templateTypes = require("../../../models/enums/template.type");
@@ -18,11 +18,11 @@ module.exports.getTemplateTypes = async function (req, res) {
 module.exports.headerFile = async function (req, res, next) {
   const file = req.file;
   const filePath = file.path;
-  if (!!req.data) {
-    // return data form error
-  }
-  if (!!req.file) {
-    // return file error
+  // if (!req.body.data) {
+  //   throw new Exception(httpStatus.BAD_REQUEST, 'no_template_selected');
+  // }
+  if (!req.file) {
+    throw new Exception(httpStatus.BAD_REQUEST, 'no_file_selected');
   }
   const reqData = JSON.parse(req.body.data);
   const fileType = reqData.fileType;
@@ -57,9 +57,7 @@ module.exports.headerFile = async function (req, res, next) {
         });
       })
       .catch((er) => {
-        res.status(500).json({
-          error: er,
-        });
+        res.status(500).json(er);
       });
   } else if (fileType == 2) {
     // it's a csv file
@@ -74,20 +72,14 @@ module.exports.headerFile = async function (req, res, next) {
         });
       })
       .catch((er) => {
-        res.status(500).json({
-          error: er,
-        });
+        res.status(500).json(er);
       });
   } else {
-    // return error file type
-    res.status(400).json({
-      error: "Please choose a file type: CSV OR Excel",
-    });
+    throw new Exception(httpStatus.BAD_REQUEST, 'invalid_file_type');
   }
 };
 
 module.exports.importFile = async function (req, res, next) {
-  try {
     if (!!req.body.data) {
       // return data form error
     }
@@ -120,9 +112,7 @@ module.exports.importFile = async function (req, res, next) {
             });
           })
           .catch((er) => {
-            res.status(500).json({
-              error: er,
-            });
+            res.status(500).json(er);
           });
         // excel accounts file
       } else if (fileClass == 1) {
@@ -142,9 +132,7 @@ module.exports.importFile = async function (req, res, next) {
             });
           })
           .catch((er) => {
-            res.status(500).json({
-              error: er,
-            });
+            res.status(500).json(er);
           });
         // excel head file
       } else if (fileClass == 3) {
@@ -153,10 +141,7 @@ module.exports.importFile = async function (req, res, next) {
           message: "not implemented yet",
         });
       } else {
-        // return error file class
-        res.status(400).json({
-          error: "Please choose a file Class",
-        });
+        throw new Exception(httpStatus.BAD_REQUEST, 'invalid_file_class');
       }
     } else if (fileType == 2) {
       // accounts file
@@ -176,9 +161,7 @@ module.exports.importFile = async function (req, res, next) {
             });
           })
           .catch((er) => {
-            res.status(500).json({
-              error: er,
-            });
+            res.status(500).json(er);
           });
       } else if (fileClass == 2) {
         // it's a posting file
@@ -198,9 +181,7 @@ module.exports.importFile = async function (req, res, next) {
             });
           })
           .catch((er) => {
-            res.status(500).json({
-              error: er,
-            });
+            res.status(500).json(er);
           });
       } else if (fileClass == 3) {
         // it's a head file
@@ -209,60 +190,18 @@ module.exports.importFile = async function (req, res, next) {
         });
       } else {
         // return error file class
-        res.status(400).json({
-          error: "Please choose a file Class",
-        });
+        throw new Exception(httpStatus.BAD_REQUEST, 'invalid_file_class');
       }
     } else {
-      // return error file type
-      res.status(400).json({
-        error: "Please choose a file type: CSV OR Excel",
-      });
+      throw new Exception(httpStatus.BAD_REQUEST, 'invalid_file_type');
     }
-  } catch (error) {
-    await sendMail({
-      from: "Venator, Bug reporting",
-      to: env.developerMail,
-      subject: "exception stack trace",
-      html: ` 
-            <div>
-            <h3> admin upload controller </h3 >
-            <p> import file </p>
-            <p> -----------------------------------------------------------------------------------------</p>
-            <p> ${error} </p>
-            </div>`,
-    });
-    logger.error(`${new Date()}: ${error}`);
-    res.status(500).json({
-      error: error.message,
-    });
-  }
 };
 
 module.exports.deleteFileFromServier = async function (req, res) {
-  try {
     let message = "file not found";
     if (req.body.nameOnServer) {
       fs.unlinkSync(req.body.nameOnServer);
       message = "the file deleted successfully";
     }
     res.status(200).json(message);
-  } catch (error) {
-    await sendMail({
-      from: "Venator, Bug reporting",
-      to: env.developerMail,
-      subject: "exception stack trace",
-      html: ` 
-            <div>
-            <h3> admin upload controller </h3 >
-            <p> Delete file from the server </p>
-            <p> -----------------------------------------------------------------------------------------</p>
-            <p> ${error} </p>
-            </div>`,
-    });
-    logger.error(`${new Date()}: ${error}`);
-    res.status(500).json({
-      error: error.message,
-    });
-  }
 };

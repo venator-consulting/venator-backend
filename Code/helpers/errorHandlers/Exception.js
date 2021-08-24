@@ -2,10 +2,10 @@ const httpStatusCode = require("../../models/enums/httpStatus");
 const { errorHandler } = require("../error.handler.server");
 
 class Exception extends Error {
-  constructor(httpStatus = httpStatusCode.BAD_REQUEST, msg = "Bad Request") {
+  constructor(httpStatus = httpStatusCode.BAD_REQUEST, msg = "Bad Request", fromImport = false) {
     super();
     this.isCustom = true;
-
+    this.fromImport = fromImport;
     this.httpStatus = httpStatus;
     this.msg = msg;
   }
@@ -19,7 +19,7 @@ class Exception extends Error {
     }
 
     if (!res.headersSent) {
-      res.status(err.httpStatus).json({ msg: err.msg });
+      res.status(err.httpStatus).json({ msg: err.msg, fromImport: err.fromImport });
     }
     console.error(err);
   }

@@ -245,7 +245,7 @@ export class ImportComponent implements OnInit {
         this._messageService.add({
           severity: 'error',
           summary: 'ERROR!',
-          detail: 'There is an error occured, please try again!'
+          detail: err.error.msg
         });
       });
 
@@ -314,13 +314,13 @@ export class ImportComponent implements OnInit {
           detail: 'the file ' + this.filesList[this.currentFileIndex].orginalName + ' imported successfuly! you can import another file now'
         });
       }, err => {
-        // debugger;
+        debugger;
         // console.log('error: ' + err.error.error);
         this.waiting = false;
         this._messageService.add({
           severity: 'error',
           summary: 'ERROR!',
-          detail: err.error.error
+          detail: err.error.msg
         });
       });
 

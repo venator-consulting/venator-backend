@@ -3,6 +3,8 @@ const { QueryTypes } = require("sequelize");
 const Sequelize = require("../config/sequelize.config");
 const sequelize = Sequelize.getSequelize();
 const CreditLineRepo = require("./creditLines.repo.server");
+const Exception = require("../helpers/errorHandlers/Exception");
+const httpStatus = require("../models/enums/httpStatus");
 
 module.exports.liquiditytDateRange = async (orgId, prcId) => {
   let query = `SELECT MIN(pos.StartingBalanceDate) mindate, MAX(pos.documentDate) maxdate, MIN(pos.documentDate) mindocdate 
@@ -43,28 +45,26 @@ function getNumberOfDays(start, end) {
 
 module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
   return new Promise((resolve, reject) => {
-      if (!fromDate || !toDate) {
-        throw new Error("Document Date is null for this procedure!");
-      }
-      if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
-        throw new Error(
-          "Document Date and Starting Balance Date must be Date!"
-        );
-      }
+    if (!fromDate || !toDate) {
+      throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    }
+    if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    }
 
-      let data = {};
-      let chartLabels = new Array();
+    let data = {};
+    let chartLabels = new Array();
 
-      const finalResult = {
-        bankBalances: {
-          data: data,
-          labels: chartLabels,
-        },
-      };
+    const finalResult = {
+      bankBalances: {
+        data: data,
+        labels: chartLabels,
+      },
+    };
 
-      let accounts = new Array();
+    let accounts = new Array();
 
-      let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, 
+    let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, 
                             pos.StartingBalanceDate,
                             pos.accountTypeNewName, pos.balance, pos.StartingBalance
                         FROM posting_${orgId} pos
@@ -75,131 +75,128 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
                             AND UPPER(pos.accountTypeNewName) = 'FINANZKONTO'
                             ORDER BY pos.documentDate`;
 
-      const str = connection.getConnection().query(query).stream();
+    const str = connection.getConnection().query(query).stream();
 
-      str.on("data", (row) => {
-        // store account
-        // TO-DO: just if has a starting balance date
-        const i = accounts.findIndex(
-          (x) => x.accountNumber == row.accountNumber
-        );
-        if (i == -1) {
-          accounts.push({
-            accountNumber: row.accountNumber,
-            accountName: row.accountName,
-            count: 0,
-          });
-        }
-
-        const rowindex = getNumberOfDays(fromDate, row.documentDate);
-
-        // bank balances starts
-        {
-          let startingBalanceIncluded = 0;
-          if (row.StartingBalanceDate) {
-            if (row.StartingBalanceDate > fromDate) {
-              startingBalanceIncluded = getNumberOfDays(
-                fromDate,
-                row.StartingBalanceDate
-              );
-            }
-          }
-
-          if (!data[row.accountNumber]) {
-            data[row.accountNumber] = new Array();
-          }
-
-          row.StartingBalance = row.StartingBalance ? +row.StartingBalance : 0;
-
-          // index ==0 and value == 0 then starting balance
-          // index != row index and !value then value = previous value
-          // index == row index then value = balance + previous value
-
-          for (let index = 0; index <= rowindex; index++) {
-            if (
-              !data[row.accountNumber][index] &&
-              index < startingBalanceIncluded
-            ) {
-              data[row.accountNumber][index] = 0;
-            }
-            if (
-              !data[row.accountNumber][index] &&
-              index == startingBalanceIncluded
-            ) {
-              data[row.accountNumber][index] = +row.StartingBalance;
-            }
-            if (
-              index == rowindex &&
-              index > 0 &&
-              index > startingBalanceIncluded
-            ) {
-              if (data[row.accountNumber][index]) {
-                data[row.accountNumber][index] += +row.balance;
-              } else
-                data[row.accountNumber][index] =
-                  +row.balance + data[row.accountNumber][index - 1];
-            } else if (index == rowindex && index == startingBalanceIncluded) {
-              data[row.accountNumber][index] += +row.balance;
-            } else if (
-              index > 0 &&
-              !data[row.accountNumber][index] &&
-              index >= startingBalanceIncluded
-            ) {
-              data[row.accountNumber][index] =
-                data[row.accountNumber][index - 1];
-            }
-            let thisDate = new Date(fromDate);
-            thisDate.setDate(fromDate.getDate() + index);
-            chartLabels[index] = chartLabels[index]
-              ? chartLabels[index]
-              : thisDate.toLocaleDateString("de-DE", {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                });
-          }
-        }
-        // bank balnces ends
-      }); // end of on stream return row
-
-      str.on("end", async () => {
-        const diffirence = getNumberOfDays(fromDate, toDate);
-
-        let bankBalancesArray = new Array();
-
-        for (let index = 0; index <= diffirence; index++) {
-          if (!bankBalancesArray[index]) {
-            bankBalancesArray[index] = 0;
-          }
-          for (const accounNumber in data) {
-            if (Object.hasOwnProperty.call(data, accounNumber)) {
-              const element = data[accounNumber];
-              if (element && element[index]) {
-                bankBalancesArray[index] += element[index];
-              } else {
-                bankBalancesArray[index] +=
-                  index > 0 && element[index - 1] ? element[index - 1] : 0;
-                element[index] =
-                  index > 0 && element[index - 1] ? element[index - 1] : 0;
-              }
-            }
-          }
-        }
-
-        // get total count for accounts
-        accounts.forEach((val) => {
-          val.count = data[val.accountNumber]
-            ? data[val.accountNumber].length
-            : 0;
+    str.on("data", (row) => {
+      // store account
+      // TO-DO: just if has a starting balance date
+      const i = accounts.findIndex((x) => x.accountNumber == row.accountNumber);
+      if (i == -1) {
+        accounts.push({
+          accountNumber: row.accountNumber,
+          accountName: row.accountName,
+          count: 0,
         });
+      }
 
-        finalResult.accounts = accounts;
-        finalResult.bankBalances = bankBalancesArray;
-        finalResult.labels = chartLabels.filter(Boolean);
-        finalResult.data = data;
-        // cb(finalResult);
-        resolve(finalResult);
+      const rowindex = getNumberOfDays(fromDate, row.documentDate);
+
+      // bank balances starts
+      {
+        let startingBalanceIncluded = 0;
+        if (row.StartingBalanceDate) {
+          if (row.StartingBalanceDate > fromDate) {
+            startingBalanceIncluded = getNumberOfDays(
+              fromDate,
+              row.StartingBalanceDate
+            );
+          }
+        }
+
+        if (!data[row.accountNumber]) {
+          data[row.accountNumber] = new Array();
+        }
+
+        row.StartingBalance = row.StartingBalance ? +row.StartingBalance : 0;
+
+        // index ==0 and value == 0 then starting balance
+        // index != row index and !value then value = previous value
+        // index == row index then value = balance + previous value
+
+        for (let index = 0; index <= rowindex; index++) {
+          if (
+            !data[row.accountNumber][index] &&
+            index < startingBalanceIncluded
+          ) {
+            data[row.accountNumber][index] = 0;
+          }
+          if (
+            !data[row.accountNumber][index] &&
+            index == startingBalanceIncluded
+          ) {
+            data[row.accountNumber][index] = +row.StartingBalance;
+          }
+          if (
+            index == rowindex &&
+            index > 0 &&
+            index > startingBalanceIncluded
+          ) {
+            if (data[row.accountNumber][index]) {
+              data[row.accountNumber][index] += +row.balance;
+            } else
+              data[row.accountNumber][index] =
+                +row.balance + data[row.accountNumber][index - 1];
+          } else if (index == rowindex && index == startingBalanceIncluded) {
+            data[row.accountNumber][index] += +row.balance;
+          } else if (
+            index > 0 &&
+            !data[row.accountNumber][index] &&
+            index >= startingBalanceIncluded
+          ) {
+            data[row.accountNumber][index] = data[row.accountNumber][index - 1];
+          }
+          let thisDate = new Date(fromDate);
+          thisDate.setDate(fromDate.getDate() + index);
+          chartLabels[index] = chartLabels[index]
+            ? chartLabels[index]
+            : thisDate.toLocaleDateString("de-DE", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              });
+        }
+      }
+      // bank balnces ends
+    }); // end of on stream return row
+
+    str.on("end", async () => {
+      const diffirence = getNumberOfDays(fromDate, toDate);
+
+      let bankBalancesArray = new Array();
+
+      for (let index = 0; index <= diffirence; index++) {
+        if (!bankBalancesArray[index]) {
+          bankBalancesArray[index] = 0;
+        }
+        for (const accounNumber in data) {
+          if (Object.hasOwnProperty.call(data, accounNumber)) {
+            const element = data[accounNumber];
+            if (element && element[index]) {
+              bankBalancesArray[index] += element[index];
+            } else {
+              bankBalancesArray[index] +=
+                index > 0 && element[index - 1] ? element[index - 1] : 0;
+              element[index] =
+                index > 0 && element[index - 1] ? element[index - 1] : 0;
+            }
+          }
+        }
+      }
+
+      // get total count for accounts
+      accounts.forEach((val) => {
+        val.count = data[val.accountNumber]
+          ? data[val.accountNumber].length
+          : 0;
       });
+
+      finalResult.accounts = accounts;
+      finalResult.bankBalances = bankBalancesArray;
+      finalResult.labels = chartLabels.filter(Boolean);
+      finalResult.data = data;
+      // cb(finalResult);
+      resolve(finalResult);
+    });
   });
 };
 
@@ -264,27 +261,25 @@ module.exports.liquidityAnalysisDetails = async (
   toDate
 ) => {
   return new Promise((resolve, reject) => {
-      if (!fromDate || !toDate) {
-        throw new Error("Document Date is null for this procedure!");
-      }
-      if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
-        throw new Error(
-          "Document Date and Starting Balance Date must be Date!"
-        );
-      }
+    if (!fromDate || !toDate) {
+      throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    }
+    if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    }
 
-      let data = new Array();
-      let chartLabels = new Array();
-      let accountName;
+    let data = new Array();
+    let chartLabels = new Array();
+    let accountName;
 
-      const finalResult = {
-        bankBalances: {
-          data: data,
-          labels: chartLabels,
-        },
-      };
+    const finalResult = {
+      bankBalances: {
+        data: data,
+        labels: chartLabels,
+      },
+    };
 
-      let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, 
+    let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, 
                             pos.StartingBalanceDate,
                             pos.accountTypeNewName, pos.balance, pos.StartingBalance
                         FROM posting_${orgId} pos
@@ -295,82 +290,82 @@ module.exports.liquidityAnalysisDetails = async (
                             AND UPPER(pos.accountTypeNewName) = 'FINANZKONTO'
                             ORDER BY pos.documentDate`;
 
-      const str = connection.getConnection().query(query).stream();
+    const str = connection.getConnection().query(query).stream();
 
-      str.on("data", (row) => {
-        if (!accountName) {
-          accountName = row.accountName;
+    str.on("data", (row) => {
+      if (!accountName) {
+        accountName = row.accountName;
+      }
+
+      const rowindex = getNumberOfDays(fromDate, row.documentDate);
+
+      // bank balances starts
+      {
+        let startingBalanceIncluded = 0;
+        if (row.StartingBalanceDate) {
+          startingBalanceIncluded = getNumberOfDays(
+            fromDate,
+            row.StartingBalanceDate
+          );
         }
 
-        const rowindex = getNumberOfDays(fromDate, row.documentDate);
+        row.StartingBalance = row.StartingBalance ? +row.StartingBalance : 0;
 
-        // bank balances starts
-        {
-          let startingBalanceIncluded = 0;
-          if (row.StartingBalanceDate) {
-            startingBalanceIncluded = getNumberOfDays(
-              fromDate,
-              row.StartingBalanceDate
-            );
+        // index ==0 and value == 0 then starting balance
+        // index != row index and !value then value = previous value
+        // index == row index then value = balance + previous value
+
+        for (let index = 0; index <= rowindex; index++) {
+          if (!data[index] && index < startingBalanceIncluded) {
+            data[index] = 0;
           }
-
-          row.StartingBalance = row.StartingBalance ? +row.StartingBalance : 0;
-
-          // index ==0 and value == 0 then starting balance
-          // index != row index and !value then value = previous value
-          // index == row index then value = balance + previous value
-
-          for (let index = 0; index <= rowindex; index++) {
-            if (!data[index] && index < startingBalanceIncluded) {
-              data[index] = 0;
-            }
-            if (!data[index] && index == startingBalanceIncluded) {
-              data[index] = +row.StartingBalance;
-            }
-            if (
-              index == rowindex &&
-              index > 0 &&
-              index > startingBalanceIncluded
-            ) {
-              if (data[index]) {
-                data[index] += +row.balance;
-              } else data[index] = +row.balance + data[index - 1];
-            } else if (index == rowindex && index == startingBalanceIncluded) {
+          if (!data[index] && index == startingBalanceIncluded) {
+            data[index] = +row.StartingBalance;
+          }
+          if (
+            index == rowindex &&
+            index > 0 &&
+            index > startingBalanceIncluded
+          ) {
+            if (data[index]) {
               data[index] += +row.balance;
-            } else if (
-              index > 0 &&
-              !data[index] &&
-              index >= startingBalanceIncluded
-            ) {
-              data[index] = data[index - 1];
-            }
-            let thisDate = new Date(fromDate);
-            thisDate.setDate(fromDate.getDate() + index);
-            chartLabels[index] = chartLabels[index]
-              ? chartLabels[index]
-              : thisDate.toLocaleDateString("de-DE", {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                });
+            } else data[index] = +row.balance + data[index - 1];
+          } else if (index == rowindex && index == startingBalanceIncluded) {
+            data[index] += +row.balance;
+          } else if (
+            index > 0 &&
+            !data[index] &&
+            index >= startingBalanceIncluded
+          ) {
+            data[index] = data[index - 1];
           }
+          let thisDate = new Date(fromDate);
+          thisDate.setDate(fromDate.getDate() + index);
+          chartLabels[index] = chartLabels[index]
+            ? chartLabels[index]
+            : thisDate.toLocaleDateString("de-DE", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              });
         }
-        // bank balnces ends
-      }); // end of on stream return row
+      }
+      // bank balnces ends
+    }); // end of on stream return row
 
-      str.on("end", async () => {
-        const diffirence = getNumberOfDays(fromDate, toDate);
+    str.on("end", async () => {
+      const diffirence = getNumberOfDays(fromDate, toDate);
 
-        for (let index = data.length; index <= diffirence; index++) {
-          data[index] = index > 0 && data[index - 1] ? data[index - 1] : 0;
-        }
+      for (let index = data.length; index <= diffirence; index++) {
+        data[index] = index > 0 && data[index - 1] ? data[index - 1] : 0;
+      }
 
-        finalResult.bankBalances = data;
-        finalResult.labels = chartLabels.filter(Boolean);
-        finalResult.accountName = accountName;
-        // cb(finalResult);
-        resolve(finalResult);
-      });
+      finalResult.bankBalances = data;
+      finalResult.labels = chartLabels.filter(Boolean);
+      finalResult.accountName = accountName;
+      // cb(finalResult);
+      resolve(finalResult);
+    });
   });
 };
 

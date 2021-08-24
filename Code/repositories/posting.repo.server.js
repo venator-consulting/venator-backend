@@ -579,7 +579,7 @@ module.exports.textAnalysisWordDetails = async (orgId, prcId, key) => {
   } else if (key.length > 3) {
     key = "like '%" + key + "%'";
   } else {
-    throw new Error("invalid key!");
+    throw new Exception("invalid_key");
   }
   let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
                             p.textRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,

@@ -1,5 +1,3 @@
-const errorHandler =
-  require("../../../helpers/error.handler.server").errorHandler;
 const accountTypeRepo = require("../../../repositories/accountType.repo.server");
 const postingRepo = require("../../../repositories/posting.repo.server");
 

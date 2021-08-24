@@ -8,6 +8,8 @@ const SapCinram = require('../models/templates/sap.cinram.template');
 const PostingModel = require('../models/posting.model.server');
 const AccountModel = require('../models/accounts.model.server');
 const sequelize = require('../config/sequelize.config');
+const Exception = require("./errorHandlers/Exception");
+const httpStatus = require("../models/enums/httpStatus");
 
 const parseDecimalNumber = require('parse-decimal-number');
 const cldr = require('cldr');
@@ -16,13 +18,10 @@ const getHeaderIndex = require('./index.finder.helper.server').getHeaderIndex;
 const chrono = require('chrono-node');
 const env = require('../config/environment');
 const logger = require('../config/logger.config').logger;
-const { error } = require("console");
 
 const sequelizer = sequelize.getSequelize();
 
 module.exports.readHeader = async function (filePath) {
-
-    try {
         return new Promise((resolve, reject) => {
             let fileHeaders = [];
             const readable = fs.createReadStream(filePath, {
@@ -44,22 +43,6 @@ module.exports.readHeader = async function (filePath) {
                 });
 
         });
-
-        // parser.on('headers', (headers) => {
-        //     console.log(`First header: ${headers[0]}`);
-        //     fileHeaders = headers;
-        //     resolve();
-        // });
-
-        // for await (const record of parser) {
-        //     records.push(record);
-        // }
-
-        // resolve(fileHeaders);
-    } catch (e) {
-        console.error(e);
-        reject(e);
-    }
 }
 
 
@@ -201,10 +184,10 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
                 const errorMsg = splitedMsg[0] + ' at row ' + theRealRowNum;
                 logger.error(`${new Date()}: ${splitedMsg[0]} at row ${theRealRowNum}`);
                 console.log("ERROR on row number: " + theRealRowNum);
-                reject(errorMsg);
+                reject(new Exception(httpStatus.BAD_REQUEST, errorMsg, true));
             } else {
                 console.log("ERROR on row number: " + index);
-                reject(err.message);
+                reject(new Exception(httpStatus.BAD_REQUEST, err.message, true));
             }
             logger.error(`${new Date()}: ${err}`);
         }
@@ -802,10 +785,10 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 const errorMsg = splitedMsg[0] + ' at row ' + theRealRowNum;
                 logger.error(`${new Date()}: ${splitedMsg[0]} at row ${theRealRowNum}`);
                 console.log("ERROR on row number: " + theRealRowNum);
-                reject(errorMsg);
+                reject(new Exception(httpStatus.BAD_REQUEST, errorMsg, true));
             } else {
                 console.log("ERROR on row number: " + index + 1);
-                reject(err.message);
+                reject(new Exception(httpStatus.BAD_REQUEST, err.message, true));
             }
             logger.error(`${new Date()}: ${err}`);
         }

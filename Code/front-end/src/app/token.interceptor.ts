@@ -40,7 +40,7 @@ export class TokenInterceptor implements HttpInterceptor {
           }
         },
         (err: HttpErrorResponse) => {
-          if (err.error instanceof ErrorEvent) {
+          if (err.error instanceof ErrorEvent || err.error.fromImport) {
             // console.log('this is client side error');
             // errorMsg = `Error: ${error.error.message}`;
           } else {
