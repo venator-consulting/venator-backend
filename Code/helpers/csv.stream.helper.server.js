@@ -55,10 +55,6 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
         let bulkCount = 0;
 
         try {
-
-            // const options = cldr.extractNumberSymbols('de_DE');
-            // const decimalParser = parseDecimalNumber.withOptions(options);
-
             if (template == null) {
                 template = {
                     accountNumber: 'KONTO',
@@ -80,15 +76,6 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
                 }));
 
             for await (const row of parser) {
-
-                // const accountTypeId = decimalParser(row[template.accountTypeId]);
-                // if (isNaN(accountTypeId)) {
-                //     console.log(`${new Date()}: There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
-                //     logger.error(`${new Date()}: There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
-                //     reject(`There is an ERROR on row ${index+1}, accountTypeId/${template.accountTypeId} should be number!`);
-                //     return;
-                // }
-
 
                 rowsToInsert.push({
                     accountNumber: row[template.accountNumber],
@@ -321,14 +308,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let accountNumber = null;
                 let accountName = row[Standardtemplate.accountName] ? row[Standardtemplate.accountName] : null;
                 if (Standardtemplate.accountNumber && row[Standardtemplate.accountNumber]) {
-                    accountNumber = decimalParser(row[Standardtemplate.accountNumber]);
-                    if (isNaN(accountNumber)) {
-                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, accountNumber/${Standardtemplate.accountNumber} should be number!`);
-                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, accountNumber/${Standardtemplate.accountNumber} should be number!`);
-
-                        reject(`There is an ERROR on row ${index + 1}, accountNumber/${Standardtemplate.accountNumber} should be number!`);
-                        return;
-                    }
+                    accountNumber = row[Standardtemplate.accountNumber];
                     if (accountNumber) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -346,14 +326,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let contraAccountNumber = null;
                 let contraAccountName = row[Standardtemplate.contraAccountName] ? row[Standardtemplate.contraAccountName] : null;
                 if (Standardtemplate.contraAccountNumber && row[Standardtemplate.contraAccountNumber]) {
-                    contraAccountNumber = decimalParser(row[Standardtemplate.contraAccountNumber]);
-                    if (isNaN(contraAccountNumber)) {
-                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, contraAccountNumber/${Standardtemplate.contraAccountNumber} should be number!`);
-                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, contraAccountNumber/${Standardtemplate.contraAccountNumber} should be number!`);
-
-                        reject(`There is an ERROR on row ${index + 1}, contraAccountNumber/${Standardtemplate.contraAccountNumber} should be number!`);
-                        return;
-                    }
+                    contraAccountNumber = row[Standardtemplate.contraAccountNumber];
                     if (contraAccountNumber) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -372,13 +345,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let GLAccountNumber = null;
                 let GLAccountName = null;
                 if (Standardtemplate.GLAccountNumber && row[Standardtemplate.GLAccountNumber]) {
-                    GLAccountNumber = decimalParser(row[Standardtemplate.GLAccountNumber]);
-                    if (isNaN(GLAccountNumber)) {
-                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, GLAccountNumber/${Standardtemplate.GLAccountNumber} should be number!`);
-                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, GLAccountNumber/${Standardtemplate.GLAccountNumber} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, GLAccountNumber/${Standardtemplate.GLAccountNumber} should be number!`);
-                        return;
-                    }
+                    GLAccountNumber = row[Standardtemplate.GLAccountNumber];
                     if (GLAccountNumber) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -397,13 +364,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let contraAccountGLAccountNo = null;
                 let contraAccountGLAccountName = null;
                 if (Standardtemplate.contraAccountGLAccountNo && row[Standardtemplate.contraAccountGLAccountNo]) {
-                    contraAccountGLAccountNo = decimalParser(row[Standardtemplate.contraAccountGLAccountNo]);
-                    if (isNaN(contraAccountGLAccountNo)) {
-                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, contraAccountGLAccountNo/${Standardtemplate.contraAccountGLAccountNo} should be number!`);
-                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, contraAccountGLAccountNo/${Standardtemplate.contraAccountGLAccountNo} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, contraAccountGLAccountNo/${Standardtemplate.contraAccountGLAccountNo} should be number!`);
-                        return;
-                    }
+                    contraAccountGLAccountNo = row[Standardtemplate.contraAccountGLAccountNo];
                     if (contraAccountGLAccountNo) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -423,13 +384,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let debtorNumber = null;
                 let debtorName = null;
                 if (Standardtemplate.debtorNumber && row[Standardtemplate.debtorNumber]) {
-                    debtorNumber = decimalParser(row[Standardtemplate.debtorNumber]);
-                    if (isNaN(debtorNumber)) {
-                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debtorNumber/${Standardtemplate.debtorNumber} should be number!`);
-                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debtorNumber/${Standardtemplate.debtorNumber} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, debtorNumber/${Standardtemplate.debtorNumber} should be number!`);
-                        return;
-                    }
+                    debtorNumber = row[Standardtemplate.debtorNumber];
                     if (debtorNumber) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -448,13 +403,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let contraAccountDebtorNo = null;
                 let contraAccountDebtorName = null;
                 if (Standardtemplate.contraAccountDebtorNo && row[Standardtemplate.contraAccountDebtorNo]) {
-                    contraAccountDebtorNo = decimalParser(row[Standardtemplate.contraAccountDebtorNo]);
-                    if (isNaN(contraAccountDebtorNo)) {
-                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, contraAccountDebtorNo/${Standardtemplate.contraAccountDebtorNo} should be number!`);
-                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, contraAccountDebtorNo/${Standardtemplate.contraAccountDebtorNo} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, contraAccountDebtorNo/${Standardtemplate.contraAccountDebtorNo} should be number!`);
-                        return;
-                    }
+                    contraAccountDebtorNo = row[Standardtemplate.contraAccountDebtorNo];
                     if (contraAccountDebtorNo) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -474,13 +423,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let creditorNumber = null;
                 let creditorName = null;
                 if (Standardtemplate.creditorNumber && row[Standardtemplate.creditorNumber]) {
-                    creditorNumber = decimalParser(row[Standardtemplate.creditorNumber]);
-                    if (isNaN(creditorNumber)) {
-                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditorNumber/${Standardtemplate.creditorNumber} should be number!`);
-                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditorNumber/${Standardtemplate.creditorNumber} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, creditorNumber/${Standardtemplate.creditorNumber} should be number!`);
-                        return;
-                    }
+                    creditorNumber = row[Standardtemplate.creditorNumber];
                     if (creditorNumber) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -501,13 +444,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let contraAccountCreditorNo = null;
                 let contraAccountCreditorName = null;
                 if (Standardtemplate.contraAccountCreditorNo && row[Standardtemplate.contraAccountCreditorNo]) {
-                    contraAccountCreditorNo = decimalParser(row[Standardtemplate.contraAccountCreditorNo]);
-                    if (isNaN(contraAccountCreditorNo)) {
-                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, contraAccountCreditorNo/${Standardtemplate.contraAccountCreditorNo} should be number!`);
-                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, contraAccountCreditorNo/${Standardtemplate.contraAccountCreditorNo} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, contraAccountCreditorNo/${Standardtemplate.contraAccountCreditorNo} should be number!`);
-                        return;
-                    }
+                    contraAccountCreditorNo = row[Standardtemplate.contraAccountCreditorNo];
                     if (contraAccountCreditorNo) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -523,135 +460,94 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 }
 
 
-                const recordNumber = decimalParser(row[Standardtemplate.recordNumber]);
-                if (isNaN(recordNumber)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, recordNumber/${Standardtemplate.recordNumber} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, recordNumber/${Standardtemplate.recordNumber} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, recordNumber/${Standardtemplate.recordNumber} should be number!`);
-                    return;
-                }
-                const creditAmount = decimalParser(row[Standardtemplate.creditAmount]);
+                let recordNumber = row[Standardtemplate.recordNumber];
+                let creditAmount = decimalParser(row[Standardtemplate.creditAmount]?? 'null');
                 if (isNaN(creditAmount)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
-                    return;
+                    creditAmount = null;
+                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
+                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
+                    // reject(`There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
+                    // return;
                 }
-                // const postingPeriod = decimalParser(row[Standardtemplate.postingPeriod]);
-                // if (isNaN(postingPeriod)) {
-                //     console.log(`${new Date()}: There is an ERROR on row ${index + 1}, postingPeriod/${Standardtemplate.postingPeriod} should be number!`);
-                //     logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, postingPeriod/${Standardtemplate.postingPeriod} should be number!`);
-                //     reject(`There is an ERROR on row ${index + 1}, postingPeriod/${Standardtemplate.postingPeriod} should be number!`);
 
-                //     return;
-                // }
-
-                const documentTypeNumber = decimalParser(row[Standardtemplate.documentTypeNumber]);
+                let documentTypeNumber = decimalParser(row[Standardtemplate.documentTypeNumber]?? 'null');
                 if (isNaN(documentTypeNumber)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, documentTypeNumber/${Standardtemplate.documentTypeNumber} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, documentTypeNumber/${Standardtemplate.documentTypeNumber} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, documentTypeNumber/${Standardtemplate.documentTypeNumber} should be number!`);
-
-                    return;
+                    documentTypeNumber = null;
+                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, documentTypeNumber/${Standardtemplate.documentTypeNumber} should be number!`);
+                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, documentTypeNumber/${Standardtemplate.documentTypeNumber} should be number!`);
+                    // reject(`There is an ERROR on row ${index + 1}, documentTypeNumber/${Standardtemplate.documentTypeNumber} should be number!`);
+                    // return;
                 }
 
-                const balance = decimalParser(row[Standardtemplate.balance]);
+                let balance = decimalParser(row[Standardtemplate.balance]?? 'null');
                 if (isNaN(balance)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
-
-                    return;
+                    balance = null;
+                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
+                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
+                    // reject(`There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
+                    // return;
                 }
 
-                const debitAmount = decimalParser(row[Standardtemplate.debitAmount]);
+                let debitAmount = decimalParser(row[Standardtemplate.debitAmount]?? 'null');
                 if (isNaN(debitAmount)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
-
-                    return;
+                    debitAmount = null;
+                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
+                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
+                    // reject(`There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
+                    // return;
                 }
 
-                const balanceTransactionCurrency = decimalParser(row[Standardtemplate.balanceTransactionCurrency]);
+                let balanceTransactionCurrency = decimalParser(row[Standardtemplate.balanceTransactionCurrency]?? 'null');
                 if (isNaN(balanceTransactionCurrency)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
-
-                    return;
+                    balanceTransactionCurrency = null;
+                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
+                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
+                    // reject(`There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
+                    // return;
                 }
 
-                const debitAmountTransactionCurrency = decimalParser(row[Standardtemplate.debitAmountTransactionCurrency]);
+                let debitAmountTransactionCurrency = decimalParser(row[Standardtemplate.debitAmountTransactionCurrency]?? 'null');
                 if (isNaN(debitAmountTransactionCurrency)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
-
-                    return;
+                    debitAmountTransactionCurrency = null;
+                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
+                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
+                    // reject(`There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
+                    // return;
                 }
 
-                const creditAmountTransactionCurrency = decimalParser(row[Standardtemplate.creditAmountTransactionCurrency]);
+                let creditAmountTransactionCurrency = decimalParser(row[Standardtemplate.creditAmountTransactionCurrency]?? 'null');
                 if (isNaN(creditAmountTransactionCurrency)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
-
-                    return;
+                    creditAmountTransactionCurrency = null;
                 }
 
-                const exchangeRate = decimalParser(row[Standardtemplate.exchangeRate]);
+                let exchangeRate = decimalParser(row[Standardtemplate.exchangeRate]?? 'null');
                 if (isNaN(exchangeRate)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
-
-                    return;
+                    exchangeRate = null;
                 }
 
-                const cashDiscount = decimalParser(row[Standardtemplate.cashDiscount]);
+                let cashDiscount = decimalParser(row[Standardtemplate.cashDiscount]?? 'null');
                 if (isNaN(cashDiscount)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
-
-                    return;
+                    cashDiscount = null;
                 }
 
-                const taxAmount = decimalParser(row[Standardtemplate.taxAmount]);
+                let taxAmount = decimalParser(row[Standardtemplate.taxAmount]?? 'null');
                 if (isNaN(taxAmount)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
-
-                    return;
+                    taxAmount = null;
                 }
 
-                const taxAmountDebit = decimalParser(row[Standardtemplate.taxAmountDebit]);
+                let taxAmountDebit = decimalParser(row[Standardtemplate.taxAmountDebit]?? 'null');
                 if (isNaN(taxAmountDebit)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
-
-                    return;
+                    taxAmountDebit = null;
                 }
 
-                const taxAmountCredit = decimalParser(row[Standardtemplate.taxAmountCredit]);
+                let taxAmountCredit = decimalParser(row[Standardtemplate.taxAmountCredit]?? 'null');
                 if (isNaN(taxAmountCredit)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
-
-                    return;
+                    taxAmountCredit = null;
                 }
 
-                const identifierBalanceCarryforward = decimalParser(row[Standardtemplate.identifierBalanceCarryforward]);
+                let identifierBalanceCarryforward = decimalParser(row[Standardtemplate.identifierBalanceCarryforward]?? 'null');
                 if (isNaN(identifierBalanceCarryforward)) {
-                    console.log(`${new Date()}: There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
-                    logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
-                    reject(`There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
-
-                    return;
+                    identifierBalanceCarryforward = null;
                 }
 
                 rowsToInsert.push({
@@ -736,7 +632,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     typeDocumentInformation7: row[Standardtemplate.typeDocumentInformation7],
                     contentDocumentInformation7: row[Standardtemplate.contentDocumentInformation7],
                     typeDocumentInformation8: row[Standardtemplate.typeDocumentInformation8],
-                    contentDocumentInformation8: row[contentDocumentInformation8.contentDocumentInformation8]
+                    contentDocumentInformation8: row[Standardtemplate.contentDocumentInformation8]
                 });
 
 
