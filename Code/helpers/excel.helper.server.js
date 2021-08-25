@@ -17,6 +17,7 @@ const chrono = require('chrono-node');
 const env = require('../config/environment');
 
 const logger = require('../config/logger.config').logger;
+const { errorHandler } = require("./error.handler.server");
 
 const sequelizer = sequelize.getSequelize();
 
@@ -548,7 +549,8 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                 console.log("ERROR on row number: " + index);
                 reject(new Exception(httpStatus.BAD_REQUEST, err.message, true));
             }
-            logger.error(`${new Date()}: ${err}`);
+            // logger.error(`${new Date()}: ${err}`);
+            errorHandler("Error", err);
         }
 
 
@@ -786,7 +788,8 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
                 console.log("ERROR on row number: " + index);
                 reject(new Exception(httpStatus.BAD_REQUEST, err.message, true));
             }
-            logger.error(`${new Date()}: ${err}`);
+            // logger.error(`${new Date()}: ${err}`);
+            errorHandler("Error", err);
         }
     });
 
