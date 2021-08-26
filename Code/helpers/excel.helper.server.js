@@ -167,7 +167,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
             const workbookReader = new Excel.stream.xlsx.WorkbookReader(excelFilePath, {
                 includeEmpty: true
             });
-
+            // const worksheetReader = workbookReader.worksheets[0];
             for await (const worksheetReader of workbookReader) {
                 for await (const row of worksheetReader) {
 
@@ -264,12 +264,12 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                         // don't forget if procedure id not exist don't go to DB
                         // don't forget to get account type
 
-                        const companyCode = companyCodeIndex >= 0 ? row.model.cells[companyCodeIndex].value : null;
+                        const companyCode = companyCodeIndex >= 0 && row.model.cells[companyCodeIndex] ? row.model.cells[companyCodeIndex].value : null;
 
                         // account
-                        const accountType = accountTypeIndex >= 0 ? row.model.cells[accountTypeIndex].value : null;
-                        const accountNumber = accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null;
-                        let accountName = accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null;
+                        const accountType = accountTypeIndex >= 0 && row.model.cells[accountTypeIndex] ? row.model.cells[accountTypeIndex].value : null;
+                        const accountNumber = accountNumberIndex >= 0 && row.model.cells[accountNumberIndex] ? row.model.cells[accountNumberIndex].value : null;
+                        let accountName = accountNameIndex >= 0 && row.model.cells[accountNameIndex] ? row.model.cells[accountNameIndex].value : null;
                         if (accountNumber && accountType) {
                             let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                                 where: {
@@ -285,9 +285,9 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
 
 
                         // contraAccount
-                        const contraAccountType = contraAccountTypeIndex >= 0 ? row.model.cells[contraAccountTypeIndex].value : null;
-                        const contraAccountNumber = contraAccountNumberIndex >= 0 ? row.model.cells[contraAccountNumberIndex].value : null;
-                        let contraAccountName = contraAccountNameIndex >= 0 ? row.model.cells[contraAccountNameIndex].value : null;
+                        const contraAccountType = contraAccountTypeIndex >= 0 && row.model.cells[contraAccountTypeIndex] ? row.model.cells[contraAccountTypeIndex].value : null;
+                        const contraAccountNumber = contraAccountNumberIndex >= 0 && row.model.cells[contraAccountNumberIndex] ? row.model.cells[contraAccountNumberIndex].value : null;
+                        let contraAccountName = contraAccountNameIndex >= 0 && row.model.cells[contraAccountNameIndex] ? row.model.cells[contraAccountNameIndex].value : null;
                         if (contraAccountNumber && contraAccountType) {
                             let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                                 where: {
@@ -302,7 +302,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                         }
 
                         // GlaAccount
-                        const GLAccountNumber = GLAccountNumberIndex >= 0 ? row.model.cells[GLAccountNumberIndex].value : null;
+                        const GLAccountNumber = GLAccountNumberIndex >= 0 && row.model.cells[GLAccountNumberIndex] ? row.model.cells[GLAccountNumberIndex].value : null;
                         let GLAccountName = null;
                         if (GLAccountNumber) {
                             let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
@@ -318,7 +318,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                         }
 
                         // contra gla account 
-                        const contraAccountGLAccountNo = contraAccountGLAccountNoIndex >= 0 ? row.model.cells[contraAccountGLAccountNoIndex].value : null;
+                        const contraAccountGLAccountNo = contraAccountGLAccountNoIndex >= 0 && row.model.cells[contraAccountGLAccountNoIndex] ? row.model.cells[contraAccountGLAccountNoIndex].value : null;
                         let contraAccountGLAccountName = null;
                         if (contraAccountGLAccountNo) {
                             let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
@@ -335,7 +335,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
 
 
                         // Debitor Account
-                        const debtorNumber = debtorNumberIndex >= 0 ? row.model.cells[debtorNumberIndex].value : null;
+                        const debtorNumber = debtorNumberIndex >= 0 && row.model.cells[debtorNumberIndex] ? row.model.cells[debtorNumberIndex].value : null;
                         let debtorName = null;
                         if (debtorNumber) {
                             let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
@@ -351,7 +351,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                         }
 
                         // contra Debitor Account
-                        const contraAccountDebtorNo = contraAccountDebtorNoIndex >= 0 ? row.model.cells[contraAccountDebtorNoIndex].value : null;
+                        const contraAccountDebtorNo = contraAccountDebtorNoIndex >= 0 && row.model.cells[contraAccountDebtorNoIndex] ? row.model.cells[contraAccountDebtorNoIndex].value : null;
                         let contraAccountDebtorName = null;
                         if (contraAccountDebtorNo) {
                             let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
@@ -368,7 +368,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
 
 
                         // Credito Account
-                        const creditorNumber = creditorNumberIndex >= 0 ? row.model.cells[creditorNumberIndex].value : null;
+                        const creditorNumber = creditorNumberIndex >= 0 && row.model.cells[creditorNumberIndex] ? row.model.cells[creditorNumberIndex].value : null;
                         let creditorName = null;
                         if (creditorNumber) {
                             let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
@@ -384,7 +384,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                         }
 
                         // contra creditor account
-                        const contraAccountCreditorNo = contraAccountCreditorNoIndex >= 0 ? row.model.cells[contraAccountCreditorNoIndex].value : null;
+                        const contraAccountCreditorNo = contraAccountCreditorNoIndex >= 0 && row.model.cells[contraAccountCreditorNoIndex] ? row.model.cells[contraAccountCreditorNoIndex].value : null;
                         let contraAccountCreditorName = null;
                         if (contraAccountCreditorNo) {
                             let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
@@ -399,9 +399,9 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                             contraAccountCreditorName = temp.length > 0 ? temp[0].accountName : null;
                         }
 
-                        const creditAmount = creditAmountIndex >= 0 ? row.model.cells[creditAmountIndex].value : null;
+                        const creditAmount = creditAmountIndex >= 0 && row.model.cells[creditAmountIndex] ? row.model.cells[creditAmountIndex].value : null;
                         // creditAmount = creditAmount ? decimalParser(creditAmount) : null;
-                        const debitCredit = debitCreditIndex >= 0 ? row.model.cells[debitCreditIndex].value : null;
+                        const debitCredit = debitCreditIndex >= 0 && row.model.cells[debitCreditIndex] ? row.model.cells[debitCreditIndex].value : null;
                         // debitCredit = debitCredit ? decimalParser(debitCredit) : null;
 
                         rowsToInsert.push({
@@ -420,73 +420,73 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
                             creditorName: creditorName,
                             contraAccountCreditorNo: contraAccountCreditorNo,
                             contraAccountCreditorName: contraAccountCreditorName,
-                            assignment: assignmentIndex >= 0 ? row.model.cells[assignmentIndex].value : null,
-                            documentNumber: documentNumberIndex >= 0 ? row.model.cells[documentNumberIndex].value : null,
-                            documentType: documentTypeIndex >= 0 ? row.model.cells[documentTypeIndex].value : null,
-                            documentDate: documentDateIndex >= 0 ? getDate(row.model.cells[documentDateIndex]) : null,
-                            recordNumber: recordNumberIndex >= 0 ? row.model.cells[recordNumberIndex].value : null,
+                            assignment: assignmentIndex >= 0 && row.model.cells[assignmentIndex] ? row.model.cells[assignmentIndex].value : null,
+                            documentNumber: documentNumberIndex >= 0 && row.model.cells[documentNumberIndex] ? row.model.cells[documentNumberIndex].value : null,
+                            documentType: documentTypeIndex >= 0 && row.model.cells[documentTypeIndex] ? row.model.cells[documentTypeIndex].value : null,
+                            documentDate: documentDateIndex >= 0 && row.model.cells[documentDateIndex] ? getDate(row.model.cells[documentDateIndex]) : null,
+                            recordNumber: recordNumberIndex >= 0 && row.model.cells[recordNumberIndex] ? row.model.cells[recordNumberIndex].value : null,
                             creditAmount: creditAmount,
-                            transactionCurrency: transactionCurrencyIndex >= 0 ? row.model.cells[transactionCurrencyIndex].value : null,
-                            applicationDocument: applicationDocumentIndex >= 0 ? row.model.cells[applicationDocumentIndex].value : null,
-                            textPosting: textPostingIndex >= 0 ? row.model.cells[textPostingIndex].value : null,
-                            applicationDate: applicationDateIndex >= 0 ? getDate(row.model.cells[applicationDateIndex]) : null,
-                            postingDate: postingDateIndex >= 0 ? getDate(row.model.cells[postingDateIndex]) : null,
+                            transactionCurrency: transactionCurrencyIndex >= 0 && row.model.cells[transactionCurrencyIndex] ? row.model.cells[transactionCurrencyIndex].value : null,
+                            applicationDocument: applicationDocumentIndex >= 0 && row.model.cells[applicationDocumentIndex] ? row.model.cells[applicationDocumentIndex].value : null,
+                            textPosting: textPostingIndex >= 0 && row.model.cells[textPostingIndex] ? row.model.cells[textPostingIndex].value : null,
+                            applicationDate: applicationDateIndex >= 0 && row.model.cells[applicationDateIndex] ? getDate(row.model.cells[applicationDateIndex]) : null,
+                            postingDate: postingDateIndex >= 0 && row.model.cells[postingDateIndex]? getDate(row.model.cells[postingDateIndex]) : null,
                             companyCode: companyCode,
-                            fiscalYear: fiscalYearIndex >= 0 ? row.model.cells[fiscalYearIndex].value : null,
-                            postingPeriod: postingPeriodIndex >= 0 ? row.model.cells[postingPeriodIndex].value : null,
+                            fiscalYear: fiscalYearIndex >= 0 && row.model.cells[fiscalYearIndex] ? row.model.cells[fiscalYearIndex].value : null,
+                            postingPeriod: postingPeriodIndex >= 0 && row.model.cells[postingPeriodIndex] ? row.model.cells[postingPeriodIndex].value : null,
                             debitCredit: debitCredit,
-                            reference: referenceIndex >= 0 ? row.model.cells[referenceIndex].value : null,
+                            reference: referenceIndex >= 0 && row.model.cells[referenceIndex] ? row.model.cells[referenceIndex].value : null,
                             contraAccountType: contraAccountType,
                             contraAccountNumber: contraAccountNumber,
-                            dueDate: dueDateIndex >= 0 ? getDate(row.model.cells[dueDateIndex]) : null,
-                            textHeader: textHeaderIndex >= 0 ? row.model.cells[textHeaderIndex].value : null,
+                            dueDate: dueDateIndex >= 0 && row.model.cells[dueDateIndex] ? getDate(row.model.cells[dueDateIndex]) : null,
+                            textHeader: textHeaderIndex >= 0 && row.model.cells[textHeaderIndex] ? row.model.cells[textHeaderIndex].value : null,
                             procedureId: procedureId,
-                            client: clientIndex >= 0 ? row.model.cells[clientIndex].value : null,
-                            documentNumber2: documentNumber2Index >= 0 ? row.model.cells[documentNumber2Index].value : null,
-                            documentTypeNumber: documentTypeNumberIndex >= 0 ? row.model.cells[documentTypeNumberIndex].value : null,
-                            documentTypeName: documentTypeNameIndex >= 0 ? row.model.cells[documentTypeNameIndex].value : null,
-                            documentTypeNew: documentTypeNewIndex >= 0 ? row.model.cells[documentTypeNewIndex].value : null,
-                            dueDateNew: dueDateNewIndex >= 0 ? getDate(row.model.cells[dueDateNewIndex]) : null,
-                            executionDate: executionDateIndex >= 0 ? getDate(row.model.cells[executionDateIndex]) : null,
+                            client: clientIndex >= 0  && row.model.cells[clientIndex]? row.model.cells[clientIndex].value : null,
+                            documentNumber2: documentNumber2Index >= 0 && row.model.cells[documentNumber2Index] ? row.model.cells[documentNumber2Index].value : null,
+                            documentTypeNumber: documentTypeNumberIndex >= 0 && row.model.cells[documentTypeNumberIndex] ? row.model.cells[documentTypeNumberIndex].value : null,
+                            documentTypeName: documentTypeNameIndex >= 0 && row.model.cells[documentTypeNameIndex] ? row.model.cells[documentTypeNameIndex].value : null,
+                            documentTypeNew: documentTypeNewIndex >= 0 && row.model.cells[documentTypeNewIndex] ? row.model.cells[documentTypeNewIndex].value : null,
+                            dueDateNew: dueDateNewIndex >= 0 && row.model.cells[dueDateNewIndex] ? getDate(row.model.cells[dueDateNewIndex]) : null,
+                            executionDate: executionDateIndex >= 0 && row.model.cells[executionDateIndex] ? getDate(row.model.cells[executionDateIndex]) : null,
                             contraAccountName: contraAccountName,
-                            balance: balanceIndex >= 0 ? row.model.cells[balanceIndex].value : null,
-                            debitAmount: debitAmountIndex >= 0 ? row.model.cells[debitAmountIndex].value : null,
-                            balanceTransactionCurrency: balanceTransactionCurrencyIndex >= 0 ? row.model.cells[balanceTransactionCurrencyIndex].value : null,
-                            debitAmountTransactionCurrency: debitAmountTransactionCurrencyIndex >= 0 ? row.model.cells[debitAmountTransactionCurrencyIndex].value : null,
-                            creditAmountTransactionCurrency: creditAmountTransactionCurrencyIndex >= 0 ? row.model.cells[creditAmountTransactionCurrencyIndex].value : null,
-                            exchangeRate: exchangeRateIndex >= 0 ? row.model.cells[exchangeRateIndex].value : null,
-                            cashDiscount: cashDiscountIndex >= 0 ? row.model.cells[cashDiscountIndex].value : null,
-                            postingKey: postingKeyIndex >= 0 ? row.model.cells[postingKeyIndex].value : null,
-                            salesTaxKey: salesTaxKeyIndex >= 0 ? row.model.cells[salesTaxKeyIndex].value : null,
-                            taxRate: taxRateIndex >= 0 ? row.model.cells[taxRateIndex].value : null,
-                            euTaxRate: euTaxRateIndex >= 0 ? row.model.cells[euTaxRateIndex].value : null,
-                            taxAmount: taxAmountIndex >= 0 ? row.model.cells[taxAmountIndex].value : null,
-                            taxAmountDebit: taxAmountDebitIndex >= 0 ? row.model.cells[taxAmountDebitIndex].value : null,
-                            taxAmountCredit: taxAmountCreditIndex >= 0 ? row.model.cells[taxAmountCreditIndex].value : null,
-                            stackNumber: stackNumberIndex >= 0 ? row.model.cells[stackNumberIndex].value : null,
-                            constCenter1: constCenter1Index >= 0 ? row.model.cells[constCenter1Index].value : null,
-                            CostCenter2: CostCenter2Index >= 0 ? row.model.cells[CostCenter2Index].value : null,
-                            applicationDateNew: applicationDateNewIndex >= 0 ? getDate(row.model.cells[applicationDateNewIndex]) : null,
-                            identifierBalanceCarryforward: identifierBalanceCarryforwardIndex >= 0 ? row.model.cells[identifierBalanceCarryforwardIndex].value : null,
-                            generalReversal: generalReversalIndex >= 0 ? row.model.cells[generalReversalIndex].value : null,
-                            ledgerId: ledgerIdIndex >= 0 ? row.model.cells[ledgerIdIndex].value : null,
-                            documentLink: documentLinkIndex >= 0 ? row.model.cells[documentLinkIndex].value : null,
-                            typeDocumentInformation1: typeDocumentInformation1Index >= 0 ? row.model.cells[typeDocumentInformation1Index].value : null,
-                            contentDocumentInformation1: contentDocumentInformation1Index >= 0 ? row.model.cells[contentDocumentInformation1Index].value : null,
-                            typeDocumentInformation2: typeDocumentInformation2Index >= 0 ? row.model.cells[typeDocumentInformation2Index].value : null,
-                            contentDocumentInformation2: contentDocumentInformation2Index >= 0 ? row.model.cells[contentDocumentInformation2Index].value : null,
-                            typeDocumentInformation3: typeDocumentInformation3Index >= 0 ? row.model.cells[typeDocumentInformation3Index].value : null,
-                            contentDocumentInformation3: contentDocumentInformation3Index >= 0 ? row.model.cells[contentDocumentInformation3Index].value : null,
-                            typeDocumentInformation4: typeDocumentInformation4Index >= 0 ? row.model.cells[typeDocumentInformation4Index].value : null,
-                            contentDocumentInformation4: contentDocumentInformation4Index >= 0 ? row.model.cells[contentDocumentInformation4Index].value : null,
-                            typeDocumentInformation5: typeDocumentInformation5Index >= 0 ? row.model.cells[typeDocumentInformation5Index].value : null,
-                            contentDocumentInformation5: contentDocumentInformation5Index >= 0 ? row.model.cells[contentDocumentInformation5Index].value : null,
-                            typeDocumentInformation6: typeDocumentInformation6Index >= 0 ? row.model.cells[typeDocumentInformation6Index].value : null,
-                            contentDocumentInformation6: contentDocumentInformation6Index >= 0 ? row.model.cells[contentDocumentInformation6Index].value : null,
-                            typeDocumentInformation7: typeDocumentInformation7Index >= 0 ? row.model.cells[typeDocumentInformation7Index].value : null,
-                            contentDocumentInformation7: contentDocumentInformation7Index >= 0 ? row.model.cells[contentDocumentInformation7Index].value : null,
-                            typeDocumentInformation8: typeDocumentInformation8Index >= 0 ? row.model.cells[typeDocumentInformation8Index].value : null,
-                            contentDocumentInformation8: contentDocumentInformation8Index >= 0 ? row.model.cells[contentDocumentInformation8Index].value : null,
+                            balance: balanceIndex >= 0 && row.model.cells[executionDateIndex] ? row.model.cells[balanceIndex].value : null,
+                            debitAmount: debitAmountIndex >= 0 && row.model.cells[executionDateIndex] ? row.model.cells[debitAmountIndex].value : null,
+                            balanceTransactionCurrency: balanceTransactionCurrencyIndex >= 0  && row.model.cells[balanceTransactionCurrencyIndex]? row.model.cells[balanceTransactionCurrencyIndex].value : null,
+                            debitAmountTransactionCurrency: debitAmountTransactionCurrencyIndex >= 0 && row.model.cells[debitAmountTransactionCurrencyIndex] ? row.model.cells[debitAmountTransactionCurrencyIndex].value : null,
+                            creditAmountTransactionCurrency: creditAmountTransactionCurrencyIndex >= 0 && row.model.cells[creditAmountTransactionCurrencyIndex] ? row.model.cells[creditAmountTransactionCurrencyIndex].value : null,
+                            exchangeRate: exchangeRateIndex >= 0  && row.model.cells[exchangeRateIndex]? row.model.cells[exchangeRateIndex].value : null,
+                            cashDiscount: cashDiscountIndex >= 0  && row.model.cells[cashDiscountIndex]? row.model.cells[cashDiscountIndex].value : null,
+                            postingKey: postingKeyIndex >= 0 && row.model.cells[postingKeyIndex] ? row.model.cells[postingKeyIndex].value : null,
+                            salesTaxKey: salesTaxKeyIndex >= 0 && row.model.cells[salesTaxKeyIndex] ? row.model.cells[salesTaxKeyIndex].value : null,
+                            taxRate: taxRateIndex >= 0 && row.model.cells[taxRateIndex] ? row.model.cells[taxRateIndex].value : null,
+                            euTaxRate: euTaxRateIndex >= 0 && row.model.cells[euTaxRateIndex] ? row.model.cells[euTaxRateIndex].value : null,
+                            taxAmount: taxAmountIndex >= 0 && row.model.cells[taxAmountIndex] ? row.model.cells[taxAmountIndex].value : null,
+                            taxAmountDebit: taxAmountDebitIndex >= 0 && row.model.cells[taxAmountDebitIndex] ? row.model.cells[taxAmountDebitIndex].value : null,
+                            taxAmountCredit: taxAmountCreditIndex >= 0 && row.model.cells[taxAmountCreditIndex] ? row.model.cells[taxAmountCreditIndex].value : null,
+                            stackNumber: stackNumberIndex >= 0 && row.model.cells[stackNumberIndex] ? row.model.cells[stackNumberIndex].value : null,
+                            constCenter1: constCenter1Index >= 0 && row.model.cells[constCenter1Index] ? row.model.cells[constCenter1Index].value : null,
+                            CostCenter2: CostCenter2Index >= 0  && row.model.cells[CostCenter2Index]? row.model.cells[CostCenter2Index].value : null,
+                            applicationDateNew: applicationDateNewIndex >= 0 && row.model.cells[applicationDateNewIndex] ? getDate(row.model.cells[applicationDateNewIndex]) : null,
+                            identifierBalanceCarryforward: identifierBalanceCarryforwardIndex >= 0 && row.model.cells[identifierBalanceCarryforwardIndex] ? row.model.cells[identifierBalanceCarryforwardIndex].value : null,
+                            generalReversal: generalReversalIndex >= 0 && row.model.cells[generalReversalIndex] ? row.model.cells[generalReversalIndex].value : null,
+                            ledgerId: ledgerIdIndex >= 0  && row.model.cells[ledgerIdIndex]? row.model.cells[ledgerIdIndex].value : null,
+                            documentLink: documentLinkIndex >= 0 && row.model.cells[documentLinkIndex] ? row.model.cells[documentLinkIndex].value : null,
+                            typeDocumentInformation1: typeDocumentInformation1Index >= 0 && row.model.cells[typeDocumentInformation1Index] ? row.model.cells[typeDocumentInformation1Index].value : null,
+                            contentDocumentInformation1: contentDocumentInformation1Index >= 0 && row.model.cells[contentDocumentInformation1Index] ? row.model.cells[contentDocumentInformation1Index].value : null,
+                            typeDocumentInformation2: typeDocumentInformation2Index >= 0 && row.model.cells[typeDocumentInformation2Index] ? row.model.cells[typeDocumentInformation2Index].value : null,
+                            contentDocumentInformation2: contentDocumentInformation2Index >= 0 && row.model.cells[contentDocumentInformation2Index] ? row.model.cells[contentDocumentInformation2Index].value : null,
+                            typeDocumentInformation3: typeDocumentInformation3Index >= 0 && row.model.cells[typeDocumentInformation3Index] ? row.model.cells[typeDocumentInformation3Index].value : null,
+                            contentDocumentInformation3: contentDocumentInformation3Index >= 0 && row.model.cells[contentDocumentInformation3Index] ? row.model.cells[contentDocumentInformation3Index].value : null,
+                            typeDocumentInformation4: typeDocumentInformation4Index >= 0 && row.model.cells[typeDocumentInformation4Index] ? row.model.cells[typeDocumentInformation4Index].value : null,
+                            contentDocumentInformation4: contentDocumentInformation4Index >= 0 && row.model.cells[contentDocumentInformation4Index] ? row.model.cells[contentDocumentInformation4Index].value : null,
+                            typeDocumentInformation5: typeDocumentInformation5Index >= 0 && row.model.cells[typeDocumentInformation5Index] ? row.model.cells[typeDocumentInformation5Index].value : null,
+                            contentDocumentInformation5: contentDocumentInformation5Index >= 0 && row.model.cells[contentDocumentInformation5Index] ? row.model.cells[contentDocumentInformation5Index].value : null,
+                            typeDocumentInformation6: typeDocumentInformation6Index >= 0 && row.model.cells[typeDocumentInformation6Index] ? row.model.cells[typeDocumentInformation6Index].value : null,
+                            contentDocumentInformation6: contentDocumentInformation6Index >= 0 && row.model.cells[contentDocumentInformation6Index] ? row.model.cells[contentDocumentInformation6Index].value : null,
+                            typeDocumentInformation7: typeDocumentInformation7Index >= 0 && row.model.cells[typeDocumentInformation7Index] ? row.model.cells[typeDocumentInformation7Index].value : null,
+                            contentDocumentInformation7: contentDocumentInformation7Index >= 0 && row.model.cells[contentDocumentInformation7Index] ? row.model.cells[contentDocumentInformation7Index].value : null,
+                            typeDocumentInformation8: typeDocumentInformation8Index >= 0  && row.model.cells[typeDocumentInformation8Index]? row.model.cells[typeDocumentInformation8Index].value : null,
+                            contentDocumentInformation8: contentDocumentInformation8Index >= 0 && row.model.cells[contentDocumentInformation8Index] ? row.model.cells[contentDocumentInformation8Index].value : null,
                         });
 
 
@@ -632,7 +632,12 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
             const workbookReader = new Excel.stream.xlsx.WorkbookReader(excelFilePath, {
                 includeEmpty: true
             });
-
+            // const worksheetReader = workbookReader.worksheets[0];
+            // fetch sheet by id
+            // INFO: Be careful when using it!
+            // It tries to access to `worksheet.id` field. Sometimes (really very often) workbook has worksheets with id not starting from 1.
+            // For instance It happens when any worksheet has been deleted.
+            // .getWorksheet(1);
             for await (const worksheetReader of workbookReader) {
                 for await (const row of worksheetReader) {
 
@@ -687,44 +692,44 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
                     } else {
 
                         rowsToInsert.push({
-                            accountNumber: accountNumberIndex >= 0 ? row.model.cells[accountNumberIndex].value : null,
-                            companyCode: companyCodeIndex >= 0 ? row.model.cells[companyCodeIndex].value : null,
-                            accountName: accountNameIndex >= 0 ? row.model.cells[accountNameIndex].value : null,
-                            accountType: AccountTypeEnum[accountType] ? AccountTypeEnum[accountType] : row.model.cells[accountTypeIndex].value,
+                            accountNumber: accountNumberIndex >= 0 && row.model.cells[accountNumberIndex] ? row.model.cells[accountNumberIndex].value : null,
+                            companyCode: companyCodeIndex >= 0 && row.model.cells[companyCodeIndex] ? row.model.cells[companyCodeIndex].value : null,
+                            accountName: accountNameIndex >= 0 && row.model.cells[accountNameIndex] ? row.model.cells[accountNameIndex].value : null,
+                            accountType: AccountTypeEnum[accountType] ? AccountTypeEnum[accountType] : row.model.cells[accountTypeIndex]? row.model.cells[accountTypeIndex].value: null,
                             procedureId: procedureId,
-                            accountTypeId: accountTypeIdIndex >= 0 ? row.model.cells[accountTypeIdIndex].value : null,
-                            accountTypeIdInternal: accountTypeIdInternalIndex >= 0 ? row.model.cells[accountTypeIdInternalIndex].value : null,
-                            nameAffix1: nameAffix1Index >= 0 ? row.model.cells[nameAffix1Index].value : null,
-                            nameAffix2: nameAffix2Index >= 0 ? row.model.cells[nameAffix2Index].value : null,
-                            VATId: VATIdIndex >= 0 ? row.model.cells[VATIdIndex].value : null,
-                            taxNumber: taxNumberIndex >= 0 ? row.model.cells[taxNumberIndex].value : null,
-                            street: streetIndex >= 0 ? row.model.cells[streetIndex].value : null,
-                            postCode: postCodeIndex >= 0 ? row.model.cells[postCodeIndex].value : null,
-                            city: cityIndex >= 0 ? row.model.cells[cityIndex].value : null,
-                            country: countryIndex >= 0 ? row.model.cells[countryIndex].value : null,
-                            contactPerson: contactPersonIndex >= 0 ? row.model.cells[contactPersonIndex].value : null,
-                            phone: phoneIndex >= 0 ? row.model.cells[phoneIndex].value : null,
-                            email: emailIndex >= 0 ? row.model.cells[emailIndex].value : null,
-                            bankName1: bankName1Index >= 0 ? row.model.cells[bankName1Index].value : null,
-                            bankSortCode1: bankSortCode1Index >= 0 ? row.model.cells[bankSortCode1Index].value : null,
-                            bankAccountNo1: bankAccountNo1Index >= 0 ? row.model.cells[bankAccountNo1Index].value : null,
-                            countryCode1: countryCode1Index >= 0 ? row.model.cells[countryCode1Index].value : null,
-                            iBAN_No1: iBAN_No1Index >= 0 ? row.model.cells[iBAN_No1Index].value : null,
-                            swift_code1: swift_code1Index >= 0 ? row.model.cells[swift_code1Index].value : null,
-                            differentAccountHolder1: differentAccountHolder1Index >= 0 ? row.model.cells[differentAccountHolder1Index].value : null,
-                            bankSortCode2: bankSortCode2Index >= 0 ? row.model.cells[bankSortCode2Index].value : null,
-                            bankName2: bankName2Index >= 0 ? row.model.cells[bankName2Index].value : null,
-                            bankAccountNo2: bankAccountNo2Index >= 0 ? row.model.cells[bankAccountNo2Index].value : null,
-                            countryCode2: countryCode2Index >= 0 ? row.model.cells[countryCode2Index].value : null,
-                            iBAN_No2: iBAN_No2Index >= 0 ? row.model.cells[iBAN_No2Index].value : null,
-                            swift_code2: swift_code2Index >= 0 ? row.model.cells[swift_code2Index].value : null,
-                            differentAccountHolder2: differentAccountHolder2Index >= 0 ? row.model.cells[differentAccountHolder2Index].value : null,
-                            bankName3: bankName3Index >= 0 ? row.model.cells[bankName3Index].value : null,
-                            bankAccountNo3: bankAccountNo3Index >= 0 ? row.model.cells[bankAccountNo3Index].value : null,
-                            countryCode3: countryCode3Index >= 0 ? row.model.cells[countryCode3Index].value : null,
-                            iBAN_No3: iBAN_No3Index >= 0 ? row.model.cells[iBAN_No3Index].value : null,
-                            swift_code3: swift_code3Index >= 0 ? row.model.cells[swift_code3Index].value : null,
-                            differentAccountHolder3: differentAccountHolder3Index >= 0 ? row.model.cells[differentAccountHolder3Index].value : null,
+                            accountTypeId: accountTypeIdIndex >= 0 && row.model.cells[accountTypeIdIndex] ? row.model.cells[accountTypeIdIndex].value : null,
+                            accountTypeIdInternal: accountTypeIdInternalIndex >= 0 && row.model.cells[accountTypeIdInternalIndex] ? row.model.cells[accountTypeIdInternalIndex].value : null,
+                            nameAffix1: nameAffix1Index >= 0 && row.model.cells[nameAffix1Index] ? row.model.cells[nameAffix1Index].value : null,
+                            nameAffix2: nameAffix2Index >= 0 && row.model.cells[nameAffix2Index] ? row.model.cells[nameAffix2Index].value : null,
+                            VATId: VATIdIndex >= 0 && row.model.cells[VATIdIndex] ? row.model.cells[VATIdIndex].value : null,
+                            taxNumber: taxNumberIndex >= 0 && row.model.cells[taxNumberIndex] ? row.model.cells[taxNumberIndex].value : null,
+                            street: streetIndex >= 0  && row.model.cells[streetIndex]? row.model.cells[streetIndex].value : null,
+                            postCode: postCodeIndex >= 0 && row.model.cells[postCodeIndex] ? row.model.cells[postCodeIndex].value : null,
+                            city: cityIndex >= 0 && row.model.cells[cityIndex] ? row.model.cells[cityIndex].value : null,
+                            country: countryIndex >= 0 && row.model.cells[countryIndex] ? row.model.cells[countryIndex].value : null,
+                            contactPerson: contactPersonIndex >= 0 && row.model.cells[contactPersonIndex] ? row.model.cells[contactPersonIndex].value : null,
+                            phone: phoneIndex >= 0  && row.model.cells[phoneIndex]? row.model.cells[phoneIndex].value : null,
+                            email: emailIndex >= 0  && row.model.cells[emailIndex]? row.model.cells[emailIndex].value : null,
+                            bankName1: bankName1Index >= 0  && row.model.cells[bankName1Index]? row.model.cells[bankName1Index].value : null,
+                            bankSortCode1: bankSortCode1Index >= 0  && row.model.cells[bankSortCode1Index]? row.model.cells[bankSortCode1Index].value : null,
+                            bankAccountNo1: bankAccountNo1Index >= 0 && row.model.cells[bankAccountNo1Index] ? row.model.cells[bankAccountNo1Index].value : null,
+                            countryCode1: countryCode1Index >= 0  && row.model.cells[countryCode1Index]? row.model.cells[countryCode1Index].value : null,
+                            iBAN_No1: iBAN_No1Index >= 0 && row.model.cells[iBAN_No1Index] ? row.model.cells[iBAN_No1Index].value : null,
+                            swift_code1: swift_code1Index >= 0 && row.model.cells[swift_code1Index] ? row.model.cells[swift_code1Index].value : null,
+                            differentAccountHolder1: differentAccountHolder1Index >= 0 && row.model.cells[differentAccountHolder1Index] ? row.model.cells[differentAccountHolder1Index].value : null,
+                            bankSortCode2: bankSortCode2Index >= 0 && row.model.cells[bankSortCode2Index] ? row.model.cells[bankSortCode2Index].value : null,
+                            bankName2: bankName2Index >= 0 && row.model.cells[bankName2Index] ? row.model.cells[bankName2Index].value : null,
+                            bankAccountNo2: bankAccountNo2Index >= 0 && row.model.cells[bankAccountNo2Index] ? row.model.cells[bankAccountNo2Index].value : null,
+                            countryCode2: countryCode2Index >= 0 && row.model.cells[countryCode2Index] ? row.model.cells[countryCode2Index].value : null,
+                            iBAN_No2: iBAN_No2Index >= 0 && row.model.cells[iBAN_No2Index] ? row.model.cells[iBAN_No2Index].value : null,
+                            swift_code2: swift_code2Index >= 0 && row.model.cells[swift_code2Index] ? row.model.cells[swift_code2Index].value : null,
+                            differentAccountHolder2: differentAccountHolder2Index >= 0 && row.model.cells[differentAccountHolder2Index] ? row.model.cells[differentAccountHolder2Index].value : null,
+                            bankName3: bankName3Index >= 0 && row.model.cells[bankName3Index] ? row.model.cells[bankName3Index].value : null,
+                            bankAccountNo3: bankAccountNo3Index >= 0 && row.model.cells[bankAccountNo3Index] ? row.model.cells[bankAccountNo3Index].value : null,
+                            countryCode3: countryCode3Index >= 0 && row.model.cells[countryCode3Index] ? row.model.cells[countryCode3Index].value : null,
+                            iBAN_No3: iBAN_No3Index >= 0 && row.model.cells[iBAN_No3Index] ? row.model.cells[iBAN_No3Index].value : null,
+                            swift_code3: swift_code3Index >= 0 && row.model.cells[swift_code3Index] ? row.model.cells[swift_code3Index].value : null,
+                            differentAccountHolder3: differentAccountHolder3Index >= 0 && row.model.cells[differentAccountHolder3Index] ? row.model.cells[differentAccountHolder3Index].value : null,
                         });
 
 
