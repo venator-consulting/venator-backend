@@ -169,7 +169,7 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
             });
             // const worksheetReader = workbookReader.worksheets[0];
             for await (const worksheetReader of workbookReader) {
-                if(worksheetReader.id == 1){
+                // if(worksheetReader.id == 1){
                     for await (const row of worksheetReader) {
 
                         row.eachCell({
@@ -533,9 +533,9 @@ module.exports.importStreamExcelFile = async function (excelFilePath, managerId,
 
                         resolve(true);
                     }
-                }
+                // }
             }
-
+            // resolve(true);
         } catch (err) {
             console.log("ERROR, the transaction will Rollback");
             console.error(err);
@@ -641,7 +641,7 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
             // For instance It happens when any worksheet has been deleted.
             // .getWorksheet(1);
             for await (const worksheetReader of workbookReader) {
-                if(worksheetReader.id == 1){
+                // if(worksheetReader.id == 1){
                     for await (const row of worksheetReader) {
 
                         row.eachCell({
@@ -777,7 +777,7 @@ module.exports.importStreamAccountsExcel = async function (excelFilePath, manage
                     benchmark = process.hrtime(benchmark);
                     console.log('benchmark took %d seconds and %d nanoseconds', benchmark[0], benchmark[1]);
                     logger.info(`${new Date()}:benchmark for import took: ${benchmark[0]} seconds and ${benchmark[1]} nanoseconds for ${index} records`);
-                }
+                // }
                 resolve(true);
             } // end of main for each sheet
 
