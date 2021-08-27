@@ -4,10 +4,11 @@ const Sequelize = require("../config/sequelize.config");
 const Exception = require("../helpers/errorHandlers/Exception");
 const httpStatus = require("../models/enums/httpStatus");
 const DATE_RANGE = require("../models/enums/date.ranges");
+const keywords = require("../models/analysis/text.analysis.keywords");
 
 const sequelize = Sequelize.getSequelize();
 
-module.exports.dateRange = async (orgId, prcId) => {
+getDateRange = async (orgId, prcId) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(prcId))
@@ -30,62 +31,63 @@ module.exports.dateRange = async (orgId, prcId) => {
   return result;
 };
 
-getDateRanges = (mindate, maxdate, step) => {
+calculateDateRanges = (mindate, maxdate, step) => {
   if (maxdate < mindate)
     throw new Exception(
       httpStatus.BAD_REQUEST,
       "MaxDate_must_be_bigger_than_MinDate"
     );
   const ranges = [mindate];
+  let tempDate;
   switch (step) {
     case DATE_RANGE.MONTHLY:
       // get the start of the next month if less than the maxdate, then push it to the array
-      let tempDate = new Date(mindate.getFullYear(), mindate.getMonth() + 1, 1);
-      ranges.push(tempDate);
-      while(tempDate < maxdate) {
+      tempDate = new Date(mindate.getFullYear(), mindate.getMonth() + 1, 1);
+      if(tempDate < maxdate) ranges.push(tempDate);
+      while (tempDate < maxdate) {
         tempDate.setMonth(tempDate.getMonth() + 1, 1);
-        ranges.push(new Date(tempDate));
+        if(tempDate < maxdate) ranges.push(new Date(tempDate));
       }
       // push maxdate
       ranges.push(maxdate);
       break;
     case DATE_RANGE.TOW_MONTHS:
       // get the start of the next-next month (+2) if less than the maxdate, then push it to the array
-      let tempDate = new Date(mindate.getFullYear(), mindate.getMonth() + 2, 1);
-      ranges.push(tempDate);
-      while(tempDate < maxdate) {
+      tempDate = new Date(mindate.getFullYear(), mindate.getMonth() + 2, 1);
+      if(tempDate < maxdate) ranges.push(tempDate);
+      while (tempDate < maxdate) {
         tempDate.setMonth(tempDate.getMonth() + 2, 1);
-        ranges.push(new Date(tempDate));
+        if(tempDate < maxdate) ranges.push(new Date(tempDate));
       }
       // push maxdate
       ranges.push(maxdate);
       break;
     case DATE_RANGE.QUARTER:
-      let tempDate = new Date(mindate.getFullYear(), mindate.getMonth() + 3, 1);
-      ranges.push(tempDate);
-      while(tempDate < maxdate) {
+      tempDate = new Date(mindate.getFullYear(), mindate.getMonth() + 3, 1);
+      if(tempDate < maxdate) ranges.push(tempDate);
+      while (tempDate < maxdate) {
         tempDate.setMonth(tempDate.getMonth() + 3, 1);
-        ranges.push(new Date(tempDate));
+        if(tempDate < maxdate) ranges.push(new Date(tempDate));
       }
       // push maxdate
       ranges.push(maxdate);
       break;
     case DATE_RANGE.HALF_ANNUAL:
-      let tempDate = new Date(mindate.getFullYear(), mindate.getMonth() + 6, 1);
-      ranges.push(tempDate);
-      while(tempDate < maxdate) {
+      tempDate = new Date(mindate.getFullYear(), mindate.getMonth() + 6, 1);
+      if(tempDate < maxdate) ranges.push(tempDate);
+      while (tempDate < maxdate) {
         tempDate.setMonth(tempDate.getMonth() + 6, 1);
-        ranges.push(new Date(tempDate));
+        if(tempDate < maxdate) ranges.push(new Date(tempDate));
       }
       // push maxdate
       ranges.push(maxdate);
       break;
     case DATE_RANGE.ANNUAL:
-      let tempDate = new Date(mindate.getFullYear() + 1, 1, 1);
-      ranges.push(tempDate);
-      while(tempDate < maxdate) {
+      tempDate = new Date(mindate.getFullYear() + 1, 1, 1);
+      if(tempDate < maxdate) ranges.push(tempDate);
+      while (tempDate < maxdate) {
         tempDate.setFullYear(tempDate.getFullYear() + 1, 1, 1);
-        ranges.push(new Date(tempDate));
+        if(tempDate < maxdate) ranges.push(new Date(tempDate));
       }
       // push maxdate
       ranges.push(maxdate);
@@ -108,7 +110,7 @@ getDateRanges = (mindate, maxdate, step) => {
  * @param {*} keys
  * @returns
  */
-module.exports.textAnalysisByWord = async (orgId, prcId, keys, dateRanges) => {
+getData = async (orgId, prcId, keys, dateRanges) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(prcId))
@@ -157,4 +159,26 @@ module.exports.textAnalysisByWord = async (orgId, prcId, keys, dateRanges) => {
     result = result.filter((rec) => +rec.recordsCount > 0);
   }
   return result;
+};
+
+module.exports.textAnalysisByWord = async (orgId, prcId, step) => {
+  const dateRange = await getDateRange(orgId, prcId);
+
+  if (dateRange.length < 1) {
+    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+  }
+  if (
+    !dateRange[0].mindate ||
+    !(dateRange[0].mindate instanceof Date) ||
+    !dateRange[0].maxdate ||
+    !(dateRange[0].maxdate instanceof Date)
+  ) {
+    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+  }
+  const mindate = dateRange[0].mindate;
+  const maxdate = dateRange[0].maxdate;
+
+  const dateRanges = calculateDateRanges(mindate, maxdate, step);
+
+  const result = await getData(orgId, prcId, keywords, dateRanges);
 };
