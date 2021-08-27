@@ -1,7 +1,7 @@
 module.exports = {
-    MONTHLY: 'Monthly',
-    TOW_MONTHS: 'twoMonths',
-    QUARTER: 'quartAnnual',
-    HALF_ANNUAL: 'halfAnnual',
-    ANNUAL: 'annual' 
+    MONTHLY: 'MONTHLY',
+    TOW_MONTHS: 'TOW_MONTHS',
+    QUARTER: 'QUARTER',
+    HALF_ANNUAL: 'HALF_ANNUAL',
+    ANNUAL: 'ANNUAL' 
 };

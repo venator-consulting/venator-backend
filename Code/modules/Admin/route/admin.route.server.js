@@ -12,6 +12,7 @@ const organisationCtrl = require('../controller/organisation.controller.server')
 const docTypeCtrl = require('../controller/documentType.controller.server');
 const postingCtrl = require('../controller/posting.controller.server');
 const accountTypeCtrl = require('../controller/accountType.controler.server');
+const precalcCtrl = require('../controller/precalculated.controller.server');
 
 const multer = require('multer');
 const uploadfiles = multer({
@@ -48,6 +49,10 @@ router
     .post(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), uploadCtrl.deleteFileFromServier);
+
+router
+    .route('/precalculate/:orgId/:prcId/:step')
+    .get(precalcCtrl.textAnalysisByWord);
 
 router
     .route('/user')
