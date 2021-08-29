@@ -42,7 +42,8 @@ export class TextAnalysisPreComponent implements OnInit {
   wordRecordsData: any[];
   criteriaWord: any = {};
   dateRanges: { label, value }[] = new Array();
-  selectedRangeString: string = '';
+  steps: { label, value }[] = new Array();
+  selectedStep: string = 'MONTHLY';
 
   constructor(private _analysisService: AnalysisService,
     private _router: Router,
@@ -63,7 +64,28 @@ export class TextAnalysisPreComponent implements OnInit {
       routerLink: '/dashboard/shared/data',
     };
 
-    this.waiting = true;
+    this.steps = [
+      {
+        label: 'MONTHLY',
+        value: 'MONTHLY'
+      },
+      {
+        label: 'TOW_MONTHS',
+        value: 'TOW_MONTHS'
+      },
+      {
+        label: 'QUARTER',
+        value: 'QUARTER'
+      },
+      {
+        label: 'HALF_ANNUAL',
+        value: 'HALF_ANNUAL'
+      },
+      {
+        label: 'ANNUAL',
+        value: 'ANNUAL'
+      }
+    ];
 
     this.basicOptionsWords = {
       responsive: true,
@@ -106,28 +128,38 @@ export class TextAnalysisPreComponent implements OnInit {
       },
     ];
 
-    this._analysisService
-      .getTextAnalysisWordCalcDateRange(this.selectedOrganisation, this.selectedProcedure)
-      .subscribe(res => {
-        res.forEach(range => {
-          this.dateRanges.push({
-            label: this.datepipe.transform(range.fromDate, 'yyyy.MM.dd') + ' - ' + this.datepipe.transform(range.toDate, 'yyyy.MM.dd'),
-            value: {
-              fromDate: this.datepipe.transform(range.fromDate, 'yyyy.MM.dd'),
-              toDate: this.datepipe.transform(range.toDate, 'yyyy.MM.dd')
-            }
-          });
-        });
-      }, er => this.waiting = false
-      );
+    this.getDateRanges(this.selectedStep);
 
   } // end of ng on init
+
+  stepChangedHandler(e) {
+    this.getDateRanges(e.value);
+  }
+
+  getDateRanges(step) {
+    this._analysisService
+    .getTextAnalysisWordCalcDateRange(this.selectedOrganisation, this.selectedProcedure, step)
+    .subscribe(res => {
+      this.dateRanges = [];
+      res.forEach(range => {
+        this.dateRanges.push({
+          label: this.datepipe.transform(range.fromDate, 'yyyy.MM.dd') + ' - ' + this.datepipe.transform(range.toDate, 'yyyy.MM.dd'),
+          value: {
+            fromDate: this.datepipe.transform(range.fromDate, 'yyyy.MM.dd'),
+            toDate: this.datepipe.transform(range.toDate, 'yyyy.MM.dd')
+          }
+        });
+      });
+    }, er => this.waiting = false
+    );
+  }
 
   dateChangedHandler(e) {
     this.getData(e.value.fromDate, e.value.toDate);
   }
 
   getData(fromDate, toDate) {
+    this.waiting = true;
     this._analysisService
       .getTextAnalysisWordCalcData(
         this.selectedOrganisation,
