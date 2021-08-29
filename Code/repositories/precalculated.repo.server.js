@@ -1,3 +1,4 @@
+const connection = require("../config/mysql.config");
 const Posting = require("../models/posting.model.server");
 const { Op, fn, col, QueryTypes } = require("sequelize");
 const Sequelize = require("../config/sequelize.config");
@@ -89,11 +90,12 @@ calculateDateRanges = (mindate, maxdate, step) => {
   return ranges;
 };
 
-/**
- * INSERT INTO table2
-    SELECT * FROM table1
-    WHERE condition;
- */
+module.exports.deletePrevData = async (orgId, prcId) => {
+  let query = `DELETE FROM text_analysis_word_${orgId} WHERE procedureId = ${prcId}`;
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+
 /**
  *
  * @param {*} orgId
@@ -101,12 +103,12 @@ calculateDateRanges = (mindate, maxdate, step) => {
  * @param {*} keys
  * @returns
  */
-getData = async (orgId, prcId, keys, dateRanges) => {
+getData = async (orgId, prcId, keys, dateRanges, step) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
-  let query = `INSERT INTO text_analysis_word_${orgId} (`;
+  let query = ` INSERT INTO text_analysis_word_${orgId} (recordsCount, accountsCount, word, fromDate, toDate, procedureId, step) `;
   for (let index = 0; index < keys.length; index++) {
     const key = keys[index];
     let originalKey = keys[index];
@@ -115,26 +117,29 @@ getData = async (orgId, prcId, keys, dateRanges) => {
     originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
     originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
 
-    for (let index = 1; index < dateRanges.length; index++) {
-      let fromDate = dateRanges[index - 1];
-      let toDate = dateRanges[index];
+    for (let i = 1; i < dateRanges.length; i++) {
+      let fromDate = dateRanges[i - 1];
+      let toDate = dateRanges[i];
 
       query += `  
               SELECT
-                  SUM(pos.totalCount) recordsCount,
-                  COUNT(pos.accountNumber) accountsCount,
+                  IF (SUM(pos.totalCount) > 0, SUM(pos.totalCount),0) recordsCount,
+                  IF (COUNT(pos.accountNumber) > 0,COUNT(pos.accountNumber),0) accountsCount,
                   IF(1 = 1,
                       '${originalKey}',
                       '${originalKey}') word,
                   IF(1 = 1,
-                    '${fromDate.toLocaleDateString()}',
-                    '${fromDate.toLocaleDateString()}') fromDate,
+                    '${fromDate.toISOString().split('T')[0]}',
+                    '${fromDate.toISOString().split('T')[0]}') fromDate,
                   IF(1 = 1,
-                    '${toDate.toLocaleDateString()}',
-                    '${toDate.toLocaleDateString()}') toDate,
+                    '${toDate.toISOString().split('T')[0]}',
+                    '${toDate.toISOString().split('T')[0]}') toDate,
                   IF(1 = 1,
                     '${prcId}',
-                    '${prcId}') procedureId
+                    '${prcId}') procedureId,
+                  IF(1 = 1,
+                    '${step}',
+                    '${step}') step
               from
                   (SELECT
                       p.accountNumber ,
@@ -142,9 +147,9 @@ getData = async (orgId, prcId, keys, dateRanges) => {
                   from
                       posting_${orgId} p
                   WHERE
-                      p.procedureId = :procedureId
-                      AND p.documentDate >= ${fromDate}
-                      AND p.documentDate < ${toDate}
+                      p.procedureId = ${prcId}
+                      AND p.documentDate >= '${fromDate.toISOString().split('T')[0]}'
+                      AND p.documentDate < '${toDate.toISOString().split('T')[0]}'
                       AND (
                       UPPER(p.textPosting) ${key}
                       OR UPPER(p.reference) ${key}
@@ -153,19 +158,12 @@ getData = async (orgId, prcId, keys, dateRanges) => {
                   GROUP by
                       p.accountNumber) pos
               `;
-      query += index < keys.length - 1 ? " UNION " : "";
+      query += " UNION ";
     }
   }
-  query += ')';
-  let result = await sequelize.query(query, {
-    replacements: {
-      procedureId: prcId,
-    },
-    type: QueryTypes.INSERT,
-  });
-  if (result.length > 0) {
-    result = result.filter((rec) => +rec.recordsCount > 0);
-  }
+  query = query.slice(0, -6);
+  // console.log(query);
+  let result = await connection.getConnection().execute(query);
   return result;
 };
 
@@ -188,5 +186,47 @@ module.exports.textAnalysisByWord = async (orgId, prcId, step) => {
 
   const dateRanges = calculateDateRanges(mindate, maxdate, step);
 
-  const result = await getData(orgId, prcId, keywords, dateRanges);
+  const result = await getData(orgId, prcId, keywords, dateRanges, step);
+};
+
+
+module.exports.getrDateRangeOptions = async (orgId, prcId, step) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = `SELECT DISTINCT t.fromDate , t.toDate FROM text_analysis_word_${orgId} t
+      WHERE procedureId = :procedureId AND step = :step`;
+
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+      step: step
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
+};
+
+
+module.exports.getrDataByRange = async (orgId, prcId, fromDate, toDate) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = `SELECT * FROM text_analysis_word_${orgId} t
+      WHERE procedureId = :procedureId AND fromDate = :fromDate AND toDate = :toDate`;
+
+  let result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+      fromDate: fromDate,
+      toDate: toDate
+    },
+    type: QueryTypes.SELECT,
+  });
+  if (result.length && result.length > 0) {
+    result = result.filter((rec) => +rec.recordsCount > 0);
+  }
+  return result;
 };

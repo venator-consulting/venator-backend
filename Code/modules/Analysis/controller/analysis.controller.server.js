@@ -2,6 +2,7 @@ const postingRepo = require("../../../repositories/posting.repo.server");
 const nlpHelper = require("../../../helpers/nlp.helper.server");
 const keywords = require("../../../models/analysis/text.analysis.keywords");
 const paymentAnalysisRepo = require("../../../repositories/payment.analysis.repo");
+const precalRepo = require('../../../repositories/precalculated.repo.server');
 const dueDateAnalysisRepo = require("../../../repositories/duedate.analysis.repo");
 const criteorAnalysisRepo = require("../../../repositories/creditor.analysis.repo");
 const Exception = require("../../../helpers/errorHandlers/Exception");
@@ -53,6 +54,23 @@ module.exports.textAnalysis = async (req, res) => {
     req.params.prcId,
     fileKeywords
   );
+  res.status(200).json(result);
+};
+
+module.exports.getTextAnalysisDateRangeOptionsByWord = async (req, res) => {
+  const orgId = +req.params.orgId;
+  const prcId = +req.params.prcId;
+  const step = req.params.step;
+  const result = await precalRepo.getrDateRangeOptions(orgId, prcId, step);
+  res.status(200).json(result);
+};
+
+module.exports.getTextAnalysisDataByWordCalc = async (req, res) => {
+  const orgId = +req.params.orgId;
+  const prcId = +req.params.prcId;
+  const fromDate = req.params.fromDate;
+  const toDate = req.params.toDate;
+  const result = await precalRepo.getrDataByRange(orgId, prcId, fromDate, toDate);
   res.status(200).json(result);
 };
 

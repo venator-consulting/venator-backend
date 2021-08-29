@@ -109,7 +109,6 @@ export class NavBarComponent implements OnInit {
                   this.sideBarShow = false;
                 },
               },
-
               {
                 label: elem.resetPassword,
                 icon: 'pi pi-lock',
@@ -118,6 +117,19 @@ export class NavBarComponent implements OnInit {
                   this.sideBarShow = false;
                 },
               },
+
+              {
+                label: 'Pre-Calculate Analysis',
+                icon: 'pi pi-flag',
+                routerLink: ['/dashboard/admin/pre-calc'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+                visible:
+                  +localStorage.getItem('organisationId') > 0 &&
+                  +localStorage.getItem('currentProcedureId') > 0,
+              },
+
             ],
           },
           {
@@ -172,6 +184,14 @@ export class NavBarComponent implements OnInit {
                 label: 'Text Analysis with index',
                 icon: 'pi pi-file',
                 routerLink: ['/dashboard/analysis/text-indexed'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },//text-word-calc
+              {
+                label: 'Text Analysis Pre Calculated',
+                icon: 'pi pi-file',
+                routerLink: ['/dashboard/analysis/text-word-calc'],
                 command: () => {
                   this.sideBarShow = false;
                 },

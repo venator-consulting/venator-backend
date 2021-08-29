@@ -90,6 +90,8 @@ import { FreeLiquidityComponent } from './shared/liquidity/free-liquidity/free-l
 import { FreeLiquidityDetailsComponent } from './shared/liquidity/free-liquidity/free-liquidity-details/free-liquidity-details.component';
 import { TextAnalysisWordDetailsComponent } from './shared/analysis/text-analysis/text-analysis-word-details/text-analysis-word-details.component';
 import { TextAnalysisIndexedComponent } from './shared/analysis/text-analysis/text-analysis-indexed/text-analysis-indexed.component';
+import { TextAnalysisPreComponent } from './shared/analysis/text-analysis/text-analysis-pre/text-analysis-pre.component';
+import { PreCalculateComponent } from './admin/pre-calculate/pre-calculate.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -138,6 +140,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     FreeLiquidityDetailsComponent,
     TextAnalysisWordDetailsComponent,
     TextAnalysisIndexedComponent,
+    TextAnalysisPreComponent,
+    PreCalculateComponent,
   ],
   imports: [
     BrowserModule,

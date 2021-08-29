@@ -37,6 +37,8 @@ import { OpeningBalanceComponent } from './shared/liquidity/opening-balance/open
 import { CreditLineComponent } from './shared/liquidity/credit-line/credit-line.component';
 import { FreeLiquidityComponent } from './shared/liquidity/free-liquidity/free-liquidity.component';
 import { FreeLiquidityDetailsComponent } from './shared/liquidity/free-liquidity/free-liquidity-details/free-liquidity-details.component';
+import { TextAnalysisPreComponent } from './shared/analysis/text-analysis/text-analysis-pre/text-analysis-pre.component';
+import { PreCalculateComponent } from './admin/pre-calculate/pre-calculate.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -93,6 +95,12 @@ const routes: Routes = [
       {
         path: 'admin/document-type',
         component: DocumentTypeComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin'] },
+      },
+      {
+        path: 'admin/pre-calc',
+        component: PreCalculateComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin'] },
       },
@@ -161,6 +169,12 @@ const routes: Routes = [
       {
         path: 'analysis/text-indexed',
         component: TextAnalysisIndexedComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin', 'Manager', 'User'] },
+      },
+      {
+        path: 'analysis/text-word-calc',
+        component: TextAnalysisPreComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
       },

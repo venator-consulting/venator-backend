@@ -43,6 +43,14 @@ export class AnalysisService {
     return this._http.get<any[]>(this._thisURL + orgId + '/' + prcId + '/text-word-indexed');
   }
 
+  getTextAnalysisWordCalcDateRange(orgId: number, prcId: number, step: string = 'MONTHLY'): Observable<any[]> {
+    return this._http.get<any[]>(this._thisURL + orgId + '/' + prcId + '/text-word-calc/date-range/' + step);
+  }
+
+  getTextAnalysisWordCalcData(orgId: number, prcId: number, fromDate:string, toDate: string): Observable<any[]> {
+    return this._http.get<any[]>(this._thisURL + orgId + '/' + prcId + '/text-word-calc/' + fromDate +'/' + toDate);
+  }
+
   getTextAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<TextAnalysisDetails[]> {
     return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/text/details/' + accountNumber);
   }

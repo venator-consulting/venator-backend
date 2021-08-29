@@ -1,0 +1,88 @@
+<p-toast></p-toast>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+<div class="p-grid">
+    <div class="p-col-12">
+        <h1 class="p-text-center">Text Analysis By Word pre calculated</h1>
+        <h2 class="p-text-center">{{ procedureName }}</h2>
+        <h4 class="p-text-center">All Accounts</h4>
+        <h4 class="p-text-center">
+            <p-dropdown [options]="dateRanges" [(ngModel)]="selectedRangeString" placeholder="Date Range"
+                optionLabel="label" optionValue="value" [filter]="true" filterBy="label" required
+                (onChange)="dateChangedHandler($event)" [style]="{width:'500px'}">
+            </p-dropdown>
+        </h4>
+        <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
+        <!-- <h4 class="p-text-right">
+      <button
+        type="button"
+        pButton
+        pRipple
+        icon="pi pi-undo"
+        class="p-button-rounded p-button-warning"
+        (click)="byAccount = !byAccount"
+        pTooltip="Details"
+        tooltipPosition="bottom"
+        label="{{ byAccount? 'By Word' : 'By Account' }}"
+      ></button> -->
+        <!-- <button (click)="byAccount = !byAccount">ByWord</button> -->
+        <!-- </h4> -->
+
+    </div>
+</div>
+
+
+<div class="p-grid" *ngIf="basicDataWord">
+    <div class="p-col-12">
+        <div class="card">
+            <p-chart type="bar" [data]="basicDataWord" [options]="basicOptionsWords" height="350px"></p-chart>
+        </div>
+    </div>
+</div>
+
+<div class="p-grid">
+    <div class="p-col-12" *ngIf="selectedProcedure > 0">
+        <p-table #dtword [value]="dataWord" [resizableColumns]="true" dataKey="word" styleClass="p-datatable-gridlines"
+            [loading]="waiting" [columns]="colsWord" responsive="true" [scrollable]="true" scrollHeight="350px"
+            [reorderableColumns]="true">
+            <ng-template pTemplate="colgroup">
+                <colgroup>
+                    <col *ngFor="let col of colsWord" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn
+                        class="p-text-{{col.align}}" *ngFor="let col of colsWord">
+                        <span pTooltip="{{ col.header | translate }}">
+                            {{ col.header | translate }}
+                        </span>
+                        <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+                    </th>
+                    <th>{{ "AmountAnalysis.details" | translate }}</th>
+                </tr>
+                <tr>
+                    <th pResizableColumn *ngFor="let col of colsWord" class="autocomplete">
+                        <input pInputText type="text" [(ngModel)]="criteriaWord[col.field]" [style]="{ width: '90%' }"
+                            (input)="filterChangeWord($any($event.target).value, col.field)" class="filterInputCss"
+                            *ngIf="col.field == 'word'" />
+                    </th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+                <tr>
+                    <td pReorderableRowHandle *ngFor="let col of colsWord" class="p-text-{{ col.align }}">
+                        <span pTooltip="{{ row[col.field] }}">
+                            {{ row[col.field] }}
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" pButton pRipple icon="pi pi-list"
+                            class="p-button-rounded p-button-warning" (click)="goToDetailsWord(row)" pTooltip="Details"
+                            tooltipPosition="bottom"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
