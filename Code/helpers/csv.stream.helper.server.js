@@ -23,27 +23,27 @@ const { errorHandler } = require("./error.handler.server");
 const sequelizer = sequelize.getSequelize();
 
 module.exports.readHeader = async function (filePath) {
-        return new Promise((resolve, reject) => {
-            let fileHeaders = [];
-            const readable = fs.createReadStream(filePath, {
-                encoding: 'utf8'
-            });
-            // readable.setEncoding('ucs2');
-
-            readable
-                .pipe(csv({
-                    separator: ';',
-                    encoding: "utf8",
-                    // encoding: null
-                    bom: true
-                }))
-                .on('headers', (headers) => {
-                    // console.log(`First header: ${headers[0]}`);
-                    fileHeaders = headers;
-                    resolve(fileHeaders);
-                });
-
+    return new Promise((resolve, reject) => {
+        let fileHeaders = [];
+        const readable = fs.createReadStream(filePath, {
+            encoding: 'utf8'
         });
+        // readable.setEncoding('ucs2');
+
+        readable
+            .pipe(csv({
+                separator: ';',
+                encoding: "utf8",
+                // encoding: null
+                bom: true
+            }))
+            .on('headers', (headers) => {
+                // console.log(`First header: ${headers[0]}`);
+                fileHeaders = headers;
+                resolve(fileHeaders);
+            });
+
+    });
 }
 
 
@@ -78,45 +78,45 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
             for await (const row of parser) {
 
                 rowsToInsert.push({
-                    accountNumber: row[template.accountNumber],
-                    companyCode: row[template.companyCode],
-                    accountName: row[template.accountName],
-                    accountType: AccountTypeEnum[accountType] ? AccountTypeEnum[accountType] : row[template.accountType] ,
+                    accountNumber: row[template.accountNumber]?.trim(),
+                    companyCode: row[template.companyCode]?.trim(),
+                    accountName: row[template.accountName]?.trim(),
+                    accountType: AccountTypeEnum[accountType] ? AccountTypeEnum[accountType] : row[template.accountType]?.trim(),
                     procedureId: procedureId,
                     // accountTypeId: accountTypeId,
-                    accountTypeIdInternal: row[template.accountTypeIdInternal],
-                    nameAffix1: row[template.nameAffix1],
-                    nameAffix2: row[template.nameAffix2],
-                    VATId: row[template.VATId],
-                    taxNumber: row[template.taxNumber],
-                    street: row[template.street],
-                    postCode: row[template.postCode],
-                    city: row[template.city],
-                    country: row[template.country],
-                    contactPerson: row[template.contactPerson],
-                    phone: row[template.phone],
-                    email: row[template.email],
-                    bankName1: row[template.bankName1],
-                    accountNumber: row[template.accountNumber],
-                    bankSortCode1: row[template.bankSortCode1],
-                    bankAccountNo1: row[template.bankAccountNo1],
-                    countryCode1: row[template.countryCode1],
-                    iBAN_No1: row[template.iBAN_No1],
-                    swift_code1: row[template.swift_code1],
-                    differentAccountHolder1: row[template.differentAccountHolder1],
-                    bankSortCode2: row[template.bankSortCode2],
-                    bankName2: row[template.bankName2],
-                    bankAccountNo2: row[template.bankAccountNo2],
-                    countryCode2: row[template.countryCode2],
-                    iBAN_No2: row[template.iBAN_No2],
-                    swift_code2: row[template.swift_code2],
-                    differentAccountHolder2: row[template.differentAccountHolder2],
-                    bankName3: row[template.bankName3],
-                    bankAccountNo3: row[template.bankAccountNo3],
-                    countryCode3: row[template.countryCode3],
-                    iBAN_No3: row[template.iBAN_No3],
-                    swift_code3: row[template.swift_code3],
-                    differentAccountHolder3: row[template.differentAccountHolder3],
+                    accountTypeIdInternal: row[template.accountTypeIdInternal]?.trim(),
+                    nameAffix1: row[template.nameAffix1]?.trim(),
+                    nameAffix2: row[template.nameAffix2]?.trim(),
+                    VATId: row[template.VATId]?.trim(),
+                    taxNumber: row[template.taxNumber]?.trim(),
+                    street: row[template.street]?.trim(),
+                    postCode: row[template.postCode]?.trim(),
+                    city: row[template.city]?.trim(),
+                    country: row[template.country]?.trim(),
+                    contactPerson: row[template.contactPerson]?.trim(),
+                    phone: row[template.phone]?.trim(),
+                    email: row[template.email]?.trim(),
+                    bankName1: row[template.bankName1]?.trim(),
+                    accountNumber: row[template.accountNumber]?.trim(),
+                    bankSortCode1: row[template.bankSortCode1]?.trim(),
+                    bankAccountNo1: row[template.bankAccountNo1]?.trim(),
+                    countryCode1: row[template.countryCode1]?.trim(),
+                    iBAN_No1: row[template.iBAN_No1]?.trim(),
+                    swift_code1: row[template.swift_code1]?.trim(),
+                    differentAccountHolder1: row[template.differentAccountHolder1]?.trim(),
+                    bankSortCode2: row[template.bankSortCode2]?.trim(),
+                    bankName2: row[template.bankName2]?.trim(),
+                    bankAccountNo2: row[template.bankAccountNo2]?.trim(),
+                    countryCode2: row[template.countryCode2]?.trim(),
+                    iBAN_No2: row[template.iBAN_No2]?.trim(),
+                    swift_code2: row[template.swift_code2]?.trim(),
+                    differentAccountHolder2: row[template.differentAccountHolder2]?.trim(),
+                    bankName3: row[template.bankName3]?.trim(),
+                    bankAccountNo3: row[template.bankAccountNo3]?.trim(),
+                    countryCode3: row[template.countryCode3]?.trim(),
+                    iBAN_No3: row[template.iBAN_No3]?.trim(),
+                    swift_code3: row[template.swift_code3]?.trim(),
+                    differentAccountHolder3: row[template.differentAccountHolder3]?.trim(),
                 });
 
 
@@ -179,7 +179,7 @@ module.exports.importAccountCsvFile = async function (filePath, managerId, proce
             }
             // logger.error(`${new Date()}: ${err}`);
             errorHandler("Error", err);
-            
+
         }
     });
 };
@@ -231,7 +231,7 @@ detectQuote = async (filePath, delimiter) => {
                 let line = acc.slice(0, pos + index);
                 // line = line.endsWith('\\r') ? line.slice(0, line.length - 2) : line;
                 let cells = line.split(delimiter);
-                if(cells.length < 2) reject({message: "Can not detect delimiter correctly! please use ; or , or tab."});
+                if (cells.length < 2) reject({ message: "Can not detect delimiter correctly! please use ; or , or tab." });
                 for (let i = 0; i < cells.length - 1; i++) {
                     let val = cells[i];
                     if (val && val.trim()) {
@@ -240,7 +240,7 @@ detectQuote = async (filePath, delimiter) => {
                         if (!conformSingle) break;
                     }
                 }
-                for (let i = 0; i < cells.length -1; i++) {
+                for (let i = 0; i < cells.length - 1; i++) {
                     let val = cells[i];
                     if (val && val.trim()) {
                         // val = val.substring(1, cells[i].length-1);
@@ -302,13 +302,13 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
 
             for await (const row of parser) {
 
-                const companyCode = row[Standardtemplate.companyCode] ? row[Standardtemplate.companyCode] : null;
-                const accountType = row[Standardtemplate.accountType] ? row[Standardtemplate.accountType] : null;
-                const contraAccountType = row[Standardtemplate.contraAccountType] ? row[Standardtemplate.contraAccountType] : null;
+                const companyCode = row[Standardtemplate.companyCode] ? row[Standardtemplate.companyCode]?.trim() : null;
+                const accountType = row[Standardtemplate.accountType] ? row[Standardtemplate.accountType]?.trim() : null;
+                const contraAccountType = row[Standardtemplate.contraAccountType] ? row[Standardtemplate.contraAccountType]?.trim() : null;
                 let accountNumber = null;
-                let accountName = row[Standardtemplate.accountName] ? row[Standardtemplate.accountName] : null;
+                let accountName = row[Standardtemplate.accountName] ? row[Standardtemplate.accountName]?.trim() : null;
                 if (Standardtemplate.accountNumber && row[Standardtemplate.accountNumber]) {
-                    accountNumber = row[Standardtemplate.accountNumber];
+                    accountNumber = row[Standardtemplate.accountNumber]?.trim();
                     if (accountNumber) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -319,14 +319,14 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                             attributes: ['accountName'],
                             limit: 1
                         });
-                        accountName = temp.length > 0 ? temp[0].accountName : null;
+                        accountName = temp.length > 0 ? temp[0].accountName?.trim() : null;
                     }
                 }
 
                 let contraAccountNumber = null;
-                let contraAccountName = row[Standardtemplate.contraAccountName] ? row[Standardtemplate.contraAccountName] : null;
+                let contraAccountName = row[Standardtemplate.contraAccountName] ? row[Standardtemplate.contraAccountName]?.trim() : null;
                 if (Standardtemplate.contraAccountNumber && row[Standardtemplate.contraAccountNumber]) {
-                    contraAccountNumber = row[Standardtemplate.contraAccountNumber];
+                    contraAccountNumber = row[Standardtemplate.contraAccountNumber]?.trim();
                     if (contraAccountNumber) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -337,7 +337,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                             attributes: ['accountName'],
                             limit: 1
                         });
-                        contraAccountName = temp.length > 0 ? temp[0].accountName : null;
+                        contraAccountName = temp.length > 0 ? temp[0].accountName?.trim() : null;
                     }
                 }
 
@@ -345,7 +345,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let GLAccountNumber = null;
                 let GLAccountName = null;
                 if (Standardtemplate.GLAccountNumber && row[Standardtemplate.GLAccountNumber]) {
-                    GLAccountNumber = row[Standardtemplate.GLAccountNumber];
+                    GLAccountNumber = row[Standardtemplate.GLAccountNumber]?.trim();
                     if (GLAccountNumber) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -356,7 +356,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                             attributes: ['accountName'],
                             limit: 1
                         });
-                        GLAccountName = temp.length > 0 ? temp[0].accountName : null;
+                        GLAccountName = temp.length > 0 ? temp[0].accountName?.trim() : null;
                     }
                 }
 
@@ -364,7 +364,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let contraAccountGLAccountNo = null;
                 let contraAccountGLAccountName = null;
                 if (Standardtemplate.contraAccountGLAccountNo && row[Standardtemplate.contraAccountGLAccountNo]) {
-                    contraAccountGLAccountNo = row[Standardtemplate.contraAccountGLAccountNo];
+                    contraAccountGLAccountNo = row[Standardtemplate.contraAccountGLAccountNo]?.trim();
                     if (contraAccountGLAccountNo) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -375,7 +375,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                             attributes: ['accountName'],
                             limit: 1
                         });
-                        contraAccountGLAccountName = temp.length > 0 ? temp[0].accountName : null;
+                        contraAccountGLAccountName = temp.length > 0 ? temp[0].accountName?.trim() : null;
                     }
                 }
 
@@ -384,7 +384,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let debtorNumber = null;
                 let debtorName = null;
                 if (Standardtemplate.debtorNumber && row[Standardtemplate.debtorNumber]) {
-                    debtorNumber = row[Standardtemplate.debtorNumber];
+                    debtorNumber = row[Standardtemplate.debtorNumber]?.trim();
                     if (debtorNumber) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -395,7 +395,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                             attributes: ['accountName'],
                             limit: 1
                         });
-                        debtorName = temp.length > 0 ? temp[0].accountName : null;
+                        debtorName = temp.length > 0 ? temp[0].accountName?.trim() : null;
                     }
                 }
 
@@ -403,7 +403,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let contraAccountDebtorNo = null;
                 let contraAccountDebtorName = null;
                 if (Standardtemplate.contraAccountDebtorNo && row[Standardtemplate.contraAccountDebtorNo]) {
-                    contraAccountDebtorNo = row[Standardtemplate.contraAccountDebtorNo];
+                    contraAccountDebtorNo = row[Standardtemplate.contraAccountDebtorNo]?.trim();
                     if (contraAccountDebtorNo) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -414,7 +414,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                             attributes: ['accountName'],
                             limit: 1
                         });
-                        contraAccountDebtorName = temp.length > 0 ? temp[0].accountName : null;
+                        contraAccountDebtorName = temp.length > 0 ? temp[0].accountName?.trim() : null;
                     }
                 }
 
@@ -423,7 +423,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let creditorNumber = null;
                 let creditorName = null;
                 if (Standardtemplate.creditorNumber && row[Standardtemplate.creditorNumber]) {
-                    creditorNumber = row[Standardtemplate.creditorNumber];
+                    creditorNumber = row[Standardtemplate.creditorNumber]?.trim();
                     if (creditorNumber) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -434,7 +434,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                             attributes: ['accountName'],
                             limit: 1
                         });
-                        creditorName = temp.length > 0 ? temp[0].accountName : null;
+                        creditorName = temp.length > 0 ? temp[0].accountName?.trim() : null;
                     }
                 }
 
@@ -444,7 +444,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let contraAccountCreditorNo = null;
                 let contraAccountCreditorName = null;
                 if (Standardtemplate.contraAccountCreditorNo && row[Standardtemplate.contraAccountCreditorNo]) {
-                    contraAccountCreditorNo = row[Standardtemplate.contraAccountCreditorNo];
+                    contraAccountCreditorNo = row[Standardtemplate.contraAccountCreditorNo]?.trim();
                     if (contraAccountCreditorNo) {
                         let temp = await AccountModel.getAccounts('accounts_' + managerId).findAll({
                             where: {
@@ -455,22 +455,24 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                             attributes: ['accountName'],
                             limit: 1
                         });
-                        contraAccountCreditorName = temp.length > 0 ? temp[0].accountName : null;
+                        contraAccountCreditorName = temp.length > 0 ? temp[0].accountName?.trim() : null;
                     }
                 }
 
 
-                let recordNumber = row[Standardtemplate.recordNumber];
-                let creditAmount = decimalParser(row[Standardtemplate.creditAmount]?? 'null');
+                let recordNumber = row[Standardtemplate.recordNumber]?.trim();
+                let creditAmount = decimalParser(row[Standardtemplate.creditAmount] ?? 'null');
                 if (isNaN(creditAmount)) {
                     creditAmount = null;
-                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
-                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
-                    // reject(`There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
-                    // return;
+                    if (Standardtemplate.creditAmount) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
+                        return;
+                    }
                 }
 
-                let documentTypeNumber = decimalParser(row[Standardtemplate.documentTypeNumber]?? 'null');
+                let documentTypeNumber = decimalParser(row[Standardtemplate.documentTypeNumber] ?? 'null');
                 if (isNaN(documentTypeNumber)) {
                     documentTypeNumber = null;
                     // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, documentTypeNumber/${Standardtemplate.documentTypeNumber} should be number!`);
@@ -479,101 +481,151 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     // return;
                 }
 
-                let balance = decimalParser(row[Standardtemplate.balance]?? 'null');
+                let balance = decimalParser(row[Standardtemplate.balance] ?? 'null');
                 if (isNaN(balance)) {
                     balance = null;
-                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
-                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
-                    // reject(`There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
-                    // return;
+                    if (Standardtemplate.balance) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
+                        return;
+                    }
                 }
 
-                let debitAmount = decimalParser(row[Standardtemplate.debitAmount]?? 'null');
+                let debitAmount = decimalParser(row[Standardtemplate.debitAmount] ?? 'null');
                 if (isNaN(debitAmount)) {
                     debitAmount = null;
-                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
-                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
-                    // reject(`There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
-                    // return;
+                    if (Standardtemplate.debitAmount) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
+                        return;
+                    }
                 }
 
-                let balanceTransactionCurrency = decimalParser(row[Standardtemplate.balanceTransactionCurrency]?? 'null');
+                let balanceTransactionCurrency = decimalParser(row[Standardtemplate.balanceTransactionCurrency] ?? 'null');
                 if (isNaN(balanceTransactionCurrency)) {
                     balanceTransactionCurrency = null;
-                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
-                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
-                    // reject(`There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
-                    // return;
+                    if (Standardtemplate.balanceTransactionCurrency) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
+                        return;
+                    }
                 }
 
-                let debitAmountTransactionCurrency = decimalParser(row[Standardtemplate.debitAmountTransactionCurrency]?? 'null');
+                let debitAmountTransactionCurrency = decimalParser(row[Standardtemplate.debitAmountTransactionCurrency] ?? 'null');
                 if (isNaN(debitAmountTransactionCurrency)) {
                     debitAmountTransactionCurrency = null;
-                    // console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
-                    // logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
-                    // reject(`There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
-                    // return;
+                    if (Standardtemplate.debitAmountTransactionCurrency) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
+                        return;
+                    }
                 }
 
-                let creditAmountTransactionCurrency = decimalParser(row[Standardtemplate.creditAmountTransactionCurrency]?? 'null');
+                let creditAmountTransactionCurrency = decimalParser(row[Standardtemplate.creditAmountTransactionCurrency] ?? 'null');
                 if (isNaN(creditAmountTransactionCurrency)) {
                     creditAmountTransactionCurrency = null;
+                    if (Standardtemplate.creditAmountTransactionCurrency) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
+                        return;
+                    }
                 }
 
-                let exchangeRate = decimalParser(row[Standardtemplate.exchangeRate]?? 'null');
+                let exchangeRate = decimalParser(row[Standardtemplate.exchangeRate] ?? 'null');
                 if (isNaN(exchangeRate)) {
                     exchangeRate = null;
+                    if (Standardtemplate.exchangeRate) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
+                        return;
+                    }
                 }
 
-                let cashDiscount = decimalParser(row[Standardtemplate.cashDiscount]?? 'null');
+                let cashDiscount = decimalParser(row[Standardtemplate.cashDiscount] ?? 'null');
                 if (isNaN(cashDiscount)) {
                     cashDiscount = null;
+                    if (Standardtemplate.cashDiscount) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
+                        return;
+                    }
                 }
 
-                let taxAmount = decimalParser(row[Standardtemplate.taxAmount]?? 'null');
+                let taxAmount = decimalParser(row[Standardtemplate.taxAmount] ?? 'null');
                 if (isNaN(taxAmount)) {
                     taxAmount = null;
+                    if (Standardtemplate.taxAmount) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
+                        return;
+                    }
                 }
 
-                let taxAmountDebit = decimalParser(row[Standardtemplate.taxAmountDebit]?? 'null');
+                let taxAmountDebit = decimalParser(row[Standardtemplate.taxAmountDebit] ?? 'null');
                 if (isNaN(taxAmountDebit)) {
                     taxAmountDebit = null;
+                    if (Standardtemplate.taxAmountDebit) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
+                        return;
+                    }
                 }
 
-                let taxAmountCredit = decimalParser(row[Standardtemplate.taxAmountCredit]?? 'null');
+                let taxAmountCredit = decimalParser(row[Standardtemplate.taxAmountCredit] ?? 'null');
                 if (isNaN(taxAmountCredit)) {
                     taxAmountCredit = null;
+                    if (Standardtemplate.taxAmountCredit) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
+                        return;
+                    }
                 }
 
-                let identifierBalanceCarryforward = decimalParser(row[Standardtemplate.identifierBalanceCarryforward]?? 'null');
+                let identifierBalanceCarryforward = decimalParser(row[Standardtemplate.identifierBalanceCarryforward] ?? 'null');
                 if (isNaN(identifierBalanceCarryforward)) {
                     identifierBalanceCarryforward = null;
+                    if (Standardtemplate.identifierBalanceCarryforward) {
+                        console.log(`${new Date()}: There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
+                        logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
+                        reject(`There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
+                        return;
+                    }
                 }
 
                 rowsToInsert.push({
-                    assignment: row[Standardtemplate.assignment],
-                    documentNumber: row[Standardtemplate.documentNumber],
-                    documentNumber2: row[Standardtemplate.documentNumber2],
+                    assignment: row[Standardtemplate.assignment]?.trim(),
+                    documentNumber: row[Standardtemplate.documentNumber]?.trim(),
+                    documentNumber2: row[Standardtemplate.documentNumber2]?.trim(),
                     documentTypeNumber: documentTypeNumber,
-                    documentType: row[Standardtemplate.documentType],
-                    documentTypeName: row[Standardtemplate.documentTypeName],
-                    documentTypeNew: row[Standardtemplate.documentTypeNew],
+                    documentType: row[Standardtemplate.documentType]?.trim(),
+                    documentTypeName: row[Standardtemplate.documentTypeName?.trim()],
+                    documentTypeNew: row[Standardtemplate.documentTypeNew]?.trim(),
                     documentDate: chrono.parseDate(row[Standardtemplate.documentDate]),
                     recordNumber: recordNumber,
                     creditAmount: creditAmount,
-                    transactionCurrency: row[Standardtemplate.transactionCurrency],
-                    applicationDocument: row[Standardtemplate.applicationDocument],
-                    textPosting: row[Standardtemplate.textPosting],
+                    transactionCurrency: row[Standardtemplate.transactionCurrency]?.trim(),
+                    applicationDocument: row[Standardtemplate.applicationDocument]?.trim(),
+                    textPosting: row[Standardtemplate.textPosting]?.trim(),
                     applicationDate: chrono.parseDate(row[Standardtemplate.applicationDate]),
                     postingDate: chrono.parseDate(row[Standardtemplate.postingDate]),
                     companyCode: companyCode,
-                    fiscalYear: row[Standardtemplate.fiscalYear],
-                    postingPeriod: row[Standardtemplate.postingPeriod],
+                    fiscalYear: row[Standardtemplate.fiscalYear]?.trim(),
+                    postingPeriod: row[Standardtemplate.postingPeriod]?.trim(),
                     executionDate: chrono.parseDate(row[Standardtemplate.executionDate]),
                     accountType: accountType,
                     accountNumber: accountNumber,
-                    debitCredit: row[Standardtemplate.debitCredit],
-                    reference: row[Standardtemplate.reference],
+                    debitCredit: row[Standardtemplate.debitCredit]?.trim(),
+                    reference: row[Standardtemplate.reference]?.trim(),
                     GLAccountNumber: GLAccountNumber,
                     GLAccountName: GLAccountName,
                     debtorNumber: debtorNumber,
@@ -590,10 +642,10 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     contraAccountDebtorName: contraAccountDebtorName,
                     dueDate: chrono.parseDate(row[Standardtemplate.dueDate]),
                     dueDateNew: chrono.parseDate(row[Standardtemplate.dueDateNew]),
-                    textHeader: row[Standardtemplate.textHeader],
+                    textHeader: row[Standardtemplate.textHeader]?.trim(),
                     accountName: accountName,
                     procedureId: procedureId,
-                    client: row[Standardtemplate.client],
+                    client: row[Standardtemplate.client]?.trim(),
                     contraAccountName: contraAccountName,
                     balance: balance,
                     debitAmount: debitAmount,
@@ -602,37 +654,37 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     creditAmountTransactionCurrency: creditAmountTransactionCurrency,
                     exchangeRate: exchangeRate,
                     cashDiscount: cashDiscount,
-                    postingKey: row[Standardtemplate.postingKey],
-                    salesTaxKey: row[Standardtemplate.salesTaxKey],
-                    taxRate: row[Standardtemplate.taxRate],
-                    euTaxRate: row[Standardtemplate.euTaxRate],
+                    postingKey: row[Standardtemplate.postingKey]?.trim(),
+                    salesTaxKey: row[Standardtemplate.salesTaxKey]?.trim(),
+                    taxRate: row[Standardtemplate.taxRate]?.trim(),
+                    euTaxRate: row[Standardtemplate.euTaxRate]?.trim(),
                     taxAmount: taxAmount,
                     taxAmountDebit: taxAmountDebit,
                     taxAmountCredit: taxAmountCredit,
-                    stackNumber: row[Standardtemplate.stackNumber],
-                    CostCenter1: row[Standardtemplate.CostCenter1],
-                    CostCenter2: row[Standardtemplate.CostCenter2],
+                    stackNumber: row[Standardtemplate.stackNumber]?.trim(),
+                    CostCenter1: row[Standardtemplate.CostCenter1]?.trim(),
+                    CostCenter2: row[Standardtemplate.CostCenter2]?.trim(),
                     applicationDateNew: chrono.parseDate(row[Standardtemplate.applicationDateNew]),
                     identifierBalanceCarryforward: identifierBalanceCarryforward,
-                    generalReversal: row[Standardtemplate.generalReversal],
-                    ledgerId: row[Standardtemplate.ledgerId],
-                    documentLink: row[Standardtemplate.documentLink],
-                    typeDocumentInformation1: row[Standardtemplate.typeDocumentInformation1],
-                    contentDocumentInformation1: row[Standardtemplate.contentDocumentInformation1],
-                    typeDocumentInformation2: row[Standardtemplate.typeDocumentInformation2],
-                    contentDocumentInformation2: row[Standardtemplate.contentDocumentInformation2],
-                    typeDocumentInformation3: row[Standardtemplate.typeDocumentInformation3],
-                    contentDocumentInformation3: row[Standardtemplate.contentDocumentInformation3],
-                    typeDocumentInformation4: row[Standardtemplate.typeDocumentInformation4],
-                    contentDocumentInformation4: row[Standardtemplate.contentDocumentInformation4],
-                    typeDocumentInformation5: row[Standardtemplate.typeDocumentInformation5],
-                    contentDocumentInformation5: row[Standardtemplate.contentDocumentInformation5],
-                    typeDocumentInformation6: row[Standardtemplate.typeDocumentInformation6],
-                    contentDocumentInformation6: row[Standardtemplate.contentDocumentInformation6],
-                    typeDocumentInformation7: row[Standardtemplate.typeDocumentInformation7],
-                    contentDocumentInformation7: row[Standardtemplate.contentDocumentInformation7],
-                    typeDocumentInformation8: row[Standardtemplate.typeDocumentInformation8],
-                    contentDocumentInformation8: row[Standardtemplate.contentDocumentInformation8]
+                    generalReversal: row[Standardtemplate.generalReversal]?.trim(),
+                    ledgerId: row[Standardtemplate.ledgerId]?.trim(),
+                    documentLink: row[Standardtemplate.documentLink]?.trim(),
+                    typeDocumentInformation1: row[Standardtemplate.typeDocumentInformation1]?.trim(),
+                    contentDocumentInformation1: row[Standardtemplate.contentDocumentInformation1]?.trim(),
+                    typeDocumentInformation2: row[Standardtemplate.typeDocumentInformation2]?.trim(),
+                    contentDocumentInformation2: row[Standardtemplate.contentDocumentInformation2]?.trim(),
+                    typeDocumentInformation3: row[Standardtemplate.typeDocumentInformation3]?.trim(),
+                    contentDocumentInformation3: row[Standardtemplate.contentDocumentInformation3]?.trim(),
+                    typeDocumentInformation4: row[Standardtemplate.typeDocumentInformation4]?.trim(),
+                    contentDocumentInformation4: row[Standardtemplate.contentDocumentInformation4]?.trim(),
+                    typeDocumentInformation5: row[Standardtemplate.typeDocumentInformation5]?.trim(),
+                    contentDocumentInformation5: row[Standardtemplate.contentDocumentInformation5]?.trim(),
+                    typeDocumentInformation6: row[Standardtemplate.typeDocumentInformation6]?.trim(),
+                    contentDocumentInformation6: row[Standardtemplate.contentDocumentInformation6]?.trim(),
+                    typeDocumentInformation7: row[Standardtemplate.typeDocumentInformation7]?.trim(),
+                    contentDocumentInformation7: row[Standardtemplate.contentDocumentInformation7]?.trim(),
+                    typeDocumentInformation8: row[Standardtemplate.typeDocumentInformation8]?.trim(),
+                    contentDocumentInformation8: row[Standardtemplate.contentDocumentInformation8]?.trim()
                 });
 
 

@@ -8,11 +8,10 @@ module.exports.getCreditLines = async (orgId, prcId) => {
   let query = `SELECT DISTINCT p.accountNumber, p.accountName, c.procedureId, c.creditLineFromDate , c.id, c.creditLineToDate , c.creditLine FROM 
                         posting_${orgId} p
                         left outer join
-                        creditLines_${orgId} c
+                        ( select * from creditLines_${orgId} WHERE procedureId = :procedureId ) c
                         on p.accountNumber = c.accountNumber
                         WHERE p.procedureId = :procedureId 
-                        AND UPPER(p.accountTypeNewName) = 'FINANZKONTO'
-                        and (c.procedureId = :procedureId OR c.procedureId is null)`;
+                        AND UPPER(p.accountTypeNewName) = 'FINANZKONTO'`;
 
   const result = sequelize.query(query, {
     replacements: {
