@@ -48,7 +48,7 @@ export class TextAnalysisIndexedComponent implements OnInit {
     private _router: Router,
     private prcService: ProcedureService,
     private _route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.items = [
@@ -166,8 +166,7 @@ export class TextAnalysisIndexedComponent implements OnInit {
             this.basicData.datasets.push(
               new Bar(
                 element.accountName,
-                `rgb(${(Math.random() * 25500) % 255}, ${
-                  (Math.random() * 25500) % 255
+                `rgb(${(Math.random() * 25500) % 255}, ${(Math.random() * 25500) % 255
                 },${(Math.random() * 25500) % 255})`,
                 element.totlaCount
               )
@@ -226,7 +225,7 @@ export class TextAnalysisIndexedComponent implements OnInit {
                   ],
                 };
               },
-              (er) => {}
+              (er) => { }
             );
         },
         (er) => {
@@ -238,18 +237,18 @@ export class TextAnalysisIndexedComponent implements OnInit {
   goToDetails(row: TextAnalysis) {
     this._router.navigate([
       '/dashboard/analysis/text/' +
-        this.selectedOrganisation +
-        '/' +
-        this.selectedProcedure +
-        '/' +
-        row.accountNumber,
+      this.selectedOrganisation +
+      '/' +
+      this.selectedProcedure +
+      '/' +
+      row.accountNumber,
     ]);
   }
 
   goToDetailsWord(row) {
     this._router.navigate([
       '/dashboard/analysis/text/word/' +
-        row.word,
+      row.word,
     ]);
   }
 

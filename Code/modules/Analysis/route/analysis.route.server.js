@@ -69,6 +69,23 @@ router.route("/:orgId/:prcId/text-word").get(
   analysisCtrl.textAnalysisByWord
 );
 
+router.route("/:orgId/:prcId/text-word-calc/date-range/:step").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.getTextAnalysisDateRangeOptionsByWord
+);
+
+router.route("/:orgId/:prcId/text-word-calc/:fromDate/:toDate").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.getTextAnalysisDataByWordCalc
+);
+
+
 router.route("/:orgId/:prcId/text-word-indexed").get(
   passport.authenticate("jwt", {
     session: false,

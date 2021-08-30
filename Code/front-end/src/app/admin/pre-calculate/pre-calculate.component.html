@@ -1,0 +1,8 @@
+<p-toast></p-toast>
+<h1>PreCalculate Analysis</h1>
+<h2 class="p-text-center">{{procedureName}}</h2>
+
+<p-progressBar *ngIf="waiting" mode="indeterminate" [style]="{'height': '5px'}"></p-progressBar>
+
+<h3>Text Analysis by word</h3>
+<button pButton label="Start" (click)="textByWordStart()"></button>

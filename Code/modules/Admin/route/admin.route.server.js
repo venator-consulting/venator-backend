@@ -51,7 +51,7 @@ router
     }), authorization.authorize('Admin'), uploadCtrl.deleteFileFromServier);
 
 router
-    .route('/precalculate/:orgId/:prcId/:step')
+    .route('/precalculate/:orgId/:prcId')
     .get(precalcCtrl.textAnalysisByWord);
 
 router
