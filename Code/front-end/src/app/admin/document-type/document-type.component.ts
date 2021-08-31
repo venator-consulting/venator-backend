@@ -87,19 +87,20 @@ export class DocumentTypeComponent implements OnInit {
 
 
   save(row) {
-    // alert(JSON.stringify(row));
+    this.searching = true;
     this._docTypesService
       .updateNewDocType(this.selectedOrgId, this.selectedPrcId, row)
       .subscribe(res => {
         row.isEditable = false;
         let numOfRecords = res.length > 0 ? res[0] : 0;
-
+        this.searching = false;
         this._messageService.add({
           severity: 'success',
           summary: 'DONE!',
           detail: `Document new type is updated successfully in the targeted posting data, \n ${numOfRecords} updated.`
         });
       }, er => {
+        this.searching = false;
         this._messageService.add({
           severity: 'error',
           summary: 'ERROR!',
@@ -123,14 +124,16 @@ export class DocumentTypeComponent implements OnInit {
 
   prcChangedHandler(e) {
     if (e.value > 0) {
+      this.searching = true;
       this._docTypesService
         .getPostingDocTypes(this.selectedOrgId, e.value)
         .subscribe(
           data => {
             this.postingDocTypes = data;
             this.tempData = data;
+            this.searching = false;
           },
-          error => console.log(error)
+          error => this.searching = false
         );
     }
   }
