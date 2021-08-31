@@ -431,7 +431,7 @@ module.exports.selectedDate = async (
   let query = `SELECT * FROM posting_${orgId} p
                   WHERE p.procedureId = :procedureId
                   AND p.accountNumber = :accountNumber
-                  AND p.documentDate = :selectedDate
+                  AND date(p.documentDate) = date(:selectedDate) 
                   AND p.documentDate >= p.StartingBalanceDate`;
 
   const result = await sequelize.query(query, {
