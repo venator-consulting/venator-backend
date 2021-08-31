@@ -3,11 +3,13 @@ import { LiquidityService } from '../../service/liquidity.service';
 import { CreditLine } from '../../model/creditLine';
 import { TableColumn } from '../../model/tableColumn';
 import { MessageService } from 'primeng/api';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-credit-line',
   templateUrl: './credit-line.component.html',
   styleUrls: ['./credit-line.component.sass'],
+  providers: [DatePipe],
 })
 export class CreditLineComponent implements OnInit {
   procedureName: string;
@@ -28,8 +30,9 @@ export class CreditLineComponent implements OnInit {
 
   constructor(
     private _liquidityService: LiquidityService,
-    private _messageService: MessageService
-  ) {}
+    private _messageService: MessageService,
+    private datepipe: DatePipe,
+  ) { }
 
   ngOnInit(): void {
     // debugger;
@@ -110,8 +113,12 @@ export class CreditLineComponent implements OnInit {
 
   save(row: CreditLine) {
     this.searching = true;
+    // debugger;
+    let tempRow: any = {...row};
+    tempRow.creditLineFromDate = this.datepipe.transform(row.creditLineFromDate, 'yyyy-MM-dd');
+    tempRow.creditLineToDate = this.datepipe.transform(row.creditLineToDate, 'yyyy-MM-dd');
     this._liquidityService
-      .updateCreditLine(this.orgId, this.prcId, row)
+      .updateCreditLine(this.orgId, this.prcId, tempRow)
       .subscribe(
         (res) => {
           row.isEditable = false;

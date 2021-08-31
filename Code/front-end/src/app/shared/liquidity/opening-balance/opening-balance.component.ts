@@ -3,11 +3,13 @@ import { OpeningBalance } from '../../model/openingBalance';
 import { LiquidityService } from '../../service/liquidity.service';
 import { MessageService } from 'primeng/api';
 import { TableColumn } from '../../model/tableColumn';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-opening-balance',
   templateUrl: './opening-balance.component.html',
   styleUrls: ['./opening-balance.component.sass'],
+  providers: [DatePipe],
 })
 export class OpeningBalanceComponent implements OnInit {
   data: OpeningBalance[] = new Array();
@@ -25,6 +27,7 @@ export class OpeningBalanceComponent implements OnInit {
 
   constructor(
     private _liquidityService: LiquidityService,
+    private datepipe: DatePipe,
     private _messageService: MessageService
   ) {}
 
@@ -107,8 +110,10 @@ export class OpeningBalanceComponent implements OnInit {
 
   save(row: OpeningBalance) {
     this.searching = true;
+    let tempRow: any = {...row};
+    tempRow.StartingBalanceDate = this.datepipe.transform(row.StartingBalanceDate, 'yyyy-MM-dd');
     this._liquidityService
-      .updateOpeningBalance(this.orgId, this.prcId, row)
+      .updateOpeningBalance(this.orgId, this.prcId, tempRow)
       .subscribe(
         (res) => {
           row.isEditable = false;
