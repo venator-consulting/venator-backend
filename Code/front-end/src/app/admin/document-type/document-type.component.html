@@ -30,9 +30,14 @@
   </div>
   <div class="p-col-12" *ngIf="selectedPrcId>0">
 
-
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="searching"
+    ></p-progressBar>
     <p-table #dt dataKey="id" [value]="postingDocTypes" [columns]="cols" styleClass="p-datatable-gridlines"
-      [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
+      [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true"
+      [loading]="searching">
       <ng-template pTemplate="colgroup">
         <colgroup>
           <col *ngFor="let col of cols">

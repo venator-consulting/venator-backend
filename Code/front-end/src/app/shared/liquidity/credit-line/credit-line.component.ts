@@ -184,7 +184,7 @@ export class CreditLineComponent implements OnInit {
           this.data.push(this.newRecord);
           this.data = [...this.data];
           this.newDialog = false;
-
+          this.searching = false;
           this._messageService.add({
             severity: 'success',
             summary: 'DONE!',
