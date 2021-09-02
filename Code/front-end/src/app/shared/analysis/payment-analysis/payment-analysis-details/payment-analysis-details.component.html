@@ -821,8 +821,7 @@
                 type="number"
                 min="1"
                 class="pageNrInput p-mr-2"
-                [disabled]="true"
-                (change)="pageNrChange($any($event.target).value)"
+                (input)="pageNrChange($any($event.target).value)"
                 [value]="pageNr"
                 [placeholder]="pageNr"
               />

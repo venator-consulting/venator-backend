@@ -177,7 +177,7 @@ export class SAPDataTableComponent implements OnInit {
 
   pageNrChange(value) {
     this.loading = true;
-    this.pageNr = value;
+    this.pageNr = (value && value.trim()) ? value : 1;
     this.criteria.offset = (this.pageNr - 1) * this.limit;
     this.getData();
   }

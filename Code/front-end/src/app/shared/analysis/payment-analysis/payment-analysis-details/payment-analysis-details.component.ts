@@ -658,6 +658,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   }
 
   pageNrChange(value) {
+    this.pageNr = (value && value.trim()) ? value : 1;
     this.backCriteria.offset = (this.pageNr - 1) * this.limit;
     this.getAllByAccount();
   }
