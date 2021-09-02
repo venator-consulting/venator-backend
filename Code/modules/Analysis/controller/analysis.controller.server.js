@@ -70,7 +70,21 @@ module.exports.getTextAnalysisDataByWordCalc = async (req, res) => {
   const prcId = +req.params.prcId;
   const fromDate = req.params.fromDate;
   const toDate = req.params.toDate;
-  const result = await precalRepo.getrDataByRange(orgId, prcId, fromDate, toDate);
+  const result = await precalRepo.getTextAnalysisDataByWordCalc(orgId, prcId, fromDate, toDate);
+  res.status(200).json(result);
+};
+
+module.exports.getTextAnalysisDataByWordCalcDefault = async (req, res) => {
+  const orgId = +req.params.orgId;
+  const prcId = +req.params.prcId;
+  const result = await precalRepo.getTextAnalysisDataByWordCalcDefault(orgId, prcId);
+  res.status(200).json(result);
+};
+
+module.exports.getTextAnalysisDataByAccountCalcDefault = async (req, res) => {
+  const orgId = +req.params.orgId;
+  const prcId = +req.params.prcId;
+  const result = await precalRepo.getTextAnalysisDataByAccountCalcDefault(orgId, prcId);
   res.status(200).json(result);
 };
 

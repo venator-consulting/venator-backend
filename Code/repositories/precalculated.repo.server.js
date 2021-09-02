@@ -261,7 +261,7 @@ module.exports.getrDateRangeOptions = async (orgId, prcId, step) => {
 };
 
 
-module.exports.getrDataByRange = async (orgId, prcId, fromDate, toDate) => {
+module.exports.getTextAnalysisDataByWordCalc = async (orgId, prcId, fromDate, toDate) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(prcId))
@@ -274,6 +274,26 @@ module.exports.getrDataByRange = async (orgId, prcId, fromDate, toDate) => {
       procedureId: prcId,
       fromDate: fromDate,
       toDate: toDate
+    },
+    type: QueryTypes.SELECT,
+  });
+  if (result.length && result.length > 0) {
+    result = result.filter((rec) => +rec.recordsCount > 0);
+  }
+  return result;
+};
+
+module.exports.getTextAnalysisDataByWordCalcDefault = async (orgId, prcId) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = `SELECT * FROM text_analysis_word_${orgId} t
+      WHERE procedureId = :procedureId AND step = 'ALL'`;
+
+  let result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId
     },
     type: QueryTypes.SELECT,
   });
@@ -304,4 +324,21 @@ module.exports.textAnalysisByAccount = async (orgId, prcId, step) => {
   const dateRanges = calculateDateRanges(mindate, maxdate, step);
 
   const result = await storeDataByAccount(orgId, prcId, keywords, dateRanges, step);
+};
+
+module.exports.getTextAnalysisDataByAccountCalcDefault = async (orgId, prcId) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = `SELECT * FROM text_analysis_account_${orgId} t
+      WHERE procedureId = :procedureId AND step = 'ALL'`;
+
+  let result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
 };
