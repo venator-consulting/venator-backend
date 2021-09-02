@@ -467,7 +467,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.creditAmount) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -487,7 +488,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.balance) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -498,7 +500,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.debitAmount) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -509,7 +512,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.balanceTransactionCurrency) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -520,7 +524,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.debitAmountTransactionCurrency) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -531,7 +536,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.creditAmountTransactionCurrency) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -542,7 +548,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.exchangeRate) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -553,7 +560,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.cashDiscount) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -564,7 +572,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.taxAmount) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -575,7 +584,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.taxAmountDebit) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -586,7 +596,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.taxAmountCredit) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
@@ -597,7 +608,8 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     if (Standardtemplate.identifierBalanceCarryforward) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
-                        reject(`There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
+                        const message = `There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`;
+                        reject(new Exception(httpStatus.BAD_REQUEST, message, true));
                         return;
                     }
                 }
