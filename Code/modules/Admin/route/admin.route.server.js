@@ -51,8 +51,12 @@ router
     }), authorization.authorize('Admin'), uploadCtrl.deleteFileFromServier);
 
 router
-    .route('/precalculate/:orgId/:prcId')
+    .route('/precalculate/text-by-word/:orgId/:prcId')
     .get(precalcCtrl.textAnalysisByWord);
+
+router
+    .route('/precalculate/text-by-account/:orgId/:prcId')
+    .get(precalcCtrl.textAnalysisByAccount);
 
 router
     .route('/user')
@@ -180,7 +184,7 @@ router
     .route('/account-type')
     .get(passport.authenticate('jwt', {
         session: false
-    }),authorization.authorize('Admin'), accountTypeCtrl.getAll);
+    }), authorization.authorize('Admin'), accountTypeCtrl.getAll);
 
 
 router

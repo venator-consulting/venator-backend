@@ -35,4 +35,18 @@ export class PreCalculateComponent implements OnInit {
     }, er => this.waiting = false);
   }
 
+  textByAccountStart() {
+    this.waiting = true;
+    this._preCalcService.textAnalysisByAccount(this.orgId, this.prcId)
+    .subscribe(res => {
+      this.waiting = false;
+      this._messageService.add({
+        severity: 'success',
+        summary: 'SUCCESS',
+        life: 10000,
+        detail: 'records updated successfully!',
+      })
+    }, er => this.waiting = false);
+  }
+
 }

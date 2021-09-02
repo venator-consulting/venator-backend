@@ -12,7 +12,12 @@ export class PreCalculateService {
   constructor(private _http: HttpClient) { }
 
   textAnalysisByWord(orgId: number, prcId: number) {
-    return this._http.get<any>(this._thisURL + orgId +'/' + prcId);
+    return this._http.get<any>(this._thisURL + 'text-by-word/' + orgId +'/' + prcId);
+  }
+
+
+  textAnalysisByAccount(orgId: number, prcId: number) {
+    return this._http.get<any>(this._thisURL + 'text-by-account/' + orgId +'/' + prcId);
   }
 
 }

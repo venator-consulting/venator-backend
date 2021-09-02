@@ -90,8 +90,14 @@ calculateDateRanges = (mindate, maxdate, step) => {
   return ranges;
 };
 
-module.exports.deletePrevData = async (orgId, prcId) => {
+module.exports.deletePrevDataTextWord = async (orgId, prcId) => {
   let query = `DELETE FROM text_analysis_word_${orgId} WHERE procedureId = ${prcId}`;
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+
+module.exports.deletePrevDataTextAccount = async (orgId, prcId) => {
+  let query = `DELETE FROM text_analysis_account_${orgId} WHERE procedureId = ${prcId}`;
   let result = await connection.getConnection().execute(query);
   return result;
 };
@@ -103,7 +109,7 @@ module.exports.deletePrevData = async (orgId, prcId) => {
  * @param {*} keys
  * @returns
  */
-getData = async (orgId, prcId, keys, dateRanges, step) => {
+storeDataByWord = async (orgId, prcId, keys, dateRanges, step) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(prcId))
@@ -167,6 +173,52 @@ getData = async (orgId, prcId, keys, dateRanges, step) => {
   return result;
 };
 
+storeDataByAccount = async (orgId, prcId, keys, dateRanges, step) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = ` INSERT INTO text_analysis_account_${orgId} (accountNumber, accountName, totlaCount, fromDate, toDate, procedureId, step) `;
+  for (let i = 1; i < dateRanges.length; i++) {
+    let fromDate = dateRanges[i - 1];
+    let toDate = dateRanges[i];
+    query += `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount,
+                      IF(1 = 1,
+                        '${fromDate.toISOString().split('T')[0]}',
+                        '${fromDate.toISOString().split('T')[0]}') fromDate,
+                      IF(1 = 1,
+                        '${toDate.toISOString().split('T')[0]}',
+                        '${toDate.toISOString().split('T')[0]}') toDate,
+                      IF(1 = 1,
+                        '${prcId}',
+                        '${prcId}') procedureId,
+                      IF(1 = 1,
+                        '${step}',
+                        '${step}') step
+                            FROM posting_${orgId}  p
+                            WHERE procedureId = ${prcId} 
+                                AND UPPER(p.accountType) = 'K' 
+                                AND p.accountNumber is not NULL 
+                                `;
+    query += keys.length > 0 ? " AND ( " : "";
+
+    for (let index = 0; index < keys.length; index++) {
+      const key = keys[index];
+      query += `  p.reference ${key}
+                        OR p.textPosting ${key}
+                        OR p.textHeader ${key} OR`;
+    }
+    query += keys.length > 0 ? " 1 <> 1) " : "";
+
+    query += "GROUP BY p.accountNumber , p.accountName";
+
+    query += " UNION ";
+  }
+  query = query.slice(0, -6);
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+
 module.exports.textAnalysisByWord = async (orgId, prcId, step) => {
   const dateRange = await getDateRange(orgId, prcId);
 
@@ -186,7 +238,7 @@ module.exports.textAnalysisByWord = async (orgId, prcId, step) => {
 
   const dateRanges = calculateDateRanges(mindate, maxdate, step);
 
-  const result = await getData(orgId, prcId, keywords, dateRanges, step);
+  const result = await storeDataByWord(orgId, prcId, keywords, dateRanges, step);
 };
 
 
@@ -229,4 +281,27 @@ module.exports.getrDataByRange = async (orgId, prcId, fromDate, toDate) => {
     result = result.filter((rec) => +rec.recordsCount > 0);
   }
   return result;
+};
+
+
+module.exports.textAnalysisByAccount = async (orgId, prcId, step) => {
+  const dateRange = await getDateRange(orgId, prcId);
+
+  if (dateRange.length < 1) {
+    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+  }
+  if (
+    !dateRange[0].mindate ||
+    !(dateRange[0].mindate instanceof Date) ||
+    !dateRange[0].maxdate ||
+    !(dateRange[0].maxdate instanceof Date)
+  ) {
+    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+  }
+  const mindate = dateRange[0].mindate;
+  const maxdate = dateRange[0].maxdate;
+
+  const dateRanges = calculateDateRanges(mindate, maxdate, step);
+
+  const result = await storeDataByAccount(orgId, prcId, keywords, dateRanges, step);
 };
