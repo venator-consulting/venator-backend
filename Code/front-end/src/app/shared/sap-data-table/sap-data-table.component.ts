@@ -74,7 +74,6 @@ export class SAPDataTableComponent implements OnInit {
         delete this.criteria[key];
       }
     }
-    debugger;
     this.filtersNo = Object.keys(this.criteria).length - 6;
     this.loading = true;
     this._dataFilterService.get(this.criteria).subscribe(

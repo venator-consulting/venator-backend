@@ -59,7 +59,7 @@
             <p-dropdown [options]="accountTypesFilter" [(ngModel)]="criteria[col.field]" optionValue="AccountTypeName"
               appendTo="body" placeholder="{{'Account_Type.accountTypeNewName' | translate}}"
               optionLabel="AccountTypeName" [showClear]="true" [filter]="true" filterBy="AccountTypeName"
-              *ngIf="col.field == 'accountTypeNewName'" (onChange)="filterChange($event, col.field)"
+              *ngIf="col.field == 'accountTypeNewName'" (onChange)="filterChange($event.value, col.field)"
               [style]="{width:'300px'}">
               <ng-template pTemplate="item" let-item>
                 {{'Account_Type.'+item.AccountTypeName | translate}}

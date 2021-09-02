@@ -154,7 +154,6 @@ export class ImportComponent implements OnInit {
             summary: 'File Deleted!',
             detail: 'the file ' + this.filesList[index].orginalName + ' deleted successfuly!'
           });
-          debugger;
           this.removeFormData(index);
 
         },
@@ -255,7 +254,6 @@ export class ImportComponent implements OnInit {
 
   UploadHandler(event, f: FileToImport, index: number) {
     const selectedFiles: FileList = event.files;
-    // debugger;
     f.file = selectedFiles[0];
     f.index = index;
   }
@@ -274,18 +272,6 @@ export class ImportComponent implements OnInit {
     const template = theFile.defaultTemplate;
     const OrganisationId = theFile.OrganisationId;
     const procedureId = theFile.procedureId;
-    debugger;
-
-    // const formData: FormData = new FormData();
-
-    // formData.append('data', JSON.stringify({
-    //   template: template,
-    //   fileType: fileType,
-    //   fileClass: fileClass,
-    //   local: local,
-    //   filePath: filePath,
-    //   accountType: accountType
-    // }));
 
     const data = {
       data: {
@@ -314,8 +300,6 @@ export class ImportComponent implements OnInit {
           detail: 'the file ' + this.filesList[this.currentFileIndex].orginalName + ' imported successfuly! you can import another file now'
         });
       }, err => {
-        debugger;
-        // console.log('error: ' + err.error.error);
         this.waiting = false;
         this._messageService.add({
           severity: 'error',

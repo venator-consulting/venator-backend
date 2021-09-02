@@ -122,7 +122,6 @@ export class AccountTypeComponent implements OnInit {
   editRow(row) {
     this.postingAccountTypes.filter(row => row.isEditable).map(r => { r.isEditable = false; return r });
     row.isEditable = true;
-    // debugger;
     this.originalVal = row.accountTypeNewId;
   }
 
@@ -177,7 +176,6 @@ export class AccountTypeComponent implements OnInit {
 
   filterChange(query, colName): void {
     this.searching = true;
-    // debugger;
     if (!query) {
       this.filtersNo--;
       delete this.criteria[colName];

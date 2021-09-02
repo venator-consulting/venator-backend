@@ -68,7 +68,7 @@
 
               <p-dropdown [options]="docTypesFilter" [(ngModel)]="criteria[col.field]" optionValue="documentTypeName" appendTo="body"
                 placeholder="Document Type new" optionLabel="documentTypeName" [showClear]="true"
-                filterBy="documentTypeName" (onChange)="filterChange($event, col.field)" [style]="{width:'100%'}"
+                filterBy="documentTypeName" (onChange)="filterChange($event.value, col.field)" [style]="{width:'100%'}"
                 *ngIf="col.field == 'documentTypeNewName'">
                 <ng-template pTemplate="item" let-item>
                   {{'Document_Type.'+item.documentTypeName | translate}}
