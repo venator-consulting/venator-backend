@@ -5,9 +5,20 @@ module.exports.textAnalysisByWord = async (req, res) => {
     const orgId = +req.params.orgId;
     const prcId = +req.params.prcId;
     // const step = req.params.step;
-    await precalRepo.deletePrevData(orgId, prcId);
+    await precalRepo.deletePrevDataTextWord(orgId, prcId);
     for (const step in DATE_RANGE) {
         const result = await precalRepo.textAnalysisByWord(orgId, prcId, step);
+    }
+    res.status(201).json('done');
+};
+
+module.exports.textAnalysisByAccount = async (req, res) => {
+    const orgId = +req.params.orgId;
+    const prcId = +req.params.prcId;
+    // const step = req.params.step;
+    await precalRepo.deletePrevDataTextAccount(orgId, prcId);
+    for (const step in DATE_RANGE) {
+        const result = await precalRepo.textAnalysisByAccount(orgId, prcId, step);
     }
     res.status(201).json('done');
 };

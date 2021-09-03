@@ -75,7 +75,6 @@ export class DocumentTypeComponent implements OnInit {
   editRow(row) {
     this.postingDocTypes.filter(row => row.isEditable).map(r => { r.isEditable = false; return r });
     row.isEditable = true;
-    debugger;
     this.originalVal = row.documentTypeNewId;
   }
 

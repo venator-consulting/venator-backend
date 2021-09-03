@@ -464,7 +464,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let creditAmount = decimalParser(row[Standardtemplate.creditAmount] ?? 'null');
                 if (isNaN(creditAmount)) {
                     creditAmount = null;
-                    if (Standardtemplate.creditAmount) {
+                    if (Standardtemplate.creditAmount && row[Standardtemplate.creditAmount]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, creditAmount/${Standardtemplate.creditAmount} should be number!`;
@@ -485,7 +485,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let balance = decimalParser(row[Standardtemplate.balance] ?? 'null');
                 if (isNaN(balance)) {
                     balance = null;
-                    if (Standardtemplate.balance) {
+                    if (Standardtemplate.balance && row[Standardtemplate.balance]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, balance/${Standardtemplate.balance} should be number!`;
@@ -497,7 +497,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let debitAmount = decimalParser(row[Standardtemplate.debitAmount] ?? 'null');
                 if (isNaN(debitAmount)) {
                     debitAmount = null;
-                    if (Standardtemplate.debitAmount) {
+                    if (Standardtemplate.debitAmount && row[Standardtemplate.debitAmount]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, debitAmount/${Standardtemplate.debitAmount} should be number!`;
@@ -509,7 +509,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let balanceTransactionCurrency = decimalParser(row[Standardtemplate.balanceTransactionCurrency] ?? 'null');
                 if (isNaN(balanceTransactionCurrency)) {
                     balanceTransactionCurrency = null;
-                    if (Standardtemplate.balanceTransactionCurrency) {
+                    if (Standardtemplate.balanceTransactionCurrency && row[Standardtemplate.balanceTransactionCurrency]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, balanceTransactionCurrency/${Standardtemplate.balanceTransactionCurrency} should be number!`;
@@ -521,7 +521,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let debitAmountTransactionCurrency = decimalParser(row[Standardtemplate.debitAmountTransactionCurrency] ?? 'null');
                 if (isNaN(debitAmountTransactionCurrency)) {
                     debitAmountTransactionCurrency = null;
-                    if (Standardtemplate.debitAmountTransactionCurrency) {
+                    if (Standardtemplate.debitAmountTransactionCurrency && row[Standardtemplate.debitAmountTransactionCurrency]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, debitAmountTransactionCurrency/${Standardtemplate.debitAmountTransactionCurrency} should be number!`;
@@ -533,7 +533,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let creditAmountTransactionCurrency = decimalParser(row[Standardtemplate.creditAmountTransactionCurrency] ?? 'null');
                 if (isNaN(creditAmountTransactionCurrency)) {
                     creditAmountTransactionCurrency = null;
-                    if (Standardtemplate.creditAmountTransactionCurrency) {
+                    if (Standardtemplate.creditAmountTransactionCurrency && row[Standardtemplate.creditAmountTransactionCurrency]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, creditAmountTransactionCurrency/${Standardtemplate.creditAmountTransactionCurrency} should be number!`;
@@ -545,7 +545,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let exchangeRate = decimalParser(row[Standardtemplate.exchangeRate] ?? 'null');
                 if (isNaN(exchangeRate)) {
                     exchangeRate = null;
-                    if (Standardtemplate.exchangeRate) {
+                    if (Standardtemplate.exchangeRate && row[Standardtemplate.exchangeRate]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, exchangeRate/${Standardtemplate.exchangeRate} should be number!`;
@@ -557,7 +557,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let cashDiscount = decimalParser(row[Standardtemplate.cashDiscount] ?? 'null');
                 if (isNaN(cashDiscount)) {
                     cashDiscount = null;
-                    if (Standardtemplate.cashDiscount) {
+                    if (Standardtemplate.cashDiscount && row[Standardtemplate.cashDiscount]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, cashDiscount/${Standardtemplate.cashDiscount} should be number!`;
@@ -569,7 +569,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let taxAmount = decimalParser(row[Standardtemplate.taxAmount] ?? 'null');
                 if (isNaN(taxAmount)) {
                     taxAmount = null;
-                    if (Standardtemplate.taxAmount) {
+                    if (Standardtemplate.taxAmount && row[Standardtemplate.taxAmount]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, taxAmount/${Standardtemplate.taxAmount} should be number!`;
@@ -581,7 +581,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let taxAmountDebit = decimalParser(row[Standardtemplate.taxAmountDebit] ?? 'null');
                 if (isNaN(taxAmountDebit)) {
                     taxAmountDebit = null;
-                    if (Standardtemplate.taxAmountDebit) {
+                    if (Standardtemplate.taxAmountDebit && row[Standardtemplate.taxAmountDebit]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, taxAmountDebit/${Standardtemplate.taxAmountDebit} should be number!`;
@@ -593,7 +593,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let taxAmountCredit = decimalParser(row[Standardtemplate.taxAmountCredit] ?? 'null');
                 if (isNaN(taxAmountCredit)) {
                     taxAmountCredit = null;
-                    if (Standardtemplate.taxAmountCredit) {
+                    if (Standardtemplate.taxAmountCredit && row[Standardtemplate.taxAmountCredit]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, taxAmountCredit/${Standardtemplate.taxAmountCredit} should be number!`;
@@ -605,7 +605,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                 let identifierBalanceCarryforward = decimalParser(row[Standardtemplate.identifierBalanceCarryforward] ?? 'null');
                 if (isNaN(identifierBalanceCarryforward)) {
                     identifierBalanceCarryforward = null;
-                    if (Standardtemplate.identifierBalanceCarryforward) {
+                    if (Standardtemplate.identifierBalanceCarryforward && row[Standardtemplate.identifierBalanceCarryforward]) {
                         console.log(`${new Date()}: There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
                         logger.error(`${new Date()}: There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`);
                         const message = `There is an ERROR on row ${index + 1}, identifierBalanceCarryforward/${Standardtemplate.identifierBalanceCarryforward} should be number!`;

@@ -257,7 +257,6 @@ export class TextAnalysisWordDetailsComponent implements OnInit {
 
   filterChange(query, colName): void {
     this.waiting = true;
-    debugger;
     if (!query) {
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {

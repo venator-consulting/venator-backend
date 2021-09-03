@@ -320,7 +320,6 @@ export class TextAnalysisDetailsComponent implements OnInit {
 
   filterChange(query, colName): void {
     this.searching = true;
-    debugger;
     if (!query) {
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
@@ -573,6 +572,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
   }
 
   pageNrChange(value) {
+    this.pageNr = (value && value.trim()) ? value : 1;
     this.backCriteria.offset = (this.pageNr - 1) * this.limit;
     this.getAllByAccount();
   }

@@ -350,7 +350,6 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   }
 
   selectRow(row: AmountAnalysisDetails): void {
-    debugger;
     const index = this.selected.map((item) => item.id).indexOf(row.id);
     if (row.amountRelevant) {
       row.amountRelevant = false;
@@ -565,6 +564,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   }
 
   pageNrChange(value) {
+    this.pageNr = (value && value.trim()) ? value : 1;
     this.backCriteria.offset = (this.pageNr - 1) * this.limit;
     this.getAllByAccount();
   }

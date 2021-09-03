@@ -74,7 +74,6 @@ export class SAPDataTableComponent implements OnInit {
         delete this.criteria[key];
       }
     }
-    debugger;
     this.filtersNo = Object.keys(this.criteria).length - 6;
     this.loading = true;
     this._dataFilterService.get(this.criteria).subscribe(
@@ -177,7 +176,7 @@ export class SAPDataTableComponent implements OnInit {
 
   pageNrChange(value) {
     this.loading = true;
-    this.pageNr = value;
+    this.pageNr = (value && value.trim()) ? value : 1;
     this.criteria.offset = (this.pageNr - 1) * this.limit;
     this.getData();
   }

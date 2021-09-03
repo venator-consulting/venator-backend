@@ -273,7 +273,6 @@ export class SusaComponent implements OnInit {
         delete this.criteria[key];
       }
     }
-    // debugger;
     this.filtersNo = Object.keys(this.criteria).length;
     if (!query) {
       if (Object.keys(this.criteria).length < 1) {
@@ -282,7 +281,7 @@ export class SusaComponent implements OnInit {
         for (const key in this.criteria) {
           if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
             const element = this.criteria[key];
-            if (element.length < 3) {
+            if (element && element.length < 3) {
               this.data = this.tempData.filter(
                 (value) => value[key]?.toString().toLowerCase() == element.toLowerCase()
               );

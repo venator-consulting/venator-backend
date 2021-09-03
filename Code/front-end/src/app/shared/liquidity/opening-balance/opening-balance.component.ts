@@ -151,7 +151,6 @@ export class OpeningBalanceComponent implements OnInit {
           if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
             const element = this.criteria[key];
             if (key == 'StartingBalanceDate') {
-              debugger;
               this.data = this.tempData.filter(
                 (value) =>
                   value['StartingBalanceDate']?.getDate() ==
@@ -182,7 +181,6 @@ export class OpeningBalanceComponent implements OnInit {
         if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
           const element = this.criteria[key];
           if (key == 'StartingBalanceDate') {
-            debugger;
             this.data = this.tempData.filter(
               (value) =>
                 value['StartingBalanceDate']?.getDate() == element.getDate() &&
