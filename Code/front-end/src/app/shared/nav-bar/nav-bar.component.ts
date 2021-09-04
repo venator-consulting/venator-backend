@@ -220,6 +220,14 @@ export class NavBarComponent implements OnInit {
                   this.sideBarShow = false;
                 },
               },
+              {
+                label: 'Creditor Analysis Pre-calculated',
+                icon: 'pi pi-chart-bar',
+                routerLink: ['/dashboard/analysis/creditor-calc'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
             ],
             visible:
               +localStorage.getItem('organisationId') > 0 &&

@@ -30,3 +30,11 @@ module.exports.amountAnalysis = async (req, res) => {
         const result = await precalRepo.storeAmountData(orgId, prcId);
     res.status(201).json('done');
 };
+
+module.exports.creditorAnalysis = async (req, res) => {
+    const orgId = +req.params.orgId;
+    const prcId = +req.params.prcId;
+    await precalRepo.deletePrevDataAmount(orgId, prcId);
+        const result = await precalRepo.storeCreditorAnalysis(orgId, prcId);
+    res.status(201).json('done');
+};

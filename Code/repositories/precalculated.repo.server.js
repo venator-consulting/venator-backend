@@ -392,3 +392,89 @@ module.exports.getTextAnalysisDataByAccountCalcDefault = async (orgId, prcId) =>
   });
   return result;
 };
+
+module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = ` INSERT INTO creditor_analysis_${orgId} (accountNumber, accountName, totlaCount, totalBalance, procedureId) `;
+  query += `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, 
+                SUM(p.balance) as totalBalance,
+                IF(1 = 1,
+                  '${prcId}',
+                  '${prcId}') procedureId
+                            FROM posting_${orgId}  p
+                            WHERE p.procedureId = ${prcId} 
+                                AND UPPER(p.accountType) = 'K' 
+                                AND p.accountNumber is not NULL 
+                                `;
+  query += keywords.length > 0 ? " AND (( " : "";
+  // for text records
+  for (let index = 0; index < keywords.length; index++) {
+    const key = keywords[index];
+    query += `  p.reference ${key}
+                        OR p.textPosting ${key}
+                        OR p.textHeader ${key} OR`;
+  }
+  query += keywords.length > 0 ? " 1 <> 1) " : "";
+  // for amount records
+  query += ` OR ((UPPER(p.documentType) = 'KZ' OR 
+            UPPER(p.documentType) = 'ZP' OR
+            UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+            AND p.balance = ROUND(p.balance)
+            AND p.balance >= 500)`;
+  // for payment records
+  query += ` OR (p.documentDate is not NULL 
+            AND (p.applicationDate is null || p.applicationDate > p.dueDate)
+            AND (UPPER(p.documentTypeNewName) = 'RECHNUNG'
+                OR UPPER(p.documentTypeNewName) = 'ZAHLUNG'
+                OR UPPER(p.documentType) = 'KZ'
+                OR UPPER(p.documentType) = 'ZP'
+                OR UPPER(p.documentType) = 'RE'
+                OR UPPER(p.documentType) = 'KR'))`;
+
+  query += ")";
+  query += "GROUP BY p.accountNumber , p.accountName ";
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+
+module.exports.getCreditorAnalysis = async (orgId, prcId, criteria) => {
+  let limit = criteria.limit ? criteria.limit : 25;
+  let offset = criteria.offset ? criteria.offset : 0;
+  let orderBy = criteria.orderBy ? criteria.orderBy : "accountNumber";
+  orderBy =
+    orderBy == "accountNumber"
+      ? "LPAD(LOWER(p.accountNumber), 10,0) "
+      : orderBy;
+  const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
+  let query = `SELECT SQL_CALC_FOUND_ROWS * FROM creditor_analysis_${orgId} p 
+                WHERE procedureId = :procedureId `
+  if (criteria.accountNumber) {
+    query += `and p.accountNumber like '%${criteria.accountNumber}%' `;
+  }
+  if (criteria.accountName) {
+    query += `and p.accountName like '%${criteria.accountName}%' `;
+  }
+  query += ` order by ${orderBy} ${sortOrder} `;
+  query += ` LIMIT ${limit} offset ${offset}`;
+
+  let result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId
+    },
+    type: QueryTypes.SELECT,
+  });
+
+  const query1 = `SELECT FOUND_ROWS()`;
+
+  const totalCount = await sequelize.query(query1, {
+    type: QueryTypes.SELECT,
+  });
+
+  return {
+    data: result,
+    count: totalCount,
+  };
+};
