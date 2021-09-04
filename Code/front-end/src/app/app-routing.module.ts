@@ -39,6 +39,7 @@ import { FreeLiquidityComponent } from './shared/liquidity/free-liquidity/free-l
 import { FreeLiquidityDetailsComponent } from './shared/liquidity/free-liquidity/free-liquidity-details/free-liquidity-details.component';
 import { TextAnalysisPreComponent } from './shared/analysis/text-analysis/text-analysis-pre/text-analysis-pre.component';
 import { PreCalculateComponent } from './admin/pre-calculate/pre-calculate.component';
+import { AmountAnalysisPreComponent } from './shared/analysis/amount-analysis/amount-analysis-pre/amount-analysis-pre.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -145,6 +146,12 @@ const routes: Routes = [
       {
         path: 'analysis/amount',
         component: AmountAnalysisComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin', 'Manager', 'User'] },
+      },
+      {
+        path: 'analysis/amount-calc',
+        component: AmountAnalysisPreComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
       },

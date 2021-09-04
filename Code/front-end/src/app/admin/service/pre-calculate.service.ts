@@ -20,4 +20,9 @@ export class PreCalculateService {
     return this._http.get<any>(this._thisURL + 'text-by-account/' + orgId +'/' + prcId);
   }
 
+
+  amountAnalysis(orgId: number, prcId: number) {
+    return this._http.get<any>(this._thisURL + 'amount/' + orgId +'/' + prcId);
+  }
+
 }

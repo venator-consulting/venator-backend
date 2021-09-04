@@ -12,6 +12,14 @@ router.route("/:orgId/:prcId/amount/:baseBalance").get(
   analysisCtrl.amountAnalysis
 );
 
+router.route("/:orgId/:prcId/amount-calc/:baseBalance").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.amountAnalysisCalc
+);
+
 router
   .route("/:orgId/:prcId/amount/details/:accountNumber/:baseBalance")
   .get(

@@ -52,11 +52,21 @@ router
 
 router
     .route('/precalculate/text-by-word/:orgId/:prcId')
-    .get(precalcCtrl.textAnalysisByWord);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), precalcCtrl.textAnalysisByWord);
 
 router
     .route('/precalculate/text-by-account/:orgId/:prcId')
-    .get(precalcCtrl.textAnalysisByAccount);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), precalcCtrl.textAnalysisByAccount);
+
+router
+    .route('/precalculate/amount/:orgId/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), precalcCtrl.amountAnalysis);
 
 router
     .route('/user')
