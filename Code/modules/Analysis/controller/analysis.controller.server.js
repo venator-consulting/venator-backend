@@ -17,6 +17,14 @@ module.exports.amountAnalysis = async (req, res) => {
   res.status(200).json(result);
 };
 
+module.exports.amountAnalysisCalc = async (req, res) => {
+  const orgId = +req.params.orgId;
+  const prcId = +req.params.prcId;
+  const baseBalance = req.params.baseBalance;
+  const result = await precalRepo.amountAnalysisGetData(orgId, prcId, baseBalance);
+  res.status(200).json(result);
+};
+
 module.exports.amountAnalysisDetails = async (req, res) => {
   const result = await postingRepo.amountAnalysisDetails(
     req.params.orgId,

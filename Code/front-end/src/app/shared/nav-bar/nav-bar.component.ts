@@ -173,6 +173,14 @@ export class NavBarComponent implements OnInit {
                 },
               },
               {
+                label: 'Amount Analysis Pre Calculated',
+                icon: 'pi pi-euro',
+                routerLink: ['/dashboard/analysis/amount-calc'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
                 label: elem.textAnalysis,
                 icon: 'pi pi-inbox',
                 routerLink: ['/dashboard/analysis/text'],
@@ -187,7 +195,7 @@ export class NavBarComponent implements OnInit {
                 command: () => {
                   this.sideBarShow = false;
                 },
-              },//text-word-calc
+              },
               {
                 label: 'Text Analysis Pre Calculated',
                 icon: 'pi pi-file',

@@ -102,6 +102,12 @@ module.exports.deletePrevDataTextAccount = async (orgId, prcId) => {
   return result;
 };
 
+module.exports.deletePrevDataAmount = async (orgId, prcId) => {
+  let query = `DELETE FROM amount_analysis_${orgId} WHERE procedureId = ${prcId}`;
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+
 /**
  *
  * @param {*} orgId
@@ -216,6 +222,50 @@ storeDataByAccount = async (orgId, prcId, keys, dateRanges, step) => {
   }
   query = query.slice(0, -6);
   let result = await connection.getConnection().execute(query);
+  return result;
+};
+
+module.exports.storeAmountData = async (orgId, prcId) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = ` INSERT INTO amount_analysis_${orgId} (accountNumber, accountName, balance, accountType, documentType, procedureId) `;
+  query += `SELECT p.accountNumber , p.accountName , p.balance, p.accountType, p.documentType, p.procedureId 
+                            FROM posting_${orgId}  p
+                            WHERE procedureId = ${prcId} 
+                                AND UPPER(p.accountType) = 'K' 
+                                AND p.accountNumber is not NULL
+                                AND (UPPER(p.documentType) = 'KZ' OR 
+                                    UPPER(p.documentType) = 'ZP' OR
+                                    UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+                                AND p.balance = ROUND(p.balance, -1)
+                                AND balance >= 100 `;
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+
+module.exports.amountAnalysisGetData = async (orgId, prcId, baseBalance = 500) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = `SELECT * from amount_analysis_${orgId} pos
+                          WHERE
+                              pos.procedureId = :procedureId
+                              AND pos.balance >= :balance `;
+
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+      balance: baseBalance
+    },
+    type: QueryTypes.SELECT,
+  });
+  if (!result || !result.length)
+    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+  if (!result[0].mindate)
+    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
   return result;
 };
 
