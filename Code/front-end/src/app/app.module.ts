@@ -93,6 +93,7 @@ import { TextAnalysisIndexedComponent } from './shared/analysis/text-analysis/te
 import { TextAnalysisPreComponent } from './shared/analysis/text-analysis/text-analysis-pre/text-analysis-pre.component';
 import { PreCalculateComponent } from './admin/pre-calculate/pre-calculate.component';
 import { AmountAnalysisPreComponent } from './shared/analysis/amount-analysis/amount-analysis-pre/amount-analysis-pre.component';
+import { CreditorAnalysisCalcComponent } from './shared/analysis/creditor-analysis/creditor-analysis-calc/creditor-analysis-calc.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -144,6 +145,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TextAnalysisPreComponent,
     PreCalculateComponent,
     AmountAnalysisPreComponent,
+    CreditorAnalysisCalcComponent,
   ],
   imports: [
     BrowserModule,

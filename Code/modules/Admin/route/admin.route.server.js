@@ -69,6 +69,12 @@ router
     }), authorization.authorize('Admin'), precalcCtrl.amountAnalysis);
 
 router
+    .route('/precalculate/creditor/:orgId/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), precalcCtrl.creditorAnalysis);
+
+router
     .route('/user')
     .post(passport.authenticate('jwt', {
         session: false

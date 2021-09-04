@@ -358,6 +358,16 @@ module.exports.creditorAnalysis = async (req, res) => {
   res.status(200).json(result);
 };
 
+module.exports.creditorAnalysisCalc = async (req, res) => {
+  const criteria = req.query;
+  const result = await precalRepo.getCreditorAnalysis(
+    req.params.orgId,
+    req.params.prcId,
+    criteria
+  );
+  res.status(200).json(result);
+};
+
 module.exports.creditorAnalysisDetails = async (req, res) => {
   let fileKeywords = await nlpHelper.getsynonyms(keywords);
   const result = await criteorAnalysisRepo.creditorAnalysisDetails(
