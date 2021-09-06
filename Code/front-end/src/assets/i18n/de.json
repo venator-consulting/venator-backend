@@ -325,7 +325,14 @@
     "analysis": "Analyse",
     "cancelButton": "Abbrechen",
     "confirmButton": "Bestätigen",
-    "NoProceduresFound": "Es gibt noch keine Verfahren für diese Organisation"
+    "NoProceduresFound": "Es gibt noch keine Verfahren für diese Organisation",
+    "status": "status",
+    "amount": "Pre-Calculated Amount Analysis",
+    "credit": "Pre-Calculated Credit Analysis",
+    "payment": "Pre-Calculated Payment Analysis",
+    "text_word": "Pre-Calculated Text Analysis by Word",
+    "text_account": "Pre-Calculated Text Analysis by Account",
+    "due_date": "Pre-Calculated Due Date Analysis"
   },
   "Notfound": {
     "errorMsg": "Sorry, die Seite ist nicht vorhanden"

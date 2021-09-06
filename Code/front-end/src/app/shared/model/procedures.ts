@@ -7,6 +7,12 @@ export class Procedures {
     data:  boolean = false;
     analysis: boolean = false;
     dataSource: string ='';
+    amount: boolean = false;
+    credit: boolean = false;
+    text_word: boolean = false;
+    text_account: boolean = false;
+    payment: boolean = false;
+    status: string;
 
 
     // constructor(organisationId: number, name: string, data: boolean,analysis: boolean,dataSource: string) {

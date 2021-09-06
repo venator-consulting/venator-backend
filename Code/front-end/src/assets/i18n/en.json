@@ -328,7 +328,14 @@
     "analysis": "Analysis",
     "cancelButton": "Cancel",
     "confirmButton": "Confirm",
-    "NoProceduresFound": "There are no procedures for this organisation yet"
+    "NoProceduresFound": "There are no procedures for this organisation yet",
+    "status": "status",
+    "amount": "Pre-Calculated Amount Analysis",
+    "credit": "Pre-Calculated Credit Analysis",
+    "payment": "Pre-Calculated Payment Analysis",
+    "text_word": "Pre-Calculated Text Analysis by Word",
+    "text_account": "Pre-Calculated Text Analysis by Account",
+    "due_date": "Pre-Calculated Due Date Analysis"
   },
   "Notfound": {
     "errorMsg": "Sorry, the page does not exist!"

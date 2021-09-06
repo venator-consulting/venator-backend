@@ -50,6 +50,11 @@ export class UserDashboardComponent implements OnInit {
           field: 'analysis',
           align: 'center'
         },
+        {
+          header: 'Procedure_Registration.status',
+          field: 'status',
+          align: 'center'
+        },
       ];
 
     
@@ -60,14 +65,28 @@ export class UserDashboardComponent implements OnInit {
   dataTable(prc) {
     localStorage.setItem('currentProcedureId', prc.id);
     localStorage.setItem('currentProcedureName', prc.name);
+    localStorage.setItem('currentProcedureStatus', prc.status);
+    localStorage.setItem('currentProcedureAmount', prc.amount);
+    localStorage.setItem('currentProcedureCredit', prc.credit);
+    localStorage.setItem('currentProcedurePayment', prc.payment);
+    localStorage.setItem('currentProcedureText_word', prc.text_word);
+    localStorage.setItem('currentProcedureText_account', prc.text_account);
+    localStorage.setItem('currentProcedureData', prc.data);
+    localStorage.setItem('currentProcedureAnalysis', prc.analysis);
     this._router.navigate(['/dashboard/shared/data']);
 
   }
-  editProcedure(id, name, data, analysis) {
-    localStorage.setItem('currentProcedureId', id);
-    localStorage.setItem('currentProcedureName', name);
-    localStorage.setItem('currentProcedureData', data);
-    localStorage.setItem('currentProcedureAnalysis', analysis);
+  editProcedure(prc) {
+    localStorage.setItem('currentProcedureId', prc.id);
+    localStorage.setItem('currentProcedureName', prc.name);
+    localStorage.setItem('currentProcedureData', prc.data);
+    localStorage.setItem('currentProcedureAnalysis', prc.analysis);
+    localStorage.setItem('currentProcedureStatus', prc.status);
+    localStorage.setItem('currentProcedureAmount', prc.amount);
+    localStorage.setItem('currentProcedureCredit', prc.credit);
+    localStorage.setItem('currentProcedurePayment', prc.payment);
+    localStorage.setItem('currentProcedureText_word', prc.text_word);
+    localStorage.setItem('currentProcedureText_account', prc.text_account);
 
     this._router.navigate(['/dashboard/admin/procedure/edit']);
 

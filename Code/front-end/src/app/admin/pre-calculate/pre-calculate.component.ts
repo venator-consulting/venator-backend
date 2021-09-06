@@ -12,6 +12,11 @@ export class PreCalculateComponent implements OnInit {
   prcId: number;
   procedureName: string;
   waiting: boolean;
+  disableAmount: boolean;
+  disableCredit: boolean;
+  disabletextWord: boolean;
+  disableText_account: boolean;
+  disablePayment: boolean;
 
   constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService) { }
 
@@ -19,6 +24,11 @@ export class PreCalculateComponent implements OnInit {
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
+    this.disableAmount = (localStorage.getItem('currentProcedureAmount') === 'true');
+    this.disableCredit = (localStorage.getItem('currentProcedureCredit') === 'true');
+    this.disabletextWord = (localStorage.getItem('currentProcedureText_word') === 'true');
+    this.disableText_account = (localStorage.getItem('currentProcedureText_account') === 'true');
+    this.disablePayment = (localStorage.getItem('currentProcedurePayment') === 'true');
   }
 
   textByWordStart() {
@@ -26,6 +36,8 @@ export class PreCalculateComponent implements OnInit {
     this._preCalcService.textAnalysisByWord(this.orgId, this.prcId)
     .subscribe(res => {
       this.waiting = false;
+      localStorage.setItem('currentProcedureText_word', 'true');
+      this.disabletextWord = true;
       this._messageService.add({
         severity: 'success',
         summary: 'SUCCESS',
@@ -40,6 +52,8 @@ export class PreCalculateComponent implements OnInit {
     this._preCalcService.textAnalysisByAccount(this.orgId, this.prcId)
     .subscribe(res => {
       this.waiting = false;
+      localStorage.setItem('currentProcedureText_account', 'true');
+      this.disableText_account = true;
       this._messageService.add({
         severity: 'success',
         summary: 'SUCCESS',
@@ -55,6 +69,8 @@ export class PreCalculateComponent implements OnInit {
     this._preCalcService.amountAnalysis(this.orgId, this.prcId)
     .subscribe(res => {
       this.waiting = false;
+      localStorage.setItem('currentProcedureAmount', 'true');
+      this.disableAmount = true;
       this._messageService.add({
         severity: 'success',
         summary: 'SUCCESS',
@@ -69,6 +85,8 @@ export class PreCalculateComponent implements OnInit {
     this._preCalcService.creditorAnalysis(this.orgId, this.prcId)
     .subscribe(res => {
       this.waiting = false;
+      localStorage.setItem('currentProcedureCredit', 'true');
+      this.disableCredit = true;
       this._messageService.add({
         severity: 'success',
         summary: 'SUCCESS',
@@ -77,5 +95,6 @@ export class PreCalculateComponent implements OnInit {
       })
     }, er => this.waiting = false);
   }
+
 
 }

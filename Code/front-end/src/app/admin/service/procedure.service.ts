@@ -8,7 +8,7 @@ import { Procedures } from 'src/app/shared/model/procedures';
 })
 export class ProcedureService {
 
-  _thisURL = environment.baseUrl + 'procedures';
+  _thisURL = environment.baseUrl + 'admin/procedures';
 
   constructor(private _http: HttpClient) { }
 
