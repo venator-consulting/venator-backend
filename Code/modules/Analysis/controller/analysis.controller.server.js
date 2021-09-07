@@ -174,7 +174,7 @@ module.exports.paymentAnalysisDateRange = async (req, res) => {
 };
 
 module.exports.paymentAnalysis = async (req, res) => {
-  const dateRange = await paymentAnalysisRepo.paymentDateRange(
+  const dateRange = await paymentAnalysisRepo.paymentDateRangeCalc(
     +req.params.orgId,
     +req.params.prcId
   );
@@ -196,7 +196,7 @@ module.exports.paymentAnalysis = async (req, res) => {
     toDate = dateRange[0].maxdate;
   }
   // let result = {};
-  paymentAnalysisRepo.paymentAnalysis(
+  paymentAnalysisRepo.paymentAnalysisCalc(
     req.params.orgId,
     req.params.prcId,
     fromDate,
@@ -268,7 +268,7 @@ module.exports.paymentJustRelevant = async (req, res) => {
 };
 
 module.exports.dueDateAnalysis = async (req, res) => {
-  const dateRange = await dueDateAnalysisRepo.dueDateRange(
+  const dateRange = await dueDateAnalysisRepo.dueDateRangeCalc(
     +req.params.orgId,
     +req.params.prcId
   );
@@ -292,7 +292,7 @@ module.exports.dueDateAnalysis = async (req, res) => {
     maxappdate = dateRange[0].maxdate;
   }
 
-  dueDateAnalysisRepo.dueDateAnalysis(
+  dueDateAnalysisRepo.dueDateAnalysisCalc(
     req.params.orgId,
     req.params.prcId,
     fromDate,

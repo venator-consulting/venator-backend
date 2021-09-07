@@ -34,14 +34,14 @@
         {{ (procedure[col.field]?.toString().toLowerCase().trim() != 'true' &&
         procedure[col.field]?.toString().toLowerCase().trim() != 'false') ? procedure[col.field] : ''}}
       </td>
-      <td *ngIf="role!=='User'" style="width: 10em" class="p-text-right">
+      <td style="width: 10em" class="p-text-right">
         <button pButton pRipple type="button" icon="pi pi-bookmark"
           class="p-button-rounded p-button-warning headerColor" pTooltip="{{'Admin_Dashboard.show' | translate}}"
           tooltipPosition="bottom" (click)="dataTable(procedure)"></button> &nbsp;
-        <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning headerColor"
+        <button  *ngIf="role ==='Admin'" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning headerColor"
           pTooltip="{{'Procedure_Registration.editProedurePlaceHolder' | translate}}" tooltipPosition="bottom"
           (click)="editProcedure(procedure)"></button> &nbsp;
-        <button pButton (click)="reset(procedure)" icon="pi pi-times" pRipple class="p-button-rounded p-button-warning headerColor"
+        <button  *ngIf="role ==='Admin'" pButton (click)="reset(procedure)" icon="pi pi-times" pRipple class="p-button-rounded p-button-warning headerColor"
           pTooltip="{{'Admin_Dashboard.delete' | translate}}"  tooltipPosition="bottom" [disabled]="procedure.status=='NOT_IMPORTED'"></button>
       </td>
 

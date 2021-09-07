@@ -79,15 +79,15 @@ module.exports.canDisplayAnalysis = function () {
         userinfo.Role != "Admin"
       )
         throw new Exception(httpStatus.FORBIDDEN, "unauthorized_401");
-      const prcs =
+      const prc =
         await require("../repositories/procedure.repo.server").fetchOne(
           req.params.prcId
         );
-      if (prcs.length !== 1)
-        next(
-          new Exception(httpStatus.UNAUTHORIZED, "procedure_id_is_required")
-        );
-      if (!prcs[0].analysis)
+      // if (prcs.length !== 1)
+      //   next(
+      //     new Exception(httpStatus.UNAUTHORIZED, "procedure_id_is_required")
+      //   );
+      if (!prc.analysis)
         next(
           new Exception(httpStatus.UNAUTHORIZED, "procedure_analysis_disabled")
         );

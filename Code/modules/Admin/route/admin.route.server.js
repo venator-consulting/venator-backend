@@ -75,6 +75,19 @@ router
     }), authorization.authorize('Admin'), precalcCtrl.creditorAnalysis);
 
 router
+    .route('/precalculate/payment/:orgId/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), precalcCtrl.paymentAnalysis);
+
+
+router
+    .route('/precalculate/due-date/:orgId/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), precalcCtrl.dueDateAnalysis);
+
+router
     .route('/user')
     .post(passport.authenticate('jwt', {
         session: false

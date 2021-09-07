@@ -170,16 +170,16 @@ export class NavBarComponent implements OnInit {
           {
             label: elem.analysis,
             items: [
+              // {
+              //   label: elem.amountAnalyisis,
+              //   icon: 'pi pi-euro',
+              //   routerLink: ['/dashboard/analysis/amount'],
+              //   command: () => {
+              //     this.sideBarShow = false;
+              //   },
+              // },
               {
                 label: elem.amountAnalyisis,
-                icon: 'pi pi-euro',
-                routerLink: ['/dashboard/analysis/amount'],
-                command: () => {
-                  this.sideBarShow = false;
-                },
-              },
-              {
-                label: 'Amount Analysis Pre Calculated',
                 icon: 'pi pi-euro',
                 routerLink: ['/dashboard/analysis/amount-calc'],
                 visible: localStorage.getItem('currentProcedureAmount') == 'true',
@@ -187,24 +187,24 @@ export class NavBarComponent implements OnInit {
                   this.sideBarShow = false;
                 },
               },
+              // {
+              //   label: elem.textAnalysis,
+              //   icon: 'pi pi-inbox',
+              //   routerLink: ['/dashboard/analysis/text'],
+              //   command: () => {
+              //     this.sideBarShow = false;
+              //   },
+              // },
+              // {
+              //   label: 'Text Analysis with index',
+              //   icon: 'pi pi-file',
+              //   routerLink: ['/dashboard/analysis/text-indexed'],
+              //   command: () => {
+              //     this.sideBarShow = false;
+              //   },
+              // },
               {
                 label: elem.textAnalysis,
-                icon: 'pi pi-inbox',
-                routerLink: ['/dashboard/analysis/text'],
-                command: () => {
-                  this.sideBarShow = false;
-                },
-              },
-              {
-                label: 'Text Analysis with index',
-                icon: 'pi pi-file',
-                routerLink: ['/dashboard/analysis/text-indexed'],
-                command: () => {
-                  this.sideBarShow = false;
-                },
-              },
-              {
-                label: 'Text Analysis Pre Calculated',
                 icon: 'pi pi-file',
                 routerLink: ['/dashboard/analysis/text-word-calc'],
                 visible: localStorage.getItem('currentProcedureText_word') == 'true',
@@ -216,20 +216,21 @@ export class NavBarComponent implements OnInit {
                 label: elem.paymentAnalyse,
                 icon: 'pi pi-credit-card',
                 routerLink: ['/dashboard/analysis/payment'],
+                visible: localStorage.getItem('currentProcedurePayment') == 'true',
                 command: () => {
                   this.sideBarShow = false;
                 },
               },
+              // {
+              //   label: elem.creditorsAnalyse,
+              //   icon: 'pi pi-chart-bar',
+              //   routerLink: ['/dashboard/analysis/creditor'],
+              //   command: () => {
+              //     this.sideBarShow = false;
+              //   },
+              // },
               {
                 label: elem.creditorsAnalyse,
-                icon: 'pi pi-chart-bar',
-                routerLink: ['/dashboard/analysis/creditor'],
-                command: () => {
-                  this.sideBarShow = false;
-                },
-              },
-              {
-                label: 'Creditor Analysis Pre-calculated',
                 icon: 'pi pi-chart-bar',
                 routerLink: ['/dashboard/analysis/creditor-calc'],
                 visible: localStorage.getItem('currentProcedureCredit') == 'true',

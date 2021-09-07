@@ -53,7 +53,11 @@ const Procedures = sequelizer.define('Procedures', {
     payment: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
-    }
+    },
+    due_date: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
 }, {
     tableName: 'Procedures'
 });

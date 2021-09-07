@@ -34,7 +34,23 @@ module.exports.amountAnalysis = async (req, res) => {
 module.exports.creditorAnalysis = async (req, res) => {
     const orgId = +req.params.orgId;
     const prcId = +req.params.prcId;
-    await precalRepo.deletePrevDataAmount(orgId, prcId);
+    await precalRepo.deletePrevDataCredit(orgId, prcId);
         const result = await precalRepo.storeCreditorAnalysis(orgId, prcId);
+    res.status(201).json('done');
+};
+
+module.exports.paymentAnalysis = async (req, res) => {
+    const orgId = +req.params.orgId;
+    const prcId = +req.params.prcId;
+    await precalRepo.deletePrevDataPayment(orgId, prcId);
+        const result = await precalRepo.storePaymentAnalysis(orgId, prcId);
+    res.status(201).json('done');
+};
+
+module.exports.dueDateAnalysis = async (req, res) => {
+    const orgId = +req.params.orgId;
+    const prcId = +req.params.prcId;
+    await precalRepo.deletePrevDataDueDate(orgId, prcId);
+        const result = await precalRepo.storeDueDateAnalysis(orgId, prcId);
     res.status(201).json('done');
 };

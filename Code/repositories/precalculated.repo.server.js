@@ -108,6 +108,24 @@ module.exports.deletePrevDataAmount = async (orgId, prcId) => {
   return result;
 };
 
+module.exports.deletePrevDataCredit = async (orgId, prcId) => {
+  let query = `DELETE FROM creditor_analysis_${orgId} WHERE procedureId = ${prcId}`;
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+
+module.exports.deletePrevDataPayment = async (orgId, prcId) => {
+  let query = `DELETE FROM payment_analysis_${orgId} WHERE procedureId = ${prcId}`;
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+
+module.exports.deletePrevDataDueDate = async (orgId, prcId) => {
+  let query = `DELETE FROM due_date_analysis_${orgId} WHERE procedureId = ${prcId}`;
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+
 /**
  *
  * @param {*} orgId
@@ -266,10 +284,12 @@ module.exports.amountAnalysisGetData = async (orgId, prcId, baseBalance = 500) =
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
-  let query = `SELECT * from amount_analysis_${orgId} pos
-                          WHERE
-                              pos.procedureId = :procedureId
-                              AND pos.balance >= :balance `;
+  let query = `SELECT  p.accountNumber , p.accountName , SUM(p.balance) as totalBalance, COUNT(p.id) as totlaCount
+     from amount_analysis_${orgId} p
+      WHERE
+          p.procedureId = :procedureId
+          AND p.balance >= :balance 
+          GROUP BY p.accountNumber , p.accountName`;
 
   const result = await sequelize.query(query, {
     replacements: {
@@ -278,10 +298,6 @@ module.exports.amountAnalysisGetData = async (orgId, prcId, baseBalance = 500) =
     },
     type: QueryTypes.SELECT,
   });
-  if (!result || !result.length)
-    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
-  if (!result[0].mindate)
-    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
   return result;
 };
 
@@ -498,4 +514,67 @@ module.exports.getCreditorAnalysis = async (orgId, prcId, criteria) => {
     data: result,
     count: totalCount,
   };
+};
+
+module.exports.storePaymentAnalysis = async (orgId, prcId) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = ` INSERT INTO payment_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
+    documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType) `;
+
+  query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
+    pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
+    FROM posting_${orgId} pos
+    WHERE
+      pos.procedureId = ${prcId}
+      AND UPPER(pos.accountType) = 'K'
+      AND pos.accountNumber is not NULL
+      AND pos.documentDate is not NULL 
+      AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
+      AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
+          OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
+          OR UPPER(pos.documentType) = 'KZ'
+          OR UPPER(pos.documentType) = 'ZP'
+          OR UPPER(pos.documentType) = 'RE'
+          OR UPPER(pos.documentType) = 'KR')`;
+
+  let result = await connection.getConnection().execute(query);
+  await Procedure.getProcedures().update({ payment: true }, {
+    where: {
+      id: prcId,
+    },
+  });
+  return result;
+};
+
+module.exports.storeDueDateAnalysis = async (orgId, prcId) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+  let query = ` INSERT INTO due_date_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
+    documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType) `;
+
+  query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
+    pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
+    FROM posting_${orgId} pos
+    WHERE
+      pos.procedureId = ${prcId}
+      AND UPPER(pos.accountType) = 'K'
+      AND pos.accountNumber is not NULL
+      AND pos.dueDate is not NULL 
+      AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
+          OR UPPER(pos.documentType) = 'RE'
+          OR UPPER(pos.documentType) = 'KR')
+      ORDER BY pos.dueDate`;
+
+  let result = await connection.getConnection().execute(query);
+  await Procedure.getProcedures().update({ due_date: true }, {
+    where: {
+      id: prcId,
+    },
+  });
+  return result;
 };

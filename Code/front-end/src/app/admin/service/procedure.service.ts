@@ -28,6 +28,10 @@ export class ProcedureService {
     return this._http.put<any>(this._thisURL + '/' + p.id, p);
   }
 
+  patch(p) {
+    return this._http.put<any>(this._thisURL + '/' + p.id, p);
+  }
+
   delete(id: number) {
     return this._http.delete<any>(this._thisURL + '/' + id);
   }

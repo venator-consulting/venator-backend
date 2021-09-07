@@ -29,4 +29,12 @@ export class PreCalculateService {
     return this._http.get<any>(this._thisURL + 'creditor/' + orgId +'/' + prcId);
   }
 
+  paymentAnalysis(orgId: number, prcId: number) {
+    return this._http.get<any>(this._thisURL + 'payment/' + orgId +'/' + prcId);
+  }
+
+  dueDateAnalysis(orgId: number, prcId: number) {
+    return this._http.get<any>(this._thisURL + 'due-date/' + orgId +'/' + prcId);
+  }
+
 }
