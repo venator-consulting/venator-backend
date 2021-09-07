@@ -143,6 +143,12 @@ router
     }), authorization.authorize('Admin'), procedureCtrl.delete);
 
 router
+    .route('/procedures/:orgId/:prcId')
+    .delete(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), procedureCtrl.reset)
+
+router
     .route('/organisation')
     .get(passport.authenticate('jwt', {
         session: false

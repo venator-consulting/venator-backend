@@ -76,3 +76,19 @@ module.exports.delete = async (id) => {
   );
   return result;
 };
+
+module.exports.resetProcedure = async function (orgId, prcId) {
+  const query1 = `DELETE FROM posting_${orgId} WHERE procedureId = ${prcId} `;
+  const query2 = `DELETE FROM accounts_${orgId} WHERE procedureId = ${prcId}`;
+  const query3 = `DELETE FROM text_analysis_account_${orgId} WHERE procedureId = ${prcId}`;
+  const query4 = `DELETE FROM text_analysis_word_${orgId} WHERE procedureId = ${prcId} `;
+  const query5 = `DELETE FROM amount_analysis_${orgId} WHERE procedureId = ${prcId} `;
+  const query6 = `DELETE FROM creditLines_${orgId} WHERE procedureId = ${prcId}`;
+  const connection = require("../config/mysql.config").getConnection();
+  await Promise.all([connection.execute(query1),
+                      connection.execute(query2), connection.execute(query3), 
+                      connection.execute(query4), connection.execute(query5),
+                       connection.execute(query6),
+                      this.update({status: 'NOT_IMPORTED'}, prcId)]);
+  return;
+};
