@@ -4,6 +4,7 @@ import { RoleServiceService } from "../service/role-service.service";
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { ProcedureService } from '../service/procedure.service';
 
 @Component({
   selector: 'app-procedure-edit',
@@ -15,19 +16,39 @@ export class ProcedureEditComponent implements OnInit {
   procedureModel: Procedures;
 
 
-  constructor(private _router: Router, private _messageService: MessageService, private _roleServiceService : RoleServiceService, public _translateService: TranslateService) { }
+  constructor(private _router: Router, private _messageService: MessageService,
+    private _roleServiceService: RoleServiceService, public _translateService: TranslateService,
+    private _procedureService: ProcedureService) { }
 
   ngOnInit(): void {
     this.procedureModel = new Procedures();
     this.procedureModel.id = +localStorage.getItem('currentProcedureId');
-    this.procedureModel.name = localStorage.getItem('currentProcedureName');
-    this.procedureModel.data = (localStorage.getItem('currentProcedureData') === "true");
-    this.procedureModel.analysis = (localStorage.getItem('currentProcedureAnalysis') === "true");
-
+    this._procedureService.getOne(this.procedureModel.id)
+      .subscribe(procedure => this.procedureModel = procedure);
   }
 
-  submitHandler(){
-     this._roleServiceService.editProcedure(this.procedureModel)
+  submitHandler() {
+    if (this.procedureModel.amount && this.procedureModel.credit &&
+      this.procedureModel.text_account && this.procedureModel.text_word &&
+      this.procedureModel.payment)
+      this.procedureModel.status = "CALCULATED";
+    else if (this.procedureModel.amount || this.procedureModel.credit ||
+      this.procedureModel.text_account || this.procedureModel.text_word ||
+      this.procedureModel.payment)
+      this.procedureModel.status = "PARTIAL_CALCULATED";
+    else if (!this.procedureModel.amount && !this.procedureModel.credit &&
+      !this.procedureModel.text_account && !this.procedureModel.text_word &&
+      !this.procedureModel.payment)
+      this.procedureModel.status = "IMPORTED";
+    localStorage.setItem('currentProcedureStatus', this.procedureModel.status);
+    localStorage.setItem('currentProcedureAmount', '' + this.procedureModel.amount);
+    localStorage.setItem('currentProcedureCredit', '' + this.procedureModel.credit);
+    localStorage.setItem('currentProcedurePayment', '' + this.procedureModel.payment);
+    localStorage.setItem('currentProcedureText_word', '' + this.procedureModel.text_word);
+    localStorage.setItem('currentProcedureText_account', '' + this.procedureModel.text_account);
+    localStorage.setItem('currentProcedureData', '' + this.procedureModel.data);
+    localStorage.setItem('currentProcedureAnalysis', '' + this.procedureModel.analysis);
+    this._procedureService.update(this.procedureModel)
       .subscribe(res => {
         // console.dir('done: ' + res);
         this._messageService.add({
@@ -36,34 +57,9 @@ export class ProcedureEditComponent implements OnInit {
           detail: 'updated successfully'
         });
       }, err => {
-        this._translateService.get("ErrorHandler").subscribe(elem => {
-          let errorMsg = "" ; 
-
-          if(err.status=== 400){
-            errorMsg = elem.badRequest_400
-          }
-          else if (err.status=== 401) {
-            errorMsg = elem.unauthorized_401
-          }
-          else if (err.status=== 403) {
-            errorMsg = elem.forbidden_403
-          }
-          else if (err.status=== 404) {
-            errorMsg = elem.NotFound_404
-          }
-          else if (err.status=== 500) {
-            errorMsg = elem.internalServerError_500
-          }
-          this._messageService.add({
-            severity: 'error',
-            summary: 'ERROR',
-            life: 10000,
-            detail: errorMsg
-          });
-        })
-      }); 
-  } 
-  cancelHandle(){
+      });
+  }
+  cancelHandle() {
     this._router.navigate(['/dashboard/shared/user/procedures']);
     localStorage.removeItem("currentProcedureId");
     localStorage.removeItem("currentProcedureName");

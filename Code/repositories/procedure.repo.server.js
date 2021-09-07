@@ -1,3 +1,5 @@
+const Exception = require("../helpers/errorHandlers/Exception");
+const httpStatus = require("../models/enums/httpStatus");
 const Procedure = require("../models/procedures.model.server");
 
 module.exports.fetchAll = async () => {
@@ -26,7 +28,10 @@ module.exports.fetchOne = async (id) => {
       id: id,
     },
   });
-  return res;
+  if (!res || !res.length) {
+    throw new Exception(httpStatus.BAD_REQUEST, 'PROCEDURE_NOT_FOUND');
+  }
+  return res[0];
 };
 
 /**
@@ -44,6 +49,7 @@ module.exports.getManagerProcedures = async (managerId) => {
 };
 
 module.exports.insert = async (model) => {
+  model.status = 'NOT_IMPORTED';
   const result = await Procedure.getProcedures().create(model);
   return result;
 }; // end of function

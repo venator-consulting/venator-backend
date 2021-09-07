@@ -1,5 +1,5 @@
 const connection = require("../config/mysql.config");
-const Posting = require("../models/posting.model.server");
+const Procedure = require("../models/procedures.model.server");
 const { Op, fn, col, QueryTypes } = require("sequelize");
 const Sequelize = require("../config/sequelize.config");
 const Exception = require("../helpers/errorHandlers/Exception");
@@ -176,6 +176,12 @@ storeDataByWord = async (orgId, prcId, keys, dateRanges, step) => {
   query = query.slice(0, -6);
   // console.log(query);
   let result = await connection.getConnection().execute(query);
+  // set as calculated in procedure
+  await Procedure.getProcedures().update({ text_word: true }, {
+    where: {
+      id: prcId,
+    },
+  });
   return result;
 };
 
@@ -222,6 +228,11 @@ storeDataByAccount = async (orgId, prcId, keys, dateRanges, step) => {
   }
   query = query.slice(0, -6);
   let result = await connection.getConnection().execute(query);
+  await Procedure.getProcedures().update({ text_account: true }, {
+    where: {
+      id: prcId,
+    },
+  });
   return result;
 };
 
@@ -242,6 +253,11 @@ module.exports.storeAmountData = async (orgId, prcId) => {
                                 AND p.balance = ROUND(p.balance, -1)
                                 AND balance >= 100 `;
   let result = await connection.getConnection().execute(query);
+  await Procedure.getProcedures().update({ amount: true }, {
+    where: {
+      id: prcId,
+    },
+  });
   return result;
 };
 
@@ -437,6 +453,11 @@ module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
   query += ")";
   query += "GROUP BY p.accountNumber , p.accountName ";
   let result = await connection.getConnection().execute(query);
+  await Procedure.getProcedures().update({ credit: true }, {
+    where: {
+      id: prcId,
+    },
+  });
   return result;
 };
 

@@ -5,14 +5,14 @@
 <p-progressBar *ngIf="waiting" mode="indeterminate" [style]="{'height': '5px'}"></p-progressBar>
 
 <h3>Text Analysis by word</h3>
-<button pButton label="Start" (click)="textByWordStart()"></button>
+<button pButton label="Start" (click)="textByWordStart()" [disabled]="disabletextWord"></button>
 <br><br>
 
 <h3>Text Analysis by Account</h3>
-<button pButton label="Start" (click)="textByAccountStart()"></button>
+<button pButton label="Start" (click)="textByAccountStart()" [disabled]="disableText_account"></button>
 
 <h3>Amount Analysis</h3>
-<button pButton label="Start" (click)="amountStart()"></button>
+<button pButton label="Start" (click)="amountStart()" [disabled]="disableAmount"></button>
 
 <h3>Creditor Analysis</h3>
-<button pButton label="Start" (click)="creditorStart()"></button>
+<button pButton label="Start" (click)="creditorStart()" [disabled]="disableCredit"></button>

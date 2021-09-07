@@ -19,6 +19,7 @@ export class NavBarComponent implements OnInit {
   orgId: number;
   prcId: number;
   @ViewChild('menu') menu: any;
+  currentProcedureStatus: string;
 
   constructor(
     public _translateService: TranslateService,
@@ -62,6 +63,7 @@ export class NavBarComponent implements OnInit {
 
   getSideBarItems() {
     this.sideBarShow = true;
+    this.currentProcedureStatus = localStorage.getItem('currentProcedureStatus');
     // debugger;
     this._translateService.get('sideBarMenu').subscribe((elem) => {
       if (this.role === 'Admin') {
@@ -127,7 +129,10 @@ export class NavBarComponent implements OnInit {
                 },
                 visible:
                   +localStorage.getItem('organisationId') > 0 &&
-                  +localStorage.getItem('currentProcedureId') > 0,
+                  +localStorage.getItem('currentProcedureId') > 0 &&
+                  (localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                  localStorage.getItem('currentProcedureStatus')  === 'PARTIAL_CALCULATED' ||
+                  localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
               },
 
             ],
@@ -159,7 +164,8 @@ export class NavBarComponent implements OnInit {
             ],
             visible:
               +localStorage.getItem('organisationId') > 0 &&
-              +localStorage.getItem('currentProcedureId') > 0,
+              +localStorage.getItem('currentProcedureId') > 0 &&
+              localStorage.getItem('currentProcedureData') == 'true',
           },
           {
             label: elem.analysis,
@@ -176,6 +182,7 @@ export class NavBarComponent implements OnInit {
                 label: 'Amount Analysis Pre Calculated',
                 icon: 'pi pi-euro',
                 routerLink: ['/dashboard/analysis/amount-calc'],
+                visible: localStorage.getItem('currentProcedureAmount') == 'true',
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -200,6 +207,7 @@ export class NavBarComponent implements OnInit {
                 label: 'Text Analysis Pre Calculated',
                 icon: 'pi pi-file',
                 routerLink: ['/dashboard/analysis/text-word-calc'],
+                visible: localStorage.getItem('currentProcedureText_word') == 'true',
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -224,6 +232,7 @@ export class NavBarComponent implements OnInit {
                 label: 'Creditor Analysis Pre-calculated',
                 icon: 'pi pi-chart-bar',
                 routerLink: ['/dashboard/analysis/creditor-calc'],
+                visible: localStorage.getItem('currentProcedureCredit') == 'true',
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -231,7 +240,8 @@ export class NavBarComponent implements OnInit {
             ],
             visible:
               +localStorage.getItem('organisationId') > 0 &&
-              +localStorage.getItem('currentProcedureId') > 0,
+              +localStorage.getItem('currentProcedureId') > 0 &&
+              localStorage.getItem('currentProcedureAnalysis') == 'true',
           },
           {
             label: elem.liquidity,
@@ -263,7 +273,8 @@ export class NavBarComponent implements OnInit {
             ],
             visible:
               +localStorage.getItem('organisationId') > 0 &&
-              +localStorage.getItem('currentProcedureId') > 0,
+              +localStorage.getItem('currentProcedureId') > 0 &&
+              localStorage.getItem('currentProcedureAnalysis') == 'true',
           },
         ];
       } else if (this.role === 'Manager') {
