@@ -12,6 +12,7 @@ export class Procedures {
     text_word: boolean = false;
     text_account: boolean = false;
     payment: boolean = false;
+    due_date: boolean = false;
     status: string;
 
 

@@ -144,14 +144,14 @@ const routes: Routes = [
         data: { roles: ['Admin', 'Manager', 'User'] },
       },
 
+      // {
+      //   path: 'analysis/amount',
+      //   component: AmountAnalysisComponent,
+      //   canActivate: [AuthGuard],
+      //   data: { roles: ['Admin', 'Manager', 'User'] },
+      // },
       {
         path: 'analysis/amount',
-        component: AmountAnalysisComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin', 'Manager', 'User'] },
-      },
-      {
-        path: 'analysis/amount-calc',
         component: AmountAnalysisPreComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
@@ -164,24 +164,24 @@ const routes: Routes = [
       },
       {
         path: 'analysis/text',
-        component: TextAnalysisComponent,
+        component: TextAnalysisPreComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
       },
+      // {
+      //   path: 'analysis/text/:by-word',
+      //   component: TextAnalysisComponent,
+      //   canActivate: [AuthGuard],
+      //   data: { roles: ['Admin', 'Manager', 'User'] },
+      // },
+      // {
+      //   path: 'analysis/text-indexed',
+      //   component: TextAnalysisIndexedComponent,
+      //   canActivate: [AuthGuard],
+      //   data: { roles: ['Admin', 'Manager', 'User'] },
+      // },
       {
         path: 'analysis/text/:by-word',
-        component: TextAnalysisComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin', 'Manager', 'User'] },
-      },
-      {
-        path: 'analysis/text-indexed',
-        component: TextAnalysisIndexedComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin', 'Manager', 'User'] },
-      },
-      {
-        path: 'analysis/text-word-calc',
         component: TextAnalysisPreComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
@@ -222,14 +222,14 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
       },
+      // {
+      //   path: 'analysis/creditor',
+      //   component: CreditorAnalysisComponent,
+      //   canActivate: [AuthGuard],
+      //   data: { roles: ['Admin', 'Manager', 'User'] },
+      // },
       {
         path: 'analysis/creditor',
-        component: CreditorAnalysisComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin', 'Manager', 'User'] },
-      },
-      {
-        path: 'analysis/creditor-calc',
         component: CreditorAnalysisCalcComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },

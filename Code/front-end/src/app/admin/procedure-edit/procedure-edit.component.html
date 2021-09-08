@@ -65,6 +65,13 @@
                 </div>
             </div> 
 
+            <div class="p-field p-grid" *ngIf="role ==='Admin'">
+                <label for="due_date" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.due_date' | translate}} </label>
+                <div class="p-col-12 p-md-10 p-field-checkbox">
+                    <p-checkbox name="due_date" binary="true" [(ngModel)]="procedureModel.due_date" inputId="due_date" [value]="procedureModel.due_date"></p-checkbox>
+                </div>
+            </div> 
+
 
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <div class="p-xs-col-5  p-mr-4">

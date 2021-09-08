@@ -181,7 +181,7 @@ export class NavBarComponent implements OnInit {
               {
                 label: elem.amountAnalyisis,
                 icon: 'pi pi-euro',
-                routerLink: ['/dashboard/analysis/amount-calc'],
+                routerLink: ['/dashboard/analysis/amount'],
                 visible: localStorage.getItem('currentProcedureAmount') == 'true',
                 command: () => {
                   this.sideBarShow = false;
@@ -206,7 +206,7 @@ export class NavBarComponent implements OnInit {
               {
                 label: elem.textAnalysis,
                 icon: 'pi pi-file',
-                routerLink: ['/dashboard/analysis/text-word-calc'],
+                routerLink: ['/dashboard/analysis/text'],
                 visible: localStorage.getItem('currentProcedureText_word') == 'true',
                 command: () => {
                   this.sideBarShow = false;
@@ -232,7 +232,7 @@ export class NavBarComponent implements OnInit {
               {
                 label: elem.creditorsAnalyse,
                 icon: 'pi pi-chart-bar',
-                routerLink: ['/dashboard/analysis/creditor-calc'],
+                routerLink: ['/dashboard/analysis/creditor'],
                 visible: localStorage.getItem('currentProcedureCredit') == 'true',
                 command: () => {
                   this.sideBarShow = false;
