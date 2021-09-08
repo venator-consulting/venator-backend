@@ -1,24 +1,24 @@
 <p-toast></p-toast>
-<h1>PreCalculate Analysis</h1>
+<h1  class="p-text-center">{{'precalc.precalc'| translate}}</h1>
 <h2 class="p-text-center">{{procedureName}}</h2>
 
 <p-progressBar *ngIf="waiting" mode="indeterminate" [style]="{'height': '5px'}"></p-progressBar>
 
-<h3>Text Analysis by word</h3>
+<h3>{{'precalc.text_word'| translate}}</h3>
 <button pButton label="Start" (click)="textByWordStart()" [disabled]="disabletextWord"></button>
 <br><br>
 
-<h3>Text Analysis by Account</h3>
+<h3>{{'precalc.text_account'| translate}}</h3>
 <button pButton label="Start" (click)="textByAccountStart()" [disabled]="disableText_account"></button>
 
-<h3>Amount Analysis</h3>
+<h3>{{'precalc.amount'| translate}}</h3>
 <button pButton label="Start" (click)="amountStart()" [disabled]="disableAmount"></button>
 
-<h3>Creditor Analysis</h3>
+<h3>{{'precalc.credit'| translate}}</h3>
 <button pButton label="Start" (click)="creditorStart()" [disabled]="disableCredit"></button>
 
-<h3>Payment Analysis</h3>
+<h3>{{'precalc.payment'| translate}}</h3>
 <button pButton label="Start" (click)="paymentStart()" [disabled]="disablePayment"></button>
 
-<h3>Due Date Analysis</h3>
+<h3>{{'precalc.due_date'| translate}}</h3>
 <button pButton label="Start" (click)="dueDateStart()" [disabled]="disableDueDate"></button>

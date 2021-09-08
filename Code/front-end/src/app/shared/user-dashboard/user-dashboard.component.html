@@ -35,7 +35,7 @@
         procedure[col.field]?.toString().toLowerCase().trim() != 'false') ? procedure[col.field] : ''}}
       </td>
       <td style="width: 10em" class="p-text-right">
-        <button pButton pRipple type="button" icon="pi pi-bookmark"
+        <button pButton pRipple type="button" icon="pi pi-bookmark" [disabled]="procedure.status=='NOT_IMPORTED' || !procedure.data"
           class="p-button-rounded p-button-warning headerColor" pTooltip="{{'Admin_Dashboard.show' | translate}}"
           tooltipPosition="bottom" (click)="dataTable(procedure)"></button> &nbsp;
         <button  *ngIf="role ==='Admin'" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning headerColor"

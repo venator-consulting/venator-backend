@@ -58,6 +58,10 @@ const Procedures = sequelizer.define('Procedures', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
+    liquidity: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
 }, {
     tableName: 'Procedures'
 });

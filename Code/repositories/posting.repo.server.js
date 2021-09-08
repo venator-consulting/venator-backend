@@ -1,4 +1,5 @@
 const Posting = require("../models/posting.model.server");
+const Procedure = require("../models/procedures.model.server");
 const { Op, fn, col, QueryTypes } = require("sequelize");
 const Sequelize = require("../config/sequelize.config");
 const { values } = require("../models/analysis/text.analysis.keywords");
@@ -196,6 +197,11 @@ module.exports.updateStartBalance = async (
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
   if (isNaN(procedureId))
     throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    await Procedure.getProcedures().update({ liquidity: true }, {
+      where: {
+        id: procedureId,
+      },
+    });
   return await Posting.getPosting("posting_" + organisationId).update(
     {
       StartingBalance: StartingBalance,

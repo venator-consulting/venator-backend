@@ -64,7 +64,6 @@ export class NavBarComponent implements OnInit {
   getSideBarItems() {
     this.sideBarShow = true;
     this.currentProcedureStatus = localStorage.getItem('currentProcedureStatus');
-    // debugger;
     this._translateService.get('sideBarMenu').subscribe((elem) => {
       if (this.role === 'Admin') {
         this.sidebarItems = [
@@ -121,18 +120,18 @@ export class NavBarComponent implements OnInit {
               },
 
               {
-                label: 'Pre-Calculate Analysis',
+                label: elem.precalc,
                 icon: 'pi pi-flag',
                 routerLink: ['/dashboard/admin/pre-calc'],
                 command: () => {
                   this.sideBarShow = false;
                 },
-                visible:
-                  +localStorage.getItem('organisationId') > 0 &&
-                  +localStorage.getItem('currentProcedureId') > 0 &&
-                  (localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
-                  localStorage.getItem('currentProcedureStatus')  === 'PARTIAL_CALCULATED' ||
-                  localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
               },
 
             ],
@@ -160,54 +159,40 @@ export class NavBarComponent implements OnInit {
                 command: () => {
                   this.sideBarShow = false;
                 },
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureData') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
               },
             ],
-            visible:
-              +localStorage.getItem('organisationId') > 0 &&
-              +localStorage.getItem('currentProcedureId') > 0 &&
-              localStorage.getItem('currentProcedureData') == 'true',
           },
           {
             label: elem.analysis,
             items: [
-              // {
-              //   label: elem.amountAnalyisis,
-              //   icon: 'pi pi-euro',
-              //   routerLink: ['/dashboard/analysis/amount'],
-              //   command: () => {
-              //     this.sideBarShow = false;
-              //   },
-              // },
               {
                 label: elem.amountAnalyisis,
                 icon: 'pi pi-euro',
                 routerLink: ['/dashboard/analysis/amount'],
-                visible: localStorage.getItem('currentProcedureAmount') == 'true',
+                disabled: localStorage.getItem('currentProcedureAmount') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
               },
-              // {
-              //   label: elem.textAnalysis,
-              //   icon: 'pi pi-inbox',
-              //   routerLink: ['/dashboard/analysis/text'],
-              //   command: () => {
-              //     this.sideBarShow = false;
-              //   },
-              // },
-              // {
-              //   label: 'Text Analysis with index',
-              //   icon: 'pi pi-file',
-              //   routerLink: ['/dashboard/analysis/text-indexed'],
-              //   command: () => {
-              //     this.sideBarShow = false;
-              //   },
-              // },
               {
                 label: elem.textAnalysis,
                 icon: 'pi pi-file',
                 routerLink: ['/dashboard/analysis/text'],
-                visible: localStorage.getItem('currentProcedureText_word') == 'true',
+                disabled: localStorage.getItem('currentProcedureText_word') != 'true' ||
+                  localStorage.getItem('currentProcedureText_account') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -216,33 +201,27 @@ export class NavBarComponent implements OnInit {
                 label: elem.paymentAnalyse,
                 icon: 'pi pi-credit-card',
                 routerLink: ['/dashboard/analysis/payment'],
-                visible: localStorage.getItem('currentProcedurePayment') == 'true',
+                disabled: localStorage.getItem('currentProcedurePayment') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
               },
-              // {
-              //   label: elem.creditorsAnalyse,
-              //   icon: 'pi pi-chart-bar',
-              //   routerLink: ['/dashboard/analysis/creditor'],
-              //   command: () => {
-              //     this.sideBarShow = false;
-              //   },
-              // },
               {
                 label: elem.creditorsAnalyse,
                 icon: 'pi pi-chart-bar',
                 routerLink: ['/dashboard/analysis/creditor'],
-                visible: localStorage.getItem('currentProcedureCredit') == 'true',
+                disabled: localStorage.getItem('currentProcedureCredit') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
               },
             ],
-            visible:
-              +localStorage.getItem('organisationId') > 0 &&
-              +localStorage.getItem('currentProcedureId') > 0 &&
-              localStorage.getItem('currentProcedureAnalysis') == 'true',
           },
           {
             label: elem.liquidity,
@@ -251,6 +230,13 @@ export class NavBarComponent implements OnInit {
                 label: elem.openingBalance,
                 icon: 'pi  pi-plus-circle',
                 routerLink: ['/dashboard/liquidity/openingBalance'],
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -259,6 +245,13 @@ export class NavBarComponent implements OnInit {
                 label: elem.creditLine,
                 icon: 'pi  pi-plus-circle',
                 routerLink: ['/dashboard/liquidity/creditLine'],
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -267,15 +260,19 @@ export class NavBarComponent implements OnInit {
                 label: elem.freeLiquidity,
                 icon: 'pi  pi-chart-line',
                 routerLink: ['/dashboard/liquidity/freeLiquidity'],
+                disabled:
+                  localStorage.getItem('currentProcedureLiquidity') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
                 command: () => {
                   this.sideBarShow = false;
                 },
               },
             ],
-            visible:
-              +localStorage.getItem('organisationId') > 0 &&
-              +localStorage.getItem('currentProcedureId') > 0 &&
-              localStorage.getItem('currentProcedureAnalysis') == 'true',
           },
         ];
       } else if (this.role === 'Manager') {
@@ -308,6 +305,13 @@ export class NavBarComponent implements OnInit {
                 label: elem.table,
                 icon: 'pi pi-table',
                 routerLink: ['/dashboard/data'],
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureData') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
               },
             ],
           },
@@ -319,6 +323,10 @@ export class NavBarComponent implements OnInit {
                 label: elem.amountAnalyisis,
                 icon: 'pi pi-euro',
                 routerLink: ['/dashboard/analysis/amount'],
+                disabled: localStorage.getItem('currentProcedureAmount') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -327,6 +335,11 @@ export class NavBarComponent implements OnInit {
                 label: elem.textAnalysis,
                 icon: 'pi pi-inbox',
                 routerLink: ['/dashboard/analysis/text'],
+                disabled: localStorage.getItem('currentProcedureText_word') != 'true' ||
+                  localStorage.getItem('currentProcedureText_account') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -335,6 +348,11 @@ export class NavBarComponent implements OnInit {
                 label: elem.paymentAnalyse,
                 icon: 'pi pi-credit-card',
                 routerLink: ['/dashboard/analysis/payment'],
+                disabled: localStorage.getItem('currentProcedurePayment') != 'true' ||
+                  localStorage.getItem('currentProcedureDueDate') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -343,6 +361,10 @@ export class NavBarComponent implements OnInit {
                 label: elem.creditorsAnalyse,
                 icon: 'pi pi-chart-bar',
                 routerLink: ['/dashboard/analysis/creditor'],
+                disabled: localStorage.getItem('currentProcedureCredit') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -372,6 +394,13 @@ export class NavBarComponent implements OnInit {
                 label: elem.table,
                 icon: 'pi pi-table',
                 routerLink: ['/dashboard/data'],
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureData') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
               },
             ],
           },
@@ -383,6 +412,10 @@ export class NavBarComponent implements OnInit {
                 label: elem.amountAnalyisis,
                 icon: 'pi pi-euro',
                 routerLink: ['/dashboard/analysis/amount'],
+                disabled: localStorage.getItem('currentProcedureAmount') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -391,6 +424,11 @@ export class NavBarComponent implements OnInit {
                 label: elem.textAnalysis,
                 icon: 'pi pi-inbox',
                 routerLink: ['/dashboard/analysis/text'],
+                disabled: localStorage.getItem('currentProcedureText_word') != 'true' ||
+                  localStorage.getItem('currentProcedureText_account') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -399,6 +437,11 @@ export class NavBarComponent implements OnInit {
                 label: elem.paymentAnalyse,
                 icon: 'pi pi-credit-card',
                 routerLink: ['/dashboard/analysis/payment'],
+                disabled: localStorage.getItem('currentProcedurePayment') != 'true' ||
+                  localStorage.getItem('currentProcedureDueDate') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
@@ -407,6 +450,10 @@ export class NavBarComponent implements OnInit {
                 label: elem.creditorsAnalyse,
                 icon: 'pi pi-chart-bar',
                 routerLink: ['/dashboard/analysis/creditor'],
+                disabled: localStorage.getItem('currentProcedureCredit') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
                   this.sideBarShow = false;
                 },
