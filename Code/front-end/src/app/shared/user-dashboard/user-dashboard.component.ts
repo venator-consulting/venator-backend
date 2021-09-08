@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from "../service/user.service";
 import { Router } from '@angular/router';
+import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
+import { ProcedureService } from '../service/procedure.service';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -9,16 +11,17 @@ import { Router } from '@angular/router';
 })
 export class UserDashboardComponent implements OnInit {
 
-  organisationId = localStorage.getItem('organisationId')
-  role = localStorage.getItem('role')
+  organisationId = localStorage.getItem('organisationId');
+  role = localStorage.getItem('role');
   procedures: [] = [];
-  cols: { header, field , align}[] = new Array();
+  cols: { header, field, align }[] = new Array();
   check = '<i class="pi pi-check checkIcon"></i>';
 
-  constructor(private _userService: UserService, private _router: Router) { }
+  constructor(private _userService: UserService, private _router: Router, private _procedureService: ProcedureService,
+    private _confirmationService: ConfirmationService, private _messageService: MessageService) { }
 
   ngOnInit(): void {
-    this._userService
+    this._procedureService
       .getProcedures(this.organisationId)
       .subscribe(
         (data) => {
@@ -29,35 +32,35 @@ export class UserDashboardComponent implements OnInit {
         () => { }
       );
 
-      this.cols = [
-        {
-          header: 'Procedure_Registration.name',
-          field: 'name',
-          align: 'left'
-        },
-        {
-          header: 'Procedure_Registration.datasource',
-          field: 'dataSource',
-          align: 'center'
-        },
-        {
-          header: 'Procedure_Registration.data',
-          field: 'data',
-          align: 'center'
-        },
-        {
-          header: 'Procedure_Registration.analysis',
-          field: 'analysis',
-          align: 'center'
-        },
-        {
-          header: 'Procedure_Registration.status',
-          field: 'status',
-          align: 'center'
-        },
-      ];
+    this.cols = [
+      {
+        header: 'Procedure_Registration.name',
+        field: 'name',
+        align: 'left'
+      },
+      {
+        header: 'Procedure_Registration.datasource',
+        field: 'dataSource',
+        align: 'center'
+      },
+      {
+        header: 'Procedure_Registration.data',
+        field: 'data',
+        align: 'center'
+      },
+      {
+        header: 'Procedure_Registration.analysis',
+        field: 'analysis',
+        align: 'center'
+      },
+      {
+        header: 'Procedure_Registration.status',
+        field: 'status',
+        align: 'center'
+      },
+    ];
 
-    
+
   } // end of ng on init
 
 
@@ -93,6 +96,30 @@ export class UserDashboardComponent implements OnInit {
   }
   addProcedure() {
     this._router.navigate(['/dashboard/admin/procedure/add']);
+  }
 
+  reset(prc) {
+    this._confirmationService.confirm({
+      message: 'Do you want to reset this Procedure? this will delete all data for selected procedure',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        this._procedureService.reset(this.organisationId, prc.id)
+          .subscribe(res => {
+            prc.status = 'NOT_IMPORTED';
+            this._messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted' });
+          });
+      },
+      reject: (type) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            this._messageService.add({ severity: 'info', summary: 'Cancelled', detail: 'Action cancelled' });
+            break;
+          case ConfirmEventType.CANCEL:
+            this._messageService.add({ severity: 'info', summary: 'Cancelled', detail: 'Action cancelled' });
+            break;
+        }
+      }
+    });
   }
 }

@@ -14,6 +14,7 @@ import { ProcedureService } from '../service/procedure.service';
 export class ProcedureEditComponent implements OnInit {
 
   procedureModel: Procedures;
+  role: string;
 
 
   constructor(private _router: Router, private _messageService: MessageService,
@@ -21,6 +22,7 @@ export class ProcedureEditComponent implements OnInit {
     private _procedureService: ProcedureService) { }
 
   ngOnInit(): void {
+    this.role = localStorage.getItem('role');
     this.procedureModel = new Procedures();
     this.procedureModel.id = +localStorage.getItem('currentProcedureId');
     this._procedureService.getOne(this.procedureModel.id)

@@ -6,6 +6,8 @@ const text_analysis_word = require("../models/textWord.model.server");
 const text_analysis_account = require("../models/textAccount.model.server");
 const amount_analysis = require("../models/amount.model.server");
 const creditor_analysis = require("../models/creditorAnalysis.model");
+const payment_analysis = require("../models/payment.model.server");
+const due_date_analysis = require("../models/dueDate.model.server");
 const { Op, QueryTypes } = require("sequelize");
 const config = require("../config/environment");
 
@@ -66,6 +68,8 @@ module.exports.insert = async (org) => {
   await text_analysis_account.syncTextAccount("text_analysis_account_" + result.dataValues.id);
   await amount_analysis.syncAmount("amount_analysis_" + result.dataValues.id);
   await creditor_analysis.syncCreditor("creditor_analysis_" + result.dataValues.id);
+  await payment_analysis.syncPayment("payment_analysis_" + result.dataValues.id);
+  await due_date_analysis.syncDueDate("due_date_analysis_" + result.dataValues.id);
   // const connection = require("../config/mysql.config");
   // partition table after create
   // let query = `ALTER  table posting_${result.dataValues.id} PARTITION BY HASH(procedureId) PARTITIONS ${config.partitionCount}`;

@@ -25,6 +25,22 @@ module.exports.dueDateRange = async (orgId, prcId) => {
   return result;
 };
 
+module.exports.dueDateRangeCalc = async (orgId, prcId) => {
+  let query = `SELECT MIN(pos.dueDate) mindate , MAX(pos.dueDate) maxdate,
+                         MIN(pos.documentDate) mindocdate , MAX(pos.applicationDate) maxappdate
+                    FROM due_date_analysis_${orgId} pos
+                    WHERE
+                        pos.procedureId = :procedureId`;
+
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
+};
+
 /**
  *
  * @param {Date} start
@@ -52,15 +68,8 @@ monthDiff = (d1, d2) => {
   return months <= 0 ? 0 : months;
 };
 
-module.exports.dueDateAnalysis = async (
-  orgId,
-  prcId,
-  fromDate,
-  toDate,
-  mindocdate,
-  maxappdate,
-  cb
-) => {
+module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
+  toDate, mindocdate, maxappdate, cb) => {
   if (!fromDate) {
     throw new Error("Due Date is null for this procedure!");
   }
@@ -131,10 +140,10 @@ module.exports.dueDateAnalysis = async (
       firstChartLabels[rowindex] = firstChartLabels[rowindex]
         ? firstChartLabels[rowindex]
         : row.dueDate.toLocaleDateString("de-DE", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          });
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
 
       const i = dueDateRefAccounts.findIndex(
         (x) => x.accountNumber == row.accountNumber
@@ -198,6 +207,140 @@ module.exports.dueDateAnalysis = async (
     cb(finalResult);
   });
 };
+
+module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
+  toDate, mindocdate, maxappdate, cb) => {
+  if (!fromDate) {
+    throw new Error("Due Date is null for this procedure!");
+  }
+  if (!toDate) {
+    throw new Error("Due Date is null for this procedure!");
+  }
+  if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
+    throw new Error("Due Date and ApplicationDate must be Date!");
+  }
+
+  const diff = monthDiff(mindocdate, maxappdate);
+
+  let res = new Array();
+  let starterMonth = mindocdate.getMonth() + 1;
+  let starterYear = mindocdate.getFullYear();
+  for (let index = 0; index <= diff; index++) {
+    const element = {
+      monthName: starterMonth,
+      yearName: starterYear,
+      positive: 0,
+      negative: 0,
+      notPaid: 0,
+    };
+    res.push(element);
+    starterMonth++;
+    if (starterMonth > 12) {
+      starterMonth = 1;
+      starterYear++;
+    }
+  }
+
+  let diffData = new Array();
+  let firstChartLabels = new Array();
+
+  const finalResult = {
+    dueDateReference: {
+      data: diffData,
+      labels: firstChartLabels,
+    },
+    docDateReference: res,
+  };
+
+  let dueDateRefAccounts = new Array();
+
+  let query = `SELECT *
+                    FROM due_date_analysis_${orgId} pos
+                    WHERE
+                        pos.procedureId = ${prcId}
+                        ORDER BY pos.dueDate`;
+
+  const str = connection.query(query).stream();
+
+  str.on("data", (row) => {
+    // too early or too late records
+    if (row.applicationDate) {
+      const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
+      const rowindex = getNumberOfDays(fromDate, row.dueDate);
+      diffData[rowindex] = diffData[rowindex]
+        ? diffData[rowindex] + rowDiff
+        : rowDiff;
+      firstChartLabels[rowindex] = firstChartLabels[rowindex]
+        ? firstChartLabels[rowindex]
+        : row.dueDate.toLocaleDateString("de-DE", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+
+      const i = dueDateRefAccounts.findIndex(
+        (x) => x.accountNumber == row.accountNumber
+      );
+      if (i == -1) {
+        if (rowDiff > 0) {
+          dueDateRefAccounts.push({
+            accountNumber: row.accountNumber,
+            accountName: row.accountName,
+            delayPos: rowDiff,
+            delayNeg: 0,
+            count: 1,
+          });
+        } else {
+          dueDateRefAccounts.push({
+            accountNumber: row.accountNumber,
+            accountName: row.accountName,
+            delayPos: 0,
+            delayNeg: rowDiff,
+            count: 1,
+          });
+        }
+      } else {
+        dueDateRefAccounts[i].count++;
+        if (rowDiff > 0) {
+          dueDateRefAccounts[i].delayPos += +rowDiff;
+        } else {
+          dueDateRefAccounts[i].delayNeg += +rowDiff;
+        }
+      }
+
+      for (const element of res) {
+        if (
+          row.documentDate.getMonth() == element.monthName - 1 &&
+          row.documentDate.getFullYear() == element.yearName
+        ) {
+          element.positive += rowDiff > 0 ? rowDiff : 0;
+          element.negative += rowDiff < 0 ? rowDiff : 0;
+          continue;
+        }
+      }
+      // Not paid at all
+    } else {
+      for (const element of res) {
+        if (
+          row.documentDate.getMonth() == element.monthName - 1 &&
+          row.documentDate.getFullYear() == element.yearName
+        ) {
+          element.notPaid += +row.balance;
+          continue;
+        }
+      }
+    }
+  }); // end of on data
+
+  str.on("end", async () => {
+    finalResult.dueDateReference.data = diffData.filter(Boolean);
+    finalResult.dueDateReference.labels = firstChartLabels.filter(Boolean);
+    finalResult.docDateReference = res;
+    finalResult.dueDateRefAccounts = dueDateRefAccounts;
+    cb(finalResult);
+  });
+};
+
 
 module.exports.dueDateAnalysisDetails = async (
   orgId,

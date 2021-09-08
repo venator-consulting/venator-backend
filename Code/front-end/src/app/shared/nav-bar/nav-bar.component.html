@@ -75,8 +75,7 @@
       [showCloseIcon]="false"
     >
       <h2 style="font-weight: lighter" class="p-text-center">{{ username }}</h2>
-      <h4 style="font-weight: lighter" class="p-text-center">Selected Procedure status</h4>
-      <p style="font-weight: lighter" class="p-text-center">{{ currentProcedureStatus }}</p>
+      <p style="font-weight: lighter" class="p-text-center {{ currentProcedureStatus }}">{{ currentProcedureStatus }}</p>
       <p-menu
         #menu
         [model]="sidebarItems"

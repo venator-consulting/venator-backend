@@ -16,7 +16,7 @@ export class AnalysisService {
   constructor(private _http: HttpClient) { }
 
   getAmountAnalysis(orgId: number, prcId: number, baseBalance: number): Observable<AmountAnalysis[]> {
-    return this._http.get<AmountAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/amount/' + baseBalance);
+    return this._http.get<AmountAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/amount-calc/' + baseBalance);
   }
 
   getAmountAnalysisDetails(orgId: number, prcId: number, accountNumber: string, baseBalance: number): Observable<AmountAnalysisDetails[]> {
