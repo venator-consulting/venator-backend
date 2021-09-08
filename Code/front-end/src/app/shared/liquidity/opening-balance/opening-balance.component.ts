@@ -118,7 +118,7 @@ export class OpeningBalanceComponent implements OnInit {
         (res) => {
           row.isEditable = false;
           let numOfRecords = res.length > 0 ? res[0] : 0;
-
+          localStorage.setItem('currentProcedureLiquidity', 'true');
           this._messageService.add({
             severity: 'success',
             summary: 'DONE!',

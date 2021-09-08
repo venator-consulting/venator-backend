@@ -1,6 +1,7 @@
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<p-toast></p-toast>
 <div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
     <div class="card">
-        <p-toast></p-toast>
         <div class="p-text-center titleFontStyle p-mb-4"> {{'Procedure_Registration.editHeader' | translate}} </div>
         <h3 class="p-text-center">{{procedureModel.status}}</h3>
         <form class="p-fluid"  (ngSubmit)="submitHandler()">
@@ -22,7 +23,7 @@
                     <p-checkbox name="data" binary="true"[(ngModel)]="procedureModel.data" inputId="data" [value]="procedureModel.data"></p-checkbox>
                 </div>
             </div> 
-
+            
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <label for="analysis" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.analysis' | translate}} </label>
                 <div class="p-col-12 p-md-10 p-field-checkbox">
@@ -31,44 +32,54 @@
             </div> 
 
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
+                <h3>{{'precalc.precalc'| translate}}</h3>
+            </div>
+
+            <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <label for="amount" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.amount' | translate}} </label>
                 <div class="p-col-12 p-md-10 p-field-checkbox">
-                    <p-checkbox name="amount" binary="true" [(ngModel)]="procedureModel.amount" inputId="amount" [value]="procedureModel.amount"></p-checkbox>
+                    <i *ngIf="!procedureModel.amount" class="pi pi-times closeIcon"></i>
+                    <p-checkbox *ngIf="procedureModel.payment" name="amount" binary="true" [(ngModel)]="procedureModel.amount" inputId="amount" [value]="procedureModel.amount"></p-checkbox>
                 </div>
             </div> 
 
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <label for="text_account" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.text_account' | translate}} </label>
                 <div class="p-col-12 p-md-10 p-field-checkbox">
-                    <p-checkbox name="text_account" binary="true" [(ngModel)]="procedureModel.text_account" inputId="text_account" [value]="procedureModel.text_account"></p-checkbox>
+                    <i *ngIf="!procedureModel.text_account" class="pi pi-times closeIcon"></i>
+                    <p-checkbox *ngIf="procedureModel.text_account" name="text_account" binary="true" [(ngModel)]="procedureModel.text_account" inputId="text_account" [value]="procedureModel.text_account"></p-checkbox>
                 </div>
             </div> 
 
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <label for="text_word" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.text_word' | translate}} </label>
                 <div class="p-col-12 p-md-10 p-field-checkbox">
-                    <p-checkbox name="text_word" binary="true" [(ngModel)]="procedureModel.text_word" inputId="text_word" [value]="procedureModel.text_word"></p-checkbox>
+                    <i *ngIf="!procedureModel.text_word" class="pi pi-times closeIcon"></i>
+                    <p-checkbox *ngIf="procedureModel.text_word" name="text_word" binary="true" [(ngModel)]="procedureModel.text_word" inputId="text_word" [value]="procedureModel.text_word"></p-checkbox>
                 </div>
             </div> 
 
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <label for="credit" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.credit' | translate}} </label>
                 <div class="p-col-12 p-md-10 p-field-checkbox">
-                    <p-checkbox name="credit" binary="true" [(ngModel)]="procedureModel.credit" inputId="credit" [value]="procedureModel.credit"></p-checkbox>
+                    <i *ngIf="!procedureModel.credit" class="pi pi-times closeIcon"></i>
+                    <p-checkbox *ngIf="procedureModel.credit" name="credit" binary="true" [(ngModel)]="procedureModel.credit" inputId="credit" [value]="procedureModel.credit"></p-checkbox>
                 </div>
             </div> 
 
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <label for="payment" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.payment' | translate}} </label>
                 <div class="p-col-12 p-md-10 p-field-checkbox">
-                    <p-checkbox name="payment" binary="true" [(ngModel)]="procedureModel.payment" inputId="payment" [value]="procedureModel.payment"></p-checkbox>
+                    <i *ngIf="!procedureModel.payment" class="pi pi-times closeIcon"></i>
+                    <p-checkbox *ngIf="procedureModel.payment" name="payment" binary="true" [(ngModel)]="procedureModel.payment" inputId="payment" [value]="procedureModel.payment"></p-checkbox>
                 </div>
             </div> 
 
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <label for="due_date" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.due_date' | translate}} </label>
                 <div class="p-col-12 p-md-10 p-field-checkbox">
-                    <p-checkbox name="due_date" binary="true" [(ngModel)]="procedureModel.due_date" inputId="due_date" [value]="procedureModel.due_date"></p-checkbox>
+                    <i *ngIf="!procedureModel.due_date" class="pi pi-times closeIcon"></i>
+                    <p-checkbox *ngIf="procedureModel.due_date" name="due_date" binary="true" [(ngModel)]="procedureModel.due_date" inputId="due_date" [value]="procedureModel.due_date"></p-checkbox>
                 </div>
             </div> 
 

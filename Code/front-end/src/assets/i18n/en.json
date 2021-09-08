@@ -46,6 +46,7 @@
     "addProcedure": "Add procedure",
     "editProcedure": "Edit procedure",
     "resetPassword": "Reset password",
+    "precalc": "Pre-calculate Analysis",
     "setting": "Setting",
     "logout": "Logout",
     "procedures": "Procedures",
@@ -340,6 +341,15 @@
     "text_word": "Pre-Calculated Text Analysis by Word",
     "text_account": "Pre-Calculated Text Analysis by Account",
     "due_date": "Pre-Calculated Due Date Analysis"
+  },
+  "precalc" : {
+    "precalc": "Pre-calculate Analysis",
+    "amount": "Amount",
+    "credit": "Creditor",
+    "text_account": "Text By Account",
+    "text_word": "Text By Word",
+    "payment": "Payment",
+    "due_date": "Due Date"
   },
   "Notfound": {
     "errorMsg": "Sorry, the page does not exist!"
