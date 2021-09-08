@@ -121,7 +121,7 @@ export class NavBarComponent implements OnInit {
               },
 
               {
-                label: 'Pre-Calculate Analysis',
+                label: elem.preCalculateAnalysis,
                 icon: 'pi pi-flag',
                 routerLink: ['/dashboard/admin/pre-calc'],
                 command: () => {
