@@ -22,6 +22,29 @@
     "invalid_file_class": "Invalid File Class"
 
   },
+  "general_actions": {
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "print": "Print",
+    "reset": "Reset"
+  },
+  "general_messages": {
+    "update_success": "updated successfully!",
+    "create_success": "Created successfully!",
+    "done": "Done.",
+    "delete_success": "Deleted successfully!",
+    "canceled": "Canceled!"
+  },
+  "confirm_messages": {
+    "r_u_sure": "Are You Sure? press yes to proceed",
+    "yes": "Yes",
+    "cancel": "Cancel",
+    "update": "Update Confirmation",
+    "delete": "Delete Confirmation",
+    "body_update": "Are You sure you want to update?",
+    "body_delete": "Are You sure, you want to delete? deleted data are unrecoverable! press 'YES' to proceed, 'NO' to cancel."
+  },
   "LOGIN": {
     "welcomeMsg": "Please log in ",
     "welcomeWord": "Welcom to Venalytics",
@@ -55,8 +78,11 @@
     "openingBalance": "Starting Balance",
     "creditLine": "CreditLine",
     "freeLiquidity": "Freie Liquidität",
-    "preCalculateAnalysis": "analysis pre calculation"
-
+    "preCalculateAnalysis": "analysis pre calculation",
+    "NOT_IMPORTED": "NOT IMPORTED",
+    "IMPORTED": "IMPORTED",
+    "PARTIAL_CALCULATED": "PARTIAL CALCULATED",
+    "CALCULATED": "CALCULATED"
   },
   "Admin_Dashboard": {
     "organisationEmail": "Email",

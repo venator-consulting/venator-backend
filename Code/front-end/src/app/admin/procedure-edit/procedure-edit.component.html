@@ -3,7 +3,7 @@
 <div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
     <div class="card">
         <div class="p-text-center titleFontStyle p-mb-4"> {{'Procedure_Registration.editHeader' | translate}} </div>
-        <h3 class="p-text-center">{{procedureModel.status}}</h3>
+        <h3 class="p-text-center">{{'sideBarMenu.' + procedureModel.status | translate}}</h3>
         <form class="p-fluid"  (ngSubmit)="submitHandler()">
 
 
@@ -39,7 +39,7 @@
                 <label for="amount" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.amount' | translate}} </label>
                 <div class="p-col-12 p-md-10 p-field-checkbox">
                     <i *ngIf="!procedureModel.amount" class="pi pi-times closeIcon"></i>
-                    <p-checkbox *ngIf="procedureModel.payment" name="amount" binary="true" [(ngModel)]="procedureModel.amount" inputId="amount" [value]="procedureModel.amount"></p-checkbox>
+                    <p-checkbox *ngIf="procedureModel.amount" name="amount" binary="true" [(ngModel)]="procedureModel.amount" inputId="amount" [value]="procedureModel.amount"></p-checkbox>
                 </div>
             </div> 
 

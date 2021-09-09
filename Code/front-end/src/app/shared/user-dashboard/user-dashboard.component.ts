@@ -3,6 +3,7 @@ import { UserService } from "../service/user.service";
 import { Router } from '@angular/router';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ProcedureService } from '../service/procedure.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -17,7 +18,7 @@ export class UserDashboardComponent implements OnInit {
   cols: { header, field, align }[] = new Array();
   check = '<i class="pi pi-check checkIcon"></i>';
 
-  constructor(private _userService: UserService, private _router: Router, private _procedureService: ProcedureService,
+  constructor(private _translateService: TranslateService, private _router: Router, private _procedureService: ProcedureService,
     private _confirmationService: ConfirmationService, private _messageService: MessageService) { }
 
   ngOnInit(): void {
@@ -98,25 +99,35 @@ export class UserDashboardComponent implements OnInit {
     this._router.navigate(['/dashboard/admin/procedure/add']);
   }
 
-  reset(prc) {
+  async reset(prc) {
     this._confirmationService.confirm({
-      message: 'Do you want to reset this Procedure? this will delete all data for selected procedure',
-      header: 'Delete Confirmation',
+      message: await this._translateService.get('confirm_messages.body_delete').toPromise(),
+      header:await this._translateService.get('confirm_messages.delete').toPromise(),
       icon: 'pi pi-info-circle',
+      acceptLabel: await this._translateService.get('confirm_messages.yes').toPromise(),
+      rejectLabel: await this._translateService.get('confirm_messages.cancel').toPromise(),
       accept: () => {
         this._procedureService.reset(this.organisationId, prc.id)
-          .subscribe(res => {
+          .subscribe(async (res) => {
             prc.status = 'NOT_IMPORTED';
-            this._messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted' });
+            this._messageService.add({ severity: 'info',
+            summary: await this._translateService.get('general_messages.delete_success').toPromise(),
+              detail: await this._translateService.get('general_messages.delete_success').toPromise() });
           });
       },
-      reject: (type) => {
+      reject: async (type) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this._messageService.add({ severity: 'info', summary: 'Cancelled', detail: 'Action cancelled' });
+            this._messageService.add({ severity: 'info', 
+            summary: await this._translateService.get('general_messages.canceled').toPromise(),
+            // detail: 'Action cancelled' 
+          });
             break;
           case ConfirmEventType.CANCEL:
-            this._messageService.add({ severity: 'info', summary: 'Cancelled', detail: 'Action cancelled' });
+            this._messageService.add({ severity: 'info', 
+            summary: await this._translateService.get('general_messages.canceled').toPromise(),
+            // detail: 'Action cancelled' 
+          });
             break;
         }
       }

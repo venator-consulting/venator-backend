@@ -1,48 +1,48 @@
-  <p-table [value]="users" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines" [columns]="cols"
-    responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
-    <ng-template pTemplate="caption" *ngIf="role==='Admin'">
-      <div class="p-mb-4">
-        <!-- Add User -->
-        <button type="button" pButton pRipple icon="pi pi-plus" (click)="addUser()"
-          class="p-button-rounded p-button-primary" pTooltip="Add user" tooltipPosition="bottom"></button>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="colgroup">
-      <colgroup>
-        <col *ngFor="let col of cols">
-        <col>
-      </colgroup>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
-          {{col.header | translate}}</th>
-        <th *ngIf="role!=='User'" style="width: 10em"> </th>
-      </tr>
-    </ng-template>
+<p-table [value]="users" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines" [columns]="cols"
+  responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
+  <ng-template pTemplate="caption" *ngIf="role==='Admin'">
+    <div class="p-mb-4">
+      <!-- Add User -->
+      <button type="button" pButton pRipple icon="pi pi-plus" (click)="addUser()"
+        class="p-button-rounded p-button-primary" pTooltip="{{'general_actions.add' | translate }}"
+        tooltipPosition="bottom"></button>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col *ngFor="let col of cols">
+      <col>
+    </colgroup>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pResizableColumn pReorderableColumn class="p-text-center" *ngFor="let col of cols">
+        {{col.header | translate}}</th>
+      <th *ngIf="role!=='User'" style="width: 10em"> </th>
+    </tr>
+  </ng-template>
 
 
-    <ng-template pTemplate="body" let-user>
-      <tr>
+  <ng-template pTemplate="body" let-user>
+    <tr>
 
-        <td pReorderableRowHandle *ngFor="let col of cols">
-          <div *ngIf="col.subField;then nested_object_content else normal_content"></div>
-          <ng-template #nested_object_content>
-            {{user[col.field][col.subField]}}
-          </ng-template>
-          <ng-template #normal_content>
-            {{user[col.field]}}
-          </ng-template>
-        <td *ngIf="role!=='User'" style="width: 10em">
-          <button pButton pRipple type="button" icon="pi pi-pencil"
-            class="p-button-rounded p-button-warning headerColor" pTooltip="Edit user" tooltipPosition="bottom"
-            (click)="edituser(user)"></button>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="12">{{'User_Registration.NoUsersFound' | translate}}</td>
-      </tr>
-    </ng-template>
-  </p-table>
+      <td pReorderableRowHandle *ngFor="let col of cols">
+        <div *ngIf="col.subField;then nested_object_content else normal_content"></div>
+        <ng-template #nested_object_content>
+          {{user[col.field][col.subField]}}
+        </ng-template>
+        <ng-template #normal_content>
+          {{user[col.field]}}
+        </ng-template>
+      <td *ngIf="role!=='User'" style="width: 10em">
+        <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning headerColor"
+          pTooltip="{{'general_actions.edit' | translate }}" tooltipPosition="bottom" (click)="edituser(user)"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="12">{{'User_Registration.NoUsersFound' | translate}}</td>
+    </tr>
+  </ng-template>
+</p-table>

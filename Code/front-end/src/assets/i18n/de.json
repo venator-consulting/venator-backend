@@ -20,6 +20,28 @@
     "invalid_file_type": "Ungültiger Dateityp, bitte wählen Sie eine CSV- oder Excel-Datei aus",
     "invalid_file_class": "Ungültige Dateiklasse"
   },
+  "general_actions": {
+    "add": "hinzufügen",
+    "edit": "bearbeiten",
+    "delete": "Löschen",
+    "print": "Print",
+    "reset": "zurücksetzen"
+  },
+  "general_messages": {
+    "update_success": "updated successfully!",
+    "create_success": "Created successfully!",
+    "done": "Done.",
+    "delete_success": "Deleted successfully!"
+  },
+  "confirm_messages": {
+    "r_u_sure": "Are You Sure? press yes to proceed",
+    "yes": "Yes",
+    "cancel": "Cancel",
+    "update": "Update Confirmation",
+    "delete": "Delete Confirmation",
+    "body_update": "Are You sure you want to update?",
+    "body_delete": "Are You sure, you want to delete? deleted data are unrecoverable! press 'YES' to proceed, 'NO' to cancel."
+  },
   "LOGIN": {
     "welcomeMsg": "Bitte loggen Sie sich ein",
     "welcomeWord": "Willkommen bei Venalytics!",
@@ -53,8 +75,11 @@
     "openingBalance": "Startsaldo",
     "creditLine": "Kreditlinie",
     "freeLiquidity": "Freie Liquidität",
-    "preCalculateAnalysis": "Analysen Vorberechnung"
-
+    "preCalculateAnalysis": "Analysen Vorberechnung",
+    "NOT_IMPORTED": "NOT IMPORTED",
+    "IMPORTED": "IMPORTED",
+    "PARTIAL_CALCULATED": "PARTIAL CALCULATED",
+    "CALCULATED": "CALCULATED"
   },
   "Admin_Dashboard": {
     "organisationEmail": "Email",

@@ -28,11 +28,13 @@ export class ProcedureEditComponent implements OnInit {
       .subscribe(procedure => this.procedureModel = procedure);
   }
 
-  submitHandler() {
+  async submitHandler() {
     this._confirmationService.confirm({
-      message: 'Do you want to update this Procedure?',
-      header: 'Update Confirmation',
+      message: await this._translateService.get('confirm_messages.body_update').toPromise(),
+      header: await this._translateService.get('confirm_messages.update').toPromise(),
       icon: 'pi pi-info-circle',
+      acceptLabel: await this._translateService.get('confirm_messages.yes').toPromise(),
+      rejectLabel: await this._translateService.get('confirm_messages.cancel').toPromise(),
       accept: () => {
         if (this.procedureModel.amount && this.procedureModel.credit &&
           this.procedureModel.text_account && this.procedureModel.text_word &&
@@ -56,23 +58,29 @@ export class ProcedureEditComponent implements OnInit {
         localStorage.setItem('currentProcedureData', '' + this.procedureModel.data);
         localStorage.setItem('currentProcedureAnalysis', '' + this.procedureModel.analysis);
         this._procedureService.update(this.procedureModel)
-          .subscribe(res => {
+          .subscribe(async (res) => {
             // console.dir('done: ' + res);
             this._messageService.add({
               severity: 'success',
-              summary: 'updated successfully!',
-              detail: 'updated successfully'
+              summary: await this._translateService.get('general_messages.update_success').toPromise(),
+              detail: await this._translateService.get('general_messages.update_success').toPromise()
             });
           }, err => {
           });
       },
-      reject: (type) => {
+      reject: async (type) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this._messageService.add({ severity: 'info', summary: 'Cancelled', detail: 'Action cancelled' });
+            this._messageService.add({ severity: 'info', 
+            summary: await this._translateService.get('general_messages.canceled').toPromise(), 
+            // detail: 'Action cancelled'
+           });
             break;
           case ConfirmEventType.CANCEL:
-            this._messageService.add({ severity: 'info', summary: 'Cancelled', detail: 'Action cancelled' });
+            this._messageService.add({ severity: 'info', 
+            summary: await this._translateService.get('general_messages.canceled').toPromise(), 
+            // detail: 'Action cancelled' 
+          });
             break;
         }
       }
