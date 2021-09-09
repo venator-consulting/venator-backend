@@ -77,6 +77,7 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedureText_account', prc.text_account);
     localStorage.setItem('currentProcedureData', prc.data);
     localStorage.setItem('currentProcedureAnalysis', prc.analysis);
+    localStorage.setItem('currentProcedureLiquidity', prc.liquidity);
     this._router.navigate(['/dashboard/shared/data']);
 
   }

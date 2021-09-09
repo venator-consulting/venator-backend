@@ -126,13 +126,6 @@ module.exports.deletePrevDataDueDate = async (orgId, prcId) => {
   return result;
 };
 
-/**
- *
- * @param {*} orgId
- * @param {*} prcId
- * @param {*} keys
- * @returns
- */
 storeDataByWord = async (orgId, prcId, keys, dateRanges, step) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
