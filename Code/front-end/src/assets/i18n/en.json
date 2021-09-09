@@ -344,12 +344,13 @@
   },
   "precalc" : {
     "precalc": "Pre-calculate Analysis",
-    "amount": "Amount",
-    "credit": "Creditor",
-    "text_account": "Text By Account",
-    "text_word": "Text By Word",
-    "payment": "Payment",
-    "due_date": "Due Date"
+    "amount": "Amount Analysis",
+    "credit": "Creditor Analysis",
+    "text_account": "Textanalysis By Account",
+    "text_word": "Textanalysis By Word",
+    "payment": "Payment Analysis",
+    "due_date": "Due Date Analysis",
+    "start": "Starten"
   },
   "Notfound": {
     "errorMsg": "Sorry, the page does not exist!"
