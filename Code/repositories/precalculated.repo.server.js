@@ -261,7 +261,7 @@ module.exports.storeAmountData = async (orgId, prcId) => {
                                 AND (UPPER(p.documentType) = 'KZ' OR 
                                     UPPER(p.documentType) = 'ZP' OR
                                     UPPER(p.documentTypeNewName) = 'ZAHLUNG')
-                                AND p.balance = ROUND(p.balance, -1)
+                                AND p.balance = ROUND(p.balance, -2)
                                 AND balance >= 100 `;
   let result = await connection.getConnection().execute(query);
   await Procedure.getProcedures().update({ amount: true }, {
@@ -447,7 +447,7 @@ module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
   query += ` OR ((UPPER(p.documentType) = 'KZ' OR 
             UPPER(p.documentType) = 'ZP' OR
             UPPER(p.documentTypeNewName) = 'ZAHLUNG')
-            AND p.balance = ROUND(p.balance)
+            AND p.balance = ROUND(p.balance, -2)
             AND p.balance >= 500)`;
   // for payment records
   query += ` OR (p.documentDate is not NULL 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { DocumentTypes, PostingDocTypes } from 'src/app/shared/model/document-type';
 import { Organisation } from 'src/app/shared/model/organisation';
 import { Procedures } from 'src/app/shared/model/procedures';
@@ -31,7 +31,8 @@ export class DocumentTypeComponent implements OnInit {
   filtersNo: number = 0;
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
-    private _orgService: OrganisationService, private _docTypesService: PostingService) { }
+    private _orgService: OrganisationService, private _docTypesService: PostingService,
+    private _confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.docTypes.push({
@@ -85,7 +86,7 @@ export class DocumentTypeComponent implements OnInit {
   }
 
 
-  save(row) {
+  save(row, update = true) {
     this.searching = true;
     this._docTypesService
       .updateNewDocType(this.selectedOrgId, this.selectedPrcId, row)
@@ -96,7 +97,7 @@ export class DocumentTypeComponent implements OnInit {
         this._messageService.add({
           severity: 'success',
           summary: 'DONE!',
-          detail: `Document new type is updated successfully in the targeted posting data, \n ${numOfRecords} updated.`
+          detail: `Document new type is ${update ? 'updated' : 'Deleted'} successfully in the targeted posting data, \n ${numOfRecords} updated.`
         });
       }, er => {
         this.searching = false;
@@ -138,10 +139,37 @@ export class DocumentTypeComponent implements OnInit {
   }
 
 
-  reset(row) {
-    row.documentTypeNewId = null;
-    row.documentTypeNewName = null;
-    this.save(row);
+  async reset(row) {
+    this._confirmationService.confirm({
+      message: await this._translateService.get('confirm_messages.body_delete').toPromise(),
+      header: await this._translateService.get('confirm_messages.delete').toPromise(),
+      icon: 'pi pi-info-circle',
+      acceptLabel: await this._translateService.get('confirm_messages.yes').toPromise(),
+      rejectLabel: await this._translateService.get('confirm_messages.cancel').toPromise(),
+      accept: () => {
+        row.documentTypeNewId = null;
+        row.documentTypeNewName = null;
+        this.save(row, false);
+      },
+      reject: async (type) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            this._messageService.add({
+              severity: 'info',
+              summary: await this._translateService.get('general_messages.canceled').toPromise(),
+              // detail: 'Action cancelled'
+            });
+            break;
+          case ConfirmEventType.CANCEL:
+            this._messageService.add({
+              severity: 'info',
+              summary: await this._translateService.get('general_messages.canceled').toPromise(),
+              // detail: 'Action cancelled' 
+            });
+            break;
+        }
+      }
+    });
   }
 
   docTypeChangedHandler(e, row) {
@@ -154,7 +182,7 @@ export class DocumentTypeComponent implements OnInit {
     this.postingDocTypes = [...this.tempData];
     this.filtersNo = 0;
   }
-  
+
 
   async filterChange(query, colName) {
     this.searching = true;
@@ -168,9 +196,9 @@ export class DocumentTypeComponent implements OnInit {
           if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
             const element = this.criteria[key];
             if (element.length < 3) {
-                this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
+              this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
             } else {
-                this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
+              this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
             }
           }
         }
@@ -182,9 +210,9 @@ export class DocumentTypeComponent implements OnInit {
         if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
           const element = this.criteria[key];
           if (element.length < 3) {
-              this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());
+            this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());
           } else {
-              this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
+            this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
           }
         }
       } // end of for each criteria field

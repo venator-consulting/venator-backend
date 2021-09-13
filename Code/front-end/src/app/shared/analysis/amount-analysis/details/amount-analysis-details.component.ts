@@ -56,10 +56,12 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance');
     this._translateService.get('AmountAnalysis').subscribe((elem) => {
       this.items = [
         // {label: 'Analysis'},
-        { label: elem.label, routerLink: '/dashboard/analysis/amount' },
+        { label: elem.label, routerLink: '/dashboard/analysis/amount/' + this.baseBalance },
         {
           label: 'Details',
           routerLink: this._router.url,
@@ -82,7 +84,6 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this.prcId = this.prcId
       ? this.prcId
       : +localStorage.getItem('currentProcedureId');
-    this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
     this.backCriteria = {
       limit: 25,
@@ -209,7 +210,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   } // end of ng on init
 
   goBack() {
-    this._router.navigate(['/dashboard/analysis/amount/']);
+    this._router.navigate(['/dashboard/analysis/amount/' + this.baseBalance]);
   }
 
   async exportExcel() {

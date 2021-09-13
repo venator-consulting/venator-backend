@@ -230,7 +230,7 @@ module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
                                 AND (UPPER(p.documentType) = 'KZ' OR 
                                     UPPER(p.documentType) = 'ZP' OR
                                     UPPER(p.documentTypeNewName) = 'ZAHLUNG')
-                                AND p.balance = ROUND(p.balance, -1)
+                                AND p.balance = ROUND(p.balance, -2)
                                 AND balance >= :baseBalance
                             GROUP BY p.accountNumber , p.accountName`;
   const result = await sequelize.query(query, {
@@ -268,7 +268,7 @@ module.exports.amountAnalysisDetails = async (
                                 AND (UPPER(p.documentType) = 'KZ' OR 
                                     UPPER(p.documentType) = 'ZP' OR
                                     UPPER(p.documentTypeNewName) = 'ZAHLUNG')
-                                AND p.balance = ROUND(p.balance, -1)
+                                AND p.balance = ROUND(p.balance, -2)
                                 AND balance >= :baseBalance`;
   const result = await sequelize.query(query, {
     replacements: {

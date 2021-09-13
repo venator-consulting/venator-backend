@@ -70,12 +70,12 @@ module.exports.insert = async (org) => {
   await creditor_analysis.syncCreditor("creditor_analysis_" + result.dataValues.id);
   await payment_analysis.syncPayment("payment_analysis_" + result.dataValues.id);
   await due_date_analysis.syncDueDate("due_date_analysis_" + result.dataValues.id);
-  // const connection = require("../config/mysql.config");
+  const connection = require("../config/mysql.config");
   // partition table after create
-  // let query = `ALTER  table posting_${result.dataValues.id} PARTITION BY HASH(procedureId) PARTITIONS ${config.partitionCount}`;
-  // const str = connection
-  //   .getConnection()
-  //   .execute(query, (er, res) => console.log(er));
+  let query = `ALTER  table posting_${result.dataValues.id} PARTITION BY HASH(procedureId) PARTITIONS ${config.partitionCount}`;
+  const str = connection
+    .getConnection()
+    .execute(query, (er, res) => console.log(er));
   return result;
 }; // end of create new organisation
 

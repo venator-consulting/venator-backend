@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { AccountTypes, PostingAccountTypes } from 'src/app/shared/model/accountType';
 import { Organisation } from 'src/app/shared/model/organisation';
 import { Procedures } from 'src/app/shared/model/procedures';
@@ -22,9 +22,9 @@ export class AccountTypeComponent implements OnInit {
   accountTypes: AccountTypes[] = new Array();
   accountTypesFilter: AccountTypes[] = new Array();
   originalVal: number = -1;
-  cols: { header, field , align}[] = new Array();
+  cols: { header, field, align }[] = new Array();
   procedureName: string;
- 
+
   // for filter
   searching: boolean;
   criteria: any = {};
@@ -32,7 +32,8 @@ export class AccountTypeComponent implements OnInit {
   filtersNo: number = 0;
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
-    private _postingService: PostingService, private _orgService: OrganisationService) { }
+    private _postingService: PostingService, private _orgService: OrganisationService,
+    private _confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
 
@@ -108,7 +109,7 @@ export class AccountTypeComponent implements OnInit {
           data => {
             data.forEach(account => {
               let accountNumber = parseInt(account.accountNumber.toString(), 10);
-              account.accountNumber = isNaN(accountNumber)? account.accountNumber : accountNumber;
+              account.accountNumber = isNaN(accountNumber) ? account.accountNumber : accountNumber;
             });
             this.postingAccountTypes = data;
             this.tempData = data;
@@ -132,7 +133,7 @@ export class AccountTypeComponent implements OnInit {
   }
 
 
-  save(row) {
+  save(row, update = true) {
     this.searching = true;
     this._postingService
       .updateNewAccountType(this.selectedOrgId, this.selectedPrcId, row)
@@ -143,7 +144,7 @@ export class AccountTypeComponent implements OnInit {
         this._messageService.add({
           severity: 'success',
           summary: 'DONE!',
-          detail: `Account new type is updated successfully in the targeted posting data, \n ${numOfRecords} updated.`
+          detail: `Account new type is ${update? 'updated' : 'Deleted'} successfully in the targeted posting data, \n ${numOfRecords} updated.`
         });
       }, er => {
         this.searching = false;
@@ -162,10 +163,37 @@ export class AccountTypeComponent implements OnInit {
   }
 
 
-  reset(row) {
-    row.accountTypeNewId = null;
-    row.accountTypeNewName = null;
-    this.save(row);
+  async reset(row) {
+    this._confirmationService.confirm({
+      message: await this._translateService.get('confirm_messages.body_delete').toPromise(),
+      header: await this._translateService.get('confirm_messages.delete').toPromise(),
+      icon: 'pi pi-info-circle',
+      acceptLabel: await this._translateService.get('confirm_messages.yes').toPromise(),
+      rejectLabel: await this._translateService.get('confirm_messages.cancel').toPromise(),
+      accept: () => {
+        row.accountTypeNewId = null;
+        row.accountTypeNewName = null;
+        this.save(row, false);
+      },
+      reject: async (type) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            this._messageService.add({
+              severity: 'info',
+              summary: await this._translateService.get('general_messages.canceled').toPromise(),
+              // detail: 'Action cancelled'
+            });
+            break;
+          case ConfirmEventType.CANCEL:
+            this._messageService.add({
+              severity: 'info',
+              summary: await this._translateService.get('general_messages.canceled').toPromise(),
+              // detail: 'Action cancelled' 
+            });
+            break;
+        }
+      }
+    });
   }
 
   clearFilter() {

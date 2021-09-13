@@ -144,14 +144,14 @@ const routes: Routes = [
         data: { roles: ['Admin', 'Manager', 'User'] },
       },
 
-      // {
-      //   path: 'analysis/amount',
-      //   component: AmountAnalysisComponent,
-      //   canActivate: [AuthGuard],
-      //   data: { roles: ['Admin', 'Manager', 'User'] },
-      // },
       {
         path: 'analysis/amount',
+        component: AmountAnalysisPreComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin', 'Manager', 'User'] },
+      },
+      {
+        path: 'analysis/amount/:baseBalance',
         component: AmountAnalysisPreComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },

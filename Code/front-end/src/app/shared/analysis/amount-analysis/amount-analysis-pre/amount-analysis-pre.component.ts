@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AmountAnalysis } from 'src/app/shared/model/amountAnalysis';
@@ -17,7 +17,7 @@ export class AmountAnalysisPreComponent implements OnInit {
   data: AmountAnalysis[] = new Array();
   selectedOrganisation: number = 0;
   selectedProcedure: number = 0;
-  baseBalance = 500;
+  baseBalance = 0;
   basicOptions: any;
   basicData: any;
   cols: TableColumn[];
@@ -35,10 +35,15 @@ export class AmountAnalysisPreComponent implements OnInit {
     public _translateService: TranslateService,
     private _messageService: MessageService,
     private _analysisService: AnalysisService,
+    private _route: ActivatedRoute,
     private _router: Router
   ) { }
 
   ngOnInit(): void {
+
+    this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance') ?? 500;
+    if(!this.baseBalance || isNaN(this.baseBalance)) this.baseBalance = 500;
+
     this._translateService.get('AmountAnalysis').subscribe((elem) => {
       this.items = [
         { label: elem.label, routerLink: '/dashboard/analysis/amount' },

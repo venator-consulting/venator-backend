@@ -33,7 +33,7 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys, criteria) => {
   query += ` OR ((UPPER(p.documentType) = 'KZ' OR 
             UPPER(p.documentType) = 'ZP' OR
             UPPER(p.documentTypeNewName) = 'ZAHLUNG')
-            AND p.balance = ROUND(p.balance)
+            AND p.balance = ROUND(p.balance, -2)
             AND p.balance >= :baseBalance)`;
   // for payment records
   query += ` OR (p.documentDate is not NULL 
@@ -120,7 +120,7 @@ module.exports.creditorAnalysisDetails = async (
              AND (UPPER(po.documentType) = 'KZ' OR 
                  UPPER(po.documentType) = 'ZP' OR
                  UPPER(po.documentTypeNewName) = 'ZAHLUNG')
-             AND po.balance = ROUND(po.balance)
+             AND po.balance = ROUND(po.balance, -2)
              AND po.balance >= :baseBalance
          GROUP BY po.accountNumber , po.accountName`;
 
