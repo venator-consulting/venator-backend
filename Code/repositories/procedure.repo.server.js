@@ -1,6 +1,7 @@
 const Exception = require("../helpers/errorHandlers/Exception");
 const httpStatus = require("../models/enums/httpStatus");
 const Procedure = require("../models/procedures.model.server");
+const errors = require('../models/enums/errors');
 
 module.exports.fetchAll = async () => {
   const res = await Procedure.getProcedures().findAll({
@@ -29,7 +30,7 @@ module.exports.fetchOne = async (id) => {
     },
   });
   if (!res || !res.length) {
-    throw new Exception(httpStatus.BAD_REQUEST, 'PROCEDURE_NOT_FOUND');
+    throw new Exception(httpStatus.BAD_REQUEST, errors.PROCEDURE_NOT_FOUND);
   }
   return res[0];
 };

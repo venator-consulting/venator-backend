@@ -5,6 +5,7 @@ const sequelize = Sequelize.getSequelize();
 const CreditLineRepo = require("./creditLines.repo.server");
 const Exception = require("../helpers/errorHandlers/Exception");
 const httpStatus = require("../models/enums/httpStatus");
+const errors = require('../models/enums/errors');
 
 module.exports.liquiditytDateRange = async (orgId, prcId) => {
   let query = `SELECT MIN(pos.StartingBalanceDate) mindate, MAX(pos.documentDate) maxdate, MIN(pos.documentDate) mindocdate 
@@ -46,10 +47,10 @@ function getNumberOfDays(start, end) {
 module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
   return new Promise((resolve, reject) => {
     if (!fromDate || !toDate) {
-      throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     }
     if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
-      throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     }
 
     let data = {};
@@ -262,10 +263,10 @@ module.exports.liquidityAnalysisDetails = async (
 ) => {
   return new Promise((resolve, reject) => {
     if (!fromDate || !toDate) {
-      throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     }
     if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
-      throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     }
 
     let data = new Array();

@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const Exception = require("../../../helpers/errorHandlers/Exception");
 const httpStatus = require("../../../models/enums/httpStatus");
 const UsersRepo = require("../../../repositories/user.repo.server");
+const errors = require('../../../models/enums/errors');
 
 module.exports.changePassword = async function (req, res, next) {
   const userID = req.userinfo.id;
@@ -9,7 +10,7 @@ module.exports.changePassword = async function (req, res, next) {
   const newPassword = req.body.newPassword;
   const rows = await UsersRepo.existUser(userID);
   if (rows.length != 1 || !bcrypt.compareSync(password, rows[0].password)) {
-    throw new Exception(httpStatus.UNAUTHORIZED, "passwordsMatch");
+    throw new Exception(httpStatus.UNAUTHORIZED, errors.passwordsMatch);
   } else {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(newPassword, salt);

@@ -5,13 +5,14 @@ const Sequelize = require("../config/sequelize.config");
 const { values } = require("../models/analysis/text.analysis.keywords");
 const Exception = require("../helpers/errorHandlers/Exception");
 const httpStatus = require("../models/enums/httpStatus");
+const errors = require('../models/enums/errors');
 
 const sequelize = Sequelize.getSequelize();
 
 module.exports.fetch = async (criteria) => {
   const OrganisationId = criteria.OrganisationId;
   if (isNaN(OrganisationId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   delete criteria.OrganisationId;
   const limit = criteria.limit ? criteria.limit : 25;
   delete criteria.limit;
@@ -66,9 +67,9 @@ module.exports.fetchAll = function (companyCode, offset, limit) {
 
 module.exports.getDocTypes = async (organisationId, procedureId) => {
   if (isNaN(organisationId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(procedureId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   const result = await Posting.getPosting("posting_" + organisationId).findAll({
     where: {
       ProcedureId: procedureId,
@@ -89,9 +90,9 @@ module.exports.getDocTypes = async (organisationId, procedureId) => {
 
 module.exports.getAccountTypes = async (organisationId, procedureId) => {
   if (isNaN(organisationId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(procedureId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   const result = await Posting.getPosting("posting_" + organisationId).findAll({
     where: {
       ProcedureId: procedureId,
@@ -120,9 +121,9 @@ module.exports.updateDocTypeNew = async (
   documentTypeNewName
 ) => {
   if (isNaN(organisationId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(procedureId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   return await Posting.getPosting("posting_" + organisationId).update(
     {
       documentTypeNewId: documentTypeNewId,
@@ -145,9 +146,9 @@ module.exports.updateAccountTypeNew = async (
   accountTypeNewName
 ) => {
   if (isNaN(organisationId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(procedureId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   return await Posting.getPosting("posting_" + organisationId).update(
     {
       accountTypeNewId: accountTypeNewId,
@@ -164,9 +165,9 @@ module.exports.updateAccountTypeNew = async (
 
 module.exports.getStartingBalance = async (organisationId, procedureId) => {
   if (isNaN(organisationId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(procedureId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   const result = await Posting.getPosting("posting_" + organisationId).findAll({
     where: {
       ProcedureId: procedureId,
@@ -194,9 +195,9 @@ module.exports.updateStartBalance = async (
   StartingBalanceDate
 ) => {
   if (isNaN(organisationId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(procedureId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
     await Procedure.getProcedures().update({ liquidity: true }, {
       where: {
         id: procedureId,
@@ -219,9 +220,9 @@ module.exports.updateStartBalance = async (
 
 module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   const query = `SELECT p.accountNumber , p.accountName , SUM(p.balance) as totalBalance, COUNT(p.id) as totlaCount
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
@@ -254,9 +255,9 @@ module.exports.amountAnalysisDetails = async (
   accountNumber
 ) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   const query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.amountRelevant,
                                 p.amountRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
                                 p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
@@ -288,9 +289,9 @@ module.exports.getByAccountNumber = async (
   criteria
 ) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   const limit = criteria.limit ? criteria.limit : 25;
   delete criteria.limit;
   const offset = criteria.offset ? criteria.offset : 0;
@@ -339,9 +340,9 @@ module.exports.getByAccountNumber = async (
 
 module.exports.textAnalysis = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
@@ -371,9 +372,9 @@ module.exports.textAnalysis = async (orgId, prcId, keys) => {
 
 module.exports.textAnalysisIndexed = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
@@ -413,9 +414,9 @@ module.exports.textAnalysisIndexed = async (orgId, prcId, keys) => {
 
 module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = " ";
   for (let index = 0; index < keys.length; index++) {
     const key = keys[index];
@@ -464,9 +465,9 @@ module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
 
 module.exports.textAnalysisByWordFullTextIndex = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = " ";
   for (let index = 0; index < keys.length; index++) {
     const key = keys[index];
@@ -543,9 +544,9 @@ module.exports.textAnalysisDetails = async (
   accountNumber
 ) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
                             p.textRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
                             p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
@@ -577,9 +578,9 @@ module.exports.textAnalysisDetails = async (
 
 module.exports.textAnalysisWordDetails = async (orgId, prcId, key) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   if (key.length <= 3 && key.length > 0) {
     key = "REGEXP '(\\b|[^a-zA-Z]+)" + key + "([^a-zA-Z]+|\\s*)'";
   } else if (key.length > 3) {
@@ -617,7 +618,7 @@ module.exports.textAnalysisWordDetails = async (orgId, prcId, key) => {
  */
 module.exports.textBulkUpdate = async (orgId, records) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   const postings = await Posting.getPosting("posting_" + orgId).bulkCreate(
     records,
     {
@@ -634,7 +635,7 @@ module.exports.textBulkUpdate = async (orgId, records) => {
  */
 module.exports.amountBulkUpdate = async (orgId, records) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   const postings = await Posting.getPosting("posting_" + orgId).bulkCreate(
     records,
     {
@@ -646,9 +647,9 @@ module.exports.amountBulkUpdate = async (orgId, records) => {
 
 module.exports.textJustRelevant = async (orgId, prcId, accountNumber) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   return await Posting.getPosting("posting_" + orgId).findAll({
     where: {
       textRelevant: true,
@@ -683,9 +684,9 @@ module.exports.textJustRelevant = async (orgId, prcId, accountNumber) => {
 
 module.exports.amountJustRelevant = async (orgId, prcId, accountNumber) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   return await Posting.getPosting("posting_" + orgId).findAll({
     where: {
       amountRelevant: true,
@@ -717,9 +718,9 @@ module.exports.amountJustRelevant = async (orgId, prcId, accountNumber) => {
 
 module.exports.susaDateRange = async (orgId, prcId) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT MAX(documentDate)  maxdate, MIN(documentDate) mindate from posting_${orgId} pos
                         WHERE
                             pos.procedureId = :procedureId
@@ -732,9 +733,9 @@ module.exports.susaDateRange = async (orgId, prcId) => {
     type: QueryTypes.SELECT,
   });
   if (!result || !result.length)
-    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
   if (!result[0].mindate)
-    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
   return result;
 };
 
@@ -746,9 +747,9 @@ module.exports.susaAnalysis = async (
   criteria
 ) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT DISTINCT pos.accountType, pos.accountNumber, pos.accountName, 
         fromRange.famount, inRange.inamount , credit.creditAmount, debit.debitAmount,
         (fromRange.famount + inRange.inamount) outamount
