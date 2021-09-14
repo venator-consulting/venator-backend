@@ -8,12 +8,13 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 // import { AutocompleteService } from '../service/autocomplete.service';
 import { Word } from '../model/word';
 import { DictionaryService } from '../service/dictionary.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-sap-data-table',
   templateUrl: './sap-data-table.component.html',
   styleUrls: ['./sap-data-table.component.sass'],
-  // providers: [DatePipe]
+  providers: [DatePipe]
 })
 export class SAPDataTableComponent implements OnInit {
   constructor(
@@ -22,7 +23,8 @@ export class SAPDataTableComponent implements OnInit {
     private _exportDataService: ExportDataService,
     private _router: Router,
     private _translateService: TranslateService,
-    private _autocompleteService: DictionaryService
+    private _autocompleteService: DictionaryService,
+    // private datepipe: DatePipe,
   ) {}
 
   organisationId = localStorage.getItem('organisationId');
@@ -73,6 +75,9 @@ export class SAPDataTableComponent implements OnInit {
       if (!this.criteria[key] && key != 'offset') {
         delete this.criteria[key];
       }
+      // debugger;
+      // if(key == 'documentDate' || key == 'dueDate' || key == 'applicationDate')
+      //   this.criteria[key] = this.datepipe.transform(this.criteria[key], 'yyyy-MM-dd');
     }
     this.filtersNo = Object.keys(this.criteria).length - 6;
     this.loading = true;

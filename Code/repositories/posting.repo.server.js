@@ -36,7 +36,7 @@ module.exports.fetch = async (criteria) => {
   delete criteria.sortOrder;
   for (const key in criteria) {
     if (Object.hasOwnProperty.call(criteria, key)) {
-      if (criteria[key].toString().length > 2) {
+      if (criteria[key].toString().length > 2 && !key.includes('Date')) {
         criteria[key] = {
           [Op.like]: "%" + criteria[key] + "%",
         };
