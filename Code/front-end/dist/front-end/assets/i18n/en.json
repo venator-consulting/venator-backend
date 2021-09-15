@@ -115,7 +115,7 @@
     "accountTypeIdInternal": "accountTypeIdInternal",
     "nameAffix1": "nameAffix1",
     "nameAffix2":"nameAffix2",
-    "VATId":"VATId",
+    "VATId":"salesTaxId",
     "taxNumber": "taxNumber",
     "street":"Street",
     "postCode":"postCode",
