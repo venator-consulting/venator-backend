@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LiquidityService } from '../../service/liquidity.service';
 import { CurrencyPipe } from '@angular/common';
 import { TableColumn } from '../../model/tableColumn';
@@ -33,18 +33,40 @@ export class FreeLiquidityComponent implements OnInit {
   bankBalancesTotal: number = 0;
   creditLinesTotal: number = 0;
   freeLiquidityTotal: number = 0;
+  baseFromDate: Date;
+  baseToDate: Date;
+  maxRange: number;
+  fromDate: Date;
+  toDate: Date;
+  rangeValues: number[];
 
   constructor(
     public _translateService: TranslateService,
     private _liquidityService: LiquidityService,
     private _messageService: MessageService,
-    private _router: Router
-  ) {}
+    private _router: Router,
+    private _route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
+    let baseFromDateTemp = this._route.snapshot.paramMap.get('baseFromDate');
+    if (baseFromDateTemp?.trim()) this.baseFromDate = new Date(baseFromDateTemp);
+    let baseToDateTemp = this._route.snapshot.paramMap.get('baseToDate');
+    if (baseToDateTemp?.trim()) this.baseToDate = new Date(baseToDateTemp);
+    let fromDateTemp = this._route.snapshot.paramMap.get('fromDate');
+    if (fromDateTemp?.trim()) this.fromDate = new Date(fromDateTemp);
+    let toDateTemp = this._route.snapshot.paramMap.get('toDate');
+    if (toDateTemp?.trim()) this.toDate = new Date(toDateTemp);
+    if (this.baseFromDate && this.baseToDate && this.fromDate && this.toDate) {
+      this.maxRange = this.dayDiff(this.baseFromDate, this.baseToDate);
+      this.rangeValues = [
+        this.dayDiff(this.baseFromDate, this.fromDate),
+        this.dayDiff(this.baseFromDate, this.toDate)
+      ];
+    }
 
     this._translateService.get('Liquidity').subscribe((elem) => {
       this.items = [
@@ -141,12 +163,41 @@ export class FreeLiquidityComponent implements OnInit {
     ];
 
     this.getData();
+    // this.dateRangeChanges();
   } // end of ng on init
+
+  handleSliderChange(e) {
+    let start = e.values[0];
+    let end = e.values[1];
+    // calculate fromDate: start + baseFromDate
+    let tempStart = new Date(this.baseFromDate);
+    tempStart.setDate(tempStart.getDate() + start);
+    this.fromDate = new Date(tempStart);
+    // calculate toDate: baseToDate - end
+    let tempEnd = new Date(this.baseToDate);
+    tempEnd.setDate(tempEnd.getDate() - (this.maxRange - +end));
+    this.toDate = new Date(tempEnd);
+  }
+
+  dayDiff(d1: Date, d2: Date) {
+    var diff = Math.abs(d1.getTime() - d2.getTime());
+    var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+    return diffDays;
+  }
 
   getData() {
     this.searching = true;
-    this._liquidityService.getFreeLiquidity(this.orgId, this.prcId).subscribe(
+    debugger;
+    let start = this.fromDate?.toISOString().split('T')[0];
+    let end = this.toDate?.toISOString().split('T')[0];
+    this._liquidityService.getFreeLiquidity(this.orgId, this.prcId, start, end).subscribe(
       (res) => {
+        if (!this.baseFromDate) this.baseFromDate = new Date(res.fromDate);
+        if (!this.baseToDate) this.baseToDate = new Date(res.toDate);
+        if (!this.fromDate) this.fromDate = new Date(res.fromDate);
+        if (!this.toDate) this.toDate = new Date(res.toDate);
+        if (!this.rangeValues) this.rangeValues = [0, this.dayDiff(this.fromDate, this.toDate)];
+        if (!this.maxRange) this.maxRange = this.dayDiff(this.fromDate, this.toDate);
         this.accounts = res.bankBalances.accounts;
         this.tempData = res.bankBalances.accounts;
         this.labels = res.bankBalances.labels;
@@ -171,7 +222,7 @@ export class FreeLiquidityComponent implements OnInit {
             },
             {
               type: 'bar',
-              label: 'Bank Balance' ,
+              label: 'Bank Balance',
               backgroundColor: '#88FF88',
               borderColor: '#58dF58',
               data: res.bankBalances.bankBalances,
@@ -208,7 +259,7 @@ export class FreeLiquidityComponent implements OnInit {
         const element = this.allAccountsDataBankBalances[key];
         const creditLine =
           this.allAccountsDataCreditLines[key] &&
-          this.allAccountsDataCreditLines[key][index]
+            this.allAccountsDataCreditLines[key][index]
             ? this.allAccountsDataCreditLines[key][index]
             : 0;
         let accountNumber = parseInt(key);
@@ -276,7 +327,11 @@ export class FreeLiquidityComponent implements OnInit {
 
   goToDetails(row: any) {
     this._router.navigate([
-      '/dashboard/liquidity/freeLiquidity/details/' + row.accountNumber,
+      '/dashboard/liquidity/freeLiquidity/details/' + row.accountNumber + '/' +
+      this.baseFromDate.toISOString().split('T')[0] + '/' +
+      this.baseToDate.toISOString().split('T')[0] + '/' +
+      this.fromDate.toISOString().split('T')[0] + '/' +
+      this.toDate.toISOString().split('T')[0],
     ]);
   }
 

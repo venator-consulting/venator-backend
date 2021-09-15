@@ -80,6 +80,7 @@ import { DueDateComponent } from './shared/analysis/payment-analysis/due-date/du
 import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
+import {SliderModule} from 'primeng/slider';
 
 import { BnNgIdleService } from 'bn-ng-idle';
 import { DueDateDetailsComponent } from './shared/analysis/payment-analysis/due-date-details/due-date-details.component';
@@ -198,7 +199,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AutoCompleteModule,
     InputNumberModule,
     BreadcrumbModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    SliderModule
   ],
   providers: [MessageService, ConfirmationService, AuthGuard, {
     provide: LOCALE_ID,

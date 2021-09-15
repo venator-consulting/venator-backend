@@ -5,17 +5,29 @@
     <h2 class="p-text-center">{{ procedureName }}</h2>
     <h4 class="p-text-center">{{'PaymentAnalysis.allAccounts' | translate}}</h4>
   </div>
+  <!-- <div class="p-col-12">
+    <p class="p-text-center" style="margin-left: -25px;">{{baseFromDate | date}}     -     {{baseToDate | date}}</p>
+  </div> -->
+  <div class="p-col-12">
+    <p class="p-text-center" style="margin-left: -25px;">{{fromDate | date}} - {{toDate | date}}</p>
+  </div>
+  <div class="p-col-3"></div>
+  <div class="p-col-1 p-text-right">{{baseFromDate | date}}</div>
+  <div class="p-col-4">
+    <p-slider [(ngModel)]="rangeValues" [range]="true" (onChange)="handleSliderChange($event)"
+    [min]="0" [max]="maxRange"></p-slider>
+  </div>
+  <div class="p-col-1">{{baseToDate | date}}</div>
+  <div class="p-col-1">
+    <button pButton pRipple type="button" icon="pi pi-search" (click)="getData()"
+      class="p-button-rounded p-button-primary" style="margin-top: -18px;"></button>
+  </div>
 </div>
 <div class="p-grid">
   <div class="p-col-12">
     <div class="card">
-      <p-chart
-        type="bar"
-        [data]="basicData"
-        [options]="basicOptions"
-        height="400px"
-        (onDataSelect)="selectBarData($event)"
-      ></p-chart>
+      <p-chart type="bar" [data]="basicData" [options]="basicOptions" height="400px"
+        (onDataSelect)="selectBarData($event)"></p-chart>
     </div>
   </div>
 </div>
@@ -25,38 +37,15 @@
     <h2 class="p-text-right">{{ selectedDate }}</h2>
   </div>
   <div class="p-col-5 p-text-right">
-      <button
-        type="button"
-        pButton
-        pRipple
-        label="All Accounts"
-        icon="pi pi-times"
-        class="p-button-rounded p-button-warning"
-        (click)="selectedDate = null"
-        pTooltip="All"
-        tooltipPosition="bottom"
-        style="margin-top: 20px;"
-      ></button>
+    <button type="button" pButton pRipple label="All Accounts" icon="pi pi-times"
+      class="p-button-rounded p-button-warning" (click)="selectedDate = null" pTooltip="All" tooltipPosition="bottom"
+      style="margin-top: 20px;"></button>
   </div>
   <div class="p-col-12">
-    <p-progressBar
-      mode="indeterminate"
-      [style]="{ height: '5px' }"
-      *ngIf="searching"
-    ></p-progressBar>
-    <p-table
-      #dt
-      dataKey="accountNumber"
-      [value]="selectedDateData"
-      styleClass="p-datatable-gridlines"
-      [columns]="selectedDateCols"
-      responsive="true"
-      [scrollable]="true"
-      scrollHeight="350px"
-      [reorderableColumns]="true"
-      [resizableColumns]="true"
-      [loading]="searching"
-    >
+    <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="searching"></p-progressBar>
+    <p-table #dt dataKey="accountNumber" [value]="selectedDateData" styleClass="p-datatable-gridlines"
+      [columns]="selectedDateCols" responsive="true" [scrollable]="true" scrollHeight="350px"
+      [reorderableColumns]="true" [resizableColumns]="true" [loading]="searching">
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
           <col *ngFor="let col of columns" />
@@ -65,17 +54,9 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th
-            pSortableColumn="{{ col.field }}"
-            pReorderableColumn
-            pResizableColumn
-            class="p-text-{{ col.align }}"
-            *ngFor="let col of columns"
-          >
-            <span
-              pTooltip="{{ col.header | translate }} "
-              class="p-text-{{ col.align }}"
-            >
+          <th pSortableColumn="{{ col.field }}" pReorderableColumn pResizableColumn class="p-text-{{ col.align }}"
+            *ngFor="let col of columns">
+            <span pTooltip="{{ col.header | translate }} " class="p-text-{{ col.align }}">
               {{ col.header | translate }}
               <p-sortIcon field="{{ col.field }}"></p-sortIcon>
             </span>
@@ -84,15 +65,9 @@
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-            <input
-              pInputText
-              type="text"
-              [(ngModel)]="criteria[col.field]"
-              [style]="{ width: '90%' }"
-              (input)="filterChange($any($event.target).value, col.field)"
-              class="filterInputCss"
-              *ngIf="col.field == 'accountNumber' || col.field == 'accountName'"
-            />
+            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{ width: '90%' }"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
+              *ngIf="col.field == 'accountNumber' || col.field == 'accountName'" />
           </th>
           <th></th>
         </tr>
@@ -100,38 +75,25 @@
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr>
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
-            <span
-              *ngIf="
+            <span *ngIf="
                 col.field != 'accountNumber' &&
                 col.field != 'accountName' &&
                 col.field != 'freeLiaquidity'
-              "
-            >
+              ">
               {{ row[col.field] | currency: "EUR":"" }}
             </span>
             <span *ngIf="col.field == 'freeLiaquidity'">
               {{
-                +row["bankBalance"] + +row["creditLine"] | currency: "EUR":""
+              +row["bankBalance"] + +row["creditLine"] | currency: "EUR":""
               }}
             </span>
-            <span
-              pTooltip="{{ row[col.field] }}"
-              *ngIf="col.field == 'accountNumber' || col.field == 'accountName'"
-            >
+            <span pTooltip="{{ row[col.field] }}" *ngIf="col.field == 'accountNumber' || col.field == 'accountName'">
               {{ row[col.field] }}
             </span>
           </td>
           <td class="p-text-center">
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="pi pi-list"
-              class="p-button-rounded p-button-warning"
-              (click)="goToDetails(row)"
-              pTooltip="Details"
-              tooltipPosition="bottom"
-            ></button>
+            <button type="button" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-warning"
+              (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom"></button>
           </td>
         </tr>
       </ng-template>
@@ -157,24 +119,10 @@
 
 <div class="p-grid" *ngIf="!selectedDate">
   <div class="p-col-12" [hidden]="!prcId">
-    <p-progressBar
-      mode="indeterminate"
-      [style]="{ height: '5px' }"
-      *ngIf="searching"
-    ></p-progressBar>
-    <p-table
-      #dt
-      dataKey="accountNumber"
-      [value]="accounts"
-      styleClass="p-datatable-gridlines"
-      [columns]="cols"
-      responsive="true"
-      [scrollable]="true"
-      scrollHeight="350px"
-      [reorderableColumns]="true"
-      [resizableColumns]="true"
-      [loading]="searching"
-    >
+    <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="searching"></p-progressBar>
+    <p-table #dt dataKey="accountNumber" [value]="accounts" styleClass="p-datatable-gridlines" [columns]="cols"
+      responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [resizableColumns]="true"
+      [loading]="searching">
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
           <col *ngFor="let col of columns" />
@@ -183,17 +131,9 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th
-            pSortableColumn="{{ col.field }}"
-            pReorderableColumn
-            pResizableColumn
-            class="p-text-{{col.align}}"
-            *ngFor="let col of columns"
-          >
-            <span
-              pTooltip="{{ col.header | translate }} "
-              class="p-text-{{ col.align }}"
-            >
+          <th pSortableColumn="{{ col.field }}" pReorderableColumn pResizableColumn class="p-text-{{col.align}}"
+            *ngFor="let col of columns">
+            <span pTooltip="{{ col.header | translate }} " class="p-text-{{ col.align }}">
               {{ col.header | translate }}
               <p-sortIcon field="{{ col.field }}"></p-sortIcon>
             </span>
@@ -202,15 +142,9 @@
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-            <input
-              pInputText
-              type="text"
-              [(ngModel)]="criteria[col.field]"
-              [style]="{ width: '90%' }"
-              (input)="filterChange($any($event.target).value, col.field)"
-              class="filterInputCss"
-              *ngIf="col.field == 'accountNumber' || col.field == 'accountName'"
-            />
+            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{ width: '90%' }"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
+              *ngIf="col.field == 'accountNumber' || col.field == 'accountName'" />
           </th>
           <th></th>
         </tr>
@@ -218,9 +152,7 @@
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr>
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
-            <span
-              *ngIf="col.field != 'accountNumber' && col.field != 'accountName'"
-            >
+            <span *ngIf="col.field != 'accountNumber' && col.field != 'accountName'">
               {{ row[col.field] | currency: "EUR":"" }}
             </span>
             <span pTooltip="{{ row[col.field] }}">
@@ -228,16 +160,8 @@
             </span>
           </td>
           <td class="p-text-center">
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="pi pi-list"
-              class="p-button-rounded p-button-warning"
-              (click)="goToDetails(row)"
-              pTooltip="Details"
-              tooltipPosition="bottom"
-            ></button>
+            <button type="button" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-warning"
+              (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom"></button>
           </td>
         </tr>
       </ng-template>

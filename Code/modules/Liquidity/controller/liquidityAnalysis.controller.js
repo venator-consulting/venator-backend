@@ -4,30 +4,36 @@ const httpStatus = require("../../../models/enums/httpStatus");
 const errors = require('../../../models/enums/errors');
 
 module.exports.getAnalysisMainData = async (req, res) => {
-  const dateRange = await liquidityRepo.liquiditytDateRange(
-    +req.params.orgId,
-    +req.params.prcId
-  );
-  if (dateRange.length < 1) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
-  }
-  let fromDate = dateRange[0].mindate;
-  if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
-    if (
-      !dateRange[0].mindocdate ||
-      !(dateRange[0].mindocdate instanceof Date)
-    ) {
-      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
-    } else {
-      fromDate = dateRange[0].mindocdate;
-    }
-  }
+  let fromDate = req.params.fromDate;
+  let toDate = req.params.toDate;
 
-  // not needed
-  if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
+  if (!fromDate && !toDate) {
+    const dateRange = await liquidityRepo.liquiditytDateRange(
+      +req.params.orgId,
+      +req.params.prcId
+    );
+    if (dateRange.length < 1) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
+    }
+    fromDate = dateRange[0].mindate;
+    if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
+      if (
+        !dateRange[0].mindocdate ||
+        !(dateRange[0].mindocdate instanceof Date)
+      ) {
+        throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
+      } else {
+        fromDate = dateRange[0].mindocdate;
+      }
+    }
+
+    // not needed
+    if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
+    }
+    toDate = dateRange[0].maxdate;
+
   }
-  const toDate = dateRange[0].maxdate;
 
   const bankBalancesPromise = liquidityRepo.liquidityAnalysis(
     req.params.orgId,
@@ -73,33 +79,41 @@ module.exports.getAnalysisMainData = async (req, res) => {
     bankBalances: finalResult[0],
     creditLines: finalResult[1],
     freeLiquidity: finalResult[2],
+    fromDate: fromDate,
+    toDate: toDate
   });
 };
 
 module.exports.getAnalysisDetailsData = async (req, res) => {
-  const dateRange = await liquidityRepo.liquiditytDateRange(
-    +req.params.orgId,
-    +req.params.prcId
-  );
-  if (dateRange.length < 1) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
-  }
-  let fromDate = dateRange[0].mindate;
-  if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
-    if (
-      !dateRange[0].mindocdate ||
-      !(dateRange[0].mindocdate instanceof Date)
-    ) {
-      throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
-    } else {
-      fromDate = dateRange[0].mindocdate;
-    }
-  }
+  let fromDate = req.params.fromDate;
+  let toDate = req.params.toDate;
 
-  if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
+  if (!fromDate && !toDate) {
+    const dateRange = await liquidityRepo.liquiditytDateRange(
+      +req.params.orgId,
+      +req.params.prcId
+    );
+    if (dateRange.length < 1) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
+    }
+    fromDate = dateRange[0].mindate;
+    if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
+      if (
+        !dateRange[0].mindocdate ||
+        !(dateRange[0].mindocdate instanceof Date)
+      ) {
+        throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
+      } else {
+        fromDate = dateRange[0].mindocdate;
+      }
+    }
+
+    if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
+    }
+    toDate = dateRange[0].maxdate;
+
   }
-  const toDate = dateRange[0].maxdate;
 
   const bankBalancesPromise = liquidityRepo.liquidityAnalysisDetails(
     req.params.orgId,
@@ -141,6 +155,8 @@ module.exports.getAnalysisDetailsData = async (req, res) => {
     bankBalances: finalResult[0],
     creditLines: finalResult[1],
     freeLiquidity: finalResult[2],
+    fromDate: fromDate,
+    toDate: toDate
   });
 };
 

@@ -4,23 +4,30 @@
   <div class="p-col-12">
     <h2 class="p-text-center">{{ procedureName }}</h2>
     <h4 class="p-text-center">{{ accountName }}</h4>
-    <p-progressBar
-    mode="indeterminate"
-    [style]="{ height: '5px' }"
-    *ngIf="searching"
-  ></p-progressBar>
+  </div>
+  <div class="p-col-12">
+    <p class="p-text-center" style="margin-left: -25px;">{{fromDate | date}} - {{toDate | date}}</p>
+  </div>
+  <div class="p-col-3"></div>
+  <div class="p-col-1 p-text-right">{{baseFromDate | date}}</div>
+  <div class="p-col-4">
+    <p-slider [(ngModel)]="rangeValues" [range]="true" (onChange)="handleSliderChange($event)" [min]="0"
+      [max]="maxRange"></p-slider>
+  </div>
+  <div class="p-col-1">{{baseToDate | date}}</div>
+  <div class="p-col-1">
+    <button pButton pRipple type="button" icon="pi pi-search" (click)="getData()"
+      class="p-button-rounded p-button-primary" style="margin-top: -18px;"></button>
+  </div>
+  <div class="p-col-12">
+    <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="searching"></p-progressBar>
   </div>
 </div>
 <div class="p-grid">
   <div class="p-col-12">
     <div class="card">
-      <p-chart
-        type="bar"
-        [data]="basicData"
-        [options]="basicOptions"
-        height="350px"
-        (onDataSelect)="selectBarData($event)"
-      ></p-chart>
+      <p-chart type="bar" [data]="basicData" [options]="basicOptions" height="350px"
+        (onDataSelect)="selectBarData($event)"></p-chart>
     </div>
   </div>
 </div>
@@ -30,42 +37,20 @@
     <h2 class="p-text-center" *ngIf="selectedDate">{{ selectedDate }}</h2>
   </div>
   <div class="p-col-12">
-    <p-progressBar
-      mode="indeterminate"
-      [style]="{ height: '5px' }"
-      *ngIf="searching"
-    ></p-progressBar>
-    <p-table
-      #dt
-      dataKey="id"
-      [value]="selectedDateData"
-      styleClass="p-datatable-gridlines"
-      [columns]="cols"
-      responsive="true"
-      [scrollable]="true"
-      scrollHeight="350px"
-      [reorderableColumns]="true"
-      [resizableColumns]="true"
-      [loading]="searching"
-    >
+    <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="searching"></p-progressBar>
+    <p-table #dt dataKey="id" [value]="selectedDateData" styleClass="p-datatable-gridlines" [columns]="cols"
+      responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [resizableColumns]="true"
+      [loading]="searching">
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" [style]="{'width': (col.width? col.width : 200) +'px'}"/>
+          <col *ngFor="let col of columns" [style]="{'width': (col.width? col.width : 200) +'px'}" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th
-            pSortableColumn="{{ col.field }}"
-            pReorderableColumn
-            pResizableColumn
-            class="p-text-{{ col.align }}"
-            *ngFor="let col of columns"
-          >
-            <span
-              pTooltip="{{ col.header | translate }} "
-              class="p-text-{{ col.align }}"
-            >
+          <th pSortableColumn="{{ col.field }}" pReorderableColumn pResizableColumn class="p-text-{{ col.align }}"
+            *ngFor="let col of columns">
+            <span pTooltip="{{ col.header | translate }} " class="p-text-{{ col.align }}">
               {{ col.header | translate }}
               <p-sortIcon field="{{ col.field }}"></p-sortIcon>
             </span>
@@ -73,15 +58,9 @@
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-            <input
-              pInputText
-              type="text"
-              [(ngModel)]="criteria[col.field]"
-              [style]="{ width: '90%' }"
-              (input)="filterChange($any($event.target).value, col.field)"
-              class="filterInputCss"
-              *ngIf="col.field != 'accountNumber' || col.field != 'accountName'"
-            />
+            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{ width: '90%' }"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
+              *ngIf="col.field != 'accountNumber' || col.field != 'accountName'" />
           </th>
         </tr>
       </ng-template>
@@ -91,13 +70,11 @@
             <span *ngIf="col.field == 'balance'">
               {{ row[col.field] | currency: "EUR":"" }}
             </span>
-            <span
-              *ngIf="
+            <span *ngIf="
                 col.field == 'documentDate' ||
                 col.field == 'executionDate' ||
                 col.field == 'dueDate'
-              "
-            >
+              ">
               {{ row[col.field] | date: "dd.MM.yyyy" }}
             </span>
             <span pTooltip="{{ row[col.field] }}"

@@ -35,16 +35,19 @@ export class LiquidityService {
     return this._http.delete<any>(this._thisURL + orgId + '/' + prcId + '/creditLine/' + row.id);
   }
 
-  getFreeLiquidity(orgId: number, prcId: number) {
-    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity');
+  getFreeLiquidity(orgId: number, prcId: number, fromDate, toDate) {
+    if (!fromDate || !toDate)
+      return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity');
+    else
+      return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity/' + fromDate + '/' + toDate);
   }
 
-  getFreeLiquidityDetails(orgId: number, prcId: number, accountNumber: string) {
-    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity/' + accountNumber);
+  getFreeLiquidityDetails(orgId: number, prcId: number, accountNumber: string, from: string, to: string) {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity/details/' + accountNumber + '/' + from + '/' + to);
   }
 
   getFreeLiquidityDetailsRecords(orgId: number, prcId: number, accountNumber: string, selectedDate: string) {
-    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity/' + accountNumber + '/' + selectedDate);
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity/details/' + accountNumber + '/specific/' + selectedDate);
   }
 
 }

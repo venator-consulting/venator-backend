@@ -50,7 +50,9 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
       throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     }
     if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
-      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
+      fromDate = new Date(fromDate);
+      toDate = new Date(toDate);
+      // throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     }
 
     let data = {};
@@ -72,7 +74,9 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
                         WHERE
                             pos.procedureId = ${prcId}
                             AND pos.accountNumber is not NULL
-                            AND pos.documentDate is not NULL 
+                            AND pos.documentDate is not NULL
+                            AND pos.documentDate >= '${fromDate.toISOString().split('T')[0]}' 
+                            AND pos.documentDate <= '${toDate.toISOString().split('T')[0]}'
                             AND UPPER(pos.accountTypeNewName) = 'FINANZKONTO'
                             ORDER BY pos.documentDate`;
 
@@ -151,10 +155,10 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
           chartLabels[index] = chartLabels[index]
             ? chartLabels[index]
             : thisDate.toLocaleDateString("de-DE", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              });
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            });
         }
       }
       // bank balnces ends
@@ -208,6 +212,12 @@ module.exports.creditLinnes = async (orgId, prcId, fromDate, toDate) => {
    * foreach day
    *      sum credit lines that day included in it
    */
+  if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
+    fromDate = new Date(fromDate);
+    toDate = new Date(toDate);
+    // throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
+  }
+
   // get credit lines
   const creditLines = await CreditLineRepo.getAll(orgId, prcId);
 
@@ -266,7 +276,9 @@ module.exports.liquidityAnalysisDetails = async (
       throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     }
     if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
-      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
+      fromDate = new Date(fromDate);
+      toDate = new Date(toDate);
+      // throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     }
 
     let data = new Array();
@@ -288,6 +300,8 @@ module.exports.liquidityAnalysisDetails = async (
                             pos.procedureId = ${prcId}
                             AND pos.accountNumber = ${accountNumber}
                             AND pos.documentDate is not NULL 
+                            AND pos.documentDate >= '${fromDate.toISOString().split('T')[0]}' 
+                            AND pos.documentDate <= '${toDate.toISOString().split('T')[0]}'
                             AND UPPER(pos.accountTypeNewName) = 'FINANZKONTO'
                             ORDER BY pos.documentDate`;
 
@@ -345,10 +359,10 @@ module.exports.liquidityAnalysisDetails = async (
           chartLabels[index] = chartLabels[index]
             ? chartLabels[index]
             : thisDate.toLocaleDateString("de-DE", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              });
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            });
         }
       }
       // bank balnces ends
@@ -370,13 +384,7 @@ module.exports.liquidityAnalysisDetails = async (
   });
 };
 
-module.exports.creditLinnesDetails = async (
-  orgId,
-  prcId,
-  accountNumber,
-  fromDate,
-  toDate
-) => {
+module.exports.creditLinnesDetails = async (orgId, prcId, accountNumber, fromDate, toDate) => {
   /**
    * get credit lines
    * calculate difference
@@ -389,6 +397,12 @@ module.exports.creditLinnesDetails = async (
     prcId,
     accountNumber
   );
+
+  if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
+    fromDate = new Date(fromDate);
+    toDate = new Date(toDate);
+    // throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
+  }
 
   // calculate difference
   const diffirence = getNumberOfDays(fromDate, toDate);

@@ -31,6 +31,13 @@ export class FreeLiquidityDetailsComponent implements OnInit {
   creditLinesTotal: number;
   bankBalancesTotal: number;
   freeLiquidityTotal: number;
+  /// for slider
+  baseFromDate: Date;
+  baseToDate: Date;
+  maxRange: number;
+  fromDate: Date;
+  toDate: Date;
+  rangeValues: number[];
 
   constructor(
     public _translateService: TranslateService,
@@ -38,19 +45,34 @@ export class FreeLiquidityDetailsComponent implements OnInit {
     private _messageService: MessageService,
     private _router: Router,
     private _route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+    let baseFromDateTemp = this._route.snapshot.paramMap.get('baseFromDate');
+    this.baseFromDate = new Date(baseFromDateTemp);
+    let baseToDateTemp = this._route.snapshot.paramMap.get('baseToDate');
+    this.baseToDate = new Date(baseToDateTemp);
+    let fromDateTemp = this._route.snapshot.paramMap.get('fromDate');
+    this.fromDate = new Date(fromDateTemp);
+    let toDateTemp = this._route.snapshot.paramMap.get('toDate');
+    this.toDate = new Date(toDateTemp);
+    this.maxRange = this.dayDiff(this.baseFromDate, this.baseToDate);
+    this.rangeValues = [
+      this.dayDiff(this.baseFromDate, this.fromDate),
+      this.dayDiff(this.baseFromDate, this.toDate)
+    ];
     this._translateService.get('Liquidity').subscribe((elem) => {
 
       this.items = [
         {
           label: elem.freeLiquidity,
-          routerLink: '/dashboard/liquidity/freeLiquidity',
+          routerLink: '/dashboard/liquidity/freeLiquidity/' +
+            baseFromDateTemp + '/' + baseToDateTemp + '/' +
+            fromDateTemp + '/' + toDateTemp,
           routerLinkActiveOptions: { exact: true },
         },
         {
@@ -182,10 +204,32 @@ export class FreeLiquidityDetailsComponent implements OnInit {
     ];
   } // end of ng on init
 
+
+  handleSliderChange(e) {
+    let start = e.values[0];
+    let end = e.values[1];
+    // calculate fromDate: start + baseFromDate
+    let tempStart = new Date(this.baseFromDate);
+    tempStart.setDate(tempStart.getDate() + start);
+    this.fromDate = new Date(tempStart);
+    // calculate toDate: baseToDate - end
+    let tempEnd = new Date(this.baseToDate);
+    tempEnd.setDate(tempEnd.getDate() - (this.maxRange - +end));
+    this.toDate = new Date(tempEnd);
+  }
+  
+  dayDiff(d1: Date, d2: Date) {
+    var diff = Math.abs(d1.getTime() - d2.getTime());
+    var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+    return diffDays;
+  }
+
   getData() {
     this.searching = true;
+    let start = this.fromDate?.toISOString().split('T')[0];
+    let end = this.toDate?.toISOString().split('T')[0];
     this._liquidityService
-      .getFreeLiquidityDetails(this.orgId, this.prcId, this.accountNumber)
+      .getFreeLiquidityDetails(this.orgId, this.prcId, this.accountNumber, start, end)
       .subscribe(
         (res) => {
           this.accountName = res.bankBalances.accountName;

@@ -266,7 +266,13 @@ const routes: Routes = [
         data: { roles: ['Admin', 'Manager', 'User'] },
       },
       {
-        path: 'liquidity/freeLiquidity/details/:accountNumber',
+        path: 'liquidity/freeLiquidity/:baseFromDate/:baseToDate/:fromDate/:toDate',
+        component: FreeLiquidityComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin', 'Manager', 'User'] },
+      },
+      {
+        path: 'liquidity/freeLiquidity/details/:accountNumber/:baseFromDate/:baseToDate/:fromDate/:toDate',
         component: FreeLiquidityDetailsComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },

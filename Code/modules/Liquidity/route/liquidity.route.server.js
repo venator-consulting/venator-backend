@@ -47,6 +47,42 @@ router.route("/:orgId/:prcId/creditLine/:id").delete(
   creditLineCtrl.deleteCreditLine
 );
 
+
+
+router.route("/:orgId/:prcId/liquidity/details/:accountNumber/specific/:selectedDate").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  liquidityAnalysisCtrl.getDetailsForSelectedDate
+);
+
+router.route("/:orgId/:prcId/liquidity/details/:accountNumber/:fromDate/:toDate").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  liquidityAnalysisCtrl.getAnalysisDetailsData
+);
+
+
+router.route("/:orgId/:prcId/liquidity/details/:accountNumber").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  liquidityAnalysisCtrl.getAnalysisDetailsData
+);
+
+
+router.route("/:orgId/:prcId/liquidity/:fromDate/:toDate").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  liquidityAnalysisCtrl.getAnalysisMainData
+);
+
 router.route("/:orgId/:prcId/liquidity").get(
   passport.authenticate("jwt", {
     session: false,
@@ -55,20 +91,5 @@ router.route("/:orgId/:prcId/liquidity").get(
   liquidityAnalysisCtrl.getAnalysisMainData
 );
 
-router.route("/:orgId/:prcId/liquidity/:accountNumber").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  liquidityAnalysisCtrl.getAnalysisDetailsData
-);
-
-router.route("/:orgId/:prcId/liquidity/:accountNumber/:selectedDate").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  liquidityAnalysisCtrl.getDetailsForSelectedDate
-);
 
 module.exports = router;
