@@ -1,6 +1,7 @@
 const liquidityRepo = require("../../../repositories/liquidity.analysis.repo");
 const Exception = require("../../../helpers/errorHandlers/Exception");
 const httpStatus = require("../../../models/enums/httpStatus");
+const errors = require('../../../models/enums/errors');
 
 module.exports.getAnalysisMainData = async (req, res) => {
   const dateRange = await liquidityRepo.liquiditytDateRange(
@@ -8,7 +9,7 @@ module.exports.getAnalysisMainData = async (req, res) => {
     +req.params.prcId
   );
   if (dateRange.length < 1) {
-    throw new Exception(httpStatus.BAD_REQUEST, "no_date_range");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
   }
   let fromDate = dateRange[0].mindate;
   if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
@@ -16,7 +17,7 @@ module.exports.getAnalysisMainData = async (req, res) => {
       !dateRange[0].mindocdate ||
       !(dateRange[0].mindocdate instanceof Date)
     ) {
-      throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     } else {
       fromDate = dateRange[0].mindocdate;
     }
@@ -24,7 +25,7 @@ module.exports.getAnalysisMainData = async (req, res) => {
 
   // not needed
   if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
   }
   const toDate = dateRange[0].maxdate;
 
@@ -81,7 +82,7 @@ module.exports.getAnalysisDetailsData = async (req, res) => {
     +req.params.prcId
   );
   if (dateRange.length < 1) {
-    throw new Exception(httpStatus.BAD_REQUEST, "no_date_range");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
   }
   let fromDate = dateRange[0].mindate;
   if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
@@ -89,14 +90,14 @@ module.exports.getAnalysisDetailsData = async (req, res) => {
       !dateRange[0].mindocdate ||
       !(dateRange[0].mindocdate instanceof Date)
     ) {
-      throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
     } else {
       fromDate = dateRange[0].mindocdate;
     }
   }
 
   if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    throw new Exception(httpStatus.BAD_REQUEST, "no_due_date");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
   }
   const toDate = dateRange[0].maxdate;
 

@@ -8,6 +8,7 @@ const config = require("./environment");
 const userRepo = require("../repositories/user.repo.server");
 const httpStatus = require('../models/enums/httpStatus');
 const Exception = require('../helpers/errorHandlers/Exception');
+const errors = require('../models/enums/errors');
 
 passport.use(
   new LocalStrategy(
@@ -21,7 +22,7 @@ passport.use(
       if (!rows || !bcrypt.compareSync(password, rows.password)) {
         //   throw new Exception(httpStatus.UNAUTHORIZED, 'incorrect_username_or_password');
         return cb(null, false, {
-          msg: "incorrect_username_or_password",
+          msg: errors.incorrect_username_or_password,
         });
       }
       rows.password = "deleted for security purpose";

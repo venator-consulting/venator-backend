@@ -4,6 +4,7 @@ const wMobelTemplate = require("../../../models/templates/sap.wmobel.template");
 const cinramTemplate = require("../../../models/templates/sap.cinram.template");
 const defaultAccountTemplate = require("../../../models/templates/accounts.default.template");
 const Procedure = require('../../../models/procedures.model.server');
+const errors = require('../../../models/enums/errors');
 
 const fs = require("fs");
 
@@ -20,10 +21,10 @@ module.exports.headerFile = async function (req, res, next) {
   const file = req.file;
   const filePath = file.path;
   // if (!req.body.data) {
-  //   throw new Exception(httpStatus.BAD_REQUEST, 'no_template_selected');
+  //   throw new Exception(httpStatus.BAD_REQUEST, errors.no_template_selected);
   // }
   if (!req.file) {
-    throw new Exception(httpStatus.BAD_REQUEST, 'no_file_selected');
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_file_selected);
   }
   const reqData = JSON.parse(req.body.data);
   const fileType = reqData.fileType;
@@ -147,7 +148,7 @@ module.exports.importFile = async function (req, res, next) {
         message: "not implemented yet",
       });
     } else {
-      throw new Exception(httpStatus.BAD_REQUEST, 'invalid_file_class');
+      throw new Exception(httpStatus.BAD_REQUEST, errors.invalid_file_class);
     }
   } else if (fileType == 2) {
     // accounts file
@@ -201,10 +202,10 @@ module.exports.importFile = async function (req, res, next) {
       });
     } else {
       // return error file class
-      throw new Exception(httpStatus.BAD_REQUEST, 'invalid_file_class');
+      throw new Exception(httpStatus.BAD_REQUEST, errors.invalid_file_class);
     }
   } else {
-    throw new Exception(httpStatus.BAD_REQUEST, 'invalid_file_type');
+    throw new Exception(httpStatus.BAD_REQUEST, errors.invalid_file_type);
   }
 };
 

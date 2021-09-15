@@ -50,7 +50,7 @@ getDate = function (cell) {
     } else if (cell.type === Excel.ValueType.Number) {
         return getJsDateFromExcel(cell.value);
     } else if (cell.type === Excel.ValueType.String || cell.type === Excel.ValueType.SharedString) {
-        return chrono.parseDate(cell.value);
+        return chrono.de.parseDate(cell.value);
     } else {
         // throw error!
     }

@@ -6,14 +6,15 @@ const Exception = require("../helpers/errorHandlers/Exception");
 const httpStatus = require("../models/enums/httpStatus");
 const DATE_RANGE = require("../models/enums/date.ranges");
 const keywords = require("../models/analysis/text.analysis.keywords");
+const errors = require('../models/enums/errors');
 
 const sequelize = Sequelize.getSequelize();
 
 getDateRange = async (orgId, prcId) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT MAX(documentDate)  maxdate, MIN(documentDate) mindate from posting_${orgId} pos
                           WHERE
                               pos.procedureId = :procedureId
@@ -26,9 +27,9 @@ getDateRange = async (orgId, prcId) => {
     type: QueryTypes.SELECT,
   });
   if (!result || !result.length)
-    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
   if (!result[0].mindate)
-    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
   return result;
 };
 
@@ -36,7 +37,7 @@ calculateDateRanges = (mindate, maxdate, step) => {
   if (maxdate < mindate)
     throw new Exception(
       httpStatus.BAD_REQUEST,
-      "MaxDate_must_be_bigger_than_MinDate"
+      errors.MaxDate_must_be_bigger_than_MinDate
     );
   const ranges = [mindate];
   let tempDate = new Date(mindate);
@@ -128,9 +129,9 @@ module.exports.deletePrevDataDueDate = async (orgId, prcId) => {
 
 storeDataByWord = async (orgId, prcId, keys, dateRanges, step) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = ` INSERT INTO text_analysis_word_${orgId} (recordsCount, accountsCount, word, fromDate, toDate, procedureId, step) `;
   for (let index = 0; index < keys.length; index++) {
     const key = keys[index];
@@ -198,9 +199,9 @@ storeDataByWord = async (orgId, prcId, keys, dateRanges, step) => {
 
 storeDataByAccount = async (orgId, prcId, keys, dateRanges, step) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = ` INSERT INTO text_analysis_account_${orgId} (accountNumber, accountName, totlaCount, fromDate, toDate, procedureId, step) `;
   for (let i = 1; i < dateRanges.length; i++) {
     let fromDate = dateRanges[i - 1];
@@ -249,9 +250,9 @@ storeDataByAccount = async (orgId, prcId, keys, dateRanges, step) => {
 
 module.exports.storeAmountData = async (orgId, prcId) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = ` INSERT INTO amount_analysis_${orgId} (accountNumber, accountName, balance, accountType, documentType, procedureId) `;
   query += `SELECT p.accountNumber , p.accountName , p.balance, p.accountType, p.documentType, p.procedureId 
                             FROM posting_${orgId}  p
@@ -274,9 +275,9 @@ module.exports.storeAmountData = async (orgId, prcId) => {
 
 module.exports.amountAnalysisGetData = async (orgId, prcId, baseBalance = 500) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT  p.accountNumber , p.accountName , SUM(p.balance) as totalBalance, COUNT(p.id) as totlaCount
      from amount_analysis_${orgId} p
       WHERE
@@ -298,7 +299,7 @@ module.exports.textAnalysisByWord = async (orgId, prcId, step) => {
   const dateRange = await getDateRange(orgId, prcId);
 
   if (dateRange.length < 1) {
-    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
   }
   if (
     !dateRange[0].mindate ||
@@ -306,7 +307,7 @@ module.exports.textAnalysisByWord = async (orgId, prcId, step) => {
     !dateRange[0].maxdate ||
     !(dateRange[0].maxdate instanceof Date)
   ) {
-    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
   }
   const mindate = dateRange[0].mindate;
   const maxdate = dateRange[0].maxdate;
@@ -319,9 +320,9 @@ module.exports.textAnalysisByWord = async (orgId, prcId, step) => {
 
 module.exports.getrDateRangeOptions = async (orgId, prcId, step) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT DISTINCT t.fromDate , t.toDate FROM text_analysis_word_${orgId} t
       WHERE procedureId = :procedureId AND step = :step`;
 
@@ -338,9 +339,9 @@ module.exports.getrDateRangeOptions = async (orgId, prcId, step) => {
 
 module.exports.getTextAnalysisDataByWordCalc = async (orgId, prcId, fromDate, toDate) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT * FROM text_analysis_word_${orgId} t
       WHERE procedureId = :procedureId AND fromDate = :fromDate AND toDate = :toDate`;
 
@@ -360,9 +361,9 @@ module.exports.getTextAnalysisDataByWordCalc = async (orgId, prcId, fromDate, to
 
 module.exports.getTextAnalysisDataByWordCalcDefault = async (orgId, prcId) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT * FROM text_analysis_word_${orgId} t
       WHERE procedureId = :procedureId AND step = 'ALL'`;
 
@@ -383,7 +384,7 @@ module.exports.textAnalysisByAccount = async (orgId, prcId, step) => {
   const dateRange = await getDateRange(orgId, prcId);
 
   if (dateRange.length < 1) {
-    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
   }
   if (
     !dateRange[0].mindate ||
@@ -391,7 +392,7 @@ module.exports.textAnalysisByAccount = async (orgId, prcId, step) => {
     !dateRange[0].maxdate ||
     !(dateRange[0].maxdate instanceof Date)
   ) {
-    throw new Exception(httpStatus.BAD_REQUEST, "no_document_date");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
   }
   const mindate = dateRange[0].mindate;
   const maxdate = dateRange[0].maxdate;
@@ -403,9 +404,9 @@ module.exports.textAnalysisByAccount = async (orgId, prcId, step) => {
 
 module.exports.getTextAnalysisDataByAccountCalcDefault = async (orgId, prcId) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = `SELECT * FROM text_analysis_account_${orgId} t
       WHERE procedureId = :procedureId AND step = 'ALL'`;
 
@@ -420,9 +421,9 @@ module.exports.getTextAnalysisDataByAccountCalcDefault = async (orgId, prcId) =>
 
 module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = ` INSERT INTO creditor_analysis_${orgId} (accountNumber, accountName, totlaCount, totalBalance, procedureId) `;
   query += `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, 
                 SUM(p.balance) as totalBalance,
@@ -511,9 +512,9 @@ module.exports.getCreditorAnalysis = async (orgId, prcId, criteria) => {
 
 module.exports.storePaymentAnalysis = async (orgId, prcId) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = ` INSERT INTO payment_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
     documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType) `;
 
@@ -544,9 +545,9 @@ module.exports.storePaymentAnalysis = async (orgId, prcId) => {
 
 module.exports.storeDueDateAnalysis = async (orgId, prcId) => {
   if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, "organisation_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, "procedure_id_is_required");
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = ` INSERT INTO due_date_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
     documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType) `;
 
