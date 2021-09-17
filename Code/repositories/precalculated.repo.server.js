@@ -127,25 +127,30 @@ module.exports.deletePrevDataDueDate = async (orgId, prcId) => {
   return result;
 };
 
-storeDataByWord = async (orgId, prcId, keys, dateRanges, step) => {
+storeDataByWord = async (orgId, prcId, keywords, dateRanges, step) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-  let query = ` INSERT INTO text_analysis_word_${orgId} (recordsCount, accountsCount, word, fromDate, toDate, procedureId, step) `;
-  for (let index = 0; index < keys.length; index++) {
-    const key = keys[index];
-    let originalKey = keys[index];
-    originalKey = originalKey.replace("like '%", "");
-    originalKey = originalKey.replace("%'", "");
-    originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
-    originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
+  const length = keywords.length;
+  const times = Math.ceil(length / 20);
+  for (let iterator = 0; iterator < times; iterator++) {
+    let keys = keywords.slice(iterator * 20, iterator * 20 + 20);
+    //#region insert data
+    let query = ` INSERT INTO text_analysis_word_${orgId} (recordsCount, accountsCount, word, fromDate, toDate, procedureId, step) `;
+    for (let index = 0; index < keys.length; index++) {
+      const key = keys[index];
+      let originalKey = keys[index];
+      originalKey = originalKey.replace("like '%", "");
+      originalKey = originalKey.replace("%'", "");
+      originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
+      originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
 
-    for (let i = 1; i < dateRanges.length; i++) {
-      let fromDate = dateRanges[i - 1];
-      let toDate = dateRanges[i];
+      for (let i = 1; i < dateRanges.length; i++) {
+        let fromDate = dateRanges[i - 1];
+        let toDate = dateRanges[i];
 
-      query += `  
+        query += `  
               SELECT
                   IF (SUM(pos.totalCount) > 0, SUM(pos.totalCount),0) recordsCount,
                   IF (COUNT(pos.accountNumber) > 0,COUNT(pos.accountNumber),0) accountsCount,
@@ -182,19 +187,21 @@ storeDataByWord = async (orgId, prcId, keys, dateRanges, step) => {
                   GROUP by
                       p.accountNumber) pos
               `;
-      query += " UNION ";
+        query += " UNION ";
+      }
     }
+    query = query.slice(0, -6);
+    // console.log(query);
+    await connection.getConnection().execute(query);
+    //#endregion insert data
   }
-  query = query.slice(0, -6);
-  // console.log(query);
-  let result = await connection.getConnection().execute(query);
   // set as calculated in procedure
   await Procedure.getProcedures().update({ text_word: true }, {
     where: {
       id: prcId,
     },
   });
-  return result;
+  return "done";
 };
 
 storeDataByAccount = async (orgId, prcId, keys, dateRanges, step) => {
