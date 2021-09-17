@@ -40,6 +40,8 @@ module.exports.fetch = async (criteria) => {
         criteria[key] = {
           [Op.like]: "%" + criteria[key] + "%",
         };
+      } else if(key.includes('Date')) {
+        criteria[key] = sequelize.where(sequelize.fn('date', sequelize.col(key)), '=', criteria[key]);
       }
     }
   }
