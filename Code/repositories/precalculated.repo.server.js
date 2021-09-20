@@ -133,9 +133,9 @@ storeDataByWord = async (orgId, prcId, keywords, dateRanges, step) => {
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   const length = keywords.length;
-  const times = Math.ceil(length / 20);
+  const times = Math.ceil(length / 10);
   for (let iterator = 0; iterator < times; iterator++) {
-    let keys = keywords.slice(iterator * 20, iterator * 20 + 20);
+    let keys = keywords.slice(iterator * 10, iterator * 10 + 10);
     //#region insert data
     let query = ` INSERT INTO text_analysis_word_${orgId} (recordsCount, accountsCount, word, fromDate, toDate, procedureId, step) `;
     for (let index = 0; index < keys.length; index++) {
@@ -192,7 +192,11 @@ storeDataByWord = async (orgId, prcId, keywords, dateRanges, step) => {
     }
     query = query.slice(0, -6);
     // console.log(query);
-    await connection.getConnection().execute(query);
+    const c = connection.getConnection();
+    const result = await c.execute(query);
+
+    c.end();
+    // await connection.getConnection().execute(query);
     //#endregion insert data
   }
   // set as calculated in procedure

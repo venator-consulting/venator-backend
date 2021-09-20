@@ -24,8 +24,8 @@ export class SAPDataTableComponent implements OnInit {
     private _router: Router,
     private _translateService: TranslateService,
     private _autocompleteService: DictionaryService,
-    // private datepipe: DatePipe,
-  ) {}
+    private datepipe: DatePipe,
+  ) { }
 
   organisationId = localStorage.getItem('organisationId');
   procedureId = localStorage.getItem('currentProcedureId');
@@ -71,17 +71,18 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   async getData() {
-    for (const key in this.criteria) {
-      if (!this.criteria[key] && key != 'offset') {
-        delete this.criteria[key];
-      }
-      // debugger;
-      // if(key == 'documentDate' || key == 'dueDate' || key == 'applicationDate')
-      //   this.criteria[key] = this.datepipe.transform(this.criteria[key], 'yyyy-MM-dd');
-    }
-    this.filtersNo = Object.keys(this.criteria).length - 6;
+    
     this.loading = true;
-    this._dataFilterService.get(this.criteria).subscribe(
+    let tempCriteria = { ...this.criteria };
+    for (const key in tempCriteria) {
+      if (!tempCriteria[key] && key != 'offset') {
+        delete tempCriteria[key];
+      }
+      if (key.includes('Date'))
+      tempCriteria[key] = this.datepipe.transform(tempCriteria[key], 'yyyy.MM.dd');
+    }
+    this.filtersNo = Object.keys(tempCriteria).length - 6;
+    this._dataFilterService.get(tempCriteria).subscribe(
       (data) => {
         this.data = data;
         this.postings = this.data.rows;
@@ -99,7 +100,7 @@ export class SAPDataTableComponent implements OnInit {
 
   sort(event: LazyLoadEvent) {
     // debugger;
-    this.criteria.orderBy = event.sortField? event.sortField : 'id';
+    this.criteria.orderBy = event.sortField ? event.sortField : 'id';
     this.criteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.criteria.offset = 0;
@@ -210,7 +211,7 @@ export class SAPDataTableComponent implements OnInit {
         (url) => {
           window.open(url.toString(), '_blank');
         },
-        (err) => {}
+        (err) => { }
       );
   }
   exportPDF() {
@@ -218,8 +219,8 @@ export class SAPDataTableComponent implements OnInit {
       (data) => {
         // console.log(data);
       },
-      (err) => {},
-      () => {}
+      (err) => { },
+      () => { }
     );
   }
 

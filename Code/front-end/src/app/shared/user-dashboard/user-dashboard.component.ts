@@ -69,14 +69,15 @@ export class UserDashboardComponent implements OnInit {
   dataTable(prc) {
     localStorage.setItem('currentProcedureId', prc.id);
     localStorage.setItem('currentProcedureName', prc.name);
-    localStorage.setItem('currentProcedureStatus', prc.status);
-    localStorage.setItem('currentProcedureAmount', prc.amount);
-    localStorage.setItem('currentProcedureCredit', prc.credit);
-    localStorage.setItem('currentProcedurePayment', prc.payment);
-    localStorage.setItem('currentProcedureText_word', prc.text_word);
-    localStorage.setItem('currentProcedureText_account', prc.text_account);
     localStorage.setItem('currentProcedureData', prc.data);
     localStorage.setItem('currentProcedureAnalysis', prc.analysis);
+    localStorage.setItem('currentProcedureStatus', prc.status);
+    localStorage.setItem('currentProcedureAmount', prc.amount);
+    localStorage.setItem('currentProcedureText_word', prc.text_word);
+    localStorage.setItem('currentProcedureText_account', prc.text_account);
+    localStorage.setItem('currentProcedureCredit', prc.credit);
+    localStorage.setItem('currentProcedurePayment', prc.payment);
+    localStorage.setItem('currentProcedureDueDate', prc.due_date);
     localStorage.setItem('currentProcedureLiquidity', prc.liquidity);
     this._router.navigate(['/dashboard/shared/data']);
 
@@ -88,10 +89,12 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedureAnalysis', prc.analysis);
     localStorage.setItem('currentProcedureStatus', prc.status);
     localStorage.setItem('currentProcedureAmount', prc.amount);
-    localStorage.setItem('currentProcedureCredit', prc.credit);
-    localStorage.setItem('currentProcedurePayment', prc.payment);
     localStorage.setItem('currentProcedureText_word', prc.text_word);
     localStorage.setItem('currentProcedureText_account', prc.text_account);
+    localStorage.setItem('currentProcedureCredit', prc.credit);
+    localStorage.setItem('currentProcedurePayment', prc.payment);
+    localStorage.setItem('currentProcedureDueDate', prc.due_date);
+    localStorage.setItem('currentProcedureLiquidity', prc.liquidity);
 
     this._router.navigate(['/dashboard/admin/procedure/edit']);
 

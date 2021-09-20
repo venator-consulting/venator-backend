@@ -458,7 +458,8 @@
     "firstChartLabel": "Number of days",
     "average": "Average",
     "positive": "Positive",
-    "negative": "Negative"
+    "negative": "Negative",
+    "delay": "Delay"
   },
   "CreditorsAnalysis": {
     "label": "Creditors analysis",

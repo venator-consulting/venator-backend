@@ -53,51 +53,58 @@ export class DueDateDetailsComponent implements OnInit {
         { label: elem.label, routerLink: '/dashboard/analysis/due-date', routerLinkActiveOptions: { exact: true } },
         { label: 'Details', routerLink: this._router.url, routerLinkActiveOptions: { exact: true } }
       ];
-      
+
       this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/dashboard/shared/data' };
       this._analysisService
-      .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
-      .subscribe(res => {
+        .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+        .subscribe(res => {
 
-        this.waiting = false;
-        this.docDataTable = res.data.docDateReference;
-        this.data = res.data.records;
+          this.waiting = false;
+          this.docDataTable = res.data.docDateReference;
+          this.data = res.data.records;
 
-        this.docDataTable.forEach(element => {
-          this.docDateLabels.push(element.monthName + '-' + element.yearName);
-          this.docPositiveData.push(element.positive);
-          this.docNegativeData.push(element.negative);
-          this.docData.push(+element.positive + +element.negative);
+          this.docDataTable.forEach(element => {
+            this.docDateLabels.push(element.monthName + '-' + element.yearName);
+            this.docPositiveData.push(element.positive);
+            this.docNegativeData.push(element.negative);
+            this.docData.push(+element.positive + +element.negative);
+          });
+
+          this.docDateData = {
+            labels: this.docDateLabels,
+            datasets: [{
+              type: 'line',
+              label: elem.average,
+              borderColor: '#42A5F5',
+              borderWidth: 2,
+              fill: false,
+              data: this.docData
+            }, {
+              type: 'bar',
+              label: elem.positive,
+              backgroundColor: '#F5B59B',
+              data: this.docPositiveData,
+              borderColor: '#E5A58B',
+              borderWidth: 2
+            }, {
+              type: 'bar',
+              label: elem.negative,
+              backgroundColor: '#FFD795',
+              borderColor: '#EFC785',
+              data: this.docNegativeData
+            }]
+          };
+
+          this.data.forEach(record => {
+            let appDate = new Date(record.applicationDate);
+            let dueDate = new Date(record.dueDate);
+            if (appDate && dueDate && appDate instanceof Date && dueDate instanceof Date)
+              record.delay = Math.ceil((appDate?.getTime() - dueDate?.getTime()) / (1000 * 3600 * 24));
+          })
+
+        }, er => {
+          this.waiting = false;
         });
-
-        this.docDateData = {
-          labels: this.docDateLabels,
-          datasets: [{
-            type: 'line',
-            label: elem.average,
-            borderColor: '#42A5F5',
-            borderWidth: 2,
-            fill: false,
-            data: this.docData
-          }, {
-            type: 'bar',
-            label: elem.positive,
-            backgroundColor: '#F5B59B',
-            data: this.docPositiveData,
-            borderColor: '#E5A58B',
-            borderWidth: 2
-          }, {
-            type: 'bar',
-            label: elem.negative,
-            backgroundColor: '#FFD795',
-            borderColor: '#EFC785',
-            data: this.docNegativeData
-          }]
-        };
-
-      }, er => {
-        this.waiting = false;
-      });
     })
 
 
@@ -149,7 +156,7 @@ export class DueDateDetailsComponent implements OnInit {
       },
       {
         header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew',
+        field: 'documentTypeNewName',
         align: 'center'
       },
       {
@@ -163,18 +170,23 @@ export class DueDateDetailsComponent implements OnInit {
         align: 'center'
       },
       {
-        header: 'DataTableColumns.executionDate',
-        field: 'executionDate',
+        header: 'DataTableColumns.applicationDate',
+        field: 'applicationDate',
         align: 'center'
       },
       {
         header: 'DataTableColumns.dueDate',
         field: 'dueDate',
         align: 'center'
+      },
+      {
+        header: 'DueDateAnalysis.delay',
+        field: 'delay',
+        align: 'center'
       }
     ];
 
-   
+
 
   }
 

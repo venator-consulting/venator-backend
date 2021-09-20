@@ -3,6 +3,7 @@ import { MessageService } from 'primeng/api';
 import { ProcedureService } from '../service/procedure.service';
 import { PreCalculateService } from '../service/pre-calculate.service';
 import { Procedures } from 'src/app/shared/model/procedures';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-pre-calculate',
@@ -22,7 +23,7 @@ export class PreCalculateComponent implements OnInit {
   disableDueDate: boolean;
 
   constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService,
-    private _procedureService: ProcedureService) { }
+    private _procedureService: ProcedureService, private _translateService: TranslateService) { }
 
   ngOnInit(): void {
     this.orgId = +localStorage.getItem('organisationId');
@@ -47,7 +48,7 @@ export class PreCalculateComponent implements OnInit {
   textByWordStart() {
     this.waiting = true;
     this._preCalcService.textAnalysisByWord(this.orgId, this.prcId)
-      .subscribe(res => {
+      .subscribe(async (res) => {
         this.waiting = false;
         localStorage.setItem('currentProcedureText_word', 'true');
         this.disabletextWord = true;
@@ -55,7 +56,7 @@ export class PreCalculateComponent implements OnInit {
           severity: 'success',
           summary: 'SUCCESS',
           life: 10000,
-          detail: 'records updated successfully!',
+          detail: await this._translateService.get('general_messages.update_success').toPromise(),
         });
         this.updateProcedureStatus();
       }, er => this.waiting = false);
@@ -64,7 +65,7 @@ export class PreCalculateComponent implements OnInit {
   textByAccountStart() {
     this.waiting = true;
     this._preCalcService.textAnalysisByAccount(this.orgId, this.prcId)
-      .subscribe(res => {
+      .subscribe(async (res) => {
         this.waiting = false;
         localStorage.setItem('currentProcedureText_account', 'true');
         this.disableText_account = true;
@@ -72,7 +73,7 @@ export class PreCalculateComponent implements OnInit {
           severity: 'success',
           summary: 'SUCCESS',
           life: 10000,
-          detail: 'records updated successfully!',
+          detail: await this._translateService.get('general_messages.update_success').toPromise(),
         });
         this.updateProcedureStatus();
       }, er => this.waiting = false);
@@ -82,7 +83,7 @@ export class PreCalculateComponent implements OnInit {
   amountStart() {
     this.waiting = true;
     this._preCalcService.amountAnalysis(this.orgId, this.prcId)
-      .subscribe(res => {
+      .subscribe(async (res) => {
         this.waiting = false;
         localStorage.setItem('currentProcedureAmount', 'true');
         this.disableAmount = true;
@@ -90,7 +91,7 @@ export class PreCalculateComponent implements OnInit {
           severity: 'success',
           summary: 'SUCCESS',
           life: 10000,
-          detail: 'records updated successfully!',
+          detail: await this._translateService.get('general_messages.update_success').toPromise(),
         });
         this.updateProcedureStatus();
       }, er => this.waiting = false);
@@ -99,7 +100,7 @@ export class PreCalculateComponent implements OnInit {
   creditorStart() {
     this.waiting = true;
     this._preCalcService.creditorAnalysis(this.orgId, this.prcId)
-      .subscribe(res => {
+      .subscribe(async (res) => {
         this.waiting = false;
         localStorage.setItem('currentProcedureCredit', 'true');
         this.disableCredit = true;
@@ -107,7 +108,7 @@ export class PreCalculateComponent implements OnInit {
           severity: 'success',
           summary: 'SUCCESS',
           life: 10000,
-          detail: 'records updated successfully!',
+          detail: await this._translateService.get('general_messages.update_success').toPromise(),
         });
         this.updateProcedureStatus();
       }, er => this.waiting = false);
@@ -116,7 +117,7 @@ export class PreCalculateComponent implements OnInit {
   paymentStart() {
     this.waiting = true;
     this._preCalcService.paymentAnalysis(this.orgId, this.prcId)
-      .subscribe(res => {
+      .subscribe(async (res) => {
         this.waiting = false;
         localStorage.setItem('currentProcedurePayment', 'true');
         this.disablePayment = true;
@@ -124,7 +125,7 @@ export class PreCalculateComponent implements OnInit {
           severity: 'success',
           summary: 'SUCCESS',
           life: 10000,
-          detail: 'records updated successfully!',
+          detail: await this._translateService.get('general_messages.update_success').toPromise(),
         });
         this.updateProcedureStatus();
       }, er => this.waiting = false);
@@ -133,7 +134,7 @@ export class PreCalculateComponent implements OnInit {
   dueDateStart() {
     this.waiting = true;
     this._preCalcService.dueDateAnalysis(this.orgId, this.prcId)
-      .subscribe(res => {
+      .subscribe(async (res) => {
         this.waiting = false;
         localStorage.setItem('currentProcedureDueDate', 'true');
         this.disableDueDate = true;
@@ -141,7 +142,7 @@ export class PreCalculateComponent implements OnInit {
           severity: 'success',
           summary: 'SUCCESS',
           life: 10000,
-          detail: 'records updated successfully!',
+          detail: await this._translateService.get('general_messages.update_success').toPromise(),
         });
         this.updateProcedureStatus();
       }, er => this.waiting = false);
