@@ -199,7 +199,8 @@ export class SAPDataTableComponent implements OnInit {
   exportXLSX() {
     const lang = localStorage.getItem('lang');
     let criteriaWithLang = { ...this.criteria };
-    criteriaWithLang['lang'] = lang;
+    // criteriaWithLang['lang'] = lang;
+    criteriaWithLang['lang'] = lang?? 'de';
     this._exportDataService
       .exportXLSX(
         'posting',
