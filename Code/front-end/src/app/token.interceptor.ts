@@ -18,7 +18,7 @@ export class TokenInterceptor implements HttpInterceptor {
     private _authSrvc: AuthService,
     private _messageService: MessageService,
     private _translateService: TranslateService
-  ) {}
+  ) { }
 
   intercept(
     request: HttpRequest<unknown>,
@@ -35,11 +35,13 @@ export class TokenInterceptor implements HttpInterceptor {
     return new Observable((observer) => {
       next.handle(tokenizedReq).subscribe(
         (res: HttpResponse<any>) => {
+          debugger;
           if (res instanceof HttpResponse) {
             observer.next(res);
           }
         },
         (err: HttpErrorResponse) => {
+          debugger;
           if (err.error instanceof ErrorEvent || err.error.fromImport) {
             // console.log('this is client side error');
             // errorMsg = `Error: ${error.error.message}`;

@@ -9,6 +9,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Word } from '../model/word';
 import { DictionaryService } from '../service/dictionary.service';
 import { DatePipe } from '@angular/common';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-sap-data-table',
@@ -71,7 +72,7 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   async getData() {
-    
+
     this.loading = true;
     let tempCriteria = { ...this.criteria };
     for (const key in tempCriteria) {
@@ -79,7 +80,7 @@ export class SAPDataTableComponent implements OnInit {
         delete tempCriteria[key];
       }
       if (key.includes('Date'))
-      tempCriteria[key] = this.datepipe.transform(tempCriteria[key], 'yyyy.MM.dd');
+        tempCriteria[key] = this.datepipe.transform(tempCriteria[key], 'yyyy.MM.dd');
     }
     this.filtersNo = Object.keys(tempCriteria).length - 6;
     this._dataFilterService.get(tempCriteria).subscribe(
@@ -197,10 +198,11 @@ export class SAPDataTableComponent implements OnInit {
   }
 
   exportXLSX() {
+    this.loading = true;
     const lang = localStorage.getItem('lang');
     let criteriaWithLang = { ...this.criteria };
     // criteriaWithLang['lang'] = lang;
-    criteriaWithLang['lang'] = lang?? 'de';
+    criteriaWithLang['lang'] = lang ?? 'de';
     this._exportDataService
       .exportXLSX(
         'posting',
@@ -208,13 +210,29 @@ export class SAPDataTableComponent implements OnInit {
         this.procedureId,
         criteriaWithLang
       )
-      .subscribe(
-        (url) => {
-          window.open(url.toString(), '_blank');
-        },
-        (err) => { }
+      .subscribe((res) => {
+        this.loading = false;
+        this.saveAsExcelFile(res, 'data_table');
+        // window.open(url.toString(), '_blank');
+      },
+        (err) => { this.loading = false; }
       );
   }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE =
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const d: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE,
+    });
+    // FileSaver.saveAs(file);
+    FileSaver.saveAs(
+      d,
+      fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
+    );
+  }
+
   exportPDF() {
     this._exportDataService.exportPDF(this.postings).subscribe(
       (data) => {

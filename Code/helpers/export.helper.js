@@ -102,7 +102,8 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
 
         str.on('end', async () => {
             await workbook.commit();
-            cb(env.domain + 'public/Venator_Consuting_Exported_file_' + tableName + '_' + organisationId + '_' + procedureId + '.xlsx');
+            // cb(env.domain + 'public/Venator_Consuting_Exported_file_' + tableName + '_' + organisationId + '_' + procedureId + '.xlsx');
+            cb('./public/Venator_Consuting_Exported_file_' + tableName + '_' + organisationId + '_' + procedureId + '.xlsx');
         });
 
         // await workbook.commit();

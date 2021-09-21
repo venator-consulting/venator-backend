@@ -14,7 +14,8 @@ module.exports.exportAsExcel = async (req, res) => {
     req.params.ProcedureId,
     req.query,
     (fileUrl) => {
-      res.status(200).json(fileUrl);
+      // res.status(200).json(fileUrl);
+      res.download(fileUrl);
     }
   );
 };

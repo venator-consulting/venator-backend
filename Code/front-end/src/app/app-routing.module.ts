@@ -123,7 +123,7 @@ const routes: Routes = [
         path: 'shared/user/procedures',
         component: UserDashboardComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['Admin', 'Manager'] },
+        data: { roles: ['Admin', 'Manager', 'User'] },
       },
       {
         path: 'shared/user/users',

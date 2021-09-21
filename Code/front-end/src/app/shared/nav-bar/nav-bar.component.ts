@@ -371,6 +371,57 @@ export class NavBarComponent implements OnInit {
               },
             ],
           },
+          {
+            label: elem.liquidity,
+            items: [
+              {
+                label: elem.openingBalance,
+                icon: 'pi  pi-plus-circle',
+                routerLink: ['/dashboard/liquidity/openingBalance'],
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
+                label: elem.creditLine,
+                icon: 'pi  pi-plus-circle',
+                routerLink: ['/dashboard/liquidity/creditLine'],
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
+                label: elem.freeLiquidity,
+                icon: 'pi  pi-chart-line',
+                routerLink: ['/dashboard/liquidity/freeLiquidity'],
+                disabled:
+                  localStorage.getItem('currentProcedureLiquidity') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+            ],
+          },
         ];
       } else if (this.role === 'User') {
         this.sidebarItems = [
@@ -454,6 +505,57 @@ export class NavBarComponent implements OnInit {
                   localStorage.getItem('currentProcedureAnalysis') != 'true' ||
                   +localStorage.getItem('organisationId') <= 0 ||
                   +localStorage.getItem('currentProcedureId') <= 0,
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+            ],
+          },
+          {
+            label: elem.liquidity,
+            items: [
+              {
+                label: elem.openingBalance,
+                icon: 'pi  pi-plus-circle',
+                routerLink: ['/dashboard/liquidity/openingBalance'],
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
+                label: elem.creditLine,
+                icon: 'pi  pi-plus-circle',
+                routerLink: ['/dashboard/liquidity/creditLine'],
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
+                label: elem.freeLiquidity,
+                icon: 'pi  pi-chart-line',
+                routerLink: ['/dashboard/liquidity/freeLiquidity'],
+                disabled:
+                  localStorage.getItem('currentProcedureLiquidity') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
                 command: () => {
                   this.sideBarShow = false;
                 },
