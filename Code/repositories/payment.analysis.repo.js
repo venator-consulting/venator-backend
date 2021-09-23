@@ -13,8 +13,8 @@ module.exports.paymentDateRange = async (orgId, prcId) => {
                         AND pos.accountNumber is not NULL
                         AND pos.documentDate is not NULL 
                         AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
-                        AND (year(pos.documentDate) <> year(pos.dueDate) OR
-                            (year(pos.documentDate) = year(pos.dueDate) AND month(pos.documentDate) <> month(pos.dueDate)))
+                        AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
+                            (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
                             OR UPPER(pos.documentType) = 'KZ'
@@ -112,8 +112,8 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
                         AND pos.accountNumber is not NULL
                         AND pos.documentDate is not NULL 
                         AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate) 
-                        AND (year(pos.documentDate) <> year(pos.dueDate) OR
-                        (year(pos.documentDate) = year(pos.dueDate) AND month(pos.documentDate) <> month(pos.dueDate)))
+                        AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
+                        (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
                             OR UPPER(pos.documentType) = 'KZ'
@@ -505,8 +505,8 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
                         AND pos.accountNumber = ${accountNumber} 
                         AND pos.documentDate is not NULL 
                         AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
-                        AND (year(pos.documentDate) <> year(pos.dueDate) OR
-                        (year(pos.documentDate) = year(pos.dueDate) AND month(pos.documentDate) <> month(pos.dueDate)))
+                        AND (year(pos.documentDate) <> year(pos.applicationDate) OR  pos.applicationDate is null OR 
+                        (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
                             OR UPPER(pos.documentType) = 'KZ'
