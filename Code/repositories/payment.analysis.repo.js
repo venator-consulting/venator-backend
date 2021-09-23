@@ -109,7 +109,9 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.documentDate is not NULL 
-                        AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
+                        AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate) 
+                        AND (year(pos.documentDate) <> year(pos.dueDate) OR
+                        (year(pos.documentDate) = year(pos.dueDate) AND month(pos.documentDate) <> month(pos.dueDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
                             OR UPPER(pos.documentType) = 'KZ'
@@ -501,6 +503,8 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
                         AND pos.accountNumber = ${accountNumber} 
                         AND pos.documentDate is not NULL 
                         AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
+                        AND (year(pos.documentDate) <> year(pos.dueDate) OR
+                        (year(pos.documentDate) = year(pos.dueDate) AND month(pos.documentDate) <> month(pos.dueDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
                             OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
                             OR UPPER(pos.documentType) = 'KZ'
