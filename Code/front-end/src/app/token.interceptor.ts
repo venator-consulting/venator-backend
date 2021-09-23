@@ -35,13 +35,13 @@ export class TokenInterceptor implements HttpInterceptor {
     return new Observable((observer) => {
       next.handle(tokenizedReq).subscribe(
         (res: HttpResponse<any>) => {
-          debugger;
+          // debugger;
           if (res instanceof HttpResponse) {
             observer.next(res);
           }
         },
         (err: HttpErrorResponse) => {
-          debugger;
+          // debugger;
           if (err.error instanceof ErrorEvent || err.error.fromImport) {
             // console.log('this is client side error');
             // errorMsg = `Error: ${error.error.message}`;

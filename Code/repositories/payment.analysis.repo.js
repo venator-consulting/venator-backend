@@ -287,25 +287,18 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
   }
   const diff = monthDiff(fromDate, toDate);
   // if diff = 0 throw an error
+  // init res
   let res = new Array();
   let starterMonth = fromDate.getMonth() + 1;
   let starterYear = fromDate.getFullYear();
+  // add element for each included month
   for (let index = 0; index <= diff; index++) {
     const element = {
       monthName: starterMonth,
       yearName: starterYear,
-      blue: {
-        value: 0,
-        accounts: [],
-      },
-      red: {
-        value: 0,
-        accounts: [],
-      },
-      green: {
-        value: 0,
-        accounts: [],
-      },
+      blue: { value: 0, accounts: [], },
+      red: { value: 0, accounts: [], },
+      green: { value: 0, accounts: [], },
     };
     res.push(element);
     starterMonth++;
@@ -314,11 +307,10 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
       starterYear++;
     }
   }
-
-  const finalResult = {
-    res: res,
-    accounts: new Array(),
-  };
+  // final result contains: 
+  // accounts (for the table) which contains includedd account and for each of them the sum of blue, green and red
+  // the res (for chart) which include the sum of blue, green and red for each month 
+  const finalResult = { res: res, accounts: new Array(), };
 
   const blueBlackList = new Array();
   const redBlackList = new Array();
@@ -332,37 +324,33 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
   const str = connection.getConnection().query(query).stream();
 
   str.on("data", (row) => {
+    // iterate for each month
     res.forEach((element) => {
       // get last day of the month
       var d = new Date(element.yearName, +element.monthName, 0);
-      if (
-        ((row.documentTypeNewName &&
-          row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "RE") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "KR")) &&
-        row.documentDate <= d &&
-        (row.applicationDate == null || row.applicationDate > d)
-      ) {
+      if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") ||
+        (row.documentType && row.documentType.toString().toUpperCase() == "RE") ||
+        (row.documentType && row.documentType.toString().toUpperCase() == "KR")) &&
+        row.documentDate?.getTime() <= d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime())) {
         element.blue.value += +row.balance;
         // add creditor to the list
-        const b = element.blue.accounts.findIndex(
-          (x) => x.accountNumber == row.accountNumber
-        );
+        // check if the account added to the blue bar in chart for this month
+        const b = element.blue.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
+        // if already account added, then sum the balance
         if (b >= 0) {
           element.blue.accounts[b].value += +row.balance;
+          // else add the account
         } else {
           element.blue.accounts.push({
             value: +row.balance,
-            accountNumber: row.accountNumber,
+            accountNumber: row.accountNumber?.trim(),
             accountName: row.accountName,
           });
         }
-        const i = finalResult.accounts.findIndex(
-          (x) => x.accountNumber == row.accountNumber
-        );
+        // check if the account added to the accounts array for the table
+        const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (i >= 0) {
+          // the row must be added once
           const j = blueBlackList.findIndex((x) => x == row.id);
           if (j == -1) {
             if (finalResult.accounts[i].blue) {
@@ -377,39 +365,29 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
             blue: +row.balance,
             red: 0,
             green: 0,
-            accountNumber: row.accountNumber,
+            accountNumber: row.accountNumber?.trim(),
             accountName: row.accountName,
           });
           blueBlackList.push(row.id);
         }
       } // end of blue condition
-      if (
-        ((row.documentTypeNewName &&
-          row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "RE") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "KR")) &&
-        row.documentDate <= d &&
-        (row.applicationDate == null || row.applicationDate > d) &&
-        row.dueDate <= d
-      ) {
+      if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") ||
+        (row.documentType && row.documentType.toString().toUpperCase() == "RE") ||
+        (row.documentType && row.documentType.toString().toUpperCase() == "KR")) &&
+        row.documentDate?.getTime() <= d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime()) &&
+        row.dueDate?.getTime() <= d?.getTime()) {
         element.red.value += +row.balance;
-        const r = element.red.accounts.findIndex(
-          (x) => x.accountNumber == row.accountNumber
-        );
+        const r = element.red.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (r >= 0) {
           element.red.accounts[r].value += +row.balance;
         } else {
           element.red.accounts.push({
             value: +row.balance,
-            accountNumber: row.accountNumber,
+            accountNumber: row.accountNumber?.trim(),
             accountName: row.accountName,
           });
         }
-        const i = finalResult.accounts.findIndex(
-          (x) => x.accountNumber == row.accountNumber
-        );
+        const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (i >= 0) {
           const j = redBlackList.findIndex((x) => x == row.id);
           if (j == -1) {
@@ -425,38 +403,28 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
             blue: 0,
             red: +row.balance,
             green: 0,
-            accountNumber: row.accountNumber,
+            accountNumber: row.accountNumber?.trim(),
             accountName: row.accountName,
           });
           redBlackList.push(row.id);
         }
       } // end of red condition
-      if (
-        ((row.documentTypeNewName &&
-          row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "KZ") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "ZP")) &&
-        row.documentDate <= d &&
-        row.applicationDate == null
-      ) {
+      if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG") ||
+        (row.documentType && row.documentType.toString().toUpperCase() == "KZ") ||
+        (row.documentType && row.documentType.toString().toUpperCase() == "ZP")) &&
+        row.documentDate?.getTime() <= d?.getTime() && row.applicationDate == null) {
         element.green.value += +row.balance;
-        const g = element.green.accounts.findIndex(
-          (x) => x.accountNumber == row.accountNumber
-        );
+        const g = element.green.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (g >= 0) {
           element.green.accounts[g].value += +row.balance;
         } else {
           element.green.accounts.push({
             value: +row.balance,
-            accountNumber: row.accountNumber,
+            accountNumber: row.accountNumber?.trim(),
             accountName: row.accountName,
           });
         }
-        const i = finalResult.accounts.findIndex(
-          (x) => x.accountNumber == row.accountNumber
-        );
+        const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (i >= 0) {
           const j = greenBlackList.findIndex((x) => x == row.id);
           if (j == -1) {
@@ -472,13 +440,15 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
             blue: 0,
             red: 0,
             green: +row.balance,
-            accountNumber: row.accountNumber,
+            accountNumber: row.accountNumber?.trim(),
             accountName: row.accountName,
           });
           greenBlackList.push(row.id);
         }
       } // end of green condition
-    }); // end of foreach
+    }); // end of foreach month
+
+
   }); // end of fetching row event
 
   str.on("end", async () => {
@@ -488,14 +458,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
 
 
 
-module.exports.paymentAnalysisDetails = async (
-  orgId,
-  prcId,
-  fromDate,
-  toDate,
-  accountNumber,
-  cb
-) => {
+module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, accountNumber, cb) => {
   if (!fromDate) {
     throw new Error("Document Date is null for this procedure!");
   }
@@ -508,27 +471,16 @@ module.exports.paymentAnalysisDetails = async (
   const diff = monthDiff(fromDate, toDate);
   // if diff = 0 throw an error
   let result = [];
-  let finalResult = {
-    data: result,
-    blue: [],
-    red: [],
-    green: [],
-  };
+  let finalResult = { data: result, blue: [], red: [], green: [], };
   let starterMonth = fromDate.getMonth() + 1;
   let starterYear = fromDate.getFullYear();
   for (let index = 0; index <= diff; index++) {
     const element = {
       monthName: starterMonth,
       yearName: starterYear,
-      blue: {
-        value: 0,
-      },
-      red: {
-        value: 0,
-      },
-      green: {
-        value: 0,
-      },
+      blue: { value: 0, },
+      red: { value: 0, },
+      green: { value: 0, },
     };
     result.push(element);
     starterMonth++;
@@ -541,7 +493,7 @@ module.exports.paymentAnalysisDetails = async (
   let query = `SELECT pos.id, pos.procedureId, pos.accountNumber, pos.accountName, pos.paymentRelevant,
                         pos.paymentRelevantComment, pos.accountType, pos.documentType, pos.balance, pos.contraAccountNumber,
                         pos.contraAccountName, pos.documentTypeNewName, pos.documentNumber, pos.documentDate, pos.recordNumber,
-                        pos.ledgerId, pos.executionDate, pos.dueDate
+                        pos.ledgerId, pos.executionDate, pos.dueDate, pos.applicationDate 
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = ${prcId}
@@ -572,8 +524,8 @@ module.exports.paymentAnalysisDetails = async (
             row.documentType.toString().toUpperCase() == "RE") ||
           (row.documentType &&
             row.documentType.toString().toUpperCase() == "KR")) &&
-        row.documentDate <= d &&
-        (row.applicationDate == null || row.applicationDate > d)
+        row.documentDate?.getTime() <= d?.getTime() &&
+        (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime())
       ) {
         element.blue.value += +row.balance;
         // add row to the blue list
@@ -590,9 +542,9 @@ module.exports.paymentAnalysisDetails = async (
             row.documentType.toString().toUpperCase() == "RE") ||
           (row.documentType &&
             row.documentType.toString().toUpperCase() == "KR")) &&
-        row.documentDate <= d &&
-        (row.applicationDate == null || row.applicationDate > d) &&
-        row.dueDate <= d
+        row.documentDate?.getTime() <= d?.getTime() &&
+        (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime()) &&
+        row.dueDate?.getTime() <= d?.getTime()
       ) {
         element.red.value += +row.balance;
         // add row to the red list
@@ -610,7 +562,7 @@ module.exports.paymentAnalysisDetails = async (
             row.documentType.toString().toUpperCase() == "KZ") ||
           (row.documentType &&
             row.documentType.toString().toUpperCase() == "ZP")) &&
-        row.documentDate <= d &&
+        row.documentDate?.getTime() <= d?.getTime() &&
         row.applicationDate == null
       ) {
         element.green.value += +row.balance;
