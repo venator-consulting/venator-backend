@@ -464,8 +464,8 @@ module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
   // for payment records
   query += ` OR (p.documentDate is not NULL 
             AND (p.applicationDate is null || p.applicationDate > p.dueDate)
-            AND (year(pos.documentDate) <> year(pos.dueDate) OR
-                (year(pos.documentDate) = year(pos.dueDate) AND month(pos.documentDate) <> month(pos.dueDate)))
+            AND (year(p.documentDate) <> year(p.dueDate) OR
+                (year(p.documentDate) = year(p.dueDate) AND month(p.documentDate) <> month(p.dueDate)))
             AND (UPPER(p.documentTypeNewName) = 'RECHNUNG'
                 OR UPPER(p.documentTypeNewName) = 'ZAHLUNG'
                 OR UPPER(p.documentType) = 'KZ'
