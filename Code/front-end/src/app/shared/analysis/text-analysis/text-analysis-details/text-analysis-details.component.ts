@@ -511,6 +511,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
 
   // export excel from back-end for all table
   exportXLSX() {
+    this.waiting = true;
     const lang = localStorage.getItem('lang');
     let criteriaWithLang = { ...this.backCriteria };
     criteriaWithLang['lang'] = lang;
@@ -520,11 +521,12 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this._exportDataService
       .exportXLSX('text_analysis', this.orgId, this.prcId, criteriaWithLang)
       .subscribe(
-        (url) => {
-          // console.log(url);
-          window.open(url.toString(), '_blank');
+        (res) => {
+          this.waiting = false;
+          this.saveAsExcelFile(res, 'Text_details');
+          // window.open(url.toString(), '_blank');
         },
-        (err) => {}
+        (err) => {this.waiting = false;}
       );
   }
 

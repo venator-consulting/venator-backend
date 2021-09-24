@@ -213,7 +213,7 @@ module.exports.paymentAnalysis = async (req, res) => {
 };
 
 module.exports.paymentAnalysisDetails = async (req, res) => {
-  const dateRange = await paymentAnalysisRepo.paymentDateRange(
+  const dateRange = await paymentAnalysisRepo.paymentDateRangeCalc(
     +req.params.orgId,
     +req.params.prcId
   );

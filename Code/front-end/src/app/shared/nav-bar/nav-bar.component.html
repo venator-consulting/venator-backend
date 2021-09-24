@@ -75,7 +75,7 @@
       [showCloseIcon]="false"
     >
       <h2 style="font-weight: lighter" class="p-text-center">{{ username }}</h2>
-      <p style="font-weight: lighter" class="p-text-center {{ currentProcedureStatus }}">{{ 'sideBarMenu.' + currentProcedureStatus | translate }}</p>
+      <p style="font-weight: lighter" *ngIf="currentProcedureStatus" class="p-text-center {{ currentProcedureStatus }}">{{ 'sideBarMenu.' + currentProcedureStatus | translate }}</p>
       <p-menu
         #menu
         [model]="sidebarItems"

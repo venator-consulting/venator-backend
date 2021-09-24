@@ -23,10 +23,10 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
 
         let lang = 'de';
 
-        if (criteria && criteria.lang) {
+        if (criteria && criteria.lang?.trim() && (criteria.lang == 'de' || criteria.lang == 'en')) {
             lang = criteria.lang;
-            delete criteria.lang;
         }
+        delete criteria.lang;
 
         const worksheet = workbook.addWorksheet(tableName);
 
@@ -80,7 +80,7 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
                         try {
                             let temp = Number.parseFloat(row[key]);
                             if (!Number.isNaN(temp)) {
-                                row[key] = temp.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                                row[key] = temp.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                             }
 
                         } catch (e) {
@@ -102,7 +102,8 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
 
         str.on('end', async () => {
             await workbook.commit();
-            cb(env.domain + 'public/Venator_Consuting_Exported_file_' + tableName + '_' + organisationId + '_' + procedureId + '.xlsx');
+            // cb(env.domain + 'public/Venator_Consuting_Exported_file_' + tableName + '_' + organisationId + '_' + procedureId + '.xlsx');
+            cb('./public/Venator_Consuting_Exported_file_' + tableName + '_' + organisationId + '_' + procedureId + '.xlsx');
         });
 
         // await workbook.commit();

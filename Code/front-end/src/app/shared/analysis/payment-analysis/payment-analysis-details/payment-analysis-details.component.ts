@@ -593,6 +593,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
   // export excel from back-end for all table
   exportXLSX() {
+    this.waiting = true;
     const lang = localStorage.getItem('lang');
     let criteriaWithLang = { ...this.backCriteria };
     criteriaWithLang['lang'] = lang;
@@ -606,11 +607,12 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         criteriaWithLang
       )
       .subscribe(
-        (url) => {
-          // console.log(url);
-          window.open(url.toString(), '_blank');
+        (res) => {
+          this.waiting = false;
+          this.saveAsExcelFile(res, 'Payment_details');
+          // window.open(url.toString(), '_blank');
         },
-        (err) => {}
+        (err) => {this.waiting = false;}
       );
   }
 
