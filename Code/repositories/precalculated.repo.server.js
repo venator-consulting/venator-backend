@@ -467,11 +467,7 @@ module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
             AND (year(p.documentDate) <> year(p.dueDate) OR p.applicationDate is null OR 
                 (year(p.documentDate) = year(p.dueDate) AND month(p.documentDate) <> month(p.dueDate)))
             AND (UPPER(p.documentTypeNewName) = 'RECHNUNG'
-                OR UPPER(p.documentTypeNewName) = 'ZAHLUNG'
-                OR UPPER(p.documentType) = 'KZ'
-                OR UPPER(p.documentType) = 'ZP'
-                OR UPPER(p.documentType) = 'RE'
-                OR UPPER(p.documentType) = 'KR'))`;
+                OR UPPER(p.documentTypeNewName) = 'ZAHLUNG'))`;
 
   query += ")";
   query += "GROUP BY p.accountNumber , p.accountName ";
@@ -543,11 +539,7 @@ module.exports.storePaymentAnalysis = async (orgId, prcId) => {
       AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
           (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
       AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
-          OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
-          OR UPPER(pos.documentType) = 'KZ'
-          OR UPPER(pos.documentType) = 'ZP'
-          OR UPPER(pos.documentType) = 'RE'
-          OR UPPER(pos.documentType) = 'KR')`;
+          OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG')`;
 
   let result = await connection.getConnection().execute(query);
   await Procedure.getProcedures().update({ payment: true }, {

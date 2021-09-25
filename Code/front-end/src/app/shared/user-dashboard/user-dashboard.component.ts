@@ -79,6 +79,7 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedurePayment', prc.payment);
     localStorage.setItem('currentProcedureDueDate', prc.due_date);
     localStorage.setItem('currentProcedureLiquidity', prc.liquidity);
+    localStorage.setItem('currentProcedureDocType', prc.docType);
     this._router.navigate(['/dashboard/shared/data']);
 
   }
@@ -95,7 +96,7 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedurePayment', prc.payment);
     localStorage.setItem('currentProcedureDueDate', prc.due_date);
     localStorage.setItem('currentProcedureLiquidity', prc.liquidity);
-
+    localStorage.setItem('currentProcedureDocType', prc.docType);
     this._router.navigate(['/dashboard/admin/procedure/edit']);
 
   }
@@ -106,7 +107,7 @@ export class UserDashboardComponent implements OnInit {
   async reset(prc) {
     this._confirmationService.confirm({
       message: await this._translateService.get('confirm_messages.body_delete').toPromise(),
-      header:await this._translateService.get('confirm_messages.delete').toPromise(),
+      header: await this._translateService.get('confirm_messages.delete').toPromise(),
       icon: 'pi pi-info-circle',
       acceptLabel: await this._translateService.get('confirm_messages.yes').toPromise(),
       rejectLabel: await this._translateService.get('confirm_messages.cancel').toPromise(),
@@ -114,24 +115,28 @@ export class UserDashboardComponent implements OnInit {
         this._procedureService.reset(this.organisationId, prc.id)
           .subscribe(async (res) => {
             prc.status = 'NOT_IMPORTED';
-            this._messageService.add({ severity: 'info',
-            summary: await this._translateService.get('general_messages.delete_success').toPromise(),
-              detail: await this._translateService.get('general_messages.delete_success').toPromise() });
+            this._messageService.add({
+              severity: 'info',
+              summary: await this._translateService.get('general_messages.delete_success').toPromise(),
+              detail: await this._translateService.get('general_messages.delete_success').toPromise()
+            });
           });
       },
       reject: async (type) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this._messageService.add({ severity: 'info', 
-            summary: await this._translateService.get('general_messages.canceled').toPromise(),
-            // detail: 'Action cancelled' 
-          });
+            this._messageService.add({
+              severity: 'info',
+              summary: await this._translateService.get('general_messages.canceled').toPromise(),
+              // detail: 'Action cancelled' 
+            });
             break;
           case ConfirmEventType.CANCEL:
-            this._messageService.add({ severity: 'info', 
-            summary: await this._translateService.get('general_messages.canceled').toPromise(),
-            // detail: 'Action cancelled' 
-          });
+            this._messageService.add({
+              severity: 'info',
+              summary: await this._translateService.get('general_messages.canceled').toPromise(),
+              // detail: 'Action cancelled' 
+            });
             break;
         }
       }

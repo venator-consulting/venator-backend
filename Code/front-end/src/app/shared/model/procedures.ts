@@ -15,6 +15,7 @@ export class Procedures {
     due_date: boolean = false;
     liquidity: boolean = false;
     status: string;
+    docType: boolean = false;
 
 
     // constructor(organisationId: number, name: string, data: boolean,analysis: boolean,dataSource: string) {

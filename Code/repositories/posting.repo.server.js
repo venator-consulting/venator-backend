@@ -40,7 +40,7 @@ module.exports.fetch = async (criteria) => {
         criteria[key] = {
           [Op.like]: "%" + criteria[key] + "%",
         };
-      } else if(key.includes('Date')) {
+      } else if (key.includes('Date')) {
         criteria[key] = sequelize.where(sequelize.fn('date', sequelize.col(key)), '=', criteria[key]);
       }
     }
@@ -126,6 +126,11 @@ module.exports.updateDocTypeNew = async (
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(procedureId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  await Procedure.getProcedures().update({ docType: true }, {
+    where: {
+      id: procedureId,
+    },
+  });
   return await Posting.getPosting("posting_" + organisationId).update(
     {
       documentTypeNewId: documentTypeNewId,
@@ -200,11 +205,11 @@ module.exports.updateStartBalance = async (
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(procedureId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-    await Procedure.getProcedures().update({ liquidity: true }, {
-      where: {
-        id: procedureId,
-      },
-    });
+  await Procedure.getProcedures().update({ liquidity: true }, {
+    where: {
+      id: procedureId,
+    },
+  });
   return await Posting.getPosting("posting_" + organisationId).update(
     {
       StartingBalance: StartingBalance,

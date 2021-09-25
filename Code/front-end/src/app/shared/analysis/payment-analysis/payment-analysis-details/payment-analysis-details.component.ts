@@ -244,20 +244,20 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         align: 'center',
       },
       {
-        header: 'DataTableColumns.recordNumber',
-        field: 'recordNumber',
-        align: 'left',
-      },
-      {
-        header: 'DataTableColumns.ledgerId',
-        field: 'ledgerId',
+        header: 'DataTableColumns.applicationDate',
+        field: 'applicationDate',
         align: 'center',
       },
-      {
-        header: 'DataTableColumns.executionDate',
-        field: 'executionDate',
-        align: 'center',
-      },
+      // {
+      //   header: 'DataTableColumns.ledgerId',
+      //   field: 'ledgerId',
+      //   align: 'center',
+      // },
+      // {
+      //   header: 'DataTableColumns.executionDate',
+      //   field: 'executionDate',
+      //   align: 'center',
+      // },
       {
         header: 'DataTableColumns.dueDate',
         field: 'dueDate',
