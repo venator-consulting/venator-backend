@@ -1,0 +1,171 @@
+<span class="p-text-center">
+    <p-selectButton [options]="paymentOptions" [(ngModel)]="displayData" optionLabel="name" optionValue="value">
+    </p-selectButton>
+  </span>
+  <p-table #dtmaxb dataKey="id" [value]="filteredBlue" *ngIf="displayData == 1" [resizableColumns]="true"
+    styleClass="p-datatable-gridlines" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
+    [reorderableColumns]="true">
+    
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+        <col *ngFor="let col of columns" [style]="{ width: (col.width ? col.width : 200) + 'px' }" />
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn class="p-text-{{ col.align }}"
+          *ngFor="let col of columns">
+          <span pTooltip="{{ col.header | translate }}">
+            {{ col.header | translate }}
+          </span>
+          <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+        </th>
+      </tr>
+      <!-- <tr>
+        <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
+          <input *ngIf="col.field != 'paymentRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
+            [style]="{ width: '90%' }" (input)="filterChange($any($event.target).value, col.field)"
+            class="filterInputCss" />
+        </th>
+      </tr> -->
+    </ng-template>
+    <ng-template pTemplate="body" let-row let-columns="columns">
+      <tr>
+        <td pReorderableRowHandle *ngFor="let col of columns" class="p-text-{{ col.align }}">
+          <span *ngIf="col.field == 'balance'">
+            {{ row.balance | currency: "EUR":"" }}
+          </span>
+          <span *ngIf="
+              col.field == 'documentDate' ||
+              col.field == 'dueDate' ||
+              col.field == 'applicationDate'
+            ">
+            {{ row[col.field] | date: "dd.MM.yyyy" }}
+          </span>
+          <span pTooltip="{{ row[col.field] }}" *ngIf="
+              col.field != 'balance' &&
+              col.field != 'documentDate' &&
+              col.field != 'dueDate' &&
+              col.field != 'applicationDate' &&
+              col.field != 'paymentRelevantComment' &&
+              col.field != 'paymentRelevant'
+            ">
+            {{ row[col.field] }}
+          </span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-table #dtmaxb dataKey="id" [value]="filteredRed" *ngIf="displayData == 2" [resizableColumns]="true"
+    styleClass="p-datatable-gridlines" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
+    [reorderableColumns]="true">
+    
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+        <col *ngFor="let col of columns" [style]="{ width: (col.width ? col.width : 200) + 'px' }" />
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn class="p-text-{{ col.align }}"
+          *ngFor="let col of columns">
+          <span pTooltip="{{ col.header | translate }}">
+            {{ col.header | translate }}
+          </span>
+          <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+        </th>
+      </tr>
+      <!-- <tr>
+        <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
+          <input *ngIf="col.field != 'paymentRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
+            [style]="{ width: '90%' }" (input)="filterChange($any($event.target).value, col.field)"
+            class="filterInputCss" />
+        </th>
+      </tr> -->
+    </ng-template>
+    <ng-template pTemplate="body" let-row let-columns="columns">
+      <tr>
+        <td pReorderableRowHandle *ngFor="let col of columns" class="p-text-{{ col.align }}">
+          <span *ngIf="col.field == 'balance'">
+            {{ row.balance | currency: "EUR":"" }}
+          </span>
+          <span *ngIf="
+              col.field == 'documentDate' ||
+              col.field == 'dueDate' ||
+              col.field == 'applicationDate'
+            ">
+            {{ row[col.field] | date: "dd.MM.yyyy" }}
+          </span>
+          <span pTooltip="{{ row[col.field] }}" *ngIf="
+              col.field != 'balance' &&
+              col.field != 'documentDate' &&
+              col.field != 'dueDate' &&
+              col.field != 'applicationDate' &&
+              col.field != 'paymentRelevantComment' &&
+              col.field != 'paymentRelevant'
+            ">
+            {{ row[col.field] }}
+          </span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-table #dtmaxb dataKey="id" [value]="filteredGreen" *ngIf="displayData == 3" [resizableColumns]="true"
+    styleClass="p-datatable-gridlines" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
+    [reorderableColumns]="true">
+    
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+        <col *ngFor="let col of columns" [style]="{ width: (col.width ? col.width : 200) + 'px' }" />
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn class="p-text-{{ col.align }}"
+          *ngFor="let col of columns">
+          <span pTooltip="{{ col.header | translate }}">
+            {{ col.header | translate }}
+          </span>
+          <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+        </th>
+      </tr>
+      <!-- <tr>
+        <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
+          <input *ngIf="col.field != 'paymentRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
+            [style]="{ width: '90%' }" (input)="filterChange($any($event.target).value, col.field)"
+            class="filterInputCss" />
+        </th>
+      </tr> -->
+    </ng-template>
+    <ng-template pTemplate="body" let-row let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
+          <span *ngIf="col.field == 'balance'">
+            {{ row.balance | currency: "EUR":"" }}
+          </span>
+          <span *ngIf="
+              col.field == 'documentDate' ||
+              col.field == 'dueDate' ||
+              col.field == 'applicationDate'
+            ">
+            {{ row[col.field] | date: "dd.MM.yyyy" }}
+          </span>
+          <span pTooltip="{{ row[col.field] }}" *ngIf="
+              col.field != 'balance' &&
+              col.field != 'documentDate' &&
+              col.field != 'dueDate' &&
+              col.field != 'applicationDate' &&
+              col.field != 'paymentRelevantComment' &&
+              col.field != 'paymentRelevant'
+            ">
+            {{ row[col.field] }}
+          </span>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td [attr.colspan]="columns.length">No records found</td>
+      </tr>
+    </ng-template>
+  </p-table>

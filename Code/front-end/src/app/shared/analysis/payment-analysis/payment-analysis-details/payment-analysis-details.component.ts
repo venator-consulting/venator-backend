@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import {
@@ -63,7 +63,10 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   filtersNo: number = 0;
   totalCount: any;
   displayedDataCount: any;
+  selectedDate: any;
   // for pagination ends
+
+  @ViewChild('child') child: any;
 
   constructor(
     public _translateService: TranslateService,
@@ -674,4 +677,11 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     this.getAllByAccount();
   }
   // for pagination ends
+
+  selectBarData(e) {
+    let index = e?.element?._index;
+    this.selectedDate = this.labels[index];
+    this.child.updateData(this.selectedDate);
+  }
+
 }
