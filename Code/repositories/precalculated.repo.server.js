@@ -566,6 +566,7 @@ module.exports.storeDueDateAnalysis = async (orgId, prcId) => {
       AND UPPER(pos.accountType) = 'K'
       AND pos.accountNumber is not NULL
       AND pos.dueDate is not NULL 
+      AND pos.applicationDate is not NULL 
       AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
       ORDER BY pos.dueDate`;
 
