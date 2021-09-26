@@ -24,6 +24,7 @@ export class DueDateDetailsComponent implements OnInit {
   labels: any[] = new Array();
   docDateLabels: any[] = new Array();
   docDataTable: any[] = new Array();
+  filteredDataTable: any[] = new Array();
   data: any[] = new Array();
   docPositiveData: any[] = new Array();
   docNegativeData: any[] = new Array();
@@ -32,6 +33,7 @@ export class DueDateDetailsComponent implements OnInit {
   delayCols: TableColumn[];
   items: MenuItem[];
   home: MenuItem;
+  selectedDate: string;
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService, private _analysisService: AnalysisService,
     private _router: Router, private _route: ActivatedRoute) { }
@@ -193,6 +195,17 @@ export class DueDateDetailsComponent implements OnInit {
 
   backToPayment() {
     this._router.navigate(['/dashboard/analysis/due-date']);
+  }
+
+  selectBarData(e) {
+    debugger;
+    let index = e?.element?._index;
+    this.selectedDate = this.docDateLabels[index];
+    let startTemp = this.selectedDate.split('-');
+    let startDate = new Date(parseInt(startTemp[1]), parseInt(startTemp[0]) - 1, 1);
+    let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+    this.filteredDataTable = this.data.filter(row => (new Date(row.documentDate)).getTime() >= startDate.getTime() &&
+    (new Date(row.documentDate)).getTime() <= endDate.getTime());
   }
 
 }
