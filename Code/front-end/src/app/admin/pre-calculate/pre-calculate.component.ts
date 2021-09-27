@@ -21,6 +21,7 @@ export class PreCalculateComponent implements OnInit {
   disableText_account: boolean;
   disablePayment: boolean;
   disableDueDate: boolean;
+  disableDocType: boolean;
 
   constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService,
     private _procedureService: ProcedureService, private _translateService: TranslateService) { }
@@ -28,6 +29,7 @@ export class PreCalculateComponent implements OnInit {
   ngOnInit(): void {
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
+    this.disableDocType = (localStorage.getItem('currentProcedureDocType') !== 'true');
     this.procedureName = localStorage.getItem('currentProcedureName');
     this.disableAmount = (localStorage.getItem('currentProcedureAmount') === 'true');
     this.disableCredit = (localStorage.getItem('currentProcedureCredit') === 'true');

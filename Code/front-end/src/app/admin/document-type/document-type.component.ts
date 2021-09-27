@@ -92,6 +92,7 @@ export class DocumentTypeComponent implements OnInit {
       .updateNewDocType(this.selectedOrgId, this.selectedPrcId, row)
       .subscribe(res => {
         row.isEditable = false;
+        localStorage.setItem('currentProcedureDocType', 'true');
         let numOfRecords = res.length > 0 ? res[0] : 0;
         this.searching = false;
         this._messageService.add({

@@ -41,11 +41,7 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys, criteria) => {
             AND (year(p.documentDate) <> year(p.dueDate) OR p.applicationDate is null OR 
                 (year(p.documentDate) = year(p.dueDate) AND month(p.documentDate) <> month(p.dueDate)))
             AND (UPPER(p.documentTypeNewName) = 'RECHNUNG'
-                OR UPPER(p.documentTypeNewName) = 'ZAHLUNG'
-                OR UPPER(p.documentType) = 'KZ'
-                OR UPPER(p.documentType) = 'ZP'
-                OR UPPER(p.documentType) = 'RE'
-                OR UPPER(p.documentType) = 'KR'))`;
+                OR UPPER(p.documentTypeNewName) = 'ZAHLUNG'))`;
 
   query += ")";
   if (criteria.accountNumber) {
@@ -144,11 +140,7 @@ module.exports.creditorAnalysisDetails = async (
                     AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
                         (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                     AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
-                        OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
-                        OR UPPER(pos.documentType) = 'KZ'
-                        OR UPPER(pos.documentType) = 'ZP'
-                        OR UPPER(pos.documentType) = 'RE'
-                        OR UPPER(pos.documentType) = 'KR')
+                        OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG')
                 GROUP BY pos.accountNumber , pos.accountName`;
   /**
    * Payment records ends

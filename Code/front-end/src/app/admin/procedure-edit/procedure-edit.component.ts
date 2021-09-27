@@ -56,6 +56,7 @@ export class ProcedureEditComponent implements OnInit {
         localStorage.setItem('currentProcedureText_account', '' + this.procedureModel.text_account);
         localStorage.setItem('currentProcedureDueDate', '' + this.procedureModel.due_date);
         localStorage.setItem('currentProcedureLiquidity', '' + this.procedureModel.liquidity);
+        localStorage.setItem('currentProcedureDocType', '' + this.procedureModel.docType);
         localStorage.setItem('currentProcedureData', '' + this.procedureModel.data);
         localStorage.setItem('currentProcedureAnalysis', '' + this.procedureModel.analysis);
         this._procedureService.update(this.procedureModel)

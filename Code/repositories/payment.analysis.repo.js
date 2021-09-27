@@ -16,11 +16,7 @@ module.exports.paymentDateRange = async (orgId, prcId) => {
                         AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
                             (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
-                            OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
-                            OR UPPER(pos.documentType) = 'KZ'
-                            OR UPPER(pos.documentType) = 'ZP'
-                            OR UPPER(pos.documentType) = 'RE'
-                            OR UPPER(pos.documentType) = 'KR')`;
+                            OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG')`;
 
   const result = await sequelize.query(query, {
     replacements: {
@@ -115,11 +111,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
                         AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
                         (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
-                            OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
-                            OR UPPER(pos.documentType) = 'KZ'
-                            OR UPPER(pos.documentType) = 'ZP'
-                            OR UPPER(pos.documentType) = 'RE'
-                            OR UPPER(pos.documentType) = 'KR')`;
+                            OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG')`;
 
   const str = connection.getConnection().query(query).stream();
 
@@ -508,11 +500,7 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
                         AND (year(pos.documentDate) <> year(pos.applicationDate) OR  pos.applicationDate is null OR 
                         (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
-                            OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG'
-                            OR UPPER(pos.documentType) = 'KZ'
-                            OR UPPER(pos.documentType) = 'ZP'
-                            OR UPPER(pos.documentType) = 'RE'
-                            OR UPPER(pos.documentType) = 'KR')`;
+                            OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG')`;
 
   const str = connection.getConnection().query(query).stream();
 

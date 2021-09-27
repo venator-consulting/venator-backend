@@ -13,9 +13,7 @@ module.exports.dueDateRange = async (orgId, prcId) => {
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.dueDate is not NULL 
-                        AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
-                            OR UPPER(pos.documentType) = 'RE'
-                            OR UPPER(pos.documentType) = 'KR')`;
+                        AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')`;
 
   const result = await sequelize.query(query, {
     replacements: {
@@ -123,9 +121,10 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.dueDate is not NULL 
-                        AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
-                            OR UPPER(pos.documentType) = 'RE'
-                            OR UPPER(pos.documentType) = 'KR')
+                        AND pos.applicationDate is not NULL 
+                        AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
+                            (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
+                        AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
                         ORDER BY pos.dueDate`;
 
   const str = connection.query(query).stream();
@@ -134,13 +133,13 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
     // too early or too late records
     if (row.applicationDate) {
       const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
-      const rowindex = getNumberOfDays(fromDate, row.dueDate);
+      const rowindex = getNumberOfDays(fromDate, row.applicationDate);
       diffData[rowindex] = diffData[rowindex]
         ? diffData[rowindex] + rowDiff
         : rowDiff;
       firstChartLabels[rowindex] = firstChartLabels[rowindex]
         ? firstChartLabels[rowindex]
-        : row.dueDate.toLocaleDateString("de-DE", {
+        : row.applicationDate.toLocaleDateString("de-DE", {
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
@@ -267,13 +266,13 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
     // too early or too late records
     if (row.applicationDate) {
       const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
-      const rowindex = getNumberOfDays(fromDate, row.dueDate);
+      const rowindex = getNumberOfDays(fromDate, row.applicationDate);
       diffData[rowindex] = diffData[rowindex]
         ? diffData[rowindex] + rowDiff
         : rowDiff;
       firstChartLabels[rowindex] = firstChartLabels[rowindex]
         ? firstChartLabels[rowindex]
-        : row.dueDate.toLocaleDateString("de-DE", {
+        : row.applicationDate.toLocaleDateString("de-DE", {
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
@@ -399,12 +398,12 @@ module.exports.dueDateAnalysisDetails = async (
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.dueDate is not NULL 
-                        AND pos.applicationDate is not null
+                        AND pos.applicationDate is not null 
+                        AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
+                            (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND pos.applicationDate > pos.dueDate
                         AND pos.accountNumber = ${accountNumber}
-                        AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
-                            OR UPPER(pos.documentType) = 'RE'
-                            OR UPPER(pos.documentType) = 'KR')
+                        AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
                         ORDER BY pos.dueDate`;
 
   const str = connection.query(query).stream();

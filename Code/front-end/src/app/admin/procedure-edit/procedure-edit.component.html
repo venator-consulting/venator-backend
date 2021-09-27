@@ -83,6 +83,14 @@
                 </div>
             </div> 
 
+            <div class="p-field p-grid" *ngIf="role ==='Admin'">
+                <label for="docType" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.docType' | translate}} </label>
+                <div class="p-col-12 p-md-10 p-field-checkbox">
+                    <i *ngIf="!procedureModel.docType" class="pi pi-times closeIcon"></i>
+                    <p-checkbox *ngIf="procedureModel.docType" name="docType" binary="true" [(ngModel)]="procedureModel.docType" inputId="docType" [value]="procedureModel.docType"></p-checkbox>
+                </div>
+            </div> 
+
 
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <div class="p-xs-col-5  p-mr-4">

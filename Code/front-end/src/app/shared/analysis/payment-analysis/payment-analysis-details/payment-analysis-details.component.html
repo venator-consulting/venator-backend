@@ -11,10 +11,26 @@
 <div class="p-grid">
   <div class="p-col-12">
     <div class="card">
-      <p-chart type="bar" height="450" [data]="basicData" [options]="basicOptions" *ngIf="!waiting">
+      <p-chart type="bar" height="450" [data]="basicData" [options]="basicOptions" *ngIf="!waiting"
+        (onDataSelect)="selectBarData($event)">
       </p-chart>
     </div>
   </div>
+  </div>
+  <div class="p-grid">
+    <div class="p-col-7" *ngIf="selectedDate">
+      <h2 class="p-text-right">{{ selectedDate }}</h2>
+    </div>
+    <div class="p-col-5 p-text-right" *ngIf="selectedDate">
+      <button type="button" pButton pRipple label="All" icon="pi pi-times" class="p-button-rounded p-button-warning"
+        (click)="selectedDate = null" pTooltip="All" tooltipPosition="bottom" style="margin-top: 20px;"></button>
+    </div>
+    <div class="p-col-12">
+      <app-payment-details-month  [hidden]="!selectedDate" [month]="selectedDate" [blue]="blueData" [red]="redData" [green]="greenData" #child>
+      </app-payment-details-month>
+    </div>
+  </div>
+  <div class="p-grid" *ngIf="!selectedDate" >
   <div class="p-col-12">
     <span class="p-text-center">
       <p-selectButton [options]="detailsOptions" (onChange)="changeData($event.value)" optionLabel="name"

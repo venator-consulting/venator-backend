@@ -54,6 +54,10 @@ const Procedures = sequelizer.define('Procedures', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
+    docType: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
     due_date: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
