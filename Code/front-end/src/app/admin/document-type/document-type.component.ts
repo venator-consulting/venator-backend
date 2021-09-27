@@ -93,12 +93,15 @@ export class DocumentTypeComponent implements OnInit {
       .subscribe(res => {
         if(res == 1) localStorage.setItem('currentProcedureDocType', 'true');
         else if(res == 0) {
-          localStorage.setItem('currentProcedureDueDate', 'false');
-          localStorage.setItem('currentProcedurePayment', 'false');
-          localStorage.setItem('currentProcedureCredit', 'false');
-          localStorage.setItem('currentProcedureDocType', 'false');
-          let prcStatus = localStorage.getItem('currentProcedureStatus');
-          if(prcStatus === 'CALCULATED') localStorage.setItem('currentProcedureStatus', 'PARTIAL_CALCULATED');
+          let currentPrcID = localStorage.getItem('currentProcedureId');
+          if(this.selectedPrcId == +currentPrcID) {
+            localStorage.setItem('currentProcedureDueDate', 'false');
+            localStorage.setItem('currentProcedurePayment', 'false');
+            localStorage.setItem('currentProcedureCredit', 'false');
+            localStorage.setItem('currentProcedureDocType', 'false');
+            let prcStatus = localStorage.getItem('currentProcedureStatus');
+            if(prcStatus === 'CALCULATED') localStorage.setItem('currentProcedureStatus', 'PARTIAL_CALCULATED');
+          }
         }
         row.isEditable = false;
         localStorage.setItem('currentProcedureDocType', 'true');
