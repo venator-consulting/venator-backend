@@ -91,6 +91,15 @@ export class DocumentTypeComponent implements OnInit {
     this._docTypesService
       .updateNewDocType(this.selectedOrgId, this.selectedPrcId, row)
       .subscribe(res => {
+        if(res == 1) localStorage.setItem('currentProcedureDocType', 'true');
+        else if(res == 0) {
+          localStorage.setItem('currentProcedureDueDate', 'false');
+          localStorage.setItem('currentProcedurePayment', 'false');
+          localStorage.setItem('currentProcedureCredit', 'false');
+          localStorage.setItem('currentProcedureDocType', 'false');
+          let prcStatus = localStorage.getItem('currentProcedureStatus');
+          if(prcStatus === 'CALCULATED') localStorage.setItem('currentProcedureStatus', 'PARTIAL_CALCULATED');
+        }
         row.isEditable = false;
         localStorage.setItem('currentProcedureDocType', 'true');
         let numOfRecords = res.length > 0 ? res[0] : 0;
