@@ -126,12 +126,8 @@ module.exports.updateDocTypeNew = async (
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(procedureId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-  await Procedure.getProcedures().update({ docType: true }, {
-    where: {
-      id: procedureId,
-    },
-  });
-  return await Posting.getPosting("posting_" + organisationId).update(
+  // update the value
+  await Posting.getPosting("posting_" + organisationId).update(
     {
       documentTypeNewId: documentTypeNewId,
       documentTypeNewName: documentTypeNewName,
@@ -141,8 +137,37 @@ module.exports.updateDocTypeNew = async (
         procedureId: procedureId,
         documentType: documentType,
       },
+    });
+  // get document types new ffor this procedure
+  let result = await Posting.getPosting("posting_" + organisationId).findOne({
+    where: {
+      procedureId: procedureId,
+      documentTypeNewName: {
+        [Op.ne]: null
+      },
+      documentTypeNewName: {
+        [Op.ne]: 'null'
+      }
     }
-  );
+  });
+  // if there is none set it to false and return 0
+  if (!result) {
+    await Procedure.getProcedures().update({ docType: false, payment: false, due_date: false, credit: false }, {
+      where: {
+        id: procedureId,
+      },
+    });
+    return 0;
+  } else {
+    // else set docType to true and return 1
+    await Procedure.getProcedures().update({ docType: true }, {
+      where: {
+        id: procedureId,
+      },
+    });
+    return 1;
+  }
+
 };
 
 module.exports.updateAccountTypeNew = async (
