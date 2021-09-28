@@ -39,7 +39,7 @@ function getNumberOfDays(start, end) {
   const diffInTime = end.getTime() - start.getTime();
 
   // Calculating the no. of days between two dates
-  const diffInDays = Math.round(diffInTime / oneDay);
+  const diffInDays = Math.ceil(diffInTime / oneDay);
 
   return diffInDays;
 }

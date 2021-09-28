@@ -87,6 +87,16 @@ export class DueDateComponent implements OnInit {
               fill: false,
             });
             this.secondChartOptions = {
+              tooltips: {
+                callbacks: {
+                  label: (tooltipItem, data) => {
+                    // debugger;
+                    let value = tooltipItem.value;
+                    let label = this.labels[tooltipItem.datasetIndex];
+                    return label + ': ' + value;
+                  },
+                },
+              },
               scales: {
                 yAxes: [{
                   stacked: true,
@@ -96,11 +106,20 @@ export class DueDateComponent implements OnInit {
                   }
                 }],
                 xAxes: [{
-                  // stacked: true,
+                  stacked: true,
                   gridLines: {
                     display: true,
                     color: "rgba(255,99,132,0.2)"
-                  }
+                  },
+                  ticks: {
+                    minRotation: 40,
+                    maxRotation: 90,
+                    // callback: (label, index, values) => {
+                    //   // debugger;
+                    //   label = this.labels[index];
+                    //   return label;
+                    // },
+                  },
                 }]
               },
             };
@@ -114,7 +133,7 @@ export class DueDateComponent implements OnInit {
               }]
             };
 
-            
+
             // this.chart.refresh();
             // this.chart.reinit();
             this.docDataTable = res.data.docDateReference;

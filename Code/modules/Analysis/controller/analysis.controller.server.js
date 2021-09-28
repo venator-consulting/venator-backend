@@ -293,7 +293,7 @@ module.exports.dueDateAnalysis = async (req, res) => {
     maxappdate = dateRange[0].maxdate;
   }
 
-  dueDateAnalysisRepo.dueDateAnalysis(
+  dueDateAnalysisRepo.dueDateAnalysisCalc(
     req.params.orgId,
     req.params.prcId,
     fromDate,
