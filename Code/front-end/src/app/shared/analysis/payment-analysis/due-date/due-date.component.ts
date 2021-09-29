@@ -74,7 +74,7 @@ export class DueDateComponent implements OnInit {
             this.data = res.data.dueDateReference.data;
             this.labels = res.data.dueDateReference.labels;
             // this.secondChartData = res.data.dueDateReference.recordsDelay;
-            // this.secondChartLabels = res.data.dueDateReference.recordsDelayLabels;
+            this.secondChartLabels = res.data.dueDateReference.secondChartLabels;
             this.waiting = false;
             this.basicData = {
               labels: this.labels,
@@ -90,9 +90,9 @@ export class DueDateComponent implements OnInit {
               tooltips: {
                 callbacks: {
                   label: (tooltipItem, data) => {
-                    // debugger;
+                    debugger;
                     let value = tooltipItem.value;
-                    let label = this.labels[tooltipItem.datasetIndex];
+                    let label = this.secondChartLabels[tooltipItem.index];
                     return label + ': ' + value;
                   },
                 },
@@ -124,7 +124,7 @@ export class DueDateComponent implements OnInit {
               },
             };
             this.secondChartData = {
-              labels: this.labels,
+              // labels: this.labels,
               datasets: [{
                 label: 'records',
                 borderColor: `rgb(100,100,255)`,
