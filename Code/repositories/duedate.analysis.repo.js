@@ -5,7 +5,7 @@ const sequelize = Sequelize.getSequelize();
 const errors = require('../models/enums/errors');
 
 module.exports.dueDateRange = async (orgId, prcId) => {
-  let query = `SELECT MIN(pos.dueDate) mindate , MAX(pos.dueDate) maxdate,
+  let query = `SELECT MIN(pos.applicationDate) mindate , MAX(pos.applicationDate) maxdate,
                          MIN(pos.documentDate) mindocdate , MAX(pos.applicationDate) maxappdate
                     FROM posting_${orgId} pos
                     WHERE
@@ -13,6 +13,7 @@ module.exports.dueDateRange = async (orgId, prcId) => {
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.dueDate is not NULL 
+                        AND pos.applicationDate is not NULL 
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')`;
 
   const result = await sequelize.query(query, {
@@ -25,7 +26,7 @@ module.exports.dueDateRange = async (orgId, prcId) => {
 };
 
 module.exports.dueDateRangeCalc = async (orgId, prcId) => {
-  let query = `SELECT MIN(pos.dueDate) mindate , MAX(pos.dueDate) maxdate,
+  let query = `SELECT MIN(pos.applicationDate) mindate , MAX(pos.applicationDate) maxdate,
                          MIN(pos.documentDate) mindocdate , MAX(pos.applicationDate) maxappdate
                     FROM due_date_analysis_${orgId} pos
                     WHERE
