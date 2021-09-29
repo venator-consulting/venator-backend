@@ -54,7 +54,7 @@ function getNumberOfDays(start, end) {
   const diffInTime = end.getTime() - start.getTime();
 
   // Calculating the no. of days between two dates
-  const diffInDays = Math.round(diffInTime / oneDay);
+  const diffInDays = Math.ceil(diffInTime / oneDay);
 
   return diffInDays;
 }
@@ -102,11 +102,14 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
 
   let diffData = new Array();
   let firstChartLabels = new Array();
+  let recordsCountPerDay = new Array();
+  let recordsDelay = new Array();
 
   const finalResult = {
     dueDateReference: {
       data: diffData,
       labels: firstChartLabels,
+      recordsDelay: recordsDelay,
     },
     docDateReference: res,
   };
@@ -134,9 +137,17 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
     if (row.applicationDate) {
       const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
       const rowindex = getNumberOfDays(fromDate, row.applicationDate);
-      diffData[rowindex] = diffData[rowindex]
-        ? diffData[rowindex] + rowDiff
-        : rowDiff;
+      recordsCountPerDay[rowindex] = recordsCountPerDay[rowindex] ? recordsCountPerDay[rowindex] + 1 : 1;
+      diffData[rowindex] = diffData[rowindex] ? diffData[rowindex] + rowDiff : rowDiff;
+      recordsDelay.push({
+        x: rowindex,
+        y: rowDiff,
+        label: row.applicationDate.toLocaleDateString("de-DE", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+      });
       firstChartLabels[rowindex] = firstChartLabels[rowindex]
         ? firstChartLabels[rowindex]
         : row.applicationDate.toLocaleDateString("de-DE", {
@@ -145,9 +156,7 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
           day: "2-digit",
         });
 
-      const i = dueDateRefAccounts.findIndex(
-        (x) => x.accountNumber == row.accountNumber
-      );
+      const i = dueDateRefAccounts.findIndex((x) => x.accountNumber == row.accountNumber);
       if (i == -1) {
         if (rowDiff > 0) {
           dueDateRefAccounts.push({
@@ -156,6 +165,8 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
             delayPos: rowDiff,
             delayNeg: 0,
             count: 1,
+            posCount: 1,
+            negCount: 0
           });
         } else {
           dueDateRefAccounts.push({
@@ -164,13 +175,17 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
             delayPos: 0,
             delayNeg: rowDiff,
             count: 1,
+            posCount: 0,
+            negCount: 1
           });
         }
       } else {
         dueDateRefAccounts[i].count++;
         if (rowDiff > 0) {
+          dueDateRefAccounts[i].posCount++;
           dueDateRefAccounts[i].delayPos += +rowDiff;
         } else {
+          dueDateRefAccounts[i].negCount++;
           dueDateRefAccounts[i].delayNeg += +rowDiff;
         }
       }
@@ -200,8 +215,35 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
   }); // end of on data
 
   str.on("end", async () => {
+    for (let index = 0; index < diffData.length; index++) {
+      if (diffData[index] && recordsCountPerDay[index]) diffData[index] = Math.ceil(diffData[index] / recordsCountPerDay[index]);
+    }
+    dueDateRefAccounts = dueDateRefAccounts.map(account => {
+      return {
+        accountNumber: account.accountNumber,
+        accountName: account.accountName,
+        delayPosTotal: account.delayPos,
+        delayNegTotal: account.delayNeg,
+        delayPos: account.posCount ? Math.ceil(account.delayPos / account.posCount) : 0,
+        delayNeg: account.negCount ? Math.ceil(account.delayNeg / account.negCount) : 0,
+        count: account.count,
+        posCount: account.posCount,
+        negCount: account.negCount
+      };
+    });
+    firstChartLabels = firstChartLabels.filter(Boolean);
+    recordsDelay = recordsDelay.filter(Boolean);
+    recordsDelay = recordsDelay.map(rec => {
+      let x = firstChartLabels.findIndex(value => value == rec.label);
+      return {
+        x: x,
+        y: rec.y,
+        label: rec.label
+      }
+    });
     finalResult.dueDateReference.data = diffData.filter(Boolean);
-    finalResult.dueDateReference.labels = firstChartLabels.filter(Boolean);
+    finalResult.dueDateReference.labels = firstChartLabels;
+    finalResult.dueDateReference.recordsDelay = recordsDelay;
     finalResult.docDateReference = res;
     finalResult.dueDateRefAccounts = dueDateRefAccounts;
     cb(finalResult);
@@ -243,11 +285,14 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
 
   let diffData = new Array();
   let firstChartLabels = new Array();
+  let recordsCountPerDay = new Array();
+  let recordsDelay = new Array();
 
   const finalResult = {
     dueDateReference: {
       data: diffData,
       labels: firstChartLabels,
+      recordsDelay: recordsDelay,
     },
     docDateReference: res,
   };
@@ -267,9 +312,17 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
     if (row.applicationDate) {
       const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
       const rowindex = getNumberOfDays(fromDate, row.applicationDate);
-      diffData[rowindex] = diffData[rowindex]
-        ? diffData[rowindex] + rowDiff
-        : rowDiff;
+      recordsCountPerDay[rowindex] = recordsCountPerDay[rowindex] ? recordsCountPerDay[rowindex] + 1 : 1;
+      diffData[rowindex] = diffData[rowindex] ? diffData[rowindex] + rowDiff : rowDiff;
+      recordsDelay.push({
+        x: rowindex,
+        y: rowDiff,
+        label: row.applicationDate.toLocaleDateString("de-DE", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+      });
       firstChartLabels[rowindex] = firstChartLabels[rowindex]
         ? firstChartLabels[rowindex]
         : row.applicationDate.toLocaleDateString("de-DE", {
@@ -289,6 +342,8 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
             delayPos: rowDiff,
             delayNeg: 0,
             count: 1,
+            posCount: 1,
+            negCount: 0
           });
         } else {
           dueDateRefAccounts.push({
@@ -297,13 +352,17 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
             delayPos: 0,
             delayNeg: rowDiff,
             count: 1,
+            posCount: 0,
+            negCount: 1
           });
         }
       } else {
         dueDateRefAccounts[i].count++;
         if (rowDiff > 0) {
+          dueDateRefAccounts[i].posCount++;
           dueDateRefAccounts[i].delayPos += +rowDiff;
         } else {
+          dueDateRefAccounts[i].negCount++;
           dueDateRefAccounts[i].delayNeg += +rowDiff;
         }
       }
@@ -333,8 +392,35 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
   }); // end of on data
 
   str.on("end", async () => {
+    for (let index = 0; index < diffData.length; index++) {
+      if (diffData[index] && recordsCountPerDay[index]) diffData[index] = Math.ceil(diffData[index] / recordsCountPerDay[index]);
+    }
+    dueDateRefAccounts = dueDateRefAccounts.map(account => {
+      return {
+        accountNumber: account.accountNumber,
+        accountName: account.accountName,
+        delayPosTotal: account.delayPos,
+        delayNegTotal: account.delayNeg,
+        delayPos: account.posCount ? Math.ceil(account.delayPos / account.posCount) : 0,
+        delayNeg: account.negCount ? Math.ceil(account.delayNeg / account.negCount) : 0,
+        count: account.count,
+        posCount: account.posCount,
+        negCount: account.negCount
+      };
+    });
+    firstChartLabels = firstChartLabels.filter(Boolean);
+    recordsDelay = recordsDelay.filter(Boolean);
+    recordsDelay = recordsDelay.map(rec => {
+      let x = firstChartLabels.findIndex(value => value == rec.label);
+      return {
+        x: x,
+        y: rec.y,
+        label: rec.label
+      }
+    });
     finalResult.dueDateReference.data = diffData.filter(Boolean);
-    finalResult.dueDateReference.labels = firstChartLabels.filter(Boolean);
+    finalResult.dueDateReference.labels = firstChartLabels;
+    finalResult.dueDateReference.recordsDelay = recordsDelay;
     finalResult.docDateReference = res;
     finalResult.dueDateRefAccounts = dueDateRefAccounts;
     cb(finalResult);
@@ -370,7 +456,9 @@ module.exports.dueDateAnalysisDetails = async (
       monthName: starterMonth,
       yearName: starterYear,
       positive: 0,
+      positiveCount: 0,
       negative: 0,
+      negativeCount: 0,
       notPaid: 0,
     };
     res.push(element);
@@ -414,12 +502,14 @@ module.exports.dueDateAnalysisDetails = async (
     const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
     records.push(row);
     for (const element of res) {
-      if (
-        row.documentDate.getMonth() == element.monthName - 1 &&
-        row.documentDate.getFullYear() == element.yearName
-      ) {
-        element.positive += rowDiff > 0 ? rowDiff : 0;
-        element.negative += rowDiff < 0 ? rowDiff : 0;
+      if (row.documentDate.getMonth() == element.monthName - 1 && row.documentDate.getFullYear() == element.yearName) {
+        if (rowDiff > 0) {
+          element.positive += rowDiff;
+          element.positiveCount++;
+        } else if (rowDiff < 0) {
+          element.negative += rowDiff;
+          element.negativeCount++;
+        }
         continue;
       }
     }
@@ -435,6 +525,19 @@ module.exports.dueDateAnalysisDetails = async (
   }); // end of on data
 
   str.on("end", async () => {
+    res = res.map(month => {
+      return {
+        monthName: month.monthName,
+        yearName: month.yearName,
+        positiveTotal: month.positive,
+        positive: month.positiveCount ? Math.ceil(month.positive / month.positiveCount) : 0,
+        positiveCount: month.positiveCount,
+        negativeTotal: month.negative,
+        negative: month.negativeCount ? Math.ceil(month.negative / month.negativeCount) : 0,
+        negativeCount: month.negativeCount,
+        notPaid: month.notPaid,
+      }
+    });
     finalResult.docDateReference = res;
     finalResult.records = records;
     cb(finalResult);

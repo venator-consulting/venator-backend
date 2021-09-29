@@ -19,21 +19,24 @@ export class DueDateComponent implements OnInit {
   basicData: any;
   labels: any[] = new Array();
   docDateOptions: any;
-  docDateData: any;
-  docDateLabels: any[] = new Array();
-  docPositiveData: any[] = new Array();
-  docNegativeData: any[] = new Array();
+  // docDateData: any;
+  // docDateLabels: any[] = new Array();
+  // docPositiveData: any[] = new Array();
+  // docNegativeData: any[] = new Array();
   docData: any[] = new Array();
   docDataTable: any[] = new Array();
-  notPaidLabels: any[] = new Array();
-  notPaidData: any[] = new Array();
+  // notPaidLabels: any[] = new Array();
+  // notPaidData: any[] = new Array();
   // notPaidDataTable: any[] = new Array();
-  notPaidChartData: any;
+  // notPaidChartData: any;
+  secondChartData: any;
+  secondChartLabels: any[] = new Array();
+  secondChartOptions: any;
 
   data: any[] = new Array();
   @ViewChild('chart') chart: any;
   // docCols: { header: string; field: string; }[];
-  notPaidCols: TableColumn[];
+  // notPaidCols: TableColumn[];
   delayCols: TableColumn[];
   delayData: any;
   items: MenuItem[];
@@ -44,7 +47,7 @@ export class DueDateComponent implements OnInit {
     private _messageService: MessageService,
     private _analysisService: AnalysisService,
     private _router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.selectedOrganisation = +localStorage.getItem('organisationId');
@@ -70,6 +73,8 @@ export class DueDateComponent implements OnInit {
             // debugger;
             this.data = res.data.dueDateReference.data;
             this.labels = res.data.dueDateReference.labels;
+            // this.secondChartData = res.data.dueDateReference.recordsDelay;
+            // this.secondChartLabels = res.data.dueDateReference.recordsDelayLabels;
             this.waiting = false;
             this.basicData = {
               labels: this.labels,
@@ -81,6 +86,54 @@ export class DueDateComponent implements OnInit {
               data: this.data,
               fill: false,
             });
+            this.secondChartOptions = {
+              tooltips: {
+                callbacks: {
+                  label: (tooltipItem, data) => {
+                    // debugger;
+                    let value = tooltipItem.value;
+                    let label = this.labels[tooltipItem.datasetIndex];
+                    return label + ': ' + value;
+                  },
+                },
+              },
+              scales: {
+                yAxes: [{
+                  stacked: true,
+                  gridLines: {
+                    display: true,
+                    color: "rgba(255,99,132,0.2)"
+                  }
+                }],
+                xAxes: [{
+                  stacked: true,
+                  gridLines: {
+                    display: true,
+                    color: "rgba(255,99,132,0.2)"
+                  },
+                  ticks: {
+                    minRotation: 40,
+                    maxRotation: 90,
+                    // callback: (label, index, values) => {
+                    //   // debugger;
+                    //   label = this.labels[index];
+                    //   return label;
+                    // },
+                  },
+                }]
+              },
+            };
+            this.secondChartData = {
+              labels: this.labels,
+              datasets: [{
+                label: 'records',
+                borderColor: `rgb(100,100,255)`,
+                data: res.data.dueDateReference.recordsDelay,
+                fill: false,
+              }]
+            };
+
+
             // this.chart.refresh();
             // this.chart.reinit();
             this.docDataTable = res.data.docDateReference;
@@ -94,68 +147,64 @@ export class DueDateComponent implements OnInit {
                 : accountNumber;
             });
 
-            this.docDataTable.forEach((element) => {
-              this.docDateLabels.push(
-                element.monthName + '-' + element.yearName
-              );
-              this.notPaidLabels.push(
-                element.monthName + '-' + element.yearName
-              );
-              this.docPositiveData.push(element.positive);
-              this.docNegativeData.push(element.negative);
-              this.docData.push(+element.positive + +element.negative);
-              this.notPaidData.push(+element.notPaid);
-            });
+            // this.docDataTable.forEach((element) => {
+            //   this.docDateLabels.push(
+            //     element.monthName + '-' + element.yearName
+            //   );
+            //   this.notPaidLabels.push(
+            //     element.monthName + '-' + element.yearName
+            //   );
+            //   this.docPositiveData.push(element.positive);
+            //   this.docNegativeData.push(element.negative);
+            //   this.docData.push(+element.positive + +element.negative);
+            //   this.notPaidData.push(+element.notPaid);
+            // });
 
-            this.docDateData = {
-              labels: this.docDateLabels,
-              datasets: [
-                {
-                  type: 'line',
-                  label: elem.average,
-                  borderColor: '#42A5F5',
-                  borderWidth: 2,
-                  fill: false,
-                  data: this.docData,
-                },
-                {
-                  type: 'bar',
-                  label: elem.positive,
-                  backgroundColor: '#F5B59B',
-                  data: this.docPositiveData,
-                  borderColor: '#E5A58B',
-                  borderWidth: 2,
-                },
-                {
-                  type: 'bar',
-                  label: elem.negative,
-                  backgroundColor: '#FFD795',
-                  borderColor: '#EFC785',
-                  data: this.docNegativeData,
-                },
-              ],
-            };
+            // this.docDateData = {
+            //   labels: this.docDateLabels,
+            //   datasets: [
+            //     {
+            //       type: 'line',
+            //       label: elem.average,
+            //       borderColor: '#42A5F5',
+            //       borderWidth: 2,
+            //       fill: false,
+            //       data: this.docData,
+            //     },
+            //     {
+            //       type: 'bar',
+            //       label: elem.positive,
+            //       backgroundColor: '#F5B59B',
+            //       data: this.docPositiveData,
+            //       borderColor: '#E5A58B',
+            //       borderWidth: 2,
+            //     },
+            //     {
+            //       type: 'bar',
+            //       label: elem.negative,
+            //       backgroundColor: '#FFD795',
+            //       borderColor: '#EFC785',
+            //       data: this.docNegativeData,
+            //     },
+            //   ],
+            // };
 
-            this.notPaidChartData = {
-              labels: this.notPaidLabels,
-              datasets: [
-                {
-                  label: elem.notPaid,
-                  backgroundColor: '#42A5F5',
-                  data: this.notPaidData,
-                },
-              ],
-            };
+            // this.notPaidChartData = {
+            //   labels: this.notPaidLabels,
+            //   datasets: [
+            //     {
+            //       label: elem.notPaid,
+            //       backgroundColor: '#42A5F5',
+            //       data: this.notPaidData,
+            //     },
+            //   ],
+            // };
           },
           (er) => {
             this.waiting = false;
           }
         );
     });
-    this.basicData = {
-      labels: this.labels,
-      datasets: new Array(),
-    };
 
     this.basicOptions = {
       scales: {
@@ -178,6 +227,8 @@ export class DueDateComponent implements OnInit {
         ],
       },
     };
+
+
 
     this.waiting = true;
 
@@ -209,19 +260,19 @@ export class DueDateComponent implements OnInit {
       },
     ];
 
-    this.notPaidCols = [
-      {
-        header: 'DueDateAnalysis.date',
-        field: 'date',
-        align: 'center',
-      },
-      {
-        header: 'DueDateAnalysis.notPaid',
-        field: 'notPaid',
-        align: 'center',
-      },
-    ];
-  }
+    // this.notPaidCols = [
+    //   {
+    //     header: 'DueDateAnalysis.date',
+    //     field: 'date',
+    //     align: 'center',
+    //   },
+    //   {
+    //     header: 'DueDateAnalysis.notPaid',
+    //     field: 'notPaid',
+    //     align: 'center',
+    //   },
+    // ];
+  } // end of ng on init
 
   backToPayment() {
     this._router.navigate(['/dashboard/analysis/payment/']);
