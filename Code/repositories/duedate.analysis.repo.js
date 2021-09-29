@@ -287,12 +287,14 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
   let firstChartLabels = new Array();
   let recordsCountPerDay = new Array();
   let recordsDelay = new Array();
+  let secondChartLabels = new Array();
 
   const finalResult = {
     dueDateReference: {
       data: diffData,
       labels: firstChartLabels,
       recordsDelay: recordsDelay,
+      secondChartLabels: secondChartLabels
     },
     docDateReference: res,
   };
@@ -410,7 +412,9 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
     });
     firstChartLabels = firstChartLabels.filter(Boolean);
     recordsDelay = recordsDelay.filter(Boolean);
+    
     recordsDelay = recordsDelay.map(rec => {
+      secondChartLabels.push(rec.label);
       let x = firstChartLabels.findIndex(value => value == rec.label);
       return {
         x: x,
@@ -420,6 +424,7 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
     });
     finalResult.dueDateReference.data = diffData.filter(Boolean);
     finalResult.dueDateReference.labels = firstChartLabels;
+    finalResult.dueDateReference.secondChartLabels = secondChartLabels;
     finalResult.dueDateReference.recordsDelay = recordsDelay;
     finalResult.docDateReference = res;
     finalResult.dueDateRefAccounts = dueDateRefAccounts;

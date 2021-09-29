@@ -311,7 +311,7 @@ module.exports.dueDateAnalysis = async (req, res) => {
 };
 
 module.exports.dueDateDetailsAnalysis = async (req, res) => {
-  const dateRange = await dueDateAnalysisRepo.dueDateRange(
+  const dateRange = await dueDateAnalysisRepo.dueDateRangeCalc(
     +req.params.orgId,
     +req.params.prcId
   );
