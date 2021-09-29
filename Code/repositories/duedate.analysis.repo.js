@@ -128,7 +128,7 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
                         AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
                             (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
-                        ORDER BY pos.dueDate`;
+                        ORDER BY pos.applicationDate`;
 
   const str = connection.query(query).stream();
 
@@ -234,9 +234,9 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
     firstChartLabels = firstChartLabels.filter(Boolean);
     recordsDelay = recordsDelay.filter(Boolean);
     recordsDelay = recordsDelay.map(rec => {
-      let x = firstChartLabels.findIndex(value => value == rec.label);
+      // let x = firstChartLabels.findIndex(value => value == rec.label);
       return {
-        x: x,
+        x: rec.x,
         y: rec.y,
         label: rec.label
       }
@@ -305,7 +305,7 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
                     FROM due_date_analysis_${orgId} pos
                     WHERE
                         pos.procedureId = ${prcId}
-                        ORDER BY pos.dueDate`;
+                        ORDER BY pos.applicationDate`;
 
   const str = connection.query(query).stream();
 
@@ -415,9 +415,9 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
     
     recordsDelay = recordsDelay.map(rec => {
       secondChartLabels.push(rec.label);
-      let x = firstChartLabels.findIndex(value => value == rec.label);
+      // let x = firstChartLabels.findIndex(value => value == rec.label);
       return {
-        x: x,
+        x: rec.x,
         y: rec.y,
         label: rec.label
       }

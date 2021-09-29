@@ -41,6 +41,9 @@ export class DueDateComponent implements OnInit {
   delayData: any;
   items: MenuItem[];
   home: MenuItem;
+  maxDate: Date;
+  minDate: Date;
+  rangeDays: number;
 
   constructor(
     public _translateService: TranslateService,
@@ -75,6 +78,14 @@ export class DueDateComponent implements OnInit {
             this.labels = res.data.dueDateReference.labels;
             // this.secondChartData = res.data.dueDateReference.recordsDelay;
             this.secondChartLabels = res.data.dueDateReference.secondChartLabels;
+            this.minDate = new Date(res.dateRange[0].mindate);
+            let lastChartDateTemp = this.secondChartLabels[this.secondChartLabels.length - 1].split('.');
+            this.maxDate = new Date(lastChartDateTemp[2], lastChartDateTemp[1], lastChartDateTemp[0]);
+            this.maxDate.setMonth(this.maxDate.getMonth() +1);
+            // let firstChartDateTemp = this.secondChartLabels[0].split('.');
+            // this.minDate = new Date(firstChartDateTemp[2], firstChartDateTemp[1], firstChartDateTemp[0]);
+            // this.minDate.setMonth(this.minDate.getMonth() +1);
+            this.rangeDays = Math.ceil((this.maxDate.getTime() - this.minDate.getTime()) / (1000 * 60 * 60 * 24));
             this.waiting = false;
             this.basicData = {
               labels: this.labels,
@@ -90,7 +101,7 @@ export class DueDateComponent implements OnInit {
               tooltips: {
                 callbacks: {
                   label: (tooltipItem, data) => {
-                    debugger;
+                    // debugger;
                     let value = tooltipItem.value;
                     let label = this.secondChartLabels[tooltipItem.index];
                     return label + ': ' + value;
@@ -114,17 +125,24 @@ export class DueDateComponent implements OnInit {
                   ticks: {
                     minRotation: 40,
                     maxRotation: 90,
-                    // callback: (label, index, values) => {
-                    //   // debugger;
-                    //   label = this.labels[index];
-                    //   return label;
-                    // },
+                    callback: (label, index, values) => {
+                      debugger;
+                      // let temp = label * this.rangeDays / values.length;
+                      let tempDate = new Date(this.minDate);
+                      tempDate.setDate(tempDate.getDate() + label);
+                      label = tempDate.toLocaleString("de-DE", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      });
+                      return label;
+                    },
                   },
                 }]
               },
             };
             this.secondChartData = {
-              // labels: this.labels,
+              labels: this.labels,
               datasets: [{
                 label: 'records',
                 borderColor: `rgb(100,100,255)`,
