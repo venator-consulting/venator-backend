@@ -192,6 +192,22 @@ router.route("/:orgId/:prcId/payment/details-relevant/:accountNumber").get(
   analysisCtrl.paymentJustRelevant
 );
 
+router.route("/:orgId/:prcId/duedate/details/:accountNumber").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.dueDateDetailsAnalysis
+);
+
+router.route("/:orgId/:prcId/duedate/:fromDate/:toDate").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.dueDateAnalysis
+);
+
 router.route("/:orgId/:prcId/duedate").get(
   passport.authenticate("jwt", {
     session: false,
@@ -200,13 +216,7 @@ router.route("/:orgId/:prcId/duedate").get(
   analysisCtrl.dueDateAnalysis
 );
 
-router.route("/:orgId/:prcId/duedate/details/:accountNumber").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.dueDateDetailsAnalysis
-);
+
 
 router.route("/:orgId/:prcId/credtor").get(
   passport.authenticate("jwt", {
