@@ -492,7 +492,7 @@ module.exports.dueDateAnalysisDetails = async (
                         AND pos.applicationDate is not null 
                         AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
                             (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
-                        AND pos.applicationDate > pos.dueDate
+                        AND pos.applicationDate <> pos.dueDate
                         AND pos.accountNumber = ${accountNumber}
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
                         ORDER BY pos.dueDate`;
