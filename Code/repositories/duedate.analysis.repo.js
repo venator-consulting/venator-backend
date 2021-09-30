@@ -2,6 +2,8 @@ const connection = require("../config/mysql.config").getConnection();
 const { QueryTypes } = require("sequelize");
 const Sequelize = require("../config/sequelize.config");
 const sequelize = Sequelize.getSequelize();
+const Exception = require("../helpers/errorHandlers/Exception");
+const httpStatus = require("../models/enums/httpStatus");
 const errors = require('../models/enums/errors');
 
 module.exports.dueDateRange = async (orgId, prcId) => {
@@ -68,23 +70,18 @@ monthDiff = (d1, d2) => {
   return months <= 0 ? 0 : months;
 };
 
-module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
-  toDate, mindocdate, maxappdate, cb) => {
-  if (!fromDate) {
-    throw new Error("Due Date is null for this procedure!");
-  }
-  if (!toDate) {
-    throw new Error("Due Date is null for this procedure!");
-  }
-  if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
-    throw new Error("Due Date and ApplicationDate must be Date!");
-  }
+module.exports.dueDateAnalysis = async (orgId, prcId, mindate, maxappdate, cb) => {
+    
+    if (!(mindate instanceof Date) || !(maxappdate instanceof Date)) {
+      mindate = new Date(mindate);
+      maxappdate = new Date(maxappdate);
+    }
 
-  const diff = monthDiff(mindocdate, maxappdate);
+  const diff = monthDiff(mindate, maxappdate);
 
   let res = new Array();
-  let starterMonth = mindocdate.getMonth() + 1;
-  let starterYear = mindocdate.getFullYear();
+  let starterMonth = mindate.getMonth() + 1;
+  let starterYear = mindate.getFullYear();
   for (let index = 0; index <= diff; index++) {
     const element = {
       monthName: starterMonth,
@@ -126,6 +123,8 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
                         AND pos.accountNumber is not NULL
                         AND pos.dueDate is not NULL 
                         AND pos.applicationDate is not NULL 
+                        AND pos.applicationDate >= '${mindate.toISOString().split('T')[0]}'  
+                        AND pos.applicationDate <= '${maxappdate.toISOString().split('T')[0]}' 
                         AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
                             (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
@@ -137,7 +136,7 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
     // too early or too late records
     if (row.applicationDate) {
       const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
-      const rowindex = getNumberOfDays(fromDate, row.applicationDate);
+      const rowindex = getNumberOfDays(mindate, row.applicationDate);
       recordsCountPerDay[rowindex] = recordsCountPerDay[rowindex] ? recordsCountPerDay[rowindex] + 1 : 1;
       diffData[rowindex] = diffData[rowindex] ? diffData[rowindex] + rowDiff : rowDiff;
       recordsDelay.push({
@@ -251,23 +250,19 @@ module.exports.dueDateAnalysis = async (orgId, prcId, fromDate,
   });
 };
 
-module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
-  toDate, mindocdate, maxappdate, cb) => {
-  if (!fromDate) {
-    throw new Error("Due Date is null for this procedure!");
-  }
-  if (!toDate) {
-    throw new Error("Due Date is null for this procedure!");
-  }
-  if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
-    throw new Error("Due Date and ApplicationDate must be Date!");
-  }
+module.exports.dueDateAnalysisCalc = async (orgId, prcId, mindate, maxappdate, cb) => {
+    
+    if (!(mindate instanceof Date) || !(maxappdate instanceof Date)) {
+      mindate = new Date(mindate);
+      maxappdate = new Date(maxappdate);
+      // throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
+    }
 
-  const diff = monthDiff(mindocdate, maxappdate);
+  const diff = monthDiff(mindate, maxappdate);
 
   let res = new Array();
-  let starterMonth = mindocdate.getMonth() + 1;
-  let starterYear = mindocdate.getFullYear();
+  let starterMonth = mindate.getMonth() + 1;
+  let starterYear = mindate.getFullYear();
   for (let index = 0; index <= diff; index++) {
     const element = {
       monthName: starterMonth,
@@ -305,7 +300,9 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
   let query = `SELECT *
                     FROM due_date_analysis_${orgId} pos
                     WHERE
-                        pos.procedureId = ${prcId}
+                        pos.procedureId = ${prcId} 
+                        AND pos.applicationDate >= '${mindate.toISOString().split('T')[0]}'  
+                        AND pos.applicationDate <= '${maxappdate.toISOString().split('T')[0]}' 
                         ORDER BY pos.applicationDate`;
 
   const str = connection.query(query).stream();
@@ -314,7 +311,7 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, fromDate,
     // too early or too late records
     if (row.applicationDate) {
       const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
-      const rowindex = getNumberOfDays(fromDate, row.applicationDate);
+      const rowindex = getNumberOfDays(mindate, row.applicationDate);
       recordsCountPerDay[rowindex] = recordsCountPerDay[rowindex] ? recordsCountPerDay[rowindex] + 1 : 1;
       diffData[rowindex] = diffData[rowindex] ? diffData[rowindex] + rowDiff : rowDiff;
       recordsDelay.push({

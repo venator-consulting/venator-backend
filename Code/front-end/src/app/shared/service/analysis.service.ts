@@ -123,8 +123,9 @@ export class AnalysisService {
     return this._http.get<{ count: number, rows: PaymentAnalysisDetailsData[] }>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber, { params: criteria });
   }
 
-  getDueDateAnalysis(orgId: number, prcId: number): Observable<any> {
-    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate');
+  getDueDateAnalysis(orgId: number, prcId: number, start: string, end: string): Observable<any> {
+    return start?.trim() && end.trim() ? this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate/' + start + '/' + end) :
+    this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate');
   }
 
   getDueDateAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<any> {

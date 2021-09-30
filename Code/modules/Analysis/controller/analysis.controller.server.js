@@ -269,36 +269,39 @@ module.exports.paymentJustRelevant = async (req, res) => {
 };
 
 module.exports.dueDateAnalysis = async (req, res) => {
-  const dateRange = await dueDateAnalysisRepo.dueDateRangeCalc(
-    +req.params.orgId,
-    +req.params.prcId
-  );
-  if (dateRange.length < 1) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
-  }
-  if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
-  }
-  const fromDate = dateRange[0].mindate;
-  if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
-  }
-  const toDate = dateRange[0].maxdate;
-  if (!dateRange[0].mindocdate || !(dateRange[0].mindocdate instanceof Date)) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
-  }
-  const mindocdate = dateRange[0].mindocdate;
-  const maxappdate = dateRange[0].maxappdate;
-  if (!dateRange[0].maxappdate || !(dateRange[0].maxappdate instanceof Date)) {
-    maxappdate = dateRange[0].maxdate;
+  let mindate = req.params.fromDate;
+  let maxappdate = req.params.toDate;
+  let dateRange = [{ mindate: mindate, maxappdate }];
+  if (!mindate && !maxappdate) {
+    dateRange = await dueDateAnalysisRepo.dueDateRangeCalc(
+      +req.params.orgId,
+      +req.params.prcId
+    );
+    if (dateRange.length < 1) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
+    }
+    // if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
+    //   throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
+    // }
+    // const fromDate = dateRange[0].mindate;
+    // if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+    //   throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
+    // }
+    // const toDate = dateRange[0].maxdate;
+    if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_application_date);
+    }
+    mindate = dateRange[0].mindate;
+    maxappdate = dateRange[0].maxappdate;
+    if (!dateRange[0].maxappdate || !(dateRange[0].maxappdate instanceof Date)) {
+      maxappdate = dateRange[0].maxdate;
+    }
   }
 
   dueDateAnalysisRepo.dueDateAnalysisCalc(
     req.params.orgId,
     req.params.prcId,
-    fromDate,
-    toDate,
-    mindocdate,
+    mindate,
     maxappdate,
     (data) => {
       // result = data;
