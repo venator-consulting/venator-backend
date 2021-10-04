@@ -15,7 +15,7 @@ export class ExportDataService {
 
   exportXLSX(tableName, OrganisationId, ProcedureId, criteria: any) {
     // return this._http.get<Observable<Blob>>(this._thisURL + '/export/' + tableName + '/' + OrganisationId + '/' + ProcedureId, { params: criteria, responseType: 'arraybuffer' });
-    return this._http.get<Blob>(this._thisURL + '/export/' + tableName + '/' + OrganisationId + '/' + ProcedureId, {responseType: 'blob' as 'json'})
+    return this._http.get<Blob>(this._thisURL + '/export/' + tableName + '/' + OrganisationId + '/' + ProcedureId, { params: criteria, responseType: 'blob' as 'json' })
   }
 
   exportPDF(data) {
