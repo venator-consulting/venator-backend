@@ -271,6 +271,7 @@ module.exports.paymentJustRelevant = async (req, res) => {
 module.exports.dueDateAnalysis = async (req, res) => {
   let mindate = req.params.fromDate;
   let maxappdate = req.params.toDate;
+  const criteria = req.query;
   let dateRange = [{ mindate: mindate, maxappdate }];
   if (!mindate && !maxappdate) {
     dateRange = await dueDateAnalysisRepo.dueDateRangeCalc(
@@ -280,14 +281,6 @@ module.exports.dueDateAnalysis = async (req, res) => {
     if (dateRange.length < 1) {
       throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
     }
-    // if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
-    //   throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
-    // }
-    // const fromDate = dateRange[0].mindate;
-    // if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    //   throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
-    // }
-    // const toDate = dateRange[0].maxdate;
     if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
       throw new Exception(httpStatus.BAD_REQUEST, errors.no_application_date);
     }
@@ -303,6 +296,8 @@ module.exports.dueDateAnalysis = async (req, res) => {
     req.params.prcId,
     mindate,
     maxappdate,
+    criteria.maxDelay,
+    criteria.accountNumber,
     (data) => {
       // result = data;
       res.status(200).json({

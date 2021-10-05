@@ -12,20 +12,43 @@
     <p class="p-text-center" style="margin-left: -25px;">{{minDate | date}} - {{toDate | date}}</p>
   </div>
   <div class="p-col-3"></div>
-  <div class="p-col-1 p-text-right">{{baseFromDate | date}}</div>
-  <div class="p-col-4">
+  <div class="p-col-2 p-text-right">{{baseFromDate | date}}</div>
+  <div class="p-col-2" style="text-align: center;">
     <p-slider [(ngModel)]="rangeValues" [range]="true" (onChange)="handleSliderChange($event)" [min]="0"
-      [max]="maxRange"></p-slider>
+      [max]="maxRange" [style]="{width:'300px'}"></p-slider>
   </div>
   <div class="p-col-1">{{baseToDate | date}}</div>
-  <div class="p-col-1">
+
+  <!-- [(ngModel)]="selectedAccount"  (onChange)="accountChangedHandler($event)"-->
+  <div class="p-col-12 p-text-center">
+    <p-dropdown [options]="delayData" placeholder=" {{'Admin_Import.selectOrganisationPlaceholder' | translate}}"
+      optionLabel="accountName" [showClear]="true" [filter]="true" [(ngModel)]="selectedAccount" filterBy="accountName"
+      [style]="{width:'300px'}">
+      <ng-template pTemplate="selectedItem">
+        <div class="account-item account-item-value" *ngIf="selectedAccount">
+          <div>{{selectedAccount.accountNumber + ' - ' + selectedAccount.accountName}}</div>
+        </div>
+      </ng-template>
+      <ng-template let-account pTemplate="item">
+        <div>{{account.accountNumber + ' - ' + account.accountName}}</div>
+      </ng-template>
+    </p-dropdown>
+  </div>
+  <div class="p-col-12" style="text-align: center;">
+    <p-inputNumber [(ngModel)]="maxDelay" mode="decimal" [min]="0" [useGrouping]="false"
+      [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="10"
+      decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary"
+      incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+    </p-inputNumber>
+  </div>
+  <div class="p-col-12 p-text-center">
     <button pButton pRipple type="button" icon="pi pi-search" (click)="getData()"
-      class="p-button-rounded p-button-primary" style="margin-top: -18px;"></button>
+      class="p-button-rounded p-button-primary"></button>
   </div>
 </div>
 
 <div class="p-grid">
-  <div class="p-col-12">
+  <div class="p-col-6">
     <h4 class="p-text-center">{{'PaymentAnalysis.allAccounts' | translate}}</h4>
     <div class="card p-text-center">
       <p-chart #chart type="line" height="350" [data]="basicData" [options]="basicOptions">
@@ -33,11 +56,61 @@
     </div>
   </div>
 
-  <div class="p-col-12">
+  <div class="p-col-6">
     <h4 class="p-text-center">{{'PaymentAnalysis.allAccounts' | translate}}</h4>
     <div class="card p-text-center">
       <p-chart #chart2 type="scatter" height="350" [data]="secondChartData" [options]="secondChartOptions">
       </p-chart>
+    </div>
+  </div>
+
+  <div class="p-grid" *ngIf="selectedAccount && selectedAccount.accountNumber">
+    <div class="p-col-12">
+      <div class="card p-text-center">
+        <p-table [value]="detailsData" [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="detailsCols"
+          responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [loading]="waiting">
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+              <col *ngFor="let col of columns" />
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn class="p-text-{{ col.align }}"
+                *ngFor="let col of columns">
+                <span pTooltip="{{ col.header | translate }}">
+                  {{ col.header | translate }}
+                </span>
+                <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row let-columns="columns">
+            <tr [pSelectableRow]="row">
+              <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
+                <span *ngIf="col.field == 'balance'">
+                  {{ row[col.field] | currency: "EUR":"" }}
+                </span>
+                <span *ngIf="
+                  col.field == 'dueDate' ||
+                  col.field == 'applicationDate' ||
+                  col.field == 'documentDate'
+                ">
+                  {{ row[col.field] | date: "dd.MM.yyyy" }}
+                </span>
+                <span pTooltip="{{ row[col.field] }}" *ngIf="
+                  col.field != 'balance' &&
+                  col.field != 'documentDate' &&
+                  col.field != 'dueDate' &&
+                  col.field != 'applicationDate'
+                ">
+                  {{ row[col.field] }}
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
     </div>
   </div>
 
@@ -49,7 +122,7 @@
     </div>
   </div> -->
 
-  <div class="p-col-12">
+  <!-- <div class="p-col-12">
     <div class="card p-text-center">
       <p-table [value]="delayData" [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="delayCols"
         responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [loading]="waiting">
@@ -74,9 +147,6 @@
         <ng-template pTemplate="body" let-row let-columns="columns">
           <tr [pSelectableRow]="row">
             <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
-              <!-- <span *ngIf="col.field=='delayPos' || col.field=='delayNeg'">
-                {{ row[col.field]  | currency:'EUR':'' }}
-              </span> -->
               <span pTooltip="{{ row[col.field] }}">
                 {{ row[col.field] }}
               </span>
@@ -89,7 +159,7 @@
         </ng-template>
       </p-table>
     </div>
-  </div>
+  </div> -->
 
   <!-- <div class="p-col-10">
     <div class="card p-text-center">

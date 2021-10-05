@@ -71,11 +71,11 @@ monthDiff = (d1, d2) => {
 };
 
 module.exports.dueDateAnalysis = async (orgId, prcId, mindate, maxappdate, cb) => {
-    
-    if (!(mindate instanceof Date) || !(maxappdate instanceof Date)) {
-      mindate = new Date(mindate);
-      maxappdate = new Date(maxappdate);
-    }
+
+  if (!(mindate instanceof Date) || !(maxappdate instanceof Date)) {
+    mindate = new Date(mindate);
+    maxappdate = new Date(maxappdate);
+  }
 
   const diff = monthDiff(mindate, maxappdate);
 
@@ -142,6 +142,8 @@ module.exports.dueDateAnalysis = async (orgId, prcId, mindate, maxappdate, cb) =
       recordsDelay.push({
         x: rowindex,
         y: rowDiff,
+        accountNumber: row.accountNumber,
+        accountName: row.accountName,
         label: row.applicationDate.toLocaleDateString("de-DE", {
           year: "numeric",
           month: "2-digit",
@@ -233,14 +235,6 @@ module.exports.dueDateAnalysis = async (orgId, prcId, mindate, maxappdate, cb) =
     });
     firstChartLabels = firstChartLabels.filter(Boolean);
     recordsDelay = recordsDelay.filter(Boolean);
-    recordsDelay = recordsDelay.map(rec => {
-      // let x = firstChartLabels.findIndex(value => value == rec.label);
-      return {
-        x: rec.x,
-        y: rec.y,
-        label: rec.label
-      }
-    });
     finalResult.dueDateReference.data = diffData.filter(Boolean);
     finalResult.dueDateReference.labels = firstChartLabels;
     finalResult.dueDateReference.recordsDelay = recordsDelay;
@@ -250,14 +244,13 @@ module.exports.dueDateAnalysis = async (orgId, prcId, mindate, maxappdate, cb) =
   });
 };
 
-module.exports.dueDateAnalysisCalc = async (orgId, prcId, mindate, maxappdate, cb) => {
-    
-    if (!(mindate instanceof Date) || !(maxappdate instanceof Date)) {
-      mindate = new Date(mindate);
-      maxappdate = new Date(maxappdate);
-      // throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
-    }
+module.exports.dueDateAnalysisCalc = async (orgId, prcId, mindate, maxappdate, selctedMaxDelay, accountNumber, cb) => {
 
+  if (!(mindate instanceof Date) || !(maxappdate instanceof Date)) {
+    mindate = new Date(mindate);
+    maxappdate = new Date(maxappdate);
+  }
+  let maxDelay = 0;
   const diff = monthDiff(mindate, maxappdate);
 
   let res = new Array();
@@ -302,21 +295,25 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, mindate, maxappdate, c
                     WHERE
                         pos.procedureId = ${prcId} 
                         AND pos.applicationDate >= '${mindate.toISOString().split('T')[0]}'  
-                        AND pos.applicationDate <= '${maxappdate.toISOString().split('T')[0]}' 
-                        ORDER BY pos.applicationDate`;
-
+                        AND pos.applicationDate <= '${maxappdate.toISOString().split('T')[0]}' `;
+  if (accountNumber && accountNumber != 'null' && accountNumber != 'undefined') query += `AND pos.accountNumber = ${accountNumber} `;
+  query += ` ORDER BY pos.applicationDate`;
   const str = connection.query(query).stream();
 
   str.on("data", (row) => {
     // too early or too late records
     if (row.applicationDate) {
       const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
+      if(!selctedMaxDelay || selctedMaxDelay == 'null' || selctedMaxDelay == 'undefined' || rowDiff <= selctedMaxDelay) {
+      if (rowDiff > maxDelay) maxDelay = rowDiff;
       const rowindex = getNumberOfDays(mindate, row.applicationDate);
       recordsCountPerDay[rowindex] = recordsCountPerDay[rowindex] ? recordsCountPerDay[rowindex] + 1 : 1;
       diffData[rowindex] = diffData[rowindex] ? diffData[rowindex] + rowDiff : rowDiff;
       recordsDelay.push({
         x: rowindex,
         y: rowDiff,
+        accountNumber: row.accountNumber,
+        accountName: row.accountName,
         label: row.applicationDate.toLocaleDateString("de-DE", {
           year: "numeric",
           month: "2-digit",
@@ -367,65 +364,68 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, mindate, maxappdate, c
         }
       }
 
-      for (const element of res) {
-        if (
-          row.documentDate.getMonth() == element.monthName - 1 &&
-          row.documentDate.getFullYear() == element.yearName
-        ) {
-          element.positive += rowDiff > 0 ? rowDiff : 0;
-          element.negative += rowDiff < 0 ? rowDiff : 0;
-          continue;
-        }
-      }
+      // for (const element of res) {
+      //   if (
+      //     row.documentDate.getMonth() == element.monthName - 1 &&
+      //     row.documentDate.getFullYear() == element.yearName
+      //   ) {
+      //     element.positive += rowDiff > 0 ? rowDiff : 0;
+      //     element.negative += rowDiff < 0 ? rowDiff : 0;
+      //     continue;
+      //   }
+      // }
+    }
       // Not paid at all
     } else {
-      for (const element of res) {
-        if (
-          row.documentDate.getMonth() == element.monthName - 1 &&
-          row.documentDate.getFullYear() == element.yearName
-        ) {
-          element.notPaid += +row.balance;
-          continue;
-        }
-      }
+      // for (const element of res) {
+      //   if (
+      //     row.documentDate.getMonth() == element.monthName - 1 &&
+      //     row.documentDate.getFullYear() == element.yearName
+      //   ) {
+      //     element.notPaid += +row.balance;
+      //     continue;
+      //   }
+      // }
     }
   }); // end of on data
 
   str.on("end", async () => {
     for (let index = 0; index < diffData.length; index++) {
       if (diffData[index] && recordsCountPerDay[index]) diffData[index] = Math.ceil(diffData[index] / recordsCountPerDay[index]);
+      if (diffData[index] > maxDelay) maxDelay = diffData[index];
     }
-    dueDateRefAccounts = dueDateRefAccounts.map(account => {
-      return {
-        accountNumber: account.accountNumber,
-        accountName: account.accountName,
-        delayPosTotal: account.delayPos,
-        delayNegTotal: account.delayNeg,
-        delayPos: account.posCount ? Math.ceil(account.delayPos / account.posCount) : 0,
-        delayNeg: account.negCount ? Math.ceil(account.delayNeg / account.negCount) : 0,
-        count: account.count,
-        posCount: account.posCount,
-        negCount: account.negCount
-      };
-    });
+    // dueDateRefAccounts = dueDateRefAccounts.map(account => {
+    //   return {
+    //     accountNumber: account.accountNumber,
+    //     accountName: account.accountName,
+    //     delayPosTotal: account.delayPos,
+    //     delayNegTotal: account.delayNeg,
+    //     delayPos: account.posCount ? Math.ceil(account.delayPos / account.posCount) : 0,
+    //     delayNeg: account.negCount ? Math.ceil(account.delayNeg / account.negCount) : 0,
+    //     count: account.count,
+    //     posCount: account.posCount,
+    //     negCount: account.negCount
+    //   };
+    // });
     firstChartLabels = firstChartLabels.filter(Boolean);
     recordsDelay = recordsDelay.filter(Boolean);
-    
-    recordsDelay = recordsDelay.map(rec => {
-      secondChartLabels.push(rec.label);
-      // let x = firstChartLabels.findIndex(value => value == rec.label);
-      return {
-        x: rec.x,
-        y: rec.y,
-        label: rec.label
-      }
-    });
+
+    // recordsDelay = recordsDelay.map(rec => {
+    //   secondChartLabels.push(rec.label);
+    //   // let x = firstChartLabels.findIndex(value => value == rec.label);
+    //   return {
+    //     x: rec.x,
+    //     y: rec.y,
+    //     label: rec.label
+    //   }
+    // });
     finalResult.dueDateReference.data = diffData.filter(Boolean);
     finalResult.dueDateReference.labels = firstChartLabels;
     finalResult.dueDateReference.secondChartLabels = secondChartLabels;
     finalResult.dueDateReference.recordsDelay = recordsDelay;
     finalResult.docDateReference = res;
     finalResult.dueDateRefAccounts = dueDateRefAccounts;
+    finalResult.maxDelay = maxDelay;
     cb(finalResult);
   });
 };

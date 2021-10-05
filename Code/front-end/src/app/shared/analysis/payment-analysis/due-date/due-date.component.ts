@@ -38,7 +38,9 @@ export class DueDateComponent implements OnInit {
   // docCols: { header: string; field: string; }[];
   // notPaidCols: TableColumn[];
   delayCols: TableColumn[];
+  detailsCols: TableColumn[];
   delayData: any;
+  detailsData: any[] = new Array();
   items: MenuItem[];
   home: MenuItem;
   //for second chart
@@ -57,6 +59,10 @@ export class DueDateComponent implements OnInit {
   baseFromDate: Date;
   // for slider
   baseToDate: Date;
+  secondChartDataRecords: any;
+
+  selectedAccount: { accountNumber: string; accountName: string };
+  maxDelay: number;
 
   constructor(
     public _translateService: TranslateService,
@@ -114,38 +120,87 @@ export class DueDateComponent implements OnInit {
         ],
       },
     };
-
-
-
-    this.waiting = true;
-
-    this.delayCols = [
+    this.detailsCols = [
       {
-        header: 'DueDateAnalysis.accountNumber',
+        header: 'DataTableColumns.accountNumber',
         field: 'accountNumber',
-        align: 'left',
+        align: 'left'
       },
       {
-        header: 'DueDateAnalysis.accountName',
+        header: 'DataTableColumns.accountName',
         field: 'accountName',
-        align: 'left',
+        align: 'left'
       },
       {
-        header: 'DueDateAnalysis.positiveDelay',
-        field: 'delayPos',
-        align: 'center',
+        header: 'DataTableColumns.accountType',
+        field: 'accountType',
+        align: 'center'
+      },
+
+      {
+        header: 'DataTableColumns.documentType',
+        field: 'documentType',
+        align: 'center'
       },
       {
-        header: 'DueDateAnalysis.negativeDelay',
-        field: 'delayNeg',
-        align: 'center',
+        header: 'DataTableColumns.documentTypeNew',
+        field: 'documentTypeNewName',
+        align: 'center'
       },
       {
-        header: 'DueDateAnalysis.count',
-        field: 'count',
-        align: 'center',
+        header: 'DataTableColumns.balance',
+        field: 'balance',
+        align: 'right'
       },
+      {
+        header: 'DataTableColumns.documentDate',
+        field: 'documentDate',
+        align: 'center'
+      },
+      {
+        header: 'DataTableColumns.applicationDate',
+        field: 'applicationDate',
+        align: 'center'
+      },
+      {
+        header: 'DataTableColumns.dueDate',
+        field: 'dueDate',
+        align: 'center'
+      },
+      {
+        header: 'DueDateAnalysis.delay',
+        field: 'delay',
+        align: 'center'
+      }
     ];
+
+    // this.delayCols = [
+    //   {
+    //     header: 'DueDateAnalysis.accountNumber',
+    //     field: 'accountNumber',
+    //     align: 'left',
+    //   },
+    //   {
+    //     header: 'DueDateAnalysis.accountName',
+    //     field: 'accountName',
+    //     align: 'left',
+    //   },
+    //   {
+    //     header: 'DueDateAnalysis.positiveDelay',
+    //     field: 'delayPos',
+    //     align: 'center',
+    //   },
+    //   {
+    //     header: 'DueDateAnalysis.negativeDelay',
+    //     field: 'delayNeg',
+    //     align: 'center',
+    //   },
+    //   {
+    //     header: 'DueDateAnalysis.count',
+    //     field: 'count',
+    //     align: 'center',
+    //   },
+    // ];
 
     // this.notPaidCols = [
     //   {
@@ -166,14 +221,16 @@ export class DueDateComponent implements OnInit {
     this.waiting = true;
     let start = this.minDate?.toISOString().split('T')[0];
     let end = this.toDate?.toISOString().split('T')[0];
+    let parmas = { maxDelay: this.maxDelay, accountNumber: this.selectedAccount?.accountNumber?? null };
     this._analysisService
-      .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure, start, end)
+      .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure, start, end, parmas)
       .subscribe(
         async (res) => {
           // debugger;
+          if(!this.maxDelay) this.maxDelay = res.data.maxDelay;
           this.data = res.data.dueDateReference.data;
           this.labels = res.data.dueDateReference.labels;
-          // this.secondChartData = res.data.dueDateReference.recordsDelay;
+          this.secondChartDataRecords = res.data.dueDateReference.recordsDelay;
           this.secondChartLabels = res.data.dueDateReference.secondChartLabels;
           if (!this.baseFromDate) this.baseFromDate = new Date(res.dateRange[0].mindate);
           if (!this.baseToDate) this.baseToDate = new Date(res.dateRange[0].maxappdate);
@@ -213,10 +270,13 @@ export class DueDateComponent implements OnInit {
             tooltips: {
               callbacks: {
                 label: (tooltipItem, data) => {
-                  // debugger;
+                  debugger;
                   let value = tooltipItem.value;
-                  let label = this.secondChartLabels[tooltipItem.index];
-                  return label + ': ' + value;
+                  let point = this.secondChartDataRecords[tooltipItem.index];
+                  let label = point.label;
+                  let accountNumber = point?.accountNumber;
+                  let accountName = point?.accountName;
+                  return label + ': ' + value + ' - account: ' + accountNumber + ' / ' + accountName;
                 },
               },
             },
@@ -258,7 +318,7 @@ export class DueDateComponent implements OnInit {
             datasets: [{
               label: 'records',
               borderColor: `rgb(100,100,255)`,
-              data: res.data.dueDateReference.recordsDelay,
+              data: this.secondChartDataRecords,
               fill: false,
             }]
           };
@@ -271,11 +331,20 @@ export class DueDateComponent implements OnInit {
           this.delayData = res.data.dueDateRefAccounts;
 
           this.delayData.forEach((account) => {
-            let accountNumber = parseInt(account.accountNumber, 10);
-            account.accountNumber = isNaN(accountNumber)
-              ? account.accountNumber
-              : accountNumber;
+            // let accountNumber = parseInt(account.accountNumber, 10);
+            // account.accountNumber = isNaN(accountNumber)
+            //   ? account.accountNumber
+            //   : accountNumber;
+            account.accountName = account.accountName ?? 'No Name';
           });
+          if(this.selectedAccount && this.selectedAccount.accountNumber) {
+            this._analysisService
+            .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.selectedAccount.accountNumber)
+            .subscribe(res => {
+              this.waiting = false;
+              this.detailsData = res.data.records;
+            });
+          }
 
           // this.docDataTable.forEach((element) => {
           //   this.docDateLabels.push(
