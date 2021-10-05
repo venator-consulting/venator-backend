@@ -6,19 +6,41 @@
     "NotFound_404": "Der Server kann die angeforderte Ressource nicht finden",
     "internalServerError_500": "Auf dem Server ist ein Fehler aufgetreten. Wir werden das Problem sehr bald beheben",
     "passwordsMatch": "Die Passwörter stimmen nicht überein",
-    "organisation_id_is_required": "Bitte wählen Sie eine Organisation aus",
-    "procedure_id_is_required": "Bitte wählen Sie ein Verfahren",
-    "procedure_analysis_disabled": "Die Analysefunktion ist für dieses Verfahren deaktiviert",
+    "organisation_id_is_required": "Please select an organisation",
+    "procedure_id_is_required": "Please select a procedure",
+    "procedure_analysis_disabled": "Analysis feature is disabled for this procedure",
     "no_date_range": "Datumsbereich für dieses Verfahren kann nicht abgerufen werden",
-    "no_document_date": "Dieses Verfahren hat kein Belegdatum! Bitte importieren Sie es erneut korrekt",
-    "no_application_date": "Dieses Verfahren hat kein Ausgleichdatum! Bitte importieren Sie es erneut korrekt",
-    "no_due_date": "Dieses Verfahren hat kein Fälligkeitsdatum! Bitte importieren Sie es erneut korrekt",
+    "no_document_date": "Dieses Verfahren hat kein Dokumentdatum! Bitte importieren Sie es erneut korrekt",
+    "no_application_date": "This Procedure has no application date! please re-import it correctly",
+    "no_due_date": "Dieses Verfahren hat kein Belegdatum! Bitte importieren Sie es erneut korrekt",
     "invalid_key": "Ungültiger Schlüssel!",
 
-    "no_template_selected": "Bitte wählen Sie eine Vorlage und andere Felder aus!",
+    "no_template_selected": "Bitte wählen Sie ein Template und andere Felder aus!",
     "no_file_selected": "Bitte wählen Sie eine zu importierende Datei aus",
     "invalid_file_type": "Ungültiger Dateityp, bitte wählen Sie eine CSV- oder Excel-Datei aus",
     "invalid_file_class": "Ungültige Dateiklasse"
+  },
+  "general_actions": {
+    "add": "hinzufügen",
+    "edit": "bearbeiten",
+    "delete": "Löschen",
+    "print": "Print",
+    "reset": "zurücksetzen"
+  },
+  "general_messages": {
+    "update_success": "updated successfully!",
+    "create_success": "Created successfully!",
+    "done": "Done.",
+    "delete_success": "Deleted successfully!"
+  },
+  "confirm_messages": {
+    "r_u_sure": "Are You Sure? press yes to proceed",
+    "yes": "Yes",
+    "cancel": "Cancel",
+    "update": "Update Confirmation",
+    "delete": "Delete Confirmation",
+    "body_update": "Are You sure you want to update?",
+    "body_delete": "Are You sure, you want to delete? deleted data are unrecoverable! press 'YES' to proceed, 'NO' to cancel."
   },
   "LOGIN": {
     "welcomeMsg": "Bitte loggen Sie sich ein",
@@ -44,6 +66,7 @@
     "addProcedure": "Verfahren hinzufügen",
     "editProcedure": "Verfahren bearbeiten",
     "resetPassword": "Passwort zurücksetzen",
+    "precalc": "Pre-calculate Analysis",
     "setting": "Einstellung",
     "logout": "Logout",
     "procedures": "Verfahren",
@@ -51,7 +74,12 @@
     "liquidity": "Liquidität",
     "openingBalance": "Startsaldo",
     "creditLine": "Kreditlinie",
-    "freeLiquidity": "Freie Liquidität"
+    "freeLiquidity": "Freie Liquidität",
+    "preCalculateAnalysis": "Analysen Vorberechnung",
+    "NOT_IMPORTED": "NOT IMPORTED",
+    "IMPORTED": "IMPORTED",
+    "PARTIAL_CALCULATED": "PARTIAL CALCULATED",
+    "CALCULATED": "CALCULATED"
   },
   "Admin_Dashboard": {
     "organisationEmail": "Email",
@@ -62,7 +90,8 @@
     "organisationPostCode": "Plz",
     "organisationStreet": "Straße",
     "organisationHouseNr": "Haus-Nr",
-    "show": "Anzeigen"
+    "show": "Anzeigen",
+    "delete": "Löschen"
   },
 
   "Admin_Import": {
@@ -112,26 +141,25 @@
     "dateDataType": "Datum",
     "firthStepHeader": "Dateien importieren",
 
-    "accountTypeIdInternal": "accountTypeIdInternal",
     "nameAffix1": "Namenszusatz1",
     "nameAffix2": "Namenszusatz2",
     "VATId": "UmsatzsteuerID",
     "taxNumber": "Steuernummer",
-    "street": "Straße",
+    "street": "Strasse",
     "postCode": "Postleitzahl",
-    "city": "Ort",
+    "city": "Stadt",
     "country": "Land",
     "contactPerson": "Ansprechpartner",
     "phone": "Telefon",
     "email": "Email",
-    "bankName1": "Bankleitzahl 1",
-    "bankSortCode1": "Bankbezeichnung 1",
+    "bankName1": "Bankbezeichnung 1",
+    "bankSortCode1": "Bankleitzahl 1",
     "bankAccountNo1": "Bankkontonummer 1",
     "countryCode1": "Laenderkennzeichen 1",
     "iBAN_No1": "IBAN-Nr. 1",
-    "swift_code1": "swift_code1",
-    "differentAccountHolder1": "differentAccountHolder1",
-    "bankSortCode2": "bankSortCode2",
+    "swift_code1": "SWIFT-Code 1",
+    "differentAccountHolder1": "Abweichender Kontoinhaber 1",
+    "bankSortCode2": "Bankleitzahl 2",
     "bankName2": "Bankbezeichnung 2",
     "bankAccountNo2": "Bankkontonummer 2",
     "countryCode2": "Laenderkennzeichen 2",
@@ -325,7 +353,24 @@
     "analysis": "Analyse",
     "cancelButton": "Abbrechen",
     "confirmButton": "Bestätigen",
-    "NoProceduresFound": "Es gibt noch keine Verfahren für diese Organisation"
+    "NoProceduresFound": "Es gibt noch keine Verfahren für diese Organisation",
+    "status": "Status",
+    "amount": "Vorberechnete Glattebeträgeanalyse",
+    "credit": "Vorberechnete Kreditorenanalyse",
+    "payment": "Vorberechnete Zahlungsanalyse",
+    "text_word": "Vorberechnete Textanalyse nach Wört",
+    "text_account": "Vorberechnete Textanalyse nach Konto",
+    "due_date": "Vorberechnete Fälligkeitsanalyse"
+  },
+  "precalc" : {
+    "precalc": "Analysen Vorberechnung",
+    "amount": "Glattebeträgeanalyse",
+    "credit": "Kreditorenanalyse",
+    "text_account": "Textanalyse nach Konto",
+    "text_word": "Textanalyse nach Wört",
+    "payment": "Zahlungsanalyse",
+    "due_date": "Fälligkeitsanalyse",
+    "start": "Starten"
   },
   "Notfound": {
     "errorMsg": "Sorry, die Seite ist nicht vorhanden"
