@@ -328,15 +328,18 @@ export class DueDateComponent implements OnInit {
           // this.chart.reinit();
           this.docDataTable = res.data.docDateReference;
           // this.notPaidDataTable = res.data.docDateReference;
-          this.delayData = res.data.dueDateRefAccounts;
+          if(!this.delayData) {
+            this.delayData = res.data.dueDateRefAccounts;
 
-          this.delayData.forEach((account) => {
-            // let accountNumber = parseInt(account.accountNumber, 10);
-            // account.accountNumber = isNaN(accountNumber)
-            //   ? account.accountNumber
-            //   : accountNumber;
-            account.accountName = account.accountName ?? 'No Name';
-          });
+            this.delayData.forEach((account) => {
+              // let accountNumber = parseInt(account.accountNumber, 10);
+              // account.accountNumber = isNaN(accountNumber)
+              //   ? account.accountNumber
+              //   : accountNumber;
+              account.accountName = account.accountName ?? 'No Name';
+            });
+          }
+          
           if(this.selectedAccount && this.selectedAccount.accountNumber) {
             this._analysisService
             .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.selectedAccount.accountNumber)
