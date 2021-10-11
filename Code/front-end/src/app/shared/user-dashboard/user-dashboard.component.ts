@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ProcedureService } from '../service/procedure.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -19,7 +20,8 @@ export class UserDashboardComponent implements OnInit {
   check = '<i class="pi pi-check checkIcon"></i>';
 
   constructor(private _translateService: TranslateService, private _router: Router, private _procedureService: ProcedureService,
-    private _confirmationService: ConfirmationService, private _messageService: MessageService) { }
+    private _confirmationService: ConfirmationService, private _messageService: MessageService,
+    private navbar: NavBarComponent) { }
 
   ngOnInit(): void {
     this._procedureService
@@ -80,6 +82,7 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedureDueDate', prc.due_date);
     localStorage.setItem('currentProcedureLiquidity', prc.liquidity);
     localStorage.setItem('currentProcedureDocType', prc.docType);
+    this.navbar.updateLocal();
     this._router.navigate(['/dashboard/shared/data']);
 
   }
@@ -97,6 +100,7 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedureDueDate', prc.due_date);
     localStorage.setItem('currentProcedureLiquidity', prc.liquidity);
     localStorage.setItem('currentProcedureDocType', prc.docType);
+    this.navbar.updateLocal();
     this._router.navigate(['/dashboard/admin/procedure/edit']);
 
   }

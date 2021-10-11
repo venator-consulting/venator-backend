@@ -1,13 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { HostListener } from "@angular/core";
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.sass'],
+})
+@Injectable({
+  providedIn: 'root'
 })
 export class NavBarComponent implements OnInit {
   sideBarShow: boolean = false;
@@ -21,7 +25,8 @@ export class NavBarComponent implements OnInit {
   prcId: number;
   @ViewChild('menu') menu: any;
   currentProcedureStatus: string;
-  prcName: string;
+  prcNameObserve: Observable<string>;
+  prcName: string = localStorage.getItem('currentProcedureName');
   scrWidth: number;
   prcStyle: string;
 
@@ -39,11 +44,19 @@ export class NavBarComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   getScreenSize(event?) {
     // this.scrHeight = window.innerHeight;
-    debugger;
     this.scrWidth = window.innerWidth;
-    this.prcStyle = 'position: fixed; z-index: 999; top: 15px; right:' + (this.scrWidth/2 - this.prcName?.length) + 'px; color: #ffffff; height: 100px; font-size: xx-large;';
+      this.prcStyle = 'position: fixed; z-index: 999; top: 15px; right:' + (this.scrWidth / 2 - 25) + 'px; color: #ffffff; height: 100px; font-size: xx-large;';
     // let elem: HTMLElement = document.getElementById('navbar-title');
     // elem?.setAttribute("style", `margin-left: ${this.scrWidth/3} !important`);
+  }
+
+
+  updateLocal() {
+    debugger;
+    this.prcName = localStorage.getItem('currentProcedureName');
+    let elem: HTMLElement = document.getElementById('prc');
+    elem.innerHTML = this.prcName;
+    this.prcStyle = 'position: fixed; z-index: 999; top: 15px; right:' + (this.scrWidth / 2 - this.prcName?.length) + 'px; color: #ffffff; height: 100px; font-size: xx-large;';
   }
 
   async ngOnInit() {
@@ -51,8 +64,7 @@ export class NavBarComponent implements OnInit {
     this.role = localStorage.getItem('role');
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
-    this.prcName = localStorage.getItem('currentProcedureName');
-    this.prcStyle = 'position: fixed; z-index: 999; top: 15px; right:' + (this.scrWidth/2 - this.prcName?.length) + 'px; color: #ffffff; height: 100px; font-size: xx-large;';
+    // this.prcStyle = 'position: fixed; z-index: 999; top: 15px; right:' + (this.scrWidth / 2 - this.prcName?.length) + 'px; color: #ffffff; height: 100px; font-size: xx-large;';
 
 
     this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
