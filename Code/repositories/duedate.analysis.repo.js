@@ -501,7 +501,7 @@ module.exports.dueDateAnalysisDetails = async (orgId, prcId, mindocdate, maxappd
     // if (row.applicationDate) {
     const rowDiff = getNumberOfDays(row.dueDate, row.applicationDate);
     row.delay = rowDiff;
-    if (!maxDelay || maxDelay == 'null' || maxDelay == 'undefined' || rowDiff <= maxDelaydb)
+    if (!maxDelay || maxDelay == 'null' || maxDelay == 'undefined' || rowDiff <= maxDelay)
       records.push(row);
     // for (const element of res) {
     //   if (row.documentDate.getMonth() == element.monthName - 1 && row.documentDate.getFullYear() == element.yearName) {

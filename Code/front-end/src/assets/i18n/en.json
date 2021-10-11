@@ -557,7 +557,9 @@
     "typeDocumentInformation5": "Typedocument Information 5",
     "contentDocumentInformation5": "Contentdocument Information 5",
     "typeDocumentInformation6": "Typedocument Information 6",
-    "contentDocumentInformation6": "Contentdocument Information 6"
+    "contentDocumentInformation6": "Contentdocument Information 6",
+    "documentTypeNewName": "documentTypeNewName",
+    "delay": "delay"
   },
   "Susa": {
     "accountType": "Account type",

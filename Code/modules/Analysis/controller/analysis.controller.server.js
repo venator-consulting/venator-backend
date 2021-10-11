@@ -311,9 +311,9 @@ module.exports.dueDateAnalysis = async (req, res) => {
 module.exports.dueDateDetailsAnalysis = async (req, res) => {
   let mindocdate = req.params.fromDate;
   let maxappdate = req.params.toDate;
-  
+  let dateRange = [{ mindocdate, maxappdate }];
   if (!mindocdate && !maxappdate) {
-    const dateRange = await dueDateAnalysisRepo.dueDateRangeCalc(
+    dateRange = await dueDateAnalysisRepo.dueDateRangeCalc(
       +req.params.orgId,
       +req.params.prcId
     );

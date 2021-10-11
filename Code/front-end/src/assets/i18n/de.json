@@ -551,7 +551,9 @@
     "typeDocumentInformation5": "Art der Beleginformation 5",
     "contentDocumentInformation5": "Inhalt der Beleginformation 5",
     "typeDocumentInformation6": "Art der Beleginformation 6",
-    "contentDocumentInformation6": "Inhalt der Beleginformation 6"
+    "contentDocumentInformation6": "Inhalt der Beleginformation 6",
+    "documentTypeNewName": "documentTypeNewName",
+    "delay": "delay"
   },
   "Susa": {
     "accountType": "Kontotyp",

@@ -510,7 +510,7 @@ export class DueDateComponent implements OnInit {
     import('xlsx').then((xlsx) => {
       const worksheet = xlsx.utils.json_to_sheet(translatedData);
       const workbook = {
-        Sheets: { payment_analysis: worksheet },
+        Sheets: { due_date_analysis: worksheet },
         SheetNames: ['due_date_analysis'],
       };
       const excelBuffer: any = xlsx.write(workbook, {
