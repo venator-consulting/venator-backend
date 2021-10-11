@@ -16,7 +16,7 @@
   <!-- [style]="{width:'300px'}" -->
   <div class="p-col-2" style="text-align: center;">
     <p-slider [(ngModel)]="rangeValues" [range]="true" (onChange)="handleSliderChange($event)" [min]="0"
-      [max]="maxRange" ></p-slider>
+      [max]="maxRange"></p-slider>
   </div>
   <div class="p-col-1">{{baseToDate | date}}</div>
 
@@ -37,8 +37,8 @@
     </p-dropdown>
   </div>
   <div class="p-col-12" style="text-align: center;">
-    <p-inputNumber [(ngModel)]="maxDelay" mode="decimal" [min]="0" [useGrouping]="false"
-      [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="10"
+    <p-inputNumber [(ngModel)]="maxDelay" mode="decimal" [min]="0" [useGrouping]="false" [showButtons]="true"
+      buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="10"
       decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary"
       incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [style]="{width:'425px'}">
     </p-inputNumber>
@@ -160,8 +160,17 @@
 <div class="p-grid" *ngIf="selectedAccount && selectedAccount.accountNumber">
   <div class="p-col-12">
     <div class="card p-text-center">
-      <p-table [value]="detailsData" [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="detailsCols"
-        responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [loading]="waiting">
+      <p-table [value]="detailsData" [resizableColumns]="true" styleClass="p-datatable-gridlines"
+        [columns]="detailsCols" responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true"
+        [loading]="waiting">
+        <ng-template pTemplate="caption">
+          <div class="p-grid">
+            <div class="p-col-4">
+              <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
+            </div>
+          </div>
+        </ng-template>
         <ng-template pTemplate="colgroup" let-columns>
           <colgroup>
             <col *ngFor="let col of columns" />

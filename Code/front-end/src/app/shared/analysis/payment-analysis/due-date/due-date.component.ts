@@ -4,6 +4,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-due-date',
@@ -438,4 +439,100 @@ export class DueDateComponent implements OnInit {
       '/dashboard/analysis/due-date/deails/' + row.accountNumber,
     ]);
   }
+
+  async exportExcel() {
+    let translatedData = [];
+    for (let index = 0; index < this.detailsData.length; index++) {
+      let element = this.detailsData[index];
+      let translatedRecord = {};
+      for (const key in element) {
+        if (
+          Object.prototype.hasOwnProperty.call(element, key) &&
+          key != 'id' &&
+          key != 'procedureId'
+        ) {
+          let translatedKey = await this._translateService
+            .get('DataTableColumns.' + key)
+            .toPromise();
+          translatedRecord[translatedKey] = element[key];
+
+          // formatting
+          if (
+            element[key] &&
+            (key == 'balance' ||
+              key == 'debitAmount' ||
+              key == 'creditAmount' ||
+              key == 'taxAmount' ||
+              key == 'taxAmountDebit' ||
+              key == 'taxAmountCredit' ||
+              key == 'StartingBalance')
+          ) {
+            try {
+              let temp = Number.parseFloat(element[key].toString());
+              if (!Number.isNaN(temp)) {
+                translatedRecord[translatedKey] = temp.toLocaleString('de-DE', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                });
+              }
+            } catch (e) {
+              // do nothing
+            }
+          } else if (
+            element[key] &&
+            (key == 'documentDate' ||
+              key == 'postingDate' ||
+              key == 'dueDate' ||
+              key == 'dueDateNew' ||
+              key == 'executionDate' ||
+              key == 'applicationDate' ||
+              key == 'StartingBalanceDate')
+          ) {
+            try {
+              let temp = new Date(Date.parse(element[key].toString()));
+              if (temp instanceof Date)
+                translatedRecord[translatedKey] = temp.toLocaleDateString(
+                  'de-DE',
+                  {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  }
+                );
+            } catch (e) {}
+          }
+          // end of formatting
+        }
+      }
+      translatedData.push(translatedRecord);
+    }
+
+    import('xlsx').then((xlsx) => {
+      const worksheet = xlsx.utils.json_to_sheet(translatedData);
+      const workbook = {
+        Sheets: { payment_analysis: worksheet },
+        SheetNames: ['due_date_analysis'],
+      };
+      const excelBuffer: any = xlsx.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+      });
+      this.saveAsExcelFile(excelBuffer, 'due_date_analysis');
+    });
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE =
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const d: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE,
+    });
+    // FileSaver.saveAs(file);
+    FileSaver.saveAs(
+      d,
+      fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
+    );
+  }
+
 }
