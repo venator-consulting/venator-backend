@@ -221,13 +221,13 @@ export class DueDateComponent implements OnInit {
     this.waiting = true;
     let start = this.minDate?.toISOString().split('T')[0];
     let end = this.toDate?.toISOString().split('T')[0];
-    let parmas = { maxDelay: this.maxDelay, accountNumber: this.selectedAccount?.accountNumber?? null };
+    let parmas = { maxDelay: this.maxDelay, accountNumber: this.selectedAccount?.accountNumber ?? null };
     this._analysisService
       .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure, start, end, parmas)
       .subscribe(
         async (res) => {
           // debugger;
-          if(!this.maxDelay) this.maxDelay = res.data.maxDelay;
+          if (!this.maxDelay) this.maxDelay = res.data.maxDelay;
           this.data = res.data.dueDateReference.data;
           this.labels = res.data.dueDateReference.labels;
           this.secondChartDataRecords = res.data.dueDateReference.recordsDelay;
@@ -328,7 +328,7 @@ export class DueDateComponent implements OnInit {
           // this.chart.reinit();
           this.docDataTable = res.data.docDateReference;
           // this.notPaidDataTable = res.data.docDateReference;
-          if(!this.delayData) {
+          if (!this.delayData) {
             this.delayData = res.data.dueDateRefAccounts;
 
             this.delayData.forEach((account) => {
@@ -339,14 +339,14 @@ export class DueDateComponent implements OnInit {
               account.accountName = account.accountName ?? 'No Name';
             });
           }
-          
-          if(this.selectedAccount && this.selectedAccount.accountNumber) {
+
+          if (this.selectedAccount && this.selectedAccount.accountNumber) {
             this._analysisService
-            .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.selectedAccount.accountNumber)
-            .subscribe(res => {
-              this.waiting = false;
-              this.detailsData = res.data.records;
-            });
+              .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.selectedAccount.accountNumber, start, end, this.maxDelay)
+              .subscribe(res => {
+                this.waiting = false;
+                this.detailsData = res.data.records;
+              });
           }
 
           // this.docDataTable.forEach((element) => {

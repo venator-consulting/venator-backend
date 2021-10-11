@@ -200,6 +200,14 @@ router.route("/:orgId/:prcId/duedate/details/:accountNumber").get(
   analysisCtrl.dueDateDetailsAnalysis
 );
 
+router.route("/:orgId/:prcId/duedate/details/:accountNumber/:fromDate/:toDate/:maxDelay").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.dueDateDetailsAnalysis
+);
+
 router.route("/:orgId/:prcId/duedate/:fromDate/:toDate").get(
   passport.authenticate("jwt", {
     session: false,

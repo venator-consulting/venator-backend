@@ -58,7 +58,7 @@ export class DueDateDetailsComponent implements OnInit {
 
       this.home = { icon: 'pi pi-home', label: elem.data, routerLink: '/dashboard/shared/data' };
       this._analysisService
-        .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+        .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, null, null, null)
         .subscribe(res => {
 
           this.waiting = false;

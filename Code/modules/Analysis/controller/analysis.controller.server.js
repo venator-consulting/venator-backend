@@ -309,32 +309,37 @@ module.exports.dueDateAnalysis = async (req, res) => {
 };
 
 module.exports.dueDateDetailsAnalysis = async (req, res) => {
-  const dateRange = await dueDateAnalysisRepo.dueDateRangeCalc(
-    +req.params.orgId,
-    +req.params.prcId
-  );
-  if (dateRange.length < 1) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
-  }
+  let mindocdate = req.params.fromDate;
+  let maxappdate = req.params.toDate;
+  
+  if (!mindocdate && !maxappdate) {
+    const dateRange = await dueDateAnalysisRepo.dueDateRangeCalc(
+      +req.params.orgId,
+      +req.params.prcId
+    );
+    if (dateRange.length < 1) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
+    }
 
-  if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
+    if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
+    }
+    if (!dateRange[0].mindocdate || !(dateRange[0].mindocdate instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
+    }
+    mindocdate = dateRange[0].mindocdate;
+    maxappdate = dateRange[0].maxappdate;
+    if (!dateRange[0].maxappdate || !(dateRange[0].maxappdate instanceof Date)) {
+      maxappdate = dateRange[0].maxdate;
+    }
   }
-  if (!dateRange[0].mindocdate || !(dateRange[0].mindocdate instanceof Date)) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_due_date);
-  }
-  const mindocdate = dateRange[0].mindocdate;
-  const maxappdate = dateRange[0].maxappdate;
-  if (!dateRange[0].maxappdate || !(dateRange[0].maxappdate instanceof Date)) {
-    maxappdate = dateRange[0].maxdate;
-  }
-
   dueDateAnalysisRepo.dueDateAnalysisDetails(
     req.params.orgId,
     req.params.prcId,
     mindocdate,
     maxappdate,
     req.params.accountNumber,
+    +req.params.maxDelay,
     (data) => {
       // result = data;
       res.status(200).json({

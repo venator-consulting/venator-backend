@@ -128,8 +128,8 @@ export class AnalysisService {
       this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate', { params });
   }
 
-  getDueDateAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<any> {
-    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate/details/' + accountNumber);
+  getDueDateAnalysisDetails(orgId: number, prcId: number, accountNumber: string, start: string, end: string, maxDelay): Observable<any> {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate/details/' + accountNumber + '/' + start + '/' + end + '/' + maxDelay);
   }
 
 
