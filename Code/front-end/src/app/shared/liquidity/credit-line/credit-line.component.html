@@ -1,30 +1,16 @@
 <p-toast></p-toast>
 <div class="p-grid">
   <div class="p-col-12">
-    <h2 class="p-text-center">
+    <!-- <h2 class="p-text-center">
       {{ procedureName }}
-    </h2>
-    <p-progressBar
-      mode="indeterminate"
-      [style]="{ height: '5px' }"
-      *ngIf="searching"
-    ></p-progressBar>
+    </h2> -->
+    <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="searching"></p-progressBar>
   </div>
 
   <div class="p-col-12">
-    <p-table
-      #dt
-      dataKey="accountNumber"
-      [value]="data"
-      [columns]="cols"
-      styleClass="p-datatable-gridlines"
-      [resizableColumns]="true"
-      responsive="true"
-      [scrollable]="true"
-      scrollHeight="400px"
-      [reorderableColumns]="true"
-      [loading]="searching"
-    >
+    <p-table #dt dataKey="accountNumber" [value]="data" [columns]="cols" styleClass="p-datatable-gridlines"
+      [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true"
+      [loading]="searching">
       <ng-template pTemplate="colgroup">
         <colgroup>
           <col *ngFor="let col of cols" />
@@ -32,28 +18,15 @@
       </ng-template>
       <ng-template pTemplate="caption">
         <div class="p-mb-4">
-          <button
-            type="button"
-            pButton
-            pRipple
-            icon="pi pi-filter-slash"
-            (click)="clearFilter()"
-            class="p-ml-6 clearFilter"
-            pTooltip="{{ 'Data_Table.clearFilter' | translate }}"
-            *ngIf="filtersNo > 0"
-            tooltipPosition="bottom"
-          ></button>
+          <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+            class="p-ml-6 clearFilter" pTooltip="{{ 'Data_Table.clearFilter' | translate }}" *ngIf="filtersNo > 0"
+            tooltipPosition="bottom"></button>
         </div>
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th
-            pSortableColumn="{{ col.field }}"
-            pResizableColumn
-            pReorderableColumn
-            class="p-text-{{ col.align }}"
-            *ngFor="let col of cols"
-          >
+          <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn class="p-text-{{ col.align }}"
+            *ngFor="let col of cols">
             {{ col.header | translate }}
             <p-sortIcon field="{{ col.field }}"></p-sortIcon>
           </th>
@@ -63,31 +36,16 @@
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
-            <input
-              pInputText
-              type="text"
-              [(ngModel)]="criteria[col.field]"
-              [style]="{ width: '90%' }"
-              (input)="filterChange($any($event.target).value, col.field)"
-              class="filterInputCss"
-              *ngIf="
+            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{ width: '90%' }"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" *ngIf="
                 col.field != 'creditLineFromDate' &&
                 col.field != 'creditLineToDate'
-              "
-            />
-            <p-calendar
-              *ngIf="
+              " />
+            <p-calendar *ngIf="
                 col.field == 'creditLineFromDate' ||
                 col.field == 'creditLineToDate'
-              "
-              [(ngModel)]="criteria[col.field]"
-              (onSelect)="filterChange($event, col.field)"
-              [monthNavigator]="true"
-              [yearNavigator]="true"
-              yearRange="1900:2100"
-              appendTo="body"
-              dateFormat="dd.mm.yy"
-            >
+              " [(ngModel)]="criteria[col.field]" (onSelect)="filterChange($event, col.field)" [monthNavigator]="true"
+              [yearNavigator]="true" yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy">
             </p-calendar>
           </th>
           <th></th>
@@ -95,19 +53,12 @@
       </ng-template>
       <ng-template pTemplate="body" let-row>
         <tr [pEditableRow]="row">
-          <td
-            pEditableColumn
-            pReorderableRowHandle
-            *ngFor="let col of cols"
-            class="p-text-{{ col.align }}"
-          >
-            <span
-              *ngIf="
+          <td pEditableColumn pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{ col.align }}">
+            <span *ngIf="
                 col.field != 'creditLine' &&
                 col.field != 'creditLineToDate' &&
                 col.field != 'creditLineFromDate'
-              "
-            >
+              ">
               {{ row[col.field] }}
             </span>
 
@@ -115,116 +66,45 @@
               {{ row[col.field] | currency: "EUR":"" }}
             </span>
 
-            <span
-              *ngIf="
+            <span *ngIf="
                 !row.isEditable &&
                 (col.field == 'creditLineToDate' ||
                   col.field == 'creditLineFromDate')
-              "
-            >
+              ">
               {{ row[col.field] | date: "dd.MM.yyyy" }}
             </span>
 
-            <p-inputNumber
-              *ngIf="row.isEditable && col.field == 'creditLine'"
-              [(ngModel)]="row.creditLine"
-              mode="decimal"
-              locale="de-DE"
-              [minFractionDigits]="2"
-              [min]="0"
-              [showButtons]="true"
-              buttonLayout="horizontal"
-              inputId="horizontal"
-              spinnerMode="horizontal"
-              [step]="100"
-              decrementButtonClass="p-button-secondary"
-              incrementButtonClass="p-button-secondary"
-              incrementButtonIcon="pi pi-plus"
-              decrementButtonIcon="pi pi-minus"
-              [style]="{ 'margin-left': '5%' }"
-              size="10"
-            >
+            <p-inputNumber *ngIf="row.isEditable && col.field == 'creditLine'" [(ngModel)]="row.creditLine"
+              mode="decimal" locale="de-DE" [minFractionDigits]="2" [min]="0" [showButtons]="true"
+              buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="100"
+              decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary"
+              incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [style]="{ 'margin-left': '5%' }"
+              size="10">
             </p-inputNumber>
 
-            <p-calendar
-              *ngIf="row.isEditable && col.field == 'creditLineFromDate'"
-              [(ngModel)]="row.creditLineFromDate"
-              [monthNavigator]="true"
-              [yearNavigator]="true"
-              yearRange="1900:2100"
-              appendTo="body"
-              dateFormat="dd.mm.yy"
-            ></p-calendar>
-            <p-calendar
-              *ngIf="row.isEditable && col.field == 'creditLineToDate'"
-              [(ngModel)]="row.creditLineToDate"
-              [monthNavigator]="true"
-              [yearNavigator]="true"
-              yearRange="1900:2100"
-              appendTo="body"
-              dateFormat="dd.mm.yy"
-            ></p-calendar>
+            <p-calendar *ngIf="row.isEditable && col.field == 'creditLineFromDate'" [(ngModel)]="row.creditLineFromDate"
+              [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
+              dateFormat="dd.mm.yy"></p-calendar>
+            <p-calendar *ngIf="row.isEditable && col.field == 'creditLineToDate'" [(ngModel)]="row.creditLineToDate"
+              [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
+              dateFormat="dd.mm.yy"></p-calendar>
           </td>
           <td>
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="pi pi-pencil"
-              (click)="editRow(row)"
-              class="p-button-rounded p-button-warning"
-              *ngIf="!row.isEditable"
-              pTooltip="{{ 'Liquidity.edit' | translate }}"
-              tooltipPosition="bottom"
-            ></button
-            >&nbsp;
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="pi pi-save"
-              (click)="save(row)"
-              class="p-button-rounded p-button-warning"
-              *ngIf="row.isEditable"
-              pTooltip="{{ 'Liquidity.save' | translate }}"
-              tooltipPosition="bottom"
-            ></button
-            >&nbsp;
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="pi pi-times"
-              (click)="cancel(row)"
-              class="p-button-rounded p-button-warning"
-              *ngIf="row.isEditable"
-              pTooltip="{{ 'Liquidity.cancel' | translate }}"
-              tooltipPosition="bottom"
-            ></button
-            >&nbsp;
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="pi pi-plus"
-              (click)="addRow(row)"
-              class="p-button-rounded p-button-warning"
-              *ngIf="!row.isEditable && row.creditLine"
-              pTooltip="{{ 'Liquidity.add' | translate }}"
-              tooltipPosition="bottom"
-            ></button
-            >&nbsp;
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="pi pi-trash"
-              (click)="deleteRow(row)"
-              class="p-button-rounded p-button-warning"
-              *ngIf="!row.isEditable && row.creditLine"
-              pTooltip="{{ 'Liquidity.delete' | translate }}"
-              tooltipPosition="bottom"
-            ></button>
+            <button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(row)"
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
+              pTooltip="{{ 'Liquidity.edit' | translate }}" tooltipPosition="bottom"></button>&nbsp;
+            <button type="button" pButton pRipple icon="pi pi-save" (click)="save(row)"
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+              pTooltip="{{ 'Liquidity.save' | translate }}" tooltipPosition="bottom"></button>&nbsp;
+            <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
+              class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+              pTooltip="{{ 'Liquidity.cancel' | translate }}" tooltipPosition="bottom"></button>&nbsp;
+            <button type="button" pButton pRipple icon="pi pi-plus" (click)="addRow(row)"
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable && row.creditLine"
+              pTooltip="{{ 'Liquidity.add' | translate }}" tooltipPosition="bottom"></button>&nbsp;
+            <button type="button" pButton pRipple icon="pi pi-trash" (click)="deleteRow(row)"
+              class="p-button-rounded p-button-warning" *ngIf="!row.isEditable && row.creditLine"
+              pTooltip="{{ 'Liquidity.delete' | translate }}" tooltipPosition="bottom"></button>
           </td>
         </tr>
       </ng-template>
@@ -232,97 +112,48 @@
   </div>
 </div>
 
-<p-dialog
-  [(visible)]="newDialog"
-  [style]="{ width: '450px' }"
-  header="{{ 'Liquidity.creditLineLabel' | translate }}"
-  [modal]="true"
-  styleClass="p-fluid"
->
+<p-dialog [(visible)]="newDialog" [style]="{ width: '450px' }" header="{{ 'Liquidity.creditLineLabel' | translate }}"
+  [modal]="true" styleClass="p-fluid">
   <ng-template pTemplate="content">
     <div class="p-field">
-      <label for="number"
-        >{{ "Liquidity.accountNumber" | translate }}:
-        {{ newRecord.accountNumber }}</label
-      >
+      <label for="number">{{ "Liquidity.accountNumber" | translate }}:
+        {{ newRecord.accountNumber }}</label>
     </div>
     <div class="p-field">
-      <label for="name"
-        >{{ "Liquidity.accountName" | translate }}:
-        {{ newRecord.accountName }}</label
-      >
+      <label for="name">{{ "Liquidity.accountName" | translate }}:
+        {{ newRecord.accountName }}</label>
     </div>
     <div class="p-field">
-      <label for="CreditLine"
-        >{{ "Liquidity.creditLineLabel" | translate }}:</label
-      >
-      <p-inputNumber
-        [(ngModel)]="newRecord.creditLine"
-        mode="decimal"
-        locale="de-DE"
-        [minFractionDigits]="2"
-        [min]="0"
-        [showButtons]="true"
-        buttonLayout="horizontal"
-        inputId="horizontal"
-        spinnerMode="horizontal"
-        [step]="100"
-        decrementButtonClass="p-button-secondary"
-        incrementButtonClass="p-button-secondary"
-        incrementButtonIcon="pi pi-plus"
-        decrementButtonIcon="pi pi-minus"
-        [style]="{ width: '40%' }"
-        size="10"
-        class="p-ml-4"
-      >
+      <label for="CreditLine">{{ "Liquidity.creditLineLabel" | translate }}:</label>
+      <p-inputNumber [(ngModel)]="newRecord.creditLine" mode="decimal" locale="de-DE" [minFractionDigits]="2" [min]="0"
+        [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="100"
+        decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary"
+        incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" [style]="{ width: '40%' }" size="10"
+        class="p-ml-4">
       </p-inputNumber>
     </div>
 
     <div class="p-field">
       <label for="creditLineFromDate">{{
         "Liquidity.creditLineFromDate" | translate
-      }}</label>
-      <p-calendar
-        [(ngModel)]="newRecord.creditLineFromDate"
-        [monthNavigator]="true"
-        [yearNavigator]="true"
-        yearRange="1900:2100"
-        appendTo="body"
-        dateFormat="dd.mm.yy"
-      ></p-calendar>
+        }}</label>
+      <p-calendar [(ngModel)]="newRecord.creditLineFromDate" [monthNavigator]="true" [yearNavigator]="true"
+        yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy"></p-calendar>
     </div>
 
     <div class="p-field">
       <label for="creditLineToDate">{{
         "Liquidity.creditLineToDate" | translate
-      }}</label>
-      <p-calendar
-        [(ngModel)]="newRecord.creditLineToDate"
-        [monthNavigator]="true"
-        [yearNavigator]="true"
-        yearRange="1900:2100"
-        appendTo="body"
-        dateFormat="dd.mm.yy"
-      ></p-calendar>
+        }}</label>
+      <p-calendar [(ngModel)]="newRecord.creditLineToDate" [monthNavigator]="true" [yearNavigator]="true"
+        yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy"></p-calendar>
     </div>
   </ng-template>
 
   <ng-template pTemplate="footer">
-    <button
-      pButton
-      pRipple
-      label="{{ 'Liquidity.cancel' | translate }}"
-      icon="pi pi-times"
-      class="p-button-text"
-      (click)="hideDialog()"
-    ></button>
-    <button
-      pButton
-      pRipple
-      label="{{ 'Liquidity.save' | translate }}"
-      icon="pi pi-check"
-      class="p-button-text"
-      (click)="saveCreditLie()"
-    ></button>
+    <button pButton pRipple label="{{ 'Liquidity.cancel' | translate }}" icon="pi pi-times" class="p-button-text"
+      (click)="hideDialog()"></button>
+    <button pButton pRipple label="{{ 'Liquidity.save' | translate }}" icon="pi pi-check" class="p-button-text"
+      (click)="saveCreditLie()"></button>
   </ng-template>
 </p-dialog>

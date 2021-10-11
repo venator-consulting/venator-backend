@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { HostListener } from "@angular/core";
 
 @Component({
   selector: 'app-nav-bar',
@@ -20,6 +21,9 @@ export class NavBarComponent implements OnInit {
   prcId: number;
   @ViewChild('menu') menu: any;
   currentProcedureStatus: string;
+  prcName: string;
+  scrWidth: number;
+  prcStyle: string;
 
   constructor(
     public _translateService: TranslateService,
@@ -28,9 +32,18 @@ export class NavBarComponent implements OnInit {
     this._translateService.addLangs(['de', 'en']);
     this._translateService.setDefaultLang('de');
     this.browserLang = this._translateService.getBrowserLang();
-    this._translateService.use(
-      this.browserLang.match(/de|en/) ? this.browserLang : 'de'
-    );
+    this._translateService.use(this.browserLang.match(/de|en/) ? this.browserLang : 'de');
+    this.getScreenSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize(event?) {
+    // this.scrHeight = window.innerHeight;
+    debugger;
+    this.scrWidth = window.innerWidth;
+    this.prcStyle = 'position: fixed; z-index: 999; top: 15px; right:' + (this.scrWidth/2 - this.prcName?.length) + 'px; color: #ffffff; height: 100px; font-size: xx-large;';
+    // let elem: HTMLElement = document.getElementById('navbar-title');
+    // elem?.setAttribute("style", `margin-left: ${this.scrWidth/3} !important`);
   }
 
   async ngOnInit() {
@@ -38,6 +51,9 @@ export class NavBarComponent implements OnInit {
     this.role = localStorage.getItem('role');
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
+    this.prcName = localStorage.getItem('currentProcedureName');
+    this.prcStyle = 'position: fixed; z-index: 999; top: 15px; right:' + (this.scrWidth/2 - this.prcName?.length) + 'px; color: #ffffff; height: 100px; font-size: xx-large;';
+
 
     this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
       this._translateService.use(event.lang);

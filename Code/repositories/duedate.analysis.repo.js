@@ -419,7 +419,7 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, mindate, maxappdate, s
     //     label: rec.label
     //   }
     // });
-    finalResult.dueDateReference.data = diffData.filter(Boolean);
+    finalResult.dueDateReference.data = diffData.filter(value => value != null && value != undefined);
     finalResult.dueDateReference.labels = firstChartLabels;
     finalResult.dueDateReference.secondChartLabels = secondChartLabels;
     finalResult.dueDateReference.recordsDelay = recordsDelay;
