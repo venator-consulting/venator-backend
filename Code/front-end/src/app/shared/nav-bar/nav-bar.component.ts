@@ -238,6 +238,18 @@ export class NavBarComponent implements OnInit {
                 },
               },
               {
+                label: elem.dueDateAnalyse,
+                icon: 'pi pi-credit-card',
+                routerLink: ['/dashboard/analysis/due-date'],
+                disabled: localStorage.getItem('currentProcedureDueDate') != 'true' ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
                 label: elem.creditorsAnalyse,
                 icon: 'pi pi-chart-bar',
                 routerLink: ['/dashboard/analysis/creditor'],

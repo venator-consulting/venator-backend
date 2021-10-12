@@ -87,7 +87,7 @@ export class DueDateComponent implements OnInit {
 
     this._translateService.get('DueDateAnalysis').subscribe((elem) => {
       this.items = [
-        { label: elem.paymentLabel, routerLink: '/dashboard/analysis/payment' },
+        // { label: elem.paymentLabel, routerLink: '/dashboard/analysis/payment' },
         { label: elem.label, routerLink: '/dashboard/analysis/due-date' },
       ];
 
