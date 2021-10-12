@@ -460,7 +460,8 @@
     "average": "Average",
     "positive": "Positive",
     "negative": "Negative",
-    "delay": "Delay"
+    "delay": "Delay",
+    "selectAccount": "select Account"
   },
   "CreditorsAnalysis": {
     "label": "Creditors analysis",

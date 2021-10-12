@@ -454,7 +454,8 @@
     "average": "Durchschnitt",
     "positive": "Positiv",
     "negative": "Negativ",
-    "delay": "Delay"
+    "delay": "Delay",
+    "selectAccount": "select Account"
   },
   "CreditorsAnalysis": {
     "label": "Kreditorenanalyse",
