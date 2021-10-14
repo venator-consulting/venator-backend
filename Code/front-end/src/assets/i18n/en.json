@@ -60,7 +60,7 @@
     "amountAnalyisis": "Amount analysis",
     "textAnalysis": "Text analysis",
     "paymentAnalyse": "Payment analysis",
-    "dueDateAnalyse": "Due Date Analysis",
+    "dueDateAnalyse": "Payment Behavior",
     "creditorsAnalyse": "Creditors analysis",
     "addUser": "Add user",
     "editUser": "Edit user",
@@ -445,23 +445,26 @@
     "allRelevant": "All Records"
   },
   "DueDateAnalysis": {
-    "label": " Duedate Analysis",
+    "label": " Payment Behavior",
     "paymentLabel": "Payment Analysis",
     "data": " Data",
     "backToPayment": " To Paymentanalysis",
-    "backtoDueDate": " Zur Fälligkeitsanalyse",
+    "backtoDueDate": " To Payment Behavior",
     "accountNumber": "Accountnumber",
     "accountName": "Accountname",
     "positiveDelay": "To late",
     "negativeDelay": "To early",
     "notPaid": "Notpaid",
     "count": "Count",
-    "firstChartLabel": "Number of days",
+    "firstChartLabel": "Average",
+    "secondChartLabel": "Difference between payment and due date",
     "average": "Average",
     "positive": "Positive",
     "negative": "Negative",
     "delay": "Delay",
-    "selectAccount": "select Account"
+    "selectAccount": "select Account",
+    "search": "Apply"
+
   },
   "CreditorsAnalysis": {
     "label": "Creditors analysis",

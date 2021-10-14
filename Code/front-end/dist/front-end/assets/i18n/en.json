@@ -60,6 +60,7 @@
     "amountAnalyisis": "Amount analysis",
     "textAnalysis": "Text analysis",
     "paymentAnalyse": "Payment analysis",
+    "dueDateAnalyse": "Payment Behavior",
     "creditorsAnalyse": "Creditors analysis",
     "addUser": "Add user",
     "editUser": "Edit user",
@@ -444,21 +445,26 @@
     "allRelevant": "All Records"
   },
   "DueDateAnalysis": {
-    "label": " Duedate Analysis",
+    "label": " Payment Behavior",
     "paymentLabel": "Payment Analysis",
     "data": " Data",
     "backToPayment": " To Paymentanalysis",
-    "backtoDueDate": " Zur Fälligkeitsanalyse",
+    "backtoDueDate": " To Payment Behavior",
     "accountNumber": "Accountnumber",
     "accountName": "Accountname",
     "positiveDelay": "To late",
     "negativeDelay": "To early",
     "notPaid": "Notpaid",
     "count": "Count",
-    "firstChartLabel": "Number of days",
+    "firstChartLabel": "Average",
+    "secondChartLabel": "Difference between payment and due date",
     "average": "Average",
     "positive": "Positive",
-    "negative": "Negative"
+    "negative": "Negative",
+    "delay": "Delay",
+    "selectAccount": "select Account",
+    "search": "Apply"
+
   },
   "CreditorsAnalysis": {
     "label": "Creditors analysis",
@@ -556,7 +562,9 @@
     "typeDocumentInformation5": "Typedocument Information 5",
     "contentDocumentInformation5": "Contentdocument Information 5",
     "typeDocumentInformation6": "Typedocument Information 6",
-    "contentDocumentInformation6": "Contentdocument Information 6"
+    "contentDocumentInformation6": "Contentdocument Information 6",
+    "documentTypeNewName": "documentTypeNewName",
+    "delay": "delay"
   },
   "Susa": {
     "accountType": "Account type",

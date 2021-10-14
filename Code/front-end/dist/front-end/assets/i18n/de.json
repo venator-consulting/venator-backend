@@ -28,19 +28,19 @@
     "reset": "zurücksetzen"
   },
   "general_messages": {
-    "update_success": "updated successfully!",
-    "create_success": "Created successfully!",
-    "done": "Done.",
-    "delete_success": "Deleted successfully!"
+    "update_success": "Erfolgreich bearbeitet !",
+    "create_success": "Erfolgreich erstellt!",
+    "done": "Fertig.",
+    "delete_success": "Erfolgreich gelöscht!"
   },
   "confirm_messages": {
-    "r_u_sure": "Are You Sure? press yes to proceed",
-    "yes": "Yes",
-    "cancel": "Cancel",
-    "update": "Update Confirmation",
-    "delete": "Delete Confirmation",
-    "body_update": "Are You sure you want to update?",
-    "body_delete": "Are You sure, you want to delete? deleted data are unrecoverable! press 'YES' to proceed, 'NO' to cancel."
+    "r_u_sure": "Bist du sicher? drücken Sie 'ja' um fortzufahren",
+    "yes": "Ja",
+    "cancel": "Abbrechen",
+    "update": "aktualisieren Bestätigung",
+    "delete": "löschen Bestätigung",
+    "body_update": "Möchten Sie wirklich aktualisieren?",
+    "body_delete": "Sind Sie sicher, dass Sie löschen möchten? Gelöschte Daten sind nicht wiederherstellbar! Drücken Sie 'JA' um fortzufahren, 'NEIN' um abzubrechen."
   },
   "LOGIN": {
     "welcomeMsg": "Bitte loggen Sie sich ein",
@@ -57,6 +57,7 @@
     "amountAnalyisis": "Betragsanalyse",
     "textAnalysis": "Textanalyse",
     "paymentAnalyse": "Zahlunganalyse",
+    "dueDateAnalyse": "Zahlungsverhalten",
     "creditorsAnalyse": "Kreditorenanalyse",
     "addUser": "Admin hinzufügen",
     "editUser": "Benutzer bearbeiten",
@@ -76,10 +77,10 @@
     "creditLine": "Kreditlinie",
     "freeLiquidity": "Freie Liquidität",
     "preCalculateAnalysis": "Analysen Vorberechnung",
-    "NOT_IMPORTED": "NOT IMPORTED",
-    "IMPORTED": "IMPORTED",
-    "PARTIAL_CALCULATED": "PARTIAL CALCULATED",
-    "CALCULATED": "CALCULATED"
+    "NOT_IMPORTED": "Nicht Importiert",
+    "IMPORTED": "Importiert",
+    "PARTIAL_CALCULATED": "Teilberechnet",
+    "CALCULATED": "Berechnet"
   },
   "Admin_Dashboard": {
     "organisationEmail": "Email",
@@ -360,7 +361,7 @@
     "payment": "Vorberechnete Zahlungsanalyse",
     "text_word": "Vorberechnete Textanalyse nach Wört",
     "text_account": "Vorberechnete Textanalyse nach Konto",
-    "due_date": "Vorberechnete Fälligkeitsanalyse"
+    "due_date": "Vorberechnetes Zahlungsverhalten"
   },
   "precalc" : {
     "precalc": "Analysen Vorberechnung",
@@ -369,7 +370,7 @@
     "text_account": "Textanalyse nach Konto",
     "text_word": "Textanalyse nach Wört",
     "payment": "Zahlungsanalyse",
-    "due_date": "Fälligkeitsanalyse",
+    "due_date": "Zahlungsverhalten",
     "start": "Starten"
   },
   "Notfound": {
@@ -438,21 +439,25 @@
     "allRelevant": "Alle Buchungen"
   },
   "DueDateAnalysis": {
-    "label": " Fälligkeitsanalyse",
+    "label": " Zahlungsverhalten",
     "paymentLabel": "Zahlungsanalyse",
     "data": " Daten",
     "backToPayment": " Zur Zahlungsanalyse",
-    "backtoDueDate": " Zur Fälligkeitsanalyse",
+    "backtoDueDate": " Zum Zahlungsverhalten",
     "accountNumber": "Kontonummer",
     "accountName": "Kontoname",
     "positiveDelay": "Zu spät",
     "negativeDelay": "Zu früh",
     "notPaid": "Unbezahlt",
     "count": "Anzahl",
-    "firstChartLabel": "Anzahl der Tage",
+    "firstChartLabel": "Durchschnitt",
+    "secondChartLabel": "Differenz zwischen Zahlung und Fälligkeit",
     "average": "Durchschnitt",
     "positive": "Positiv",
-    "negative": "Negativ"
+    "negative": "Negativ",
+    "delay": "Verspätung",
+    "selectAccount": "Konto auswählen",
+    "search": "Übernehmen"
   },
   "CreditorsAnalysis": {
     "label": "Kreditorenanalyse",
@@ -550,7 +555,9 @@
     "typeDocumentInformation5": "Art der Beleginformation 5",
     "contentDocumentInformation5": "Inhalt der Beleginformation 5",
     "typeDocumentInformation6": "Art der Beleginformation 6",
-    "contentDocumentInformation6": "Inhalt der Beleginformation 6"
+    "contentDocumentInformation6": "Inhalt der Beleginformation 6",
+    "documentTypeNewName": " BelegTypNeuName",
+    "delay": "Verspätung"
   },
   "Susa": {
     "accountType": "Kontotyp",

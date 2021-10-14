@@ -277,7 +277,7 @@ export class DueDateComponent implements OnInit {
                   let label = point.label;
                   let accountNumber = point?.accountNumber;
                   let accountName = point?.accountName;
-                  return label + ': ' + value + ' - account: ' + accountNumber + ' / ' + accountName;
+                  return label + ' :' + value +  '  - ' + accountNumber + '/' + accountName;
                 },
               },
             },
@@ -317,7 +317,7 @@ export class DueDateComponent implements OnInit {
           this.secondChartData = {
             labels: this.labels,
             datasets: [{
-              label: 'records',
+              label: await this._translateService.get('DueDateAnalysis.secondChartLabel').toPromise(),
               borderColor: `rgb(100,100,255)`,
               data: this.secondChartDataRecords,
               fill: false,

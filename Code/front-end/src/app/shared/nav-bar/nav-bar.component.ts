@@ -45,7 +45,7 @@ export class NavBarComponent implements OnInit {
   getScreenSize(event?) {
     // this.scrHeight = window.innerHeight;
     this.scrWidth = window.innerWidth;
-      this.prcStyle = 'position: fixed; z-index: 999; top: 15px; right:' + (this.scrWidth / 2 - 25) + 'px; color: #ffffff; height: 100px; font-size: xx-large;';
+      this.prcStyle = 'position: fixed; z-index: 999; top: 30px; right:' + (this.scrWidth / 2 - 25) + 'px; color: #ffffff; height: 100px; font-size: x-large;';
     // let elem: HTMLElement = document.getElementById('navbar-title');
     // elem?.setAttribute("style", `margin-left: ${this.scrWidth/3} !important`);
   }
@@ -56,7 +56,7 @@ export class NavBarComponent implements OnInit {
     this.prcName = localStorage.getItem('currentProcedureName');
     let elem: HTMLElement = document.getElementById('prc');
     elem.innerHTML = this.prcName;
-    this.prcStyle = 'position: fixed; z-index: 999; top: 15px; right:' + (this.scrWidth / 2 - this.prcName?.length) + 'px; color: #ffffff; height: 100px; font-size: xx-large;';
+    this.prcStyle = 'position: fixed; z-index: 999; top: 30px; right:' + (this.scrWidth / 2 - this.prcName?.length) + 'px; color: #ffffff; height: 100px; font-size: x-large;';
   }
 
   async ngOnInit() {
@@ -64,7 +64,6 @@ export class NavBarComponent implements OnInit {
     this.role = localStorage.getItem('role');
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
-    // this.prcStyle = 'position: fixed; z-index: 999; top: 15px; right:' + (this.scrWidth / 2 - this.prcName?.length) + 'px; color: #ffffff; height: 100px; font-size: xx-large;';
 
 
     this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
