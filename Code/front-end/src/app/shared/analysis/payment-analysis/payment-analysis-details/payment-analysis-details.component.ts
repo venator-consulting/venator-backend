@@ -75,7 +75,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     private _router: Router,
     private _route: ActivatedRoute,
     private _exportDataService: ExportDataService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this._translateService.get('PaymentAnalysis').subscribe((elem) => {
@@ -232,11 +232,6 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         align: 'left',
       },
       {
-        header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew',
-        align: 'left',
-      },
-      {
         header: 'DataTableColumns.documentNumber',
         field: 'documentNumber',
         align: 'left',
@@ -265,6 +260,26 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         header: 'DataTableColumns.dueDate',
         field: 'dueDate',
         align: 'center',
+      },
+      {
+        header: 'DataTableColumns.textPosting',
+        field: 'textPosting',
+        align: 'left',
+      },
+      {
+        header: 'DataTableColumns.textHeader',
+        field: 'textHeader',
+        align: 'left',
+      },
+      {
+        header: 'DataTableColumns.reference',
+        field: 'reference',
+        align: 'left',
+      },
+      {
+        header: 'DataTableColumns.assignment',
+        field: 'assignment',
+        align: 'left',
       },
     ];
 
@@ -307,9 +322,9 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
             for (let i = 0; i < this.data.length; i++) {
               const element = this.data[i];
               this.labels.push(element.monthName + '-' + element.yearName);
-              this.blue.push(Math.abs(element.blue.value));
-              this.green.push(Math.abs(element.green.value));
-              this.red.push(Math.abs(element.red.value));
+              this.blue.push(-1 * (element.blue.value));
+              this.green.push(element.green.value);
+              this.red.push(-1 * (element.red.value));
             }
           }
           this.waiting = false;
@@ -375,7 +390,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
             detail: 'records set as relevant successfully!',
           });
         },
-        (er) => {}
+        (er) => { }
       );
   }
 
@@ -484,7 +499,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
                     day: '2-digit',
                   }
                 );
-            } catch (e) {}
+            } catch (e) { }
           }
           // end of formatting
         }
@@ -587,7 +602,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   }
 
   sort(event) {
-    this.backCriteria.orderBy = event.sortField? event.sortField : 'id';
+    this.backCriteria.orderBy = event.sortField ? event.sortField : 'id';
     this.backCriteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.backCriteria.offset = 0;
@@ -615,7 +630,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
           this.saveAsExcelFile(res, 'Payment_details');
           // window.open(url.toString(), '_blank');
         },
-        (err) => {this.waiting = false;}
+        (err) => { this.waiting = false; }
       );
   }
 

@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.primengConfig.ripple = true;
 
-    this.bnIdle.startWatching(900).subscribe((isTimedOut: boolean) => {
+    this.bnIdle.startWatching(1800).subscribe((isTimedOut: boolean) => {
         console.log('session expired');
         localStorage.clear();
         this._router.navigate(['/']);

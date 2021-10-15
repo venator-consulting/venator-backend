@@ -12,7 +12,6 @@ module.exports.paymentDateRange = async (orgId, prcId) => {
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.documentDate is not NULL 
-                        AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
                         AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
                             (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
@@ -107,7 +106,6 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber is not NULL
                         AND pos.documentDate is not NULL 
-                        AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate) 
                         AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
                         (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
@@ -118,17 +116,11 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
   str.on("data", (row) => {
     res.forEach((element) => {
       // get last day of the month
-      var d = new Date(element.yearName, +element.monthName, 0);
-      if (
-        ((row.documentTypeNewName &&
-          row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "RE") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "KR")) &&
-        row.documentDate <= d &&
-        (row.applicationDate == null || row.applicationDate > d)
-      ) {
+      var d = new Date(element.yearName, +element.monthName, 1);
+      if (row.documentTypeNewName &&
+        row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
+        row.documentDate < d &&
+        (row.applicationDate == null || row.applicationDate >= d)) {
         element.blue.value += +row.balance;
         // add creditor to the list
         const b = element.blue.accounts.findIndex(
@@ -167,17 +159,11 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
           blueBlackList.push(row.id);
         }
       } // end of blue condition
-      if (
-        ((row.documentTypeNewName &&
-          row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "RE") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "KR")) &&
-        row.documentDate <= d &&
-        (row.applicationDate == null || row.applicationDate > d) &&
-        row.dueDate <= d
-      ) {
+      if (row.documentTypeNewName &&
+        row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
+        row.documentDate < d &&
+        (row.applicationDate == null || row.applicationDate >= d) &&
+        row.dueDate < d) {
         element.red.value += +row.balance;
         const r = element.red.accounts.findIndex(
           (x) => x.accountNumber == row.accountNumber
@@ -215,16 +201,10 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
           redBlackList.push(row.id);
         }
       } // end of red condition
-      if (
-        ((row.documentTypeNewName &&
-          row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "KZ") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "ZP")) &&
-        row.documentDate <= d &&
-        row.applicationDate == null
-      ) {
+      if (row.documentTypeNewName &&
+        row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG" &&
+        row.documentDate < d &&
+        row.applicationDate == null) {
         element.green.value += +row.balance;
         const g = element.green.accounts.findIndex(
           (x) => x.accountNumber == row.accountNumber
@@ -323,11 +303,9 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
     // iterate for each month
     res.forEach((element) => {
       // get last day of the month
-      var d = new Date(element.yearName, +element.monthName, 0);
-      if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") ||
-        (row.documentType && row.documentType.toString().toUpperCase() == "RE") ||
-        (row.documentType && row.documentType.toString().toUpperCase() == "KR")) &&
-        row.documentDate?.getTime() <= d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime())) {
+      var d = new Date(element.yearName, +element.monthName, 1);
+      if (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
+        row.documentDate?.getTime() < d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime())) {
         element.blue.value += +row.balance;
         // add creditor to the list
         // check if the account added to the blue bar in chart for this month
@@ -367,11 +345,9 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
           blueBlackList.push(row.id);
         }
       } // end of blue condition
-      if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") ||
-        (row.documentType && row.documentType.toString().toUpperCase() == "RE") ||
-        (row.documentType && row.documentType.toString().toUpperCase() == "KR")) &&
-        row.documentDate?.getTime() <= d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime()) &&
-        row.dueDate?.getTime() <= d?.getTime()) {
+      if (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
+        row.documentDate?.getTime() < d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime()) &&
+        row.dueDate?.getTime() < d?.getTime()) {
         element.red.value += +row.balance;
         const r = element.red.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (r >= 0) {
@@ -405,10 +381,8 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
           redBlackList.push(row.id);
         }
       } // end of red condition
-      if (((row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG") ||
-        (row.documentType && row.documentType.toString().toUpperCase() == "KZ") ||
-        (row.documentType && row.documentType.toString().toUpperCase() == "ZP")) &&
-        row.documentDate?.getTime() <= d?.getTime() && row.applicationDate == null) {
+      if (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG" &&
+        row.documentDate?.getTime() < d?.getTime() && row.applicationDate == null) {
         element.green.value += +row.balance;
         const g = element.green.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (g >= 0) {
@@ -489,14 +463,13 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
   let query = `SELECT pos.id, pos.procedureId, pos.accountNumber, pos.accountName, pos.paymentRelevant,
                         pos.paymentRelevantComment, pos.accountType, pos.documentType, pos.balance, pos.contraAccountNumber,
                         pos.contraAccountName, pos.documentTypeNewName, pos.documentNumber, pos.documentDate, pos.recordNumber,
-                        pos.ledgerId, pos.executionDate, pos.dueDate, pos.applicationDate 
+                        pos.ledgerId, pos.executionDate, pos.dueDate, pos.applicationDate, pos.textPosting, pos.textHeader, pos.reference, pos.assignment 
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = ${prcId}
                         AND UPPER(pos.accountType) = 'K'
                         AND pos.accountNumber = ${accountNumber} 
                         AND pos.documentDate is not NULL 
-                        AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
                         AND (year(pos.documentDate) <> year(pos.applicationDate) OR  pos.applicationDate is null OR 
                         (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                         AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
@@ -506,21 +479,15 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
 
   str.on("data", (row) => {
     result.forEach((element) => {
-      // get last day of the month
-      var d = new Date(element.yearName, +element.monthName, 0);
+      // get first day of the next month
+      var d = new Date(element.yearName, +element.monthName , 1);
       // BLUES................
       // and it's late: app date > due date
       // month we increment already!!!!!!!!!!!!!!!!!!
-      if (
-        ((row.documentTypeNewName &&
-          row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "RE") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "KR")) &&
-        row.documentDate?.getTime() <= d?.getTime() &&
-        (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime())
-      ) {
+      if ((row.documentTypeNewName &&
+        row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") &&
+        row.documentDate?.getTime() < d?.getTime() &&
+        (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime())) {
         element.blue.value += +row.balance;
         // add row to the blue list
         const i = finalResult.blue.findIndex((x) => x.id == row.id);
@@ -529,17 +496,11 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
         }
         // RED......................
       }
-      if (
-        ((row.documentTypeNewName &&
-          row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "RE") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "KR")) &&
-        row.documentDate?.getTime() <= d?.getTime() &&
-        (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime()) &&
-        row.dueDate?.getTime() <= d?.getTime()
-      ) {
+      if (row.documentTypeNewName &&
+        row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
+        row.documentDate?.getTime() < d?.getTime() &&
+        (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime()) &&
+        row.dueDate?.getTime() < d?.getTime()) {
         element.red.value += +row.balance;
         // add row to the red list
         const i = finalResult.red.findIndex((x) => x.id == row.id);
@@ -549,16 +510,10 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
         // finalResult.red.push(row);
         // GREEN.......................
       }
-      if (
-        ((row.documentTypeNewName &&
-          row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "KZ") ||
-          (row.documentType &&
-            row.documentType.toString().toUpperCase() == "ZP")) &&
-        row.documentDate?.getTime() <= d?.getTime() &&
-        row.applicationDate == null
-      ) {
+      if (row.documentTypeNewName &&
+        row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG" &&
+        row.documentDate?.getTime() < d?.getTime() &&
+        row.applicationDate == null) {
         element.green.value += +row.balance;
         // add row to the green list
         const i = finalResult.green.findIndex((x) => x.id == row.id);

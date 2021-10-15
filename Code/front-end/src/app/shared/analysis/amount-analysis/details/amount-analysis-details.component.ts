@@ -151,11 +151,6 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         align: 'center',
       },
       {
-        header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew',
-        align: 'center',
-      },
-      {
         header: 'DataTableColumns.documentNumber',
         field: 'documentNumber',
         align: 'center',
@@ -184,6 +179,26 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         header: 'DataTableColumns.dueDate',
         field: 'dueDate',
         align: 'center',
+      },
+      {
+        header: 'DataTableColumns.textPosting',
+        field: 'textPosting',
+        align: 'left',
+      },
+      {
+        header: 'DataTableColumns.textHeader',
+        field: 'textHeader',
+        align: 'left',
+      },
+      {
+        header: 'DataTableColumns.reference',
+        field: 'reference',
+        align: 'left',
+      },
+      {
+        header: 'DataTableColumns.assignment',
+        field: 'assignment',
+        align: 'left',
       },
     ];
 

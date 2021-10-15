@@ -477,7 +477,7 @@ module.exports.dueDateAnalysisDetails = async (orgId, prcId, mindocdate, maxappd
   // AND pos.applicationDate is not NULL
   // AND (pos.applicationDate <> pos.dueDate)
   let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
-                         pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
+                         pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType, pos.textPosting, pos.textHeader, pos.reference, pos.assignment 
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = ${prcId}

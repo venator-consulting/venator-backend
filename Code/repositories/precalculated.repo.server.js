@@ -535,7 +535,6 @@ module.exports.storePaymentAnalysis = async (orgId, prcId) => {
       AND UPPER(pos.accountType) = 'K'
       AND pos.accountNumber is not NULL
       AND pos.documentDate is not NULL 
-      AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
       AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
           (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
       AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
