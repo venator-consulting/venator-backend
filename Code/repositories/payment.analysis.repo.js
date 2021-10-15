@@ -116,11 +116,11 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
   str.on("data", (row) => {
     res.forEach((element) => {
       // get last day of the month
-      var d = new Date(element.yearName, +element.monthName, 0);
+      var d = new Date(element.yearName, +element.monthName, 1);
       if (row.documentTypeNewName &&
         row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
-        row.documentDate <= d &&
-        (row.applicationDate == null || row.applicationDate > d)) {
+        row.documentDate < d &&
+        (row.applicationDate == null || row.applicationDate >= d)) {
         element.blue.value += +row.balance;
         // add creditor to the list
         const b = element.blue.accounts.findIndex(
@@ -161,9 +161,9 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
       } // end of blue condition
       if (row.documentTypeNewName &&
         row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
-        row.documentDate <= d &&
-        (row.applicationDate == null || row.applicationDate > d) &&
-        row.dueDate <= d) {
+        row.documentDate < d &&
+        (row.applicationDate == null || row.applicationDate >= d) &&
+        row.dueDate < d) {
         element.red.value += +row.balance;
         const r = element.red.accounts.findIndex(
           (x) => x.accountNumber == row.accountNumber
@@ -203,7 +203,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
       } // end of red condition
       if (row.documentTypeNewName &&
         row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG" &&
-        row.documentDate <= d &&
+        row.documentDate < d &&
         row.applicationDate == null) {
         element.green.value += +row.balance;
         const g = element.green.accounts.findIndex(
@@ -303,9 +303,9 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
     // iterate for each month
     res.forEach((element) => {
       // get last day of the month
-      var d = new Date(element.yearName, +element.monthName, 0);
+      var d = new Date(element.yearName, +element.monthName, 1);
       if (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
-        row.documentDate?.getTime() <= d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime())) {
+        row.documentDate?.getTime() < d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime())) {
         element.blue.value += +row.balance;
         // add creditor to the list
         // check if the account added to the blue bar in chart for this month
@@ -346,8 +346,8 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         }
       } // end of blue condition
       if (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
-        row.documentDate?.getTime() <= d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime()) &&
-        row.dueDate?.getTime() <= d?.getTime()) {
+        row.documentDate?.getTime() < d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime()) &&
+        row.dueDate?.getTime() < d?.getTime()) {
         element.red.value += +row.balance;
         const r = element.red.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (r >= 0) {
@@ -382,7 +382,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         }
       } // end of red condition
       if (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG" &&
-        row.documentDate?.getTime() <= d?.getTime() && row.applicationDate == null) {
+        row.documentDate?.getTime() < d?.getTime() && row.applicationDate == null) {
         element.green.value += +row.balance;
         const g = element.green.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (g >= 0) {
@@ -479,15 +479,15 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
 
   str.on("data", (row) => {
     result.forEach((element) => {
-      // get last day of the month
-      var d = new Date(element.yearName, +element.monthName, 0);
+      // get first day of the next month
+      var d = new Date(element.yearName, +element.monthName , 1);
       // BLUES................
       // and it's late: app date > due date
       // month we increment already!!!!!!!!!!!!!!!!!!
       if ((row.documentTypeNewName &&
         row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG") &&
-        row.documentDate?.getTime() <= d?.getTime() &&
-        (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime())) {
+        row.documentDate?.getTime() < d?.getTime() &&
+        (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime())) {
         element.blue.value += +row.balance;
         // add row to the blue list
         const i = finalResult.blue.findIndex((x) => x.id == row.id);
@@ -498,9 +498,9 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
       }
       if (row.documentTypeNewName &&
         row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
-        row.documentDate?.getTime() <= d?.getTime() &&
-        (row.applicationDate == null || row.applicationDate?.getTime() > d?.getTime()) &&
-        row.dueDate?.getTime() <= d?.getTime()) {
+        row.documentDate?.getTime() < d?.getTime() &&
+        (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime()) &&
+        row.dueDate?.getTime() < d?.getTime()) {
         element.red.value += +row.balance;
         // add row to the red list
         const i = finalResult.red.findIndex((x) => x.id == row.id);
@@ -512,7 +512,7 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
       }
       if (row.documentTypeNewName &&
         row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG" &&
-        row.documentDate?.getTime() <= d?.getTime() &&
+        row.documentDate?.getTime() < d?.getTime() &&
         row.applicationDate == null) {
         element.green.value += +row.balance;
         // add row to the green list
