@@ -293,7 +293,7 @@ module.exports.amountAnalysisDetails = async (
   const query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.amountRelevant,
                                 p.amountRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
                                 p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
-                                p.ledgerId, p.executionDate, p.dueDate,  pos.textPosting, pos.textHeader, pos.reference, pos.assignment 
+                                p.ledgerId, p.executionDate, p.dueDate,  p.textPosting, p.textHeader, p.reference, p.assignment 
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 

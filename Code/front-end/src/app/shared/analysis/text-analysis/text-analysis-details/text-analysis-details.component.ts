@@ -136,11 +136,6 @@ export class TextAnalysisDetailsComponent implements OnInit {
         align: 'left',
       },
       {
-        header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew',
-        align: 'center',
-      },
-      {
         header: 'DataTableColumns.documentNumber',
         field: 'documentNumber',
         align: 'left',
@@ -183,6 +178,11 @@ export class TextAnalysisDetailsComponent implements OnInit {
       {
         header: 'DataTableColumns.textHeader',
         field: 'textHeader',
+        align: 'left',
+      },
+      {
+        header: 'DataTableColumns.assignment',
+        field: 'assignment',
         align: 'left',
       },
     ];

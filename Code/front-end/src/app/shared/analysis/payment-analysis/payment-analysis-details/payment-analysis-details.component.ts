@@ -232,11 +232,6 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         align: 'left',
       },
       {
-        header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNew',
-        align: 'left',
-      },
-      {
         header: 'DataTableColumns.documentNumber',
         field: 'documentNumber',
         align: 'left',
@@ -265,6 +260,26 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         header: 'DataTableColumns.dueDate',
         field: 'dueDate',
         align: 'center',
+      },
+      {
+        header: 'DataTableColumns.textPosting',
+        field: 'textPosting',
+        align: 'left',
+      },
+      {
+        header: 'DataTableColumns.textHeader',
+        field: 'textHeader',
+        align: 'left',
+      },
+      {
+        header: 'DataTableColumns.reference',
+        field: 'reference',
+        align: 'left',
+      },
+      {
+        header: 'DataTableColumns.assignment',
+        field: 'assignment',
+        align: 'left',
       },
     ];
 
