@@ -293,7 +293,7 @@ module.exports.liquidityAnalysisDetails = async (
     };
 
     let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, 
-                            pos.StartingBalanceDate,
+                            pos.StartingBalanceDate, pos.textPosting, pos.textHeader, pos.reference, pos.assignment,  
                             pos.accountTypeNewName, pos.balance, pos.StartingBalance
                         FROM posting_${orgId} pos
                         WHERE

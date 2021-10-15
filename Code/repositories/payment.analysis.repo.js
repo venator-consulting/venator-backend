@@ -463,7 +463,7 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
   let query = `SELECT pos.id, pos.procedureId, pos.accountNumber, pos.accountName, pos.paymentRelevant,
                         pos.paymentRelevantComment, pos.accountType, pos.documentType, pos.balance, pos.contraAccountNumber,
                         pos.contraAccountName, pos.documentTypeNewName, pos.documentNumber, pos.documentDate, pos.recordNumber,
-                        pos.ledgerId, pos.executionDate, pos.dueDate, pos.applicationDate 
+                        pos.ledgerId, pos.executionDate, pos.dueDate, pos.applicationDate, pos.textPosting, pos.textHeader, pos.reference, pos.assignment 
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = ${prcId}

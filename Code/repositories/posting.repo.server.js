@@ -293,7 +293,7 @@ module.exports.amountAnalysisDetails = async (
   const query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.amountRelevant,
                                 p.amountRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
                                 p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
-                                p.ledgerId, p.executionDate, p.dueDate
+                                p.ledgerId, p.executionDate, p.dueDate,  pos.textPosting, pos.textHeader, pos.reference, pos.assignment 
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
@@ -582,7 +582,7 @@ module.exports.textAnalysisDetails = async (
   let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
                             p.textRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
                             p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
-                            p.ledgerId, p.executionDate, p.dueDate, p.reference, p.textPosting, p.textHeader
+                            p.ledgerId, p.executionDate, p.dueDate, p.reference, p.textPosting, p.textHeader, p.assignment 
                             FROM posting_${orgId}  p
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
@@ -623,7 +623,7 @@ module.exports.textAnalysisWordDetails = async (orgId, prcId, key) => {
   let query = `SELECT p.id, p.procedureId, p.accountNumber, p.accountName, p.textRelevant,
                             p.textRelevantComment, p.accountType, p.documentType, p.balance, p.contraAccountNumber,
                             p.contraAccountName, p.documentTypeNewName, p.documentNumber, p.documentDate, p.recordNumber,
-                            p.ledgerId, p.executionDate, p.dueDate, p.reference, p.textPosting, p.textHeader
+                            p.ledgerId, p.executionDate, p.dueDate, p.reference, p.textPosting, p.textHeader, p.assignment 
                             FROM posting_${orgId}  p
                             WHERE
                             p.procedureId = :procedureId
