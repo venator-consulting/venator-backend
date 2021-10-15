@@ -61,7 +61,7 @@ export class PaymentAnalysisComponent implements OnInit {
     private _analysisService: AnalysisService,
     private _router: Router,
     private prcService: ProcedureService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.waiting = true;
@@ -269,11 +269,11 @@ export class PaymentAnalysisComponent implements OnInit {
   goToDetails(row: any) {
     this._router.navigate([
       '/dashboard/analysis/payment/' +
-        this.selectedOrganisation +
-        '/' +
-        this.selectedProcedure +
-        '/' +
-        row.accountNumber,
+      this.selectedOrganisation +
+      '/' +
+      this.selectedProcedure +
+      '/' +
+      row.accountNumber,
     ]);
   }
 
@@ -346,7 +346,7 @@ export class PaymentAnalysisComponent implements OnInit {
             total += b.value;
           }
         }); // end of for each account
-        this.specificAccountBlueData[i] = Math.abs(total);
+        this.specificAccountBlueData[i] = (-1 * total);
       }
       if (element.red.accounts) {
         let total = 0;
@@ -356,7 +356,7 @@ export class PaymentAnalysisComponent implements OnInit {
             total += r.value;
           }
         }); // end of for each account
-        this.specificAccountRedData[i] = Math.abs(total);
+        this.specificAccountRedData[i] = (-1 * total);
       }
       if (element.green.accounts) {
         let total = 0;
@@ -366,7 +366,7 @@ export class PaymentAnalysisComponent implements OnInit {
             total += g.value;
           }
         }); // end of for each account
-        this.specificAccountGreenData[i] = Math.abs(total);
+        this.specificAccountGreenData[i] = total;
       }
     }
     this.chart.refresh();
