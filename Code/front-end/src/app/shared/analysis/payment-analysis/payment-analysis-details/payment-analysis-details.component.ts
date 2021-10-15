@@ -323,7 +323,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
               const element = this.data[i];
               this.labels.push(element.monthName + '-' + element.yearName);
               this.blue.push(-1 * (element.blue.value));
-              this.green.push(Math.abs(element.green.value));
+              this.green.push(element.green.value);
               this.red.push(-1 * (element.red.value));
             }
           }
