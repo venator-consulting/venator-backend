@@ -454,7 +454,7 @@ module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
   }
   query += keywords.length > 0 ? " 1 <> 1) " : "";
   // for amount records
-  query += ` OR (UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+  query += ` OR (UPPER(p.documentTypeNewName) = 'ZAHLUNG'
             AND p.balance = ROUND(p.balance, -2)
             AND p.balance >= 500)`;
   // for payment records
