@@ -3,114 +3,42 @@
 <div class="p-grid">
   <div class="p-col-12">
     <!-- <h2 class="p-text-center">{{ procedureName }}</h2> -->
-    <p-progressBar
-      mode="indeterminate"
-      [style]="{ height: '5px' }"
-      *ngIf="waiting"
-    ></p-progressBar>
+    <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
   </div>
 </div>
 
-<p-table
-  #dtmaxb
-  dataKey="accountNumber"
-  [value]="data"
-  [resizableColumns]="true"
-  styleClass="p-datatable-gridlines"
-  [columns]="cols"
-  responsive="true"
-  [scrollable]="true"
-  scrollHeight="350px"
-  [reorderableColumns]="true"
-  [loading]="waiting"
-  [lazy]="true"
-  [customSort]="true"
-  (onLazyLoad)="sort($event)"
->
+<p-table #dtmaxb dataKey="accountNumber" [value]="data" [resizableColumns]="true" styleClass="p-datatable-gridlines"
+  [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true"
+  [loading]="waiting" [lazy]="true" [customSort]="true" (onLazyLoad)="sort($event)">
   <ng-template pTemplate="caption">
     <div class="p-mb-4">
       <!-- Limit options -->
-      <p-dropdown
-        [options]="pageLimitSizes"
-        optionValue="value"
-        optionLabel="label"
-        [(ngModel)]="limit"
-        (onChange)="limitChange($event)"
-        class="p-mr-2"
-      ></p-dropdown>
+      <p-dropdown [options]="pageLimitSizes" optionValue="value" optionLabel="label" [(ngModel)]="limit"
+        (onChange)="limitChange($event)" class="p-mr-2"></p-dropdown>
       <!-- Go to First page -->
-      <button
-        type="button"
-        [disabled]="pageNr === 1"
-        pButton
-        pRipple
-        icon="pi pi-angle-double-left"
-        (click)="firstPage()"
-        class="p-mr-2"
-        pTooltip="{{ 'Data_Table.firstPage' | translate }}"
-        tooltipPosition="bottom"
-      ></button>
+      <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-double-left"
+        (click)="firstPage()" class="p-mr-2" pTooltip="{{ 'Data_Table.firstPage' | translate }}"
+        tooltipPosition="bottom"></button>
       <!-- Go previous -->
-      <button
-        type="button"
-        [disabled]="pageNr === 1"
-        pButton
-        pRipple
-        icon="pi pi-angle-left"
-        (click)="previousPage()"
-        class="p-mr-2"
-        pTooltip="{{ 'Data_Table.previous' | translate }}"
-        tooltipPosition="bottom"
-      ></button>
+      <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-left" (click)="previousPage()"
+        class="p-mr-2" pTooltip="{{ 'Data_Table.previous' | translate }}" tooltipPosition="bottom"></button>
       <!-- Page number -->
-      <input
-        pInputText
-        type="number"
-        min="1"
-        class="pageNrInput p-mr-2"
-        (input)="pageNrChange($any($event.target).value)"
-        [value]="pageNr"
-        [placeholder]="pageNr"
-      />
+      <input pInputText type="number" min="1" class="pageNrInput p-mr-2"
+        (input)="pageNrChange($any($event.target).value)" [value]="pageNr" [placeholder]="pageNr" />
       <!-- Go to next Page -->
-      <button
-        type="button"
-        [disabled]="pageNr >= maxPageNr"
-        pButton
-        pRipple
-        icon="pi pi-angle-right"
-        (click)="nextPage()"
-        class="p-mr-2"
-        pTooltip="{{ 'Data_Table.next' | translate }}"
-        tooltipPosition="bottom"
-      ></button>
+      <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-right"
+        (click)="nextPage()" class="p-mr-2" pTooltip="{{ 'Data_Table.next' | translate }}"
+        tooltipPosition="bottom"></button>
       <!-- Go to last page -->
-      <button
-        type="button"
-        [disabled]="pageNr >= maxPageNr"
-        pButton
-        pRipple
-        icon="pi pi-angle-double-right"
-        (click)="lastPage()"
-        class="p-mr-2"
-        pTooltip="{{ 'Data_Table.lastPage' | translate }}"
-        tooltipPosition="bottom"
-      ></button>
+      <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-double-right"
+        (click)="lastPage()" class="p-mr-2" pTooltip="{{ 'Data_Table.lastPage' | translate }}"
+        tooltipPosition="bottom"></button>
 
       <!-- dispalyed data of total count -->
       {{ displayedDataCount }} of {{ totalCount }}
       <!-- Clear filter -->
-      <button
-        type="button"
-        pButton
-        pRipple
-        icon="pi pi-filter-slash"
-        (click)="clearFilter()"
-        class="p-ml-6 clearFilter"
-        pTooltip="{{ 'Data_Table.clearFilter' | translate }}"
-        *ngIf="filtersNo > 0"
-        tooltipPosition="bottom"
-      ></button>
+      <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()" class="p-ml-6 clearFilter"
+        pTooltip="{{ 'Data_Table.clearFilter' | translate }}" *ngIf="filtersNo > 0" tooltipPosition="bottom"></button>
     </div>
   </ng-template>
   <ng-template pTemplate="colgroup" let-columns>
@@ -121,13 +49,8 @@
   </ng-template>
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th
-        pSortableColumn="{{ col.field }}"
-        pResizableColumn
-        pReorderableColumn
-        class="p-text-{{ col.align }}"
-        *ngFor="let col of columns"
-      >
+      <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn class="p-text-{{ col.align }}"
+        *ngFor="let col of columns">
         <span pTooltip="{{ col.header | translate }}">
           {{ col.header | translate }}
         </span>
@@ -137,24 +60,12 @@
     </tr>
     <tr>
       <th pResizableColumn class="autocomplete">
-        <input
-          pInputText
-          type="text"
-          [(ngModel)]="criteria['accountNumber']"
-          [style]="{ width: '90%' }"
-          (input)="filterChange($any($event.target).value, 'accountNumber')"
-          class="filterInputCss"
-        />
+        <input pInputText type="text" [(ngModel)]="criteria['accountNumber']" [style]="{ width: '90%' }"
+          (input)="filterChange($any($event.target).value, 'accountNumber')" class="filterInputCss" />
       </th>
       <th pResizableColumn class="autocomplete">
-        <input
-          pInputText
-          type="text"
-          [(ngModel)]="criteria['accountName']"
-          [style]="{ width: '90%' }"
-          (input)="filterChange($any($event.target).value, 'accountName')"
-          class="filterInputCss"
-        />
+        <input pInputText type="text" [(ngModel)]="criteria['accountName']" [style]="{ width: '90%' }"
+          (input)="filterChange($any($event.target).value, 'accountName')" class="filterInputCss" />
       </th>
     </tr>
   </ng-template>
@@ -164,24 +75,13 @@
         <span *ngIf="col.field == 'totalBalance'">
           {{ row.totalBalance | currency: "EUR":"" }}
         </span>
-        <span
-          *ngIf="col.field != 'totalBalance'"
-          pTooltip="{{ row[col.field] }}"
-        >
+        <span *ngIf="col.field != 'totalBalance'" pTooltip="{{ row[col.field] }}">
           {{ row[col.field] }}
         </span>
       </td>
       <td>
-        <button
-          type="button"
-          pButton
-          pRipple
-          icon="pi pi-list"
-          class="p-button-rounded p-button-warning"
-          (click)="goToDetails(row)"
-          pTooltip="Details"
-          tooltipPosition="bottom"
-        ></button>
+        <button type="button" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-warning"
+          (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom"></button>
       </td>
     </tr>
   </ng-template>

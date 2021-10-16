@@ -37,7 +37,6 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys, criteria) => {
             AND p.balance >= :baseBalance)`;
   // for payment records
   query += ` OR (p.documentDate is not NULL 
-            AND (p.applicationDate is null || p.applicationDate > p.dueDate)
             AND (year(p.documentDate) <> year(p.dueDate) OR p.applicationDate is null OR 
                 (year(p.documentDate) = year(p.dueDate) AND month(p.documentDate) <> month(p.dueDate)))
             AND (UPPER(p.documentTypeNewName) = 'RECHNUNG'
@@ -136,7 +135,6 @@ module.exports.creditorAnalysisDetails = async (
                     AND UPPER(pos.accountType) = 'K'
                     AND pos.accountNumber = :accountNumber
                     AND pos.documentDate is not NULL 
-                    AND (pos.applicationDate is null || pos.applicationDate > pos.dueDate)
                     AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
                         (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
                     AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'

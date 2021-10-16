@@ -44,6 +44,10 @@ export class PreCalculateComponent implements OnInit {
       this.disablePayment && this.disableText_account && this.disabletextWord) {
       this._procedureService.patch({ id: this.prcId, status: 'CALCULATED' })
         .subscribe(res => localStorage.setItem('currentProcedureStatus', 'CALCULATED'));
+    } else if (this.disableAmount || this.disableCredit || this.disableDueDate ||
+      this.disablePayment || this.disableText_account || this.disabletextWord) {
+      this._procedureService.patch({ id: this.prcId, status: 'CALCULATED' })
+        .subscribe(res => localStorage.setItem('currentProcedureStatus', 'PARTIAL_CALCULATED'));
     }
   }
 

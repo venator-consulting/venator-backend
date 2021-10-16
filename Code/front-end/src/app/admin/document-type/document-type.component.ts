@@ -91,16 +91,16 @@ export class DocumentTypeComponent implements OnInit {
     this._docTypesService
       .updateNewDocType(this.selectedOrgId, this.selectedPrcId, row)
       .subscribe(res => {
-        if(res == 1) localStorage.setItem('currentProcedureDocType', 'true');
-        else if(res == 0) {
+        if (res == 1) localStorage.setItem('currentProcedureDocType', 'true');
+        else if (res == 0) {
           let currentPrcID = localStorage.getItem('currentProcedureId');
-          if(this.selectedPrcId == +currentPrcID) {
+          if (this.selectedPrcId == +currentPrcID) {
             localStorage.setItem('currentProcedureDueDate', 'false');
             localStorage.setItem('currentProcedurePayment', 'false');
             localStorage.setItem('currentProcedureCredit', 'false');
             localStorage.setItem('currentProcedureDocType', 'false');
             let prcStatus = localStorage.getItem('currentProcedureStatus');
-            if(prcStatus === 'CALCULATED') localStorage.setItem('currentProcedureStatus', 'PARTIAL_CALCULATED');
+            if (prcStatus === 'CALCULATED') localStorage.setItem('currentProcedureStatus', 'PARTIAL_CALCULATED');
           }
         }
         row.isEditable = false;
@@ -208,11 +208,7 @@ export class DocumentTypeComponent implements OnInit {
         for (const key in this.criteria) {
           if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
             const element = this.criteria[key];
-            if (element.length < 3) {
-              this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase() == element.toLowerCase());
-            } else {
-              this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
-            }
+            this.postingDocTypes = this.tempData.filter(value => value[key]?.toLowerCase().includes(element.toLowerCase()));
           }
         }
       }
@@ -222,11 +218,7 @@ export class DocumentTypeComponent implements OnInit {
       for (const key in this.criteria) {
         if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
           const element = this.criteria[key];
-          if (element.length < 3) {
-            this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase() == element.toLowerCase());
-          } else {
-            this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
-          }
+          this.postingDocTypes = this.postingDocTypes.filter(value => value[key]?.toString().toLowerCase().includes(element.toLowerCase()));
         }
       } // end of for each criteria field
     }
