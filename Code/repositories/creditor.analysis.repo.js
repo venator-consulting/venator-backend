@@ -30,8 +30,7 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys, criteria) => {
   }
   query += keys.length > 0 ? " 1 <> 1) " : "";
   // for amount records
-  query += ` OR ((UPPER(p.documentType) = 'KZ' OR 
-            UPPER(p.documentType) = 'ZP' OR
+  query += ` OR (
             UPPER(p.documentTypeNewName) = 'ZAHLUNG')
             AND p.balance = ROUND(p.balance, -2)
             AND p.balance >= :baseBalance)`;
@@ -114,9 +113,7 @@ module.exports.creditorAnalysisDetails = async (
          WHERE po.procedureId = :procedureId 
              AND UPPER(po.accountType) = 'K' 
              AND po.accountNumber = :accountNumber
-             AND (UPPER(po.documentType) = 'KZ' OR 
-                 UPPER(po.documentType) = 'ZP' OR
-                 UPPER(po.documentTypeNewName) = 'ZAHLUNG')
+             AND UPPER(po.documentTypeNewName) = 'ZAHLUNG' 
              AND po.balance = ROUND(po.balance, -2)
              AND po.balance >= :baseBalance
          GROUP BY po.accountNumber , po.accountName`;

@@ -270,9 +270,7 @@ module.exports.storeAmountData = async (orgId, prcId) => {
                             WHERE procedureId = ${prcId} 
                                 AND UPPER(p.accountType) = 'K' 
                                 AND p.accountNumber is not NULL
-                                AND (UPPER(p.documentType) = 'KZ' OR 
-                                    UPPER(p.documentType) = 'ZP' OR
-                                    UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+                                AND UPPER(p.documentTypeNewName) = 'ZAHLUNG' 
                                 AND p.balance = ROUND(p.balance, -2)
                                 AND balance >= 100 `;
   let result = await connection.getConnection().execute(query);
@@ -456,9 +454,7 @@ module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
   }
   query += keywords.length > 0 ? " 1 <> 1) " : "";
   // for amount records
-  query += ` OR ((UPPER(p.documentType) = 'KZ' OR 
-            UPPER(p.documentType) = 'ZP' OR
-            UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+  query += ` OR (UPPER(p.documentTypeNewName) = 'ZAHLUNG')
             AND p.balance = ROUND(p.balance, -2)
             AND p.balance >= 500)`;
   // for payment records

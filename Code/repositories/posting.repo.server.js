@@ -260,9 +260,7 @@ module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
                                 AND p.accountNumber is not NULL
-                                AND (UPPER(p.documentType) = 'KZ' OR 
-                                    UPPER(p.documentType) = 'ZP' OR
-                                    UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+                                AND (UPPER(p.documentTypeNewName) = 'ZAHLUNG')
                                 AND p.balance = ROUND(p.balance, -2)
                                 AND balance >= :baseBalance
                             GROUP BY p.accountNumber , p.accountName`;
@@ -298,9 +296,7 @@ module.exports.amountAnalysisDetails = async (
                             WHERE procedureId = :procedureId 
                                 AND UPPER(p.accountType) = 'K' 
                                 AND p.accountNumber = :accountNumber
-                                AND (UPPER(p.documentType) = 'KZ' OR 
-                                    UPPER(p.documentType) = 'ZP' OR
-                                    UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+                                AND (UPPER(p.documentTypeNewName) = 'ZAHLUNG')
                                 AND p.balance = ROUND(p.balance, -2)
                                 AND balance >= :baseBalance`;
   const result = await sequelize.query(query, {
