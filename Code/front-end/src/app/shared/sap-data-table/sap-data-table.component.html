@@ -5,153 +5,57 @@
   </div>
 </div> -->
 <div class="card">
-  <p-progressBar
-    mode="indeterminate"
-    [style]="{ height: '5px' }"
-    *ngIf="loading"
-  ></p-progressBar>
-  <p-table
-    [value]="postings"
-    [columns]="cols"
-    [scrollable]="true"
-    scrollHeight="350px"
-    [style]="{ width: '100%' }"
-    [resizableColumns]="true"
-    styleClass="p-datatable-gridlines"
-    [reorderableColumns]="true"
-    [loading]="loading"
-    [lazy]="true"
-    [customSort]="true"
-    (onLazyLoad)="sort($event)"
-  >
+  <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="loading"></p-progressBar>
+  <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="350px" [style]="{ width: '100%' }"
+    [resizableColumns]="true" styleClass="p-datatable-gridlines" [reorderableColumns]="true" [loading]="loading"
+    [lazy]="true" [customSort]="true" (onLazyLoad)="sort($event)">
     <ng-template pTemplate="caption">
       <div class="p-mb-4">
         <!-- Export as excel -->
-        <button
-          type="button"
-          pButton
-          pRipple
-          icon="pi pi-file-excel"
-          (click)="exportXLSX()"
-          class="p-mr-2 p-button-warning"
-          pTooltip="Xlsx"
-          tooltipPosition="bottom"
-        ></button>
+        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportXLSX()"
+          class="p-mr-2 p-button-warning" pTooltip="Xlsx" tooltipPosition="bottom"></button>
         <!-- Limit options -->
-        <p-dropdown
-          [options]="pageLimitSizes"
-          optionValue="value"
-          optionLabel="value"
-          [(ngModel)]="limit"
-          (onChange)="limitChange($event)"
-          class="p-mr-2"
-        ></p-dropdown>
+        <p-dropdown [options]="pageLimitSizes" optionValue="value" optionLabel="value" [(ngModel)]="limit"
+          (onChange)="limitChange($event)" class="p-mr-2"></p-dropdown>
         <!-- Go to First page -->
-        <button
-          type="button"
-          [disabled]="pageNr === 1"
-          pButton
-          pRipple
-          icon="pi pi-angle-double-left"
-          (click)="firstPage()"
-          class="p-mr-2"
-          pTooltip="{{ 'Data_Table.firstPage' | translate }}"
-          tooltipPosition="bottom"
-        ></button>
+        <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-double-left"
+          (click)="firstPage()" class="p-mr-2" pTooltip="{{ 'Data_Table.firstPage' | translate }}"
+          tooltipPosition="bottom"></button>
         <!-- Go previous -->
-        <button
-          type="button"
-          [disabled]="pageNr === 1"
-          pButton
-          pRipple
-          icon="pi pi-angle-left"
-          (click)="previousPage()"
-          class="p-mr-2"
-          pTooltip="{{ 'Data_Table.previous' | translate }}"
-          tooltipPosition="bottom"
-        ></button>
+        <button type="button" [disabled]="pageNr === 1" pButton pRipple icon="pi pi-angle-left" (click)="previousPage()"
+          class="p-mr-2" pTooltip="{{ 'Data_Table.previous' | translate }}" tooltipPosition="bottom"></button>
         <!-- Page number -->
-        <input
-          pInputText
-          type="number"
-          min="1"
-          class="pageNrInput p-mr-2"
-          (input)="pageNrChange($any($event.target).value)"
-          [value]="pageNr"
-          [placeholder]="pageNr"
-        />
+        <input pInputText type="number" min="1" class="pageNrInput p-mr-2"
+          (input)="pageNrChange($any($event.target).value)" [value]="pageNr" [placeholder]="pageNr" />
         <!-- Go to next Page -->
-        <button
-          type="button"
-          [disabled]="pageNr >= maxPageNr"
-          pButton
-          pRipple
-          icon="pi pi-angle-right"
-          (click)="nextPage()"
-          class="p-mr-2"
-          pTooltip="{{ 'Data_Table.next' | translate }}"
-          tooltipPosition="bottom"
-        ></button>
+        <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-right"
+          (click)="nextPage()" class="p-mr-2" pTooltip="{{ 'Data_Table.next' | translate }}"
+          tooltipPosition="bottom"></button>
         <!-- Go to last page -->
-        <button
-          type="button"
-          [disabled]="pageNr >= maxPageNr"
-          pButton
-          pRipple
-          icon="pi pi-angle-double-right"
-          (click)="lastPage()"
-          class="p-mr-2"
-          pTooltip="{{ 'Data_Table.lastPage' | translate }}"
-          tooltipPosition="bottom"
-        ></button>
+        <button type="button" [disabled]="pageNr >= maxPageNr" pButton pRipple icon="pi pi-angle-double-right"
+          (click)="lastPage()" class="p-mr-2" pTooltip="{{ 'Data_Table.lastPage' | translate }}"
+          tooltipPosition="bottom"></button>
 
         <!-- dispalyed data of total count -->
         {{ displayedDataCount }} of {{ totalCount }}
         <!-- Clear filter -->
-        <button
-          type="button"
-          pButton
-          pRipple
-          icon="pi pi-filter-slash"
-          (click)="clearFilter()"
-          class="p-ml-6 clearFilter"
-          pTooltip="{{ 'Data_Table.clearFilter' | translate }}"
-          *ngIf="filtersNo > 0"
-          tooltipPosition="bottom"
-        ></button>
+        <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+          class="p-ml-6 clearFilter" pTooltip="{{ 'Data_Table.clearFilter' | translate }}" *ngIf="filtersNo > 0"
+          tooltipPosition="bottom"></button>
 
-        <button
-          type="button"
-          pButton
-          pRipple
-          icon="pi pi-info-circle"
-          (click)="susa()"
-          class="p-ml-6"
-          pTooltip="Susa"
-          tooltipPosition="bottom"
-          label="Susa"
-        ></button>
+        <button type="button" pButton pRipple icon="pi pi-info-circle" (click)="susa()" class="p-ml-6" pTooltip="Susa"
+          tooltipPosition="bottom" label="Susa"></button>
       </div>
     </ng-template>
     <ng-template pTemplate="colgroup">
       <colgroup>
-        <col
-          *ngFor="let col of cols"
-          [style]="{ width: (col.width ? col.width : 150) + 'px' }"
-        />
+        <col *ngFor="let col of cols" [style]="{ width: (col.width ? col.width : 150) + 'px' }" />
       </colgroup>
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th
-          pSortableColumn="{{ col.field }}"
-          pResizableColumn
-          pReorderableColumn
-          *ngFor="let col of cols"
-          class="p-text-center"
-          pTooltip="{{ col.header }}"
-          tooltipPosition="bottom"
-        >
+        <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn *ngFor="let col of cols"
+          class="p-text-center" pTooltip="{{ col.header }}" tooltipPosition="bottom">
           {{ col.header }}
           <p-sortIcon field="{{ col.field }}"></p-sortIcon>
         </th>
@@ -161,43 +65,26 @@
           <!-- <input pInputText type="text" [(ngModel)]="criteria[col.field]"
             (change)="filterChange($any($event.target).value, col.field)" class="filterInputCss" /> -->
 
-          <p-autoComplete
-            [suggestions]="completeWords"
-            (completeMethod)="filterChange($event.query, col.field)"
-            (onClear)="filterChange($event.query, col.field)"
-            (onSelect)="filterChange($event.word, col.field)"
-            field="word"
-            [minLength]="1"
-            [inputStyle]="{ width: '90%' }"
-            [style]="{ width: '90%' }"
-            appendTo="body"
-            [(ngModel)]="criteria[col.field]"
-            *ngIf="
+          <p-autoComplete [suggestions]="completeWords" (completeMethod)="filterChange($event.query, col.field)"
+            (onClear)="filterChange($event.query, col.field)" (onSelect)="filterChange($event.word, col.field)"
+            field="word" [minLength]="1" [inputStyle]="{ width: '90%' }" [style]="{ width: '90%' }" appendTo="body"
+            [(ngModel)]="criteria[col.field]" *ngIf="
               col.field != 'documentDate' &&
               col.field != 'dueDate' &&
               col.field != 'applicationDate' &&
               col.field != 'postingDate' &&
               col.field != 'executionDate'
-            "
-          >
+            ">
           </p-autoComplete>
 
-          <p-calendar
-            *ngIf="
+          <p-calendar *ngIf="
               col.field == 'documentDate' ||
               col.field == 'dueDate' ||
               col.field == 'applicationDate' ||
               col.field == 'postingDate' ||
               col.field == 'executionDate'
-            "
-            [(ngModel)]="criteria[col.field]"
-            (onSelect)="filterChange($event, col.field)"
-            [monthNavigator]="true"
-            [yearNavigator]="true"
-            yearRange="1900:2100"
-            appendTo="body"
-            dateFormat="dd.mm.yy"
-          >
+            " [(ngModel)]="criteria[col.field]" (onSelect)="filterChange($event, col.field)" [monthNavigator]="true"
+            [yearNavigator]="true" yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy">
           </p-calendar>
 
           <!-- <i class="pi pi-filter p-ml-2 iconColor" (click)="submitFilter()"
@@ -207,13 +94,8 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowData>
       <tr>
-        <td
-          pReorderableRowHandle
-          *ngFor="let col of cols"
-          class="p-text-{{ col.align }}"
-        >
-          <div
-            *ngIf="
+        <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{ col.align }}">
+          <div *ngIf="
               col.field == 'balance' ||
                 col.field == 'debitAmount' ||
                 col.field == 'creditAmount' ||
@@ -224,8 +106,7 @@
                 col.field == 'applicationDate';
               then withFilter;
               else withoutFilter
-            "
-          ></div>
+            "></div>
           <ng-template #withoutFilter>
             <span pTooltip="{{ rowData[col.field] }}">
               {{ rowData[col.field] }}
@@ -233,11 +114,11 @@
           </ng-template>
           <ng-template #withFilter>
             {{
-              col.field == "balance" ||
-              col.field == "debitAmount" ||
-              col.field == "creditAmount"
-                ? (rowData[col.field] | currency: "EUR":"")
-                : (rowData[col.field] | date: "dd.MM.yyyy")
+            col.field == "balance" ||
+            col.field == "debitAmount" ||
+            col.field == "creditAmount"
+            ? (rowData[col.field] | currency: "EUR":"")
+            : (rowData[col.field] | date: "dd.MM.yyyy")
             }}
           </ng-template>
         </td>

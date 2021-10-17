@@ -40,6 +40,10 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   accountName: string = '';
   searching: boolean;
   criteria: any = {};
+  criteriaBlue: any = {};
+  criteriaRed: any = {};
+  criteriaGreen: any = {};
+  criteriaRelevant: any = {};
   tempData: any[];
   paymentOptions: { name: string; value: number; color: string }[];
   accountNumber: string;
@@ -67,6 +71,10 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   // for pagination ends
 
   @ViewChild('child') child: any;
+  greenDataTemp: PaymentDetailsRecord[];
+  redDataTemp: PaymentDetailsRecord[];
+  blueDataTemp: PaymentDetailsRecord[];
+  temprelevantData: PaymentAnalysisDetailsData[];
 
   constructor(
     public _translateService: TranslateService,
@@ -308,6 +316,9 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
           this.blueData = res.data.blue;
           this.redData = res.data.red;
           this.greenData = res.data.green;
+          this.blueDataTemp = res.data.blue;
+          this.redDataTemp = res.data.red;
+          this.greenDataTemp = res.data.green;
           if (!this.accountName) {
             if (this.blueData.length > 0) {
               this.accountName = this.blueData[0].accountName;
@@ -394,6 +405,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       );
   }
 
+  //#region filter change
   filterChange(query, colName): void {
     this.searching = true;
     if (!query) {
@@ -435,6 +447,207 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     }
     this.searching = false;
   }
+
+  filterChangeBlue(query, colName): void {
+    this.searching = true;
+    if (!query) {
+      delete this.criteriaBlue[colName];
+      if (Object.keys(this.criteriaBlue).length < 1) {
+        this.blueData = [...this.blueDataTemp];
+      } else {
+        for (const key in this.criteriaBlue) {
+          if (Object.prototype.hasOwnProperty.call(this.criteriaBlue, key)) {
+            const element = this.criteriaBlue[key];
+            if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
+              if (element) this.blueData = this.blueDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+            } else {
+              if (element && element.length < 3) {
+                this.blueData = this.blueDataTemp.filter(
+                  (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                );
+              } else {
+                this.blueData = this.blueDataTemp.filter((value) =>
+                  value[key]?.toLowerCase().includes(element?.toLowerCase())
+                );
+              }
+            }
+          }
+        }
+      }
+    } else {
+      this.blueData = [...this.blueDataTemp];
+      for (const key in this.criteriaBlue) {
+        if (Object.prototype.hasOwnProperty.call(this.criteriaBlue, key)) {
+          const element = this.criteriaBlue[key];
+          if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
+            if (element) this.blueData = this.blueDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+          } else {
+            if (element && element.length < 3) {
+              this.blueData = this.blueData.filter(
+                (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+              );
+            } else {
+              this.blueData = this.blueData.filter((value) =>
+                value[key]?.toLowerCase().includes(element?.toLowerCase())
+              );
+            }
+          }
+        }
+      } // end of for each criteria field
+    }
+    this.searching = false;
+  }
+
+  filterChangeRed(query, colName): void {
+    this.searching = true;
+    if (!query) {
+      delete this.criteriaRed[colName];
+      if (Object.keys(this.criteriaRed).length < 1) {
+        this.redData = [...this.redDataTemp];
+      } else {
+        for (const key in this.criteriaRed) {
+          if (Object.prototype.hasOwnProperty.call(this.criteriaRed, key)) {
+            const element = this.criteriaRed[key];
+            if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
+              if (element) this.redData = this.redDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+            } else {
+              if (element && element.length < 3) {
+                this.redData = this.redDataTemp.filter(
+                  (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                );
+              } else {
+                this.redData = this.redDataTemp.filter((value) =>
+                  value[key]?.toLowerCase().includes(element?.toLowerCase())
+                );
+              }
+            }
+          }
+        }
+      }
+    } else {
+      this.redData = [...this.redDataTemp];
+      for (const key in this.criteriaRed) {
+        if (Object.prototype.hasOwnProperty.call(this.criteriaRed, key)) {
+          const element = this.criteriaRed[key];
+          if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
+            if (element) this.redData = this.redDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+          } else {
+            if (element && element.length < 3) {
+              this.redData = this.redData.filter(
+                (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+              );
+            } else {
+              this.redData = this.redData.filter((value) =>
+                value[key]?.toLowerCase().includes(element?.toLowerCase())
+              );
+            }
+          }
+        }
+      } // end of for each criteria field
+    }
+    this.searching = false;
+  }
+
+  filterChangeGreen(query, colName): void {
+    this.searching = true;
+    if (!query) {
+      delete this.criteriaGreen[colName];
+      if (Object.keys(this.criteriaGreen).length < 1) {
+        this.greenData = [...this.greenDataTemp];
+      } else {
+        for (const key in this.criteriaGreen) {
+          if (Object.prototype.hasOwnProperty.call(this.criteriaGreen, key)) {
+            const element = this.criteriaGreen[key];
+            if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
+              if (element) this.greenData = this.greenDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+            } else {
+              if (element && element.length < 3) {
+                this.greenData = this.greenDataTemp.filter(
+                  (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                );
+              } else {
+                this.greenData = this.greenDataTemp.filter((value) =>
+                  value[key]?.toLowerCase().includes(element?.toLowerCase())
+                );
+              }
+            }
+          }
+        }
+      }
+    } else {
+      this.greenData = [...this.greenDataTemp];
+      for (const key in this.criteriaGreen) {
+        if (Object.prototype.hasOwnProperty.call(this.criteriaGreen, key)) {
+          const element = this.criteriaGreen[key];
+          if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
+            if (element) this.greenData = this.greenDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+          } else {
+            if (element && element.length < 3) {
+              this.greenData = this.greenData.filter(
+                (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+              );
+            } else {
+              this.greenData = this.greenData.filter((value) =>
+                value[key]?.toLowerCase().includes(element?.toLowerCase())
+              );
+            }
+          }
+        }
+      } // end of for each criteria field
+    }
+    this.searching = false;
+  }
+
+  filterChangeRelevant(query, colName): void {
+    this.searching = true;
+    if (!query) {
+      delete this.criteriaRelevant[colName];
+      if (Object.keys(this.criteriaRelevant).length < 1) {
+        this.relevantData = [...this.temprelevantData];
+      } else {
+        for (const key in this.criteriaRelevant) {
+          if (Object.prototype.hasOwnProperty.call(this.criteriaRelevant, key)) {
+            const element = this.criteriaRelevant[key];
+            if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
+              if (element) this.relevantData = this.temprelevantData.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+            } else {
+              if (element && element.length < 3) {
+                this.relevantData = this.temprelevantData.filter(
+                  (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                );
+              } else {
+                this.relevantData = this.temprelevantData.filter((value) =>
+                  value[key]?.toLowerCase().includes(element?.toLowerCase())
+                );
+              }
+            }
+          }
+        }
+      }
+    } else {
+      this.relevantData = [...this.temprelevantData];
+      for (const key in this.criteriaRelevant) {
+        if (Object.prototype.hasOwnProperty.call(this.criteriaRelevant, key)) {
+          const element = this.criteriaRelevant[key];
+          if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
+            if (element) this.relevantData = this.temprelevantData.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+          } else {
+            if (element && element.length < 3) {
+              this.relevantData = this.relevantData.filter(
+                (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+              );
+            } else {
+              this.relevantData = this.relevantData.filter((value) =>
+                value[key]?.toLowerCase().includes(element?.toLowerCase())
+              );
+            }
+          }
+        }
+      } // end of for each criteria field
+    }
+    this.searching = false;
+  }
+  //#endregion filter in front
 
   goBack() {
     this._router.navigate(['/dashboard/analysis/payment/']);
@@ -563,7 +776,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       .subscribe(
         (res) => {
           this.relevantData = res;
-          // this.tempData = res;
+          this.temprelevantData = res;
           this.waiting = false;
         },
         (er) => {

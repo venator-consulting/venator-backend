@@ -16,21 +16,22 @@
       </p-chart>
     </div>
   </div>
+</div>
+<div class="p-grid">
+  <div class="p-col-7" *ngIf="selectedDate">
+    <h2 class="p-text-right">{{ selectedDate }}</h2>
   </div>
-  <div class="p-grid">
-    <div class="p-col-7" *ngIf="selectedDate">
-      <h2 class="p-text-right">{{ selectedDate }}</h2>
-    </div>
-    <div class="p-col-5 p-text-right" *ngIf="selectedDate">
-      <button type="button" pButton pRipple label="All" icon="pi pi-times" class="p-button-rounded p-button-warning"
-        (click)="selectedDate = null" pTooltip="All" tooltipPosition="bottom" style="margin-top: 20px;"></button>
-    </div>
-    <div class="p-col-12">
-      <app-payment-details-month  [hidden]="!selectedDate" [month]="selectedDate" [blue]="blueData" [red]="redData" [green]="greenData" #child>
-      </app-payment-details-month>
-    </div>
+  <div class="p-col-5 p-text-right" *ngIf="selectedDate">
+    <button type="button" pButton pRipple label="All" icon="pi pi-times" class="p-button-rounded p-button-warning"
+      (click)="selectedDate = null" pTooltip="All" tooltipPosition="bottom" style="margin-top: 20px;"></button>
   </div>
-  <div class="p-grid" *ngIf="!selectedDate" >
+  <div class="p-col-12">
+    <app-payment-details-month [hidden]="!selectedDate" [month]="selectedDate" [blue]="blueData" [red]="redData"
+      [green]="greenData" #child>
+    </app-payment-details-month>
+  </div>
+</div>
+<div class="p-grid" *ngIf="!selectedDate">
   <div class="p-col-12">
     <span class="p-text-center">
       <p-selectButton [options]="detailsOptions" (onChange)="changeData($event.value)" optionLabel="name"
@@ -82,9 +83,21 @@
           </tr>
           <tr>
             <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-              <input *ngIf="col.field != 'paymentRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
-                [style]="{ width: '90%' }" (input)="filterChange($any($event.target).value, col.field)"
-                class="filterInputCss" />
+              <input *ngIf="
+              col.field != 'paymentRelevant' &&
+              col.field == 'documentDate' &&
+              col.field == 'dueDate' &&
+              col.field == 'applicationDate' 
+            " pInputText type="text" [(ngModel)]="criteriaBlue[col.field]" [style]="{ width: '90%' }"
+                (input)="filterChangeBlue($any($event.target).value, col.field)" class="filterInputCss" />
+              <p-calendar *ngIf="
+              col.field == 'documentDate' ||
+              col.field == 'dueDate' ||
+              col.field == 'applicationDate' 
+            " [(ngModel)]="criteriaBlue[col.field]" (onSelect)="filterChangeBlue($event, col.field)"
+                [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
+                dateFormat="dd.mm.yy" showButtonBar="true" (onClearClick)="filterChangeBlue($event, col.field)">
+              </p-calendar>
             </th>
           </tr>
         </ng-template>
@@ -125,6 +138,11 @@
                 {{ row[col.field] }}
               </span>
             </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="columns.length">No records found</td>
           </tr>
         </ng-template>
       </p-table>
@@ -168,9 +186,21 @@
           </tr>
           <tr>
             <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-              <input *ngIf="col.field != 'paymentRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
-                [style]="{ width: '90%' }" (input)="filterChange($any($event.target).value, col.field)"
-                class="filterInputCss" />
+              <input *ngIf="
+              col.field != 'paymentRelevant' &&
+              col.field == 'documentDate' &&
+              col.field == 'dueDate' &&
+              col.field == 'applicationDate' 
+            " pInputText type="text" [(ngModel)]="criteriaRed[col.field]" [style]="{ width: '90%' }"
+                (input)="filterChangeRed($any($event.target).value, col.field)" class="filterInputCss" />
+              <p-calendar *ngIf="
+              col.field == 'documentDate' ||
+              col.field == 'dueDate' ||
+              col.field == 'applicationDate' 
+            " [(ngModel)]="criteriaRed[col.field]" (onSelect)="filterChangeRed($event, col.field)"
+                [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
+                dateFormat="dd.mm.yy" showButtonBar="true" (onClearClick)="filterChangeRed($event, col.field)">
+              </p-calendar>
             </th>
           </tr>
         </ng-template>
@@ -211,6 +241,11 @@
                 {{ row[col.field] }}
               </span>
             </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="columns.length">No records found</td>
           </tr>
         </ng-template>
       </p-table>
@@ -254,10 +289,21 @@
           </tr>
           <tr>
             <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-              <input *ngIf="col.field != 'paymentRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
-                [style]="{ width: '90%' }" (input)="filterChange($any($event.target).value, col.field)"
-                class="filterInputCss" />
-            </th>
+              <input *ngIf="
+              col.field != 'paymentRelevant' &&
+              col.field == 'documentDate' &&
+              col.field == 'dueDate' &&
+              col.field == 'applicationDate' 
+            " pInputText type="text" [(ngModel)]="criteriaGreen[col.field]" [style]="{ width: '90%' }"
+                (input)="filterChangeGreen($any($event.target).value, col.field)" class="filterInputCss" />
+              <p-calendar *ngIf="
+              col.field == 'documentDate' ||
+              col.field == 'dueDate' ||
+              col.field == 'applicationDate' 
+            " [(ngModel)]="criteriaGreen[col.field]" (onSelect)="filterChangeGreen($event, col.field)"
+                [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
+                dateFormat="dd.mm.yy" showButtonBar="true" (onClearClick)="filterChangeGreen($event, col.field)">
+              </p-calendar>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row let-columns="columns">
@@ -346,9 +392,21 @@
           </tr>
           <tr>
             <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-              <input *ngIf="col.field != 'paymentRelevant'" pInputText type="text" [(ngModel)]="criteria[col.field]"
-                [style]="{ width: '90%' }" (input)="filterChange($any($event.target).value, col.field)"
-                class="filterInputCss" />
+              <input *ngIf="
+                col.field != 'paymentRelevant' &&
+                col.field == 'documentDate' &&
+                col.field == 'dueDate' &&
+                col.field == 'applicationDate' 
+              " pInputText type="text" [(ngModel)]="criteriaRelevant[col.field]" [style]="{ width: '90%' }"
+                (input)="filterChangeRelevant($any($event.target).value, col.field)" class="filterInputCss" />
+              <p-calendar *ngIf="
+                col.field == 'documentDate' ||
+                col.field == 'dueDate' ||
+                col.field == 'applicationDate' 
+              " [(ngModel)]="criteriaRelevant[col.field]" (onSelect)="filterChangeRelevant($event, col.field)"
+                [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
+                dateFormat="dd.mm.yy" showButtonBar="true" (onClearClick)="filterChangeRelevant($event, col.field)">
+              </p-calendar>
             </th>
           </tr>
         </ng-template>
@@ -389,6 +447,11 @@
                 {{ row[col.field] }}
               </span>
             </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="columns.length">No records found</td>
           </tr>
         </ng-template>
       </p-table>
@@ -509,6 +572,11 @@
                 {{ row[col.field] }}
               </span>
             </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="columns.length">No records found</td>
           </tr>
         </ng-template>
       </p-table>
