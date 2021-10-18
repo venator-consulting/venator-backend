@@ -41,6 +41,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   pageNr: number = 1;
   maxPageNr: number = 0;
   filtersNo: number = 0;
+  filtersDataNo: number = 0;
   totalCount: any;
   displayedDataCount: any;
   accountName: string;
@@ -53,7 +54,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     private _analysisService: AnalysisService,
     private _exportDataService: ExportDataService,
     private _translateService: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -287,7 +288,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
                     day: '2-digit',
                   }
                 );
-            } catch (e) {}
+            } catch (e) { }
           }
           // end of formatting
         }
@@ -323,41 +324,67 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     );
   }
 
+  clearDataFilter() {
+    this.criteria = {};
+    this.filtersDataNo = 0;
+    this.data = [...this.tempData];
+  }
+
+
   filterChange(query, colName): void {
     this.searching = true;
-    if (!query) {
+    if (!query || !query?.toString()?.trim()) {
+      this.filtersDataNo--;
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
         this.data = [...this.tempData];
+        this.filtersDataNo = 0;
       } else {
         for (const key in this.criteria) {
           if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
             const element = this.criteria[key];
-            if (element.length < 3) {
-              this.data = this.tempData.filter(
-                (value) => value[key]?.toLowerCase() == element.toLowerCase()
-              );
+            if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate' || key === 'executionDate') {
+              if (element) this.data = this.tempData.filter((value) => {
+                let d = new Date(value[key]);
+                d.setHours(0, 0, 0, 0);
+                return d.getTime() == element.getTime();
+              });
             } else {
-              this.data = this.tempData.filter((value) =>
-                value[key]?.toLowerCase().includes(element.toLowerCase())
-              );
+              if (element.length < 3) {
+                this.data = this.tempData.filter(
+                  (value) => value[key]?.toLowerCase() == element.toLowerCase()
+                );
+              } else {
+                this.data = this.tempData.filter((value) =>
+                  value[key]?.toLowerCase().includes(element.toLowerCase())
+                );
+              }
             }
           }
         }
       }
     } else {
+      this.filtersDataNo++;
       this.data = [...this.tempData];
       for (const key in this.criteria) {
         if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
           const element = this.criteria[key];
-          if (element.length < 3) {
-            this.data = this.data.filter(
-              (value) => value[key]?.toLowerCase() == element.toLowerCase()
-            );
+          if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate' || key === 'executionDate') {
+            if (element) this.data = this.tempData.filter((value) => {
+              let d = new Date(value[key]);
+              d.setHours(0, 0, 0, 0);
+              return d.getTime() == element.getTime();
+            });
           } else {
-            this.data = this.data.filter((value) =>
-              value[key]?.toLowerCase().includes(element.toLowerCase())
-            );
+            if (element.length < 3) {
+              this.data = this.data.filter(
+                (value) => value[key]?.toLowerCase() == element.toLowerCase()
+              );
+            } else {
+              this.data = this.data.filter((value) =>
+                value[key]?.toLowerCase().includes(element.toLowerCase())
+              );
+            }
           }
         }
       } // end of for each criteria field
@@ -419,22 +446,26 @@ export class AmountAnalysisDetailsComponent implements OnInit {
             detail: 'records updated successfully!',
           });
         },
-        (er) => {}
+        (er) => { }
       );
   }
 
   changeData(option: number): void {
     switch (option) {
       case 1:
+        this.clearDataFilter();
         this.getSysRelevant();
         break;
       case 2:
+        this.clearDataFilter();
         this.getUserRelevant();
         break;
       case 3:
+        // this.clearDataFilter();
         // this.getAllByAccount();
         break;
       default:
+        this.clearDataFilter();
         this.getSysRelevant();
         break;
     }
@@ -526,12 +557,12 @@ export class AmountAnalysisDetailsComponent implements OnInit {
           this.saveAsExcelFile(res, 'Amount_details');
           // window.open(url.toString(), '_blank');
         },
-        (error) => {this.waiting = false;}
+        (error) => { this.waiting = false; }
       );
   }
 
   sort(event) {
-    this.backCriteria.orderBy = event.sortField? event.sortField : 'id';
+    this.backCriteria.orderBy = event.sortField ? event.sortField : 'id';
     this.backCriteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.backCriteria.offset = 0;

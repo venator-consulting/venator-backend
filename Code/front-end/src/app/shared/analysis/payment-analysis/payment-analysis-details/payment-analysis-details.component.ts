@@ -655,7 +655,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
   filterChangeRelevant(query, colName): void {
     this.searching = true;
-    if (!query || !query.trim()) {
+    if (!query || !query?.toString()?.trim()) {
       this.relevantFiltersNo--;
       delete this.criteriaRelevant[colName];
       if (Object.keys(this.criteriaRelevant).length < 1) {

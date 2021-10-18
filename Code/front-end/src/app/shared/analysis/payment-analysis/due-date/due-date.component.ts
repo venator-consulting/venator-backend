@@ -547,7 +547,7 @@ export class DueDateComponent implements OnInit {
 
   filterChange(query, colName): void {
     this.waiting = true;
-    if (!query || !query.trim()) {
+    if (!query || !query?.toString()?.trim()) {
       this.filtersNo--;
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
