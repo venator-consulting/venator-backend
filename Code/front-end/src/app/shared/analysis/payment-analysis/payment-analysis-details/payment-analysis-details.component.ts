@@ -44,6 +44,10 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   criteriaRed: any = {};
   criteriaGreen: any = {};
   criteriaRelevant: any = {};
+  blueFiltersNo: number = 0;
+  redFiltersNo: number = 0;
+  greenFiltersNo: number = 0;
+  relevantFiltersNo: number = 0;
   tempData: any[];
   paymentOptions: { name: string; value: number; color: string }[];
   accountNumber: string;
@@ -408,7 +412,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   //#region filter change
   filterChange(query, colName): void {
     this.searching = true;
-    if (!query) {
+    if (!query || !query.trim()) {
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
         this.data = [...this.tempData];
@@ -450,24 +454,30 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
   filterChangeBlue(query, colName): void {
     this.searching = true;
-    if (!query) {
+    if (!query || !query.trim()) {
+      this.blueFiltersNo--;
       delete this.criteriaBlue[colName];
       if (Object.keys(this.criteriaBlue).length < 1) {
         this.blueData = [...this.blueDataTemp];
+        this.blueFiltersNo = 0;
       } else {
         for (const key in this.criteriaBlue) {
           if (Object.prototype.hasOwnProperty.call(this.criteriaBlue, key)) {
             const element = this.criteriaBlue[key];
             if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
-              if (element) this.blueData = this.blueDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+              if (element) this.blueData = this.blueDataTemp.filter((value) => {
+                let d = new Date(value[key]);
+                d.setHours(0, 0, 0, 0);
+                return d.getTime() == element.getTime();
+              });
             } else {
               if (element && element.length < 3) {
                 this.blueData = this.blueDataTemp.filter(
-                  (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                  (value) => value[key]?.toString()?.toLowerCase() == element?.toLowerCase()
                 );
               } else {
                 this.blueData = this.blueDataTemp.filter((value) =>
-                  value[key]?.toLowerCase().includes(element?.toLowerCase())
+                  value[key]?.toString()?.toLowerCase().includes(element?.toLowerCase())
                 );
               }
             }
@@ -475,20 +485,25 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         }
       }
     } else {
+      this.blueFiltersNo++;
       this.blueData = [...this.blueDataTemp];
       for (const key in this.criteriaBlue) {
         if (Object.prototype.hasOwnProperty.call(this.criteriaBlue, key)) {
           const element = this.criteriaBlue[key];
           if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
-            if (element) this.blueData = this.blueDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+            if (element) this.blueData = this.blueDataTemp.filter((value) => {
+              let d = new Date(value[key]);
+              d.setHours(0, 0, 0, 0);
+              return d.getTime() == element.getTime();
+            });
           } else {
             if (element && element.length < 3) {
               this.blueData = this.blueData.filter(
-                (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                (value) => value[key]?.toString()?.toLowerCase() == element?.toLowerCase()
               );
             } else {
               this.blueData = this.blueData.filter((value) =>
-                value[key]?.toLowerCase().includes(element?.toLowerCase())
+                value[key]?.toString()?.toLowerCase().includes(element?.toLowerCase())
               );
             }
           }
@@ -498,26 +513,38 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     this.searching = false;
   }
 
+  clearBlueFilter() {
+    this.criteriaBlue = {};
+    this.blueData = [...this.blueDataTemp];
+    this.blueFiltersNo = 0;
+  }
+
   filterChangeRed(query, colName): void {
     this.searching = true;
-    if (!query) {
+    if (!query || !query.trim()) {
+      this.redFiltersNo--;
       delete this.criteriaRed[colName];
       if (Object.keys(this.criteriaRed).length < 1) {
         this.redData = [...this.redDataTemp];
+        this.redFiltersNo = 0;
       } else {
         for (const key in this.criteriaRed) {
           if (Object.prototype.hasOwnProperty.call(this.criteriaRed, key)) {
             const element = this.criteriaRed[key];
             if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
-              if (element) this.redData = this.redDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+              if (element) this.redData = this.redDataTemp.filter((value) => {
+                let d = new Date(value[key]);
+                d.setHours(0, 0, 0, 0);
+                return d.getTime() == element.getTime();
+              });
             } else {
               if (element && element.length < 3) {
                 this.redData = this.redDataTemp.filter(
-                  (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                  (value) => value[key]?.toString()?.toLowerCase() == element?.toLowerCase()
                 );
               } else {
                 this.redData = this.redDataTemp.filter((value) =>
-                  value[key]?.toLowerCase().includes(element?.toLowerCase())
+                  value[key]?.toString()?.toLowerCase().includes(element?.toLowerCase())
                 );
               }
             }
@@ -525,20 +552,25 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         }
       }
     } else {
+      this.redFiltersNo++;
       this.redData = [...this.redDataTemp];
       for (const key in this.criteriaRed) {
         if (Object.prototype.hasOwnProperty.call(this.criteriaRed, key)) {
           const element = this.criteriaRed[key];
           if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
-            if (element) this.redData = this.redDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+            if (element) this.redData = this.redDataTemp.filter((value) => {
+              let d = new Date(value[key]);
+              d.setHours(0, 0, 0, 0);
+              return d.getTime() == element.getTime();
+            });
           } else {
             if (element && element.length < 3) {
               this.redData = this.redData.filter(
-                (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                (value) => value[key]?.toString()?.toLowerCase() == element?.toLowerCase()
               );
             } else {
               this.redData = this.redData.filter((value) =>
-                value[key]?.toLowerCase().includes(element?.toLowerCase())
+                value[key]?.toString()?.toLowerCase().includes(element?.toLowerCase())
               );
             }
           }
@@ -548,26 +580,38 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     this.searching = false;
   }
 
+  clearRedFilter() {
+    this.criteriaRed = {};
+    this.redData = [...this.redDataTemp];
+    this.redFiltersNo = 0;
+  }
+
   filterChangeGreen(query, colName): void {
     this.searching = true;
-    if (!query) {
+    if (!query || !query.trim()) {
       delete this.criteriaGreen[colName];
+      this.greenFiltersNo--;
       if (Object.keys(this.criteriaGreen).length < 1) {
         this.greenData = [...this.greenDataTemp];
+        this.greenFiltersNo = 0;
       } else {
         for (const key in this.criteriaGreen) {
           if (Object.prototype.hasOwnProperty.call(this.criteriaGreen, key)) {
             const element = this.criteriaGreen[key];
             if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
-              if (element) this.greenData = this.greenDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+              if (element) this.greenData = this.greenDataTemp.filter((value) => {
+                let d = new Date(value[key]);
+                d.setHours(0, 0, 0, 0);
+                return d.getTime() == element.getTime();
+              });
             } else {
               if (element && element.length < 3) {
                 this.greenData = this.greenDataTemp.filter(
-                  (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                  (value) => value[key]?.toString()?.toLowerCase() == element?.toLowerCase()
                 );
               } else {
                 this.greenData = this.greenDataTemp.filter((value) =>
-                  value[key]?.toLowerCase().includes(element?.toLowerCase())
+                  value[key]?.toString()?.toLowerCase().includes(element?.toLowerCase())
                 );
               }
             }
@@ -575,20 +619,25 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         }
       }
     } else {
+      this.greenFiltersNo++;
       this.greenData = [...this.greenDataTemp];
       for (const key in this.criteriaGreen) {
         if (Object.prototype.hasOwnProperty.call(this.criteriaGreen, key)) {
           const element = this.criteriaGreen[key];
           if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
-            if (element) this.greenData = this.greenDataTemp.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+            if (element) this.greenData = this.greenDataTemp.filter((value) => {
+              let d = new Date(value[key]);
+              d.setHours(0, 0, 0, 0);
+              return d.getTime() == element.getTime();
+            });
           } else {
             if (element && element.length < 3) {
               this.greenData = this.greenData.filter(
-                (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                (value) => value[key]?.toString()?.toLowerCase() == element?.toLowerCase()
               );
             } else {
               this.greenData = this.greenData.filter((value) =>
-                value[key]?.toLowerCase().includes(element?.toLowerCase())
+                value[key]?.toString()?.toLowerCase().includes(element?.toLowerCase())
               );
             }
           }
@@ -598,26 +647,38 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     this.searching = false;
   }
 
+  clearGreenFilter() {
+    this.criteriaGreen = {};
+    this.greenData = [...this.greenDataTemp];
+    this.greenFiltersNo = 0;
+  }
+
   filterChangeRelevant(query, colName): void {
     this.searching = true;
-    if (!query) {
+    if (!query || !query.trim()) {
+      this.relevantFiltersNo--;
       delete this.criteriaRelevant[colName];
       if (Object.keys(this.criteriaRelevant).length < 1) {
         this.relevantData = [...this.temprelevantData];
+        this.relevantFiltersNo = 0;
       } else {
         for (const key in this.criteriaRelevant) {
           if (Object.prototype.hasOwnProperty.call(this.criteriaRelevant, key)) {
             const element = this.criteriaRelevant[key];
             if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
-              if (element) this.relevantData = this.temprelevantData.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+              if (element) this.relevantData = this.temprelevantData.filter((value) => {
+                let d = new Date(value[key]);
+                d.setHours(0, 0, 0, 0);
+                return d.getTime() == element.getTime();
+              });
             } else {
               if (element && element.length < 3) {
                 this.relevantData = this.temprelevantData.filter(
-                  (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                  (value) => value[key]?.toString()?.toLowerCase() == element?.toLowerCase()
                 );
               } else {
                 this.relevantData = this.temprelevantData.filter((value) =>
-                  value[key]?.toLowerCase().includes(element?.toLowerCase())
+                  value[key]?.toString()?.toLowerCase().includes(element?.toLowerCase())
                 );
               }
             }
@@ -625,20 +686,25 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         }
       }
     } else {
+      this.relevantFiltersNo++;
       this.relevantData = [...this.temprelevantData];
       for (const key in this.criteriaRelevant) {
         if (Object.prototype.hasOwnProperty.call(this.criteriaRelevant, key)) {
           const element = this.criteriaRelevant[key];
           if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
-            if (element) this.relevantData = this.temprelevantData.filter((value) => value[key]?.toString()?.split('T')[0] == element?.toISOString()?.split('T')[0]);
+            if (element) this.relevantData = this.temprelevantData.filter((value) => {
+              let d = new Date(value[key]);
+              d.setHours(0, 0, 0, 0);
+              return d.getTime() == element.getTime();
+            });
           } else {
             if (element && element.length < 3) {
               this.relevantData = this.relevantData.filter(
-                (value) => value[key]?.toLowerCase() == element?.toLowerCase()
+                (value) => value[key]?.toString()?.toLowerCase() == element?.toLowerCase()
               );
             } else {
               this.relevantData = this.relevantData.filter((value) =>
-                value[key]?.toLowerCase().includes(element?.toLowerCase())
+                value[key]?.toString()?.toLowerCase().includes(element?.toLowerCase())
               );
             }
           }
@@ -647,6 +713,14 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     }
     this.searching = false;
   }
+
+  clearRelevantFilter() {
+    this.criteriaRelevant = {};
+    this.relevantData = [...this.temprelevantData];
+    this.relevantFiltersNo = 0;
+  }
+
+
   //#endregion filter in front
 
   goBack() {

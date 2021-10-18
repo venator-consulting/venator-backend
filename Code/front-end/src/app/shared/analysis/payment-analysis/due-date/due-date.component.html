@@ -53,8 +53,8 @@
   </div>
   <!-- <div class="p-col-6"></div> -->
   <div class="p-col-1 p-text-left">
-    <button pButton pRipple type="button" label="{{'DueDateAnalysis.search' | translate}}" icon="pi pi-search" (click)="getData()"
-      class="p-button-rounded p-button-primary"></button>
+    <button pButton pRipple type="button" label="{{'DueDateAnalysis.search' | translate}}" icon="pi pi-search"
+      (click)="getData()" class="p-button-rounded p-button-primary"></button>
   </div>
 </div>
 
@@ -171,9 +171,12 @@
         [loading]="waiting">
         <ng-template pTemplate="caption">
           <div class="p-grid">
-            <div class="p-col-4 p-text-left">
+            <div class="p-col-1 p-text-left">
               <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
                 class="p-button-warning p-mr-2" pTooltip="Xlsx" tooltipPosition="bottom"></button>
+              <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+                class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}" *ngIf="filtersNo>0"
+                tooltipPosition="bottom"></button>
             </div>
           </div>
         </ng-template>
@@ -192,6 +195,22 @@
               <p-sortIcon field="{{ col.field }}"></p-sortIcon>
             </th>
           </tr>
+          <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
+            <input *ngIf="
+              col.field != 'documentDate' &&
+              col.field != 'dueDate' &&
+              col.field != 'applicationDate' 
+            " pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{ width: '90%' }"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
+            <p-calendar *ngIf="
+              col.field == 'documentDate' ||
+              col.field == 'dueDate' ||
+              col.field == 'applicationDate' 
+            " [(ngModel)]="criteria[col.field]" (onSelect)="filterChange($event, col.field)" [monthNavigator]="true"
+              [yearNavigator]="true" yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy" showButtonBar="true"
+              (onClearClick)="filterChange($event, col.field)">
+            </p-calendar>
+          </th>
         </ng-template>
         <ng-template pTemplate="body" let-row let-columns="columns">
           <tr [pSelectableRow]="row">

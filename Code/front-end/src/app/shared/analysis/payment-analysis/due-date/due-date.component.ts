@@ -64,6 +64,9 @@ export class DueDateComponent implements OnInit {
 
   selectedAccount: { accountNumber: string; accountName: string };
   maxDelay: number;
+  detailsDataTemp: any;
+  criteria: any = {};
+  filtersNo: number = 0;
 
   constructor(
     public _translateService: TranslateService,
@@ -277,7 +280,7 @@ export class DueDateComponent implements OnInit {
                   let label = point.label;
                   let accountNumber = point?.accountNumber;
                   let accountName = point?.accountName;
-                  return label + ' :' + value +  '  - ' + accountNumber + '/' + accountName;
+                  return label + ' :' + value + '  - ' + accountNumber + '/' + accountName;
                 },
               },
             },
@@ -347,6 +350,7 @@ export class DueDateComponent implements OnInit {
               .subscribe(res => {
                 this.waiting = false;
                 this.detailsData = res.data.records;
+                this.detailsDataTemp = res.data.records;
               });
           }
 
@@ -499,7 +503,7 @@ export class DueDateComponent implements OnInit {
                     day: '2-digit',
                   }
                 );
-            } catch (e) {}
+            } catch (e) { }
           }
           // end of formatting
         }
@@ -533,6 +537,73 @@ export class DueDateComponent implements OnInit {
       d,
       fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
     );
+  }
+
+  clearFilter() {
+    this.criteria = {};
+    this.detailsData = [...this.detailsDataTemp];
+    this.filtersNo = 0;
+  }
+
+  filterChange(query, colName): void {
+    this.waiting = true;
+    if (!query || !query.trim()) {
+      this.filtersNo--;
+      delete this.criteria[colName];
+      if (Object.keys(this.criteria).length < 1) {
+        this.detailsData = [...this.detailsDataTemp];
+        this.filtersNo = 0;
+      } else {
+        for (const key in this.criteria) {
+          if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+            const element = this.criteria[key];
+            if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
+              if (element) this.detailsData = this.detailsDataTemp.filter((value) => {
+                let d = new Date(value[key]);
+                d.setHours(0, 0, 0, 0);
+                return d.getTime() == element.getTime();
+              });
+            } else {
+              if (element && element.length < 3) {
+                this.detailsData = this.detailsDataTemp.filter(
+                  (value) => value[key]?.toString()?.toLowerCase() == element?.toLowerCase()
+                );
+              } else {
+                this.detailsData = this.detailsDataTemp.filter((value) =>
+                  value[key]?.toString()?.toLowerCase().includes(element?.toLowerCase())
+                );
+              }
+            }
+          }
+        }
+      }
+    } else {
+      this.filtersNo++;
+      this.detailsData = [...this.detailsDataTemp];
+      for (const key in this.criteria) {
+        if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
+          const element = this.criteria[key];
+          if (key === 'dueDate' || key === 'applicationDate' || key === 'documentDate') {
+            if (element) this.detailsData = this.detailsDataTemp.filter((value) => {
+              let d = new Date(value[key]);
+              d.setHours(0, 0, 0, 0);
+              return d.getTime() == element.getTime();
+            });
+          } else {
+            if (element && element.length < 3) {
+              this.detailsData = this.detailsData.filter(
+                (value) => value[key]?.toString()?.toLowerCase() == element?.toLowerCase()
+              );
+            } else {
+              this.detailsData = this.detailsData.filter((value) =>
+                value[key]?.toString()?.toLowerCase().includes(element?.toLowerCase())
+              );
+            }
+          }
+        }
+      } // end of for each criteria field
+    }
+    this.waiting = false;
   }
 
 }

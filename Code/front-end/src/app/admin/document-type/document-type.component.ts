@@ -199,7 +199,7 @@ export class DocumentTypeComponent implements OnInit {
 
   async filterChange(query, colName) {
     this.searching = true;
-    if (!query) {
+    if (!query || !query.trim()) {
       this.filtersNo--;
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
