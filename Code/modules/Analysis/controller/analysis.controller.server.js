@@ -175,26 +175,31 @@ module.exports.paymentAnalysisDateRange = async (req, res) => {
 };
 
 module.exports.paymentAnalysis = async (req, res) => {
-  const dateRange = await paymentAnalysisRepo.paymentDateRangeCalc(
-    +req.params.orgId,
-    +req.params.prcId
-  );
-  if (dateRange.length < 1) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
-  }
-  if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
-  }
-  const fromDate = dateRange[0].mindate;
-  let toDate = new Date();
-  if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-    if (!dateRange[0].maxdue || !(dateRange[0].maxdue instanceof Date)) {
-      throw new Exception(httpStatus.BAD_REQUEST, errors.no_application_date);
-    } else {
-      toDate = dateRange[0].maxdue;
+  let fromDate = req.params.fromDate;
+  let toDate = req.params.toDate;
+  let dateRange = [{ fromDate, toDate }];
+  if (!fromDate || !toDate || fromDate == 'null' || fromDate == 'undefined' || toDate == 'null' || toDate == 'undefined') {
+    dateRange = await paymentAnalysisRepo.paymentDateRangeCalc(
+      +req.params.orgId,
+      +req.params.prcId
+    );
+    if (dateRange.length < 1) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
     }
-  } else {
-    toDate = dateRange[0].maxdate;
+    if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
+    }
+    fromDate = dateRange[0].mindate;
+    toDate = new Date();
+    if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+      if (!dateRange[0].maxdue || !(dateRange[0].maxdue instanceof Date)) {
+        throw new Exception(httpStatus.BAD_REQUEST, errors.no_application_date);
+      } else {
+        toDate = dateRange[0].maxdue;
+      }
+    } else {
+      toDate = dateRange[0].maxdate;
+    }
   }
   // let result = {};
   paymentAnalysisRepo.paymentAnalysisCalc(

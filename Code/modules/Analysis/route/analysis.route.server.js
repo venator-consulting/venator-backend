@@ -159,14 +159,6 @@ router
     analysisCtrl.textBulkUpdate
   );
 
-router.route("/:orgId/:prcId/payment").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.paymentAnalysis
-);
-
 router
   .route("/:orgId/:prcId/payment/details/:accountNumber")
   .get(
@@ -191,6 +183,15 @@ router.route("/:orgId/:prcId/payment/details-relevant/:accountNumber").get(
   authorization.canDisplayAnalysis(),
   analysisCtrl.paymentJustRelevant
 );
+
+router.route("/:orgId/:prcId/payment/:fromDate/:toDate").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.paymentAnalysis
+);
+
 
 router.route("/:orgId/:prcId/duedate/details/:accountNumber").get(
   passport.authenticate("jwt", {

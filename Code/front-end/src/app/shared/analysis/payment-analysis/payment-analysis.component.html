@@ -2,12 +2,24 @@
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <div class="p-grid">
   <div class="p-col-12">
-    <!-- <h2 class="p-text-center">{{ procedureName }}</h2> -->
     <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
     <!-- <button type="button" pButton pRipple icon="pi pi-clock" label=" {{ 'DueDateAnalysis.label' | translate }}"
       class="p-button-rounded p-button-warning" (click)="goToDueDate()"
       pTooltip="{{ 'DueDateAnalysis.label' | translate }}" tooltipPosition="bottom"></button> -->
   </div>
+  <div class="p-col-1 p-text-right" style="margin-top: 5px;">{{fromDate | date}}</div>
+  <!-- [style]="{width:'300px'}" -->
+  <div class="p-col-4" style="text-align: center;margin-top: 5px;">
+    <p-slider [(ngModel)]="rangeValues" [range]="true" (onChange)="handleSliderChange($event)" [min]="0"
+      [max]="maxRange"></p-slider>
+  </div>
+  <div class="p-col-1" style="margin-top: 5px;">{{toDate | date}}</div>
+  <div class="p-col-1 p-text-left">
+    <button pButton pRipple type="button" label="{{'DueDateAnalysis.search' | translate}}" icon="pi pi-search"
+      (click)="getData()" class="p-button-rounded p-button-primary"></button>
+  </div>
+  <!-- <h2 class="p-text-center">{{ procedureName }}</h2> -->
+
 </div>
 <div class="p-grid" *ngIf="basicData && ready">
   <div class="p-col-6">
@@ -15,7 +27,7 @@
       <span *ngIf="!selectedMaxAccountNumber">
         {{ "PaymentAnalysis.allAccounts" | translate }}
       </span>
-      <p-chart type="bar" height="450" [data]="basicData" [options]="basicOptions" *ngIf="!selectedMaxAccountNumber">
+      <p-chart #allChart type="bar" height="450" [data]="basicData" [options]="basicOptions" *ngIf="!selectedMaxAccountNumber">
       </p-chart>
       <span *ngIf="selectedMaxAccountNumber">
         {{ selectedMaxAccountName }}
@@ -55,7 +67,7 @@
         <tr [pSelectableRow]="row">
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
             <span *ngIf="col.field == 'value'">
-              {{ row.blue | currency: "EUR":"" }}
+              {{ row.lastBlue | currency: "EUR":"" }}
             </span>
             <span *ngIf="col.field != 'value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
@@ -86,7 +98,7 @@
         <tr [pSelectableRow]="row">
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
             <span *ngIf="col.field == 'value'">
-              {{ row.red | currency: "EUR":"" }}
+              {{ row.lastRed | currency: "EUR":"" }}
             </span>
             <span *ngIf="col.field != 'value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
@@ -117,7 +129,7 @@
         <tr [pSelectableRow]="row">
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
             <span *ngIf="col.field == 'value'">
-              {{ row.green | currency: "EUR":"" }}
+              {{ row.lastGreen | currency: "EUR":"" }}
             </span>
             <span *ngIf="col.field != 'value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}

@@ -32,8 +32,6 @@ export class PaymentAnalysisComponent implements OnInit {
   top10Blue: any[] = new Array();
   greenAccounts: any[] = new Array();
   redAccounts: any[] = new Array();
-  startDate: Date = new Date();
-  endDate: Date = new Date();
   procedureName: string;
   top10Red: any[];
   top10Green: any[];
@@ -47,6 +45,7 @@ export class PaymentAnalysisComponent implements OnInit {
   selectedMaxAccountNumber: string;
   selectedMaxAccount: any;
   @ViewChild('chart') chart: any;
+  @ViewChild('allChart') allChart: any;
   selectedMaxAccountName: string;
   items: MenuItem[];
   home: MenuItem;
@@ -54,6 +53,12 @@ export class PaymentAnalysisComponent implements OnInit {
   red: string;
   green: string;
   waiting: boolean = true;
+  fromDate: Date;
+  toDate: Date;
+  maxDate: Date;
+  mindate: Date;
+  rangeValues: number[];
+  maxRange: any;
 
   constructor(
     public _translateService: TranslateService,
@@ -173,74 +178,60 @@ export class PaymentAnalysisComponent implements OnInit {
         },
       ];
 
-      this.basicData = {
-        labels: this.labels,
-        datasets: new Array(),
-      };
 
-      this.basicData.datasets.push(
-        {
-          label: this.blue,
-          backgroundColor: `rgb(100,100,255)`,
-          data: this.blueData,
-        },
-        {
-          label: this.red,
-          backgroundColor: `rgb(255,100,100)`,
-          data: this.RedData,
-        },
-        {
-          label: this.green,
-          backgroundColor: `rgb(100,255,100)`,
-          data: this.GreenData,
-        }
-      );
-
-      this.specificAccountData = {
-        labels: this.labels,
-        datasets: new Array(),
-      };
-
-      this.specificAccountData.datasets.push(
-        {
-          label: this.blue,
-          backgroundColor: `rgb(100,100,255)`,
-          data: this.specificAccountBlueData,
-        },
-        {
-          label: this.red,
-          backgroundColor: `rgb(255,100,100)`,
-          data: this.specificAccountRedData,
-        },
-        {
-          label: this.green,
-          backgroundColor: `rgb(100,255,100)`,
-          data: this.specificAccountGreenData,
-        }
-      );
     });
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
+    this.getData();
+  } // end of init function
 
+  dayDiff(d1: Date, d2: Date) {
+    var diff = Math.abs(d1.getTime() - d2.getTime());
+    var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+    return diffDays;
+  }
+
+  getData() {
+    this.waiting = true;
+    this.labels = new Array();
+    this.blueData = new Array();
+    this.GreenData = new Array();
+    this.RedData = new Array();
+    let tmpFromDate = this.fromDate?.toISOString()?.split('T')[0];
+    let tmpToDate = this.toDate?.toISOString()?.split('T')[0];
     this._analysisService
-      .getPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure)
+      .getPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure, tmpFromDate, tmpToDate)
       .subscribe(
         (res) => {
           this.data = res.data.res;
           this.accounts = res.data.accounts;
-          this.startDate = res.dateRange[0].mindate;
-          this.endDate = res.dateRange[0].maxdate;
-
+          if (!this.fromDate) this.fromDate = new Date(res.dateRange[0].mindate);
+          if (!this.toDate) this.toDate = new Date(res.dateRange[0].maxdate);
+          if (!this.mindate) this.mindate = new Date(res.dateRange[0].mindate);
+          if (!this.maxDate) this.maxDate = new Date(res.dateRange[0].maxdate);
+          if (!this.rangeValues) this.rangeValues = [0, this.dayDiff(this.mindate, this.maxDate)];
+          if (!this.maxRange) this.maxRange = this.dayDiff(this.mindate, this.maxDate);
+          // debugger;
           for (let i = 0; i < this.data.length; i++) {
             const element = this.data[i];
-
             this.labels.push(element.monthName + '-' + element.yearName);
-            this.blueData.push(Math.abs(element.blue.value));
-            this.GreenData.push(Math.abs(element.green.value));
-            this.RedData.push(Math.abs(element.red.value));
+            this.blueData.push(-1 * element.blue.value);
+            this.GreenData.push(element.green.value);
+            this.RedData.push(-1 * element.red.value);
           }
+
+          this.accounts.forEach((account) => {
+            let accountNumber = parseInt(account.accountNumber, 10);
+            account.accountNumber = isNaN(accountNumber)
+              ? account.accountNumber
+              : accountNumber;
+            account.blue = -1 * account.blue;
+            account.red = -1 * account.red;
+            account.lastBlue = -1 * account.lastBlue;
+            account.lastRed = -1 * account.lastRed;
+          });
 
           // get top 10
           this.accounts.sort((a, b) => Math.abs(b.blue) - Math.abs(a.blue));
@@ -250,21 +241,75 @@ export class PaymentAnalysisComponent implements OnInit {
           this.accounts.sort((a, b) => Math.abs(b.green) - Math.abs(a.green));
           this.top10Green = this.accounts.slice(0, 10);
           // debugger;
-          this.accounts.forEach((account) => {
-            let accountNumber = parseInt(account.accountNumber, 10);
-            account.accountNumber = isNaN(accountNumber)
-              ? account.accountNumber
-              : accountNumber;
-          });
+
+          this.basicData = {
+            labels: this.labels,
+            datasets: new Array(),
+          };
+
+          this.basicData.datasets.push(
+            {
+              label: this.blue,
+              backgroundColor: `rgb(100,100,255)`,
+              data: this.blueData,
+            },
+            {
+              label: this.red,
+              backgroundColor: `rgb(255,100,100)`,
+              data: this.RedData,
+            },
+            {
+              label: this.green,
+              backgroundColor: `rgb(100,255,100)`,
+              data: this.GreenData,
+            }
+          );
+
+          this.specificAccountData = {
+            labels: this.labels,
+            datasets: new Array(),
+          };
+
+          this.specificAccountData.datasets.push(
+            {
+              label: this.blue,
+              backgroundColor: `rgb(100,100,255)`,
+              data: this.specificAccountBlueData,
+            },
+            {
+              label: this.red,
+              backgroundColor: `rgb(255,100,100)`,
+              data: this.specificAccountRedData,
+            },
+            {
+              label: this.green,
+              backgroundColor: `rgb(100,255,100)`,
+              data: this.specificAccountGreenData,
+            }
+          );
+
           this.ready = true;
           this.waiting = false;
           this.tempData = [...this.accounts];
+          if (this.allChart) this.allChart.reinit();
         },
         (er) => {
           this.waiting = false;
-        }
-      );
-  } // end of init function
+        });
+  }
+
+  handleSliderChange(e) {
+    let start = e.values[0];
+    let end = e.values[1];
+    // calculate fromDate: start + baseFromDate
+    let tempStart = new Date(this.mindate);
+    tempStart.setDate(tempStart.getDate() + start);
+    this.fromDate = new Date(tempStart);
+    // calculate toDate: baseToDate - end
+    let tempEnd = new Date(this.maxDate);
+    tempEnd.setDate(tempEnd.getDate() - (this.maxRange - +end));
+    this.toDate = new Date(tempEnd);
+  }
 
   goToDetails(row: any) {
     this._router.navigate([
@@ -346,7 +391,7 @@ export class PaymentAnalysisComponent implements OnInit {
             total += b.value;
           }
         }); // end of for each account
-        this.specificAccountBlueData[i] = (-1 * total);
+        this.specificAccountBlueData[i] = -1 * total;
       }
       if (element.red.accounts) {
         let total = 0;
@@ -356,7 +401,7 @@ export class PaymentAnalysisComponent implements OnInit {
             total += r.value;
           }
         }); // end of for each account
-        this.specificAccountRedData[i] = (-1 * total);
+        this.specificAccountRedData[i] = -1 * total;
       }
       if (element.green.accounts) {
         let total = 0;

@@ -91,8 +91,8 @@ export class AnalysisService {
     return this._http.put<PaymentAnalysisDetailsData[]>(this._thisURL + orgId + '/' + prcId + '/payment/details/' + accountNumber, records);
   }
 
-  getPaymentAnalysis(orgId: number, prcId: number): Observable<PaymentAnalysis> {
-    return this._http.get<PaymentAnalysis>(this._thisURL + orgId + '/' + prcId + '/payment');
+  getPaymentAnalysis(orgId: number, prcId: number, fromDate: string, toDate: string): Observable<PaymentAnalysis> {
+    return this._http.get<PaymentAnalysis>(this._thisURL + orgId + '/' + prcId + '/payment/' + fromDate + '/' + toDate);
   }
 
   getPaymentAnalysisDetails(orgId: number, prcId: number, accountNumber: String): Observable<PaymentAnalysisDetails> {

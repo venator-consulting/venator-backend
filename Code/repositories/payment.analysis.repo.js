@@ -259,7 +259,8 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
     throw new Error("Application Date is null for this procedure!");
   }
   if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
-    throw new Error("DocumentDate and ApplicationDate must be Date!");
+    fromDate = new Date(fromDate);
+    toDate = new Date(toDate);
   }
   const diff = monthDiff(fromDate, toDate);
   // if diff = 0 throw an error
@@ -295,7 +296,10 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
   let query = `SELECT *
                     FROM payment_analysis_${orgId} pos
                     WHERE
-                        pos.procedureId = ${prcId}`;
+                        pos.procedureId = ${prcId}
+                        AND pos.documentDate >=  '${fromDate.toISOString().split('T')[0]}' 
+                        AND ((pos.applicationDate is NULL AND pos.dueDate <= '${toDate.toISOString().split('T')[0]}')
+                          OR (pos.applicationDate <= '${toDate.toISOString().split('T')[0]}'))`;
 
   const str = connection.getConnection().query(query).stream();
 
@@ -324,6 +328,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         // check if the account added to the accounts array for the table
         const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (i >= 0) {
+          finalResult.accounts[i].lastBlue = +row.balance;
           // the row must be added once
           const j = blueBlackList.findIndex((x) => x == row.id);
           if (j == -1) {
@@ -337,8 +342,11 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         } else {
           finalResult.accounts.push({
             blue: +row.balance,
+            lastBlue: +row.balance,
             red: 0,
+            lastRed: 0,
             green: 0,
+            lastGreen: 0,
             accountNumber: row.accountNumber?.trim(),
             accountName: row.accountName,
           });
@@ -361,6 +369,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         }
         const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (i >= 0) {
+          finalResult.accounts[i].lastRed = +row.balance;
           const j = redBlackList.findIndex((x) => x == row.id);
           if (j == -1) {
             if (finalResult.accounts[i].red) {
@@ -373,8 +382,11 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         } else {
           finalResult.accounts.push({
             blue: 0,
+            lastBlue: 0,
             red: +row.balance,
+            lastRed: +row.balance,
             green: 0,
+            lastGreen: 0,
             accountNumber: row.accountNumber?.trim(),
             accountName: row.accountName,
           });
@@ -396,6 +408,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         }
         const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (i >= 0) {
+          finalResult.accounts[i].lastGreen = +row.balance;
           const j = greenBlackList.findIndex((x) => x == row.id);
           if (j == -1) {
             if (finalResult.accounts[i].green) {
@@ -408,8 +421,11 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         } else {
           finalResult.accounts.push({
             blue: 0,
+            lastBlue: 0,
             red: 0,
+            lastRed: 0,
             green: +row.balance,
+            lastGreen: row.balance,
             accountNumber: row.accountNumber?.trim(),
             accountName: row.accountName,
           });
@@ -480,7 +496,7 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
   str.on("data", (row) => {
     result.forEach((element) => {
       // get first day of the next month
-      var d = new Date(element.yearName, +element.monthName , 1);
+      var d = new Date(element.yearName, +element.monthName, 1);
       // BLUES................
       // and it's late: app date > due date
       // month we increment already!!!!!!!!!!!!!!!!!!
