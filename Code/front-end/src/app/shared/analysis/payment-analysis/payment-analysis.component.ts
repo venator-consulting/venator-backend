@@ -70,6 +70,7 @@ export class PaymentAnalysisComponent implements OnInit {
 
   ngOnInit(): void {
     this.waiting = true;
+    
     this._translateService.get('PaymentAnalysis').subscribe((elem) => {
       this.blue = elem.blue;
       this.red = elem.red;
@@ -184,6 +185,14 @@ export class PaymentAnalysisComponent implements OnInit {
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
+    let prcId = +localStorage.getItem('paymentPrcId');
+    debugger;
+    if (prcId == this.selectedProcedure) {
+      this.mindate = new Date(localStorage.getItem('paymentMinDate'));
+      this.maxDate = new Date(localStorage.getItem('paymentMaxDate'));
+      this.fromDate = new Date(localStorage.getItem('paymentFromDate'));
+      this.toDate = new Date(localStorage.getItem('paymentToDate'));
+    }
     this.getData();
   } // end of init function
 
@@ -211,8 +220,13 @@ export class PaymentAnalysisComponent implements OnInit {
           if (!this.toDate) this.toDate = new Date(res.dateRange[0].maxdate);
           if (!this.mindate) this.mindate = new Date(res.dateRange[0].mindate);
           if (!this.maxDate) this.maxDate = new Date(res.dateRange[0].maxdate);
-          if (!this.rangeValues) this.rangeValues = [0, this.dayDiff(this.mindate, this.maxDate)];
+          if (!this.rangeValues) this.rangeValues = [0, this.dayDiff(this.fromDate, this.toDate)];
           if (!this.maxRange) this.maxRange = this.dayDiff(this.mindate, this.maxDate);
+          localStorage.setItem('paymentMinDate', this.mindate?.toISOString().split('T')[0]);
+          localStorage.setItem('paymentMaxDate', this.maxDate?.toISOString().split('T')[0]);
+          localStorage.setItem('paymentFromDate', this.fromDate?.toISOString().split('T')[0]);
+          localStorage.setItem('paymentToDate', this.toDate?.toISOString().split('T')[0]);
+          localStorage.setItem('paymentPrcId', '' + this.selectedProcedure);
           // debugger;
           for (let i = 0; i < this.data.length; i++) {
             const element = this.data[i];
