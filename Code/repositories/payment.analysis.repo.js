@@ -123,9 +123,8 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
         (row.applicationDate == null || row.applicationDate >= d)) {
         element.blue.value += +row.balance;
         // add creditor to the list
-        const b = element.blue.accounts.findIndex(
-          (x) => x.accountNumber == row.accountNumber
-        );
+        const b = element.blue.accounts.findIndex((x) => x.accountNumber == row.accountNumber);
+        const i = finalResult.accounts.findIndex((x) => x.accountNumber == row.accountNumber);
         if (b >= 0) {
           element.blue.accounts[b].value += +row.balance;
         } else {
@@ -135,9 +134,7 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
             accountName: row.accountName,
           });
         }
-        const i = finalResult.accounts.findIndex(
-          (x) => x.accountNumber == row.accountNumber
-        );
+
         if (i >= 0) {
           const j = blueBlackList.findIndex((x) => x == row.id);
           if (j == -1) {
@@ -314,9 +311,11 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         // add creditor to the list
         // check if the account added to the blue bar in chart for this month
         const b = element.blue.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
+        let lastBlue = +row.balance;
         // if already account added, then sum the balance
         if (b >= 0) {
           element.blue.accounts[b].value += +row.balance;
+          lastBlue = element.blue.accounts[b].value;
           // else add the account
         } else {
           element.blue.accounts.push({
@@ -328,7 +327,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         // check if the account added to the accounts array for the table
         const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (i >= 0) {
-          finalResult.accounts[i].lastBlue = +row.balance;
+          finalResult.accounts[i].lastBlue = lastBlue;
           // the row must be added once
           const j = blueBlackList.findIndex((x) => x == row.id);
           if (j == -1) {
@@ -342,7 +341,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         } else {
           finalResult.accounts.push({
             blue: +row.balance,
-            lastBlue: +row.balance,
+            lastBlue: lastBlue,
             red: 0,
             lastRed: 0,
             green: 0,
@@ -358,8 +357,10 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         row.dueDate?.getTime() < d?.getTime()) {
         element.red.value += +row.balance;
         const r = element.red.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
+        let lastRed = +row.balance;
         if (r >= 0) {
           element.red.accounts[r].value += +row.balance;
+          lastRed = element.red.accounts[r].value;
         } else {
           element.red.accounts.push({
             value: +row.balance,
@@ -369,7 +370,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         }
         const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (i >= 0) {
-          finalResult.accounts[i].lastRed = +row.balance;
+          finalResult.accounts[i].lastRed = lastRed;
           const j = redBlackList.findIndex((x) => x == row.id);
           if (j == -1) {
             if (finalResult.accounts[i].red) {
@@ -384,7 +385,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
             blue: 0,
             lastBlue: 0,
             red: +row.balance,
-            lastRed: +row.balance,
+            lastRed: lastRed,
             green: 0,
             lastGreen: 0,
             accountNumber: row.accountNumber?.trim(),
@@ -396,9 +397,11 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
       if (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG" &&
         row.documentDate?.getTime() < d?.getTime() && row.applicationDate == null) {
         element.green.value += +row.balance;
+        let lastGreen = +row.balance;
         const g = element.green.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (g >= 0) {
           element.green.accounts[g].value += +row.balance;
+          lastGreen = element.green.accounts[g].value;
         } else {
           element.green.accounts.push({
             value: +row.balance,
@@ -408,7 +411,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
         }
         const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
         if (i >= 0) {
-          finalResult.accounts[i].lastGreen = +row.balance;
+          finalResult.accounts[i].lastGreen = lastGreen;
           const j = greenBlackList.findIndex((x) => x == row.id);
           if (j == -1) {
             if (finalResult.accounts[i].green) {
@@ -425,7 +428,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
             red: 0,
             lastRed: 0,
             green: +row.balance,
-            lastGreen: row.balance,
+            lastGreen: lastGreen,
             accountNumber: row.accountNumber?.trim(),
             accountName: row.accountName,
           });
