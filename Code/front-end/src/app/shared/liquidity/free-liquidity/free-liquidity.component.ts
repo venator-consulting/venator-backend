@@ -281,7 +281,7 @@ export class FreeLiquidityComponent implements OnInit {
   filterChange(query, colName): void {
     this.searching = true;
     // debugger;
-    if (!query) {
+    if (!query || !query?.toString()?.trim()) {
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
         this.accounts = [...this.tempData];

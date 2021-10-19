@@ -141,7 +141,7 @@ export class OpeningBalanceComponent implements OnInit {
   filterChange(query, colName): void {
     this.searching = true;
     // debugger;
-    if (!query) {
+    if (!query || !query?.toString()?.trim()) {
       delete this.criteria[colName];
       this.filtersNo--;
       if (Object.keys(this.criteria).length < 1) {
