@@ -259,7 +259,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
     fromDate = new Date(fromDate);
     toDate = new Date(toDate);
   }
-  const diff = monthDiff(fromDate, toDate);
+  const diff = monthDiff(fromDate, toDate) - 1;
   // if diff = 0 throw an error
   // init res
   let res = new Array();
