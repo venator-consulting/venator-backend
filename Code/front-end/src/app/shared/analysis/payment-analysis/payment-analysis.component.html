@@ -67,7 +67,7 @@
         <tr [pSelectableRow]="row">
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
             <span *ngIf="col.field == 'value'">
-              {{ row.lastBlue | currency: "EUR":"" }}
+              {{ row.lastChartBlue | currency: "EUR":"" }}
             </span>
             <span *ngIf="col.field != 'value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
@@ -98,7 +98,7 @@
         <tr [pSelectableRow]="row">
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
             <span *ngIf="col.field == 'value'">
-              {{ row.lastRed | currency: "EUR":"" }}
+              {{ row.lastChartRed | currency: "EUR":"" }}
             </span>
             <span *ngIf="col.field != 'value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
@@ -129,7 +129,7 @@
         <tr [pSelectableRow]="row">
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
             <span *ngIf="col.field == 'value'">
-              {{ row.lastGreen | currency: "EUR":"" }}
+              {{ row.lastChartGreen | currency: "EUR":"" }}
             </span>
             <span *ngIf="col.field != 'value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}

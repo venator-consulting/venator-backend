@@ -231,6 +231,9 @@ export class PaymentAnalysisComponent implements OnInit {
             account.red = -1 * account.red;
             account.lastBlue = -1 * account.lastBlue;
             account.lastRed = -1 * account.lastRed;
+            account.lastChartBlue = this.data[this.data.length - 1]?.blue?.accounts?.find(ac => ac.accountNumber == account.accountNumber)?.value;
+            account.lastChartRed = this.data[this.data.length - 1]?.red?.accounts?.find(ac => ac.accountNumber == account.accountNumber)?.value;
+            account.lastChartGreen = this.data[this.data.length - 1]?.green?.accounts?.find(ac => ac.accountNumber == account.accountNumber)?.value;
           });
 
           // get top 10
