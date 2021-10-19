@@ -29,9 +29,9 @@ module.exports.fetchOne = async (id) => {
       id: id,
     },
   });
-  if (!res || !res.length) {
-    throw new Exception(httpStatus.BAD_REQUEST, errors.PROCEDURE_NOT_FOUND);
-  }
+  // if (!res || !res.length) {
+  //   throw new Exception(httpStatus.BAD_REQUEST, errors.PROCEDURE_NOT_FOUND);
+  // }
   return res[0];
 };
 

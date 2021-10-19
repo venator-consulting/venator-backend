@@ -95,6 +95,11 @@ export class AnalysisService {
     return this._http.get<PaymentAnalysis>(this._thisURL + orgId + '/' + prcId + '/payment/' + fromDate + '/' + toDate);
   }
 
+
+  getPaymentAnalysisDateFilter(orgId: number, prcId: number, toDate: string): Observable<PaymentAnalysis> {
+    return this._http.get<PaymentAnalysis>(this._thisURL + orgId + '/' + prcId + '/payment/dateFilter/' + toDate);
+  }
+
   getPaymentAnalysisDetails(orgId: number, prcId: number, accountNumber: String): Observable<PaymentAnalysisDetails> {
     return this._http.get<PaymentAnalysisDetails>(this._thisURL + orgId + '/' + prcId + '/payment/details/' + accountNumber);
   }

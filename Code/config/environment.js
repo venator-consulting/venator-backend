@@ -1,7 +1,7 @@
 module.exports = {
     // used for excel export from back-end
-   // domain: 'http://venalytics.de:8000/',
-    domain: 'http://localhost:8000/',
+   domain: 'http://venalytics.de:8000/',
+    // domain: 'http://localhost:8000/',
     port: 8000,
     jwtSecret: 'IT\'s just a secret For JWT token so use some special @#$%!1',
     uploadPath: './modules/Admin/files/',
@@ -22,8 +22,8 @@ module.exports = {
     mailerUser: 'elza.tillman13@ethereal.email',
     mailerPassword: 'JdRqgGeAb5HeDqp3Ny',
     // used for register new user to generate link to reset the password
-    resetPassLink: 'http://localhost/reset/',
-   // resetPassLink: 'http://venalytics.de/reset/',  
+    // resetPassLink: 'http://localhost/reset/',
+   resetPassLink: 'http://venalytics.de/reset/',  
     developerMail: 'mohamad.hamad@venator-consulting.de'
     
 };

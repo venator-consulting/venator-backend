@@ -1,14 +1,20 @@
 <p-toast></p-toast>
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <div class="p-grid">
+  <div class="p-col-12 p-text-right">
+    <p-calendar [(ngModel)]="maxDayFilter" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"
+      appendTo="body" dateFormat="dd.mm.yy" showButtonBar="true">
+    </p-calendar>
+    <button pButton pRipple type="button" label="{{'DueDateAnalysis.search' | translate}}" icon="pi pi-search"
+      (click)="getDateFilter()" class="p-button-rounded p-button-primary" ></button>
+  </div>
   <div class="p-col-12">
     <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
     <!-- <button type="button" pButton pRipple icon="pi pi-clock" label=" {{ 'DueDateAnalysis.label' | translate }}"
       class="p-button-rounded p-button-warning" (click)="goToDueDate()"
       pTooltip="{{ 'DueDateAnalysis.label' | translate }}" tooltipPosition="bottom"></button> -->
   </div>
-  <div class="p-col-1 p-text-right" style="margin-top: 5px;">{{fromDate | date}}</div>
-  <!-- [style]="{width:'300px'}" -->
+  <!-- <div class="p-col-1 p-text-right" style="margin-top: 5px;">{{fromDate | date}}</div>
   <div class="p-col-4" style="text-align: center;margin-top: 5px;">
     <p-slider [(ngModel)]="rangeValues" [range]="true" (onChange)="handleSliderChange($event)" [min]="0"
       [max]="maxRange"></p-slider>
@@ -17,7 +23,7 @@
   <div class="p-col-1 p-text-left">
     <button pButton pRipple type="button" label="{{'DueDateAnalysis.search' | translate}}" icon="pi pi-search"
       (click)="getData()" class="p-button-rounded p-button-primary"></button>
-  </div>
+  </div> -->
   <!-- <h2 class="p-text-center">{{ procedureName }}</h2> -->
 
 </div>
@@ -27,7 +33,8 @@
       <span *ngIf="!selectedMaxAccountNumber">
         {{ "PaymentAnalysis.allAccounts" | translate }}
       </span>
-      <p-chart #allChart type="bar" height="450" [data]="basicData" [options]="basicOptions" *ngIf="!selectedMaxAccountNumber">
+      <p-chart #allChart type="bar" height="450" [data]="basicData" [options]="basicOptions"
+        *ngIf="!selectedMaxAccountNumber">
       </p-chart>
       <span *ngIf="selectedMaxAccountNumber">
         {{ selectedMaxAccountName }}
@@ -67,7 +74,7 @@
         <tr [pSelectableRow]="row">
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
             <span *ngIf="col.field == 'value'">
-              {{ row.lastChartBlue | currency: "EUR":"" }}
+              {{ row.blue | currency: "EUR":"" }}
             </span>
             <span *ngIf="col.field != 'value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
@@ -98,7 +105,7 @@
         <tr [pSelectableRow]="row">
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
             <span *ngIf="col.field == 'value'">
-              {{ row.lastChartRed | currency: "EUR":"" }}
+              {{ row.red | currency: "EUR":"" }}
             </span>
             <span *ngIf="col.field != 'value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}
@@ -129,7 +136,7 @@
         <tr [pSelectableRow]="row">
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
             <span *ngIf="col.field == 'value'">
-              {{ row.lastChartGreen | currency: "EUR":"" }}
+              {{ row.green | currency: "EUR":"" }}
             </span>
             <span *ngIf="col.field != 'value'" pTooltip="{{ row[col.field] }}">
               {{ row[col.field] }}

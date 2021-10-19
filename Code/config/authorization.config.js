@@ -69,29 +69,18 @@ module.exports.canDisplayAnalysis = function () {
       if (err) throw new Exception(httpStatus.FORBIDDEN, errors.unauthorized);
       const userinfo = decoded.userinfo;
       if (!req.params.orgId)
-        throw new Exception(
-          httpStatus.BAD_REQUEST,
-          errors.organisation_id_is_required
-        );
+        throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
       if (!req.params.prcId)
         throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-      if (
-        userinfo.OrganisationId != req.params.orgId &&
-        userinfo.Role != "Admin"
-      )
+      if (userinfo.OrganisationId != req.params.orgId && userinfo.Role != "Admin")
         throw new Exception(httpStatus.FORBIDDEN, errors.unauthorized);
-      const prc =
-        await require("../repositories/procedure.repo.server").fetchOne(
-          req.params.prcId
-        );
+      const prc = await require("../repositories/procedure.repo.server").fetchOne(+req.params.prcId);
       // if (prcs.length !== 1)
       //   next(
       //     new Exception(httpStatus.UNAUTHORIZED, "procedure_id_is_required")
       //   );
-      if (!prc.analysis)
-        next(
-          new Exception(httpStatus.UNAUTHORIZED, errors.procedure_analysis_disabled)
-        );
+      if (!prc || !prc.analysis)
+        next(new Exception(httpStatus.UNAUTHORIZED, errors.procedure_analysis_disabled));
       next();
     });
   };
