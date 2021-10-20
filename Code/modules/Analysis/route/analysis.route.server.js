@@ -159,6 +159,18 @@ router
     analysisCtrl.textBulkUpdate
   );
 
+
+router
+  .route("/:orgId/:prcId/payment/dateFilter/:toDate")
+  .get(
+    passport.authenticate("jwt", {
+      session: false,
+    }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.paymentAnalysisDateFilter
+  );
+
+
 router
   .route("/:orgId/:prcId/payment/details/:accountNumber")
   .get(

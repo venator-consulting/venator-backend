@@ -204,6 +204,7 @@ export class DocumentTypeComponent implements OnInit {
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
         this.postingDocTypes = [...this.tempData];
+        this.filtersNo = 0;
       } else {
         for (const key in this.criteria) {
           if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {

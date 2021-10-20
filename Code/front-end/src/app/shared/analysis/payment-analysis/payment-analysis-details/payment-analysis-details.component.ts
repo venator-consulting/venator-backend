@@ -412,7 +412,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
   //#region filter change
   filterChange(query, colName): void {
     this.searching = true;
-    if (!query || !query.trim()) {
+    if (!query || !query?.toString()?.trim()) {
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
         this.data = [...this.tempData];
@@ -454,7 +454,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
   filterChangeBlue(query, colName): void {
     this.searching = true;
-    if (!query || !query.trim()) {
+    if (!query || !query?.toString()?.trim()) {
       this.blueFiltersNo--;
       delete this.criteriaBlue[colName];
       if (Object.keys(this.criteriaBlue).length < 1) {
@@ -521,7 +521,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
   filterChangeRed(query, colName): void {
     this.searching = true;
-    if (!query || !query.trim()) {
+    if (!query || !query?.toString()?.trim()) {
       this.redFiltersNo--;
       delete this.criteriaRed[colName];
       if (Object.keys(this.criteriaRed).length < 1) {
@@ -588,7 +588,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
 
   filterChangeGreen(query, colName): void {
     this.searching = true;
-    if (!query || !query.trim()) {
+    if (!query || !query?.toString()?.trim()) {
       delete this.criteriaGreen[colName];
       this.greenFiltersNo--;
       if (Object.keys(this.criteriaGreen).length < 1) {

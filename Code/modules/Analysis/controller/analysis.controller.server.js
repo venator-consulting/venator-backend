@@ -217,6 +217,37 @@ module.exports.paymentAnalysis = async (req, res) => {
   );
 };
 
+module.exports.paymentAnalysisDateFilter = async (req, res) => {
+  let toDate = req.params.toDate;
+  if (!toDate || toDate == 'null' || toDate == 'undefined') {
+    dateRange = await paymentAnalysisRepo.paymentDateRangeCalc(
+      +req.params.orgId,
+      +req.params.prcId
+    );
+    if (dateRange.length < 1) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
+    }
+    if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
+    }
+    if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+      if (!dateRange[0].maxdue || !(dateRange[0].maxdue instanceof Date)) {
+        throw new Exception(httpStatus.BAD_REQUEST, errors.no_application_date);
+      } else {
+        toDate = dateRange[0].maxdue;
+      }
+    } else {
+      toDate = dateRange[0].maxdate;
+    }
+  }
+  // let result = {};
+  paymentAnalysisRepo.paymentAnalysisDateFilterCalc(
+    req.params.orgId,
+    req.params.prcId,
+    toDate,
+    (data) => { res.status(200).json({ data: data }); });
+};
+
 module.exports.paymentAnalysisDetails = async (req, res) => {
   const dateRange = await paymentAnalysisRepo.paymentDateRangeCalc(
     +req.params.orgId,

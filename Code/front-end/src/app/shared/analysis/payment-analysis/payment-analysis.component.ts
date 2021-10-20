@@ -7,10 +7,12 @@ import { ProcedureService } from '../../service/procedure.service';
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from '../../model/tableColumn';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-payment-analysis',
   templateUrl: './payment-analysis.component.html',
   styleUrls: ['./payment-analysis.component.sass'],
+  providers: [DatePipe],
 })
 export class PaymentAnalysisComponent implements OnInit {
   selectedOrganisation: number = 0;
@@ -28,6 +30,7 @@ export class PaymentAnalysisComponent implements OnInit {
   labels: any[] = new Array();
   ready: boolean = false;
   accounts: any[] = new Array();
+  orginialAccounts: any[] = new Array();
   blueAccounts: any[] = new Array();
   top10Blue: any[] = new Array();
   greenAccounts: any[] = new Array();
@@ -35,6 +38,9 @@ export class PaymentAnalysisComponent implements OnInit {
   procedureName: string;
   top10Red: any[];
   top10Green: any[];
+  originalTop10Blue: any[] = new Array();
+  originalTop10Red: any[] = new Array();
+  OriginalTop10Green: any[] = new Array();
   top10: number;
   paymentOptions: { name: string; value: number; color: string }[];
   top10Cols: TableColumn[];
@@ -53,23 +59,26 @@ export class PaymentAnalysisComponent implements OnInit {
   red: string;
   green: string;
   waiting: boolean = true;
-  fromDate: Date;
-  toDate: Date;
-  maxDate: Date;
-  mindate: Date;
-  rangeValues: number[];
-  maxRange: any;
+  // fromDate: Date;
+  // toDate: Date;
+  // maxDate: Date;
+  // mindate: Date;
+  // rangeValues: number[];
+  // maxRange: any;
+  maxDayFilter: Date;
 
   constructor(
     public _translateService: TranslateService,
     private _messageService: MessageService,
     private _analysisService: AnalysisService,
     private _router: Router,
-    private prcService: ProcedureService
+    private prcService: ProcedureService,
+    private datepipe: DatePipe,
   ) { }
 
   ngOnInit(): void {
     this.waiting = true;
+
     this._translateService.get('PaymentAnalysis').subscribe((elem) => {
       this.blue = elem.blue;
       this.red = elem.red;
@@ -184,6 +193,14 @@ export class PaymentAnalysisComponent implements OnInit {
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
+    // let prcId = +localStorage.getItem('paymentPrcId');
+    // debugger;
+    // if (prcId == this.selectedProcedure) {
+    //   this.mindate = new Date(localStorage.getItem('paymentMinDate'));
+    //   this.maxDate = new Date(localStorage.getItem('paymentMaxDate'));
+    //   this.fromDate = new Date(localStorage.getItem('paymentFromDate'));
+    //   this.toDate = new Date(localStorage.getItem('paymentToDate'));
+    // }
     this.getData();
   } // end of init function
 
@@ -199,20 +216,25 @@ export class PaymentAnalysisComponent implements OnInit {
     this.blueData = new Array();
     this.GreenData = new Array();
     this.RedData = new Array();
-    let tmpFromDate = this.fromDate?.toISOString()?.split('T')[0];
-    let tmpToDate = this.toDate?.toISOString()?.split('T')[0];
+    // let tmpFromDate = this.fromDate?.toISOString()?.split('T')[0];
+    // let tmpToDate = this.toDate?.toISOString()?.split('T')[0];
     this._analysisService
-      .getPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure, tmpFromDate, tmpToDate)
+      .getPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure, null, null)
       .subscribe(
         (res) => {
           this.data = res.data.res;
           this.accounts = res.data.accounts;
-          if (!this.fromDate) this.fromDate = new Date(res.dateRange[0].mindate);
-          if (!this.toDate) this.toDate = new Date(res.dateRange[0].maxdate);
-          if (!this.mindate) this.mindate = new Date(res.dateRange[0].mindate);
-          if (!this.maxDate) this.maxDate = new Date(res.dateRange[0].maxdate);
-          if (!this.rangeValues) this.rangeValues = [0, this.dayDiff(this.mindate, this.maxDate)];
-          if (!this.maxRange) this.maxRange = this.dayDiff(this.mindate, this.maxDate);
+          // if (!this.fromDate) this.fromDate = new Date(res.dateRange[0].mindate);
+          // if (!this.toDate) this.toDate = new Date(res.dateRange[0].maxdate);
+          // if (!this.mindate) this.mindate = new Date(res.dateRange[0].mindate);
+          // if (!this.maxDate) this.maxDate = new Date(res.dateRange[0].maxdate);
+          // if (!this.rangeValues) this.rangeValues = [0, this.dayDiff(this.fromDate, this.toDate)];
+          // if (!this.maxRange) this.maxRange = this.dayDiff(this.mindate, this.maxDate);
+          // localStorage.setItem('paymentMinDate', this.mindate?.toISOString().split('T')[0]);
+          // localStorage.setItem('paymentMaxDate', this.maxDate?.toISOString().split('T')[0]);
+          // localStorage.setItem('paymentFromDate', this.fromDate?.toISOString().split('T')[0]);
+          // localStorage.setItem('paymentToDate', this.toDate?.toISOString().split('T')[0]);
+          // localStorage.setItem('paymentPrcId', '' + this.selectedProcedure);
           // debugger;
           for (let i = 0; i < this.data.length; i++) {
             const element = this.data[i];
@@ -227,11 +249,15 @@ export class PaymentAnalysisComponent implements OnInit {
             account.accountNumber = isNaN(accountNumber)
               ? account.accountNumber
               : accountNumber;
-            account.blue = -1 * account.blue;
-            account.red = -1 * account.red;
-            account.lastBlue = -1 * account.lastBlue;
-            account.lastRed = -1 * account.lastRed;
+            // account.blue = -1 * account.blue;
+            // account.red = -1 * account.red;
+            // account.lastBlue = -1 * account.lastBlue;
+            // account.lastRed = -1 * account.lastRed;
+            // account.lastChartBlue = -1 * (this.data[this.data.length - 1]?.blue?.accounts?.find(ac => ac.accountNumber == account.accountNumber)?.value?? 0);
+            // account.lastChartRed = -1 * (this.data[this.data.length - 1]?.red?.accounts?.find(ac => ac.accountNumber == account.accountNumber)?.value?? 0);
+            // account.lastChartGreen = this.data[this.data.length - 1]?.green?.accounts?.find(ac => ac.accountNumber == account.accountNumber)?.value?? 0;
           });
+          this.orginialAccounts = this.accounts;
 
           // get top 10
           this.accounts.sort((a, b) => Math.abs(b.blue) - Math.abs(a.blue));
@@ -241,6 +267,9 @@ export class PaymentAnalysisComponent implements OnInit {
           this.accounts.sort((a, b) => Math.abs(b.green) - Math.abs(a.green));
           this.top10Green = this.accounts.slice(0, 10);
           // debugger;
+          this.originalTop10Blue = this.top10Blue;
+          this.originalTop10Red = this.top10Red;
+          this.OriginalTop10Green = this.top10Green;
 
           this.basicData = {
             labels: this.labels,
@@ -298,18 +327,51 @@ export class PaymentAnalysisComponent implements OnInit {
         });
   }
 
-  handleSliderChange(e) {
-    let start = e.values[0];
-    let end = e.values[1];
-    // calculate fromDate: start + baseFromDate
-    let tempStart = new Date(this.mindate);
-    tempStart.setDate(tempStart.getDate() + start);
-    this.fromDate = new Date(tempStart);
-    // calculate toDate: baseToDate - end
-    let tempEnd = new Date(this.maxDate);
-    tempEnd.setDate(tempEnd.getDate() - (this.maxRange - +end));
-    this.toDate = new Date(tempEnd);
+  getDateFilter() {
+    if (!this.maxDayFilter) this.clearDateFilter();
+    else {
+      this.waiting = true;
+      let tempDate = this.datepipe.transform(this.maxDayFilter, 'yyyy-MM-dd');
+      this._analysisService
+        .getPaymentAnalysisDateFilter(this.selectedOrganisation, this.selectedProcedure, tempDate)
+        .subscribe(res => {
+          this.accounts = res.data.accounts;
+          this.accounts.forEach((account) => {
+            let accountNumber = parseInt(account.accountNumber, 10);
+            account.accountNumber = isNaN(accountNumber)
+              ? account.accountNumber
+              : accountNumber;
+          });
+          this.accounts.sort((a, b) => Math.abs(b.blue) - Math.abs(a.blue));
+          this.top10Blue = this.accounts.slice(0, 10);
+          this.accounts.sort((a, b) => Math.abs(b.red) - Math.abs(a.red));
+          this.top10Red = this.accounts.slice(0, 10);
+          this.accounts.sort((a, b) => Math.abs(b.green) - Math.abs(a.green));
+          this.top10Green = this.accounts.slice(0, 10);
+          this.waiting = false;
+        }, er => this.waiting = false);
+    }
   }
+
+  clearDateFilter() {
+    this.accounts = this.orginialAccounts;
+    this.top10Blue = this.originalTop10Blue;
+    this.top10Red = this.originalTop10Red;
+    this.top10Green = this.OriginalTop10Green;
+  }
+
+  // handleSliderChange(e) {
+  //   let start = e.values[0];
+  //   let end = e.values[1];
+  //   // calculate fromDate: start + baseFromDate
+  //   let tempStart = new Date(this.mindate);
+  //   tempStart.setDate(tempStart.getDate() + start);
+  //   this.fromDate = new Date(tempStart);
+  //   // calculate toDate: baseToDate - end
+  //   let tempEnd = new Date(this.maxDate);
+  //   tempEnd.setDate(tempEnd.getDate() - (this.maxRange - +end));
+  //   this.toDate = new Date(tempEnd);
+  // }
 
   goToDetails(row: any) {
     this._router.navigate([
@@ -329,7 +391,7 @@ export class PaymentAnalysisComponent implements OnInit {
   filterChange(query, colName): void {
     this.searching = true;
     // debugger;
-    if (!query) {
+    if (!query || !query?.toString()?.trim()) {
       delete this.criteria[colName];
       if (Object.keys(this.criteria).length < 1) {
         this.accounts = [...this.tempData];

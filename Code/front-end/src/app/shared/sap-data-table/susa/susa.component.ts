@@ -274,7 +274,7 @@ export class SusaComponent implements OnInit {
       }
     }
     this.filtersNo = Object.keys(this.criteria).length;
-    if (!query) {
+    if (!query || !query?.toString()?.trim()) {
       if (Object.keys(this.criteria).length < 1) {
         this.data = [...this.tempData];
       } else {
