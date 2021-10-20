@@ -56,7 +56,7 @@
     "analysis": "Analyse",
     "amountAnalyisis": "Betragsanalyse",
     "textAnalysis": "Textanalyse",
-    "paymentAnalyse": "Zahlunganalyse",
+    "paymentAnalyse": "Fälligkeitsanalyse",
     "dueDateAnalyse": "Zahlungsverhalten",
     "creditorsAnalyse": "Kreditorenanalyse",
     "addUser": "Admin hinzufügen",
@@ -358,7 +358,7 @@
     "status": "Status",
     "amount": "Vorberechnete Glattebeträgeanalyse",
     "credit": "Vorberechnete Kreditorenanalyse",
-    "payment": "Vorberechnete Zahlungsanalyse",
+    "payment": "Vorberechnete Fälligkeitsanalyse",
     "text_word": "Vorberechnete Textanalyse nach Wört",
     "text_account": "Vorberechnete Textanalyse nach Konto",
     "due_date": "Vorberechnetes Zahlungsverhalten"
@@ -369,7 +369,7 @@
     "credit": "Kreditorenanalyse",
     "text_account": "Textanalyse nach Konto",
     "text_word": "Textanalyse nach Wört",
-    "payment": "Zahlungsanalyse",
+    "payment": "Fälligkeitsanalyse",
     "due_date": "Zahlungsverhalten",
     "start": "Starten"
   },
@@ -425,7 +425,7 @@
   },
   "PaymentAnalysis": {
     "data": " Daten",
-    "label": "Zahlungsanalyse",
+    "label": "Fälligkeitsanalyse",
     "allAccounts": "Alle Konten",
     "accountNumber": "Kontonummer",
     "accountName": "Kontoname",
@@ -440,9 +440,9 @@
   },
   "DueDateAnalysis": {
     "label": " Zahlungsverhalten",
-    "paymentLabel": "Zahlungsanalyse",
+    "paymentLabel": "Fälligkeitsanalyse",
     "data": " Daten",
-    "backToPayment": " Zur Zahlungsanalyse",
+    "backToPayment": " Zur Fälligkeitsanalyse",
     "backtoDueDate": " Zum Zahlungsverhalten",
     "accountNumber": "Kontonummer",
     "accountName": "Kontoname",
@@ -468,14 +468,14 @@
     "sum": "Summe",
     "amountTotalBalance": "Gesamtsaldo der Betragsanalyse",
     "textTotalBalance": "Gesamtsaldo der Textanalyse",
-    "paymentTotalBalance": "Gesamtsaldo der Zahlungsanalyse",
+    "paymentTotalBalance": "Gesamtsaldo der Fälligkeitsanalyse",
     "amountTotalCount": "Anzahl der Buchungen der Betragsanalyse",
     "textTotalCount": "Anzahl der Buchungen der Textanalyse",
-    "paymentTotalCount": "Anzahl der Buchungen der Zahlungsanalyse",
+    "paymentTotalCount": "Anzahl der Buchungen der Fälligkeitsanalyse",
     "showDetails": "Weitere Details ansehen",
     "amountLabel": "Glattebeträge Analyse",
     "textLabel": "Text Analyse",
-    "paymentLabel": "Zahlungsanalyse"
+    "paymentLabel": "Fälligkeitsanalyse"
   },
   "DataTableColumns": {
     "client": "Mandant",

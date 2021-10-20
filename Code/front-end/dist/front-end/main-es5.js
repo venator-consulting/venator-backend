@@ -2444,10 +2444,6 @@
               field: 'contraAccountName',
               align: 'left'
             }, {
-              header: 'DataTableColumns.documentTypeNew',
-              field: 'documentTypeNew',
-              align: 'left'
-            }, {
               header: 'DataTableColumns.documentNumber',
               field: 'documentNumber',
               align: 'left'
@@ -2463,6 +2459,22 @@
               header: 'DataTableColumns.dueDate',
               field: 'dueDate',
               align: 'center'
+            }, {
+              header: 'DataTableColumns.textPosting',
+              field: 'textPosting',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.textHeader',
+              field: 'textHeader',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.reference',
+              field: 'reference',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.assignment',
+              field: 'assignment',
+              align: 'left'
             }];
           } // end of ng on init
 
@@ -9565,10 +9577,6 @@
               field: 'contraAccountName',
               align: 'center'
             }, {
-              header: 'DataTableColumns.documentTypeNew',
-              field: 'documentTypeNew',
-              align: 'center'
-            }, {
               header: 'DataTableColumns.documentNumber',
               field: 'documentNumber',
               align: 'center'
@@ -9592,6 +9600,22 @@
               header: 'DataTableColumns.dueDate',
               field: 'dueDate',
               align: 'center'
+            }, {
+              header: 'DataTableColumns.textPosting',
+              field: 'textPosting',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.textHeader',
+              field: 'textHeader',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.reference',
+              field: 'reference',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.assignment',
+              field: 'assignment',
+              align: 'left'
             }];
 
             this._analysisService.getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber, this.baseBalance).subscribe(function (res) {
@@ -12090,10 +12114,6 @@
               field: 'contraAccountName',
               align: 'left'
             }, {
-              header: 'DataTableColumns.documentTypeNew',
-              field: 'documentTypeNew',
-              align: 'center'
-            }, {
               header: 'DataTableColumns.documentNumber',
               field: 'documentNumber',
               align: 'left'
@@ -12128,6 +12148,10 @@
             }, {
               header: 'DataTableColumns.textHeader',
               field: 'textHeader',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.assignment',
+              field: 'assignment',
               align: 'left'
             }];
 
@@ -17035,10 +17059,6 @@
               field: 'contraAccountName',
               align: 'left'
             }, {
-              header: 'DataTableColumns.documentTypeNew',
-              field: 'documentTypeNew',
-              align: 'left'
-            }, {
               header: 'DataTableColumns.documentNumber',
               field: 'documentNumber',
               align: 'left'
@@ -17064,6 +17084,22 @@
               header: 'DataTableColumns.dueDate',
               field: 'dueDate',
               align: 'center'
+            }, {
+              header: 'DataTableColumns.textPosting',
+              field: 'textPosting',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.textHeader',
+              field: 'textHeader',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.reference',
+              field: 'reference',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.assignment',
+              field: 'assignment',
+              align: 'left'
             }];
             this.selectedOrganisation = +localStorage.getItem('organisationId');
             this.selectedProcedure = +localStorage.getItem('currentProcedureId');
@@ -17101,11 +17137,11 @@
 
                   _this37.labels.push(element.monthName + '-' + element.yearName);
 
-                  _this37.blue.push(Math.abs(element.blue.value));
+                  _this37.blue.push(-1 * element.blue.value);
 
-                  _this37.green.push(Math.abs(element.green.value));
+                  _this37.green.push(element.green.value);
 
-                  _this37.red.push(Math.abs(element.red.value));
+                  _this37.red.push(-1 * element.red.value);
                 }
               }
 
@@ -35648,7 +35684,7 @@
             var _this82 = this;
 
             this.primengConfig.ripple = true;
-            this.bnIdle.startWatching(900).subscribe(function (isTimedOut) {
+            this.bnIdle.startWatching(1800).subscribe(function (isTimedOut) {
               console.log('session expired');
               localStorage.clear();
 
@@ -42259,7 +42295,7 @@
 
       var environment = {
         production: false,
-        // baseUrl: 'http://localhost:8000/api/',
+        //baseUrl: 'http://localhost:8000/api/',
         baseUrl: 'http://venalytics.de:8000/api/'
       };
       /***/
@@ -44807,10 +44843,6 @@
               field: 'contraAccountName',
               align: 'left'
             }, {
-              header: 'DataTableColumns.documentTypeNew',
-              field: 'documentTypeNew',
-              align: 'center'
-            }, {
               header: 'DataTableColumns.documentNumber',
               field: 'documentNumber',
               align: 'left'
@@ -44845,6 +44877,10 @@
             }, {
               header: 'DataTableColumns.textHeader',
               field: 'textHeader',
+              align: 'left'
+            }, {
+              header: 'DataTableColumns.assignment',
+              field: 'assignment',
               align: 'left'
             }];
             this.frozenCols = [{
@@ -46897,7 +46933,7 @@
                   }
                 }); // end of for each account
 
-                this.specificAccountBlueData[i] = Math.abs(total);
+                this.specificAccountBlueData[i] = -1 * total;
               }
 
               if (element.red.accounts) {
@@ -46909,7 +46945,7 @@
                   }
                 }); // end of for each account
 
-                this.specificAccountRedData[i] = Math.abs(_total);
+                this.specificAccountRedData[i] = -1 * _total;
               }
 
               if (element.green.accounts) {
@@ -46921,7 +46957,7 @@
                   }
                 }); // end of for each account
 
-                this.specificAccountGreenData[i] = Math.abs(_total2);
+                this.specificAccountGreenData[i] = _total2;
               }
             }
 

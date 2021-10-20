@@ -1281,11 +1281,6 @@ class PaymentDetailsMonthComponent {
                 align: 'left',
             },
             {
-                header: 'DataTableColumns.documentTypeNew',
-                field: 'documentTypeNew',
-                align: 'left',
-            },
-            {
                 header: 'DataTableColumns.documentNumber',
                 field: 'documentNumber',
                 align: 'left',
@@ -1304,6 +1299,26 @@ class PaymentDetailsMonthComponent {
                 header: 'DataTableColumns.dueDate',
                 field: 'dueDate',
                 align: 'center',
+            },
+            {
+                header: 'DataTableColumns.textPosting',
+                field: 'textPosting',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.textHeader',
+                field: 'textHeader',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.reference',
+                field: 'reference',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.assignment',
+                field: 'assignment',
+                align: 'left',
             },
         ];
     } // end of ng on init
@@ -5152,11 +5167,6 @@ class AmountAnalysisDetailsComponent {
                 align: 'center',
             },
             {
-                header: 'DataTableColumns.documentTypeNew',
-                field: 'documentTypeNew',
-                align: 'center',
-            },
-            {
                 header: 'DataTableColumns.documentNumber',
                 field: 'documentNumber',
                 align: 'center',
@@ -5185,6 +5195,26 @@ class AmountAnalysisDetailsComponent {
                 header: 'DataTableColumns.dueDate',
                 field: 'dueDate',
                 align: 'center',
+            },
+            {
+                header: 'DataTableColumns.textPosting',
+                field: 'textPosting',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.textHeader',
+                field: 'textHeader',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.reference',
+                field: 'reference',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.assignment',
+                field: 'assignment',
+                align: 'left',
             },
         ];
         this._analysisService
@@ -6563,11 +6593,6 @@ class TextAnalysisWordDetailsComponent {
                 align: 'left',
             },
             {
-                header: 'DataTableColumns.documentTypeNew',
-                field: 'documentTypeNew',
-                align: 'center',
-            },
-            {
                 header: 'DataTableColumns.documentNumber',
                 field: 'documentNumber',
                 align: 'left',
@@ -6610,6 +6635,11 @@ class TextAnalysisWordDetailsComponent {
             {
                 header: 'DataTableColumns.textHeader',
                 field: 'textHeader',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.assignment',
+                field: 'assignment',
                 align: 'left',
             },
         ];
@@ -8901,11 +8931,6 @@ class PaymentAnalysisDetailsComponent {
                 align: 'left',
             },
             {
-                header: 'DataTableColumns.documentTypeNew',
-                field: 'documentTypeNew',
-                align: 'left',
-            },
-            {
                 header: 'DataTableColumns.documentNumber',
                 field: 'documentNumber',
                 align: 'left',
@@ -8934,6 +8959,26 @@ class PaymentAnalysisDetailsComponent {
                 header: 'DataTableColumns.dueDate',
                 field: 'dueDate',
                 align: 'center',
+            },
+            {
+                header: 'DataTableColumns.textPosting',
+                field: 'textPosting',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.textHeader',
+                field: 'textHeader',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.reference',
+                field: 'reference',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.assignment',
+                field: 'assignment',
+                align: 'left',
             },
         ];
         this.selectedOrganisation = +localStorage.getItem('organisationId');
@@ -8967,9 +9012,9 @@ class PaymentAnalysisDetailsComponent {
                 for (let i = 0; i < this.data.length; i++) {
                     const element = this.data[i];
                     this.labels.push(element.monthName + '-' + element.yearName);
-                    this.blue.push(Math.abs(element.blue.value));
-                    this.green.push(Math.abs(element.green.value));
-                    this.red.push(Math.abs(element.red.value));
+                    this.blue.push(-1 * (element.blue.value));
+                    this.green.push(element.green.value);
+                    this.red.push(-1 * (element.red.value));
                 }
             }
             this.waiting = false;
@@ -18203,7 +18248,7 @@ class AppComponent {
     }
     ngOnInit() {
         this.primengConfig.ripple = true;
-        this.bnIdle.startWatching(900).subscribe((isTimedOut) => {
+        this.bnIdle.startWatching(1800).subscribe((isTimedOut) => {
             console.log('session expired');
             localStorage.clear();
             this._router.navigate(['/']);
@@ -21401,7 +21446,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "environment", function() { return environment; });
 const environment = {
     production: false,
-    // baseUrl: 'http://localhost:8000/api/',
+    //baseUrl: 'http://localhost:8000/api/',
     baseUrl: 'http://venalytics.de:8000/api/',
 };
 
@@ -22587,11 +22632,6 @@ class TextAnalysisDetailsComponent {
                 align: 'left',
             },
             {
-                header: 'DataTableColumns.documentTypeNew',
-                field: 'documentTypeNew',
-                align: 'center',
-            },
-            {
                 header: 'DataTableColumns.documentNumber',
                 field: 'documentNumber',
                 align: 'left',
@@ -22634,6 +22674,11 @@ class TextAnalysisDetailsComponent {
             {
                 header: 'DataTableColumns.textHeader',
                 field: 'textHeader',
+                align: 'left',
+            },
+            {
+                header: 'DataTableColumns.assignment',
+                field: 'assignment',
                 align: 'left',
             },
         ];
@@ -23810,7 +23855,7 @@ class PaymentAnalysisComponent {
                         total += b.value;
                     }
                 }); // end of for each account
-                this.specificAccountBlueData[i] = Math.abs(total);
+                this.specificAccountBlueData[i] = (-1 * total);
             }
             if (element.red.accounts) {
                 let total = 0;
@@ -23820,7 +23865,7 @@ class PaymentAnalysisComponent {
                         total += r.value;
                     }
                 }); // end of for each account
-                this.specificAccountRedData[i] = Math.abs(total);
+                this.specificAccountRedData[i] = (-1 * total);
             }
             if (element.green.accounts) {
                 let total = 0;
@@ -23830,7 +23875,7 @@ class PaymentAnalysisComponent {
                         total += g.value;
                     }
                 }); // end of for each account
-                this.specificAccountGreenData[i] = Math.abs(total);
+                this.specificAccountGreenData[i] = total;
             }
         }
         this.chart.refresh();
