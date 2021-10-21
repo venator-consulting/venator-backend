@@ -41,9 +41,11 @@ import { TextAnalysisPreComponent } from './shared/analysis/text-analysis/text-a
 import { PreCalculateComponent } from './admin/pre-calculate/pre-calculate.component';
 import { AmountAnalysisPreComponent } from './shared/analysis/amount-analysis/amount-analysis-pre/amount-analysis-pre.component';
 import { CreditorAnalysisCalcComponent } from './shared/analysis/creditor-analysis/creditor-analysis-calc/creditor-analysis-calc.component';
+import { HomeComponent } from './website/home/home.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   {
     path: 'dashboard',

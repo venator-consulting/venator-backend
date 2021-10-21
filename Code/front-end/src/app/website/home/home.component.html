@@ -1,0 +1,31 @@
+<style>
+    [data-sticky-offset="full"]:not(.sticky-header) {
+        border-bottom-color: transparent !important;
+    }
+</style>
+<div
+    class="stretched device-xl has-plugin-easing has-plugin-bootstrap has-plugin-lightbox has-plugin-dataheights has-plugin-swiper has-plugin-hoveranimation has-plugin-textrotator has-plugin-flexslider has-plugin-carousel has-plugin-linkscroll has-plugin-isotope has-plugin-parallax has-plugin-isotope-filter">
+
+    <div id="wrapper" class="clearfix" style="min-width: 100%;">
+        <app-w-nav-bar></app-w-nav-bar>
+        <app-slider></app-slider>
+
+        <section id="content">
+
+            <div class="content-wrap pb-0" style="z-index: 1;">
+
+                <div class="container topmargin clearfix">
+                    <!-- <h1>Content will be here</h1> -->
+                    <app-what-we-do></app-what-we-do>
+
+                    <app-about></app-about>
+                </div>
+            </div>
+        </section>
+        <app-w-footer></app-w-footer>
+
+    </div>
+
+    <div id="gotoTop" class="icon-angle-up"></div>
+
+</div>

@@ -98,6 +98,14 @@ import { PreCalculateComponent } from './admin/pre-calculate/pre-calculate.compo
 import { AmountAnalysisPreComponent } from './shared/analysis/amount-analysis/amount-analysis-pre/amount-analysis-pre.component';
 import { CreditorAnalysisCalcComponent } from './shared/analysis/creditor-analysis/creditor-analysis-calc/creditor-analysis-calc.component';
 import { PaymentDetailsMonthComponent } from './shared/analysis/payment-analysis/payment-details-month/payment-details-month.component';
+import { HomeComponent } from './website/home/home.component';
+import { AboutComponent } from './website/about/about.component';
+import { OurServicesComponent } from './website/our-services/our-services.component';
+import { ContactComponent } from './website/contact/contact.component';
+import { WhatWeDoComponent } from './website/what-we-do/what-we-do.component';
+import { WNavBarComponent } from './website/w-nav-bar/w-nav-bar.component';
+import { WFooterComponent } from './website/w-footer/w-footer.component';
+import { SliderComponent } from './website/slider/slider.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -151,6 +159,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     AmountAnalysisPreComponent,
     CreditorAnalysisCalcComponent,
     PaymentDetailsMonthComponent,
+    HomeComponent,
+    AboutComponent,
+    OurServicesComponent,
+    ContactComponent,
+    WhatWeDoComponent,
+    WNavBarComponent,
+    WFooterComponent,
+    SliderComponent,
   ],
   imports: [
     BrowserModule,

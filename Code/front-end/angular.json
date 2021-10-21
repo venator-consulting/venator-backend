@@ -41,6 +41,9 @@
               "src/styles.sass"
             ],
             "scripts": [
+              "src/theme/jquery.js",
+              "src/theme/plugins.min.js",
+              "src/theme/functions.js"
             ]
           },
           "configurations": {
