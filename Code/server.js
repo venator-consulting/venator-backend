@@ -8,6 +8,7 @@ const bearerToken = require("express-bearer-token");
 const sharedRoutes = require("./modules/shared/route/shared.route.server");
 const analysisRoutes = require("./modules/Analysis/route/analysis.route.server");
 const liquidityRoutes = require("./modules/Liquidity/route/liquidity.route.server");
+const websiteRoutes = require("./modules/website/route/website.router");
 const Exception = require("./helpers/errorHandlers/Exception");
 
 const cors = require("cors");
@@ -32,6 +33,7 @@ app.use("/api/shared", sharedRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/analysis", analysisRoutes);
 app.use("/api/liquidity", liquidityRoutes);
+app.use("/api/website", websiteRoutes);
 app.use(Exception.requestDefaultHandler);
 
 app.use("/public", express.static(path.join("public")));
