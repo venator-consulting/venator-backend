@@ -8,7 +8,7 @@
 
     <div id="wrapper" class="clearfix" style="min-width: 100%;">
         <app-w-nav-bar (Navigate)="navigateTo($event)"> </app-w-nav-bar>
-        <app-slider></app-slider>
+        <app-slider (Navigate)="navigateTo($event)"></app-slider>
 
         <section id="content">
 
