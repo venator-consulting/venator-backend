@@ -26,20 +26,20 @@
                                 <div class="col-md-4 form-group">
                                     <label for="template-contactform-name">Name <small>*</small></label>
                                     <input type="text" id="template-contactform-name" name="template-contactform-name"
-                                        value="" class="sm-form-control required" [(ngModel)]="mail.name"/>
+                                        value="" class="sm-form-control required" [(ngModel)]="mail.name" />
                                 </div>
 
                                 <div class="col-md-4 form-group">
                                     <label for="template-contactform-email">Email <small>*</small></label>
                                     <input type="email" id="template-contactform-email"
                                         name="template-contactform-email" value=""
-                                        class="required email sm-form-control" [(ngModel)]="mail.email"/>
+                                        class="required email sm-form-control" [(ngModel)]="mail.email" />
                                 </div>
 
                                 <div class="col-md-4 form-group">
                                     <label for="template-contactform-phone">Phone</label>
                                     <input type="text" id="template-contactform-phone" name="template-contactform-phone"
-                                        value="" class="sm-form-control" [(ngModel)]="mail.phone"/>
+                                        value="" class="sm-form-control" [(ngModel)]="mail.phone" />
                                 </div>
 
                                 <div class="w-100"></div>
@@ -47,7 +47,7 @@
                                 <div class="col-md-12 form-group">
                                     <label for="template-contactform-subject">Subject <small>*</small></label>
                                     <input type="text" id="template-contactform-subject" name="subject" value=""
-                                        class="required sm-form-control" [(ngModel)]="mail.subject"/>
+                                        class="required sm-form-control" [(ngModel)]="mail.subject" />
                                 </div>
 
                                 <div class="w-100"></div>
@@ -55,16 +55,19 @@
                                 <div class="col-12 form-group">
                                     <label for="template-contactform-message">Message <small>*</small></label>
                                     <textarea class="required sm-form-control" id="template-contactform-message"
-                                        name="template-contactform-message" rows="6" cols="30" [(ngModel)]="mail.message"></textarea>
+                                        name="template-contactform-message" rows="6" cols="30"
+                                        [(ngModel)]="mail.message"></textarea>
                                 </div>
 
                                 <div class="col-12 form-group d-none">
                                     <input type="text" id="template-contactform-botcheck"
                                         name="template-contactform-botcheck" value="" class="sm-form-control" />
                                 </div>
+                                <p-captcha siteKey="6LfJXewcAAAAAEurF5JPG6RY-SBBf5Ue9-SVw5a0"
+                                    (onResponse)="showResponse($event)"></p-captcha>
 
                                 <div class="col-12 form-group">
-                                    <button class="button button-3d m-0" type="submit" 
+                                    <button class="button button-3d m-0" type="submit" [disabled]="!canSend"
                                         name="template-contactform-submit" value="submit">Send Message</button>
                                 </div>
                             </div>

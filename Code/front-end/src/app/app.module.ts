@@ -6,6 +6,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CaptchaModule } from 'primeng/captcha';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavBarComponent } from './shared/nav-bar/nav-bar.component';
@@ -70,17 +71,17 @@ import { AmountAnalysisDetailsComponent } from './shared/analysis/amount-analysi
 import { TextAnalysisComponent } from './shared/analysis/text-analysis/text-analysis.component';
 import { TextAnalysisDetailsComponent } from './shared/analysis/text-analysis/text-analysis-details/text-analysis-details.component';
 registerLocaleData(localeDe, 'de');
-import {AutoCompleteModule} from 'primeng/autocomplete';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SusaComponent } from './shared/sap-data-table/susa/susa.component';
 import { PaymentAnalysisComponent } from './shared/analysis/payment-analysis/payment-analysis.component';
 import { HighlightPipe } from './shared/pipes/highlight.pipe';
-import {InputNumberModule} from 'primeng/inputnumber';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { PaymentAnalysisDetailsComponent } from './shared/analysis/payment-analysis/payment-analysis-details/payment-analysis-details.component';
 import { DueDateComponent } from './shared/analysis/payment-analysis/due-date/due-date.component';
-import {BreadcrumbModule} from 'primeng/breadcrumb';
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
-import {ConfirmationService} from 'primeng/api';
-import {SliderModule} from 'primeng/slider';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { SliderModule } from 'primeng/slider';
 
 import { BnNgIdleService } from 'bn-ng-idle';
 import { DueDateDetailsComponent } from './shared/analysis/payment-analysis/due-date-details/due-date-details.component';
@@ -218,18 +219,19 @@ export function HttpLoaderFactory(http: HttpClient) {
     InputNumberModule,
     BreadcrumbModule,
     ConfirmDialogModule,
-    SliderModule
+    SliderModule,
+    CaptchaModule
   ],
   providers: [MessageService, ConfirmationService, AuthGuard, {
     provide: LOCALE_ID,
     useValue: 'de'
   },
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptor,
-    multi: true
-  },
-  BnNgIdleService
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+    BnNgIdleService
   ],
   bootstrap: [AppComponent]
 })

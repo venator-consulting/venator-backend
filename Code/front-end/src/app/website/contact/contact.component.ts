@@ -11,13 +11,20 @@ import { MailService } from '../service/mail.service';
 export class ContactComponent implements OnInit {
 
   mail: Mail = new Mail();
+  canSend: boolean = false;
 
   constructor(private _mailService: MailService, private _messageService: MessageService) { }
 
   ngOnInit(): void {
   }
 
+  showResponse(response) {
+    //call to a backend to verify against recaptcha with private key
+    this.canSend = true;
+  }
+
   send() {
+    this.canSend = false;
     this._mailService
       .sendMail(this.mail)
       .subscribe(res => {
