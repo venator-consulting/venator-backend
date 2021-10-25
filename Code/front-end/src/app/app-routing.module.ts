@@ -42,6 +42,7 @@ import { PreCalculateComponent } from './admin/pre-calculate/pre-calculate.compo
 import { AmountAnalysisPreComponent } from './shared/analysis/amount-analysis/amount-analysis-pre/amount-analysis-pre.component';
 import { CreditorAnalysisCalcComponent } from './shared/analysis/creditor-analysis/creditor-analysis-calc/creditor-analysis-calc.component';
 import { HomeComponent } from './website/home/home.component';
+import { SliderManagementComponent } from './admin/website/slider/slider-management.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -53,7 +54,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       // { path: 'import', component: ImportComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-
+      {
+        path: 'admin/website/slider',
+        component: SliderManagementComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin'] },
+      },
       {
         path: 'admin/admin/add',
         component: AdminRegistrationComponent,

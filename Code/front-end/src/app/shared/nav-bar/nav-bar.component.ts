@@ -45,7 +45,7 @@ export class NavBarComponent implements OnInit {
   getScreenSize(event?) {
     // this.scrHeight = window.innerHeight;
     this.scrWidth = window.innerWidth;
-      this.prcStyle = 'position: fixed; z-index: 999; top: 30px; right:' + (this.scrWidth / 2 - 25) + 'px; color: #ffffff; height: 100px; font-size: x-large;';
+    this.prcStyle = 'position: fixed; z-index: 999; top: 30px; right:' + (this.scrWidth / 2 - 25) + 'px; color: #ffffff; height: 100px; font-size: x-large;';
     // let elem: HTMLElement = document.getElementById('navbar-title');
     // elem?.setAttribute("style", `margin-left: ${this.scrWidth/3} !important`);
   }
@@ -162,6 +162,19 @@ export class NavBarComponent implements OnInit {
               },
 
             ],
+          },
+          {
+            label: 'Website Managment',
+            items: [
+              {
+                label: 'Cover',
+                icon: 'pi pi-image',
+                routerLink: ['/dashboard/admin/website/slider'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+            ]
           },
           {
             label: 'Dashboard',

@@ -34,6 +34,33 @@ const Website = sequelizer.define('Website', {
     logo: {
         type: DataTypes.STRING(250),
     },
+    sliderImg1: {
+        type: DataTypes.STRING(250),
+    },
+    sliderImg2: {
+        type: DataTypes.STRING(250),
+    },
+    sliderImg3: {
+        type: DataTypes.STRING(250),
+    },
+    sliderTitle1: {
+        type: DataTypes.STRING(100),
+    },
+    sliderTitle2: {
+        type: DataTypes.STRING(100),
+    },
+    sliderTitle3: {
+        type: DataTypes.STRING(100),
+    },
+    sliderSubTitle1: {
+        type: DataTypes.STRING(250),
+    },
+    sliderSubTitle2: {
+        type: DataTypes.STRING(500),
+    },
+    sliderSubTitle3: {
+        type: DataTypes.STRING(500),
+    },
 }, {
     tableName: 'Website'
 });

@@ -1,4 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Slider } from 'src/app/shared/model/website';
+import { DataService } from '../service/data.service';
 
 @Component({
   selector: 'app-slider',
@@ -12,10 +14,20 @@ export class SliderComponent implements OnInit {
   @ViewChild('slider2') slider2;
   @ViewChild('slider3') slider3;
   slideNo: number = 1;
+  data: Slider = new Slider();
 
-  constructor() { }
+  constructor(private _dateService: DataService) { }
 
   ngOnInit(): void {
+    this.getData();
+  }
+
+  getData() {
+    this._dateService
+    .get()
+    .subscribe(res=> {
+      this.data = res;
+    })
   }
 
   navigateTo(element: string) {

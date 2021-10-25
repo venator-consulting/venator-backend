@@ -13,6 +13,7 @@ const docTypeCtrl = require('../controller/documentType.controller.server');
 const postingCtrl = require('../controller/posting.controller.server');
 const accountTypeCtrl = require('../controller/accountType.controler.server');
 const precalcCtrl = require('../controller/precalculated.controller.server');
+const websiteCtrl = require('../controller/website.controller.server');
 
 const multer = require('multer');
 const uploadfiles = multer({
@@ -23,6 +24,21 @@ const publicImgs = multer({
     dest: env.publicImgsPath
 });
 
+//#region website managment
+router
+    .route('/website/')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), websiteCtrl.get);
+
+router
+    .route('/website/slider')
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), publicImgs.array('photos', 3), websiteCtrl.updateSlider);
+//#endregion website management
+
+//#region import
 router
     .route('/template-types')
     .get(passport.authenticate('jwt', {
@@ -49,7 +65,10 @@ router
     .post(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), uploadCtrl.deleteFileFromServier);
+//#endregion import
 
+
+//#region Precalculate
 router
     .route('/precalculate/text-by-word/:orgId/:prcId')
     .get(passport.authenticate('jwt', {
@@ -86,7 +105,10 @@ router
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), precalcCtrl.dueDateAnalysis);
+//#endregion Precalculate
 
+
+//#region users
 router
     .route('/user')
     .post(passport.authenticate('jwt', {
@@ -128,11 +150,10 @@ router
     .delete(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), roleCtrl.delete);
+//#endregion users
 
-// router
-//     .route('/users/:id/procedures')
-//     .get(procedureCtrl.getByUserId);
 
+//#region Procedures
 router
     .route('/procedures')
     .get(passport.authenticate('jwt', {
@@ -160,7 +181,10 @@ router
     .delete(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), procedureCtrl.reset)
+//#endregion Procedures
 
+
+//#region Organization
 router
     .route('/organisation')
     .get(passport.authenticate('jwt', {
@@ -187,7 +211,10 @@ router
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), procedureCtrl.getByOrgId);
+//#endregion Organization
 
+
+//#region document type 
 router
     .route('/document-type/posting/:orgId/:prcdrId')
     .get(passport.authenticate('jwt', {
@@ -203,8 +230,10 @@ router
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), docTypeCtrl.getAll);
+//#endregion document type
 
 
+//#region account type 
 router
     .route('/account-type/posting/:orgId/:prcId')
     .get(passport.authenticate('jwt', {
@@ -220,8 +249,10 @@ router
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), accountTypeCtrl.getAll);
+//#endregion Account type
 
 
+//#region init data
 router
     .route('/sync-db')
     .get(dataSyncCtrl.buildDatabaseSchema);
@@ -233,6 +264,6 @@ router
 router
     .route('/dict')
     .get(dataSyncCtrl.createDict);
-
+//#endregion init data
 
 module.exports = router;

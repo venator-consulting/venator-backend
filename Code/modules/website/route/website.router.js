@@ -6,4 +6,8 @@ router
     .route('/mail')
     .post(controller.sendMail);
 
+router
+    .route('/data')
+    .get(controller.get);
+
 module.exports = router;

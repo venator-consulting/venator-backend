@@ -1,0 +1,138 @@
+<div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
+    <div class="card">
+        <p-toast></p-toast>
+        <h5 class="p-text-center"> Manage cover Section / the Slider </h5>
+        <form class="p-fluid" (ngSubmit)="submitHandler()">
+            <div class="p-fluid">
+                <div class="p-field p-grid">
+                    <label for="sliderTitle1" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> First Title </label>
+                    <div class="p-col-12 p-md-10">
+                        <input required #sliderTitle1="ngModel" name="sliderTitle1" type="text" pinputtext
+                            class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
+                            [(ngModel)]="data.sliderTitle1">
+                            <small *ngIf="sliderTitle1.invalid && sliderTitle1.touched " class="spanCss ">
+                                First title is required</small>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <label for="sliderSubTitle1" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> First Subtitle
+                    </label>
+                    <div class="p-col-12 p-md-10">
+                        <input required #sliderSubTitle1="ngModel" name="sliderSubTitle1" type="text" pinputtext
+                            class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
+                            [(ngModel)]="data.sliderSubTitle1">
+                        <small *ngIf="sliderSubTitle1.invalid && sliderSubTitle1.touched " class="spanCss ">
+                            First sub-title is required</small>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <label for="sliderImg1File" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> First Image </label>
+                    <div class="p-col-12 p-md-10">
+                        <p-fileUpload name="sliderImg1File" mode="advanced" [showUploadButton]="false"
+                            customUpload="true" (uploadHandler)="UploadHandler1($event)" uploadLabel="Set First Image"
+                            accept="image/*" [auto]="true">
+                            <ng-template pTemplate="content">
+                            </ng-template>
+                        </p-fileUpload>
+                        <div *ngIf="!fromFront1" class="p-mt-2">
+                            <img src="{{data.sliderImg1}}" alt="data first image" width="80">
+                        </div>
+                        <div *ngIf="fromFront1" class="p-mt-2">
+                            <img src="{{imageSrc1}}" alt="data first image" width="80">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <label for="sliderTitle2" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Second Title </label>
+                    <div class="p-col-12 p-md-10">
+                        <input required #sliderTitle2="ngModel" name="sliderTitle2" type="text" pinputtext
+                            class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
+                            [(ngModel)]="data.sliderTitle2">
+                            <small *ngIf="sliderTitle2.invalid && sliderTitle2.touched " class="spanCss ">
+                                Second title is required</small>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <label for="sliderSubTitle2" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Second Subtitle
+                    </label>
+                    <div class="p-col-12 p-md-10">
+                        <input required #sliderSubTitle2="ngModel" name="sliderSubTitle2" type="text" pinputtext
+                            class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
+                            [(ngModel)]="data.sliderSubTitle2">
+                        <small *ngIf="sliderSubTitle2.invalid && sliderSubTitle2.touched " class="spanCss ">
+                            Second sub-title is required</small>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <label for="sliderImg2File" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Second Image </label>
+                    <div class="p-col-12 p-md-10">
+                        <p-fileUpload name="sliderImg2File" mode="advanced" [showUploadButton]="false"
+                            customUpload="true" (uploadHandler)="UploadHandler2($event)" uploadLabel="Set Second Image"
+                            accept="image/*" [auto]="true">
+                            <ng-template pTemplate="content">
+                            </ng-template>
+                        </p-fileUpload>
+                        <div *ngIf="!fromFront2" class="p-mt-2">
+                            <img src="{{data.sliderImg2}}" alt="data second image" width="80">
+                        </div>
+                        <div *ngIf="fromFront2" class="p-mt-2">
+                            <img src="{{imageSrc2}}" alt="data second image" width="80">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="p-field p-grid">
+                    <label for="sliderTitle3" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> First Title </label>
+                    <div class="p-col-12 p-md-10">
+                        <input required #sliderTitle3="ngModel" name="sliderTitle3" type="text" pinputtext
+                            class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
+                            [(ngModel)]="data.sliderTitle3">
+                            <small *ngIf="sliderTitle3.invalid && sliderTitle3.touched " class="spanCss ">
+                                Third title is required</small>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <label for="sliderSubTitle3" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> First Subtitle
+                    </label>
+                    <div class="p-col-12 p-md-10">
+                        <input required #sliderSubTitle3="ngModel" name="sliderSubTitle3" type="text" pinputtext
+                            class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
+                            [(ngModel)]="data.sliderSubTitle3">
+                        <small *ngIf="sliderSubTitle3.invalid && sliderSubTitle3.touched " class="spanCss ">
+                            Third sub-title is required</small>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <label for="sliderImg1File" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> First Image </label>
+                    <div class="p-col-12 p-md-10">
+                        <p-fileUpload name="sliderImg3File" mode="advanced" [showUploadButton]="false"
+                            customUpload="true" (uploadHandler)="UploadHandler3($event)" uploadLabel="Set Third Image"
+                            accept="image/*" [auto]="true">
+                            <ng-template pTemplate="content">
+                            </ng-template>
+                        </p-fileUpload>
+                        <div *ngIf="!fromFront3" class="p-mt-2">
+                            <img src="{{data.sliderImg3}}" alt="data third image" width="80">
+                        </div>
+                        <div *ngIf="fromFront3" class="p-mt-2">
+                            <img src="{{imageSrc3}}" alt="data third image" width="80">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <div class="p-xs-col-5 ">
+                        <button pbutton pripple type="submit" label="Submit"
+                            class="p-mt-4  p-ripple p-button p-component ">
+                            <span class="p-button-label"> Save </span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
