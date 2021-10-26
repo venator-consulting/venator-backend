@@ -29,13 +29,31 @@ router
     .route('/website/')
     .get(passport.authenticate('jwt', {
         session: false
-    }), authorization.authorize('Admin'), websiteCtrl.get);
+    }), authorization.authorize('Admin'), websiteCtrl.get)
+    .put(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), websiteCtrl.update);
 
 router
     .route('/website/slider')
     .put(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), publicImgs.array('photos', 3), websiteCtrl.updateSlider);
+
+router
+    .route('/website/social/:id')
+    .delete(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), websiteCtrl.deleteSocialLink);
+
+router
+    .route('/website/social')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), websiteCtrl.getSocialLinks)
+    .post(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), websiteCtrl.saveSocialLinks);
 //#endregion website management
 
 //#region import

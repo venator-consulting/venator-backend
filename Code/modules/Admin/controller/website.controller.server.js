@@ -25,3 +25,28 @@ module.exports.updateSlider = async (req, res) => {
     const result = await websiteRepo.update(data);
     res.status(201).json(result);
 }
+
+module.exports.update = async (req, res) => {
+    const data = req.body;
+    const result = await websiteRepo.update(data);
+    res.status(201).json(result);
+}
+
+//#region Social links
+module.exports.getSocialLinks = async (req, res) => {
+    const result = await websiteRepo.getSocialLinks();
+    res.status(200).json(result);
+};
+
+module.exports.saveSocialLinks = async (req, res) => {
+    const data = req.body;
+    const result = await websiteRepo.saveSocialLinks(data);
+    res.status(201).json(result);
+};
+
+module.exports.deleteSocialLink = async (req, res) => {
+    const { id } = req.params;
+    const result = await websiteRepo.deleteSocialLink(id);
+    res.status(204).json({});
+};
+//#endregion social links

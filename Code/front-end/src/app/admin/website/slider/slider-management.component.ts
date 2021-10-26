@@ -89,6 +89,7 @@ export class SliderManagementComponent implements OnInit {
       .updateSlider(formData)
       .subscribe(res => {
         this.waiting = false;
+        this.data = res[0];
         this._messageService.add({ severity: 'success', summary: 'SUCCESS!', detail: 'Updated successfully!' });
       }, er => this.waiting = false)
   }

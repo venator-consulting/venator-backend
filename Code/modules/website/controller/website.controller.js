@@ -8,6 +8,11 @@ module.exports.get = async (req, res) => {
     res.status(200).json(result);
 };
 
+module.exports.getSocialLinks = async (req, res) => {
+    const result = await repo.getSocialLinks();
+    res.status(200).json(result);
+};
+
 module.exports.sendMail = async (req, res) => {
     const mail = req.body;
     const data = await model.getWebsite().findAll();

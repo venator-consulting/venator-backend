@@ -10,4 +10,8 @@ router
     .route('/data')
     .get(controller.get);
 
+router
+    .route('/social')
+    .get(controller.getSocialLinks);
+
 module.exports = router;

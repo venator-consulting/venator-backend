@@ -16,4 +16,8 @@ export class DataService {
     return this._http.get<any>(this._thisURL + 'data');
   }
 
+  getSocialLinks() {
+    return this._http.get<any>(this._thisURL + 'social');
+  }
+
 }

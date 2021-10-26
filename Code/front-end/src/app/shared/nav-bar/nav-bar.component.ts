@@ -174,6 +174,14 @@ export class NavBarComponent implements OnInit {
                   this.sideBarShow = false;
                 },
               },
+              {
+                label: 'Contact us',
+                icon: 'pi pi-phone',
+                routerLink: ['/dashboard/admin/website/contact'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
             ]
           },
           {

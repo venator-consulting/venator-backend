@@ -22,6 +22,12 @@ const Website = sequelizer.define('Website', {
         type: DataTypes.STRING(50),
         unique: true
     },
+    postCode: {
+        type: DataTypes.STRING(25),
+    },
+    houseNr: {
+        type: DataTypes.INTEGER,
+    },
     street: {
         type: DataTypes.STRING(150),
     },

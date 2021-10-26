@@ -108,6 +108,7 @@ import { WNavBarComponent } from './website/w-nav-bar/w-nav-bar.component';
 import { WFooterComponent } from './website/w-footer/w-footer.component';
 import { SliderComponent } from './website/slider/slider.component';
 import { SliderManagementComponent } from './admin/website/slider/slider-management.component';
+import { ContactManagementComponent } from './admin/website/contact-management/contact-management.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -169,7 +170,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     WNavBarComponent,
     WFooterComponent,
     SliderComponent,
-    SliderManagementComponent
+    SliderManagementComponent,
+    ContactManagementComponent
   ],
   imports: [
     BrowserModule,
