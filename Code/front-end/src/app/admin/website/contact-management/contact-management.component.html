@@ -1,5 +1,5 @@
 <div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
-    <div class="card">
+    <div class="card" style="padding: 20px;">
         <p-toast></p-toast>
         <h5 class="p-text-center"> Manage Contact us Section </h5>
         <form class="p-fluid" (ngSubmit)="submitHandler()">
@@ -151,8 +151,11 @@
                         <div *ngIf="!row.isEditable">
                             {{ row[col.field] }}
                         </div>
-                        <div *ngIf="row.isEditable">
+                        <div *ngIf="row.isEditable && col.field != 'order'">
                             <input type="text" pInputText [(ngModel)]="row[col.field]" />
+                        </div>
+                        <div *ngIf="row.isEditable && col.field == 'order'">
+                            <p-inputNumber id="order" [(ngModel)]="row[col.field]" mode="decimal"></p-inputNumber>
                         </div>
                     </td>
                     <td>
@@ -186,11 +189,11 @@
         </div>
         <div class="p-field">
             <label for="icon">Icon</label>
-            <textarea id="icon" pInputTextarea [(ngModel)]="link.icon" required rows="3" cols="20"></textarea>
+            <input type="text" pInputText id="icon" [(ngModel)]="link.icon" required />
         </div>
         <div class="p-field">
             <label for="url">URL</label>
-            <textarea id="url" pInputTextarea [(ngModel)]="link.url" required rows="3" cols="20"></textarea>
+            <input type="text" pInputText id="url" [(ngModel)]="link.url" required />
         </div>
 
         <div class="p-formgrid p-grid">

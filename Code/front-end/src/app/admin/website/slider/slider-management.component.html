@@ -1,7 +1,7 @@
 <div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
-    <div class="card">
+    <div class="card" style="padding: 20px;">
         <p-toast></p-toast>
-        <h5 class="p-text-center"> Manage cover Section / the Slider </h5>
+        <h5 class=" p-text-center"> Manage cover Section / the Slider </h5>
         <form class="p-fluid" (ngSubmit)="submitHandler()">
             <div class="p-fluid">
                 <div class="p-field p-grid">
@@ -10,8 +10,8 @@
                         <input required #sliderTitle1="ngModel" name="sliderTitle1" type="text" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
                             [(ngModel)]="data.sliderTitle1">
-                            <small *ngIf="sliderTitle1.invalid && sliderTitle1.touched " class="spanCss ">
-                                First title is required</small>
+                        <small *ngIf="sliderTitle1.invalid && sliderTitle1.touched " class="spanCss ">
+                            First title is required</small>
                     </div>
                 </div>
                 <div class="p-field p-grid">
@@ -49,8 +49,8 @@
                         <input required #sliderTitle2="ngModel" name="sliderTitle2" type="text" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
                             [(ngModel)]="data.sliderTitle2">
-                            <small *ngIf="sliderTitle2.invalid && sliderTitle2.touched " class="spanCss ">
-                                Second title is required</small>
+                        <small *ngIf="sliderTitle2.invalid && sliderTitle2.touched " class="spanCss ">
+                            Second title is required</small>
                     </div>
                 </div>
                 <div class="p-field p-grid">
@@ -89,8 +89,8 @@
                         <input required #sliderTitle3="ngModel" name="sliderTitle3" type="text" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
                             [(ngModel)]="data.sliderTitle3">
-                            <small *ngIf="sliderTitle3.invalid && sliderTitle3.touched " class="spanCss ">
-                                Third title is required</small>
+                        <small *ngIf="sliderTitle3.invalid && sliderTitle3.touched " class="spanCss ">
+                            Third title is required</small>
                     </div>
                 </div>
                 <div class="p-field p-grid">
