@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { SocialLink } from 'src/app/shared/model/contact';
-import { AboutItem } from 'src/app/shared/model/website';
+import { AboutItem, OurServicesItem } from 'src/app/shared/model/website';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,20 @@ export class WebsiteService {
   updateSlider(data) {
     return this._http.put<any>(this._thisURL + 'slider', data);
   }
+
+  //#region our services
+  getOurServicesItems() {
+    return this._http.get<any>(this._thisURL + 'servicesItem');
+  }
+
+  saveOurServicesItems(data) {
+    return this._http.post<any>(this._thisURL + 'servicesItem', data);
+  }
+
+  deleteOurServicesItems(id: number) {
+    return this._http.delete(this._thisURL + 'servicesItem/' + id);
+  }
+  //#endregion our services
 
   //#region About us
   updateAbout(data) {

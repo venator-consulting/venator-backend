@@ -24,4 +24,8 @@ export class DataService {
     return this._http.get<any>(this._thisURL + 'social');
   }
 
+  getOurServiceItems() {
+    return this._http.get<any>(this._thisURL + 'servicesItem');
+  }
+
 }

@@ -175,6 +175,14 @@ export class NavBarComponent implements OnInit {
                 },
               },
               {
+                label: 'Services',
+                icon: 'pi pi-cog',
+                routerLink: ['/dashboard/admin/website/services'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
                 label: 'About us',
                 icon: 'pi pi-info-circle',
                 routerLink: ['/dashboard/admin/website/about'],

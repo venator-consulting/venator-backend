@@ -45,6 +45,7 @@ import { HomeComponent } from './website/home/home.component';
 import { SliderManagementComponent } from './admin/website/slider/slider-management.component';
 import { ContactManagementComponent } from './admin/website/contact-management/contact-management.component';
 import { AboutManagementComponent } from './admin/website/about-management/about-management.component';
+import { ServicesManagementComponent } from './admin/website/services-management/services-management.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -59,6 +60,12 @@ const routes: Routes = [
       {
         path: 'admin/website/slider',
         component: SliderManagementComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin'] },
+      },
+      {
+        path: 'admin/website/services',
+        component: ServicesManagementComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin'] },
       },

@@ -110,6 +110,7 @@ import { SliderComponent } from './website/slider/slider.component';
 import { SliderManagementComponent } from './admin/website/slider/slider-management.component';
 import { ContactManagementComponent } from './admin/website/contact-management/contact-management.component';
 import { AboutManagementComponent } from './admin/website/about-management/about-management.component';
+import { ServicesManagementComponent } from './admin/website/services-management/services-management.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -173,7 +174,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SliderComponent,
     SliderManagementComponent,
     ContactManagementComponent,
-    AboutManagementComponent
+    AboutManagementComponent,
+    ServicesManagementComponent
   ],
   imports: [
     BrowserModule,

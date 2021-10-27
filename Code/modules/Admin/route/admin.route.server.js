@@ -47,6 +47,21 @@ router
     }), authorization.authorize('Admin'), publicImgs.single('photos'), websiteCtrl.updateAbout);
 
 router
+    .route('/website/servicesItem/:id')
+    .delete(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), websiteCtrl.deleteServicesItem);
+
+router
+    .route('/website/servicesItem')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), websiteCtrl.getServicesItems)
+    .post(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), publicImgs.single('photos'), websiteCtrl.updateServicesItem);
+
+router
     .route('/website/aboutItem/:id')
     .delete(passport.authenticate('jwt', {
         session: false

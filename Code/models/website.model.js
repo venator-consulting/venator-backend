@@ -12,67 +12,29 @@ const Website = sequelizer.define('Website', {
         primaryKey: true,
         autoIncrement: true
     },
-    email: {
-        type: DataTypes.STRING(250),
-    },
-    phone: {
-        type: DataTypes.STRING(50),
-    },
-    fax: {
-        type: DataTypes.STRING(50),
-        unique: true
-    },
-    postCode: {
-        type: DataTypes.STRING(25),
-    },
-    houseNr: {
-        type: DataTypes.INTEGER,
-    },
-    street: {
-        type: DataTypes.STRING(150),
-    },
-    city: {
-        type: DataTypes.STRING(150),
-    },
-    country: {
-        type: DataTypes.STRING(150),
-    },
-    logo: {
-        type: DataTypes.STRING(250),
-    },
-    sliderImg1: {
-        type: DataTypes.STRING(250),
-    },
-    sliderImg2: {
-        type: DataTypes.STRING(250),
-    },
-    sliderImg3: {
-        type: DataTypes.STRING(250),
-    },
-    sliderTitle1: {
-        type: DataTypes.STRING(100),
-    },
-    sliderTitle2: {
-        type: DataTypes.STRING(100),
-    },
-    sliderTitle3: {
-        type: DataTypes.STRING(100),
-    },
-    sliderSubTitle1: {
-        type: DataTypes.STRING(250),
-    },
-    sliderSubTitle2: {
-        type: DataTypes.STRING(500),
-    },
-    sliderSubTitle3: {
-        type: DataTypes.STRING(500),
-    },
-    aboutText: {
-        type: DataTypes.STRING(1000)
-    },
-    aboutImg: {
-        type: DataTypes.STRING(250)
-    }
+    email: { type: DataTypes.STRING(250), },
+    phone: { type: DataTypes.STRING(50), },
+    fax: { type: DataTypes.STRING(50), unique: true },
+    postCode: { type: DataTypes.STRING(25), },
+    houseNr: { type: DataTypes.INTEGER, },
+    street: { type: DataTypes.STRING(150), },
+    city: { type: DataTypes.STRING(150), },
+    country: { type: DataTypes.STRING(150), },
+    logo: { type: DataTypes.STRING(250), },
+    sliderImg1: { type: DataTypes.STRING(250), },
+    sliderImg2: { type: DataTypes.STRING(250), },
+    sliderImg3: { type: DataTypes.STRING(250), },
+    sliderTitle1: { type: DataTypes.STRING(100), },
+    sliderTitle2: { type: DataTypes.STRING(100), },
+    sliderTitle3: { type: DataTypes.STRING(100), },
+    sliderSubTitle1: { type: DataTypes.STRING(250), },
+    sliderSubTitle2: { type: DataTypes.STRING(500), },
+    sliderSubTitle3: { type: DataTypes.STRING(500), },
+    aboutTitle: { type: DataTypes.STRING(100) },
+    aboutText: { type: DataTypes.STRING(1000) },
+    aboutImg: { type: DataTypes.STRING(250) },
+    servicesTitle: { type: DataTypes.STRING(100) },
+    servicesText: { type: DataTypes.STRING(1000) }
 }, {
     tableName: 'Website'
 });

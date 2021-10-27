@@ -16,7 +16,7 @@ export class AboutComponent implements OnInit {
   constructor(private _dataService: DataService) { }
 
   ngOnInit(): void {
-    this.fields = ['id', 'aboutText', 'aboutImg'];
+    this.fields = ['id', 'aboutText', 'aboutImg', 'aboutTitle'];
     this._dataService
       .get(this.fields)
       .subscribe(res => this.data = res);

@@ -15,6 +15,11 @@ module.exports.getCover = async (req, res) => {
     res.status(200).json(result);
 }
 
+module.exports.getServicesItems = async (req, res) => {
+    const result = await repo.getServicesItems();
+    res.status(200).json(result);
+};
+
 module.exports.getSocialLinks = async (req, res) => {
     const result = await repo.getSocialLinks();
     res.status(200).json(result);

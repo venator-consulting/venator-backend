@@ -1,4 +1,5 @@
 const Website = require("../models/website.model");
+const services = require('../models/servicesItem.model.server');
 const Social = require('../models/socialLinks.model.server');
 const about = require('../models/aboutItem.model.server');
 
@@ -18,6 +19,25 @@ module.exports.fetch = async function (fields) {
     return result[0];
 }
 
+//#region services
+module.exports.getServicesItems = async function () {
+    return await services.getServicesItem().findAll({ order: [['order']] });
+}
+
+module.exports.saveServicesItem = async function (data) {
+    return await services.getServicesItem().upsert(data);
+}
+
+module.exports.deleteServicesItem = async function (id) {
+    return await services.getServicesItem().destroy({
+        where: {
+            id: id
+        }
+    });
+}
+//#endregion services
+
+//#region About
 module.exports.getAboutItems = async function () {
     return await about.getAboutItem().findAll({ order: [['order']] });
 }
@@ -33,7 +53,9 @@ module.exports.deleteAboutItem = async function (id) {
         }
     });
 }
+//#endregion About
 
+//#region Social Links
 module.exports.getSocialLinks = async function () {
     return await Social.getSocialLinks().findAll({ order: [['order']] });
 }
@@ -50,7 +72,7 @@ module.exports.deleteSocialLink = async function (id) {
         }
     });
 }
-
+//#endregion Social links
 
 module.exports.update = async function (data) {
     return await Website.getWebsite().upsert(data);

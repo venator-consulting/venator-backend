@@ -1,6 +1,5 @@
 const websiteRepo = require('../../../repositories/website.repo.server');
 const env = require('../../../config/environment');
-const path = require('path');
 
 module.exports.get = async (req, res) => {
     const result = await websiteRepo.fetchAll();
@@ -27,6 +26,30 @@ module.exports.updateSlider = async (req, res) => {
     res.status(201).json(result);
 }
 //#endregion slider
+
+//#region our services
+module.exports.getServicesItems = async (req, res) => {
+    const result = await websiteRepo.getServicesItems();
+    res.status(200).json(result);
+};
+
+module.exports.deleteServicesItem = async (req, res) => {
+    const { id } = req.params;
+    const result = await websiteRepo.deleteServicesItem(id);
+    res.status(204).json({});
+}
+
+module.exports.updateServicesItem = async (req, res) => {
+    const file = req.file;
+    const data = JSON.parse(req.body.data);
+    if (file) {
+        data.img = env.domain + 'public/imgs/' + file.filename;
+        // delete old image
+    }
+    const result = await websiteRepo.saveServicesItem(data);
+    res.status(201).json(result);
+}
+//#endregion our services
 
 //#region About
 module.exports.updateAbout = async (req, res) => {

@@ -11,6 +11,10 @@ router
     .get(controller.get);
 
 router
+    .route('/servicesItem')
+    .get(controller.getServicesItems);
+
+router
     .route('/aboutItem')
     .get(controller.getAboutItems);
 
