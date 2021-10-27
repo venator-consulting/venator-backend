@@ -16,17 +16,19 @@ export class ContactComponent implements OnInit {
   canSend: boolean = false;
   data: ContactInfo = new ContactInfo();
   links: SocialLink[] = new Array();
+  fields: string[];
 
   constructor(private _mailService: MailService, private _dataService: DataService, private _messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.fields = ['id', 'email', 'phone', 'fax', 'postCode', 'houseNr', 'street', 'city', 'country'];
     this.getData();
     this.getSocialLinks();
   }
 
   getData() {
     this._dataService
-      .get()
+      .get(this.fields)
       .subscribe(res => this.data = res);
   }
 

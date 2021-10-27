@@ -11,6 +11,10 @@ router
     .get(controller.get);
 
 router
+    .route('/aboutItem')
+    .get(controller.getAboutItems);
+
+router
     .route('/social')
     .get(controller.getSocialLinks);
 

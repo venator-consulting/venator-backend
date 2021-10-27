@@ -44,6 +44,7 @@ import { CreditorAnalysisCalcComponent } from './shared/analysis/creditor-analys
 import { HomeComponent } from './website/home/home.component';
 import { SliderManagementComponent } from './admin/website/slider/slider-management.component';
 import { ContactManagementComponent } from './admin/website/contact-management/contact-management.component';
+import { AboutManagementComponent } from './admin/website/about-management/about-management.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -58,6 +59,12 @@ const routes: Routes = [
       {
         path: 'admin/website/slider',
         component: SliderManagementComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin'] },
+      },
+      {
+        path: 'admin/website/about',
+        component: AboutManagementComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin'] },
       },

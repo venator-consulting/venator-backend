@@ -1,0 +1,154 @@
+<div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
+    <div class="card" style="padding: 20px;">
+        <p-toast></p-toast>
+        <h5 class=" p-text-center"> Manage About us Section </h5>
+        <form class="p-fluid" (ngSubmit)="submitHandler()">
+            <div class="p-fluid">
+                <div class="p-field p-grid">
+                    <label for="aboutText" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> About us paragraph </label>
+                    <div class="p-col-12 p-md-10">
+                        <textarea pInputTextarea required #aboutText="ngModel" name="aboutText" type="text"
+                            class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
+                            [(ngModel)]="data.aboutText"></textarea>
+                        <small *ngIf="aboutText.invalid && aboutText.touched " class="spanCss ">
+                            About us paragraph is required</small>
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <label for="aboutImgFile" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> About Image </label>
+                    <div class="p-col-12 p-md-10">
+                        <p-fileUpload name="aboutImgFile" mode="advanced" [showUploadButton]="false" customUpload="true"
+                            (uploadHandler)="UploadHandler1($event)" uploadLabel="About Image" accept="image/*"
+                            [auto]="true">
+                            <ng-template pTemplate="content">
+                            </ng-template>
+                        </p-fileUpload>
+                        <div *ngIf="!fromFront" class="p-mt-2">
+                            <img src="{{data.aboutImg}}" alt="About image" width="80">
+                        </div>
+                        <div *ngIf="fromFront" class="p-mt-2">
+                            <img src="{{imageSrc}}" alt="About image" width="80">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid">
+                    <div class="p-xs-col-5 ">
+                        <button pbutton pripple type="submit" label="Submit"
+                            class="p-mt-4  p-ripple p-button p-component ">
+                            <span class="p-button-label"> Save </span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+<div class="p-grid">
+    <div class="p-col-12">
+        <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
+        <p-table #dt dataKey="id" [value]="items" [columns]="cols" styleClass="p-datatable-gridlines"
+            [resizableColumns]="true" responsive="true" [scrollable]="true" scrollHeight="400px"
+            [reorderableColumns]="true" [loading]="waiting">
+            <ng-template pTemplate="colgroup">
+                <colgroup>
+                    <col *ngFor="let col of cols">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="caption">
+                <div class="p-mb-4">
+                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success p-mr-2"
+                        (click)="openNew()"></button>
+                    <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+                        class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}"
+                        *ngIf="filtersNo>0" tooltipPosition="bottom"></button>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="{{col.field}}" pResizableColumn pReorderableColumn class="p-text-{{col.align}}"
+                        *ngFor="let col of cols">
+                        {{col.header | translate}}
+                        <p-sortIcon field="{{col.field}}"></p-sortIcon>
+                    </th>
+                    <th>Action
+                    </th>
+                </tr>
+                <tr>
+                    <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
+                        <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{width:'90%'}"
+                            (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
+                    </th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+                <tr>
+                    <td pReorderableRowHandle *ngFor="let col of cols">
+                        <div *ngIf="!row.isEditable">
+                            {{ row[col.field] }}
+                        </div>
+                        <div *ngIf="row.isEditable && col.field != 'order'">
+                            <input type="text" pInputText [(ngModel)]="row[col.field]" />
+                        </div>
+                        <div *ngIf="row.isEditable && col.field == 'order'">
+                            <p-inputNumber id="order" [(ngModel)]="row[col.field]" mode="decimal"></p-inputNumber>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(row)"
+                            class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
+                            pTooltip="{{'Document_Type.Edit' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+                        <button type="button" pButton pRipple icon="pi pi-save" (click)="save(row)"
+                            class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+                            pTooltip="{{'Document_Type.Save' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+                        <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
+                            class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+                            pTooltip="{{'Document_Type.Cancel' | translate}}" tooltipPosition="bottom"></button>
+                        <button type="button" pButton pRipple icon="pi pi-trash" (click)="reset(row)"
+                            class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
+                            pTooltip="{{'general_actions.delete' | translate}}" tooltipPosition="bottom"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+
+
+<p-dialog [(visible)]="itemDialog" [style]="{width: '450px'}" header="item Details" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="title">Title</label>
+            <input type="text" pInputText id="title" [(ngModel)]="item.title" required autofocus />
+            <small class="p-error" *ngIf="submitted && !item.title">Title is required.</small>
+        </div>
+        <div class="p-field">
+            <label for="subtitle">SubTitle</label>
+            <textarea p-textarea type="text" pInputText id="subtitle" [(ngModel)]="item.subtitle" required ></textarea>
+            <small class="p-error" *ngIf="submitted && !item.subtitle">SubTitle is required.</small>
+        </div>
+        <div class="p-field">
+            <label for="icon">Icon</label>
+            <input type="text" pInputText id="icon" [(ngModel)]="item.icon" required />
+            <small class="p-error" *ngIf="submitted && !item.icon">icon is required.</small>
+        </div>
+        <div class="p-formgrid p-grid">
+            <div class="p-field p-col">
+                <label for="order">Order</label>
+                <p-inputNumber id="order" [(ngModel)]="item.order" mode="decimal"></p-inputNumber>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveItem()"></button>
+    </ng-template>
+</p-dialog>

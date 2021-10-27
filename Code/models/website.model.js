@@ -67,6 +67,12 @@ const Website = sequelizer.define('Website', {
     sliderSubTitle3: {
         type: DataTypes.STRING(500),
     },
+    aboutText: {
+        type: DataTypes.STRING(1000)
+    },
+    aboutImg: {
+        type: DataTypes.STRING(250)
+    }
 }, {
     tableName: 'Website'
 });

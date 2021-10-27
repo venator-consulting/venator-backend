@@ -13,3 +13,19 @@ export class Slider {
     sliderSubTitle2: string;
     sliderSubTitle3: string;
 }
+
+export class About {
+    id: number;
+    aboutImg: string;
+    aboutImgFile: File;
+    aboutText: string;
+}
+
+export class AboutItem {
+    id: number;
+    title: string;
+    subtitle: string;
+    order: number;
+    icon: string;
+    isEditable: boolean;
+}

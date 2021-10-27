@@ -12,8 +12,12 @@ export class DataService {
 
   constructor(private _http: HttpClient) { }
 
-  get() {
-    return this._http.get<any>(this._thisURL + 'data');
+  get(fields) {
+    return this._http.get<any>(this._thisURL + 'data', { params: fields });
+  }
+
+  getAboutItems() {
+    return this._http.get<any>(this._thisURL + 'aboutItem');
   }
 
   getSocialLinks() {

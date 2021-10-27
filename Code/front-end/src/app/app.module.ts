@@ -109,6 +109,7 @@ import { WFooterComponent } from './website/w-footer/w-footer.component';
 import { SliderComponent } from './website/slider/slider.component';
 import { SliderManagementComponent } from './admin/website/slider/slider-management.component';
 import { ContactManagementComponent } from './admin/website/contact-management/contact-management.component';
+import { AboutManagementComponent } from './admin/website/about-management/about-management.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -171,7 +172,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     WFooterComponent,
     SliderComponent,
     SliderManagementComponent,
-    ContactManagementComponent
+    ContactManagementComponent,
+    AboutManagementComponent
   ],
   imports: [
     BrowserModule,
