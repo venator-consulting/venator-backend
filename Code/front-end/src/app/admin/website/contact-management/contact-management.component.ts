@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ContactInfo, SocialLink } from 'src/app/shared/model/contact';
+import { SocialIcons } from 'src/app/shared/model/socialIconsList';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import { WebsiteService } from '../../service/website.service';
 
@@ -25,6 +26,8 @@ export class ContactManagementComponent implements OnInit {
   criteria: any = {};
   filtersNo: number = 0;
 
+  icons: { label; value; }[] = new Array();
+
   constructor(private _websiteService: WebsiteService, private _messageService: MessageService,
     public _translateService: TranslateService, private _confirmationService: ConfirmationService) { }
 
@@ -32,6 +35,8 @@ export class ContactManagementComponent implements OnInit {
 
     this.getData();
     this.getSocialLink();
+    this.icons = SocialIcons.getIcons();
+
     this.cols = [
       {
         header: 'Name',

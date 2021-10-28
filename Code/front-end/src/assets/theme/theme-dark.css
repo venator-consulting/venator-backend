@@ -97,12 +97,12 @@ body #side-panel.dark {
 
 .dark #header,
 #header.dark {
-	background-color: #333;
+	background-color: #58585a;
 	border-bottom-color: rgba(255,255,255,0.05);
 }
 
 .dark #header-wrap {
-	background-color: #333;
+	background-color: #58585a;
 }
 
 @media (min-width: 992px) {

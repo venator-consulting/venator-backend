@@ -151,11 +151,27 @@
                         <div *ngIf="!row.isEditable">
                             {{ row[col.field] }}
                         </div>
-                        <div *ngIf="row.isEditable && col.field != 'order'">
+                        <div *ngIf="row.isEditable && col.field != 'order' && col.field != 'icon'">
                             <input type="text" pInputText [(ngModel)]="row[col.field]" />
                         </div>
                         <div *ngIf="row.isEditable && col.field == 'order'">
                             <p-inputNumber id="order" [(ngModel)]="row[col.field]" mode="decimal"></p-inputNumber>
+                        </div>
+                        <div *ngIf="row.isEditable && col.field == 'icon'">
+                            <p-dropdown [options]="icons" [(ngModel)]="row[col.field]" optionLabel="label" [style]="{ width: '100%' }" 
+                                optionValue="value" appendTo="body" [filter]="true" filterBy="label" [showClear]="true"
+                                placeholder="Select an icon" [virtualScroll]="true" >
+                                <ng-template pTemplate="selectedItem">
+                                    <div *ngIf="row.icon">
+                                        <div><span class="icon-{{row.icon}}"></span> &nbsp; {{row.icon}}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-rec pTemplate="item">
+                                    <div>
+                                        <div><span class="icon-{{rec.value}}"></span> &nbsp; {{rec.label}}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
                         </div>
                     </td>
                     <td>
@@ -189,7 +205,21 @@
         </div>
         <div class="p-field">
             <label for="icon">Icon</label>
-            <input type="text" pInputText id="icon" [(ngModel)]="link.icon" required />
+            <p-dropdown [options]="icons" [(ngModel)]="link.icon" optionLabel="label" optionValue="value"
+                appendTo="body" [filter]="true" filterBy="label" [showClear]="true" placeholder="Select an icon"
+                [virtualScroll]="true" [itemSize]="30">
+                <ng-template pTemplate="selectedItem">
+                    <div *ngIf="link.icon">
+                        <div><span class="icon-{{link.icon}}"></span> &nbsp; {{link.icon}}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-rec pTemplate="item">
+                    <div>
+                        <div><span class="icon-{{rec.value}}"></span> &nbsp; {{rec.label}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+            <!-- <input type="text" pInputText id="icon" [(ngModel)]="link.icon" required /> -->
         </div>
         <div class="p-field">
             <label for="url">URL</label>

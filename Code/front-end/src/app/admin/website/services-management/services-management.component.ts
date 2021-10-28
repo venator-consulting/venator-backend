@@ -34,10 +34,10 @@ export class ServicesManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.cols = [
-      {header: 'Order', field: 'order'},
-      {header: 'Title', field: 'title'},
-      {header: 'Subtitle', field: 'subtitle'},
-      {header: 'img', field: 'img'},
+      { header: 'Order', field: 'order' },
+      { header: 'Title', field: 'title' },
+      { header: 'Subtitle', field: 'subtitle' },
+      { header: 'img', field: 'img' },
     ]
     this.getData();
     this.getOurServicesItems();
@@ -111,12 +111,23 @@ export class ServicesManagementComponent implements OnInit {
     this._websiteService
       .saveOurServicesItems(formData)
       .subscribe(res => {
-        this.item = res[0];
-        this.items.push({ ...this.item });
-        this.items = [...this.items];
+        // edit operation so don't push it to the table, just replace it.
+        if (this.item.id) {
+          this.item = res[0];
+          let i = this.items.findIndex(item => item.id == this.item.id);
+          this.items[i] = { ...this.item };
+          // this.items = [...this.items];
+          this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item updated.', life: 3000 });
+          // insert operation
+        } else {
+          this.item = res[0];
+          this.items.push({ ...this.item });
+          this.items = [...this.items];
+          this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Created.', life: 3000 });
+        }
         this.waiting = false;
         this.itemDialog = false;
-        this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Created.', life: 3000 });
+
       }, er => this.waiting = false);
 
   }
@@ -148,13 +159,13 @@ export class ServicesManagementComponent implements OnInit {
       accept: () => {
         this.waiting = true;
         this._websiteService
-        .deleteOurServicesItems(row.id)
-        .subscribe(res => {
-          this.items = this.items.filter(link => link.id != row.id);
-          this.itemsTemp = [...this.items];
-          this.waiting = false;
-          this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted.', life: 3000 });
-        }, er => this.waiting = false);
+          .deleteOurServicesItems(row.id)
+          .subscribe(res => {
+            this.items = this.items.filter(link => link.id != row.id);
+            this.itemsTemp = [...this.items];
+            this.waiting = false;
+            this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted.', life: 3000 });
+          }, er => this.waiting = false);
       },
       reject: async (type) => {
         switch (type) {
@@ -181,7 +192,7 @@ export class ServicesManagementComponent implements OnInit {
     // this.items.filter(row => row.isEditable).map(r => { r.isEditable = false; return r });
     // row.isEditable = true;
     // this.originalVal = row;
-    this.item = {...row};
+    this.item = { ...row };
     this.submitted = false;
     this.itemDialog = true;
   }

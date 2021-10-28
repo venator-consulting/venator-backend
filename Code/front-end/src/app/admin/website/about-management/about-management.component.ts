@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
+import { AboutIcons } from 'src/app/shared/model/aboutusIconsList';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import { About, AboutItem } from 'src/app/shared/model/website';
 import { WebsiteService } from '../../service/website.service';
@@ -16,6 +17,8 @@ export class AboutManagementComponent implements OnInit {
   waiting: boolean = true;
   fromFront: boolean;
   imageSrc: string | ArrayBuffer;
+
+  icons: { label; value; }[] = new Array();
 
   items: AboutItem[] = new Array();
   itemsTemp: AboutItem[] = new Array();
@@ -37,6 +40,8 @@ export class AboutManagementComponent implements OnInit {
       { header: 'Sub-Title', field: 'subtitle' },
       { header: 'Icon', field: 'icon' }
     ];
+
+    this.icons = AboutIcons.getIcons();
 
     this.getData();
     this.getAboutItem();
