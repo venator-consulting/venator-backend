@@ -18,8 +18,6 @@ export class HomeComponent implements OnInit {
   }
 
   navigateTo(element: string) {
-    debugger;
-    // this.about.nativeElement.scrollIntoView({ behavior: "smooth" });
     this[element].nativeElement.scrollIntoView({ behavior: "smooth" });
   }
 
