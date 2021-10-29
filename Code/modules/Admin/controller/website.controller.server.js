@@ -10,17 +10,49 @@ module.exports.get = async (req, res) => {
 module.exports.updateSlider = async (req, res) => {
     const files = req.files;
     const data = JSON.parse(req.body.data);
+    const changedFiles = data.files;
     if (files[0]) {
-        data.sliderImg1 = env.domain + 'public/imgs/' + files[0].filename;
-        // delete old first image
+        if (changedFiles[0]) {
+            switch (changedFiles[0]) {
+                case 2:
+                    data.sliderImg2 = env.domain + 'public/imgs/' + files[0].filename;
+                    // delete old first image
+                    break;
+                case 3:
+                    data.sliderImg3 = env.domain + 'public/imgs/' + files[0].filename;
+                    break;
+                default:
+                    data.sliderImg1 = env.domain + 'public/imgs/' + files[0].filename;
+            }
+        } else data.sliderImg1 = env.domain + 'public/imgs/' + files[0].filename;
     }
     if (files[1]) {
-        data.sliderImg2 = env.domain + 'public/imgs/' + files[1].filename;
-        // delete old first image
+        if (changedFiles[1]) {
+            switch (changedFiles[1]) {
+                case 1:
+                    data.sliderImg1 = env.domain + 'public/imgs/' + files[1].filename;
+                    break;
+                case 3:
+                    data.sliderImg3 = env.domain + 'public/imgs/' + files[1].filename;
+                    break;
+                default:
+                    data.sliderImg2 = env.domain + 'public/imgs/' + files[1].filename;
+            }
+        } else data.sliderImg2 = env.domain + 'public/imgs/' + files[1].filename;
     }
     if (files[2]) {
-        data.sliderImg3 = env.domain + 'public/imgs/' + files[2].filename;
-        // delete old first image
+        if (changedFiles[2]) {
+            switch (changedFiles[2]) {
+                case 1:
+                    data.sliderImg1 = env.domain + 'public/imgs/' + files[2].filename;
+                    break;
+                case 2:
+                    data.sliderImg2 = env.domain + 'public/imgs/' + files[2].filename;
+                    break;
+                default:
+                    data.sliderImg3 = env.domain + 'public/imgs/' + files[2].filename;
+            }
+        } else data.sliderImg3 = env.domain + 'public/imgs/' + files[2].filename;
     }
     const result = await websiteRepo.update(data);
     res.status(201).json(result);

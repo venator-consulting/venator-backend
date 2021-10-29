@@ -12,6 +12,7 @@ export class Slider {
     sliderSubTitle1: string;
     sliderSubTitle2: string;
     sliderSubTitle3: string;
+    files: number[];
 }
 
 export class OurServices {

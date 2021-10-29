@@ -77,9 +77,19 @@ export class SliderManagementComponent implements OnInit {
   submitHandler() {
     this.waiting = true;
     const formData: FormData = new FormData();
-    formData.append('photos', this.data.sliderImg1File);
-    formData.append('photos', this.data.sliderImg2File);
-    formData.append('photos', this.data.sliderImg3File);
+    this.data.files = [];
+    if (this.data.sliderImg1File) {
+      formData.append('photos', this.data.sliderImg1File);
+      this.data.files.push(1);
+    }
+    if (this.data.sliderImg2File) {
+      formData.append('photos', this.data.sliderImg2File);
+      this.data.files.push(2);
+    }
+    if (this.data.sliderImg3File) {
+      formData.append('photos', this.data.sliderImg3File);
+      this.data.files.push(3);
+    }
     const temp = { ...this.data };
     delete temp.sliderImg1File;
     delete temp.sliderImg2File;
