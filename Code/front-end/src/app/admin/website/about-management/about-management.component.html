@@ -1,34 +1,36 @@
 <div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
     <div class="card" style="padding: 20px;">
         <p-toast></p-toast>
-        <h5 class=" p-text-center"> Manage About us Section </h5>
+        <h5 class=" p-text-center">  {{ 'Admin_Website.aboutTitle' | translate}}</h5>
         <form class="p-fluid" (ngSubmit)="submitHandler()">
             <div class="p-fluid">
                 <div class="p-field p-grid">
-                    <label for="aboutTitle" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> About us Title </label>
+                    <label for="aboutTitle" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Admin_Website.title'| translate}} </label>
                     <div class="p-col-12 p-md-10">
                         <textarea pInputTextarea required #aboutTitle="ngModel" name="aboutTitle" type="text"
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
                             [(ngModel)]="data.aboutTitle"></textarea>
                         <small *ngIf="aboutTitle.invalid && aboutTitle.touched " class="spanCss ">
-                            About us Title is required</small>
+                            {{'Admin_Website.titleRequired' | translate}}
+                        </small>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <label for="aboutText" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> About us paragraph </label>
+                    <label for="aboutText" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">{{'Admin_Website.paragraph'| translate}}</label>
                     <div class="p-col-12 p-md-10">
                         <textarea pInputTextarea required #aboutText="ngModel" name="aboutText" type="text"
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
                             [(ngModel)]="data.aboutText"></textarea>
                         <small *ngIf="aboutText.invalid && aboutText.touched " class="spanCss ">
-                            About us paragraph is required</small>
+                            {{'Admin_Website.paragraphRequired'| translate}}
+                        </small>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <label for="aboutImgFile" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> About Image </label>
+                    <label for="aboutImgFile" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Admin_Website.image' | translate}} </label>
                     <div class="p-col-12 p-md-10">
                         <p-fileUpload name="aboutImgFile" mode="advanced" [showUploadButton]="false" customUpload="true"
-                            (uploadHandler)="UploadHandler1($event)" uploadLabel="About Image" accept="image/*"
+                            (uploadHandler)="UploadHandler1($event)" uploadLabel="{{'Admin_Website.image '| translate}}" accept="image/*"
                             [auto]="true">
                             <ng-template pTemplate="content">
                             </ng-template>
@@ -46,7 +48,7 @@
                     <div class="p-xs-col-5 ">
                         <button pbutton pripple type="submit" label="Submit"
                             class="p-mt-4  p-ripple p-button p-component ">
-                            <span class="p-button-label"> Save </span>
+                            <span class="p-button-label"> {{'Admin_Website.save' | translate}} </span>
                         </button>
                     </div>
 
@@ -72,7 +74,7 @@
             </ng-template>
             <ng-template pTemplate="caption">
                 <div class="p-mb-4">
-                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success p-mr-2"
+                    <button pButton pRipple label="{{'Admin_Website.new' | translate}} " icon="pi pi-plus" class="p-button-success p-mr-2"
                         (click)="openNew()"></button>
                     <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
                         class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}"
@@ -86,7 +88,7 @@
                         {{col.header | translate}}
                         <p-sortIcon field="{{col.field}}"></p-sortIcon>
                     </th>
-                    <th>Action
+                    <th>Actions
                     </th>
                 </tr>
                 <tr>
@@ -151,19 +153,19 @@
 <p-dialog [(visible)]="itemDialog" [style]="{width: '450px'}" header="item Details" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="p-field">
-            <label for="title">Title</label>
+            <label for="title">{{'Admin_Website.title'| translate}}</label>
             <input type="text" pInputText id="title" [(ngModel)]="item.title" required autofocus />
-            <small class="p-error" *ngIf="submitted && !item.title">Title is required.</small>
+            <small class="p-error" *ngIf="submitted && !item.title">{{'Admin_Website.titleRequired' | translate}}</small>
         </div>
         <div class="p-field">
-            <label for="subtitle">SubTitle</label>
+            <label for="subtitle">{{'Admin_Website.subTitle'| translate}}</label>
             <textarea p-textarea type="text" pInputText id="subtitle" [(ngModel)]="item.subtitle" required></textarea>
-            <small class="p-error" *ngIf="submitted && !item.subtitle">SubTitle is required.</small>
+            <small class="p-error" *ngIf="submitted && !item.subtitle">{{'Admin_Website.subTitleRequired' | translate}}</small>
         </div>
         <div class="p-field">
             <label for="icon">Icon</label>
             <p-dropdown [options]="icons" [(ngModel)]="item.icon" optionLabel="label" optionValue="value"
-                appendTo="body" [filter]="true" filterBy="label" [showClear]="true" placeholder="Select an icon"
+                appendTo="body" [filter]="true" filterBy="label" [showClear]="true" placeholder="{{'Admin_Website.selectIcon'| translate}}"
                 [virtualScroll]="true" [itemSize]="30">
                 <ng-template pTemplate="selectedItem">
                     <div *ngIf="item.icon">
@@ -176,18 +178,18 @@
                     </div>
                 </ng-template>
             </p-dropdown>
-            <small class="p-error" *ngIf="submitted && !item.icon">icon is required.</small>
+            <small class="p-error" *ngIf="submitted && !item.icon">{{'Admin_Website.iconRequired'| translate}}</small>
         </div>
         <div class="p-formgrid p-grid">
             <div class="p-field p-col">
-                <label for="order">Order</label>
+                <label for="order">{{'Admin_Website.order'| translate}}</label>
                 <p-inputNumber id="order" [(ngModel)]="item.order" mode="decimal"></p-inputNumber>
             </div>
         </div>
     </ng-template>
 
     <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveItem()"></button>
+        <button pButton pRipple label="{{'Admin_Website.cancel' | translate}}" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="{{'Admin_Website.save' | translate}}" icon="pi pi-check" class="p-button-text" (click)="saveItem()"></button>
     </ng-template>
 </p-dialog>
