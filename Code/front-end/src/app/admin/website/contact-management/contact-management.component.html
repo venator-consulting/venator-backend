@@ -1,100 +1,106 @@
 <div class="p-xs-10 p-xs-offset-1 p-md-8 p-md-offset-2">
     <div class="card" style="padding: 20px;">
         <p-toast></p-toast>
-        <h5 class="p-text-center"> Manage Contact us Section </h5>
+        <h5 class="p-text-center"> {{'Admin_Website.contactTitle' | translate}}  </h5>
         <form class="p-fluid" (ngSubmit)="submitHandler()">
             <div class="p-fluid">
                 <div class="p-field p-grid">
-                    <label for="email" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Email</label>
+                    <label for="email" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Admin_Website.email' | translate}}</label>
                     <div class="p-col-12 p-md-10">
                         <input required #email="ngModel" name="email" type="text" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid" [(ngModel)]="data.email">
                         <small *ngIf="email.invalid && email.touched " class="spanCss ">
-                            Email is required</small>
+                            {{'Admin_Website.emailReq' | translate}}
+                        </small>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <label for="phone" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Phone
+                    <label for="phone" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Admin_Website.phone' | translate}}
                     </label>
                     <div class="p-col-12 p-md-10">
                         <input required #phone="ngModel" name="phone" type="tel" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid" [(ngModel)]="data.phone">
                         <small *ngIf="phone.invalid && phone.touched " class="spanCss ">
-                            Phone is required</small>
+                            {{'Admin_Website.phoneReq' | translate}}
+                        </small>
                     </div>
                 </div>
 
                 <div class="p-field p-grid">
-                    <label for="fax" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Fax </label>
+                    <label for="fax" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Admin_Website.fax' | translate}} </label>
                     <div class="p-col-12 p-md-10">
                         <input required #fax="ngModel" name="fax" type="tel" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid" [(ngModel)]="data.fax">
                         <small *ngIf="fax.invalid && fax.touched " class="spanCss ">
-                            Fax is required</small>
+                            {{'Admin_Website.faxReq' | translate}}</small>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <label for="postCode" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Post Code
+                    <label for="postCode" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Admin_Website.postCode' | translate}}
                     </label>
                     <div class="p-col-12 p-md-10">
                         <input required #postCode="ngModel" name="postCode" type="text" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
                             [(ngModel)]="data.postCode">
                         <small *ngIf="postCode.invalid && postCode.touched " class="spanCss ">
-                            Post Code is required</small>
+                            {{'Admin_Website.postCodeReq' | translate}}
+                        </small>
                     </div>
                 </div>
 
 
                 <div class="p-field p-grid">
-                    <label for="houseNr" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> House Nr </label>
+                    <label for="houseNr" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Admin_Website.houseNr' | translate}} </label>
                     <div class="p-col-12 p-md-10">
                         <input required #houseNr="ngModel" name="houseNr" type="text" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
                             [(ngModel)]="data.houseNr">
                         <small *ngIf="houseNr.invalid && houseNr.touched " class="spanCss ">
-                            House Nr is required</small>
+                            {{'Admin_Website.houseNrReq' | translate}}
+                        </small>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <label for="street" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Street
+                    <label for="street" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Admin_Website.street' | translate}}
                     </label>
                     <div class="p-col-12 p-md-10">
                         <input required #street="ngModel" name="street" type="text" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid" [(ngModel)]="data.street">
                         <small *ngIf="street.invalid && street.touched " class="spanCss ">
-                            Street is required</small>
+                            {{'Admin_Website.streetReq' | translate}}
+                        </small>
                     </div>
                 </div>
 
                 <div class="p-field p-grid">
-                    <label for="city" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> City
+                    <label for="city" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Admin_Website.city' | translate}}
                     </label>
                     <div class="p-col-12 p-md-10">
                         <input required #city="ngModel" name="city" type="text" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid" [(ngModel)]="data.city">
                         <small *ngIf="city.invalid && city.touched " class="spanCss ">
-                            City is required</small>
+                            {{'Admin_Website.cityReq' | translate}}
+                        </small>
                     </div>
                 </div>
 
                 <div class="p-field p-grid">
-                    <label for="country" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> Country
+                    <label for="country" class="p-col-12 p-mb-2 p-md-2 p-mb-md-0"> {{'Admin_Website.country' | translate}}
                     </label>
                     <div class="p-col-12 p-md-10">
                         <input required #country="ngModel" name="country" type="text" pinputtext
                             class="p-inputtext p-component ng-untouched ng-pristine ng-valid"
                             [(ngModel)]="data.country">
                         <small *ngIf="country.invalid && country.touched " class="spanCss ">
-                            Country is required</small>
+                            {{'Admin_Website.countryReq' | translate}}
+                        </small>
                     </div>
                 </div>
 
                 <div class="p-field p-grid">
                     <div class="p-xs-col-5 ">
-                        <button pbutton pripple type="submit" label="Submit"
-                            class="p-mt-4  p-ripple p-button p-component ">
-                            <span class="p-button-label"> Save </span>
+                        <button pbutton pripple type="submit" class="p-mt-4  p-ripple p-button p-component ">
+                            <span class="p-button-label"> {{'Admin_Website.save' | translate}} </span>
                         </button>
                     </div>
 
@@ -120,7 +126,7 @@
             </ng-template>
             <ng-template pTemplate="caption">
                 <div class="p-mb-4">
-                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success p-mr-2"
+                    <button pButton pRipple label="{{'Admin_Website.new' | translate}}" icon="pi pi-plus" class="p-button-success p-mr-2"
                         (click)="openNew()"></button>
                     <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
                         class="p-ml-6 clearFilter" pTooltip="{{'Data_Table.clearFilter' | translate}}"
@@ -235,7 +241,7 @@
     </ng-template>
 
     <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="savelink()"></button>
+        <button pButton pRipple label="{{'Admin_Website.cancel' | translate}}" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="{{'Admin_Website.save' | translate}}" icon="pi pi-check" class="p-button-text" (click)="savelink()"></button>
     </ng-template>
 </p-dialog>
