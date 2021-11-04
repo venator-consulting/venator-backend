@@ -5,22 +5,22 @@ const mailHistory = require('../models/emails.model.server');
 
 let mails = [];
 
-module.exports.extract = async function (filePath) {
+module.exports.extract = async function (filePath, orgId, prcId) {
 
     const pstFile = new PSTFile(resolve(filePath));
 
-    processFolder(pstFile.getRootFolder());
+    processFolder(pstFile.getRootFolder(), prcId);
     //  Store mails array in database in transaction
     // console.log(JSON.stringify(mails, null, 3));
-    await mailHistory.getEmailHistory().bulkCreate(mails);
+    await mailHistory.getEmailHistory('email_history_' + orgId).bulkCreate(mails);
 }
 
-function processFolder(folder) {
+function processFolder(folder, prcId) {
     // go through the folders...
     if (folder.hasSubfolders) {
         let childFolders = folder.getSubFolders();
         for (let childFolder of childFolders) {
-            processFolder(childFolder);
+            processFolder(childFolder, prcId);
         }
     }
 
@@ -39,7 +39,8 @@ function processFolder(folder) {
                 messageDeliveryTime: email.messageDeliveryTime,
                 bcc: email.displayBCC,
                 cc: email.displayCC,
-                numberOfAttachments: email.numberOfAttachments
+                numberOfAttachments: email.numberOfAttachments,
+                procedureId: prcId
             });
             email = folder.getNextChild();
         }

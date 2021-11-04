@@ -9,6 +9,7 @@ const sharedRoutes = require("./modules/shared/route/shared.route.server");
 const analysisRoutes = require("./modules/Analysis/route/analysis.route.server");
 const liquidityRoutes = require("./modules/Liquidity/route/liquidity.route.server");
 const websiteRoutes = require("./modules/website/route/website.router");
+const mailHistoryRoutes = require('./modules/MailHistory/route/mails.route.server');
 const Exception = require("./helpers/errorHandlers/Exception");
 
 const cors = require("cors");
@@ -33,6 +34,7 @@ app.use("/api/shared", sharedRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/analysis", analysisRoutes);
 app.use("/api/liquidity", liquidityRoutes);
+app.use("/api/mail-history", mailHistoryRoutes);
 app.use("/api/website", websiteRoutes);
 app.use(Exception.requestDefaultHandler);
 
@@ -40,9 +42,9 @@ app.use("/public", express.static(path.join("public")));
 
 app.use(express.static("front-end/dist/front-end/"));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "front-end/dist/front-end/index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "front-end/dist/front-end/index.html"));
+// });
 
 app.listen(app.get("port"), () => {
   console.log(`the server started at http://localhost:${app.get("port")}/ ...`);

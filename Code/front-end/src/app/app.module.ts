@@ -112,6 +112,7 @@ import { ContactManagementComponent } from './admin/website/contact-management/c
 import { AboutManagementComponent } from './admin/website/about-management/about-management.component';
 import { ServicesManagementComponent } from './admin/website/services-management/services-management.component';
 import { ImportPstComponent } from './admin/import-pst/import-pst.component';
+import { MailHistoryDataComponent } from './shared/mail-history/mail-history-data/mail-history-data.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -177,7 +178,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ContactManagementComponent,
     AboutManagementComponent,
     ServicesManagementComponent,
-    ImportPstComponent
+    ImportPstComponent,
+    MailHistoryDataComponent
   ],
   imports: [
     BrowserModule,

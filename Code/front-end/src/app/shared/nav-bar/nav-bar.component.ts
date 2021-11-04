@@ -305,6 +305,17 @@ export class NavBarComponent implements OnInit {
                   this.sideBarShow = false;
                 },
               },
+              {
+                label: 'Email History ',
+                icon: 'pi pi-envelope',
+                routerLink: ['/dashboard/analysis/mail-history'],
+                disabled: localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
             ],
           },
           {
