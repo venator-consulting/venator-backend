@@ -50,8 +50,8 @@ import { ImportPstComponent } from './admin/import-pst/import-pst.component';
 import { MailHistoryDataComponent } from './shared/mail-history/mail-history-data/mail-history-data.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   {
     path: 'dashboard',
@@ -59,30 +59,30 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       // { path: 'import', component: ImportComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-      {
-        path: 'admin/website/slider',
-        component: SliderManagementComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin'] },
-      },
-      {
-        path: 'admin/website/services',
-        component: ServicesManagementComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin'] },
-      },
-      {
-        path: 'admin/website/about',
-        component: AboutManagementComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin'] },
-      },
-      {
-        path: 'admin/website/contact',
-        component: ContactManagementComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin'] },
-      },
+      // {
+      //   path: 'admin/website/slider',
+      //   component: SliderManagementComponent,
+      //   canActivate: [AuthGuard],
+      //   data: { roles: ['Admin'] },
+      // },
+      // {
+      //   path: 'admin/website/services',
+      //   component: ServicesManagementComponent,
+      //   canActivate: [AuthGuard],
+      //   data: { roles: ['Admin'] },
+      // },
+      // {
+      //   path: 'admin/website/about',
+      //   component: AboutManagementComponent,
+      //   canActivate: [AuthGuard],
+      //   data: { roles: ['Admin'] },
+      // },
+      // {
+      //   path: 'admin/website/contact',
+      //   component: ContactManagementComponent,
+      //   canActivate: [AuthGuard],
+      //   data: { roles: ['Admin'] },
+      // },
       {
         path: 'admin/admin/add',
         component: AdminRegistrationComponent,

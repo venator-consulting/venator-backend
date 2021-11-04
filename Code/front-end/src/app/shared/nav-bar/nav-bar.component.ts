@@ -171,43 +171,43 @@ export class NavBarComponent implements OnInit {
 
             ],
           },
-          {
-            label: 'Website Managment',
-            items: [
-              {
-                label: 'Cover',
-                icon: 'pi pi-image',
-                routerLink: ['/dashboard/admin/website/slider'],
-                command: () => {
-                  this.sideBarShow = false;
-                },
-              },
-              {
-                label: 'Services',
-                icon: 'pi pi-cog',
-                routerLink: ['/dashboard/admin/website/services'],
-                command: () => {
-                  this.sideBarShow = false;
-                },
-              },
-              {
-                label: 'About us',
-                icon: 'pi pi-info-circle',
-                routerLink: ['/dashboard/admin/website/about'],
-                command: () => {
-                  this.sideBarShow = false;
-                },
-              },
-              {
-                label: 'Contact us',
-                icon: 'pi pi-phone',
-                routerLink: ['/dashboard/admin/website/contact'],
-                command: () => {
-                  this.sideBarShow = false;
-                },
-              },
-            ]
-          },
+          // {
+          //   label: 'Website Managment',
+          //   items: [
+          //     {
+          //       label: 'Cover',
+          //       icon: 'pi pi-image',
+          //       routerLink: ['/dashboard/admin/website/slider'],
+          //       command: () => {
+          //         this.sideBarShow = false;
+          //       },
+          //     },
+          //     {
+          //       label: 'Services',
+          //       icon: 'pi pi-cog',
+          //       routerLink: ['/dashboard/admin/website/services'],
+          //       command: () => {
+          //         this.sideBarShow = false;
+          //       },
+          //     },
+          //     {
+          //       label: 'About us',
+          //       icon: 'pi pi-info-circle',
+          //       routerLink: ['/dashboard/admin/website/about'],
+          //       command: () => {
+          //         this.sideBarShow = false;
+          //       },
+          //     },
+          //     {
+          //       label: 'Contact us',
+          //       icon: 'pi pi-phone',
+          //       routerLink: ['/dashboard/admin/website/contact'],
+          //       command: () => {
+          //         this.sideBarShow = false;
+          //       },
+          //     },
+          //   ]
+          // },
           {
             label: 'Dashboard',
             items: [
