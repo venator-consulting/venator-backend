@@ -1,28 +1,21 @@
 const PSTFile = require('pst-extractor').PSTFile;
 
 const resolve = require('path').resolve;
+const mailHistory = require('../models/emails.model.server');
 
-let depth = -1;
-let col = 0;
 let mails = [];
 
-module.exports.extract = function (filePath) {
+module.exports.extract = async function (filePath) {
 
     const pstFile = new PSTFile(resolve(filePath));
 
     processFolder(pstFile.getRootFolder());
     //  Store mails array in database in transaction
-    console.log(JSON.stringify(mails, null, 3));
+    // console.log(JSON.stringify(mails, null, 3));
+    await mailHistory.getEmailHistory().bulkCreate(mails);
 }
 
 function processFolder(folder) {
-    depth++;
-
-    // the root folder doesn't have a display name
-    // if (depth > 0) {
-    //     console.log(getDepth(depth) + folder.displayName);
-    // }
-
     // go through the folders...
     if (folder.hasSubfolders) {
         let childFolders = folder.getSubFolders();
@@ -33,12 +26,8 @@ function processFolder(folder) {
 
     // and now the emails for this folder
     if (folder.contentCount > 0) {
-        // depth++;
         let email = folder.getNextChild();
         while (email != null) {
-            // console.log(getDepth(depth) +
-            //     'Sender: ' + email.senderName +
-            //     ', Subject: ' + email.subject);
             mails.push({
                 email: email.emailAddress,
                 sender: email.senderName,
@@ -54,25 +43,5 @@ function processFolder(folder) {
             });
             email = folder.getNextChild();
         }
-        // depth--;
     }
-    // depth--;
-}
-
-/**
- * Returns a string with visual indication of depth in tree.
- * @param {number} depth
- * @returns {string}
- */
-function getDepth(depth) {
-    let sdepth = '';
-    if (col > 0) {
-        col = 0;
-        sdepth += '\n';
-    }
-    for (let x = 0; x < depth - 1; x++) {
-        sdepth += ' | ';
-    }
-    sdepth += ' |- ';
-    return sdepth;
 }
