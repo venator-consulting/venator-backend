@@ -33,6 +33,7 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pst-extractor": "^1.8.0",
     "randomstring": "^1.1.5",
     "sequelize": "^6.5.0",
     "strip-bom-stream": "^4.0.0",

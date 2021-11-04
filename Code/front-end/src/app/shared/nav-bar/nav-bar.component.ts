@@ -106,6 +106,14 @@ export class NavBarComponent implements OnInit {
                 },
               },
               {
+                label: 'Import PST File',
+                icon: 'pi pi-file',
+                routerLink: ['/dashboard/admin/import-pst'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
                 label: elem.addUser,
                 icon: 'pi pi-user-plus',
                 routerLink: ['/dashboard/admin/admin/add'],

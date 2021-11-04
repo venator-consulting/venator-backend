@@ -46,6 +46,7 @@ import { SliderManagementComponent } from './admin/website/slider/slider-managem
 import { ContactManagementComponent } from './admin/website/contact-management/contact-management.component';
 import { AboutManagementComponent } from './admin/website/about-management/about-management.component';
 import { ServicesManagementComponent } from './admin/website/services-management/services-management.component';
+import { ImportPstComponent } from './admin/import-pst/import-pst.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -120,6 +121,12 @@ const routes: Routes = [
       {
         path: 'admin/import',
         component: ImportComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin'] },
+      },
+      {
+        path: 'admin/import-pst',
+        component: ImportPstComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin'] },
       },

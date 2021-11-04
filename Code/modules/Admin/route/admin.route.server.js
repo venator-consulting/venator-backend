@@ -15,6 +15,8 @@ const accountTypeCtrl = require('../controller/accountType.controler.server');
 const precalcCtrl = require('../controller/precalculated.controller.server');
 const websiteCtrl = require('../controller/website.controller.server');
 
+const pstCtrl = require('../controller/pst.controller.servier');
+
 const multer = require('multer');
 const uploadfiles = multer({
     dest: env.uploadPath
@@ -91,6 +93,14 @@ router
         session: false
     }), authorization.authorize('Admin'), websiteCtrl.saveSocialLinks);
 //#endregion website management
+
+//#region import PST file
+router
+    .route('/pst')
+    .post(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), uploadfiles.single('file'), pstCtrl.importFile);
+//#endregion import PST file
 
 //#region import
 router

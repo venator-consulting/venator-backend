@@ -16,6 +16,10 @@ export class ImportService {
     return this._http.post<any>(this._thisURL + '/header', formdata);
   }
 
+  importPST(formData) {
+    return this._http.post<any>(this._thisURL + '/pst', formData);
+  }
+
   importFile(formData) {
     return this._http.post<any>(this._thisURL + '/import', formData);
   }

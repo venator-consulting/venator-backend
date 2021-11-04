@@ -1,0 +1,51 @@
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+<p-toast></p-toast>
+<div class="p-grid">
+    <div class="p-col-12">
+        <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
+        <div class="p-col-6 p-sm-offset-3">
+            <label class="p-mr-4 fontStyle"> {{'Admin_Import.selectOrganisation' | translate}} </label>
+
+            <p-dropdown [options]="orgs" [(ngModel)]="selectedOrgId"
+                placeholder=" {{'Admin_Import.selectOrganisationPlaceholder' | translate}}" optionLabel="name"
+                optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required
+                (onChange)="orgChangedHandler($event)" [style]="{width:'300px'}">
+            </p-dropdown>
+        </div>
+
+        <div class="p-col-12" *ngIf="selectedOrgId>0">
+            <div class="p-grid">
+
+                <div class="p-col-6 p-sm-offset-3">
+                    <label class="p-mr-6 fontStyle"> {{'Admin_Import.selectProcedure' | translate}} </label>
+                    <p-dropdown [options]="procedures" [(ngModel)]="selectedPrcId"
+                        placeholder="{{'Admin_Import.selectProcedurePlaceholder' | translate}}" optionLabel="name"
+                        optionValue="id" [showClear]="true" [filter]="true" filterBy="name" required
+                        (onChange)="prcChangedHandler($event)" [style]="{width:'300px'}"></p-dropdown>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-col-12" *ngIf="selectedPrcId>0">
+            <div class="p-sm-6 p-lg-3">
+                <!-- maxFileSize="100000000" -->
+                <p-fileUpload name="file" mode="advanced" [showUploadButton]="false" customUpload="true"
+                  (uploadHandler)="UploadHandler($event)" uploadLabel="Set File" [auto]="true"
+                  chooseLabel="{{'Admin_Import.searchLabel' | translate}}"
+                  accept=".pst, text/plain">
+                  <ng-template pTemplate="content">
+    
+                  </ng-template>
+                </p-fileUpload>
+                <span *ngIf="theFile">{{theFile?.name}} - {{ (theFile?.size / 1024) | number: '1.0-2' }} KB</span>
+              </div>
+
+              <button pButton type="button" icon="pi pi-upload" iconPos="left"
+              label="{{'Admin_Import.uploadLabel' | translate}}" (click)="save()"
+              [disabled]="!theFile || waiting"
+              class="p-button-raised p-button-rounded"><i class="pi pi-spinner pi-spin" *ngIf="waiting"></i></button>
+        </div>
+
+    </div>
+</div>

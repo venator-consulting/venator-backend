@@ -111,6 +111,7 @@ import { SliderManagementComponent } from './admin/website/slider/slider-managem
 import { ContactManagementComponent } from './admin/website/contact-management/contact-management.component';
 import { AboutManagementComponent } from './admin/website/about-management/about-management.component';
 import { ServicesManagementComponent } from './admin/website/services-management/services-management.component';
+import { ImportPstComponent } from './admin/import-pst/import-pst.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -175,7 +176,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SliderManagementComponent,
     ContactManagementComponent,
     AboutManagementComponent,
-    ServicesManagementComponent
+    ServicesManagementComponent,
+    ImportPstComponent
   ],
   imports: [
     BrowserModule,
