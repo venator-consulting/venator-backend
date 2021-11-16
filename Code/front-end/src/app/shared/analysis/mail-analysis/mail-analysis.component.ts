@@ -22,12 +22,13 @@ export class MailAnalysisComponent implements OnInit {
   cols: TableColumn[];
   labels: any[];
   RecordsData: any[];
+  wordSenderData: any[];
   criteria: any = {};
 
   items: MenuItem[];
   home: MenuItem;
 
-  constructor(private _mailService: MailHistoryService, private _router : Router) { }
+  constructor(private _mailService: MailHistoryService, private _router: Router) { }
 
   ngOnInit(): void {
     this.orgId = +localStorage.getItem('organisationId');
@@ -63,8 +64,13 @@ export class MailAnalysisComponent implements OnInit {
         align: 'left',
       },
       {
+        header: "Senders' Count",
+        field: 'senderCount',
+        align: 'center',
+      },
+      {
         header: "Emails' Count",
-        field: 'totalCount',
+        field: 'recordsCount',
         align: 'center',
       },
     ];
@@ -78,17 +84,16 @@ export class MailAnalysisComponent implements OnInit {
         this.data = res;
         this.waiting = false;
         this.labels = new Array();
+        this.wordSenderData = new Array();
         this.RecordsData = new Array();
         this.data.forEach((word) => {
-          let totalCount = parseInt(
-            word.totalCount.toString(),
-            10
-          );
-          word.totalCount = isNaN(totalCount)
-            ? word.totalCount
-            : totalCount;
+          let senderCount = parseInt(word.senderCount.toString(), 10);
+          word.senderCount = isNaN(senderCount)
+            ? word.senderCount
+            : senderCount;
           this.labels.push(word.word);
-          this.RecordsData.push(word.totalCount);
+          this.wordSenderData.push(word.senderCount);
+          this.RecordsData.push(word.recordsCount);
         });
 
         this.tempdata = this.data;
@@ -98,7 +103,16 @@ export class MailAnalysisComponent implements OnInit {
           datasets: [
             {
               type: 'bar',
-              label: 'Count of records',
+              label: 'Count of Senders',
+              backgroundColor: '#88FF88',
+              borderColor: '#58dF58',
+              borderWidth: 2,
+              fill: true,
+              data: this.wordSenderData,
+            },
+            {
+              type: 'bar',
+              label: 'Count of mails',
               backgroundColor: '#E5A58B',
               borderColor: '#E5A58B',
               borderWidth: 2,
@@ -160,7 +174,7 @@ export class MailAnalysisComponent implements OnInit {
   goToDetails(row) {
     this._router.navigate([
       '/dashboard/analysis/mail/word/' +
-        row.word,
+      row.word,
     ]);
   }
 

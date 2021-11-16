@@ -16,6 +16,7 @@ export class MailHistory {
 }
 
 export class MailAnalysis {
-    totalCount: number;
+    recordsCount: number;
+    senderCount: number;
     word: number;
 }

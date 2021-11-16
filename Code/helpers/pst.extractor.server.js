@@ -30,7 +30,7 @@ function processFolder(folder, prcId) {
         while (email != null) {
             mails.push({
                 email: email.emailAddress,
-                sender: email.senderName,
+                sender: email.senderEmailAddress,
                 subject: email.subject,
                 body: email.body,
                 bodyHTML: email.bodyHTML,

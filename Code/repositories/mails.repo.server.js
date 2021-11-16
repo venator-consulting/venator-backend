@@ -28,22 +28,28 @@ module.exports.mailAnalysisByWord = async (orgId, prcId, keys) => {
         originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
         originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
         query += `  
-              SELECT
-                      count(p.id) totalCount,
-                      IF(1 = 1,
-                        '${originalKey}',
-                        '${originalKey}') word
-                  from
+            SELECT
+                SUM(pos.totalCount) recordsCount,
+                COUNT(pos.sender) senderCount,
+                IF(1 = 1,
+                    '${originalKey}',
+                    '${originalKey}') word
+            from
+                (SELECT
+                    p.sender ,
+                    count(p.sender) totalCount
+                from
                     email_history_${orgId} p
-                  WHERE
-                      p.procedureId = :procedureId
-                      AND (
-                      UPPER(p.subject) ${key}
-                      OR UPPER(p.body) ${key}
-                      OR UPPER(p.bodyHTML) ${key}
-                      )
-                      GROUP by word
-              `;
+                WHERE
+                    p.procedureId = :procedureId
+                    AND (
+                        UPPER(p.subject) ${key}
+                        OR UPPER(p.body) ${key}
+                        OR UPPER(p.bodyHTML) ${key}
+                        )
+                GROUP by
+                    p.sender) pos
+            `;
         query += index < keys.length - 1 ? " UNION " : "";
     }
 
@@ -54,7 +60,7 @@ module.exports.mailAnalysisByWord = async (orgId, prcId, keys) => {
         type: QueryTypes.SELECT,
     });
     if (result.length && result.length > 0) {
-        result = result.filter((rec) => +rec.totalCount > 0);
+        result = result.filter((rec) => +rec.recordsCount > 0);
     }
     return result;
 };
