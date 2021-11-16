@@ -16,6 +16,8 @@ module.exports.getEmailHistory = function (tableName = 'email_history_') {
         },
         email: { type: DataTypes.STRING(250) },
         sender: { type: DataTypes.STRING(250) },
+        rcvName: { type: DataTypes.STRING(250) },
+        rcvEmail: { type: DataTypes.STRING(250) },
         subject: { type: DataTypes.STRING(250) },
         body: { type: DataTypes.TEXT },
         bodyHTML: { type: DataTypes.TEXT },

@@ -29,8 +29,10 @@ function processFolder(folder, prcId) {
         let email = folder.getNextChild();
         while (email != null) {
             mails.push({
-                email: email.emailAddress,
+                email: email.senderName,
                 sender: email.senderEmailAddress,
+                rcvName: email.receivedByName,
+                rcvEmail: email.receivedByAddress,
                 subject: email.subject,
                 body: email.body,
                 bodyHTML: email.bodyHTML,
@@ -46,3 +48,12 @@ function processFolder(folder, prcId) {
         }
     }
 }
+
+//receivedByName : display name of the messaging user who receives the message
+// sentRepresentingName: display name for the messaging user represented by the sender.
+// sentRepresentingEmailAddress: e-mail address for the messaging user who is represented by the sender.
+// receivedByAddress: e-mail address for the messaging user who receives the message.
+// senderName: message sender's display name.
+// displayTo: list of the display names of the primary (To) message recipients.
+// emailAddress: messaging user's e-mail address..
+// 

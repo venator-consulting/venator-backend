@@ -13,7 +13,7 @@
         <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id"
             styleClass="p-datatable-gridlines" [loading]="waiting" [columns]="cols" responsive="true"
             [scrollable]="true" scrollHeight="350px" [style]="{ width: '100%' }" [reorderableColumns]="true"
-            [frozenColumns]="frozenCols" frozenWidth="5px">
+            [frozenColumns]="frozenCols" frozenWidth="5px" >
             <ng-template pTemplate="caption">
                 <div class="p-grid">
                     <div class="p-col-1">
@@ -88,11 +88,11 @@
               ">
                             {{ row[col.field] | date: "dd.MM.yyyy" }}
                         </span>
-                        <span *ngIf="
+                        <span (mouseover)="hoverOnBody($event, row[col.field])" *ngIf="
                 col.field == 'subject' ||
                 col.field == 'body' ||
                 col.field == 'bodyHTML'
-              " [innerHTML]="row[col.field] | highlight" pTooltip="{{ row[col.field] }}">
+              " [innerHTML]="row[col.field] | highlight" >
                         </span>
                         <span pTooltip="{{ row[col.field] }}" *ngIf="
                 col.field != 'creationTime' &&
@@ -114,3 +114,10 @@
         </p-table>
     </div>
 </div>
+
+
+<p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
+    <ng-template pTemplate>
+        {{body}}
+    </ng-template>
+</p-overlayPanel>

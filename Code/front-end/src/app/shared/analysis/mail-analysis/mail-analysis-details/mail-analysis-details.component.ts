@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem } from 'primeng/api';
@@ -26,6 +26,9 @@ export class MailAnalysisDetailsComponent implements OnInit {
   items: MenuItem[];
   home: MenuItem;
   filtersNo: number = 0;
+
+  body: string;
+  @ViewChild('op') overlayPanel;
 
 
   constructor(private _mailService: MailHistoryService, private _router: Router,
@@ -71,11 +74,13 @@ export class MailAnalysisDetailsComponent implements OnInit {
     ];
 
     this.cols = [
-      { header: 'email', field: 'email' },
+      { header: 'Sender Email', field: 'email' },
       { header: 'sender', field: 'sender' },
+      { header: 'Reveiver Email', field: 'rcvEmail' },
+      { header: 'Reveiver', field: 'rcvName' },
       { header: 'subject', field: 'subject' },
       { header: 'body', field: 'body' },
-      { header: 'bodyHTML', field: 'bodyHTML' },
+      // { header: 'bodyHTML', field: 'bodyHTML'  },
       { header: 'bcc', field: 'bcc' },
       { header: 'cc', field: 'cc' },
       { header: 'creationTime', field: 'creationTime' },
@@ -221,5 +226,13 @@ export class MailAnalysisDetailsComponent implements OnInit {
     }
     this.waiting = false;
   }
+
+
+  hoverOnBody(event, data: string) {
+    debugger;
+    this.body = data;
+    this.overlayPanel.toggle(event);
+  }
+
 
 }
