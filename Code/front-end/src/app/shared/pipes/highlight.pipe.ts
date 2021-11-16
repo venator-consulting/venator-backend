@@ -15,16 +15,18 @@ export class HighlightPipe implements PipeTransform {
   transform(value: string): SafeHtml | null {
     if (!value)
       return null;
-
+    // debugger;
     let temp: string = '';
     this.keywords.forEach(word => {
       const regEx = new RegExp(word, 'ig');
       let wordList = value.split(" ").filter((elem, index) => {
         return regEx.test(elem);
       });
-      wordList.forEach(w => {
-        temp = value.replace(w, `<span class="highlight"><b>${w}</b></span>`);
-      });
+      if (wordList.length > 0)
+        wordList.forEach(w => {
+          temp = value.replace(w, `<span class="highlight"><b>${w}</b></span>`);
+        });
+      else temp = value;
     });
     return this.sanitizer.sanitize(SecurityContext.HTML, temp) || ''
     // return this.sanitizer.bypassSecurityTrustHtml(value);
