@@ -429,6 +429,18 @@
     "export": "Export",
     "save": "Save"
   },
+  "MailAnalysis": {
+    "email": "Email",
+    "sender": "sender",
+    "subject": "subject",
+    "body": "body",
+    "bodyHTML": "bodyHTML",
+    "bcc": "bcc",
+    "cc": "cc",
+    "creationTime": "creationTime",
+    "messageDeliveryTime": "messageDeliveryTime",
+    "numberOfAttachments": "numberOfAttachments"
+  },
   "PaymentAnalysis": {
     "data": " Data",
     "label": "Duedate Analysis",

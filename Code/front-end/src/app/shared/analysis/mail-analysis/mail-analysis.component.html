@@ -1,0 +1,59 @@
+<p-toast></p-toast>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<div >
+    <div class="p-grid" *ngIf="this.basicData">
+      <div class="p-col-12">
+        <div class="card">
+          <p-chart type="bar" [data]="basicData" [options]="basicOptions" height="350px"></p-chart>
+        </div>
+      </div>
+    </div>
+  
+    <div class="p-grid">
+      <div class="p-col-12" *ngIf="prcId > 0">
+        <p-table #dtword [value]="data" [resizableColumns]="true" dataKey="word" styleClass="p-datatable-gridlines"
+          [loading]="waiting" [columns]="cols" responsive="true" [scrollable]="true" scrollHeight="350px"
+          [reorderableColumns]="true">
+          <ng-template pTemplate="colgroup">
+            <colgroup>
+              <col *ngFor="let col of cols" />
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn class="p-text-{{col.align}}"
+                *ngFor="let col of cols">
+                <span pTooltip="{{ col.header | translate }}">
+                  {{ col.header | translate }}
+                </span>
+                <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+              </th>
+              <th>{{ "AmountAnalysis.details" | translate }}</th>
+            </tr>
+            <tr>
+              <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
+                <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{ width: '90%' }"
+                  (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
+                  *ngIf="col.field == 'word'" />
+              </th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{ col.align }}">
+                <span pTooltip="{{ row[col.field] }}">
+                  {{ row[col.field] }}
+                </span>
+              </td>
+              <td>
+                <button type="button" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-warning"
+                  (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>

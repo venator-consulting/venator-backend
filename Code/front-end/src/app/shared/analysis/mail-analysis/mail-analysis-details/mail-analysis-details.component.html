@@ -1,0 +1,116 @@
+<p-toast></p-toast>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+<div class="p-grid">
+    <div class="p-col-12">
+        <h3 class="p-text-center">{{ keyword }}</h3>
+        <!-- <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar> -->
+    </div>
+</div>
+
+<div class="p-grid">
+    <div class="p-col-12">
+        <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
+        <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id"
+            styleClass="p-datatable-gridlines" [loading]="waiting" [columns]="cols" responsive="true"
+            [scrollable]="true" scrollHeight="350px" [style]="{ width: '100%' }" [reorderableColumns]="true"
+            [frozenColumns]="frozenCols" frozenWidth="5px">
+            <ng-template pTemplate="caption">
+                <div class="p-grid">
+                    <div class="p-col-1">
+                        <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
+                            class="p-button-rounded p-button-primary" label="{{ 'TextAnalysis.back' | translate }} "
+                            pTooltip="{{ 'TextAnalysis.back' | translate }} " tooltipPosition="bottom"></button>
+                    </div>
+                    <div class="p-col-4">
+                        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                            class="p-button-warning p-mr-2" pTooltip="{{ 'TextAnalysis.export' | translate }}"
+                            tooltipPosition="bottom"></button>
+                        <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()"
+                            class="p-ml-6 clearFilter" pTooltip="{{ 'Data_Table.clearFilter' | translate }}"
+                            *ngIf="filtersNo > 0" tooltipPosition="bottom"></button>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" [style]="{ width: (col.width ? col.width : 200) + 'px' }" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn
+                        class="p-text-{{col.align}}" *ngFor="let col of columns">
+                        {{ col.header | translate }}
+                        <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+                    </th>
+                </tr>
+                <tr>
+                    <!-- <th></th> -->
+                    <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
+                        <input
+                            *ngIf="col.field != 'textRelevant' && col.field != 'creationTime' && col.field != 'messageDeliveryTime'"
+                            pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{ width: '90%' }"
+                            (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
+                        <p-calendar *ngIf="
+              col.field == 'creationTime' ||
+              col.field == 'messageDeliveryTime'            " [(ngModel)]="criteria[col.field]"
+                            (onSelect)="filterChange($event, col.field)" [monthNavigator]="true" [yearNavigator]="true"
+                            yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy">
+                        </p-calendar>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-columns="columns">
+                <tr>
+                    <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns"
+                        class="p-text-{{ col.align }}">
+                        <span *ngIf="col.field == 'textRelevant'">
+                            <i class="pi pi-star-o" *ngIf="!row.textRelevant"></i>
+                            <i class="pi pi-star" *ngIf="row.textRelevant"></i>
+                        </span>
+                        <!-- <p-cellEditor *ngIf="col.field == 'textRelevantComment'">
+              <ng-template pTemplate="input">
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="row.textRelevantComment"
+                  style="width: 100%; padding: 5px"
+                  (change)="commentChanged(row)"
+                />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ row.textRelevantComment }}
+              </ng-template>
+            </p-cellEditor> -->
+                        <span *ngIf="
+                col.field == 'creationTime' ||
+                col.field == 'messageDeliveryTime'
+              ">
+                            {{ row[col.field] | date: "dd.MM.yyyy" }}
+                        </span>
+                        <span *ngIf="
+                col.field == 'subject' ||
+                col.field == 'body' ||
+                col.field == 'bodyHTML'
+              " [innerHTML]="row[col.field] | highlight" pTooltip="{{ row[col.field] }}">
+                        </span>
+                        <span pTooltip="{{ row[col.field] }}" *ngIf="
+                col.field != 'creationTime' &&
+                col.field != 'messageDeliveryTime' &&
+                col.field != 'subject' &&
+                col.field != 'body' &&
+                col.field != 'bodyHTML' 
+              ">
+                            {{ row[col.field] }}
+                        </span>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="columns.length">No records found</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

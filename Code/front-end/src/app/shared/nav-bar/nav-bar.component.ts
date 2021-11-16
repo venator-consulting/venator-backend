@@ -270,6 +270,17 @@ export class NavBarComponent implements OnInit {
                 },
               },
               {
+                label: 'Email Analysis ',
+                icon: 'pi pi-envelope',
+                routerLink: ['/dashboard/analysis/mail'],
+                // disabled: localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                //   +localStorage.getItem('organisationId') <= 0 ||
+                //   +localStorage.getItem('currentProcedureId') <= 0,
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
                 label: elem.paymentAnalyse,
                 icon: 'pi pi-credit-card',
                 routerLink: ['/dashboard/analysis/payment'],

@@ -12,5 +12,24 @@ router.route("/:orgId/:prcId").get(
     controller.getAll
 );
 
+//#region mail analysis
+router.route("/:orgId/:prcId/mail-analysis").get(
+    passport.authenticate("jwt", {
+      session: false,
+    }),
+    authorization.canDisplayAnalysis(),
+    controller.getMailAnalysis
+  );
+
+  router.route("/:orgId/:prcId/mail-analysis/:word").get(
+    passport.authenticate("jwt", {
+      session: false,
+    }),
+    authorization.canDisplayAnalysis(),
+    controller.getMailDetailsAnalysis
+  );
+  //#endregion mail analysis
+  
+
 
 module.exports = router;

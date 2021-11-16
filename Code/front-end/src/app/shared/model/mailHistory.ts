@@ -14,3 +14,8 @@ export class MailHistory {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export class MailAnalysis {
+    totalCount: number;
+    word: number;
+}

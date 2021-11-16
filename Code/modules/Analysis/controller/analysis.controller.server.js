@@ -9,6 +9,7 @@ const Exception = require("../../../helpers/errorHandlers/Exception");
 const httpStatus = require("../../../models/enums/httpStatus");
 const errors = require('../../../models/enums/errors');
 
+//#region Amount analysis
 module.exports.amountAnalysis = async (req, res) => {
   const result = await postingRepo.amountAnalysis(
     req.params.orgId,
@@ -36,6 +37,21 @@ module.exports.amountAnalysisDetails = async (req, res) => {
   res.status(200).json(result);
 };
 
+module.exports.amountJustRelevant = async (req, res) => {
+  const result = await postingRepo.amountJustRelevant(
+    req.params.orgId,
+    req.params.prcId,
+    req.params.accountNumber
+  );
+  res.status(200).json(result);
+};
+
+module.exports.amountBulkUpdate = async (req, res) => {
+  const result = await postingRepo.amountBulkUpdate(req.params.orgId, req.body);
+  res.status(200).json(result);
+};
+//#endregion Amount analysis
+
 module.exports.getByAccountNumber = async (req, res) => {
   const criteria = req.query;
   const result = await postingRepo.getByAccountNumber(
@@ -47,15 +63,7 @@ module.exports.getByAccountNumber = async (req, res) => {
   res.status(200).json(result);
 };
 
-module.exports.amountJustRelevant = async (req, res) => {
-  const result = await postingRepo.amountJustRelevant(
-    req.params.orgId,
-    req.params.prcId,
-    req.params.accountNumber
-  );
-  res.status(200).json(result);
-};
-
+//#region text analysis
 module.exports.textAnalysis = async (req, res) => {
   let fileKeywords = await nlpHelper.getsynonyms(keywords);
   const result = await postingRepo.textAnalysis(
@@ -147,11 +155,6 @@ module.exports.textAnalysisWordDetails = async (req, res) => {
   res.status(200).json(result);
 };
 
-module.exports.amountBulkUpdate = async (req, res) => {
-  const result = await postingRepo.amountBulkUpdate(req.params.orgId, req.body);
-  res.status(200).json(result);
-};
-
 module.exports.textBulkUpdate = async (req, res) => {
   const result = await postingRepo.textBulkUpdate(req.params.orgId, req.body);
   res.status(200).json(result);
@@ -165,7 +168,10 @@ module.exports.textJustRelevant = async (req, res) => {
   );
   res.status(200).json(result);
 };
+//#endregion text analysis
+ 
 
+//#region Payment analysis
 module.exports.paymentAnalysisDateRange = async (req, res) => {
   const result = await paymentAnalysisRepo.paymentDateRange(
     req.params.orgId,
@@ -303,7 +309,10 @@ module.exports.paymentJustRelevant = async (req, res) => {
   );
   res.status(200).json(result);
 };
+//#endregion Payment analysis
 
+
+//#region duedate analysis 
 module.exports.dueDateAnalysis = async (req, res) => {
   let mindate = req.params.fromDate;
   let maxappdate = req.params.toDate;
@@ -385,7 +394,10 @@ module.exports.dueDateDetailsAnalysis = async (req, res) => {
     }
   );
 };
+//#endregion duedate analysis
 
+
+//#region Creditor analysis
 module.exports.creditorAnalysis = async (req, res) => {
   const criteria = req.query;
   let fileKeywords = await nlpHelper.getsynonyms(keywords);
@@ -418,3 +430,4 @@ module.exports.creditorAnalysisDetails = async (req, res) => {
   );
   res.status(200).json(result);
 };
+//#endregion creditor analysis
