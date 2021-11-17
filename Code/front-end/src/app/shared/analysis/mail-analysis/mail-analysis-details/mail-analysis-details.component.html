@@ -88,7 +88,7 @@
               ">
                             {{ row[col.field] | date: "dd.MM.yyyy" }}
                         </span>
-                        <span (mouseover)="hoverOnBody($event, row[col.field])" *ngIf="
+                        <span (click)="hoverOnBody($event, row[col.field])" *ngIf="
                 col.field == 'subject' ||
                 col.field == 'body' ||
                 col.field == 'bodyHTML'
@@ -99,11 +99,17 @@
                 col.field != 'messageDeliveryTime' &&
                 col.field != 'subject' &&
                 col.field != 'body' &&
-                col.field != 'bodyHTML' 
+                col.field != 'bodyHTML' &&
+                col.field != 'actions' 
               ">
                             {{ row[col.field] }}
                         </span>
+                        <span *ngIf="col.field == 'actions'">
+                            <button type="button" pButton pRipple icon="pi pi-files" (click)="attachDetailes(row)"
+                            class="p-button-rounded p-button-primary" label="Attachments"
+                            pTooltip="Attachments" tooltipPosition="bottom"></button></span>
                     </td>
+                    
                 </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns>
@@ -115,9 +121,16 @@
     </div>
 </div>
 
+<p-dialog header="Details" [(visible)]="displayDialog" [style]="{width: '100%', 'overflow-wrap': 'anywhere'}">
+    {{body}}
+</p-dialog>
 
+<p-dialog header="Details" [(visible)]="displayAttachDialog" [style]="{width: '100%', 'overflow-wrap': 'anywhere'}">
+    {{body}}
+</p-dialog>
+<!-- 
 <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px', 'overflow-wrap': 'anywhere'}">
     <ng-template pTemplate>
         {{body}}
     </ng-template>
-</p-overlayPanel>
+</p-overlayPanel> -->

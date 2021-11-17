@@ -13,10 +13,18 @@ export class MailHistory {
     procedureId: number;
     createdAt: Date;
     updatedAt: Date;
+    senderRelevant: boolean;
+    senderComment: string;
 }
 
 export class MailAnalysis {
     recordsCount: number;
     senderCount: number;
     word: number;
+}
+
+export class MailAnalysisBySender {
+    email: string;
+    sender: string;
+    totlaCount: number;
 }

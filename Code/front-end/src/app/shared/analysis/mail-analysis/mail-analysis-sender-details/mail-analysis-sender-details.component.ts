@@ -1,24 +1,25 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { MailHistory } from 'src/app/shared/model/mailHistory';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import { MailHistoryService } from 'src/app/shared/service/mail-history.service';
 import * as FileSaver from 'file-saver';
+import { ExportDataService } from 'src/app/shared/service/export-data.service';
 
 @Component({
-  selector: 'app-mail-analysis-details',
-  templateUrl: './mail-analysis-details.component.html',
-  styleUrls: ['./mail-analysis-details.component.sass']
+  selector: 'app-mail-analysis-sender-details',
+  templateUrl: './mail-analysis-sender-details.component.html',
+  styleUrls: ['./mail-analysis-sender-details.component.sass']
 })
-export class MailAnalysisDetailsComponent implements OnInit {
+export class MailAnalysisSenderDetailsComponent implements OnInit {
 
   orgId: number;
   prcId: number;
   waiting: boolean = true;
   data: MailHistory[] = new Array();
-  keyword: string;
+  email: string;
   cols: TableColumn[];
   frozenCols: TableColumn[];
   tempData: any[];
@@ -26,21 +27,32 @@ export class MailAnalysisDetailsComponent implements OnInit {
   items: MenuItem[];
   home: MenuItem;
   filtersNo: number = 0;
+  selected: MailHistory[] = new Array();
 
   body: string;
   displayDialog: boolean = false;
   displayAttachDialog: boolean = false;
-  // @ViewChild('op') overlayPanel;
 
+  pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
+  backCriteria: any = {};
+  filtersBackNo: number = 0;
+  allRecordData: MailHistory[];
+  totalCount: number;
+  displayedDataCount: number;
+  maxPageNr: number;
+  limit: number = 25;
+  pageNr: number = 1;
+  detailsOptions: { name: string; value: number }[];
+  detailsOption: number = 1;
 
   constructor(private _mailService: MailHistoryService, private _router: Router,
-    private _translateService: TranslateService,
-    private _route: ActivatedRoute) { }
+    private _translateService: TranslateService, private _exportDataService: ExportDataService,
+    private _route: ActivatedRoute, private _messageService: MessageService) { }
 
   ngOnInit(): void {
     this.items = [{
       label: 'Email Analysis',
-      routerLink: '/dashboard/analysis/mail/by-word',
+      routerLink: '/dashboard/analysis/mail',
       routerLinkActiveOptions: { exact: true },
     },
     {
@@ -58,21 +70,27 @@ export class MailAnalysisDetailsComponent implements OnInit {
 
     this.orgId = this.orgId ? this.orgId : +localStorage.getItem('organisationId');
     this.prcId = this.prcId ? this.prcId : +localStorage.getItem('currentProcedureId');
-    this.keyword = this._route.snapshot.paramMap.get('key');
+    this.email = this._route.snapshot.paramMap.get('mail');
 
+    this.detailsOptions = [
+      { name: 'Sys-Relevants', value: 1 },
+      { name: 'Marked', value: 2 },
+      { name: 'All', value: 3 },
+    ];
+    
     this.frozenCols = [
-      // {
-      //   header: '',
-      //   field: 'textRelevant',
-      //   width: '6',
-      //   align: 'center'
-      // },
-      // {
-      //   header: 'Comment',
-      //   field: 'textRelevantComment',
-      //   width: '35',
-      //   align: 'left'
-      // }
+      {
+        header: '',
+        field: 'senderRelevant',
+        width: '6',
+        align: 'center'
+      },
+      {
+        header: 'Comment',
+        field: 'senderComment',
+        width: '35',
+        align: 'left'
+      }
     ];
 
     this.cols = [
@@ -95,7 +113,7 @@ export class MailAnalysisDetailsComponent implements OnInit {
   }
 
   getData() {
-    this._mailService.getMailDetailsAnalysisWord(this.orgId, this.prcId, this.keyword)
+    this._mailService.getMailDetailsAnalysisSender(this.orgId, this.prcId, this.email)
       .subscribe(res => {
         this.data = res;
         this.waiting = false;
@@ -104,7 +122,7 @@ export class MailAnalysisDetailsComponent implements OnInit {
   }
 
   goBack() {
-    this._router.navigate(['/dashboard/analysis/mail/by-word']);
+    this._router.navigate(['/dashboard/analysis/mail']);
   }
 
 
@@ -154,9 +172,9 @@ export class MailAnalysisDetailsComponent implements OnInit {
 
     import("xlsx").then(xlsx => {
       const worksheet = xlsx.utils.json_to_sheet(translatedData);
-      const workbook = { Sheets: { 'text_analysis': worksheet }, SheetNames: ['text_analysis'] };
+      const workbook = { Sheets: { 'mail_analysis': worksheet }, SheetNames: ['mail_analysis'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-      this.saveAsExcelFile(excelBuffer, "text_analysis");
+      this.saveAsExcelFile(excelBuffer, "mail_analysis");
     });
   }
 
@@ -241,5 +259,203 @@ export class MailAnalysisDetailsComponent implements OnInit {
     this.displayAttachDialog = true;
   }
 
+
+  selectRow(row: MailHistory): void {
+    const index = this.selected.map((item) => item.id).indexOf(row.id);
+    if (row.senderRelevant) {
+      row.senderRelevant = false;
+      row.senderComment = '';
+      if (index == -1) {
+        this.selected.push(row);
+      } else {
+        // update the old one
+        this.selected[index]['senderRelevant'] = false;
+        this.selected[index]['senderComment'] = '';
+      }
+    } else {
+      row.senderRelevant = true;
+      if (index == -1) {
+        this.selected.push(row);
+      } else {
+        // update the old one
+        this.selected[index]['senderRelevant'] = true;
+      }
+    }
+  }
+
+  commentChanged(row: MailHistory): void {
+    const index = this.selected.map((item) => item.id).indexOf(row.id);
+    row.senderRelevant = true;
+    if (index == -1) {
+      this.selected.push(row);
+    } else {
+      // update the old one
+      this.selected[index]['senderRelevant'] = true;
+      this.selected[index]['senderComment'] = row.senderComment;
+    }
+  }
+
+  saveRelevant() {
+    console.log(this.selected);
+    this._mailService
+      .setRelevantMailAnalysis(this.orgId, this.prcId, this.email, this.selected)
+      .subscribe(
+        (res) => {
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: 'records set as relevant successfully!',
+          });
+        },
+        (er) => {
+          this.waiting = false;
+        }
+      );
+  }
+
+  changeData(option: number): void {
+    switch (option) {
+      case 1:
+        this.getData();
+        break;
+      case 2:
+        this.getUserRelevant();
+        break;
+      case 3:
+        // this.getAllBySender();
+        break;
+      default:
+        this.getData();
+        break;
+    }
+  }
+
+  getUserRelevant() {
+    this.waiting = true;
+    this._mailService
+      .getBySenderDetailsJustRelevant(this.orgId, this.prcId, this.email)
+      .subscribe(
+        (res) => {
+          this.data = res;
+          this.tempData = res;
+          this.waiting = false;
+        },
+        (er) => {
+          this.waiting = false;
+        }
+      );
+  }
+
+  getAllBySender() {
+    this.waiting = true;
+    for (const key in this.backCriteria) {
+      if (!this.backCriteria[key] && key != 'offset') {
+        delete this.backCriteria[key];
+      }
+    }
+    this.filtersNo = Object.keys(this.backCriteria).length - 4;
+    this._mailService
+      .getBySenderDetailsAll(this.orgId, this.prcId, this.email, this.backCriteria)
+      .subscribe(
+        (res) => {
+          this.allRecordData = res.rows;
+          this.totalCount = res.count;
+          this.displayedDataCount = this.allRecordData.length;
+          this.maxPageNr = Math.ceil(this.totalCount / this.limit);
+          this.waiting = false;
+        },
+        (er) => {
+          this.waiting = false;
+        }
+      );
+  }
+
+  sort(event) {
+    this.backCriteria.orderBy = event.sortField ? event.sortField : 'id';
+    this.backCriteria.sortOrder = event.sortOrder;
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    this.getAllBySender();
+  }
+
+  // export excel from back-end for all table
+  exportXLSX() {
+    this.waiting = true;
+    const lang = localStorage.getItem('lang');
+    let criteriaWithLang = { ...this.backCriteria };
+    criteriaWithLang['lang'] = lang;
+    criteriaWithLang['email'] = this.email;
+    criteriaWithLang['procedureId'] = this.prcId;
+    // debugger;
+    this._exportDataService
+      .exportMailXLSX('email_history', this.orgId, this.prcId, criteriaWithLang)
+      .subscribe(
+        (res) => {
+          this.waiting = false;
+          this.saveAsExcelFile(res, 'Text_details');
+          // window.open(url.toString(), '_blank');
+        },
+        (err) => { this.waiting = false; }
+      );
+  }
+
+  // for pagination starts
+
+  filterChangeBack(query, colName): void {
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    this.getAllBySender();
+  }
+
+  limitChange(e) {
+    this.limit = e.value;
+    this.backCriteria.offset = 0;
+    this.backCriteria.limit = this.limit;
+    this.pageNr = 1;
+    this.getAllBySender();
+  }
+
+  firstPage() {
+    this.pageNr = 1;
+    this.backCriteria.offset = 0;
+    this.getAllBySender();
+  }
+
+  nextPage() {
+    ++this.pageNr;
+    if (this.pageNr > this.maxPageNr) return;
+    this.backCriteria.offset += +this.limit;
+
+    this.getAllBySender();
+  }
+
+  lastPage() {
+    this.pageNr = this.maxPageNr;
+    this.backCriteria.offset = (this.pageNr - 1) * +this.limit;
+    this.getAllBySender();
+  }
+
+  previousPage() {
+    --this.pageNr;
+    if (this.pageNr <= 0) return;
+    this.backCriteria.offset -= +this.limit;
+    this.getAllBySender();
+  }
+
+  pageNrChange(value) {
+    this.pageNr = (value && value.trim()) ? value : 1;
+    this.backCriteria.offset = (this.pageNr - 1) * this.limit;
+    this.getAllBySender();
+  }
+
+  clearBackFilter() {
+    this.backCriteria = {
+      limit: this.limit,
+      offset: 0,
+    };
+    this.pageNr = 1;
+    this.getAllBySender();
+  }
 
 }

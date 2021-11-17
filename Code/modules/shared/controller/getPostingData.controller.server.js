@@ -20,6 +20,12 @@ module.exports.exportAsExcel = async (req, res) => {
   );
 };
 
+module.exports.exportMailsAsExcel = async (req, res) => {
+  await exportHelper.exportMailFile(req.params.tableName, req.params.OrganisationId, req.params.ProcedureId, req.query, (fileUrl) => {
+    res.download(fileUrl);
+  });
+};
+
 module.exports.susaDateRange = async (req, res) => {
   const result = await postngRepo.susaDateRange(
     req.params.orgId,

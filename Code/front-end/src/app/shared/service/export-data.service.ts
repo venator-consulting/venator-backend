@@ -18,6 +18,10 @@ export class ExportDataService {
     return this._http.get<Blob>(this._thisURL + '/export/' + tableName + '/' + OrganisationId + '/' + ProcedureId, { params: criteria, responseType: 'blob' as 'json' })
   }
 
+  exportMailXLSX(tableName, OrganisationId, ProcedureId, criteria: any) {
+    return this._http.get<Blob>(this._thisURL + '/export-mail/' + tableName + '/' + OrganisationId + '/' + ProcedureId, { params: criteria, responseType: 'blob' as 'json' })
+  }
+
   exportPDF(data) {
     return this._http.get(this._thisURL + '/exportPDF/' + data);
 

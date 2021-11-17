@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MailAnalysis, MailHistory } from '../model/mailHistory';
+import { MailAnalysis, MailAnalysisBySender, MailHistory } from '../model/mailHistory';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +17,32 @@ export class MailHistoryService {
     return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId);
   }
 
-  getMailAnalysis(orgId: number, prcId: number): Observable<MailAnalysis[]> {
-    return this._http.get<MailAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis');
+  getMailAnalysisWrod(orgId: number, prcId: number): Observable<MailAnalysis[]> {
+    return this._http.get<MailAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/word');
   }
-//word
 
-getMailDetailsAnalysis(orgId: number, prcId: number, word: string): Observable<MailHistory[]> {
-  return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/' + word);
-}
+  getMailAnalysisSender(orgId: number, prcId: number): Observable<MailAnalysisBySender[]> {
+    return this._http.get<MailAnalysisBySender[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/sender');
+  }
+
+  getMailDetailsAnalysisWord(orgId: number, prcId: number, word: string): Observable<MailHistory[]> {
+    return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/word/' + word);
+  }
+
+  getMailDetailsAnalysisSender(orgId: number, prcId: number, mail: string): Observable<MailHistory[]> {
+    return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/sender/' + mail);
+  }
+
+  getBySenderDetailsJustRelevant(orgId: number, prcId: number, mail: string): Observable<MailHistory[]> {
+    return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/details/' + mail + '/relevant');
+  }
+
+  getBySenderDetailsAll(orgId: number, prcId: number, mail: string, criteria: any): Observable<{ count: number, rows: MailHistory[] }> {
+    return this._http.get<{ count: number, rows: MailHistory[] }>(this._thisURL + orgId + '/' + prcId + '/details/' + mail, { params: criteria });
+  }
+
+  setRelevantMailAnalysis(orgId: number, prcId: number, mail: string, records: MailHistory[]): Observable<MailHistory[]> {
+    return this._http.put<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/sender/' + mail, records);
+  }
 
 }

@@ -113,3 +113,83 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
         logger.info(`${new Date()}: ${error.message}`);
     }
 };
+
+
+module.exports.exportMailFile = async (tableName = 'email_history_', organisationId = 9, procedureId = 1, criteria, cb) => {
+    try {
+
+        const options = {
+            filename: './public/Venator_Consuting_Exported_file_' + tableName + '_' + organisationId + '_' + procedureId + '.xlsx',
+            useStyles: true,
+            useSharedStrings: false
+        };
+        const workbook = new Excel.stream.xlsx.WorkbookWriter(options);
+
+        workbook.creator = 'Venator Consulting';
+        workbook.lastModifiedBy = 'Venator Consulting';
+        workbook.created = new Date();
+        workbook.modified = new Date();
+        workbook.lastPrinted = new Date();
+
+        let lang = 'de';
+
+        if (criteria && criteria.lang?.trim() && (criteria.lang == 'de' || criteria.lang == 'en')) {
+            lang = criteria.lang;
+        }
+        delete criteria.lang;
+
+        const worksheet = workbook.addWorksheet(tableName);
+
+        worksheet.columns = columns[tableName][lang];
+
+        let i = 0;
+
+        let query = 'SELECT * FROM email_history_' + organisationId + ' t WHERE t.procedureId = ' + procedureId;
+
+        if (criteria) {
+            delete criteria.limit;
+            delete criteria.offset;
+            delete criteria.OrganisationId;
+            delete criteria.procedureId;
+            delete criteria.orderBy;
+            delete criteria.sortOrder;
+            for (const key in criteria) {
+                if (Object.hasOwnProperty.call(criteria, key)) {
+                    const element = criteria[key];
+                    query += element.length > 2 ? ` AND ${key} like '%${element}%'` : ` AND ${key} = '${element}'`
+                }
+            }
+        }
+
+        const str = connection.query(query).stream();
+
+        str.on('data', (row) => {
+            i++;
+            if (i % env.bulkInsertSize === 0) {
+                const used = process.memoryUsage().heapUsed / 1024 / 1024;
+                console.log(`${new Date()}:The Export script uses approximately: ${Math.round(used * 100) / 100} MB`);
+                logger.info(`${new Date()}:The Export script uses approximately: ${Math.round(used * 100) / 100} MB`);
+            }
+            for (const key in row) {
+                if (Object.hasOwnProperty.call(row, key)) {
+                    if (row[key] && (row[key] instanceof Date) && (key == 'creationTime' || key == 'messageDeliveryTime')) {
+                        row[key] = row[key].toLocaleDateString('de-DE', {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                        });
+                    }
+                }
+            }
+            worksheet.addRow(row, 'i+').commit();
+        });
+
+        str.on('end', async () => {
+            await workbook.commit();
+            cb('./public/Venator_Consuting_Exported_file_' + tableName + '_' + organisationId + '_' + procedureId + '.xlsx');
+        });
+    } catch (error) {
+        console.log(`${new Date()}: ${error.message}`);
+        logger.info(`${new Date()}: ${error.message}`);
+    }
+};

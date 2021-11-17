@@ -63,8 +63,14 @@ router
     .route('/export/:tableName/:OrganisationId/:ProcedureId')
     .get(passport.authenticate('jwt', {
         session: false
-    }), 
-    getDataCtrl.exportAsExcel);
+    }),
+        getDataCtrl.exportAsExcel);
+
+router
+    .route('/export-mail/:tableName/:OrganisationId/:ProcedureId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), getDataCtrl.exportMailsAsExcel);
 
 router
     .route('/susa/defaultDate/:orgId/:prcId')

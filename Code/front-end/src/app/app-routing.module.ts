@@ -50,6 +50,7 @@ import { ImportPstComponent } from './admin/import-pst/import-pst.component';
 import { MailHistoryDataComponent } from './shared/mail-history/mail-history-data/mail-history-data.component';
 import { MailAnalysisComponent } from './shared/analysis/mail-analysis/mail-analysis.component';
 import { MailAnalysisDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-details/mail-analysis-details.component';
+import { MailAnalysisSenderDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-sender-details/mail-analysis-sender-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -244,8 +245,20 @@ const routes: Routes = [
         data: { roles: ['Admin', 'Manager', 'User'] },
       },
       {
+        path: 'analysis/mail/:by-word',
+        component: MailAnalysisComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin', 'Manager', 'User'] },
+      },
+      {
         path: 'analysis/mail/word/:key',
         component: MailAnalysisDetailsComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin', 'Manager', 'User'] },
+      },
+      {
+        path: 'analysis/mail/sender/:mail',
+        component: MailAnalysisSenderDetailsComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
       },

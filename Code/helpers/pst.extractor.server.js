@@ -29,8 +29,8 @@ function processFolder(folder, prcId) {
         let email = folder.getNextChild();
         while (email != null) {
             mails.push({
-                email: email.senderName,
-                sender: email.senderEmailAddress,
+                email: email.senderEmailAddress,
+                sender: email.senderName,
                 rcvName: email.receivedByName,
                 rcvEmail: email.receivedByAddress,
                 subject: email.subject,
