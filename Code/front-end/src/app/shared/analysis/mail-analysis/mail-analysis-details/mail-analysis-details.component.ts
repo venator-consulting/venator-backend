@@ -229,7 +229,7 @@ export class MailAnalysisDetailsComponent implements OnInit {
 
 
   hoverOnBody(event, data: string) {
-    debugger;
+    // debugger;
     this.body = data;
     this.overlayPanel.toggle(event);
   }
