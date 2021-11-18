@@ -192,11 +192,14 @@ storeDataByWord = async (orgId, prcId, keywords, dateRanges, step) => {
     }
     query = query.slice(0, -6);
     // console.log(query);
-    const c = connection.getConnection();
-    const result = await c.execute(query);
+    try {
+      const c = connection.getConnection();
+      const result = await c.execute(query);
 
-    c.end();
-    // await connection.getConnection().execute(query);
+      c.end();
+    } catch (error) {
+      throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+    }
     //#endregion insert data
   }
   // set as calculated in procedure
@@ -250,12 +253,15 @@ storeDataByAccount = async (orgId, prcId, keys, dateRanges, step) => {
     query += " UNION ";
   }
   query = query.slice(0, -6);
-  let result = await connection.getConnection().execute(query);
-  await Procedure.getProcedures().update({ text_account: true }, {
-    where: {
-      id: prcId,
-    },
-  });
+  let result;
+  try {
+    result = await connection.getConnection().execute(query);
+    await Procedure.getProcedures().update({ text_account: true }, {
+      where: { id: prcId, },
+    });
+  } catch (err) {
+    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  }
   return result;
 };
 
@@ -273,12 +279,15 @@ module.exports.storeAmountData = async (orgId, prcId) => {
                                 AND UPPER(p.documentTypeNewName) = 'ZAHLUNG' 
                                 AND p.balance = ROUND(p.balance, -2)
                                 AND balance >= 100 `;
-  let result = await connection.getConnection().execute(query);
-  await Procedure.getProcedures().update({ amount: true }, {
-    where: {
-      id: prcId,
-    },
-  });
+  let result;
+  try {
+    result = await connection.getConnection().execute(query);
+    await Procedure.getProcedures().update({ amount: true }, {
+      where: { id: prcId, },
+    });
+  } catch (err) {
+    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  }
   return result;
 };
 
@@ -466,12 +475,17 @@ module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
 
   query += ")";
   query += "GROUP BY p.accountNumber , p.accountName ";
-  let result = await connection.getConnection().execute(query);
-  await Procedure.getProcedures().update({ credit: true }, {
-    where: {
-      id: prcId,
-    },
-  });
+  let result;
+  try {
+    result = await connection.getConnection().execute(query);
+    await Procedure.getProcedures().update({ credit: true }, {
+      where: {
+        id: prcId,
+      },
+    });
+  } catch (error) {
+    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  }
   return result;
 };
 
@@ -534,13 +548,15 @@ module.exports.storePaymentAnalysis = async (orgId, prcId) => {
           (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
       AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
           OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG')`;
-
-  let result = await connection.getConnection().execute(query);
-  await Procedure.getProcedures().update({ payment: true }, {
-    where: {
-      id: prcId,
-    },
-  });
+  let result;
+  try {
+    result = await connection.getConnection().execute(query);
+    await Procedure.getProcedures().update({ payment: true }, {
+      where: { id: prcId, },
+    });
+  } catch (error) {
+    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  }
   return result;
 };
 
@@ -565,12 +581,14 @@ module.exports.storeDueDateAnalysis = async (orgId, prcId) => {
           (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
       AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
       ORDER BY pos.dueDate`;
-
-  let result = await connection.getConnection().execute(query);
-  await Procedure.getProcedures().update({ due_date: true }, {
-    where: {
-      id: prcId,
-    },
-  });
+  let result;
+  try {
+    result = await connection.getConnection().execute(query);
+    await Procedure.getProcedures().update({ due_date: true }, {
+      where: { id: prcId, },
+    });
+  } catch (error) {
+    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  }
   return result;
 };

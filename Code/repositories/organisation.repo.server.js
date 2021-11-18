@@ -9,6 +9,7 @@ const creditor_analysis = require("../models/creditorAnalysis.model");
 const payment_analysis = require("../models/payment.model.server");
 const due_date_analysis = require("../models/dueDate.model.server");
 const mailHistory = require('../models/emails.model.server');
+const emailAttachment = require('../models/emailAttachment.model.server');
 const { Op, QueryTypes } = require("sequelize");
 const config = require("../config/environment");
 
@@ -72,6 +73,8 @@ module.exports.insert = async (org) => {
   await payment_analysis.syncPayment("payment_analysis_" + result.dataValues.id);
   await due_date_analysis.syncDueDate("due_date_analysis_" + result.dataValues.id);
   await mailHistory.syncEmailHistory("email_history_" + result.dataValues.id);
+  await emailAttachment.syncEmailAttachment('email_attachment_' + result.dataValues.id);
+
   const connection = require("../config/mysql.config");
   // partition table after create
   let query = `ALTER  table posting_${result.dataValues.id} PARTITION BY HASH(procedureId) PARTITIONS ${config.partitionCount}`;

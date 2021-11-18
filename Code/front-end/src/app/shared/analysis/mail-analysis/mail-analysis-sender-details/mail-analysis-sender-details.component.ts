@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem, MessageService } from 'primeng/api';
-import { MailHistory } from 'src/app/shared/model/mailHistory';
+import { Attachment, MailHistory } from 'src/app/shared/model/mailHistory';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import { MailHistoryService } from 'src/app/shared/service/mail-history.service';
 import * as FileSaver from 'file-saver';
@@ -44,6 +44,7 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
   pageNr: number = 1;
   detailsOptions: { name: string; value: number }[];
   detailsOption: number = 1;
+  attachments: Attachment[] = new Array();
 
   constructor(private _mailService: MailHistoryService, private _router: Router,
     private _translateService: TranslateService, private _exportDataService: ExportDataService,
@@ -77,7 +78,7 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
       { name: 'Marked', value: 2 },
       { name: 'All', value: 3 },
     ];
-    
+
     this.frozenCols = [
       {
         header: '',
@@ -174,18 +175,18 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
       const worksheet = xlsx.utils.json_to_sheet(translatedData);
       const workbook = { Sheets: { 'mail_analysis': worksheet }, SheetNames: ['mail_analysis'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-      this.saveAsExcelFile(excelBuffer, "mail_analysis");
+      this.saveAsExcelFile(excelBuffer, "mail_analysis", null);
     });
   }
 
-  saveAsExcelFile(buffer: any, fileName: string): void {
-    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    let EXCEL_EXTENSION = '.xlsx';
+  saveAsExcelFile(buffer: any, fileName: string, type: string): void {
+    let EXCEL_TYPE = type ?? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    // let EXCEL_EXTENSION = '.xlsx';
     const d: Blob = new Blob([buffer], {
       type: EXCEL_TYPE
     });
     // FileSaver.saveAs(file);
-    FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() );
   }
 
   clearFilter() {
@@ -255,8 +256,26 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
     // this.overlayPanel.toggle(event);
   }
 
+
   attachDetailes(row: MailHistory) {
-    this.displayAttachDialog = true;
+    debugger;
+    this.waiting = true;
+    this._mailService
+      .getAttachments(this.orgId, this.prcId, row.id)
+      .subscribe(res => {
+        this.attachments = res;
+        this.waiting = false;
+        this.displayAttachDialog = true;
+      }, er => this.waiting = false);
+  }
+
+  downloadAttach(attatch: Attachment) {
+    this._mailService
+      .downloadAttachment(this.orgId, this.prcId, attatch.pstFilename)
+      .subscribe(res => {
+        this.waiting = false;
+        this.saveAsExcelFile(res, attatch.originalName, attatch.mimeTag);
+      });
   }
 
 
@@ -393,7 +412,7 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
       .subscribe(
         (res) => {
           this.waiting = false;
-          this.saveAsExcelFile(res, 'Text_details');
+          this.saveAsExcelFile(res, 'Text_details', null);
           // window.open(url.toString(), '_blank');
         },
         (err) => { this.waiting = false; }
@@ -457,5 +476,6 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
     this.pageNr = 1;
     this.getAllBySender();
   }
+
 
 }

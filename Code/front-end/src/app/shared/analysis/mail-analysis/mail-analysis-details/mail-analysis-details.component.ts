@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem } from 'primeng/api';
-import { MailHistory } from 'src/app/shared/model/mailHistory';
+import { Attachment, MailHistory } from 'src/app/shared/model/mailHistory';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import { MailHistoryService } from 'src/app/shared/service/mail-history.service';
 import * as FileSaver from 'file-saver';
@@ -30,6 +30,7 @@ export class MailAnalysisDetailsComponent implements OnInit {
   body: string;
   displayDialog: boolean = false;
   displayAttachDialog: boolean = false;
+  attachments: Attachment[] = new Array();
   // @ViewChild('op') overlayPanel;
 
 
@@ -238,8 +239,24 @@ export class MailAnalysisDetailsComponent implements OnInit {
   }
 
   attachDetailes(row: MailHistory) {
-    this.displayAttachDialog = true;
+    debugger;
+    this.waiting = true;
+    this._mailService
+      .getAttachments(this.orgId, this.prcId, row.id)
+      .subscribe(res => {
+        this.attachments = res;
+        this.waiting = false;
+        this.displayAttachDialog = true;
+      }, er => this.waiting = false);
   }
 
+  downloadAttach(attach: Attachment) {
+    this._mailService
+      .downloadAttachment(this.orgId, this.prcId, attach.pstFilename)
+      .subscribe(res => {
+        this.waiting = false;
+        this.saveAsExcelFile(res, attach.originalName);
+      });
+  }
 
 }

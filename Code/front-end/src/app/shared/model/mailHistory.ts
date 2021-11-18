@@ -28,3 +28,13 @@ export class MailAnalysisBySender {
     sender: string;
     totlaCount: number;
 }
+
+export class Attachment {
+    id: number;
+    size: number;
+    creationTime: Date;
+    mimeTag: string;
+    pstFilename: string;
+    emailHistoryId: string;
+    originalName: string;
+}

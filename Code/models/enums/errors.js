@@ -15,5 +15,6 @@ module.exports = {
     no_application_date: 'no_application_date',
     no_due_date: 'no_due_date',
     MaxDate_must_be_bigger_than_MinDate: 'MaxDate_must_be_bigger_than_MinDate',
-    PROCEDURE_NOT_FOUND: 'PROCEDURE_NOT_FOUND'
+    PROCEDURE_NOT_FOUND: 'PROCEDURE_NOT_FOUND',
+    SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE: 'SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE'
 };

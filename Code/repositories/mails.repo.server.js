@@ -1,4 +1,5 @@
 const MailHistory = require('../models/emails.model.server');
+const MailAttachment = require('../models/emailAttachment.model.server');
 const Exception = require("../helpers/errorHandlers/Exception");
 const httpStatus = require("../models/enums/httpStatus");
 const errors = require('../models/enums/errors');
@@ -6,6 +7,7 @@ const Sequelize = require("../config/sequelize.config");
 const sequelize = Sequelize.getSequelize();
 const { Op, QueryTypes } = require("sequelize");
 const config = require("../config/environment");
+const { organisation_id_is_required } = require('../models/enums/errors');
 
 module.exports.fetchAll = async (orgId, prcId) => {
     return await MailHistory.getEmailHistory('email_history_' + orgId).findAll({
@@ -237,3 +239,15 @@ module.exports.getBySender = async (orgId, prcId, mail, criteria) => {
     });
     return result;
 };
+
+module.exports.getAttachments = async (orgId, prcId, mailId) => {
+    if (isNaN(orgId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+    if (isNaN(prcId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+    return await MailAttachment
+        .getEmailAttachment('email_attachment_' + orgId)
+        .findAll({
+            where: { emailHistoryId: mailId }
+        });
+}

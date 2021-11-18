@@ -14,6 +14,20 @@ router.route("/:orgId/:prcId").get(
 
 //#region mail analysis
 
+router.route("/:orgId/:prcId/download/:attachments/attachments").get(passport.authenticate("jwt", {
+  session: false,
+}),
+  authorization.canDisplayAnalysis(),
+  controller.downloadAttachment);
+
+router.route("/:orgId/:prcId/details/:id/attachments").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  controller.getAttachments);
+
+
 router.route("/:orgId/:prcId/details/:mail").get(
   passport.authenticate("jwt", {
     session: false,

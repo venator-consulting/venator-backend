@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MailAnalysis, MailAnalysisBySender, MailHistory } from '../model/mailHistory';
+import { Attachment, MailAnalysis, MailAnalysisBySender, MailHistory } from '../model/mailHistory';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +43,14 @@ export class MailHistoryService {
 
   setRelevantMailAnalysis(orgId: number, prcId: number, mail: string, records: MailHistory[]): Observable<MailHistory[]> {
     return this._http.put<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/sender/' + mail, records);
+  }
+
+  getAttachments(orgId: number, prcId: number, id: number): Observable<Attachment[]> {
+    return this._http.get<Attachment[]>(this._thisURL + orgId + '/' + prcId + '/details/' + id + '/attachments');
+  }
+
+  downloadAttachment(orgId: number, prcId: number, fileName: string): Observable<any> {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/details/' + fileName + '/attachments', { responseType: 'blob' as 'json' });
   }
 
 }

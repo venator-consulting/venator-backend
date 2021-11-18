@@ -5,9 +5,11 @@ const sequelize = require('../config/sequelize.config');
 
 const sequelizer = sequelize.getSequelize();
 
+const EmailAttachment = require('./emailAttachment.model.server');
+
 
 module.exports.getEmailHistory = function (tableName = 'email_history_') {
-    return sequelizer.define('emailHistory', {
+    const EmailHistory = sequelizer.define('emailHistory', {
         id: {
             type: DataTypes.BIGINT(11),
             allowNull: false,
@@ -33,6 +35,11 @@ module.exports.getEmailHistory = function (tableName = 'email_history_') {
     }, {
         tableName: tableName
     });
+
+    const orgId = tableName.slice(-1);
+    EmailHistory.hasMany(EmailAttachment.getEmailAttachment('email_attachment_' + orgId));
+    EmailAttachment.getEmailAttachment('email_attachment_' + orgId).belongsTo(EmailHistory);
+    return EmailHistory;
 };
 
 

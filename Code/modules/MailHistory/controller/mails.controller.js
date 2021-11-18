@@ -1,5 +1,7 @@
 const mailRepo = require('../../../repositories/mails.repo.server');
 const keys = require('../../../models/analysis/text.analysis.keywords');
+const env = require('../../../config/environment');
+const path = require('path');
 
 module.exports.getAll = async (req, res) => {
     const orgId = req.params.orgId;
@@ -54,4 +56,15 @@ module.exports.mailJustRelevant = async (req, res) => {
     const result = await mailRepo.mailJustRelevant(req.params.orgId, req.params.prcId, req.params.mail);
     res.status(200).json(result);
 };
+
+module.exports.getAttachments = async (req, res) => {
+    const result = await mailRepo.getAttachments(req.params.orgId, req.params.prcId, req.params.id);
+    res.status(200).json(result);
+}
+
+module.exports.downloadAttachment = async (req, res) => {
+    let fileName = req.params.fileName;
+    let filePath = path.join(__dirname, '../../../', env.uploadPath, fileName);
+    res.download(filePath); 
+}
 //#endregion email analysis

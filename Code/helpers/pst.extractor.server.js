@@ -1,7 +1,8 @@
 const PSTFile = require('pst-extractor').PSTFile;
-
+const env = require('../config/environment');
 const resolve = require('path').resolve;
 const mailHistory = require('../models/emails.model.server');
+const emailAttachment = require('../models/emailAttachment.model.server');
 
 let mails = [];
 
@@ -12,7 +13,9 @@ module.exports.extract = async function (filePath, orgId, prcId) {
     processFolder(pstFile.getRootFolder(), prcId);
     //  Store mails array in database in transaction
     // console.log(JSON.stringify(mails, null, 3));
-    await mailHistory.getEmailHistory('email_history_' + orgId).bulkCreate(mails);
+    await mailHistory.getEmailHistory('email_history_' + orgId).bulkCreate(mails, {
+        include: [emailAttachment.getEmailAttachment('email_attachment_' + orgId)]
+    });
 }
 
 function processFolder(folder, prcId) {
@@ -28,7 +31,7 @@ function processFolder(folder, prcId) {
     if (folder.contentCount > 0) {
         let email = folder.getNextChild();
         while (email != null) {
-            mails.push({
+            let tempMail = {
                 email: email.senderEmailAddress,
                 sender: email.senderName,
                 rcvName: email.receivedByName,
@@ -42,18 +45,40 @@ function processFolder(folder, prcId) {
                 bcc: email.displayBCC,
                 cc: email.displayCC,
                 numberOfAttachments: email.numberOfAttachments,
-                procedureId: prcId
-            });
+                procedureId: prcId,
+                emailAttachments: new Array()
+            };
+
+
+
+            if (email.hasAttachments) {
+                let numberOfAttachments = email.numberOfAttachments;
+                if (numberOfAttachments > 0) {
+                    for (let attachmentNumber = 0; attachmentNumber < numberOfAttachments; attachmentNumber++) {
+                        let attachment = email.getAttachment(attachmentNumber);
+                        let fileName = attachment?.pstFile?.pstFilename;
+                        if(fileName?.includes('/')) {
+                            let parts = fileName.split('/');
+                            fileName = parts[parts.length - 1];
+                        } else if(fileName?.includes('\\')) {
+                            let parts = fileName.split('\\');
+                            fileName = parts[parts.length - 1];
+                        }
+                        // fileName= env.domain + 'public/' + fileName;
+                        tempMail.emailAttachments.push({
+                            size: attachment?.size,
+                            creationTime: attachment?.creationTime,
+                            mimeTag: attachment?.mimeTag,
+                            pstFilename: fileName,
+                            originalName: attachment?.displayName
+                        });
+                    }
+                }
+            }
+
+            mails.push(tempMail);
+
             email = folder.getNextChild();
         }
     }
 }
-
-//receivedByName : display name of the messaging user who receives the message
-// sentRepresentingName: display name for the messaging user represented by the sender.
-// sentRepresentingEmailAddress: e-mail address for the messaging user who is represented by the sender.
-// receivedByAddress: e-mail address for the messaging user who receives the message.
-// senderName: message sender's display name.
-// displayTo: list of the display names of the primary (To) message recipients.
-// emailAddress: messaging user's e-mail address..
-// 
