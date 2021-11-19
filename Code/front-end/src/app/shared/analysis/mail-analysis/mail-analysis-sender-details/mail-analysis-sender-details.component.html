@@ -264,10 +264,15 @@
     {{body}}
 </p-dialog>
 
-<p-dialog header="Attachments Details" [(visible)]="displayAttachDialog" [style]="{width: '100%', 'overflow-wrap': 'anywhere'}">
+<p-dialog header="Attachments Details" [(visible)]="displayAttachDialog"
+    [style]="{width: '100%', 'overflow-wrap': 'anywhere'}">
     <ul>
         <li *ngFor="let attach of attachments">
-            <a (click)="downloadAttach(attach)">{{attach.originalName}} - {{attach.size / 1024}} KB</a>
+            <p>{{attach.originalName}} - {{attach.size / 1024}} KB
+                <button type="button" pButton pRipple icon="pi pi-download" (click)="downloadAttach(attach)"
+                    class="p-button-rounded p-button-primary" label="Download" pTooltip="Download"
+                    tooltipPosition="bottom"></button>
+            </p>
         </li>
     </ul>
 </p-dialog>

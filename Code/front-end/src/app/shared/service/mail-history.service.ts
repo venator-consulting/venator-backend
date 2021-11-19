@@ -49,8 +49,8 @@ export class MailHistoryService {
     return this._http.get<Attachment[]>(this._thisURL + orgId + '/' + prcId + '/details/' + id + '/attachments');
   }
 
-  downloadAttachment(orgId: number, prcId: number, fileName: string): Observable<any> {
-    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/details/' + fileName + '/attachments', { responseType: 'blob' as 'json' });
+  downloadAttachment(orgId: number, prcId: number, id: number): Observable<any> {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/download/' + id + '/attachments', { responseType: 'blob' as 'json' });
   }
 
 }

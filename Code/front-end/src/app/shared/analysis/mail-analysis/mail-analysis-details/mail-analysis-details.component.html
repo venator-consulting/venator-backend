@@ -13,7 +13,7 @@
         <p-table #dt dataKey="id" [value]="data" [resizableColumns]="true" dataKey="id"
             styleClass="p-datatable-gridlines" [loading]="waiting" [columns]="cols" responsive="true"
             [scrollable]="true" scrollHeight="350px" [style]="{ width: '100%' }" [reorderableColumns]="true"
-            [frozenColumns]="frozenCols" frozenWidth="5px" >
+            [frozenColumns]="frozenCols" frozenWidth="5px">
             <ng-template pTemplate="caption">
                 <div class="p-grid">
                     <div class="p-col-1">
@@ -92,7 +92,7 @@
                 col.field == 'subject' ||
                 col.field == 'body' ||
                 col.field == 'bodyHTML'
-              " [innerHTML]="row[col.field] | highlight" >
+              " [innerHTML]="row[col.field] | highlight">
                         </span>
                         <span pTooltip="{{ row[col.field] }}" *ngIf="
                 col.field != 'creationTime' &&
@@ -106,10 +106,10 @@
                         </span>
                         <span *ngIf="col.field == 'actions'">
                             <button type="button" pButton pRipple icon="pi pi-files" (click)="attachDetailes(row)"
-                            class="p-button-rounded p-button-primary" label="Attachments"
-                            pTooltip="Attachments" tooltipPosition="bottom"></button></span>
+                                class="p-button-rounded p-button-primary" label="Attachments" pTooltip="Attachments"
+                                tooltipPosition="bottom"></button></span>
                     </td>
-                    
+
                 </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns>
@@ -126,9 +126,15 @@
 </p-dialog>
 
 <p-dialog header="Details" [(visible)]="displayAttachDialog" [style]="{width: '100%', 'overflow-wrap': 'anywhere'}">
-    <li *ngFor="let attach of attachments">
-        <a (click)="downloadAttach(attach)">{{attach.originalName}} - {{attach.size / 1024}} KB</a>
-    </li>
+    <ul>
+        <li *ngFor="let attach of attachments">
+            <p>{{attach.originalName}} - {{attach.size / 1024}} KB
+                <button type="button" pButton pRipple icon="pi pi-download" (click)="downloadAttach(attach)"
+                    class="p-button-rounded p-button-primary" label="Download" pTooltip="Download"
+                    tooltipPosition="bottom"></button>
+            </p>
+        </li>
+    </ul>
 </p-dialog>
 <!-- 
 <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px', 'overflow-wrap': 'anywhere'}">

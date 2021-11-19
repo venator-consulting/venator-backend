@@ -124,7 +124,7 @@ export class MailAnalysisComponent implements OnInit {
       },
       {
         header: "Emails' Count",
-        field: 'recordsCount',
+        field: 'totlaCount',
         align: 'center',
       },
     ];

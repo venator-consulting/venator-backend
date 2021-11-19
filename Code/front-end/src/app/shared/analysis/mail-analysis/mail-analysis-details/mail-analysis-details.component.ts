@@ -250,13 +250,21 @@ export class MailAnalysisDetailsComponent implements OnInit {
       }, er => this.waiting = false);
   }
 
-  downloadAttach(attach: Attachment) {
+  downloadAttach(attatch: Attachment) {
     this._mailService
-      .downloadAttachment(this.orgId, this.prcId, attach.pstFilename)
+      .downloadAttachment(+this.orgId, +this.prcId, +attatch.id)
       .subscribe(res => {
         this.waiting = false;
-        this.saveAsExcelFile(res, attach.originalName);
+        this.saveAttachment(res, attatch.originalName, attatch.mimeTag);
       });
+  }
+
+  saveAttachment(buffer: any, fileName: string, type: string): void {
+    let EXCEL_TYPE = type ?? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const d: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    FileSaver.saveAs(d, new Date().getTime() + '_' + fileName);
   }
 
 }

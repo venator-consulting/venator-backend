@@ -63,8 +63,11 @@ module.exports.getAttachments = async (req, res) => {
 }
 
 module.exports.downloadAttachment = async (req, res) => {
-    let fileName = req.params.fileName;
-    let filePath = path.join(__dirname, '../../../', env.uploadPath, fileName);
+    let id = req.params.id;
+    let orgId = req.params.orgId;
+    const attach = await mailRepo.getOneAttachment(orgId, id);
+    // let filePath = path.join(__dirname, '../../../', env.uploadPath, fileName);
+    let filePath = attach?.pstFilename;
     res.download(filePath); 
 }
 //#endregion email analysis

@@ -15,6 +15,12 @@ module.exports.fetchAll = async (orgId, prcId) => {
     });
 };
 
+module.exports.getOneAttachment = async (orgId, id) => {
+    return await MailAttachment
+        .getEmailAttachment('email_attachment_' + orgId)
+        .findByPk(id);
+}
+
 module.exports.mailAnalysisBySender = async (orgId, prcId, keys) => {
     if (isNaN(orgId))
         throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);

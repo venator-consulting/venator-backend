@@ -175,18 +175,18 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
       const worksheet = xlsx.utils.json_to_sheet(translatedData);
       const workbook = { Sheets: { 'mail_analysis': worksheet }, SheetNames: ['mail_analysis'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-      this.saveAsExcelFile(excelBuffer, "mail_analysis", null);
+      this.saveAsExcelFile(excelBuffer, "mail_analysis");
     });
   }
 
-  saveAsExcelFile(buffer: any, fileName: string, type: string): void {
-    let EXCEL_TYPE = type ?? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    // let EXCEL_EXTENSION = '.xlsx';
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
     const d: Blob = new Blob([buffer], {
       type: EXCEL_TYPE
     });
     // FileSaver.saveAs(file);
-    FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() );
+    FileSaver.saveAs(d, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
   clearFilter() {
@@ -258,7 +258,6 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
 
 
   attachDetailes(row: MailHistory) {
-    debugger;
     this.waiting = true;
     this._mailService
       .getAttachments(this.orgId, this.prcId, row.id)
@@ -271,11 +270,19 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
 
   downloadAttach(attatch: Attachment) {
     this._mailService
-      .downloadAttachment(this.orgId, this.prcId, attatch.pstFilename)
+      .downloadAttachment(+this.orgId, +this.prcId, +attatch.id)
       .subscribe(res => {
         this.waiting = false;
-        this.saveAsExcelFile(res, attatch.originalName, attatch.mimeTag);
+        this.saveAttachment(res, attatch.originalName, attatch.mimeTag);
       });
+  }
+
+  saveAttachment(buffer: any, fileName: string, type: string): void {
+    let EXCEL_TYPE = type ?? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const d: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    FileSaver.saveAs(d, new Date().getTime() + '_' + fileName);
   }
 
 
@@ -412,7 +419,7 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
       .subscribe(
         (res) => {
           this.waiting = false;
-          this.saveAsExcelFile(res, 'Text_details', null);
+          this.saveAsExcelFile(res, 'Text_details');
           // window.open(url.toString(), '_blank');
         },
         (err) => { this.waiting = false; }
