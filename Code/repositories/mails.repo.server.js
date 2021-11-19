@@ -254,6 +254,14 @@ module.exports.getAttachments = async (orgId, prcId, mailId) => {
     return await MailAttachment
         .getEmailAttachment('email_attachment_' + orgId)
         .findAll({
-            where: { emailHistoryId: mailId }
+            where: { emailHistoryId: mailId },
+            attributes: [
+                "id",
+                "size",
+                "creationTime",
+                "mimeTag",
+                "originalName",
+                "emailHistoryId"
+            ],
         });
 }
