@@ -49,14 +49,15 @@
             <tr>
                 <th pSortableColumn="{{ col.field }}" pResizableColumn pReorderableColumn *ngFor="let col of cols"
                     class="p-text-center" pTooltip="{{ col.header }}" tooltipPosition="bottom">
-                    {{ col.header }}
+                    {{ col.header | translate }}
                     <p-sortIcon field="{{ col.field }}"></p-sortIcon>
                 </th>
             </tr>
             <tr>
                 <th pResizableColumn *ngFor="let col of cols" class="autocomplete">
 
-                    <p-autoComplete [suggestions]="completeWords" (completeMethod)="filterChange($event.query, col.field)"
+                    <p-autoComplete [suggestions]="completeWords"
+                        (completeMethod)="filterChange($event.query, col.field)"
                         (onClear)="filterChange($event.query, col.field)"
                         (onSelect)="filterChange($event.word, col.field)" field="word" [minLength]="1"
                         [inputStyle]="{ width: '90%' }" [style]="{ width: '90%' }" appendTo="body"
@@ -78,20 +79,34 @@
         <ng-template pTemplate="body" let-rowData>
             <tr>
                 <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{ col.align }}">
-                    <div *ngIf="
-                col.field == 'creationTime' ||
-                  col.field == 'messageDeliveryTime';
-                then withFilter;
-                else withoutFilter
-              "></div>
-                    <ng-template #withoutFilter>
-                        <span pTooltip="{{ rowData[col.field] }}">
-                            {{ rowData[col.field] }}
-                        </span>
-                    </ng-template>
-                    <ng-template #withFilter>
-                        {{ (rowData[col.field] | date: "dd.MM.yyyy") }}
-                    </ng-template>
+                    <span *ngIf="
+                    col.field == 'creationTime' ||
+                    col.field == 'messageDeliveryTime'
+                  ">
+                        {{ rowData[col.field] | date: "dd.MM.yyyy" }}
+                    </span>
+                    <span (click)="hoverOnBody($event, rowData[col.field])" *ngIf="
+                    col.field == 'subject' ||
+                    col.field == 'body' ||
+                    col.field == 'bodyHTML'
+                  " [innerHTML]="rowData[col.field] | highlight">
+                    </span>
+                    <span pTooltip="{{ rowData[col.field] }}" *ngIf="
+                    col.field != 'creationTime' &&
+                    col.field != 'messageDeliveryTime' &&
+                    col.field != 'subject' &&
+                    col.field != 'body' &&
+                    col.field != 'bodyHTML' &&
+                    col.field != 'actions' &&
+                    col.field != 'senderRelevant' &&
+                    col.field != 'senderComment'
+                  ">
+                        {{ rowData[col.field] }}
+                    </span>
+                    <span *ngIf="col.field == 'actions'">
+                        <button type="button" pButton pRipple icon="pi pi-files" (click)="attachDetailes(rowData)"
+                            class="p-button-rounded p-button-primary" label="Attachments" pTooltip="Attachments"
+                            tooltipPosition="bottom"></button></span>
                 </td>
             </tr>
         </ng-template>
@@ -103,3 +118,21 @@
         </ng-template>
     </p-table>
 </div>
+
+
+<p-dialog header="Details" [(visible)]="displayDialog" [style]="{width: '100%', 'overflow-wrap': 'anywhere'}">
+    {{body}}
+</p-dialog>
+
+<p-dialog header="Attachments Details" [(visible)]="displayAttachDialog"
+    [style]="{width: '100%', 'overflow-wrap': 'anywhere'}">
+    <ul>
+        <li *ngFor="let attach of attachments">
+            <p>{{attach.originalName}} - {{attach.size / 1024}} KB
+                <button type="button" pButton pRipple icon="pi pi-download" (click)="downloadAttach(attach)"
+                    class="p-button-rounded p-button-primary" label="Download" pTooltip="Download"
+                    tooltipPosition="bottom"></button>
+            </p>
+        </li>
+    </ul>
+</p-dialog>

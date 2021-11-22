@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { dataTableColumns } from '../../model/dataTableColumns';
-import { MailHistory } from '../../model/mailHistory';
+import { Attachment, MailHistory } from '../../model/mailHistory';
 import { MailHistoryService } from '../../service/mail-history.service';
 import * as FileSaver from 'file-saver';
 import { ExportDataService } from '../../service/export-data.service';
@@ -38,21 +38,30 @@ export class MailHistoryDataComponent implements OnInit {
   totalCount: number = 0;
   completeWords: Word[] = new Array();
 
+  attachments: Attachment[] = new Array();
+  body: string;
+  displayDialog: boolean = false;
+  displayAttachDialog: boolean = false;
+
   constructor(private _mailHistoryService: MailHistoryService, private _messageService: MessageService,
     private datepipe: DatePipe, private _exportDataService: ExportDataService) { }
 
   ngOnInit(): void {
     this.cols = [
-      { header: 'email', field: 'email' },
-      { header: 'sender', field: 'sender' },
-      { header: 'subject', field: 'subject' },
-      { header: 'body', field: 'body' },
-      { header: 'bcc', field: 'bcc' },
-      { header: 'cc', field: 'cc' },
-      { header: 'creationTime', field: 'creationTime' },
-      { header: 'messageDeliveryTime', field: 'messageDeliveryTime' },
-      { header: 'numberOfAttachments', field: 'numberOfAttachments' },
+      { header: 'MailAnalysis.email', field: 'email' },
+      { header: 'MailAnalysis.sender', field: 'sender' },
+      // { header: 'MailAnalysis.rcvEmail', field: 'rcvEmail' },
+      { header: 'MailAnalysis.rcvName', field: 'rcvName' },
+      { header: 'MailAnalysis.subject', field: 'subject' },
+      { header: 'MailAnalysis.body', field: 'body' },
+      { header: 'MailAnalysis.bcc', field: 'bcc' },
+      { header: 'MailAnalysis.cc', field: 'cc' },
+      { header: 'MailAnalysis.creationTime', field: 'creationTime' },
+      { header: 'MailAnalysis.messageDeliveryTime', field: 'messageDeliveryTime' },
+      { header: 'MailAnalysis.numberOfAttachments', field: 'numberOfAttachments' },
+      { header: 'MailAnalysis.actions', field: 'actions' },
     ];
+
 
     this.getData();
   }
@@ -195,6 +204,40 @@ export class MailHistoryDataComponent implements OnInit {
       d,
       fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
     );
+  }
+
+  hoverOnBody(event, data: string) {
+    this.body = data;
+    this.displayDialog = true;
+    // this.overlayPanel.toggle(event);
+  }
+
+  attachDetailes(row: MailHistory) {
+    this.waiting = true;
+    this._mailHistoryService
+      .getAttachments(this.organisationId, this.procedureId, row.id)
+      .subscribe(res => {
+        this.attachments = res;
+        this.waiting = false;
+        this.displayAttachDialog = true;
+      }, er => this.waiting = false);
+  }
+
+  downloadAttach(attatch: Attachment) {
+    this._mailHistoryService
+      .downloadAttachment(+this.organisationId, +this.procedureId, +attatch.id)
+      .subscribe(res => {
+        this.waiting = false;
+        this.saveAttachment(res, attatch.originalName, attatch.mimeTag);
+      });
+  }
+
+  saveAttachment(buffer: any, fileName: string, type: string): void {
+    let EXCEL_TYPE = type ?? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const d: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    FileSaver.saveAs(d, new Date().getTime() + '_' + fileName);
   }
 
 }

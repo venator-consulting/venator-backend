@@ -80,7 +80,7 @@ export class MailAnalysisDetailsComponent implements OnInit {
     this.cols = [
       { header: 'MailAnalysis.email', field: 'email' },
       { header: 'MailAnalysis.sender', field: 'sender' },
-      { header: 'MailAnalysis.rcvEmail', field: 'rcvEmail' },
+      // { header: 'MailAnalysis.rcvEmail', field: 'rcvEmail' },
       { header: 'MailAnalysis.rcvName', field: 'rcvName' },
       { header: 'MailAnalysis.subject', field: 'subject' },
       { header: 'MailAnalysis.body', field: 'body' },
