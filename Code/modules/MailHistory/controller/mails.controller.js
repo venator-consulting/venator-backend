@@ -2,6 +2,7 @@ const mailRepo = require('../../../repositories/mails.repo.server');
 const keys = require('../../../models/analysis/text.analysis.keywords');
 const env = require('../../../config/environment');
 const path = require('path');
+const precalRepo = require('../../../repositories/precalculated.repo.server');
 
 module.exports.getAll = async (req, res) => {
     const orgId = req.params.orgId;
@@ -21,14 +22,14 @@ module.exports.getBySender = async (req, res) => {
 module.exports.getMailAnalysisBySender = async (req, res) => {
     const orgId = +req.params.orgId;
     const prcId = +req.params.prcId;
-    const result = await mailRepo.mailAnalysisBySender(orgId, prcId, keys);
+    const result = await precalRepo.getMailBySender(orgId, prcId);
     res.status(200).json(result);
 };
 
 module.exports.getMailAnalysisByWord = async (req, res) => {
     const orgId = +req.params.orgId;
     const prcId = +req.params.prcId;
-    const result = await mailRepo.mailAnalysisByWord(orgId, prcId, keys);
+    const result = await precalRepo.getMailByWord(orgId, prcId);
     res.status(200).json(result);
 };
 
@@ -69,6 +70,6 @@ module.exports.downloadAttachment = async (req, res) => {
     const attach = await mailRepo.getOneAttachment(orgId, id);
     // let filePath = path.join(__dirname, '../../../', env.uploadPath, fileName);
     let filePath = attach?.pstFilename;
-    res.download(filePath); 
+    res.download(filePath);
 }
 //#endregion email analysis

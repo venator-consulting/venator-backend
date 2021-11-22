@@ -169,6 +169,18 @@ router
     .get(passport.authenticate('jwt', {
         session: false
     }), authorization.authorize('Admin'), precalcCtrl.dueDateAnalysis);
+
+router
+    .route('/precalculate/mail-sender/:orgId/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), precalcCtrl.emailAnalysisSender);
+
+router
+    .route('/precalculate/mail-word/:orgId/:prcId')
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), precalcCtrl.emailAnalysisWord);
 //#endregion Precalculate
 
 

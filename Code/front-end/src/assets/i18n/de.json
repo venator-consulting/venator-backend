@@ -14,7 +14,6 @@
     "no_application_date": "This Procedure has no application date! please re-import it correctly",
     "no_due_date": "Dieses Verfahren hat kein Belegdatum! Bitte importieren Sie es erneut korrekt",
     "invalid_key": "Ungültiger Schlüssel!",
-
     "no_template_selected": "Bitte wählen Sie ein Template und andere Felder aus!",
     "no_file_selected": "Bitte wählen Sie eine zu importierende Datei aus",
     "invalid_file_type": "Ungültiger Dateityp, bitte wählen Sie eine CSV- oder Excel-Datei aus",
@@ -94,13 +93,11 @@
     "show": "Anzeigen",
     "delete": "Löschen"
   },
-
   "Admin_Import": {
     "firstStepLabel": "Basisdatei hochladen",
     "secondStepLabel": "Hilfsdateien hochladen",
     "thirdStepLabel": "Feldmapping",
     "firthStepLabel": "Dateien importieren",
-
     "firstStepHeader": "Dateien hochladen",
     "selectOrganisation": "Wählen Sie eine Organisation aus:",
     "selectOrganisationPlaceholder": "Organisation auswählen",
@@ -141,7 +138,6 @@
     "textDataType": "Text",
     "dateDataType": "Datum",
     "firthStepHeader": "Dateien importieren",
-
     "nameAffix1": "Namenszusatz1",
     "nameAffix2": "Namenszusatz2",
     "VATId": "UmsatzsteuerID",
@@ -173,7 +169,6 @@
     "iBAN_No3": "IBAN-Nr. 3",
     "swift_code3": "SWIFT-Code 3",
     "differentAccountHolder3": "Abweichender Kontoinhaber 3",
-
     "client": "Mandant",
     "companyCode": "Buchungskreis",
     "recordNumber": "Buchungssatznummer",
@@ -320,7 +315,6 @@
     "Save": "Speichern",
     "Cancel": "Abbrechen"
   },
-
   "Account_Type": {
     "Debitor": "Debitor",
     "Kreditor": "Kreditor",
@@ -336,7 +330,6 @@
     "Save": "Speichern",
     "Cancel": "Abbrechen"
   },
-
   "Procedure_Registration": {
     "editHeader": "Verfahren bearbeiten",
     "addProedurePlaceHolder": "Verfahren hinzufügen",
@@ -363,7 +356,7 @@
     "text_account": "Vorberechnete Textanalyse nach Konto",
     "due_date": "Vorberechnetes Zahlungsverhalten"
   },
-  "precalc" : {
+  "precalc": {
     "precalc": "Analysen Vorberechnung",
     "amount": "Glattebeträgeanalyse",
     "credit": "Kreditorenanalyse",
@@ -371,7 +364,9 @@
     "text_word": "Textanalyse nach Wört",
     "payment": "Fälligkeitsanalyse",
     "due_date": "Zahlungsverhalten",
-    "start": "Starten"
+    "start": "Starten",
+    "mailSender": "mailSender",
+    "mailWord": "mailWord"
   },
   "Notfound": {
     "errorMsg": "Sorry, die Seite ist nicht vorhanden"
@@ -621,57 +616,55 @@
     "sliderTitle": "Slider Seite verwalten",
     "aboutTitle": "Über uns Seite verwalten",
     "contactTitle": "Kontakt Seite verwalten",
-    "servicesTitleRequired": "Titel ist erforderlich." ,
-    "servicesSubTitleRequired": "Subtitel ist erforderlich." ,
-    "servicesParagraphRequired": "Absatz ist erforderlich." , 
-    "firstTitle": "Erster Titel" , 
-    "firstTitleRequired": "Der erste Titel ist erforderlich." , 
-    "firstSubTitle": "Erster Subtitel" , 
-    "firstSubTitleRequired": "Der erste Subtitel ist erforderlich." , 
-    "firstImg": "Erstes Bild" , 
-    "firstImgUploadLabel": "Wählen Sie ein Bild aus" , 
-    "secondTitle": "Zweiter Titel" , 
-    "secondTitleRequired": "Der zweite Titel ist erforderlich." , 
-    "secondSubTitle": "Zweiter Subtitel" , 
-    "secondSubTitleRequired": "Der zweite Subtitel ist erforderlich.." , 
-    "secondImg": "Zweites Bild" , 
-    "secondImgUploadLabel": "Wählen Sie ein Bild aus" , 
-    "thirdTitle": "Dritter Titel" , 
-    "thirdTitleRequired": "Der dritte Titel ist erforderlich" , 
-    "thirdSubTitle": "Dritter Subtitel" , 
-    "thirdSubTitleRequired": "Der dritte Subtitel ist erforderlich" , 
-    "thirdImg": "Drittes Bild" , 
-    "thirdImgUploadLabel": "Wählen Sie ein Bild aus" ,
-    "selectIcon": "Wählen Sie ein Icon aus" ,
-    "iconRequired": "Icon ist erforderlich" ,
-
-    "save": "Speichern" , 
-    "image": "Bild" , 
-    "title": "Titel" ,
-    "titleRequired": "Titel ist erforderlich" ,
+    "servicesTitleRequired": "Titel ist erforderlich.",
+    "servicesSubTitleRequired": "Subtitel ist erforderlich.",
+    "servicesParagraphRequired": "Absatz ist erforderlich.",
+    "firstTitle": "Erster Titel",
+    "firstTitleRequired": "Der erste Titel ist erforderlich.",
+    "firstSubTitle": "Erster Subtitel",
+    "firstSubTitleRequired": "Der erste Subtitel ist erforderlich.",
+    "firstImg": "Erstes Bild",
+    "firstImgUploadLabel": "Wählen Sie ein Bild aus",
+    "secondTitle": "Zweiter Titel",
+    "secondTitleRequired": "Der zweite Titel ist erforderlich.",
+    "secondSubTitle": "Zweiter Subtitel",
+    "secondSubTitleRequired": "Der zweite Subtitel ist erforderlich..",
+    "secondImg": "Zweites Bild",
+    "secondImgUploadLabel": "Wählen Sie ein Bild aus",
+    "thirdTitle": "Dritter Titel",
+    "thirdTitleRequired": "Der dritte Titel ist erforderlich",
+    "thirdSubTitle": "Dritter Subtitel",
+    "thirdSubTitleRequired": "Der dritte Subtitel ist erforderlich",
+    "thirdImg": "Drittes Bild",
+    "thirdImgUploadLabel": "Wählen Sie ein Bild aus",
+    "selectIcon": "Wählen Sie ein Icon aus",
+    "iconRequired": "Icon ist erforderlich",
+    "save": "Speichern",
+    "image": "Bild",
+    "title": "Titel",
+    "titleRequired": "Titel ist erforderlich",
     "paragraph": "Absatz",
-    "paragraphRequired": "Absatz ist erforderlich." ,
-    "subTitle": "Subtitel" ,
-    "subTitleRequired": "Subtitle ist erforderlich" ,
-    "order": "Ordnung" , 
-    "cancel": "Abbrechen" ,
+    "paragraphRequired": "Absatz ist erforderlich.",
+    "subTitle": "Subtitel",
+    "subTitleRequired": "Subtitle ist erforderlich",
+    "order": "Ordnung",
+    "cancel": "Abbrechen",
     "new": "Neu",
-    "email": "Email" , 
-    "emailReq": "Email ist erforderlich" , 
-    "phone": "HandyNr" ,
-    "phoneReq": "HandyNr ist erforderlich" ,
+    "email": "Email",
+    "emailReq": "Email ist erforderlich",
+    "phone": "HandyNr",
+    "phoneReq": "HandyNr ist erforderlich",
     "fax": "Fax",
-    "faxReq": "Fax ist erforderlich." ,
-    "postCode": "Postleitzahl" ,
-    "postCodeReq": "Postleitzahl ist erforderlich" ,
-    "houseNr": "HausNr" , 
-    "houseNrReq": "houseNr ist erforderlich" ,
-    "street": "Strasse" , 
-    "streetReq": "Strasse ist erforderlich" ,
-    "city": "Stadt" , 
-    "cityReq": "Stadt ist erforderlich" ,
-    "country": "Land" , 
-    "countryReq": "Land ist erforderlich" 
-  
+    "faxReq": "Fax ist erforderlich.",
+    "postCode": "Postleitzahl",
+    "postCodeReq": "Postleitzahl ist erforderlich",
+    "houseNr": "HausNr",
+    "houseNrReq": "houseNr ist erforderlich",
+    "street": "Strasse",
+    "streetReq": "Strasse ist erforderlich",
+    "city": "Stadt",
+    "cityReq": "Stadt ist erforderlich",
+    "country": "Land",
+    "countryReq": "Land ist erforderlich"
   }
 }

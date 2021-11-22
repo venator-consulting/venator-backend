@@ -66,6 +66,14 @@ const Procedures = sequelizer.define('Procedures', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
+    emailWord: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    emailSender: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
 }, {
     tableName: 'Procedures'
 });

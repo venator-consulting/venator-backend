@@ -10,6 +10,7 @@ const errors = require('../models/enums/errors');
 
 const sequelize = Sequelize.getSequelize();
 
+//#region  Date Range
 getDateRange = async (orgId, prcId) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -90,7 +91,9 @@ calculateDateRanges = (mindate, maxdate, step) => {
   }
   return ranges;
 };
+//#endregion Date Range
 
+//#region delete previous data
 module.exports.deletePrevDataTextWord = async (orgId, prcId) => {
   let query = `DELETE FROM text_analysis_word_${orgId} WHERE procedureId = ${prcId}`;
   let result = await connection.getConnection().execute(query);
@@ -127,6 +130,21 @@ module.exports.deletePrevDataDueDate = async (orgId, prcId) => {
   return result;
 };
 
+module.exports.deletePrevDataEmailAnalysisWord = async (orgId, prcId) => {
+  let query = `DELETE FROM email_analysis_word_${orgId} WHERE procedureId = ${prcId}`;
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+
+module.exports.deletePrevDataEmailAnalysisSender = async (orgId, prcId) => {
+  let query = `DELETE FROM email_analysis_sender_${orgId} WHERE procedureId = ${prcId}`;
+  let result = await connection.getConnection().execute(query);
+  return result;
+};
+//#endregion delete previous data
+
+
+//#region store data
 storeDataByWord = async (orgId, prcId, keywords, dateRanges, step) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -335,7 +353,222 @@ module.exports.textAnalysisByWord = async (orgId, prcId, step) => {
   const result = await storeDataByWord(orgId, prcId, keywords, dateRanges, step);
 };
 
+module.exports.storePaymentAnalysis = async (orgId, prcId) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  let query = ` INSERT INTO payment_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
+    documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType) `;
 
+  query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
+    pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
+    FROM posting_${orgId} pos
+    WHERE
+      pos.procedureId = ${prcId}
+      AND UPPER(pos.accountType) = 'K'
+      AND pos.accountNumber is not NULL
+      AND pos.documentDate is not NULL 
+      AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
+          (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
+      AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
+          OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG')`;
+  let result;
+  try {
+    result = await connection.getConnection().execute(query);
+    await Procedure.getProcedures().update({ payment: true }, {
+      where: { id: prcId, },
+    });
+  } catch (error) {
+    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  }
+  return result;
+};
+
+module.exports.storeDueDateAnalysis = async (orgId, prcId) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  let query = ` INSERT INTO due_date_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
+    documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType) `;
+
+  query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
+    pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
+    FROM posting_${orgId} pos
+    WHERE
+      pos.procedureId = ${prcId}
+      AND UPPER(pos.accountType) = 'K'
+      AND pos.accountNumber is not NULL
+      AND pos.dueDate is not NULL 
+      AND pos.applicationDate is not NULL 
+      AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
+          (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
+      AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
+      ORDER BY pos.dueDate`;
+  let result;
+  try {
+    result = await connection.getConnection().execute(query);
+    await Procedure.getProcedures().update({ due_date: true }, {
+      where: { id: prcId, },
+    });
+  } catch (error) {
+    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  }
+  return result;
+};
+
+module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  let query = ` INSERT INTO creditor_analysis_${orgId} (accountNumber, accountName, totlaCount, totalBalance, procedureId) `;
+  query += `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, 
+                SUM(p.balance) as totalBalance,
+                IF(1 = 1,
+                  '${prcId}',
+                  '${prcId}') procedureId
+                            FROM posting_${orgId}  p
+                            WHERE p.procedureId = ${prcId} 
+                                AND UPPER(p.accountType) = 'K' 
+                                AND p.accountNumber is not NULL 
+                                `;
+  query += keywords.length > 0 ? " AND (( " : "";
+  // for text records
+  for (let index = 0; index < keywords.length; index++) {
+    const key = keywords[index];
+    query += `  p.reference ${key}
+                        OR p.textPosting ${key}
+                        OR p.textHeader ${key} OR`;
+  }
+  query += keywords.length > 0 ? " 1 <> 1) " : "";
+  // for amount records
+  query += ` OR (UPPER(p.documentTypeNewName) = 'ZAHLUNG'
+            AND p.balance = ROUND(p.balance, -2)
+            AND p.balance >= 500)`;
+  // for payment records
+  query += ` OR (p.documentDate is not NULL 
+            AND (year(p.documentDate) <> year(p.dueDate) OR p.applicationDate is null OR 
+                (year(p.documentDate) = year(p.dueDate) AND month(p.documentDate) <> month(p.dueDate)))
+            AND (UPPER(p.documentTypeNewName) = 'RECHNUNG'
+                OR UPPER(p.documentTypeNewName) = 'ZAHLUNG'))`;
+
+  query += ")";
+  query += "GROUP BY p.accountNumber , p.accountName ";
+  let result;
+  try {
+    result = await connection.getConnection().execute(query);
+    await Procedure.getProcedures().update({ credit: true }, {
+      where: {
+        id: prcId,
+      },
+    });
+  } catch (error) {
+    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  }
+  return result;
+};
+
+module.exports.storeEmailAnalysisSender = async (orgId, prcId) => {
+  let keys = keywords;
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  let query = ` INSERT INTO email_analysis_sender_${orgId} (email, sender, totlaCount, procedureId) `;
+  query += `SELECT p.email , p.sender , COUNT(p.id) as totlaCount, IF(1 = 1,
+                                  '${prcId}',
+                                  '${prcId}') procedureId
+                              FROM email_history_${orgId}  p
+                              WHERE procedureId = ${prcId} 
+                                  `;
+  query += keys.length > 0 ? " AND ( " : "";
+
+  for (let index = 0; index < keys.length; index++) {
+    const key = keys[index];
+    query += `  p.subject ${key}
+                          OR p.body ${key}
+                          OR p.bodyHTML ${key} OR`;
+  }
+  query += keys.length > 0 ? " 1 <> 1) " : "";
+
+  query += "GROUP BY p.email , p.sender";
+
+  let result;
+  try {
+    result = await connection.getConnection().execute(query);
+    await Procedure.getProcedures().update({ emailSender: true }, {
+      where: {
+        id: prcId,
+      },
+    });
+  } catch (error) {
+    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  }
+  return result;
+
+};
+
+module.exports.storeEmailAnalysisWord = async (orgId, prcId) => {
+  let keys = keywords;
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  let query = ` INSERT INTO email_analysis_word_${orgId} (recordsCount, senderCount, word, procedureId) `;
+  for (let index = 0; index < keys.length; index++) {
+    const key = keys[index];
+    let originalKey = keys[index];
+    originalKey = originalKey.replace("like '%", "");
+    originalKey = originalKey.replace("%'", "");
+    originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
+    originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
+    query += `  
+                                        SELECT
+                                            SUM(pos.totalCount) recordsCount,
+                                            COUNT(pos.sender) senderCount,
+                                            IF(1 = 1,
+                                                '${originalKey}',
+                                                '${originalKey}') word,
+                                            IF(1 = 1,
+                                                '${prcId}',
+                                                '${prcId}') procedureId
+                                        from
+                                            (SELECT
+                                                p.sender ,
+                                                count(p.sender) totalCount
+                                            from
+                                                email_history_${orgId} p
+                                            WHERE
+                                                p.procedureId = ${prcId}
+                                                AND (
+                                                    UPPER(p.subject) ${key}
+                                                    OR UPPER(p.body) ${key}
+                                                    OR UPPER(p.bodyHTML) ${key}
+                                                    )
+                                            GROUP by
+                                                p.sender) pos
+                                        `;
+    query += index < keys.length - 1 ? " UNION " : "";
+  }
+
+  let result;
+  try {
+    result = await connection.getConnection().execute(query);
+    await Procedure.getProcedures().update({ emailWord: true }, {
+      where: {
+        id: prcId,
+      },
+    });
+  } catch (error) {
+    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  }
+  return result;
+};
+//#endregion store data
+
+//#region  get data
 module.exports.getrDateRangeOptions = async (orgId, prcId, step) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -437,57 +670,6 @@ module.exports.getTextAnalysisDataByAccountCalcDefault = async (orgId, prcId) =>
   return result;
 };
 
-module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
-  if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
-  if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-  let query = ` INSERT INTO creditor_analysis_${orgId} (accountNumber, accountName, totlaCount, totalBalance, procedureId) `;
-  query += `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, 
-                SUM(p.balance) as totalBalance,
-                IF(1 = 1,
-                  '${prcId}',
-                  '${prcId}') procedureId
-                            FROM posting_${orgId}  p
-                            WHERE p.procedureId = ${prcId} 
-                                AND UPPER(p.accountType) = 'K' 
-                                AND p.accountNumber is not NULL 
-                                `;
-  query += keywords.length > 0 ? " AND (( " : "";
-  // for text records
-  for (let index = 0; index < keywords.length; index++) {
-    const key = keywords[index];
-    query += `  p.reference ${key}
-                        OR p.textPosting ${key}
-                        OR p.textHeader ${key} OR`;
-  }
-  query += keywords.length > 0 ? " 1 <> 1) " : "";
-  // for amount records
-  query += ` OR (UPPER(p.documentTypeNewName) = 'ZAHLUNG'
-            AND p.balance = ROUND(p.balance, -2)
-            AND p.balance >= 500)`;
-  // for payment records
-  query += ` OR (p.documentDate is not NULL 
-            AND (year(p.documentDate) <> year(p.dueDate) OR p.applicationDate is null OR 
-                (year(p.documentDate) = year(p.dueDate) AND month(p.documentDate) <> month(p.dueDate)))
-            AND (UPPER(p.documentTypeNewName) = 'RECHNUNG'
-                OR UPPER(p.documentTypeNewName) = 'ZAHLUNG'))`;
-
-  query += ")";
-  query += "GROUP BY p.accountNumber , p.accountName ";
-  let result;
-  try {
-    result = await connection.getConnection().execute(query);
-    await Procedure.getProcedures().update({ credit: true }, {
-      where: {
-        id: prcId,
-      },
-    });
-  } catch (error) {
-    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
-  }
-  return result;
-};
 
 module.exports.getCreditorAnalysis = async (orgId, prcId, criteria) => {
   let limit = criteria.limit ? criteria.limit : 25;
@@ -528,67 +710,40 @@ module.exports.getCreditorAnalysis = async (orgId, prcId, criteria) => {
   };
 };
 
-module.exports.storePaymentAnalysis = async (orgId, prcId) => {
+module.exports.getMailByWord = async (orgId, prcId) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-  let query = ` INSERT INTO payment_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
-    documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType) `;
+  let query = `SELECT * FROM email_analysis_word_${orgId} t
+        WHERE procedureId = :procedureId `;
 
-  query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
-    pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
-    FROM posting_${orgId} pos
-    WHERE
-      pos.procedureId = ${prcId}
-      AND UPPER(pos.accountType) = 'K'
-      AND pos.accountNumber is not NULL
-      AND pos.documentDate is not NULL 
-      AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
-          (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
-      AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
-          OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG')`;
-  let result;
-  try {
-    result = await connection.getConnection().execute(query);
-    await Procedure.getProcedures().update({ payment: true }, {
-      where: { id: prcId, },
-    });
-  } catch (error) {
-    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
+  let result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId
+    },
+    type: QueryTypes.SELECT,
+  });
+  if (result.length && result.length > 0) {
+    result = result.filter((rec) => +rec.recordsCount > 0);
   }
   return result;
 };
 
-module.exports.storeDueDateAnalysis = async (orgId, prcId) => {
+module.exports.getMailBySender = async (orgId, prcId) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-  let query = ` INSERT INTO due_date_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
-    documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType) `;
+  let query = `SELECT * FROM email_analysis_sender_${orgId} t
+        WHERE procedureId = :procedureId `;
 
-  query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
-    pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
-    FROM posting_${orgId} pos
-    WHERE
-      pos.procedureId = ${prcId}
-      AND UPPER(pos.accountType) = 'K'
-      AND pos.accountNumber is not NULL
-      AND pos.dueDate is not NULL 
-      AND pos.applicationDate is not NULL 
-      AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
-          (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
-      AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
-      ORDER BY pos.dueDate`;
-  let result;
-  try {
-    result = await connection.getConnection().execute(query);
-    await Procedure.getProcedures().update({ due_date: true }, {
-      where: { id: prcId, },
-    });
-  } catch (error) {
-    throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
-  }
+  let result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId
+    },
+    type: QueryTypes.SELECT,
+  });
   return result;
 };
+//#endregion get data
