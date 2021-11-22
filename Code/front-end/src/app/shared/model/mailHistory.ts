@@ -17,6 +17,11 @@ export class MailHistory {
     senderComment: string;
 }
 
+export class MailHistoryRes {
+    count: number;
+    rows: MailHistory[];
+}
+
 export class MailAnalysis {
     recordsCount: number;
     senderCount: number;

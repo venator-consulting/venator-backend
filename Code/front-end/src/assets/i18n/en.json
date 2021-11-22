@@ -377,7 +377,9 @@
     "text_word": "Textanalysis By Word",
     "payment": "Duedate Analysis",
     "due_date": "Due Date Analysis",
-    "start": "Starten"
+    "start": "Starten",
+    "mailSender": "mailSender",
+    "mailWord": "mailWord"
   },
   "Notfound": {
     "errorMsg": "Sorry, the page does not exist!"

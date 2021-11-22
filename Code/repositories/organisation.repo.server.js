@@ -10,6 +10,8 @@ const payment_analysis = require("../models/payment.model.server");
 const due_date_analysis = require("../models/dueDate.model.server");
 const mailHistory = require('../models/emails.model.server');
 const emailAttachment = require('../models/emailAttachment.model.server');
+const emailAnalysisWord = require('../models/emailAnalysisWord.model.server');
+const emailAnalysisSender = require('../models/emailAnalysisSender.model.server');
 const { Op, QueryTypes } = require("sequelize");
 const config = require("../config/environment");
 
@@ -74,6 +76,8 @@ module.exports.insert = async (org) => {
   await due_date_analysis.syncDueDate("due_date_analysis_" + result.dataValues.id);
   await mailHistory.syncEmailHistory("email_history_" + result.dataValues.id);
   await emailAttachment.syncEmailAttachment('email_attachment_' + result.dataValues.id);
+  await emailAnalysisWord.syncEmailAnalysisWord('email_analysis_word_' + result.dataValues.id);
+  await emailAnalysisSender.syncEmailAnalysisSender('email_analysis_sender_' + result.dataValues.id);
 
   const connection = require("../config/mysql.config");
   // partition table after create

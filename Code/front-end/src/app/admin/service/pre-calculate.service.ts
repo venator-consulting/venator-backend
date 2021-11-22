@@ -37,4 +37,12 @@ export class PreCalculateService {
     return this._http.get<any>(this._thisURL + 'due-date/' + orgId +'/' + prcId);
   }
 
+  mailAnalysisBySender(orgId: number, prcId: number) {
+    return this._http.get<any>(this._thisURL + 'mail-sender/' + orgId +'/' + prcId);
+  }
+
+  mailAnalysisByWord(orgId: number, prcId: number) {
+    return this._http.get<any>(this._thisURL + 'mail-word/' + orgId +'/' + prcId);
+  }
+
 }

@@ -22,6 +22,8 @@ export class PreCalculateComponent implements OnInit {
   disablePayment: boolean;
   disableDueDate: boolean;
   disableDocType: boolean;
+  disableMailSender: boolean;
+  disableMailWord: boolean;
 
   constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService,
     private _procedureService: ProcedureService, private _translateService: TranslateService) { }
@@ -37,15 +39,19 @@ export class PreCalculateComponent implements OnInit {
     this.disableText_account = (localStorage.getItem('currentProcedureText_account') === 'true');
     this.disablePayment = (localStorage.getItem('currentProcedurePayment') === 'true');
     this.disableDueDate = (localStorage.getItem('currentProcedureDueDate') === 'true');
+    this.disableMailSender = (localStorage.getItem('currentProcedureMailSender') === 'true');
+    this.disableMailWord = (localStorage.getItem('currentProcedureMailWord') === 'true');
   }
 
   updateProcedureStatus() {
     if (this.disableAmount && this.disableCredit && this.disableDueDate &&
-      this.disablePayment && this.disableText_account && this.disabletextWord) {
+      this.disablePayment && this.disableText_account && this.disabletextWord
+      && this.disableMailSender && this.disableMailWord) {
       this._procedureService.patch({ id: this.prcId, status: 'CALCULATED' })
         .subscribe(res => localStorage.setItem('currentProcedureStatus', 'CALCULATED'));
     } else if (this.disableAmount || this.disableCredit || this.disableDueDate ||
-      this.disablePayment || this.disableText_account || this.disabletextWord) {
+      this.disablePayment || this.disableText_account || this.disabletextWord
+      || this.disableMailSender || this.disableMailWord) {
       this._procedureService.patch({ id: this.prcId, status: 'CALCULATED' })
         .subscribe(res => localStorage.setItem('currentProcedureStatus', 'PARTIAL_CALCULATED'));
     }
@@ -144,6 +150,40 @@ export class PreCalculateComponent implements OnInit {
         this.waiting = false;
         localStorage.setItem('currentProcedureDueDate', 'true');
         this.disableDueDate = true;
+        this._messageService.add({
+          severity: 'success',
+          summary: 'SUCCESS',
+          life: 10000,
+          detail: await this._translateService.get('general_messages.update_success').toPromise(),
+        });
+        this.updateProcedureStatus();
+      }, er => this.waiting = false);
+  }
+
+  mailByWordStart() {
+    this.waiting = true;
+    this._preCalcService.mailAnalysisByWord(this.orgId, this.prcId)
+      .subscribe(async (res) => {
+        this.waiting = false;
+        localStorage.setItem('currentProcedureMailWord', 'true');
+        this.disableMailWord = true;
+        this._messageService.add({
+          severity: 'success',
+          summary: 'SUCCESS',
+          life: 10000,
+          detail: await this._translateService.get('general_messages.update_success').toPromise(),
+        });
+        this.updateProcedureStatus();
+      }, er => this.waiting = false);
+  }
+
+  mailBySenderStart() {
+    this.waiting = true;
+    this._preCalcService.mailAnalysisBySender(this.orgId, this.prcId)
+      .subscribe(async (res) => {
+        this.waiting = false;
+        localStorage.setItem('currentProcedureMailSender', 'true');
+        this.disableMailSender = true;
         this._messageService.add({
           severity: 'success',
           summary: 'SUCCESS',

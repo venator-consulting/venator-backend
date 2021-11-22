@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Attachment, MailAnalysis, MailAnalysisBySender, MailHistory } from '../model/mailHistory';
+import { Attachment, MailAnalysis, MailAnalysisBySender, MailHistory, MailHistoryRes } from '../model/mailHistory';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ export class MailHistoryService {
 
   constructor(private _http: HttpClient) { }
 
-  get(orgId: number, prcId: number): Observable<MailHistory[]> {
-    return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId);
+  get(orgId: number, prcId: number, criteria: any): Observable<MailHistoryRes> {
+    return this._http.get<MailHistoryRes>(this._thisURL + orgId + '/' + prcId, { params: criteria });
   }
 
   getMailAnalysisWrod(orgId: number, prcId: number): Observable<MailAnalysis[]> {

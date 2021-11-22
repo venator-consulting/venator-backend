@@ -82,6 +82,8 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedureDueDate', prc.due_date);
     localStorage.setItem('currentProcedureLiquidity', prc.liquidity);
     localStorage.setItem('currentProcedureDocType', prc.docType);
+    localStorage.setItem('currentProcedureMailSender', prc.emailSender);
+    localStorage.setItem('currentProcedureMailWord', prc.emailWord);
     this.navbar.updateLocal();
     this._router.navigate(['/dashboard/shared/data']);
 
@@ -100,6 +102,8 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedureDueDate', prc.due_date);
     localStorage.setItem('currentProcedureLiquidity', prc.liquidity);
     localStorage.setItem('currentProcedureDocType', prc.docType);
+    localStorage.setItem('currentProcedureMailSender', prc.emailSender);
+    localStorage.setItem('currentProcedureMailWord', prc.emailWord);
     this.navbar.updateLocal();
     this._router.navigate(['/dashboard/admin/procedure/edit']);
 

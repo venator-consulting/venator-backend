@@ -16,6 +16,8 @@ export class Procedures {
     liquidity: boolean = false;
     status: string;
     docType: boolean = false;
+    emailSender: boolean = false;
+    emailWord: boolean = false;
 
 
     // constructor(organisationId: number, name: string, data: boolean,analysis: boolean,dataSource: string) {

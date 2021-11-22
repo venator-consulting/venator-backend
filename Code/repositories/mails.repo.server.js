@@ -9,11 +9,34 @@ const { Op, QueryTypes } = require("sequelize");
 const config = require("../config/environment");
 const { organisation_id_is_required } = require('../models/enums/errors');
 
-module.exports.fetchAll = async (orgId, prcId) => {
-    return await MailHistory.getEmailHistory('email_history_' + orgId).findAll({
-        where: { procedureId: prcId }
+module.exports.fetchAll = async (orgId, prcId, criteria) => {
+    const limit = criteria.limit ? criteria.limit : 25;
+    delete criteria.limit;
+    const offset = criteria.offset ? criteria.offset : 0;
+    delete criteria.offset;
+    let orderBy = criteria.orderBy ? criteria.orderBy : "id";
+    delete criteria.orderBy;
+    const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
+    delete criteria.sortOrder;
+    for (const key in criteria) {
+        if (Object.hasOwnProperty.call(criteria, key)) {
+            if (criteria[key].toString().length > 2 && !key.includes('Time')) {
+                criteria[key] = {
+                    [Op.like]: "%" + criteria[key] + "%",
+                };
+            } else if (key.includes('Time')) {
+                criteria[key] = sequelize.where(sequelize.fn('date', sequelize.col(key)), '=', criteria[key]);
+            }
+        }
+    }
+    return await MailHistory.getEmailHistory('email_history_' + orgId).findAndCountAll({
+        where: criteria,
+        offset: +offset,
+        limit: +limit,
+        order: [[orderBy, sortOrder]],
     });
 };
+
 
 module.exports.getOneAttachment = async (orgId, id) => {
     return await MailAttachment

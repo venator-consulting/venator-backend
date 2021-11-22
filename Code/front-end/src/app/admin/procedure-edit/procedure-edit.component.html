@@ -91,6 +91,22 @@
                 </div>
             </div> 
 
+            <div class="p-field p-grid" *ngIf="role ==='Admin'">
+                <label for="emailSender" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.emailSender' | translate}} </label>
+                <div class="p-col-12 p-md-10 p-field-checkbox">
+                    <i *ngIf="!procedureModel.emailSender" class="pi pi-times closeIcon"></i>
+                    <p-checkbox *ngIf="procedureModel.emailSender" name="emailSender" binary="true" [(ngModel)]="procedureModel.emailSender" inputId="emailSender" [value]="procedureModel.emailSender"></p-checkbox>
+                </div>
+            </div> 
+
+            <div class="p-field p-grid" *ngIf="role ==='Admin'">
+                <label for="emailWord" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.emailWord' | translate}} </label>
+                <div class="p-col-12 p-md-10 p-field-checkbox">
+                    <i *ngIf="!procedureModel.emailWord" class="pi pi-times closeIcon"></i>
+                    <p-checkbox *ngIf="procedureModel.emailWord" name="emailWord" binary="true" [(ngModel)]="procedureModel.emailWord" inputId="emailWord" [value]="procedureModel.emailWord"></p-checkbox>
+                </div>
+            </div> 
+
 
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <div class="p-xs-col-5  p-mr-4">
