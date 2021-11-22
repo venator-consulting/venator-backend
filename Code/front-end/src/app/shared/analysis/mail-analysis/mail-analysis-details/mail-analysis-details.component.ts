@@ -39,24 +39,25 @@ export class MailAnalysisDetailsComponent implements OnInit {
     private _route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.items = [{
-      label: 'Email Analysis',
-      routerLink: '/dashboard/analysis/mail/by-word',
-      routerLinkActiveOptions: { exact: true },
-    },
-    {
-      label: 'Details',
-      routerLink: this._router.url,
-      routerLinkActiveOptions: { exact: true },
-    },
-    ];
 
+    this._translateService.get('MailAnalysis').subscribe((elem) => {
+      this.items = [{
+        label: elem.label,
+        routerLink: '/dashboard/analysis/mail/by-word',
+        routerLinkActiveOptions: { exact: true },
+      },
+      {
+        label: 'Details',
+        routerLink: this._router.url,
+        routerLinkActiveOptions: { exact: true },
+      },
+    ];
     this.home = {
       icon: 'pi pi-home',
-      label: 'Data',
+      label: elem.data,
       routerLink: '/dashboard/shared/data',
     };
-
+    });
     this.orgId = this.orgId ? this.orgId : +localStorage.getItem('organisationId');
     this.prcId = this.prcId ? this.prcId : +localStorage.getItem('currentProcedureId');
     this.keyword = this._route.snapshot.paramMap.get('key');
@@ -77,19 +78,18 @@ export class MailAnalysisDetailsComponent implements OnInit {
     ];
 
     this.cols = [
-      { header: 'Sender Email', field: 'email' },
-      { header: 'sender', field: 'sender' },
-      { header: 'Reveiver Email', field: 'rcvEmail' },
-      { header: 'Reveiver', field: 'rcvName' },
-      { header: 'subject', field: 'subject' },
-      { header: 'body', field: 'body' },
-      // { header: 'bodyHTML', field: 'bodyHTML'  },
-      { header: 'bcc', field: 'bcc' },
-      { header: 'cc', field: 'cc' },
-      { header: 'creationTime', field: 'creationTime' },
-      { header: 'messageDeliveryTime', field: 'messageDeliveryTime' },
-      { header: 'numberOfAttachments', field: 'numberOfAttachments' },
-      { header: 'Actions', field: 'actions' },
+      { header: 'MailAnalysis.email', field: 'email' },
+      { header: 'MailAnalysis.sender', field: 'sender' },
+      { header: 'MailAnalysis.rcvEmail', field: 'rcvEmail' },
+      { header: 'MailAnalysis.rcvName', field: 'rcvName' },
+      { header: 'MailAnalysis.subject', field: 'subject' },
+      { header: 'MailAnalysis.body', field: 'body' },
+      { header: 'MailAnalysis.bcc', field: 'bcc' },
+      { header: 'MailAnalysis.cc', field: 'cc' },
+      { header: 'MailAnalysis.creationTime', field: 'creationTime' },
+      { header: 'MailAnalysis.messageDeliveryTime', field: 'messageDeliveryTime' },
+      { header: 'MailAnalysis.numberOfAttachments', field: 'numberOfAttachments' },
+      { header: 'MailAnalysis.actions', field: 'actions' },
     ];
 
     this.getData();

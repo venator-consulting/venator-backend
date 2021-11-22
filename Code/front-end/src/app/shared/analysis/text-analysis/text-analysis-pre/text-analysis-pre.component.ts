@@ -7,6 +7,7 @@ import { TableColumn } from 'src/app/shared/model/tableColumn';
 import { TextAnalysis } from 'src/app/shared/model/textAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-text-analysis-pre',
@@ -17,6 +18,8 @@ import { ProcedureService } from 'src/app/shared/service/procedure.service';
 export class TextAnalysisPreComponent implements OnInit {
 
   byAccount: boolean = true;
+  byWordSec: string = "";
+  byAccountSec: string = "";
   selectedOrganisation: number = 0;
   selectedProcedure: number = 0;
   basicOptions: any;
@@ -46,7 +49,9 @@ export class TextAnalysisPreComponent implements OnInit {
   // steps: { label, value }[] = new Array();
   // selectedStep: string = 'MONTHLY';
 
-  constructor(private _analysisService: AnalysisService,
+  constructor(
+    public _translateService: TranslateService,
+    private _analysisService: AnalysisService,
     private _router: Router,
     private prcService: ProcedureService,
     private _route: ActivatedRoute,
@@ -54,39 +59,18 @@ export class TextAnalysisPreComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.items = [
-      // { label: 'Analysis' },
-      { label: 'Text Analysis', routerLink: '/dashboard/analysis/text' },
-    ];
-
-    this.home = {
-      icon: 'pi pi-home',
-      label: ' Data',
-      routerLink: '/dashboard/shared/data',
-    };
-
-    // this.steps = [
-    //   {
-    //     label: 'MONTHLY',
-    //     value: 'MONTHLY'
-    //   },
-    //   {
-    //     label: 'TOW_MONTHS',
-    //     value: 'TOW_MONTHS'
-    //   },
-    //   {
-    //     label: 'QUARTER',
-    //     value: 'QUARTER'
-    //   },
-    //   {
-    //     label: 'HALF_ANNUAL',
-    //     value: 'HALF_ANNUAL'
-    //   },
-    //   {
-    //     label: 'ANNUAL',
-    //     value: 'ANNUAL'
-    //   }
-    // ];
+    this._translateService.get('TextAnalysis').subscribe((elem) => {
+      this.items = [
+        { label: elem.label, routerLink: '/dashboard/analysis/text' },
+      ];
+      this.home = {
+        icon: 'pi pi-home',
+        label: elem.data,
+        routerLink: '/dashboard/shared/data',
+      };
+      this.byAccountSec = elem.byAccount;
+      this.byWordSec = elem.byWord
+    });
 
     this.basicOptions = {
       responsive: true,
@@ -134,17 +118,17 @@ export class TextAnalysisPreComponent implements OnInit {
 
     this.cols = [
       {
-        header: 'AmountAnalysis.accountNumber',
+        header: 'TextAnalysis.accountNumber',
         field: 'accountNumber',
         align: 'left',
       },
       {
-        header: 'AmountAnalysis.accountName',
+        header: 'TextAnalysis.accountName',
         field: 'accountName',
         align: 'left',
       },
       {
-        header: 'AmountAnalysis.NumberOfPostings',
+        header: 'TextAnalysis.NumberOfPostings',
         field: 'totlaCount',
         align: 'center',
       },
@@ -152,17 +136,17 @@ export class TextAnalysisPreComponent implements OnInit {
 
     this.colsWord = [
       {
-        header: 'Key Word',
+        header: 'TextAnalysis.keyword',
         field: 'word',
         align: 'left',
       },
       {
-        header: "Accounts' Count",
+        header: "TextAnalysis.accountsCount",
         field: 'accountsCount',
         align: 'center',
       },
       {
-        header: "Records' Count",
+        header: "TextAnalysis.recordsCount",
         field: 'recordsCount',
         align: 'center',
       },

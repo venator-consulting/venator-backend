@@ -6,6 +6,7 @@ import { TextAnalysis } from '../../model/textAnalysis';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ProcedureService } from '../../service/procedure.service';
 import { TableColumn } from '../../model/tableColumn';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-text-analysis',
@@ -41,6 +42,7 @@ export class TextAnalysisComponent implements OnInit {
   criteriaWord: any = {};
 
   constructor(
+    public _translateService: TranslateService,
     private _messageService: MessageService,
     private _analysisService: AnalysisService,
     private _router: Router,
@@ -49,16 +51,17 @@ export class TextAnalysisComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.items = [
-      // { label: 'Analysis' },
-      { label: 'Text Analysis', routerLink: '/dashboard/analysis/text' },
-    ];
+    this._translateService.get('TextAnalysis').subscribe((elem) => {
+      this.items = [
+        { label: elem.label, routerLink: '/dashboard/analysis/text' },
+      ];
+      this.home = {
+        icon: 'pi pi-home',
+        label: elem.data,
+        routerLink: '/dashboard/shared/data',
+      };
+    });
 
-    this.home = {
-      icon: 'pi pi-home',
-      label: ' Data',
-      routerLink: '/dashboard/shared/data',
-    };
 
     this.waiting = true;
 
@@ -108,17 +111,17 @@ export class TextAnalysisComponent implements OnInit {
     this.byAccount = this._route.snapshot.paramMap.get('by-word') ? false : true;
     this.cols = [
       {
-        header: 'AmountAnalysis.accountNumber',
+        header: 'TextAnalysis.accountNumber',
         field: 'accountNumber',
         align: 'left',
       },
       {
-        header: 'AmountAnalysis.accountName',
+        header: 'TextAnalysis.accountName',
         field: 'accountName',
         align: 'left',
       },
       {
-        header: 'AmountAnalysis.NumberOfPostings',
+        header: 'TextAnalysis.NumberOfPostings',
         field: 'totlaCount',
         align: 'center',
       },
@@ -126,17 +129,17 @@ export class TextAnalysisComponent implements OnInit {
 
     this.colsWord = [
       {
-        header: 'Key Word',
+        header: 'AmountAnalysis.keyword',
         field: 'word',
         align: 'left',
       },
       {
-        header: "Accounts' Count",
+        header: "AmountAnalysis.accountsCount",
         field: 'accountsCount',
         align: 'center',
       },
       {
-        header: "Records' Count",
+        header: "AmountAnalysis.recordsCount",
         field: 'recordsCount',
         align: 'center',
       },

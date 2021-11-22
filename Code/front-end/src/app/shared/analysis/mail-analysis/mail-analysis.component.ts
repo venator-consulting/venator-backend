@@ -5,6 +5,7 @@ import { Bar } from '../../model/bar';
 import { MailAnalysis, MailAnalysisBySender, MailHistory } from '../../model/mailHistory';
 import { TableColumn } from '../../model/tableColumn';
 import { MailHistoryService } from '../../service/mail-history.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-mail-analysis',
@@ -27,6 +28,8 @@ export class MailAnalysisComponent implements OnInit {
   criteria: any = {};
 
   bySender: boolean = false;
+  byWordSec: string = "";
+  bySenderSec: string = "";
 
   // for Sender
   waitingSender: boolean;
@@ -43,15 +46,28 @@ export class MailAnalysisComponent implements OnInit {
   items: MenuItem[];
   home: MenuItem;
 
-  constructor(private _mailService: MailHistoryService, private _router: Router,
+  constructor(
+    public _translateService: TranslateService,
+    private _mailService: MailHistoryService,
+    private _router: Router,
     private _route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this._translateService.get('MailAnalysis').subscribe((elem) => {
+      this.items = [
+        { label: elem.label, routerLink: '/dashboard/analysis/mail' },
+      ];
+      this.home = {
+        icon: 'pi pi-home',
+        label: elem.data,
+        routerLink: '/dashboard/shared/data',
+      };
+      this.bySenderSec = elem.bySender;
+      this.byWordSec = elem.byWord
+    });
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
     this.bySender = this._route.snapshot.paramMap.get('by-word') ? false : true;
-    this.items = [{ label: 'Email Analysis', routerLink: '/dashboard/analysis/mail' }];
-    this.home = { icon: 'pi pi-home', label: ' Data', routerLink: '/dashboard/shared/data' };
 
     this.basicOptions = {
       responsive: true,
@@ -95,17 +111,17 @@ export class MailAnalysisComponent implements OnInit {
 
     this.cols = [
       {
-        header: 'Key Word',
+        header: 'MailAnalysis.keyword',
         field: 'word',
         align: 'left',
       },
       {
-        header: "Senders' Count",
+        header: "MailAnalysis.senderCount",
         field: 'senderCount',
         align: 'center',
       },
       {
-        header: "Emails' Count",
+        header: "MailAnalysis.emailsCount",
         field: 'recordsCount',
         align: 'center',
       },
@@ -113,17 +129,17 @@ export class MailAnalysisComponent implements OnInit {
 
     this.colsSender = [
       {
-        header: 'Sender Email',
+        header: 'MailAnalysis.email',
         field: 'email',
         align: 'left',
       },
       {
-        header: "Senders Name",
+        header: "MailAnalysis.sender",
         field: 'sender',
         align: 'center',
       },
       {
-        header: "Emails' Count",
+        header: "MailAnalysis.totlaCount",
         field: 'totlaCount',
         align: 'center',
       },
