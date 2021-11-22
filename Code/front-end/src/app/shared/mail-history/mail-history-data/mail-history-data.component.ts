@@ -1,13 +1,18 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { dataTableColumns } from '../../model/dataTableColumns';
 import { MailHistory } from '../../model/mailHistory';
 import { MailHistoryService } from '../../service/mail-history.service';
+import * as FileSaver from 'file-saver';
+import { ExportDataService } from '../../service/export-data.service';
+import { Word } from '../../model/word';
 
 @Component({
   selector: 'app-mail-history-data',
   templateUrl: './mail-history-data.component.html',
-  styleUrls: ['./mail-history-data.component.sass']
+  styleUrls: ['./mail-history-data.component.sass'],
+  providers: [DatePipe]
 })
 export class MailHistoryDataComponent implements OnInit {
 
@@ -18,10 +23,23 @@ export class MailHistoryDataComponent implements OnInit {
   waiting: boolean;
   cols: dataTableColumns[];
 
-  criteria: any = {};
   filtersNo: number = 0;
+  pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
+  limit: number = 25;
+  pageNr: number = 1;
+  maxPageNr: number = 0;
+  displayedDataCount = 0;
+  criteria: any = {
+    limit: this.limit,
+    offset: 0,
+    orderBy: 'id',
+    sortOrder: 1,
+  };
+  totalCount: number = 0;
+  completeWords: Word[] = new Array();
 
-  constructor(private _mailHistoryService: MailHistoryService, private _messageService: MessageService) { }
+  constructor(private _mailHistoryService: MailHistoryService, private _messageService: MessageService,
+    private datepipe: DatePipe, private _exportDataService: ExportDataService) { }
 
   ngOnInit(): void {
     this.cols = [
@@ -40,70 +58,143 @@ export class MailHistoryDataComponent implements OnInit {
   }
 
   getData() {
+    this.waiting = true;
+    let tempCriteria = { ...this.criteria };
+    for (const key in tempCriteria) {
+      if (!tempCriteria[key] && key != 'offset') {
+        delete tempCriteria[key];
+      }
+      if (key.includes('Time'))
+        tempCriteria[key] = this.datepipe.transform(tempCriteria[key], 'yyyy.MM.dd');
+    }
+    this.filtersNo = Object.keys(tempCriteria).length - 4;
     this._mailHistoryService
-      .get(this.organisationId, this.procedureId)
+      .get(this.organisationId, this.procedureId, tempCriteria)
       .subscribe(res => {
         this.waiting = false;
-        this.data = res;
+        this.data = res.rows;
+        this.totalCount = res.count;
+        this.displayedDataCount = this.totalCount > this.limit ? this.limit : this.totalCount;
+        this.maxPageNr = Math.ceil(this.totalCount / this.limit);
       }, er => this.waiting = false);
   }
 
 
-  clearFilter() {
-    this.criteria = {};
-    this.data = [...this.tempData];
-    this.filtersNo = 0;
+  sort(event: LazyLoadEvent) {
+    this.criteria.orderBy = event.sortField ? event.sortField : 'id';
+    this.criteria.sortOrder = event.sortOrder;
+    this.pageNr = 1;
+    this.criteria.offset = 0;
+    if (!this.waiting) this.getData();
   }
 
-  filterChange(query, colName): void {
+  filterChange(value, field) {
+    this.pageNr = 1;
+    this.criteria.offset = 0;
+    this.completeWords = new Array();
+    this.getData();
+  }
+
+  submitFilter() {
     this.waiting = true;
-    for (const key in this.criteria) {
-      if (!this.criteria[key]) {
-        delete this.criteria[key];
-      }
+    this.getData();
+  }
+
+  clearFilter() {
+    this.criteria = {
+      limit: this.limit,
+      offset: 0,
+    };
+    this.filtersNo = 0;
+    this.pageNr = 1;
+    this.getData();
+  }
+
+  nextPage() {
+    ++this.pageNr;
+    if (this.pageNr > this.maxPageNr) return;
+    this.waiting = true;
+    if (!this.criteria.offset) {
+      this.criteria.offset = 0;
     }
-    this.filtersNo = Object.keys(this.criteria).length;
-    if (!query || !query?.toString()?.trim()) {
-      if (Object.keys(this.criteria).length < 1) {
-        this.data = [...this.tempData];
-      } else {
-        for (const key in this.criteria) {
-          if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
-            const element = this.criteria[key];
-            if (element && element.length < 3) {
-              this.data = this.tempData.filter(
-                (value) => value[key]?.toString().toLowerCase() == element.toLowerCase()
-              );
-            } else {
-              this.data = this.tempData.filter((value) =>
-                value[key]?.toString().toLowerCase().includes(element.toLowerCase())
-              );
-            }
-          }
-        }
-      }
-    } else {
-      this.data = [...this.tempData];
-      for (const key in this.criteria) {
-        if (Object.prototype.hasOwnProperty.call(this.criteria, key)) {
-          const element = this.criteria[key];
-          if (element.length < 3) {
-            this.data = this.data.filter(
-              (value) =>
-                value[key]?.toString().toLowerCase() == element.toLowerCase()
-            );
-          } else {
-            this.data = this.data.filter((value) =>
-              value[key]
-                ?.toString()
-                .toLowerCase()
-                .includes(element.toLowerCase())
-            );
-          }
-        }
-      } // end of for each criteria field
-    }
-    this.waiting = false;
+    this.criteria.offset += +this.limit;
+
+    this.getData();
+  }
+
+  lastPage() {
+    this.pageNr = this.maxPageNr;
+    this.criteria.offset = (this.pageNr - 1) * +this.limit;
+    this.waiting = true;
+    this.getData();
+  }
+
+  previousPage() {
+    --this.pageNr;
+    if (this.pageNr <= 0) return;
+    this.waiting = true;
+    this.criteria.offset -= +this.limit;
+
+    this.getData();
+  }
+
+  firstPage() {
+    this.pageNr = 1;
+    this.waiting = true;
+    this.criteria.offset = 0;
+    this.getData();
+  }
+
+  pageNrChange(value) {
+    this.waiting = true;
+    this.pageNr = (value && value.trim()) ? value : 1;
+    this.criteria.offset = (this.pageNr - 1) * this.limit;
+    this.getData();
+  }
+
+  limitChange(e) {
+    this.limit = e.value;
+    this.criteria.offset = 0;
+    this.criteria.limit = this.limit;
+    this.pageNr = 1;
+    this.waiting = true;
+    this.getData();
+  }
+
+  exportXLSX() {
+    this.waiting = true;
+    const lang = localStorage.getItem('lang');
+    let criteriaWithLang = { ...this.criteria };
+    // criteriaWithLang['lang'] = lang;
+    criteriaWithLang['lang'] = lang ?? 'de';
+    this._exportDataService
+      .exportMailXLSX(
+        'email_history',
+        this.organisationId,
+        this.procedureId,
+        criteriaWithLang
+      )
+      .subscribe((res) => {
+        this.waiting = false;
+        this.saveAsExcelFile(res, 'email_history');
+        // window.open(url.toString(), '_blank');
+      },
+        (err) => { this.waiting = false; }
+      );
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE =
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const d: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE,
+    });
+    // FileSaver.saveAs(file);
+    FileSaver.saveAs(
+      d,
+      fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
+    );
   }
 
 }

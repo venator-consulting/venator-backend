@@ -115,7 +115,7 @@ module.exports.exportFile = async (tableName = 'posting', organisationId = 9, pr
 };
 
 
-module.exports.exportMailFile = async (tableName = 'email_history_', organisationId = 9, procedureId = 1, criteria, cb) => {
+module.exports.exportMailFile = async (tableName = 'email_history', organisationId = 9, procedureId = 1, criteria, cb) => {
     try {
 
         const options = {

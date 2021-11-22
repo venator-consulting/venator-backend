@@ -6,7 +6,8 @@ const path = require('path');
 module.exports.getAll = async (req, res) => {
     const orgId = req.params.orgId;
     const prcId = req.params.prcId;
-    const result = await mailRepo.fetchAll(orgId, prcId);
+    const criteria = req.query;
+    const result = await mailRepo.fetchAll(orgId, prcId, criteria);
     res.status(200).json(result);
 };
 

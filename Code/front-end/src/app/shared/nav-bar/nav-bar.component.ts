@@ -239,6 +239,17 @@ export class NavBarComponent implements OnInit {
                     localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
                     localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
               },
+              {
+                label: 'Email History ',
+                icon: 'pi pi-envelope',
+                routerLink: ['/dashboard/analysis/mail-history'],
+                disabled: localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0,
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
             ],
           },
           {
@@ -310,17 +321,6 @@ export class NavBarComponent implements OnInit {
                 routerLink: ['/dashboard/analysis/creditor'],
                 disabled: localStorage.getItem('currentProcedureCredit') != 'true' ||
                   localStorage.getItem('currentProcedureAnalysis') != 'true' ||
-                  +localStorage.getItem('organisationId') <= 0 ||
-                  +localStorage.getItem('currentProcedureId') <= 0,
-                command: () => {
-                  this.sideBarShow = false;
-                },
-              },
-              {
-                label: 'Email History ',
-                icon: 'pi pi-envelope',
-                routerLink: ['/dashboard/analysis/mail-history'],
-                disabled: localStorage.getItem('currentProcedureAnalysis') != 'true' ||
                   +localStorage.getItem('organisationId') <= 0 ||
                   +localStorage.getItem('currentProcedureId') <= 0,
                 command: () => {
