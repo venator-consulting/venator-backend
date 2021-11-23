@@ -83,7 +83,9 @@
     "NOT_IMPORTED": "NOT IMPORTED",
     "IMPORTED": "IMPORTED",
     "PARTIAL_CALCULATED": "PARTIAL CALCULATED",
-    "CALCULATED": "CALCULATED"
+    "CALCULATED": "CALCULATED",
+    "emailImport":"E-mails Import"
+
   },
   "Admin_Dashboard": {
     "organisationEmail": "Email",
@@ -367,7 +369,10 @@
     "payment": "Pre-Calculated Duedate Analysis",
     "text_word": "Pre-Calculated Text Analysis by Word",
     "text_account": "Pre-Calculated Text Analysis by Account",
-    "due_date": "Pre-Calculated Due Date Analysis"
+    "due_date": "Pre-Calculated Due Date Analysis",
+    "docType":"Documenttype",
+    "emailSender": "Pre-Calculated Email analysis by sender",
+    "emailWord": "Pre-Calculated Email analysis by word"
   },
   "precalc" : {
     "precalc": "Pre-calculate Analysis",
@@ -378,8 +383,8 @@
     "payment": "Duedate Analysis",
     "due_date": "Due Date Analysis",
     "start": "Starten",
-    "mailSender": "mailSender",
-    "mailWord": "mailWord"
+    "mailSender": "Email analysis by sender",
+    "mailWord": "Email analysis by word"
   },
   "Notfound": {
     "errorMsg": "Sorry, the page does not exist!"

@@ -1298,62 +1298,57 @@ module.exports = {
         ],
         de: [
             {
-                header: 'Sender Email',
+                header: 'Email-Absender',
                 key: 'email',
                 width: 10
             },
             {
-                header: 'Sender Name',
+                header: 'Absender',
                 key: 'sender',
                 width: 10
             },
             {
-                header: 'Receiver Name',
+                header: 'Empfänger',
                 key: 'rcvName',
                 width: 10
             },
             {
-                header: 'Receiver Email',
+                header: 'Email-Empfänger',
                 key: 'rcvEmail',
                 width: 10
             },
             {
-                header: 'subject',
+                header: 'Betreff',
                 key: 'subject',
                 width: 10
             },
             {
-                header: 'body',
+                header: 'Nachricht',
                 key: 'body',
                 width: 10
             },
             {
-                header: 'creation Time',
+                header: 'Erstellungsdatum',
                 key: 'creationTime',
                 width: 10
             },
             {
-                header: 'company Code',
-                key: 'companyCode',
-                width: 10
-            },
-            {
-                header: 'message Delivery Time',
+                header: 'NachrichtLieferzeit',
                 key: 'messageDeliveryTime',
                 width: 10
             },
             {
-                header: 'bcc',
+                header: 'BCC',
                 key: 'bcc',
                 width: 10
             },
             {
-                header: 'cc',
+                header: 'CC',
                 key: 'cc',
                 width: 10
             },
             {
-                header: 'number Of Attachments',
+                header: 'Anzahl der Anhänge',
                 key: 'numberOfAttachments',
                 width: 10
             },
@@ -1363,7 +1358,7 @@ module.exports = {
                 width: 10
             },
             {
-                header: 'Comment',
+                header: 'Kommentar',
                 key: 'senderComment',
                 width: 10
             }
