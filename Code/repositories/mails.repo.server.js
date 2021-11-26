@@ -7,7 +7,7 @@ const Sequelize = require("../config/sequelize.config");
 const sequelize = Sequelize.getSequelize();
 const { Op, QueryTypes } = require("sequelize");
 const config = require("../config/environment");
-const { organisation_id_is_required } = require('../models/enums/errors');
+const MailAnalysisBySender = require('../models/emailAnalysisSender.model.server');
 
 module.exports.fetchAll = async (orgId, prcId, criteria) => {
     const limit = criteria.limit ? criteria.limit : 25;
@@ -42,8 +42,8 @@ module.exports.update = async (orgId, prcId, row) => {
         throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
     if (isNaN(prcId))
         throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-    return await MailHistory.getEmailHistory("email_history_" + orgId).update(row, {
-        where: { id: row.id }
+    return await MailAnalysisBySender.getEmailAnalysisSender("email_analysis_sender_" + orgId).update(row, {
+        where: { email: row.email }
     });
 }
 
@@ -59,7 +59,7 @@ module.exports.mailAnalysisBySender = async (orgId, prcId, keys) => {
         throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
     if (isNaN(prcId))
         throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-    let query = `SELECT p.email , p.sender , COUNT(p.id) as totlaCount
+    let query = `SELECT p.email , p.sender , p.accountEmail, COUNT(p.id) as totlaCount
                               FROM email_history_${orgId}  p
                               WHERE procedureId = :procedureId 
                                   `;
@@ -73,7 +73,7 @@ module.exports.mailAnalysisBySender = async (orgId, prcId, keys) => {
     }
     query += keys.length > 0 ? " 1 <> 1) " : "";
 
-    query += "GROUP BY p.email , p.sender";
+    query += "GROUP BY p.email , p.sender, p.accountEmail";
 
     const result = await sequelize.query(query, {
         replacements: {

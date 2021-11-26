@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { Bar } from '../../model/bar';
-import { MailAnalysis, MailAnalysisBySender, MailHistory } from '../../model/mailHistory';
+import { MailAnalysis, MailAnalysisBySender, MailHistory, MailsOptions } from '../../model/mailHistory';
 import { TableColumn } from '../../model/tableColumn';
 import { MailHistoryService } from '../../service/mail-history.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -46,11 +46,15 @@ export class MailAnalysisComponent implements OnInit {
   items: MenuItem[];
   home: MenuItem;
 
+  mails: MailsOptions[];
+  originalVal: MailHistory = new MailHistory();
+
   constructor(
     public _translateService: TranslateService,
     private _mailService: MailHistoryService,
     private _router: Router,
-    private _route: ActivatedRoute) { }
+    private _route: ActivatedRoute,
+    private _messageService: MessageService) { }
 
   ngOnInit(): void {
     this._translateService.get('MailAnalysis').subscribe((elem) => {
@@ -110,44 +114,37 @@ export class MailAnalysisComponent implements OnInit {
     };
 
     this.cols = [
-      {
-        header: 'MailAnalysis.keyword',
-        field: 'word',
-        align: 'left',
-      },
-      {
-        header: "MailAnalysis.senderCount",
-        field: 'senderCount',
-        align: 'center',
-      },
-      {
-        header: "MailAnalysis.emailsCount",
-        field: 'recordsCount',
-        align: 'center',
-      },
+      { header: 'MailAnalysis.keyword', field: 'word', align: 'left', },
+      { header: "MailAnalysis.senderCount", field: 'senderCount', align: 'center', },
+      { header: "MailAnalysis.emailsCount", field: 'recordsCount', align: 'center', },
     ];
 
     this.colsSender = [
-      {
-        header: 'MailAnalysis.email',
-        field: 'email',
-        align: 'left',
-      },
-      {
-        header: "MailAnalysis.sender",
-        field: 'sender',
-        align: 'center',
-      },
-      {
-        header: "MailAnalysis.totlaCount",
-        field: 'totlaCount',
-        align: 'center',
-      },
+      { header: 'MailAnalysis.email', field: 'email', align: 'left', },
+      { header: "MailAnalysis.sender", field: 'sender', align: 'center', },
+      { header: "MailAnalysis.totlaCount", field: 'totlaCount', align: 'center', },
+      { header: 'MailAnalysis.accountEmail', field: 'accountEmail', width: '300' },
     ];
 
     this.getDateBySender();
     this.getDataByWord();
+    this.getCreditorsMails();
   }
+
+  getCreditorsMails() {
+    this._mailService.getCreditorsMails(this.orgId, this.prcId)
+      .subscribe(res => {
+        this.mails = res.map(rec => {
+          return {
+            accountId: rec.id,
+            accountNumber: rec.accountNumber,
+            accountName: rec.accountName,
+            accountEmail: rec.email
+          };
+        });
+      }, er => this.waiting = false);
+  }
+
 
   getDataByWord() {
     this._mailService.getMailAnalysisWrod(this.orgId, this.prcId)
@@ -320,6 +317,61 @@ export class MailAnalysisComponent implements OnInit {
 
   goToDetailsSender(row: MailAnalysisBySender) {
     this._router.navigate(['/dashboard/analysis/mail/sender/' + row.email]);
+  }
+
+  emailChangedHandler(e, row: MailHistory) {
+    let id = e.value;
+    let selected = this.mails.find(rec => rec.accountId == id);
+    row.accountId = selected.accountId;
+    row.accountEmail = selected.accountEmail;
+    row.accountName = selected.accountName;
+    row.accountNumber = selected.accountNumber;
+  }
+
+
+  editRow(row) {
+    this.dataSender.filter(row => row.isEditable).map(r => { r.isEditable = false; return r });
+    row.isEditable = true;
+    this.originalVal = { ...row };
+  }
+
+  cancel(row) {
+    row = { ...this.originalVal };
+    row.isEditable = false;
+    let i = this.dataSender.findIndex(rec => rec.email == row.email);
+    this.dataSender[i] = {...row};
+    this.dataSender = [...this.dataSender];
+  }
+
+  reset(row: MailHistory) {
+    this.waiting = true;
+    row.accountId = null;
+    row.accountEmail = null;
+    row.accountName = null;
+    row.accountNumber = null;
+    this._mailService
+      .updateEmail(this.orgId, this.prcId, row)
+      .subscribe(res => {
+        row.isEditable = false;
+        this.waiting = false;
+        this._messageService.add({ severity: 'success', summary: 'DONE!', detail: `updated successfully` });
+      }, er => {
+        this.waiting = false;
+      });
+  }
+
+
+  save(row, update = true) {
+    this.waiting = true;
+    this._mailService
+      .updateEmail(this.orgId, this.prcId, row)
+      .subscribe(res => {
+        row.isEditable = false;
+        this.waiting = false;
+        this._messageService.add({ severity: 'success', summary: 'DONE!', detail: `updated successfully` });
+      }, er => {
+        this.waiting = false;
+      });
   }
 
 }

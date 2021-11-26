@@ -31,12 +31,20 @@ export class MailAnalysis {
     recordsCount: number;
     senderCount: number;
     word: number;
+
 }
 
 export class MailAnalysisBySender {
     email: string;
     sender: string;
     totlaCount: number;
+    accountId: number;
+    accountNumber: string;
+    accountName: string;
+    accountEmail: string;
+    createdAt: Date;
+    updatedAt: Date;
+    isEditable: boolean = false;
 }
 
 export class Attachment {
