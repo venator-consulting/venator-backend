@@ -106,7 +106,7 @@ export class NavBarComponent implements OnInit {
                 },
               },
               {
-                label: 'Import PST File',
+                label: elem.emailImport,
                 icon: 'pi pi-file',
                 routerLink: ['/dashboard/admin/import-pst'],
                 command: () => {
@@ -240,7 +240,7 @@ export class NavBarComponent implements OnInit {
                     localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
               },
               {
-                label: 'Email History ',
+                label: 'E-mails',
                 icon: 'pi pi-envelope',
                 routerLink: ['/dashboard/analysis/mail-history'],
                 disabled:
