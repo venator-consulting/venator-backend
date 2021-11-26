@@ -77,7 +77,7 @@ module.exports.getAccounts = function (tableName = 'accounts') {
             type: DataTypes.STRING(25)
         },
         email: {
-            type: DataTypes.STRING(25)
+            type: DataTypes.STRING(250)
         },
         bankName1: {
             type: DataTypes.STRING(25)

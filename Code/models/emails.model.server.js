@@ -31,7 +31,11 @@ module.exports.getEmailHistory = function (tableName = 'email_history_') {
         numberOfAttachments: { type: DataTypes.INTEGER },
         procedureId: { type: DataTypes.BIGINT },
         senderRelevant: { type: DataTypes.BOOLEAN },
-        senderComment: { type: DataTypes.STRING(500) }
+        senderComment: { type: DataTypes.STRING(500) },
+        accountNumber: { type: DataTypes.STRING(25) },
+        accountName: { type: DataTypes.STRING(50) },
+        accountEmail: { type: DataTypes.STRING(250) },
+        accountId: { type: DataTypes.BIGINT },
     }, {
         tableName: tableName
     });

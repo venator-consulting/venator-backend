@@ -15,6 +15,11 @@ export class MailHistory {
     updatedAt: Date;
     senderRelevant: boolean;
     senderComment: string;
+    accountId: number;
+    accountNumber: string;
+    accountName: string;
+    accountEmail: string;
+    isEditable: boolean = false;
 }
 
 export class MailHistoryRes {
@@ -42,4 +47,18 @@ export class Attachment {
     pstFilename: string;
     emailHistoryId: string;
     originalName: string;
+}
+
+export class creditorsMails {
+    id: number;
+    accountNumber: string;
+    accountName: string;
+    email: string;
+}
+
+export class MailsOptions {
+    accountId: number;
+    accountNumber: string;
+    accountName: string;
+    accountEmail: string;
 }

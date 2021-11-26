@@ -42,7 +42,7 @@
         </ng-template>
         <ng-template pTemplate="colgroup">
             <colgroup>
-                <col *ngFor="let col of cols" [style]="{ width: (col.width ? col.width : 150) + 'px' }" />
+                <col *ngFor="let col of cols" [style]="{ width: (col.width ? col.width : 200) + 'px' }" />
             </colgroup>
         </ng-template>
         <ng-template pTemplate="header">
@@ -99,14 +99,45 @@
                     col.field != 'bodyHTML' &&
                     col.field != 'actions' &&
                     col.field != 'senderRelevant' &&
-                    col.field != 'senderComment'
+                    col.field != 'senderComment' &&
+                    col.field != 'accountEmail'
                   ">
                         {{ rowData[col.field] }}
                     </span>
+                    <span *ngIf="!rowData.isEditable && col.field == 'accountEmail'">
+                        {{ rowData[col.field] }}
+                    </span>
+                    <div *ngIf="rowData.isEditable && col.field == 'accountEmail'">
+                        <p-dropdown [options]="mails" [(ngModel)]="rowData.accountId" optionValue="accountId"
+                            appendTo="body" placeholder="Email" optionLabel="accountEmail" [showClear]="true"
+                            [filter]="true" filterBy="accountEmail" (onChange)="emailChangedHandler($event, rowData)"
+                            [style]="{width:'250px'}">
+                            <!-- <ng-template pTemplate="item" let-item>
+                            {{'Document_Type.'+item.documentTypeName | translate}}
+                          </ng-template>
+                          <ng-template pTemplate="selectedItem" let-item>
+                            {{'Document_Type.'+item.documentTypeName | translate}}
+                          </ng-template> -->
+                        </p-dropdown>
+                    </div>
                     <span *ngIf="col.field == 'actions'">
                         <button type="button" pButton pRipple icon="pi pi-files" (click)="attachDetailes(rowData)"
                             class="p-button-rounded p-button-primary" label="Attachments" pTooltip="Attachments"
-                            tooltipPosition="bottom"></button></span>
+                            tooltipPosition="bottom"></button> &nbsp;
+                        <button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(rowData)"
+                            class="p-button-rounded p-button-warning" *ngIf="!rowData.isEditable"
+                            pTooltip="{{'Document_Type.Edit' | translate}}" tooltipPosition="bottom"></button>
+                        <button type="button" pButton pRipple icon="pi pi-save" (click)="save(rowData)"
+                            class="p-button-rounded p-button-warning" *ngIf="rowData.isEditable"
+                            pTooltip="{{'Document_Type.Save' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+                        <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(rowData)"
+                            class="p-button-rounded p-button-warning" *ngIf="rowData.isEditable"
+                            pTooltip="{{'Document_Type.Cancel' | translate}}" tooltipPosition="bottom"></button>
+                        <button type="button" pButton pRipple icon="pi pi-trash" (click)="reset(rowData)"
+                            class="p-button-rounded p-button-warning"
+                            *ngIf="!rowData.isEditable && rowData.accountEmail"
+                            pTooltip="{{'general_actions.delete' | translate}}" tooltipPosition="bottom"></button>
+                    </span>
                 </td>
             </tr>
         </ng-template>

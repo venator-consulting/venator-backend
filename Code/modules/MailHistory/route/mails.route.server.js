@@ -12,6 +12,14 @@ router.route("/:orgId/:prcId").get(
   controller.getAll
 );
 
+router.route("/:orgId/:prcId/creditors-mails")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    controller.getCreditorsMails)
+  .put(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    controller.updateMail);
+
 //#region mail analysis
 
 router.route("/:orgId/:prcId/download/:id/attachments").get(passport.authenticate("jwt", {

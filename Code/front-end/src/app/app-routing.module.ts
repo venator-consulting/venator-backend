@@ -53,7 +53,7 @@ import { MailAnalysisDetailsComponent } from './shared/analysis/mail-analysis/ma
 import { MailAnalysisSenderDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-sender-details/mail-analysis-sender-details.component';
 
 const routes: Routes = [
-  //{ path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   // { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   {

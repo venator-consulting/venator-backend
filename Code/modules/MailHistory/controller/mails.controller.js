@@ -3,12 +3,28 @@ const keys = require('../../../models/analysis/text.analysis.keywords');
 const env = require('../../../config/environment');
 const path = require('path');
 const precalRepo = require('../../../repositories/precalculated.repo.server');
+const accountRepo = require('../../../repositories/accounts.repo.server');
 
 module.exports.getAll = async (req, res) => {
     const orgId = req.params.orgId;
     const prcId = req.params.prcId;
     const criteria = req.query;
     const result = await mailRepo.fetchAll(orgId, prcId, criteria);
+    res.status(200).json(result);
+};
+
+module.exports.getCreditorsMails = async (req, res) => {
+    const orgId = req.params.orgId;
+    const prcId = req.params.prcId;
+    const result = await accountRepo.getCreditorsMails(orgId, prcId);
+    res.status(200).json(result);
+};
+
+module.exports.updateMail = async (req, res) => {
+    const orgId = req.params.orgId;
+    const prcId = req.params.prcId;
+    const row = req.body;
+    const result = await mailRepo.update(orgId, prcId, row);
     res.status(200).json(result);
 };
 

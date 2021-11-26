@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { dataTableColumns } from '../../model/dataTableColumns';
-import { Attachment, MailHistory } from '../../model/mailHistory';
+import { Attachment, creditorsMails, MailHistory, MailsOptions } from '../../model/mailHistory';
 import { MailHistoryService } from '../../service/mail-history.service';
 import * as FileSaver from 'file-saver';
 import { ExportDataService } from '../../service/export-data.service';
@@ -43,6 +43,9 @@ export class MailHistoryDataComponent implements OnInit {
   displayDialog: boolean = false;
   displayAttachDialog: boolean = false;
 
+  mails: MailsOptions[];
+  originalVal: MailHistory = new MailHistory();
+
   constructor(private _mailHistoryService: MailHistoryService, private _messageService: MessageService,
     private datepipe: DatePipe, private _exportDataService: ExportDataService) { }
 
@@ -59,11 +62,28 @@ export class MailHistoryDataComponent implements OnInit {
       { header: 'MailAnalysis.creationTime', field: 'creationTime' },
       { header: 'MailAnalysis.messageDeliveryTime', field: 'messageDeliveryTime' },
       { header: 'MailAnalysis.numberOfAttachments', field: 'numberOfAttachments' },
-      { header: 'MailAnalysis.actions', field: 'actions' },
+      { header: 'MailAnalysis.accountEmail', field: 'accountEmail', width: 300 },
+      { header: 'MailAnalysis.actions', field: 'actions', width: 300 },
     ];
 
 
     this.getData();
+
+    this.getCreditorsMails();
+  }
+
+  getCreditorsMails() {
+    this._mailHistoryService.getCreditorsMails(this.organisationId, this.procedureId)
+      .subscribe(res => {
+        this.mails = res.map(rec => {
+          return {
+            accountId: rec.id,
+            accountNumber: rec.accountNumber,
+            accountName: rec.accountName,
+            accountEmail: rec.email
+          };
+        });
+      }, er => this.waiting = false);
   }
 
   getData() {
@@ -238,6 +258,61 @@ export class MailHistoryDataComponent implements OnInit {
       type: EXCEL_TYPE
     });
     FileSaver.saveAs(d, new Date().getTime() + '_' + fileName);
+  }
+
+  emailChangedHandler(e, row: MailHistory) {
+    let id = e.value;
+    let selected = this.mails.find(rec => rec.accountId == id);
+    row.accountId = selected.accountId;
+    row.accountEmail = selected.accountEmail;
+    row.accountName = selected.accountName;
+    row.accountNumber = selected.accountNumber;
+  }
+
+
+  editRow(row) {
+    this.data.filter(row => row.isEditable).map(r => { r.isEditable = false; return r });
+    row.isEditable = true;
+    this.originalVal = { ...row };
+  }
+
+  cancel(row) {
+    row = { ...this.originalVal };
+    row.isEditable = false;
+    let i = this.data.findIndex(rec => rec.id == row.id);
+    this.data[i] = row;
+    this.data = [...this.data];
+  }
+
+  reset(row: MailHistory) {
+    this.waiting = true;
+    row.accountId = null;
+    row.accountEmail = null;
+    row.accountName = null;
+    row.accountNumber = null;
+    this._mailHistoryService
+      .updateEmail(this.organisationId, this.procedureId, row)
+      .subscribe(res => {
+        row.isEditable = false;
+        this.waiting = false;
+        this._messageService.add({ severity: 'success', summary: 'DONE!', detail: `updated successfully` });
+      }, er => {
+        this.waiting = false;
+      });
+  }
+
+
+  save(row, update = true) {
+    this.waiting = true;
+    this._mailHistoryService
+      .updateEmail(this.organisationId, this.procedureId, row)
+      .subscribe(res => {
+        row.isEditable = false;
+        this.waiting = false;
+        this._messageService.add({ severity: 'success', summary: 'DONE!', detail: `updated successfully` });
+      }, er => {
+        this.waiting = false;
+      });
   }
 
 }

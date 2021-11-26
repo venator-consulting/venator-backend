@@ -82,7 +82,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { SliderModule } from 'primeng/slider';
-import {OverlayPanelModule} from 'primeng/overlaypanel';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 import { BnNgIdleService } from 'bn-ng-idle';
 import { DueDateDetailsComponent } from './shared/analysis/payment-analysis/due-date-details/due-date-details.component';
@@ -120,6 +120,7 @@ import { MailAnalysisSenderDetailsComponent } from './shared/analysis/mail-analy
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
+  // return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({

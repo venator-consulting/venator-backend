@@ -37,6 +37,16 @@ module.exports.fetchAll = async (orgId, prcId, criteria) => {
     });
 };
 
+module.exports.update = async (orgId, prcId, row) => {
+    if (isNaN(orgId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+    if (isNaN(prcId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+    return await MailHistory.getEmailHistory("email_history_" + orgId).update(row, {
+        where: { id: row.id }
+    });
+}
+
 
 module.exports.getOneAttachment = async (orgId, id) => {
     return await MailAttachment
