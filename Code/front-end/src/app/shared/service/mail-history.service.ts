@@ -43,12 +43,24 @@ export class MailHistoryService {
     return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/sender/' + mail);
   }
 
+  getMailDetailsAnalysisSenderByAccount(orgId: number, prcId: number, accountNumber: string): Observable<MailHistory[]> {
+    return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/sender-account/' + accountNumber);
+  }
+
   getBySenderDetailsJustRelevant(orgId: number, prcId: number, mail: string): Observable<MailHistory[]> {
     return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/details/' + mail + '/relevant');
   }
 
+  getBySenderDetailsJustRelevantByAccount(orgId: number, prcId: number, accountNumber: string): Observable<MailHistory[]> {
+    return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/details-account/' + accountNumber + '/relevant');
+  }
+
   getBySenderDetailsAll(orgId: number, prcId: number, mail: string, criteria: any): Observable<{ count: number, rows: MailHistory[] }> {
     return this._http.get<{ count: number, rows: MailHistory[] }>(this._thisURL + orgId + '/' + prcId + '/details/' + mail, { params: criteria });
+  }
+
+  getBySenderDetailsAllByAccountNumber(orgId: number, prcId: number, accountNumber: string, criteria: any): Observable<{ count: number, rows: MailHistory[] }> {
+    return this._http.get<{ count: number, rows: MailHistory[] }>(this._thisURL + orgId + '/' + prcId + '/details-account/' + accountNumber, { params: criteria });
   }
 
   setRelevantMailAnalysis(orgId: number, prcId: number, mail: string, records: MailHistory[]): Observable<MailHistory[]> {

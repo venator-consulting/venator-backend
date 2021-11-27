@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem, MessageService } from 'primeng/api';
@@ -14,6 +14,8 @@ import { ExportDataService } from 'src/app/shared/service/export-data.service';
   styleUrls: ['./mail-analysis-sender-details.component.sass']
 })
 export class MailAnalysisSenderDetailsComponent implements OnInit {
+
+  @Input('accountNumber') accountNumber;
 
   orgId: number;
   prcId: number;
@@ -62,18 +64,18 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
         routerLink: this._router.url,
         routerLinkActiveOptions: { exact: true },
       },
-    ];
-    this.home = {
-      icon: 'pi pi-home',
-      label: elem.data,
-      routerLink: '/dashboard/shared/data',
-    };
-    this.detailsOptions = [
-      { name: elem.sysRelevants, value: 1 },
-      { name: elem.marked, value: 2 },
-      { name: elem.all, value: 3 },
-    ];
-  });
+      ];
+      this.home = {
+        icon: 'pi pi-home',
+        label: elem.data,
+        routerLink: '/dashboard/shared/data',
+      };
+      this.detailsOptions = [
+        { name: elem.sysRelevants, value: 1 },
+        { name: elem.marked, value: 2 },
+        { name: elem.all, value: 3 },
+      ];
+    });
 
     this.orgId = this.orgId ? this.orgId : +localStorage.getItem('organisationId');
     this.prcId = this.prcId ? this.prcId : +localStorage.getItem('currentProcedureId');
@@ -112,10 +114,25 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
     ];
 
     this.getData();
-  }
+
+  } // end of init
 
   getData() {
+    if (this.accountNumber?.trim()) this.getDataByAccountNumber();
+    else this.getDataByEamil();
+  }
+
+  getDataByEamil() {
     this._mailService.getMailDetailsAnalysisSender(this.orgId, this.prcId, this.email)
+      .subscribe(res => {
+        this.data = res;
+        this.waiting = false;
+        this.tempData = res;
+      }, er => this.waiting = false);
+  }
+
+  getDataByAccountNumber() {
+    this._mailService.getMailDetailsAnalysisSenderByAccount(this.orgId, this.prcId, this.accountNumber)
       .subscribe(res => {
         this.data = res;
         this.waiting = false;
@@ -359,6 +376,11 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
   }
 
   getUserRelevant() {
+    if (this.accountNumber?.trim()) this.getUserRelevantByAccountNumber();
+    else this.getUserRelevantByEmail();
+  }
+
+  getUserRelevantByEmail() {
     this.waiting = true;
     this._mailService
       .getBySenderDetailsJustRelevant(this.orgId, this.prcId, this.email)
@@ -374,7 +396,29 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
       );
   }
 
+  getUserRelevantByAccountNumber() {
+    this.waiting = true;
+    this._mailService
+      .getBySenderDetailsJustRelevantByAccount(this.orgId, this.prcId, this.accountNumber)
+      .subscribe(
+        (res) => {
+          this.data = res;
+          this.tempData = res;
+          this.waiting = false;
+        },
+        (er) => {
+          this.waiting = false;
+        }
+      );
+  }
+
   getAllBySender() {
+    if (this.accountNumber?.trim()) this.getAllBySenderByAccountNumber();
+    else this.getAllBySenderByEmail();
+  }
+
+
+  getAllBySenderByEmail() {
     this.waiting = true;
     for (const key in this.backCriteria) {
       if (!this.backCriteria[key] && key != 'offset') {
@@ -384,6 +428,30 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
     this.filtersNo = Object.keys(this.backCriteria).length - 4;
     this._mailService
       .getBySenderDetailsAll(this.orgId, this.prcId, this.email, this.backCriteria)
+      .subscribe(
+        (res) => {
+          this.allRecordData = res.rows;
+          this.totalCount = res.count;
+          this.displayedDataCount = this.allRecordData.length;
+          this.maxPageNr = Math.ceil(this.totalCount / this.limit);
+          this.waiting = false;
+        },
+        (er) => {
+          this.waiting = false;
+        }
+      );
+  }
+
+  getAllBySenderByAccountNumber() {
+    this.waiting = true;
+    for (const key in this.backCriteria) {
+      if (!this.backCriteria[key] && key != 'offset') {
+        delete this.backCriteria[key];
+      }
+    }
+    this.filtersNo = Object.keys(this.backCriteria).length - 4;
+    this._mailService
+      .getBySenderDetailsAllByAccountNumber(this.orgId, this.prcId, this.accountNumber, this.backCriteria)
       .subscribe(
         (res) => {
           this.allRecordData = res.rows;

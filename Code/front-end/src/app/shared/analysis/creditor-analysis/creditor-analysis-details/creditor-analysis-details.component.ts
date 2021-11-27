@@ -22,6 +22,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   chartData: any;
   totalAmountCount: any;
   totalPaymentCount: any;
+  totalEmailCount: any;
   totalTextCount: any;
   items: MenuItem[];
   home: MenuItem;
@@ -33,7 +34,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
     private _analysisService: AnalysisService,
     private _messageService: MessageService,
     private _router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.selectedOrganisation = +localStorage.getItem('organisationId');
@@ -72,21 +73,18 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
           (res) => {
             this.totalAmount =
               res.amount.length > 0 ? res.amount[0].totalBalance : 0;
-            this.totalAmountCount =
-              res.amount.length > 0 ? res.amount[0].totlaCount : 0;
-            this.totalPayment =
-              res.payment.length > 0 ? res.payment[0].totalBalance : 0;
-            this.totalPaymentCount =
-              res.payment.length > 0 ? res.payment[0].totlaCount : 0;
+            this.totalAmountCount = res.amount.length > 0 ? res.amount[0].totlaCount : 0;
+            this.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
+            this.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
             this.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
-            this.totalTextCount =
-              res.text.length > 0 ? res.text[0].totlaCount : 0;
+            this.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
+            this.totalEmailCount = res.email.length > 0 ? res.email[0].totlaCount : 0;
             this.accountName =
               res.text.length > 0
                 ? res.text[0].accountName
                 : res.amount.length > 0
-                ? res.amount[0].accountName
-                : res.payment[0]?.accountName;
+                  ? res.amount[0].accountName
+                  : res.payment[0]?.accountName;
             this.chartData = {
               labels: [elem.amountLabel, elem.textLabel, elem.paymentLabel],
               datasets: [

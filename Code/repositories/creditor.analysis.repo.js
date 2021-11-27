@@ -74,12 +74,7 @@ module.exports.creditorAnalysis = async (orgId, prcId, keys, criteria) => {
   return finalResult;
 };
 
-module.exports.creditorAnalysisDetails = async (
-  orgId,
-  prcId,
-  keys,
-  accountNumber
-) => {
+module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumber) => {
   /**
    *  Text Analysis records Starts
    */
@@ -141,6 +136,14 @@ module.exports.creditorAnalysisDetails = async (
    * Payment records ends
    */
 
+  //#region emails query
+  const emailsQuery = `SELECT * 
+  FROM email_analysis_sender_${orgId} pos
+  WHERE
+      pos.procedureId = :procedureId
+      AND pos.accountNumber = :accountNumber `;
+  //#endregion emils query
+
   /**
    * define promises
    */
@@ -168,6 +171,13 @@ module.exports.creditorAnalysisDetails = async (
     },
     type: QueryTypes.SELECT,
   });
+
+  const emailsResultPromise = sequelize.query(emailsQuery, {
+    replacements: {
+      procedureId: prcId,
+      accountNumber: accountNumber,
+    }, type: QueryTypes.SELECT,
+  });
   /**
    * define promises ends
    */
@@ -179,11 +189,13 @@ module.exports.creditorAnalysisDetails = async (
   let textResult = new Array();
   let amountResult = new Array();
   let paymentResult = new Array();
+  // let emailsResult = new Array();
 
   await Promise.all([
     amountResultPromise,
     textResultPromise,
     paymentResultPromise,
+    emailsResultPromise
   ]).then((values) => {
     result = values;
   });
@@ -242,5 +254,6 @@ module.exports.creditorAnalysisDetails = async (
     text: textResult,
     amount: amountResult,
     payment: paymentResult,
+    email: result[3]
   };
 };

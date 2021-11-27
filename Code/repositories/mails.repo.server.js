@@ -164,6 +164,35 @@ module.exports.mailAnalysisSenderDetails = async (orgId, prcId, keys, email) => 
     return result;
 };
 
+module.exports.getMailBySenderAccount = async (orgId, prcId, keys, accountNumber) => {
+    if (isNaN(orgId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+    if (isNaN(prcId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+    let query = `SELECT * FROM email_history_${orgId}  p
+                        WHERE procedureId = :procedureId 
+                            AND p.accountNumber = :accountNumber
+                                  `;
+    query += keys.length > 0 ? " AND ( " : "";
+
+    for (let index = 0; index < keys.length; index++) {
+        const key = keys[index];
+        query += `  p.subject ${key}
+                    OR p.body ${key}
+                    OR p.bodyHTML ${key} OR`;
+    }
+    query += keys.length > 0 ? " 1 <> 1) " : "";
+
+    const result = await sequelize.query(query, {
+        replacements: {
+            procedureId: prcId,
+            accountNumber: accountNumber,
+        },
+        type: QueryTypes.SELECT,
+    });
+    return result;
+};
+
 module.exports.mailAnalysisWordDetails = async (orgId, prcId, key) => {
     if (isNaN(orgId))
         throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -204,6 +233,37 @@ module.exports.mailJustRelevant = async (orgId, prcId, email) => {
         where: {
             senderRelevant: true,
             email: email,
+            ProcedureId: prcId,
+        },
+        attributes: [
+            "id",
+            "procedureId",
+            "email",
+            "sender",
+            "rcvName",
+            "rcvEmail",
+            "subject",
+            "body",
+            "creationTime",
+            "messageDeliveryTime",
+            "bcc",
+            "cc",
+            "numberOfAttachments",
+            "senderRelevant",
+            "senderComment"
+        ],
+    });
+};
+
+module.exports.mailJustRelevantByAccount = async (orgId, prcId, accountNumber) => {
+    if (isNaN(orgId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+    if (isNaN(prcId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+    return await MailHistory.getEmailHistory("email_history_" + orgId).findAll({
+        where: {
+            senderRelevant: true,
+            accountNumber: accountNumber,
             ProcedureId: prcId,
         },
         attributes: [
@@ -270,6 +330,41 @@ module.exports.getBySender = async (orgId, prcId, mail, criteria) => {
     }
     criteria.procedureId = prcId;
     criteria.email = mail;
+    const result = await MailHistory.getEmailHistory("email_history_" + orgId).findAndCountAll({
+        where: criteria,
+        offset: +offset,
+        limit: +limit,
+        order: [[orderBy, sortOrder]],
+    });
+    return result;
+};
+
+module.exports.getBySenderByAccount = async (orgId, prcId, accountNumber, criteria) => {
+    if (isNaN(orgId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+    if (isNaN(prcId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+    const limit = criteria.limit ? criteria.limit : 25;
+    delete criteria.limit;
+    const offset = criteria.offset ? criteria.offset : 0;
+    delete criteria.offset;
+    let orderBy = criteria.orderBy ? criteria.orderBy : "id";
+    delete criteria.orderBy;
+    const sortOrder = criteria.sortOrder == -1 ? "DESC" : "ASC";
+    delete criteria.sortOrder;
+
+    for (const key in criteria) {
+        if (Object.hasOwnProperty.call(criteria, key)) {
+            if (criteria[key].toString().length > 2) {
+                criteria[key] = {
+                    [Op.like]: "%" + criteria[key] + "%",
+                };
+            }
+            if (!criteria[key]) delete criteria[key];
+        }
+    }
+    criteria.procedureId = prcId;
+    criteria.accountNumber = accountNumber;
     const result = await MailHistory.getEmailHistory("email_history_" + orgId).findAndCountAll({
         where: criteria,
         offset: +offset,

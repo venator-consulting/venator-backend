@@ -44,12 +44,28 @@ router.route("/:orgId/:prcId/details/:mail").get(
   controller.getBySender
 );
 
+router.route("/:orgId/:prcId/details-account/:accountNumber").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  controller.getBySenderByAccount
+);
+
 router.route("/:orgId/:prcId/mail-analysis/sender").get(
   passport.authenticate("jwt", {
     session: false,
   }),
   authorization.canDisplayAnalysis(),
   controller.getMailAnalysisBySender
+);
+
+router.route("/:orgId/:prcId/mail-analysis/sender-account/:accountNumber").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  controller.getMailDetailsAnalysisBySenderAccount
 );
 
 router.route("/:orgId/:prcId/mail-analysis/word").get(
@@ -82,6 +98,14 @@ router.route("/:orgId/:prcId/mail-analysis/details/:mail/relevant").get(
   }),
   authorization.canDisplayAnalysis(),
   controller.mailJustRelevant
+);
+
+router.route("/:orgId/:prcId/mail-analysis/details-account/:accountNumber/relevant").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  controller.mailJustRelevantByAccount
 );
 //#endregion mail analysis
 

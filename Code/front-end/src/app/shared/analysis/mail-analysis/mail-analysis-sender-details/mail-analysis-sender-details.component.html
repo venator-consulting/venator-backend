@@ -6,7 +6,7 @@
     </div>
 </div>
 
-<div class="p-grid">
+<div class="p-grid" style="min-height: 60vh;">
     <div class="p-col-12">
         <span class="p-text-center">
             <p-selectButton [options]="detailsOptions" (onChange)="changeData($event.value)" optionLabel="name"
@@ -20,7 +20,7 @@
             [frozenColumns]="frozenCols" frozenWidth="500px" [(selection)]="selected">
             <ng-template pTemplate="caption">
                 <div class="p-grid">
-                    <div class="p-col-1">
+                    <div class="p-col-1" *ngIf="!accountNumber">
                         <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
                             class="p-button-rounded p-button-primary" label="{{ 'TextAnalysis.back' | translate }} "
                             pTooltip="{{ 'TextAnalysis.back' | translate }} " tooltipPosition="bottom"></button>
@@ -68,7 +68,7 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row let-columns="columns">
-                <tr>
+                <tr style="height: 70px;">
                     <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns"
                         class="p-text-{{ col.align }}">
                         <span *ngIf="col.field == 'senderRelevant'">
@@ -109,8 +109,8 @@
                             {{ row[col.field] }}
                         </span>
                         <span *ngIf="col.field == 'actions'">
-                            <button type="button" pButton pRipple icon="pi pi-files" (click)="attachDetailes(row)"
-                                class="p-button-rounded p-button-primary" label="Attachments" pTooltip="Attachments"
+                            <button type="button" pButton pRipple icon="pi pi-file" (click)="attachDetailes(row)"
+                                class="p-button-rounded p-button-primary" pTooltip="Attachments"
                                 tooltipPosition="bottom"></button></span>
                     </td>
 
@@ -129,7 +129,7 @@
             [lazy]="true" [customSort]="true" (onLazyLoad)="sort($event)">
             <ng-template pTemplate="caption">
                 <div class="p-grid">
-                    <div class="p-col-1">
+                    <div class="p-col-1" *ngIf="!accountNumber">
                         <button type="button" pButton pRipple icon="pi pi-arrow-left" (click)="goBack()"
                             class="p-button-rounded p-button-primary" label="{{ 'TextAnalysis.back' | translate }} "
                             pTooltip="{{ 'TextAnalysis.back' | translate }} " tooltipPosition="bottom"></button>
@@ -192,19 +192,19 @@
                     <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
                         <input
                             *ngIf="col.field != 'senderRelevant' && col.field != 'creationTime' && col.field != 'messageDeliveryTime'"
-                            pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{ width: '90%' }"
-                            (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss" />
-                        <p-calendar *ngIf="
-              col.field == 'creationTime' ||
-              col.field == 'messageDeliveryTime'            " [(ngModel)]="criteria[col.field]"
-                            (onSelect)="filterChange($event, col.field)" [monthNavigator]="true" [yearNavigator]="true"
-                            yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy">
+                            pInputText type="text" [(ngModel)]="backCriteria[col.field]" [style]="{ width: '90%' }"
+                            (input)="filterChangeBack($any($event.target).value, col.field)" class="filterInputCss" />
+
+                        <p-calendar *ngIf="col.field == 'creationTime' || col.field == 'messageDeliveryTime'"
+                            [(ngModel)]="backCriteria[col.field]" (onSelect)="filterChangeBack($event, col.field)"
+                            [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
+                            dateFormat="dd.mm.yy">
                         </p-calendar>
                     </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row let-columns="columns">
-                <tr>
+                <tr style="height: 70px;">
                     <td pEditableColumn pReorderableRowHandle *ngFor="let col of columns"
                         class="p-text-{{ col.align }}">
                         <span *ngIf="col.field == 'senderRelevant'">
@@ -245,15 +245,15 @@
                             {{ row[col.field] }}
                         </span>
                         <span *ngIf="col.field == 'actions'">
-                            <button type="button" pButton pRipple icon="pi pi-files" (click)="attachDetailes(row)"
-                                class="p-button-rounded p-button-primary" label="Attachments" pTooltip="Attachments"
+                            <button type="button" pButton pRipple icon="pi pi-file" (click)="attachDetailes(row)"
+                                class="p-button-rounded p-button-primary" pTooltip="Attachments"
                                 tooltipPosition="bottom"></button></span>
                     </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns>
                 <tr>
-                    <td [attr.colspan]="columns.length">No records found</td>
+                    <td [attr.colspan]="columns.length + 2">No records found</td>
                 </tr>
             </ng-template>
         </p-table>

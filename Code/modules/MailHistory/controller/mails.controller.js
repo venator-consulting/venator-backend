@@ -34,6 +34,12 @@ module.exports.getBySender = async (req, res) => {
     res.status(200).json(result);
 };
 
+module.exports.getBySenderByAccount = async (req, res) => {
+    const criteria = req.query;
+    const result = await mailRepo.getBySenderByAccount(req.params.orgId, req.params.prcId, req.params.accountNumber, criteria);
+    res.status(200).json(result);
+};
+
 //#region email analysis
 module.exports.getMailAnalysisBySender = async (req, res) => {
     const orgId = +req.params.orgId;
@@ -57,6 +63,14 @@ module.exports.getMailDetailsAnalysisBySender = async (req, res) => {
     res.status(200).json(result);
 };
 
+module.exports.getMailDetailsAnalysisBySenderAccount = async (req, res) => {
+    const orgId = +req.params.orgId;
+    const prcId = +req.params.prcId;
+    const accountNumber = req.params.accountNumber;
+    const result = await mailRepo.getMailBySenderAccount(orgId, prcId, keys, accountNumber);
+    res.status(200).json(result);
+};
+
 module.exports.getMailDetailsAnalysisByWoed = async (req, res) => {
     const orgId = +req.params.orgId;
     const prcId = +req.params.prcId;
@@ -72,6 +86,11 @@ module.exports.mailBulkUpdate = async (req, res) => {
 
 module.exports.mailJustRelevant = async (req, res) => {
     const result = await mailRepo.mailJustRelevant(req.params.orgId, req.params.prcId, req.params.mail);
+    res.status(200).json(result);
+};
+
+module.exports.mailJustRelevantByAccount = async (req, res) => {
+    const result = await mailRepo.mailJustRelevantByAccount(req.params.orgId, req.params.prcId, req.params.accountNumber);
     res.status(200).json(result);
 };
 
