@@ -512,7 +512,9 @@
     "showDetails": "Weitere Details ansehen",
     "amountLabel": "Glattebeträge Analyse",
     "textLabel": "Text Analyse",
-    "paymentLabel": "Fälligkeitsanalyse"
+    "paymentLabel": "Fälligkeitsanalyse",
+    "senderTotalCount": "Total Sender Count",
+    "emailTotalCount":"Totla emails messages count"
   },
   "DataTableColumns": {
     "client": "Mandant",

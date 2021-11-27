@@ -42,9 +42,20 @@ module.exports.update = async (orgId, prcId, row) => {
         throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
     if (isNaN(prcId))
         throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-    return await MailAnalysisBySender.getEmailAnalysisSender("email_analysis_sender_" + orgId).update(row, {
+        // update in calculated table
+    const firstQuery = MailAnalysisBySender.getEmailAnalysisSender("email_analysis_sender_" + orgId).update(row, {
         where: { email: row.email }
     });
+    // update in original table
+    const secondQuery = MailHistory.getEmailHistory('email_history_' + orgId).update({
+        accountId: row.accountId,
+        accountEmail: row.accountEmail,
+        accountName: row.accountName,
+        accountNumber: row.accountNumber,
+    }, {
+        where: { email: row.email }
+    })
+    return await Promise.all([firstQuery, secondQuery]);
 }
 
 

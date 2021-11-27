@@ -20,10 +20,11 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   totalPayment: number;
   displayDetails: number;
   chartData: any;
-  totalAmountCount: any;
-  totalPaymentCount: any;
-  totalEmailCount: any;
-  totalTextCount: any;
+  totalAmountCount: number = 0;
+  totalPaymentCount: number = 0;
+  totalEmailCount: number = 0;
+  totlaSenderCount: number = 0;
+  totalTextCount: number = 0;
   items: MenuItem[];
   home: MenuItem;
   waiting: boolean = true;
@@ -78,7 +79,11 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
             this.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
             this.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
             this.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
-            this.totalEmailCount = res.email.length > 0 ? res.email[0].totlaCount : 0;
+            // this.totalEmailCount = res.email.length > 0 ? res.email[0].totlaCount : 0;
+            this.totlaSenderCount = res.email?.length;
+            res.email?.forEach(sender => {
+              this.totalEmailCount += +sender.totlaCount?? 0;
+            });
             this.accountName =
               res.text.length > 0
                 ? res.text[0].accountName

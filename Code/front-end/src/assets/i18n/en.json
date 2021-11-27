@@ -525,7 +525,9 @@
     "showDetails": "Weitere Details ansehen",
     "amountLabel": "Amount Analysis",
     "textLabel": "Text Analysis",
-    "paymentLabel": "Duedate Analysis"
+    "paymentLabel": "Duedate Analysis",
+    "senderTotalCount": "Total Sender Count",
+    "emailTotalCount":"Totla emails messages count"
   },
   "DataTableColumns": {
     "client": "Client",
