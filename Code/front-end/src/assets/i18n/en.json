@@ -19,7 +19,9 @@
     "no_template_selected": "Please select a Template and other fields!",
     "no_file_selected": "Please select a file to import",
     "invalid_file_type": "Invalid File Type, please selce a CSV or excel file",
-    "invalid_file_class": "Invalid File Class"
+    "invalid_file_class": "Invalid File Class",
+
+    "Please_Contact_Developer": "There is something went wrong, Please Contact Developer!"
 
   },
   "general_actions": {

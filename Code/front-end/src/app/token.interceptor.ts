@@ -46,8 +46,9 @@ export class TokenInterceptor implements HttpInterceptor {
             // console.log('this is client side error');
             // errorMsg = `Error: ${error.error.message}`;
           } else {
+            const msg = err.error.msg ?? 'Please_Contact_Developer';
             this._translateService
-              .get('ErrorHandler.' + err.error.msg)
+              .get('ErrorHandler.' + msg)
               .toPromise()
               .then((errorMsg) => {
                 this._messageService.add({

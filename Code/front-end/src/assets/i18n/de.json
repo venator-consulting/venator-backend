@@ -17,7 +17,9 @@
     "no_template_selected": "Bitte wählen Sie ein Template und andere Felder aus!",
     "no_file_selected": "Bitte wählen Sie eine zu importierende Datei aus",
     "invalid_file_type": "Ungültiger Dateityp, bitte wählen Sie eine CSV- oder Excel-Datei aus",
-    "invalid_file_class": "Ungültige Dateiklasse"
+    "invalid_file_class": "Ungültige Dateiklasse",
+
+    "Please_Contact_Developer": "There is something went wrong, Please Contact Developer!"
   },
   "general_actions": {
     "add": "hinzufügen",
