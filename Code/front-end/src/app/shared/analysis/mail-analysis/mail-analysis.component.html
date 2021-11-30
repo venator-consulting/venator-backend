@@ -118,18 +118,18 @@
                 {{ row[col.field] }}
               </span>
               <span *ngIf="!row.isEditable && col.field == 'accountEmail'">
-                {{ row[col.field] }}
+                {{row.accountName}} ({{row.accountNumber}})
               </span>
               <div *ngIf="row.isEditable && col.field == 'accountEmail'">
                 <p-dropdown [options]="mails" [(ngModel)]="row.accountId" optionValue="accountId" appendTo="body"
-                  placeholder="Email" optionLabel="accountEmail" [showClear]="true" [filter]="true"
+                  placeholder="Email" [showClear]="true" [filter]="true"
                   filterBy="accountEmail" (onChange)="emailChangedHandler($event, row)" [style]="{width:'250px'}">
-                  <!-- <ng-template pTemplate="item" let-item>
-                    {{'Document_Type.'+item.documentTypeName | translate}}
+                  <ng-template pTemplate="item" let-item>
+                    {{item.accountName}} ({{item.accountNumber}})
                   </ng-template>
                   <ng-template pTemplate="selectedItem" let-item>
-                    {{'Document_Type.'+item.documentTypeName | translate}}
-                  </ng-template> -->
+                    {{item.accountName}} ({{item.accountNumber}})
+                  </ng-template>
                 </p-dropdown>
               </div>
             </td>
