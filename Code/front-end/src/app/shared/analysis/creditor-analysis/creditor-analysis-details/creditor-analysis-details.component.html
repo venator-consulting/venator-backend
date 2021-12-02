@@ -89,11 +89,11 @@
 
 <div class="p-grid">
   <div class="p-col-12">
-    <app-text-analysis-details details="true" *ngIf="displayDetails==1"></app-text-analysis-details>
-    <amount-analysis-details details="true" *ngIf="displayDetails==2"></amount-analysis-details>
-    <app-payment-analysis-details details="true" *ngIf="displayDetails==3"></app-payment-analysis-details>
-    <app-mail-analysis-sender-details [accountNumber]="accountNumber" *ngIf="displayDetails==4">
+    <app-text-analysis-details details="true" [hidden]="displayDetails!=1"></app-text-analysis-details>
+    <amount-analysis-details details="true" [hidden]="displayDetails!=2"></amount-analysis-details>
+    <app-payment-analysis-details details="true" [hidden]="displayDetails!=3"></app-payment-analysis-details>
+    <app-mail-analysis-sender-details [accountNumber]="accountNumber" [hidden]="displayDetails!=4">
     </app-mail-analysis-sender-details>
-    <app-due-date details="true" *ngIf="displayDetails==5"></app-due-date>
+    <app-due-date details="true" [hidden]="displayDetails!=5"></app-due-date>
   </div>
 </div>

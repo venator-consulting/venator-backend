@@ -342,6 +342,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
               this.red.push(-1 * (element.red.value));
             }
           }
+          
           this.waiting = false;
         },
         (er) => {
