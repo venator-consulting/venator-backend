@@ -491,6 +491,56 @@ module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
   return result;
 };
 
+module.exports.textAnalysisByWordAndAccount = async (orgId, prcId, keys, accountNumber) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  let query = " ";
+  for (let index = 0; index < keys.length; index++) {
+    const key = keys[index];
+    let originalKey = keys[index];
+    originalKey = originalKey.replace("like '%", "");
+    originalKey = originalKey.replace("%'", "");
+    originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
+    originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
+    query += `  
+            SELECT
+                SUM(p.balance) totalBalance,
+                IF(1 = 1,
+                    '${originalKey}',
+                    '${originalKey}') word
+                from
+                    posting_${orgId} p
+                WHERE
+                    p.procedureId = :procedureId
+                    AND p.accountNumber = :accountNumber 
+                    AND (
+                    UPPER(p.textPosting) ${key}
+                    OR UPPER(p.reference) ${key}
+                    OR UPPER(p.textHeader) ${key}
+                    )
+                GROUP by
+                    p.accountNumber
+            `;
+    query += index < keys.length - 1 ? " UNION " : "";
+  }
+
+  let result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+      accountNumber: accountNumber
+    },
+    type: QueryTypes.SELECT,
+  });
+  if (result.length && result.length > 0) {
+    result = result.filter((rec) => +rec.totalBalance > 0);
+  }
+  return result;
+};
+
+
+
 module.exports.textAnalysisByWordFullTextIndex = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);

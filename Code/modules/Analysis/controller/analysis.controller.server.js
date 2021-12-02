@@ -98,6 +98,16 @@ module.exports.getTextAnalysisDataByWordCalcDefault = async (req, res) => {
   res.status(200).json(result);
 };
 
+
+module.exports.getTextAnalysisByWordForAccount = async (req, res) => {
+  const orgId = +req.params.orgId;
+  const prcId = +req.params.prcId;
+  const accountNumber = +req.params.accountNumber;
+  const result = await postingRepo.textAnalysisByWordAndAccount(orgId, prcId, keywords, accountNumber);
+  res.status(200).json(result);
+};
+
+
 module.exports.getTextAnalysisDataByAccountCalcDefault = async (req, res) => {
   const orgId = +req.params.orgId;
   const prcId = +req.params.prcId;

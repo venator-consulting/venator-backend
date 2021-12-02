@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AmountAnalysis, AmountAnalysisDetails } from '../model/amountAnalysis';
-import { TextAnalysis, TextAnalysisDetails } from '../model/textAnalysis';
+import { TextAnalysis, TextAnalysisDetails, TextAnalysisDetailsWord } from '../model/textAnalysis';
 import { PaymentAnalysis, PaymentAnalysisDetails, PaymentAnalysisDetailsData } from '../model/paymentAnalysis';
 
 @Injectable({
@@ -61,6 +61,10 @@ export class AnalysisService {
 
   getTextAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<TextAnalysisDetails[]> {
     return this._http.get<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/text/details/' + accountNumber);
+  }
+
+  getTextAnalysisDetailsWords(orgId: number, prcId: number, accountNumber: string): Observable<TextAnalysisDetailsWord[]> {
+    return this._http.get<TextAnalysisDetailsWord[]>(this._thisURL + orgId + '/' + prcId + '/text-word/account/' + accountNumber);
   }
 
   getTextAnalysisWordDetails(orgId: number, prcId: number, keyword: string): Observable<TextAnalysisDetails[]> {

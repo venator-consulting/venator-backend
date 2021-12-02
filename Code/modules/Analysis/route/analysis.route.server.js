@@ -85,6 +85,14 @@ router.route("/:orgId/:prcId/text-word").get(
   analysisCtrl.textAnalysisByWord
 );
 
+router.route("/:orgId/:prcId/text-word/account/:accountNumber").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.getTextAnalysisByWordForAccount
+);
+
 router.route("/:orgId/:prcId/text-word-calc/date-range/:step").get(
   passport.authenticate("jwt", {
     session: false,

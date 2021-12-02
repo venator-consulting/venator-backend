@@ -17,3 +17,8 @@ export class TextAnalysisDetails {
     textRelevant: Boolean;
     textRelevantComment: string;
 }
+
+export class TextAnalysisDetailsWord {
+    word: string;
+    totalBalance: number;
+}

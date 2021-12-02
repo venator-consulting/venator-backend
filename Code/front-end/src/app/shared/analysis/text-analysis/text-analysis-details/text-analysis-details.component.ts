@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
-import { TextAnalysisDetails } from 'src/app/shared/model/textAnalysis';
+import { TextAnalysisDetails, TextAnalysisDetailsWord } from 'src/app/shared/model/textAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { ProcedureService } from 'src/app/shared/service/procedure.service';
 import * as FileSaver from 'file-saver';
@@ -46,6 +46,9 @@ export class TextAnalysisDetailsComponent implements OnInit {
   accountName: string;
   // for pagination ends
 
+  wordsChartData: TextAnalysisDetailsWord[] = new Array();
+  chartData: { labels: any[]; datasets: { data: any[]; backgroundColor: string[]; hoverBackgroundColor: string[]; }[]; };
+
   constructor(
     private _router: Router,
     private _messageService: MessageService,
@@ -53,7 +56,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
     private _analysisService: AnalysisService,
     private _translateService: TranslateService,
     private _exportDataService: ExportDataService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.items = [
@@ -217,6 +220,29 @@ export class TextAnalysisDetailsComponent implements OnInit {
           this.waiting = false;
         }
       );
+    if (this.details) this.getWords();
+  }
+
+
+  getWords() {
+    this._analysisService
+      .getTextAnalysisDetailsWords(this.orgId, this.prcId, this.accountNumber)
+      .subscribe(res => {
+        this.wordsChartData = res;
+
+        this.chartData = {
+          labels: this.wordsChartData.map(rec => rec.word),
+          datasets: [
+            {
+              data: this.wordsChartData.map(rec => +rec.totalBalance),
+              backgroundColor: ['#95ca14', '#587bc7', '#fc6521'],
+              hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+            },
+          ],
+        };
+
+
+      });
   }
 
   goBack() {
@@ -282,7 +308,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
                     day: '2-digit',
                   }
                 );
-            } catch (e) {}
+            } catch (e) { }
           }
           // end of formatting
         }
@@ -502,7 +528,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
   }
 
   sort(event) {
-    this.backCriteria.orderBy = event.sortField? event.sortField : 'id';
+    this.backCriteria.orderBy = event.sortField ? event.sortField : 'id';
     this.backCriteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.backCriteria.offset = 0;
@@ -526,7 +552,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
           this.saveAsExcelFile(res, 'Text_details');
           // window.open(url.toString(), '_blank');
         },
-        (err) => {this.waiting = false;}
+        (err) => { this.waiting = false; }
       );
   }
 
