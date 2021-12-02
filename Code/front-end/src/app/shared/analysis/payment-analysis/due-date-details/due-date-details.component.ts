@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
@@ -12,6 +12,8 @@ import { TableColumn } from 'src/app/shared/model/tableColumn';
   styleUrls: ['./due-date-details.component.sass'],
 })
 export class DueDateDetailsComponent implements OnInit {
+
+  @Input('details') details: boolean = false;
 
   procedureName: string;
   selectedProcedure: number;
@@ -45,7 +47,6 @@ export class DueDateDetailsComponent implements OnInit {
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
-
     this.waiting = true;
 
     this._translateService.get('DueDateAnalysis').subscribe(elem => {

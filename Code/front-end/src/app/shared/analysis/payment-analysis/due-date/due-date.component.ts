@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -12,6 +12,8 @@ import * as FileSaver from 'file-saver';
   styleUrls: ['./due-date.component.sass'],
 })
 export class DueDateComponent implements OnInit {
+  @Input('details') details: boolean = false;
+
   procedureName: string;
   selectedProcedure: number;
   selectedOrganisation: number;
@@ -62,7 +64,7 @@ export class DueDateComponent implements OnInit {
   baseToDate: Date;
   secondChartDataRecords: any;
 
-  selectedAccount: { accountNumber: string; accountName: string };
+  selectedAccount: { accountNumber: string; accountName: string } = {accountNumber: null, accountName: null};
   maxDelay: number;
   detailsDataTemp: any;
   criteria: any = {};
@@ -72,7 +74,8 @@ export class DueDateComponent implements OnInit {
     public _translateService: TranslateService,
     private _messageService: MessageService,
     private _analysisService: AnalysisService,
-    private _router: Router
+    private _router: Router,
+    private _route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -225,6 +228,7 @@ export class DueDateComponent implements OnInit {
     this.waiting = true;
     let start = this.minDate?.toISOString().split('T')[0];
     let end = this.toDate?.toISOString().split('T')[0];
+    if (this.details) this.selectedAccount['accountNumber'] = this._route.snapshot.paramMap.get('accountNumber');
     let parmas = { maxDelay: this.maxDelay, accountNumber: this.selectedAccount?.accountNumber ?? null };
     this._analysisService
       .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure, start, end, parmas)

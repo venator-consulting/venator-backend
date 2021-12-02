@@ -310,6 +310,8 @@
   "Document_Type": {
     "Zahlung": "Zahlung",
     "Rechnung": "Rechnung",
+    "ZAHLUNG": "Zahlung",
+    "RECHNUNG": "Rechnung",
     "null": " ",
     "documentType": "Belegart",
     "documentTypeNewName": "Belegart neu",

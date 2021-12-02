@@ -321,6 +321,8 @@
   "Document_Type": {
     "Zahlung": "Payment",
     "Rechnung": "Invoice",
+    "ZAHLUNG": "Payment",
+    "RECHNUNG": "Invoice",
     "null": " ",
 
     "documentType": "Document Type",

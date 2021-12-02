@@ -11,7 +11,9 @@
     </p-card>
   </div>
 
-  <div class="p-col-3">
+  <div class="p-col-1"></div>
+
+  <div class="p-col-2">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.amountTotalBalance' | translate}}
@@ -24,7 +26,7 @@
         | translate}} </p>
     </p-card>
   </div>
-  <div class="p-col-3">
+  <div class="p-col-2">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.textTotalBalance' | translate}}
@@ -37,7 +39,7 @@
         translate}} </p>
     </p-card>
   </div>
-  <div class="p-col-3">
+  <div class="p-col-2">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.paymentTotalBalance' | translate}}
@@ -52,7 +54,7 @@
     </p-card>
   </div>
 
-  <div class="p-col-3">
+  <div class="p-col-2">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.senderTotalCount' | translate}}
@@ -62,6 +64,20 @@
       <h1> {{totalEmailCount}}</h1>
       <br>
       <p class="emailColor" (click)="setDetails(4)"><i class="pi pi-arrow-down"></i> {{
+        'CreditorsAnalysis.showDetails' | translate}} </p>
+    </p-card>
+  </div>
+
+  <div class="p-col-2">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ 'CreditorsAnalysis.dueDate' | translate}}
+      </ng-template>
+      <h1>{{totlaSenderCount}}</h1>
+      <h3>{{ 'CreditorsAnalysis.dueDate' | translate}}</h3>
+      <h1> {{totalEmailCount}}</h1>
+      <br>
+      <p class="emailColor" (click)="setDetails(5)"><i class="pi pi-arrow-down"></i> {{
         'CreditorsAnalysis.showDetails' | translate}} </p>
     </p-card>
   </div>
@@ -78,5 +94,6 @@
     <app-payment-analysis-details details="true" *ngIf="displayDetails==3"></app-payment-analysis-details>
     <app-mail-analysis-sender-details [accountNumber]="accountNumber" *ngIf="displayDetails==4">
     </app-mail-analysis-sender-details>
+    <app-due-date details="true" *ngIf="displayDetails==5"></app-due-date>
   </div>
 </div>
