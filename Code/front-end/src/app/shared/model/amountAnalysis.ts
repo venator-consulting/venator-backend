@@ -1,3 +1,4 @@
+
 export class AmountAnalysis {
     accountNumber: string | number;
     accountName: string;
@@ -17,4 +18,10 @@ export class AmountAnalysisDetails {
     contraAccountName: string;
     amountRelevant: boolean;
     amountRelevantComment: string;
+}
+
+export class AmountAnalysisDetailsChart {
+    totalBalance: number;
+    totlaCount: number;
+    balance: number;
 }

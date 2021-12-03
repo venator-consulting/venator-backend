@@ -1,12 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
-import { AmountAnalysisDetails } from 'src/app/shared/model/amountAnalysis';
+import { AmountAnalysisDetails, AmountAnalysisDetailsChart } from 'src/app/shared/model/amountAnalysis';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import * as FileSaver from 'file-saver';
 import { ExportDataService } from 'src/app/shared/service/export-data.service';
 import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'amount-analysis-details',
@@ -19,6 +20,8 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   prcId: number;
   accountNumber: string;
   data: AmountAnalysisDetails[] = new Array();
+  balanceChartData: AmountAnalysisDetailsChart[] = new Array();
+  chartData: { labels: any[]; datasets: { data: any[]; backgroundColor: string[]; hoverBackgroundColor: string[]; }[]; };
   allRecordData: AmountAnalysisDetails[] = new Array();
   waiting: boolean;
   cols: TableColumn[];
@@ -46,6 +49,8 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   displayedDataCount: any;
   accountName: string;
   // for pagination ends
+
+  basicOptions: any;
 
   constructor(
     private _router: Router,
@@ -204,12 +209,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     ];
 
     this._analysisService
-      .getAmountAnalysisDetails(
-        this.orgId,
-        this.prcId,
-        this.accountNumber,
-        this.baseBalance
-      )
+      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber, this.baseBalance)
       .subscribe(
         (res) => {
           this.data = res;
@@ -223,7 +223,71 @@ export class AmountAnalysisDetailsComponent implements OnInit {
           this.waiting = false;
         }
       );
+
+    this.basicOptions = {
+      legend: {
+        display: false
+      },
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            let value = tooltipItem.value;
+            let currencyPipe = new CurrencyPipe('de');
+            value = currencyPipe.transform(value, 'EURO', '');
+
+            let label = data.datasets[tooltipItem.datasetIndex].label || '';
+            return label + ': ' + value;
+          },
+        },
+      },
+      scales: {
+        xAxes: [
+          {
+            ticks: {
+              minRotation: 40,
+              maxRotation: 90,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              minRotation: 0,
+              maxRotation: 0,
+              callback: function (label, index, values) {
+                // debugger;
+                let currencyPipe = new CurrencyPipe('de');
+                label = currencyPipe.transform(label, 'EURO', '');
+                return label;
+              },
+            },
+          },
+        ],
+      },
+    };
+
+    if (this.details) this.getChartData();
   } // end of ng on init
+
+
+  getChartData() {
+    this._analysisService
+      .getAmountAnalysisDetailsChart(this.orgId, this.prcId, this.accountNumber, this.baseBalance)
+      .subscribe(res => {
+        this.balanceChartData = res;
+        this.chartData = {
+          labels: this.balanceChartData.map(rec => rec.balance),
+          datasets: [
+            {
+              data: this.balanceChartData.map(rec => +rec.totalBalance),
+              backgroundColor: this.balanceChartData.map(rec => `rgb(${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255})`),
+              hoverBackgroundColor: this.balanceChartData.map(rec => `rgb(${(Math.random() * 25500 + 10) % 255}, ${(Math.random() * 25500 + 10) % 255}, ${(Math.random() * 25500 + 10) % 255})`),
+            },
+          ],
+        };
+      });
+  }
+
 
   goBack() {
     this._router.navigate(['/dashboard/analysis/amount/' + this.baseBalance]);

@@ -310,6 +310,32 @@ module.exports.amountAnalysisDetails = async (
   return result;
 };
 
+module.exports.amountAnalysisDetailsChart = async (orgId, prcId, baseBalance, accountNumber) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  const query = `SELECT SUM(p.balance) totalBalance , count(p.balance) totlaCount , p.balance  
+                            FROM posting_${orgId}  p
+                            WHERE procedureId = :procedureId 
+                                AND UPPER(p.accountType) = 'K' 
+                                AND p.accountNumber = :accountNumber
+                                AND (UPPER(p.documentTypeNewName) = 'ZAHLUNG')
+                                AND p.balance = ROUND(p.balance, -2)
+                                AND balance >= :baseBalance
+                            group by p.balance `;
+  const result = await sequelize.query(query, {
+    replacements: {
+      procedureId: prcId,
+      baseBalance: baseBalance,
+      accountNumber: accountNumber,
+    },
+    type: QueryTypes.SELECT,
+  });
+  return result;
+};
+
+
 module.exports.getByAccountNumber = async (
   orgId,
   prcId,

@@ -29,6 +29,16 @@ router.route("/:orgId/:prcId/credtor-calc").get(
 );
 
 router
+  .route("/:orgId/:prcId/amount/details-chart/:accountNumber/:baseBalance")
+  .get(
+    passport.authenticate("jwt", {
+      session: false,
+    }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.amountAnalysisDetailsChart
+  )
+
+router
   .route("/:orgId/:prcId/amount/details/:accountNumber/:baseBalance")
   .get(
     passport.authenticate("jwt", {

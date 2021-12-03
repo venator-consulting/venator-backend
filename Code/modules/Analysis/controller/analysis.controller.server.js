@@ -37,6 +37,16 @@ module.exports.amountAnalysisDetails = async (req, res) => {
   res.status(200).json(result);
 };
 
+module.exports.amountAnalysisDetailsChart = async (req, res) => {
+  const result = await postingRepo.amountAnalysisDetailsChart(
+    req.params.orgId,
+    req.params.prcId,
+    req.params.baseBalance ?? 500,
+    req.params.accountNumber
+  );
+  res.status(200).json(result);
+};
+
 module.exports.amountJustRelevant = async (req, res) => {
   const result = await postingRepo.amountJustRelevant(
     req.params.orgId,
@@ -179,7 +189,7 @@ module.exports.textJustRelevant = async (req, res) => {
   res.status(200).json(result);
 };
 //#endregion text analysis
- 
+
 
 //#region Payment analysis
 module.exports.paymentAnalysisDateRange = async (req, res) => {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AmountAnalysis, AmountAnalysisDetails } from '../model/amountAnalysis';
+import { AmountAnalysis, AmountAnalysisDetails, AmountAnalysisDetailsChart } from '../model/amountAnalysis';
 import { TextAnalysis, TextAnalysisDetails, TextAnalysisDetailsWord } from '../model/textAnalysis';
 import { PaymentAnalysis, PaymentAnalysisDetails, PaymentAnalysisDetailsData } from '../model/paymentAnalysis';
 
@@ -21,6 +21,10 @@ export class AnalysisService {
 
   getAmountAnalysisDetails(orgId: number, prcId: number, accountNumber: string, baseBalance: number): Observable<AmountAnalysisDetails[]> {
     return this._http.get<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber + '/' + baseBalance);
+  }
+
+  getAmountAnalysisDetailsChart(orgId: number, prcId: number, accountNumber: string, baseBalance: number): Observable<AmountAnalysisDetailsChart[]> {
+    return this._http.get<AmountAnalysisDetailsChart[]>(this._thisURL + orgId + '/' + prcId + '/amount/details-chart/' + accountNumber + '/' + baseBalance);
   }
 
   getAmountAnalysisDetailsRelevant(orgId: number, prcId: number, accountNumber: string): Observable<AmountAnalysisDetails[]> {

@@ -10,6 +10,11 @@
 </div>
 
 <div class="p-grid" style="min-height: 60vh;">
+  <div class="p-col-12 " *ngIf="details">
+    <p-card class="p-text-center">
+      <p-chart type="bar" [data]="chartData" height="350px" [options]="basicOptions"></p-chart>
+    </p-card>
+  </div>
   <div class="p-col-12">
     <span class="p-text-center">
       <p-selectButton [options]="detailsOptions" (onChange)="changeData($event.value)" optionLabel="name"
@@ -64,15 +69,15 @@
               col.field != 'applicationDate' " pInputText type="text" [(ngModel)]="criteria[col.field]"
               [style]="{width:'90%'}" (input)="filterChange($any($event.target).value, col.field)"
               class="filterInputCss" />
-              <p-calendar *ngIf="
+            <p-calendar *ngIf="
                 col.field == 'documentDate' ||
                 col.field == 'dueDate' ||
                 col.field == 'applicationDate' ||
                 col.field == 'executionDate'
-              " [(ngModel)]="criteria[col.field]" (onSelect)="filterChange($event, col.field)"
-                [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
-                dateFormat="dd.mm.yy" showButtonBar="true" (onClearClick)="filterChange($event, col.field)">
-              </p-calendar>
+              " [(ngModel)]="criteria[col.field]" (onSelect)="filterChange($event, col.field)" [monthNavigator]="true"
+              [yearNavigator]="true" yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy" showButtonBar="true"
+              (onClearClick)="filterChange($event, col.field)">
+            </p-calendar>
           </th>
         </tr>
       </ng-template>
