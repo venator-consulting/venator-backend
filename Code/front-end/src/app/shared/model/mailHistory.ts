@@ -70,3 +70,14 @@ export class MailsOptions {
     accountName: string;
     accountEmail: string;
 }
+
+export class MailSenderChart {
+    email: string;
+    sender: string;
+    totalCount: number;
+}
+
+export class MailWordChart {
+    word: string;
+    totalCount: number;
+}

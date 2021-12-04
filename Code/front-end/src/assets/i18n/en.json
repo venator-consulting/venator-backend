@@ -531,7 +531,9 @@
     "textLabel": "Text Analysis",
     "paymentLabel": "Duedate Analysis",
     "senderTotalCount": "Total Sender Count",
-    "emailTotalCount":"Totla emails messages count"
+    "emailTotalCount":"Total emails messages count",
+    "dueDate": "Due Date",
+    "mailWord": "Email Analysis by Word"
   },
   "DataTableColumns": {
     "client": "Client",

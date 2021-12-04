@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Attachment, creditorsMails, MailAnalysis, MailAnalysisBySender, MailHistory, MailHistoryRes } from '../model/mailHistory';
+import { Attachment, creditorsMails, MailAnalysis, MailAnalysisBySender, MailHistory, MailHistoryRes, MailSenderChart, MailWordChart } from '../model/mailHistory';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +45,14 @@ export class MailHistoryService {
 
   getMailDetailsAnalysisSenderByAccount(orgId: number, prcId: number, accountNumber: string): Observable<MailHistory[]> {
     return this._http.get<MailHistory[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/sender-account/' + accountNumber);
+  }
+
+  getMailDetailsAnalysisSenderByAccountChart(orgId: number, prcId: number, accountNumber: string): Observable<MailSenderChart[]> {
+    return this._http.get<MailSenderChart[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/sender-account-chart/' + accountNumber);
+  }
+
+  getMailDetailsAnalysisWordByAccountChart(orgId: number, prcId: number, accountNumber: string): Observable<MailWordChart[]> {
+    return this._http.get<MailWordChart[]>(this._thisURL + orgId + '/' + prcId + '/mail-analysis/word-account-chart/' + accountNumber);
   }
 
   getBySenderDetailsJustRelevant(orgId: number, prcId: number, mail: string): Observable<MailHistory[]> {

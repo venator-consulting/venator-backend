@@ -5,15 +5,72 @@
     <!-- <h2 class="p-text-center">{{accountName}}</h2> -->
     <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
   </div>
-  <div class="p-col-12 ">
+  <!-- <div class="p-col-12 ">
     <p-card class="p-text-center">
       <p-chart type="pie" [data]="chartData" height="350px"></p-chart>
     </p-card>
+  </div> -->
+
+
+
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ 'CreditorsAnalysis.amountTotalBalance' | translate}}
+      </ng-template>
+      <p-chart type="bar" [data]="amountChartData" height="350px" [options]="basicOptions"></p-chart>
+    </p-card>
+  </div>
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ 'CreditorsAnalysis.textTotalBalance' | translate}}
+      </ng-template>
+      <p-chart type="pie" [data]="chartData" height="350px"></p-chart>
+    </p-card>
+  </div>
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ 'CreditorsAnalysis.paymentTotalBalance' | translate}}
+      </ng-template>
+      <p-chart type="bar" height="350" [data]="paymentChartData" [options]="basicOptions"> </p-chart>
+    </p-card>
   </div>
 
-  <div class="p-col-1"></div>
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ 'CreditorsAnalysis.dueDate' | translate}}
+      </ng-template>
+      <p-chart #chart2 type="scatter" height="350" [data]="dueDateChartData" [options]="dueDateChartOptions">
+      </p-chart>
+    </p-card>
+  </div>
 
-  <div class="p-col-2">
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ 'CreditorsAnalysis.senderTotalCount' | translate}}
+      </ng-template>
+      <p-chart type="pie" [data]="mailSenderChartData" height="350px"></p-chart>
+    </p-card>
+  </div>
+
+
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ 'CreditorsAnalysis.mailWord' | translate}}
+      </ng-template>
+      <p-chart type="pie" [data]="mailWordChartData" height="350px"></p-chart>
+    </p-card>
+  </div>
+
+
+
+
+  <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.amountTotalBalance' | translate}}
@@ -26,7 +83,7 @@
         | translate}} </p>
     </p-card>
   </div>
-  <div class="p-col-2">
+  <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.textTotalBalance' | translate}}
@@ -39,7 +96,7 @@
         translate}} </p>
     </p-card>
   </div>
-  <div class="p-col-2">
+  <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.paymentTotalBalance' | translate}}
@@ -54,7 +111,21 @@
     </p-card>
   </div>
 
-  <div class="p-col-2">
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ 'CreditorsAnalysis.dueDate' | translate}}
+      </ng-template>
+      <h1>{{totalDueDate | currency:'EUR':'symbol'}}</h1>
+      <h3>{{ 'CreditorsAnalysis.dueDate' | translate}}</h3>
+      <h1> {{totlaDueDateCount}}</h1>
+      <br>
+      <p class="emailColor" (click)="setDetails(5)"><i class="pi pi-arrow-down"></i> {{
+        'CreditorsAnalysis.showDetails' | translate}} </p>
+    </p-card>
+  </div>
+
+  <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.senderTotalCount' | translate}}
@@ -68,19 +139,7 @@
     </p-card>
   </div>
 
-  <div class="p-col-2">
-    <p-card class="p-text-center">
-      <ng-template pTemplate="header">
-        {{ 'CreditorsAnalysis.dueDate' | translate}}
-      </ng-template>
-      <h1>{{totlaSenderCount}}</h1>
-      <h3>{{ 'CreditorsAnalysis.dueDate' | translate}}</h3>
-      <h1> {{totalEmailCount}}</h1>
-      <br>
-      <p class="emailColor" (click)="setDetails(5)"><i class="pi pi-arrow-down"></i> {{
-        'CreditorsAnalysis.showDetails' | translate}} </p>
-    </p-card>
-  </div>
+
 
 
 

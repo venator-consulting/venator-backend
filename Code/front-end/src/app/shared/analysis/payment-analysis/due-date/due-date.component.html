@@ -59,26 +59,20 @@
 </div>
 
 <div class="p-grid">
-  <div class="p-col-6" *ngIf="!details">
+  <div class="p-col-6" >
     <div class="card p-text-center">
       <p-chart #chart type="line" height="350" [data]="basicData" [options]="basicOptions">
       </p-chart>
     </div>
   </div>
 
-  <div class="p-col-6" *ngIf="!details">
+  <div class="p-col-6" >
     <div class="card p-text-center">
       <p-chart #chart2 type="scatter" height="350" [data]="secondChartData" [options]="secondChartOptions">
       </p-chart>
     </div>
   </div>
 
-  <div class="p-col-12" *ngIf="details">
-    <div class="card p-text-center">
-      <p-chart #chart2 type="scatter" height="350" [data]="secondChartData" [options]="secondChartOptions">
-      </p-chart>
-    </div>
-  </div>
 
   <!-- <div class="p-col-12">
     <h4 class="p-text-center">All Accounts</h4>

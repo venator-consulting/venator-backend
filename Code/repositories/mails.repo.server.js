@@ -42,7 +42,7 @@ module.exports.update = async (orgId, prcId, row) => {
         throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
     if (isNaN(prcId))
         throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-        // update in calculated table
+    // update in calculated table
     const firstQuery = MailAnalysisBySender.getEmailAnalysisSender("email_analysis_sender_" + orgId).update(row, {
         where: { email: row.email }
     });
@@ -403,4 +403,70 @@ module.exports.getAttachments = async (orgId, prcId, mailId) => {
                 "emailHistoryId"
             ],
         });
+}
+
+module.exports.creditorBySender = async (orgId, prcId, accountNumber) => {
+    if (isNaN(orgId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+    if (isNaN(prcId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+    const query = `SELECT e.email , e.sender , COUNT(id) totalCount from email_history_${orgId} e
+                        WHERE e.accountNumber = :accountNumber
+                        AND e.procedureId = :procedureId
+                        group by e.email , e.sender `;
+    const result = await sequelize.query(query, {
+        replacements: {
+            procedureId: prcId,
+            accountNumber: accountNumber,
+        },
+        type: QueryTypes.SELECT,
+    });
+    return result;
+}
+
+
+module.exports.creditorByWord = async (orgId, prcId, keys, accountNumber) => {
+    if (isNaN(orgId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+    if (isNaN(prcId))
+        throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+    let query = " ";
+    for (let index = 0; index < keys.length; index++) {
+        const key = keys[index];
+        let originalKey = keys[index];
+        originalKey = originalKey.replace("like '%", "");
+        originalKey = originalKey.replace("%'", "");
+        originalKey = originalKey.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
+        originalKey = originalKey.replace("([^a-zA-Z]+|\\s*)'", "");
+        query += `  
+            SELECT
+                count(p.id) totalCount,
+                IF(1 = 1,
+                    '${originalKey}',
+                    '${originalKey}') word
+            from
+                email_history_${orgId} p
+            WHERE
+                p.procedureId = :procedureId 
+                AND p.accountNumber = :accountNumber 
+                AND (
+                    UPPER(p.subject) ${key}
+                    OR UPPER(p.body) ${key}
+                    OR UPPER(p.bodyHTML) ${key}
+                    )
+            `;
+        query += index < keys.length - 1 ? " UNION " : "";
+    }
+
+    let result = await sequelize.query(query, {
+        replacements: {
+            procedureId: prcId,
+            accountNumber: accountNumber
+        },
+        type: QueryTypes.SELECT,
+    });
+    if (result.length && result.length > 0) {
+        result = result.filter((rec) => +rec.totalCount > 0);
+    }
+    return result;
 }

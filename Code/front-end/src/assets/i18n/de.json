@@ -518,7 +518,9 @@
     "textLabel": "Text Analyse",
     "paymentLabel": "Fälligkeitsanalyse",
     "senderTotalCount": "Total Sender Count",
-    "emailTotalCount":"Totla emails messages count"
+    "emailTotalCount":"Total emails messages count",
+    "dueDate": "Due Date",
+    "mailWord": "Email Analysis by Word"
   },
   "DataTableColumns": {
     "client": "Mandant",

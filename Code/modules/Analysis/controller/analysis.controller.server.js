@@ -5,6 +5,7 @@ const paymentAnalysisRepo = require("../../../repositories/payment.analysis.repo
 const precalRepo = require('../../../repositories/precalculated.repo.server');
 const dueDateAnalysisRepo = require("../../../repositories/duedate.analysis.repo");
 const criteorAnalysisRepo = require("../../../repositories/creditor.analysis.repo");
+const mailsRepo = require('../../../repositories/mails.repo.server');
 const Exception = require("../../../helpers/errorHandlers/Exception");
 const httpStatus = require("../../../models/enums/httpStatus");
 const errors = require('../../../models/enums/errors');
@@ -450,4 +451,5 @@ module.exports.creditorAnalysisDetails = async (req, res) => {
   );
   res.status(200).json(result);
 };
+
 //#endregion creditor analysis

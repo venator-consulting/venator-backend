@@ -68,6 +68,22 @@ router.route("/:orgId/:prcId/mail-analysis/sender-account/:accountNumber").get(
   controller.getMailDetailsAnalysisBySenderAccount
 );
 
+router.route("/:orgId/:prcId/mail-analysis/sender-account-chart/:accountNumber").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  controller.creditorAnalysisDetailsEmailBySender
+);
+
+router.route("/:orgId/:prcId/mail-analysis/word-account-chart/:accountNumber").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  controller.creditorAnalysisDetailsEmailByWord
+);
+
 router.route("/:orgId/:prcId/mail-analysis/word").get(
   passport.authenticate("jwt", {
     session: false,

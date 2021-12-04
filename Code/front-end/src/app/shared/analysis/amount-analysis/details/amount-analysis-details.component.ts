@@ -224,49 +224,49 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         }
       );
 
-    this.basicOptions = {
-      legend: {
-        display: false
-      },
-      tooltips: {
-        callbacks: {
-          label: function (tooltipItem, data) {
-            let value = tooltipItem.value;
-            let currencyPipe = new CurrencyPipe('de');
-            value = currencyPipe.transform(value, 'EURO', '');
+    // this.basicOptions = {
+    //   legend: {
+    //     display: false
+    //   },
+    //   tooltips: {
+    //     callbacks: {
+    //       label: function (tooltipItem, data) {
+    //         let value = tooltipItem.value;
+    //         let currencyPipe = new CurrencyPipe('de');
+    //         value = currencyPipe.transform(value, 'EURO', '');
 
-            let label = data.datasets[tooltipItem.datasetIndex].label || '';
-            return label + ': ' + value;
-          },
-        },
-      },
-      scales: {
-        xAxes: [
-          {
-            ticks: {
-              minRotation: 40,
-              maxRotation: 90,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            ticks: {
-              minRotation: 0,
-              maxRotation: 0,
-              callback: function (label, index, values) {
-                // debugger;
-                let currencyPipe = new CurrencyPipe('de');
-                label = currencyPipe.transform(label, 'EURO', '');
-                return label;
-              },
-            },
-          },
-        ],
-      },
-    };
+    //         let label = data.datasets[tooltipItem.datasetIndex].label || '';
+    //         return label + ': ' + value;
+    //       },
+    //     },
+    //   },
+    //   scales: {
+    //     xAxes: [
+    //       {
+    //         ticks: {
+    //           minRotation: 40,
+    //           maxRotation: 90,
+    //         },
+    //       },
+    //     ],
+    //     yAxes: [
+    //       {
+    //         ticks: {
+    //           minRotation: 0,
+    //           maxRotation: 0,
+    //           callback: function (label, index, values) {
+    //             // debugger;
+    //             let currencyPipe = new CurrencyPipe('de');
+    //             label = currencyPipe.transform(label, 'EURO', '');
+    //             return label;
+    //           },
+    //         },
+    //       },
+    //     ],
+    //   },
+    // };
 
-    if (this.details) this.getChartData();
+    // if (this.details) this.getChartData();
   } // end of ng on init
 
 

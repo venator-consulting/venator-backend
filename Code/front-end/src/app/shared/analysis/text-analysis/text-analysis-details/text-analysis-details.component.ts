@@ -220,7 +220,7 @@ export class TextAnalysisDetailsComponent implements OnInit {
           this.waiting = false;
         }
       );
-    if (this.details) this.getWords();
+    // if (this.details) this.getWords();
   }
 
 

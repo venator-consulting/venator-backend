@@ -273,4 +273,5 @@ router.route("/:orgId/:prcId/credtor/details/:accountNumber").get(
   analysisCtrl.creditorAnalysisDetails
 );
 
+
 module.exports = router;

@@ -71,6 +71,16 @@ module.exports.getMailDetailsAnalysisBySenderAccount = async (req, res) => {
     res.status(200).json(result);
 };
 
+module.exports.creditorAnalysisDetailsEmailBySender = async (req, res) => {
+    const result = await mailRepo.creditorBySender(req.params.orgId, req.params.prcId, req.params.accountNumber);
+    res.status(200).json(result);
+};
+
+module.exports.creditorAnalysisDetailsEmailByWord = async (req, res) => {
+    const result = await mailRepo.creditorByWord(req.params.orgId, req.params.prcId, keys, req.params.accountNumber);
+    res.status(200).json(result);
+};
+
 module.exports.getMailDetailsAnalysisByWoed = async (req, res) => {
     const orgId = +req.params.orgId;
     const prcId = +req.params.prcId;
