@@ -11,6 +11,16 @@ const liquidityRoutes = require("./modules/Liquidity/route/liquidity.route.serve
 const websiteRoutes = require("./modules/website/route/website.router");
 const mailHistoryRoutes = require('./modules/MailHistory/route/mails.route.server');
 const Exception = require("./helpers/errorHandlers/Exception");
+const https = require('https');
+// for reading certificates
+const fs = require('fs');
+// for deployment
+// const key = fs.readFileSync('./ssl/server.key');
+// const cert = fs.readFileSync('./ssl/server.cer');
+// for local
+const key = fs.readFileSync('./ssl/key.pem');
+const cert = fs.readFileSync('./ssl/cert.pem');
+
 
 const cors = require("cors");
 
@@ -30,6 +40,8 @@ app.use(
 );
 app.use(bearerToken());
 
+app.get('/test', (req, res) => { res.json('this is an secure server') });
+
 app.use("/api/shared", sharedRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/analysis", analysisRoutes);
@@ -42,10 +54,15 @@ app.use("/public", express.static(path.join("public")));
 
 app.use(express.static("front-end/dist/front-end/"));
 
+
 // app.get("*", (req, res) => {
 //   res.sendFile(path.join(__dirname, "front-end/dist/front-end/index.html"));
 // });
 
-app.listen(app.get("port"), () => {
-  console.log(`the server started at http://localhost:${app.get("port")}/ ...`);
-});
+// app.listen(app.get("port"), () => {
+//   console.log(`the server started at http://localhost:${app.get("port")}/ ...`);
+// });
+
+const server = https.createServer({key: key, cert: cert }, app);
+
+server.listen(config.port, () => { console.log(`listening on ${config.port}`) });
