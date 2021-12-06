@@ -1,8 +1,0 @@
-**/node_modules
-**/files
-config/environment.js
-**/log
-**/public/imgs
-**/front-end/dist/
-
-**/ssl/
