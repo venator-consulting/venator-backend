@@ -1,6 +1,8 @@
 **/node_modules
 **/files
-**/environment.js
+config/environment.js
 **/log
 **/public/imgs
 **/front-end/dist/
+
+**/ssl/
