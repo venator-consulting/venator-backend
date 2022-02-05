@@ -28,6 +28,10 @@ const publicImgs = multer({
 
 //#region website managment
 router
+    .route('/link-trans/:orgId/:prcId')
+    .get( precalcCtrl.linkTransactions);
+
+router
     .route('/website/')
     .get(passport.authenticate('jwt', {
         session: false

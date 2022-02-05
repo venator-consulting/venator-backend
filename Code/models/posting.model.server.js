@@ -206,6 +206,9 @@ module.exports.getPosting = function (tableName = "Posting") {
       applicationDocument: {
         type: DataTypes.STRING(25),
       },
+      applicationDocumentNew: {
+        type: DataTypes.STRING(25),
+      },
       applicationDate: {
         type: DataTypes.DATE,
       },

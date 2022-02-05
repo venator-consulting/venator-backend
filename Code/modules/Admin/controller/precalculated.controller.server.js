@@ -1,5 +1,6 @@
 const precalRepo = require('../../../repositories/precalculated.repo.server');
 const DATE_RANGE = require("../../../models/enums/date.ranges");
+const linkTransactionsRepo = require('../../../repositories/link-app-doc.repo.server');
 
 module.exports.textAnalysisByWord = async (req, res) => {
     const orgId = +req.params.orgId;
@@ -69,4 +70,11 @@ module.exports.emailAnalysisWord = async (req, res) => {
     await precalRepo.deletePrevDataEmailAnalysisWord(orgId, prcId);
     const result = await precalRepo.storeEmailAnalysisWord(orgId, prcId);
     res.status(201).json('done');
+};
+
+module.exports.linkTransactions = async (req, res) => {
+    const orgId = +req.params.orgId;
+    const prcId = +req.params.prcId;
+    const result = await linkTransactionsRepo.linkTransactions(res, orgId, prcId);
+    // res.status(201).json('done');
 };

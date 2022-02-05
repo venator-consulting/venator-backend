@@ -63,6 +63,6 @@ app.use(express.static("front-end/dist/front-end/"));
 //   console.log(`the server started at http://localhost:${app.get("port")}/ ...`);
 // });
 
-const server = https.createServer({key: key, cert: cert }, app);
+const server = https.createServer({ key: key, cert: cert }, app);
 
 server.listen(config.port, () => { console.log(`listening on ${config.port}`) });
