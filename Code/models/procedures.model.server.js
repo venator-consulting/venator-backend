@@ -74,6 +74,10 @@ const Procedures = sequelizer.define('Procedures', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
+    linkTrans: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
 }, {
     tableName: 'Procedures'
 });

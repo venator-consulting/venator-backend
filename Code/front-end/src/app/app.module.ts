@@ -117,6 +117,7 @@ import { MailHistoryDataComponent } from './shared/mail-history/mail-history-dat
 import { MailAnalysisComponent } from './shared/analysis/mail-analysis/mail-analysis.component';
 import { MailAnalysisDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-details/mail-analysis-details.component';
 import { MailAnalysisSenderDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-sender-details/mail-analysis-sender-details.component';
+import { RecordMatchingComponent } from './admin/record-matching/record-matching.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -187,6 +188,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MailAnalysisComponent,
     MailAnalysisDetailsComponent,
     MailAnalysisSenderDetailsComponent,
+    RecordMatchingComponent,
   ],
   imports: [
     BrowserModule,

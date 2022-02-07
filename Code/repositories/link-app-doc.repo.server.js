@@ -117,6 +117,7 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
     console.log(`totalPayments is: ${totalPayments} and paymentsCount is: ${paymentsCount}`);
     //#endregion Assign values (await promises)
 
+    // for progress
     let counter = 0;
     //#region streaming from DB for invoices
     const qInvoices = `select
@@ -133,12 +134,12 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
     const stream = connection.getConnection().query(qInvoices).stream();
     const used = process.memoryUsage().heapUsed / 1024 / 1024;
     console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
-
+    let previousProgress = 0;
     // for each invoices
     stream.on('data', (row) => {
         //#region check if there is an equal payment
         let equalPaymentIndex = -1;
-        const equalPayment = payments.filter((payment, index) => {
+        const equalPayment = payments.find((payment, index) => {
             if (Math.abs(payment.balance) == Math.abs(row.balance) &&
                 payment.documentDate.getTime() > row.documentDate.getTime() &&
                 ((row.documentDate.getTime() - payment.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
@@ -147,15 +148,21 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
             } else return false;
         });
         // then we found an equal payment
-        if (equalPayment && equalPayment.length > 0) {
+        if (equalPayment) {
             // generate applicationDocument
             applicationDocumentNew++;
             row.applicationDocumentNew = applicationDocumentNew;
-            solution.push({ id: row.id, applicationDocumentNew }, { id: equalPayment[0].id, applicationDocumentNew });
-            // console.log({ ...row, links: equalPayment[0].id });
+            solution.push({ id: row.id, applicationDocumentNew, procedureId: prcId }, { id: equalPayment.id, applicationDocumentNew, procedureId: prcId });
             //delete payment from payments array
             payments.splice(equalPaymentIndex, 1);
-            console.log(`progress: ${(applicationDocumentNew / paymentsCount) * 100}%...`);
+            let currentProgress = Math.floor((applicationDocumentNew / paymentsCount) * 100);
+            if (currentProgress >=  (previousProgress + 1)) {
+                previousProgress = currentProgress;
+                console.log(`progress: ${Math.floor((applicationDocumentNew / paymentsCount) * 100)}%...`);
+                // res.write('event:' + 'progress\n');
+                res.write('data:' + JSON.stringify({ progress: currentProgress }) + '\n\n');
+            }
+
         } else /* add it to the orphand array to be manipulated later*/ {
             orphaned.push(row);
         }
@@ -236,11 +243,11 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
                                     applicationDocumentNew++;
                                     orphan.applicationDocumentNew = applicationDocumentNew;
                                     // add orphan to the solution
-                                    solution.push({ id: orphan.id, applicationDocumentNew });
+                                    solution.push({ id: orphan.id, applicationDocumentNew, procedureId: prcId });
                                     // delete orphan from original array
                                     orphaned.splice(i, 1);
                                     // add all in partial solution to the silution
-                                    solution.push(...partialSolution.map(ps => ({ id: ps.id, applicationDocumentNew })));
+                                    solution.push(...partialSolution.map(ps => ({ id: ps.id, applicationDocumentNew, procedureId: prcId })));
                                     // delete all in partial solution from payments
                                     console.log(`payment docdate: ${orphan.documentDate} and invoice docdate: ${invoice.documentDate}`);
                                     break;
@@ -249,9 +256,13 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
                     } // end of for start-points
                 }
             } // end of for each payment
-            console.log(`progress: ${(counter / paymentsCount) * 100}%...`);
-            // const used = process.memoryUsage().heapUsed / 1024 / 1024;
-            // console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
+            let currentProgress = Math.floor((counter / paymentsCount) * 100);
+            if (currentProgress >= (previousProgress + 1)) {
+                previousProgress = currentProgress;
+                console.log(`progress: ${Math.floor((counter / paymentsCount) * 100)}%...`);
+                // res.write('event:' + 'progress\n');
+                res.write('data:' + JSON.stringify({ progress: currentProgress }) + '\n\n');
+            }
         } // end of each orphan
         //#endregion manipulate orphand array!
         console.log(`after all orphaned are: ${orphaned.length}`);
@@ -260,26 +271,14 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
 
         await Posting.getPosting("posting_" + orgId).bulkCreate(solution,
             { updateOnDuplicate: ["applicationDocumentNew"] });
+        await Procedure.getProcedures().update({ linkTrans: true }, { where: { id: prcId, }, });
         benchmark = process.hrtime(benchmark);
         console.log('benchmark took %d seconds and %d nanoseconds', benchmark[0], benchmark[1]);
         const used = process.memoryUsage().heapUsed / 1024 / 1024;
         console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
-        res.status(201).json('done');
+        // res.status(201).json('done');
+        res.end();
     });
     //#endregion streaming from DB for invoices
 
-}
-
-
-class TransactionRow {
-    id;
-    // is an array of IDs of the linked rows 
-    links;
-    // each linked transaction will decrease 
-    // the amount of the rest balance but the original value will kept here
-    originalBalance;
-    // the rest of the balance
-    rest;
-    // randomized generated applicationDocument
-    applicationDocument;
 }

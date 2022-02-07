@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ProcedureService } from '../service/procedure.service';
 import { PreCalculateService } from '../service/pre-calculate.service';
 import { Procedures } from 'src/app/shared/model/procedures';
 import { TranslateService } from '@ngx-translate/core';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-pre-calculate',
@@ -24,6 +25,8 @@ export class PreCalculateComponent implements OnInit {
   disableDocType: boolean;
   disableMailSender: boolean;
   disableMailWord: boolean;
+  disableLinkTrans: boolean;
+  progress = 0;
 
   constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService,
     private _procedureService: ProcedureService, private _translateService: TranslateService) { }
@@ -41,17 +44,25 @@ export class PreCalculateComponent implements OnInit {
     this.disableDueDate = (localStorage.getItem('currentProcedureDueDate') === 'true');
     this.disableMailSender = (localStorage.getItem('currentProcedureMailSender') === 'true');
     this.disableMailWord = (localStorage.getItem('currentProcedureMailWord') === 'true');
+    this.disableLinkTrans = (localStorage.getItem('currentProcedureLinkTrans') === 'true');
+    this._preCalcService.returnAsObservable().subscribe((data: any) => {
+      console.log(data);
+      this.progress = data.progress;
+      //TODO: if progress 100 close connection
+      if (this.progress == 100) this._preCalcService.stopSSE();
+      // this.changeDetectorRef.detectChanges(); 
+    });
   }
 
   updateProcedureStatus() {
     if (this.disableAmount && this.disableCredit && this.disableDueDate &&
       this.disablePayment && this.disableText_account && this.disabletextWord
-      && this.disableMailSender && this.disableMailWord) {
+      && this.disableMailSender && this.disableMailWord && this.disableLinkTrans) {
       this._procedureService.patch({ id: this.prcId, status: 'CALCULATED' })
         .subscribe(res => localStorage.setItem('currentProcedureStatus', 'CALCULATED'));
     } else if (this.disableAmount || this.disableCredit || this.disableDueDate ||
       this.disablePayment || this.disableText_account || this.disabletextWord
-      || this.disableMailSender || this.disableMailWord) {
+      || this.disableMailSender || this.disableMailWord || this.disableLinkTrans) {
       this._procedureService.patch({ id: this.prcId, status: 'CALCULATED' })
         .subscribe(res => localStorage.setItem('currentProcedureStatus', 'PARTIAL_CALCULATED'));
     }
@@ -192,6 +203,42 @@ export class PreCalculateComponent implements OnInit {
         });
         this.updateProcedureStatus();
       }, er => this.waiting = false);
+  }
+
+  linkTransStart() {
+    this.waiting = true;
+    this._preCalcService.linkTransactions(this.orgId, this.prcId);
+    // .subscribe(data => console.log(data));
+    // .subscribe(async (res) => {
+    //   console.log(res);
+    //   switch (res.type) {
+    //     case HttpEventType.Sent:
+    //       console.log('Request has been made!');
+    //       break;
+    //     case HttpEventType.ResponseHeader:
+    //       console.log('Response header has been received!');
+    //       break;
+    //     // case HttpEventType.UploadProgress:
+    //     //   this.progress = Math.round(res.loaded / res.total * 100);
+    //     //   this.progressElm.nativeElement.style.width = +this.progress + '%';
+    //     //   this.cdRef.detectChanges();
+    //     //   console.log(`Uploaded! ${this.progress}%`);
+    //     //   break;
+    //     case HttpEventType.Response:
+    //       console.log('User successfully created!', res);
+    //       break;
+    //   } // end of switch
+    //   this.waiting = false;
+    //   // localStorage.setItem('currentProcedureLinkTrans', 'true');
+    //   // this.disableLinkTrans = true;
+    //   this._messageService.add({
+    //     severity: 'success',
+    //     summary: 'SUCCESS',
+    //     life: 10000,
+    //     detail: await this._translateService.get('general_messages.update_success').toPromise(),
+    //   });
+    //   this.updateProcedureStatus();
+    // }, er => this.waiting = false);
   }
 
 

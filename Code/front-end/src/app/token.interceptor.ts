@@ -36,9 +36,9 @@ export class TokenInterceptor implements HttpInterceptor {
       next.handle(tokenizedReq).subscribe(
         (res: HttpResponse<any>) => {
           // debugger;
-          if (res instanceof HttpResponse) {
+          // if (res instanceof HttpResponse) {
             observer.next(res);
-          }
+          // }
         },
         (err: HttpErrorResponse) => {
           // debugger;

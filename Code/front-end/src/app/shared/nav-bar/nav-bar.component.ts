@@ -168,6 +168,21 @@ export class NavBarComponent implements OnInit {
                     localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
                     localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
               },
+              {
+                label: 'Records Matching',
+                icon: 'pi  pi-plus-circle',
+                routerLink: ['/dashboard/admin/record-matching'],
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureDocType') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
 
             ],
           },

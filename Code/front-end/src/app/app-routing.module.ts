@@ -51,6 +51,7 @@ import { MailHistoryDataComponent } from './shared/mail-history/mail-history-dat
 import { MailAnalysisComponent } from './shared/analysis/mail-analysis/mail-analysis.component';
 import { MailAnalysisDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-details/mail-analysis-details.component';
 import { MailAnalysisSenderDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-sender-details/mail-analysis-sender-details.component';
+import { RecordMatchingComponent } from './admin/record-matching/record-matching.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -143,6 +144,12 @@ const routes: Routes = [
       {
         path: 'admin/pre-calc',
         component: PreCalculateComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin'] },
+      },
+      {
+        path: 'admin/record-matching',
+        component: RecordMatchingComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin'] },
       },
