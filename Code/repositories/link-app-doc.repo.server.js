@@ -100,6 +100,7 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
                         posting_${orgId} p
                     WHERE
                         p.procedureId = ${prcId}
+                        AND p.documentDate is not null 
                         and documentTypeNewName = 'Zahlung'
                         and (p.accountType = 'K'
                             OR p.accountType = 'D')
@@ -125,7 +126,7 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
                         FROM
                             posting_${orgId} p
                         WHERE
-                            p.procedureId = 5
+                            p.procedureId =  ${prcId}
                             AND p.documentDate is not null 
                             and documentTypeNewName = 'Rechnung'
                             and (p.accountType = 'K'
@@ -156,12 +157,16 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
             //delete payment from payments array
             payments.splice(equalPaymentIndex, 1);
             let currentProgress = Math.floor((applicationDocumentNew / paymentsCount) * 100);
-            if (currentProgress >=  (previousProgress + 1)) {
+            // if (currentProgress >= (previousProgress + 1)) {
                 previousProgress = currentProgress;
                 console.log(`progress: ${Math.floor((applicationDocumentNew / paymentsCount) * 100)}%...`);
                 // res.write('event:' + 'progress\n');
-                res.write('data:' + JSON.stringify({ progress: currentProgress }) + '\n\n');
-            }
+                // res.write('data:' + JSON.stringify({ progress: currentProgress }) + '\n\n');
+                // res.flush();
+                res.sse.data({ data: { progress: currentProgress } });
+                // res.sse.event('someEvent', Event('progress'));
+                res.sse.comment('debug: someModule emitted someEvent!');
+            // }
 
         } else /* add it to the orphand array to be manipulated later*/ {
             orphaned.push(row);
@@ -261,7 +266,11 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
                 previousProgress = currentProgress;
                 console.log(`progress: ${Math.floor((counter / paymentsCount) * 100)}%...`);
                 // res.write('event:' + 'progress\n');
-                res.write('data:' + JSON.stringify({ progress: currentProgress }) + '\n\n');
+                // res.write('data:' + JSON.stringify({ progress: currentProgress }) + '\n\n');
+                // res.flush();
+                res.sse.data({ data: { progress: currentProgress } });
+                // res.sse.event('someEvent', new Event('progress'));
+                res.sse.comment('debug: someModule emitted someEvent!');
             }
         } // end of each orphan
         //#endregion manipulate orphand array!

@@ -40,6 +40,12 @@ app.use(
 );
 app.use(bearerToken());
 
+// just a work around for sse
+app.use(function (req, res, next) {
+  res.flush = function () { /* Do nothing */ }
+  next();
+});
+
 app.get('/test', (req, res) => { res.json('this is an secure server') });
 
 app.use("/api/shared", sharedRoutes);

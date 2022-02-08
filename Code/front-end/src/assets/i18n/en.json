@@ -597,6 +597,7 @@
     "postingPeriod": "Postingperiod",
     "differentTaxationType": "Different taxation type",
     "applicationDocument": "Applicationdocument",
+    "applicationDocumentNew": "applicationDocumentNew",
     "applicationDate": "Applicationdate",
     "applicationDateNew": "ApplicationdateNew",
     "ledgerId": "LedgerId",

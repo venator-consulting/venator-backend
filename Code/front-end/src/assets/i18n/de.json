@@ -584,6 +584,7 @@
     "postingPeriod": "Buchungsperiode",
     "differentTaxationType": "DifferentTaxationType",
     "applicationDocument": "Ausgleichsbeleg",
+    "applicationDocumentNew": "Ausgleichsbeleg angepasst",
     "applicationDate": "Datum des Ausgleichs",
     "applicationDateNew": "Ausgleichsdatum angepasst",
     "ledgerId": "ID des Rechnungslegungsbereichs",

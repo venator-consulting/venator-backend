@@ -29,7 +29,8 @@ export class PreCalculateComponent implements OnInit {
   progress = 0;
 
   constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService,
-    private _procedureService: ProcedureService, private _translateService: TranslateService) { }
+    private _procedureService: ProcedureService, private _translateService: TranslateService,
+    private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.orgId = +localStorage.getItem('organisationId');
@@ -50,7 +51,7 @@ export class PreCalculateComponent implements OnInit {
       this.progress = data.progress;
       //TODO: if progress 100 close connection
       if (this.progress == 100) this._preCalcService.stopSSE();
-      // this.changeDetectorRef.detectChanges(); 
+      this.changeDetectorRef.detectChanges(); 
     });
   }
 

@@ -1,3 +1,6 @@
 <h3>{{'precalc.linkTrans'| translate}}</h3>
-<p-progressBar [value]="progress"></p-progressBar>
+<!-- <p-progressBar [value]="progress"></p-progressBar> -->
+<div class="progress">
+    <div class="progress-bar" [style.width.%]="progress" aria-valuemax="100">{{progress}}%</div>
+</div>
 <button pButton label="{{'precalc.start'| translate}}" (click)="linkTransStart()"></button>

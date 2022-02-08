@@ -14,6 +14,7 @@ const postingCtrl = require('../controller/posting.controller.server');
 const accountTypeCtrl = require('../controller/accountType.controler.server');
 const precalcCtrl = require('../controller/precalculated.controller.server');
 const websiteCtrl = require('../controller/website.controller.server');
+const { sse } = require('@toverux/expresse');
 
 const pstCtrl = require('../controller/pst.controller.servier');
 
@@ -29,7 +30,7 @@ const publicImgs = multer({
 //#region website managment
 router
     .route('/link-trans/:orgId/:prcId')
-    .get( precalcCtrl.linkTransactions);
+    .get(sse({ flushAfterWrite: true }), precalcCtrl.linkTransactions);
 
 router
     .route('/website/')

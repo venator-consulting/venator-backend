@@ -78,6 +78,7 @@ export class dataTableColumns {
     result.push(new dataTableColumns("taxAmountDebit", await translateService.get("DataTableColumns.taxAmountDebit").toPromise(), 'right'));
     result.push(new dataTableColumns("taxAmountCredit", await translateService.get("DataTableColumns.taxAmountCredit").toPromise(), 'right'));
     result.push(new dataTableColumns("applicationDocument", await translateService.get("DataTableColumns.applicationDocument").toPromise()));
+    result.push(new dataTableColumns("applicationDocumentNew", await translateService.get("DataTableColumns.applicationDocumentNew").toPromise()));
     result.push(new dataTableColumns("applicationDate", await translateService.get("DataTableColumns.applicationDate").toPromise()));
    // result.push(new dataTableColumns("applicationDateNew", await translateService.get("DataTableColumns.applicationDateNew").toPromise()));
     result.push(new dataTableColumns("generalReversal", await translateService.get("DataTableColumns.generalReversal").toPromise()));
