@@ -75,10 +75,11 @@ module.exports.emailAnalysisWord = async (req, res) => {
 module.exports.linkTransactions = async (req, res) => {
     const orgId = +req.params.orgId;
     const prcId = +req.params.prcId;
-    // res.set('Content-Type', 'text/event-stream;charset=utf-8');
-    // // res.set('Cache-Control', 'no-cache'); 
-    // res.set('Cache-Control', 'no-transform');
-    // res.flushHeaders();
+    res.set('Content-Type', 'text/event-stream;charset=utf-8');
+    // res.set('Cache-Control', 'no-cache'); 
+    res.set('Cache-Control', 'no-transform');
+    res.setHeader('X-Accel-Buffering', 'no');
+    res.flushHeaders();
 
     const result = await linkTransactionsRepo.linkTransactions(res, orgId, prcId);
     // res.status(201).json('done');

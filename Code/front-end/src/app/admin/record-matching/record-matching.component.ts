@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { PreCalculateService } from '../service/pre-calculate.service';
 
@@ -13,18 +13,21 @@ export class RecordMatchingComponent implements OnInit {
   prcId: number;
   progress = 0;
 
-  constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService,) { }
+  constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService,
+    private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
-    
+
     this._preCalcService.returnAsObservable().subscribe((data: any) => {
       console.log(data);
+      debugger;
+      data = data.length == [] ? { progress: 0 } : JSON.parse(data);
       this.progress = data.progress;
-      //TODO: if progress 100 close connection
+      // if progress 100 close connection
       if (this.progress == 100) this._preCalcService.stopSSE();
-      // this.changeDetectorRef.detectChanges(); 
+      this.changeDetectorRef.detectChanges();
     });
   }
 
