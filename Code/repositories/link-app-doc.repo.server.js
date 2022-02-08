@@ -123,7 +123,7 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
     const qInvoices = `select
                             p.id, p.balance, p.documentDate
                         FROM
-                            posting_1 p
+                            posting_${orgId} p
                         WHERE
                             p.procedureId = 5
                             AND p.documentDate is not null 
