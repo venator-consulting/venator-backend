@@ -81,6 +81,6 @@ module.exports.linkTransactions = async (req, res) => {
     res.setHeader('X-Accel-Buffering', 'no');
     res.flushHeaders();
 
-    const result = await linkTransactionsRepo.linkTransactions(res, orgId, prcId);
+    const result = await linkTransactionsRepo.linkUsingWorker(res, orgId, prcId);
     // res.status(201).json('done');
 };

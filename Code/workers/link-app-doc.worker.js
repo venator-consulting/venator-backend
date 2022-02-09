@@ -1,10 +1,4 @@
-/**
- * this repository is just for suggest and link 
- * the transactions for the procedures 
- * with empty ApplicationDocument
- */
-
-// get connection from mysql directly to open stream
+const { parentPort } = require("worker_threads");
 const connection = require("../config/mysql.config");
 // get procedure model to update procedure status (relation calculated)
 const Procedure = require("../models/procedures.model.server");
@@ -16,87 +10,13 @@ const Exception = require("../helpers/errorHandlers/Exception");
 const httpStatus = require("../models/enums/httpStatus");
 const errors = require('../models/enums/errors');
 
-const { Worker } = require("worker_threads");
+parentPort.on("message", (data) => {
 
-module.exports.linkUsingWorker = async (res, orgId, prcId) => {
+    linkTransactions(data.orgId, data.prcId);
 
-    let benchmark = process.hrtime();
-    if (isNaN(orgId))
-        throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
-    if (isNaN(prcId))
-        throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+});
 
-    const worker = new Worker(require('path').join(__dirname, '../', 'workers/link-app-doc.worker.js'));
-
-    worker.on("message", (data) => {
-        console.log(`${data.progress}%...`);
-        res.write('event:' + 'progress\n');
-        res.write('data:' + JSON.stringify({ progress: data.progress }) + '\n\n');
-        res.flush();
-    });
-
-    worker.on("error", (error) => {
-        console.log(error);
-        throw new Exception('Something went wrong!');
-    });
-
-    worker.on("exit", (exitCode) => {
-        console.log(exitCode);
-        benchmark = process.hrtime(benchmark);
-        console.log('benchmark took %d Minutes %d Seconds and %d nanoseconds', Math.floor(benchmark[0] / 60), benchmark[0] % 60, benchmark[1]);
-        const used = process.memoryUsage().heapUsed / 1024 / 1024;
-        console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
-        res.end(200);
-    });
-
-    // Send messages to the worker
-    worker.postMessage({ orgId, prcId });
-
-}
-
-
-module.exports.linkTransactions = async (res, orgId, prcId) => {
-    let benchmark = process.hrtime();
-    if (isNaN(orgId))
-        throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
-    if (isNaN(prcId))
-        throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-
-    // Rechnung is invoices and Zahlung is payment
-
-    //#region Algo
-    // one invoices can link with multiple payments and vice versa
-    // the solution will be an object, the keys is the id of the row,
-    // the value is an object of type TransactionRow
-
-    // first of all we should get:
-    // 1-total invoices balance;
-    // 2-total payments balance;
-    // 3-number of invoices;
-    // 4-number of payments;
-    // to verify the solution.
-
-    // we need to get all payments to an array (payments)
-    // to know wich are checked or not yet
-    // each payment linked will be removed
-
-    // 1-open a stream on the database and get invoices with accountType 'K' or 'D' and type 'invoices'
-    // 2-for each row we will try to find transaction with:
-    // 2-1-same balance;
-    // 2-2-type is payment;
-    // 2-3-thisRow.documentDate < thatPayment.documentDate;
-    // 2-4-(thatPayment.documentDate - thisRow.documentDate) < 120 days;
-    // 2-5-sorted by documentDate ASC (from older) to get the closer date row;
-    // 3-if got a result, add it to the solution;
-    // 4-if got no result, add it to the orphaned array.
-
-    // the optimal solution:
-    // 1- if the totla balance of invoices === total balance of payments
-    // 1-1- the payments array will be 0 length and the orphand array of invoices will be 0 length;
-    // 2- if the balances vars then the optimal solution is:
-    // Min(abs(payments balance) + abs(invoices balance))
-    //#endregion Algo
-
+async function linkTransactions(orgId, prcId) {
     // contains th final solution;
     const solution = [];
     // contains not linked invoices yet;
@@ -180,7 +100,7 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
         let equalPaymentIndex = -1;
         const equalPayment = payments.find((payment, index) => {
             if (Math.abs(payment.balance) == Math.abs(row.balance) &&
-                payment.documentDate.getTime() > row.documentDate.getTime() &&
+                payment.documentDate.getTime() >= row.documentDate.getTime() &&
                 ((row.documentDate.getTime() - payment.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
                 equalPaymentIndex = index;
                 return true;
@@ -197,10 +117,9 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
             let currentProgress = Math.floor((applicationDocumentNew / paymentsCount) * 100);
             if (currentProgress >= (previousProgress + 1)) {
                 previousProgress = currentProgress;
-                console.log(`progress: ${Math.floor((applicationDocumentNew / paymentsCount) * 100)}%...`);
-                res.write('event:' + 'progress\n');
-                res.write('data:' + JSON.stringify({ progress: currentProgress }) + '\n\n');
-                res.flush();
+                console.log(`progress from child: ${Math.floor((applicationDocumentNew / paymentsCount) * 100)}%...`);
+
+                parentPort.postMessage({ progress: currentProgress });
             }
 
         } else /* add it to the orphand array to be manipulated later*/ {
@@ -214,30 +133,6 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
         console.log(`payments array now: ${payments.length}`);
         console.log(`orphaned array now: ${orphaned.length}`);
         //#region manipulate orphand array!
-        // for each payment:
-        // try to get invoices which sum their balance equals the invoice balance as:
-        /* 
-        for each invoice get it as a start-point
-            def total = 0
-            def partialSolution as []
-            total += invoice.balance as abs value
-            add invoice to partialSolution
-            if orphaned.balance == total
-                add row and invoices in partial solution from invoices array to solution array
-                delete invoices in partial solution from invoices array
-                break all loops
-            if total > orphaned.balance pull invoice from partialSolution array
-            foreach other invoices
-                total += invoice.balance as abs value
-                add invoice to partialSolution
-                if orphaned.balance == total
-                    add row and invoices in partial solution from invoices array to solution array
-                    delete invoices in partial solution from invoices array
-                    delete orphaned from orphaneds array
-                    break all loops
-                if total > orphaned.balance pull invoice from partialSolution array
-        */
-
         counter = applicationDocumentNew;
         // foreach orphaned
         for (let i = 0; i < payments.length; i++) {
@@ -250,7 +145,7 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
                 let total = 0;
                 const partialSolution = [];
                 if (Math.abs(invoice.balance) > Math.abs(orphan.balance) ||
-                    orphan.documentDate.getTime() < invoice.documentDate.getTime() ||
+                    orphan.documentDate.getTime() <= invoice.documentDate.getTime() ||
                     ((invoice.documentDate.getTime() - orphan.documentDate.getTime()) / (1000 * 60 * 60 * 24)) > 120)
                     break;
                 else {
@@ -258,7 +153,7 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
                     total += Math.abs(invoice.balance);
                     // this will not be but we take care about it!
                     if (Math.abs(orphan.balance) == total &&
-                        orphan.documentDate.getTime() > invoice.documentDate.getTime() &&
+                        orphan.documentDate.getTime() >= invoice.documentDate.getTime() &&
                         ((invoice.documentDate.getTime() - orphan.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
                         // add to solution and delete from original arrays
                         console.warn('they are equal but not manilpulated!!!!!');
@@ -272,7 +167,7 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
                                 break;
                             } else
                                 if ((total + Math.abs(option.balance)) < Math.abs(orphan.balance) &&
-                                    orphan.documentDate.getTime() > option.documentDate.getTime() &&
+                                    orphan.documentDate.getTime() >= option.documentDate.getTime() &&
                                     ((option.documentDate.getTime() - orphan.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
                                     partialSolution.push(option);
                                     total += Math.abs(option.balance);
@@ -289,7 +184,7 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
                                     // add all in partial solution to the silution
                                     solution.push(...partialSolution.map(ps => ({ id: ps.id, applicationDocumentNew, procedureId: prcId })));
                                     // delete all in partial solution from payments
-                                    console.log(`payment docdate: ${orphan.documentDate} and invoice docdate: ${invoice.documentDate}`);
+                                    console.log(`from child: payment docdate: ${orphan.documentDate} and invoice docdate: ${invoice.documentDate}`);
                                     break;
                                 } // end of solution block
                         } // end of options
@@ -299,10 +194,8 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
             let currentProgress = Math.floor((counter / paymentsCount) * 100);
             if (currentProgress >= (previousProgress + 1)) {
                 previousProgress = currentProgress;
-                console.log(`progress: ${Math.floor((counter / paymentsCount) * 100)}%...`);
-                res.write('event:' + 'progress\n');
-                res.write('data:' + JSON.stringify({ progress: currentProgress }) + '\n\n');
-                res.flush();
+                console.log(`progress from child: ${Math.floor((counter / paymentsCount) * 100)}%...`);
+                parentPort.postMessage({ progress: currentProgress });
             }
         } // end of each orphan
         //#endregion manipulate orphand array!
@@ -313,14 +206,8 @@ module.exports.linkTransactions = async (res, orgId, prcId) => {
         await Posting.getPosting("posting_" + orgId).bulkCreate(solution,
             { updateOnDuplicate: ["applicationDocumentNew"] });
         await Procedure.getProcedures().update({ linkTrans: true }, { where: { id: prcId, }, });
-        benchmark = process.hrtime(benchmark);
-        console.log('benchmark took %d seconds and %d nanoseconds', benchmark[0], benchmark[1]);
-        const used = process.memoryUsage().heapUsed / 1024 / 1024;
-        console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
-        // res.status(201).json('done');
-        res.end();
+        console.log('execution ended');
     });
     //#endregion streaming from DB for invoices
 
 }
-

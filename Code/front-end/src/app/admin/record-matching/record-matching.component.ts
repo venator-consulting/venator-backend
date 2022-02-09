@@ -22,7 +22,7 @@ export class RecordMatchingComponent implements OnInit {
 
     this._preCalcService.returnAsObservable().subscribe((data: any) => {
       console.log(data);
-      debugger;
+      // debugger;
       data = data.length == [] ? { progress: 0 } : JSON.parse(data);
       this.progress = data.progress;
       // if progress 100 close connection
