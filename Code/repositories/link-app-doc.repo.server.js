@@ -54,7 +54,9 @@ module.exports.linkUsingWorker = async (res, orgId, prcId) => {
 
 }
 
-
+/**
+ * @deprecated please use the function in the worker
+ */
 module.exports.linkTransactions = async (res, orgId, prcId) => {
     let benchmark = process.hrtime();
     if (isNaN(orgId))

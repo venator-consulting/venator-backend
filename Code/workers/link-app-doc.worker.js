@@ -53,7 +53,7 @@ async function linkTransactions(orgId, prcId) {
 
     //#region get Payments
     let qPayments = `select
-	                    p.id, p.balance, p.documentDate
+	                    p.id, p.balance, p.documentDate, p.accountNumber 
                     FROM
                         posting_${orgId} p
                     WHERE
@@ -62,7 +62,7 @@ async function linkTransactions(orgId, prcId) {
                         and documentTypeNewName = 'Zahlung'
                         and (p.accountType = 'K'
                             OR p.accountType = 'D')
-                    ORDER BY ABS(p.balance) ASC`;
+                    ORDER BY p.documentDate ASC, ABS(p.balance) ASC`;
     const paymentsPromise = sequelize.query(qPayments, { type: QueryTypes.SELECT, });
     //#endregion getPayments
 
@@ -80,7 +80,7 @@ async function linkTransactions(orgId, prcId) {
     let counter = 0;
     //#region streaming from DB for invoices
     const qInvoices = `select
-                            p.id, p.balance, p.documentDate
+                            p.id, p.balance, p.documentDate, p.accountNumber 
                         FROM
                             posting_${orgId} p
                         WHERE
@@ -89,7 +89,7 @@ async function linkTransactions(orgId, prcId) {
                             and documentTypeNewName = 'Rechnung'
                             and (p.accountType = 'K'
                                 OR p.accountType = 'D')
-                        ORDER BY ABS(p.balance) ASC`;
+                        ORDER BY p.documentDate DESC, ABS(p.balance) ASC`;
     const stream = connection.getConnection().query(qInvoices).stream();
     const used = process.memoryUsage().heapUsed / 1024 / 1024;
     console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
@@ -100,8 +100,9 @@ async function linkTransactions(orgId, prcId) {
         let equalPaymentIndex = -1;
         const equalPayment = payments.find((payment, index) => {
             if (Math.abs(payment.balance) == Math.abs(row.balance) &&
+                payment.accountNumber?.trim() === row.accountNumber?.trim() &&
                 payment.documentDate.getTime() >= row.documentDate.getTime() &&
-                ((row.documentDate.getTime() - payment.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
+                ((payment.documentDate.getTime() - row.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
                 equalPaymentIndex = index;
                 return true;
             } else return false;
@@ -145,16 +146,18 @@ async function linkTransactions(orgId, prcId) {
                 let total = 0;
                 const partialSolution = [];
                 if (Math.abs(invoice.balance) > Math.abs(orphan.balance) ||
-                    orphan.documentDate.getTime() <= invoice.documentDate.getTime() ||
-                    ((invoice.documentDate.getTime() - orphan.documentDate.getTime()) / (1000 * 60 * 60 * 24)) > 120)
+                    invoice.accountNumber?.trim() !== orphan.accountNumber?.trim() ||
+                    orphan.documentDate.getTime() < invoice.documentDate.getTime() ||
+                    ((orphan.documentDate.getTime() - invoice.documentDate.getTime()) / (1000 * 60 * 60 * 24)) > 120)
                     break;
                 else {
                     partialSolution.push(invoice);
                     total += Math.abs(invoice.balance);
                     // this will not be but we take care about it!
                     if (Math.abs(orphan.balance) == total &&
+                        orphan.accountNumber?.trim() === invoice.accountNumber?.trim() &&
                         orphan.documentDate.getTime() >= invoice.documentDate.getTime() &&
-                        ((invoice.documentDate.getTime() - orphan.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
+                        ((orphan.documentDate.getTime() - invoice.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
                         // add to solution and delete from original arrays
                         console.warn('they are equal but not manilpulated!!!!!');
                         console.log(`Payment docdate: ${orphan.documentDate} and invoice docdate: ${invoice.documentDate}`);
@@ -167,8 +170,9 @@ async function linkTransactions(orgId, prcId) {
                                 break;
                             } else
                                 if ((total + Math.abs(option.balance)) < Math.abs(orphan.balance) &&
+                                    orphan.accountNumber?.trim() === option.accountNumber?.trim() &&
                                     orphan.documentDate.getTime() >= option.documentDate.getTime() &&
-                                    ((option.documentDate.getTime() - orphan.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
+                                    ((orphan.documentDate.getTime() - option.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
                                     partialSolution.push(option);
                                     total += Math.abs(option.balance);
                                     otherOptions.splice(k, 1);
