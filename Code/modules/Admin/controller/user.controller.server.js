@@ -24,7 +24,7 @@ module.exports.resetPass = async (req, res) => {
 
 module.exports.changePassword = async (req, res) => {
   const result = await userRepo.changePassword(
-    req.userinfo.email,
+    req.user.email,
     req.body.password
   );
   res.status(201).json(result);

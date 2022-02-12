@@ -43,7 +43,8 @@ passport.use(
 passport.use(
   new JWTStrategy(
     {
-      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      // jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJWT.fromExtractors([ExtractJWT.fromUrlQueryParameter("token"), ExtractJWT.fromHeader("token"), ExtractJWT.fromAuthHeaderAsBearerToken()]),
       secretOrKey: config.jwtSecret,
     },
     function (jwtPayload, cb) {

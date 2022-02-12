@@ -27,10 +27,16 @@ export class PreCalculateComponent implements OnInit {
   disableMailWord: boolean;
   disableLinkTrans: boolean;
   progress = 0;
+  amountProgress = 0;
+  paymentProgress = 0;
+  dueDateProgress = 0;
+  creditorProgress = 0;
+  textAccountProgress = 0;
+  mailSenderProgress = 0;
+  mailWordProgress = 0;
 
   constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService,
-    private _procedureService: ProcedureService, private _translateService: TranslateService,
-    private changeDetectorRef: ChangeDetectorRef) { }
+    private _procedureService: ProcedureService, private _translateService: TranslateService) { }
 
   ngOnInit(): void {
     this.orgId = +localStorage.getItem('organisationId');
@@ -46,13 +52,6 @@ export class PreCalculateComponent implements OnInit {
     this.disableMailSender = (localStorage.getItem('currentProcedureMailSender') === 'true');
     this.disableMailWord = (localStorage.getItem('currentProcedureMailWord') === 'true');
     this.disableLinkTrans = (localStorage.getItem('currentProcedureLinkTrans') === 'true');
-    this._preCalcService.returnAsObservable().subscribe((data: any) => {
-      console.log(data);
-      this.progress = data.progress;
-      //TODO: if progress 100 close connection
-      if (this.progress == 100) this._preCalcService.stopSSE();
-      this.changeDetectorRef.detectChanges(); 
-    });
   }
 
   updateProcedureStatus() {
@@ -72,137 +71,170 @@ export class PreCalculateComponent implements OnInit {
   textByWordStart() {
     this.waiting = true;
     this._preCalcService.textAnalysisByWord(this.orgId, this.prcId)
-      .subscribe(async (res) => {
-        this.waiting = false;
-        localStorage.setItem('currentProcedureText_word', 'true');
-        this.disabletextWord = true;
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          life: 10000,
-          detail: await this._translateService.get('general_messages.update_success').toPromise(),
-        });
-        this.updateProcedureStatus();
+      .subscribe(async (data: any) => {
+        console.log(data);
+        this.progress = data.progress;
+        if (this.progress >= 100) {
+          this.waiting = false;
+          localStorage.setItem('currentProcedureText_word', 'true');
+          this.disabletextWord = true;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: await this._translateService.get('general_messages.update_success').toPromise(),
+          });
+          this.updateProcedureStatus();
+        }
       }, er => this.waiting = false);
   }
 
   textByAccountStart() {
     this.waiting = true;
     this._preCalcService.textAnalysisByAccount(this.orgId, this.prcId)
-      .subscribe(async (res) => {
-        this.waiting = false;
-        localStorage.setItem('currentProcedureText_account', 'true');
-        this.disableText_account = true;
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          life: 10000,
-          detail: await this._translateService.get('general_messages.update_success').toPromise(),
-        });
-        this.updateProcedureStatus();
+      .subscribe(async (data: any) => {
+        console.log(data);
+        this.textAccountProgress = data.progress;
+        if (this.textAccountProgress >= 100) {
+          this.waiting = false;
+          localStorage.setItem('currentProcedureText_account', 'true');
+          this.disableText_account = true;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: await this._translateService.get('general_messages.update_success').toPromise(),
+          });
+          this.updateProcedureStatus();
+        }
       }, er => this.waiting = false);
+
   }
 
 
   amountStart() {
     this.waiting = true;
     this._preCalcService.amountAnalysis(this.orgId, this.prcId)
-      .subscribe(async (res) => {
-        this.waiting = false;
-        localStorage.setItem('currentProcedureAmount', 'true');
-        this.disableAmount = true;
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          life: 10000,
-          detail: await this._translateService.get('general_messages.update_success').toPromise(),
-        });
-        this.updateProcedureStatus();
+      .subscribe(async (data: any) => {
+        console.log(data);
+        this.amountProgress = data.progress;
+        if (this.amountProgress >= 100) {
+          this.waiting = false;
+          localStorage.setItem('currentProcedureAmount', 'true');
+          this.disableAmount = true;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: await this._translateService.get('general_messages.update_success').toPromise(),
+          });
+          this.updateProcedureStatus();
+        }
       }, er => this.waiting = false);
   }
 
   creditorStart() {
     this.waiting = true;
     this._preCalcService.creditorAnalysis(this.orgId, this.prcId)
-      .subscribe(async (res) => {
-        this.waiting = false;
-        localStorage.setItem('currentProcedureCredit', 'true');
-        this.disableCredit = true;
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          life: 10000,
-          detail: await this._translateService.get('general_messages.update_success').toPromise(),
-        });
-        this.updateProcedureStatus();
+      .subscribe(async (data: any) => {
+        console.log(data);
+        this.creditorProgress = data.progress;
+        if (this.creditorProgress >= 100) {
+          this.waiting = false;
+          localStorage.setItem('currentProcedureCredit', 'true');
+          this.disableCredit = true;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: await this._translateService.get('general_messages.update_success').toPromise(),
+          });
+          this.updateProcedureStatus();
+        }
       }, er => this.waiting = false);
   }
 
   paymentStart() {
     this.waiting = true;
     this._preCalcService.paymentAnalysis(this.orgId, this.prcId)
-      .subscribe(async (res) => {
-        this.waiting = false;
-        localStorage.setItem('currentProcedurePayment', 'true');
-        this.disablePayment = true;
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          life: 10000,
-          detail: await this._translateService.get('general_messages.update_success').toPromise(),
-        });
-        this.updateProcedureStatus();
+      .subscribe(async (data: any) => {
+        console.log(data);
+        this.paymentProgress = data.progress;
+        if (this.paymentProgress >= 100) {
+          this.waiting = false;
+          localStorage.setItem('currentProcedurePayment', 'true');
+          this.disablePayment = true;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: await this._translateService.get('general_messages.update_success').toPromise(),
+          });
+          this.updateProcedureStatus();
+        }
       }, er => this.waiting = false);
   }
 
   dueDateStart() {
     this.waiting = true;
     this._preCalcService.dueDateAnalysis(this.orgId, this.prcId)
-      .subscribe(async (res) => {
-        this.waiting = false;
-        localStorage.setItem('currentProcedureDueDate', 'true');
-        this.disableDueDate = true;
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          life: 10000,
-          detail: await this._translateService.get('general_messages.update_success').toPromise(),
-        });
-        this.updateProcedureStatus();
+      .subscribe(async (data: any) => {
+        console.log(data);
+        this.dueDateProgress = data.progress;
+        if (this.dueDateProgress >= 100) {
+          this.waiting = false;
+          localStorage.setItem('currentProcedureDueDate', 'true');
+          this.disableDueDate = true;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: await this._translateService.get('general_messages.update_success').toPromise(),
+          });
+          this.updateProcedureStatus();
+        }
       }, er => this.waiting = false);
   }
 
   mailByWordStart() {
     this.waiting = true;
     this._preCalcService.mailAnalysisByWord(this.orgId, this.prcId)
-      .subscribe(async (res) => {
-        this.waiting = false;
-        localStorage.setItem('currentProcedureMailWord', 'true');
-        this.disableMailWord = true;
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          life: 10000,
-          detail: await this._translateService.get('general_messages.update_success').toPromise(),
-        });
-        this.updateProcedureStatus();
+      .subscribe(async (data: any) => {
+        console.log(data);
+        this.mailWordProgress = data.progress;
+        if (this.mailWordProgress >= 100) {
+          this.waiting = false;
+          localStorage.setItem('currentProcedureMailWord', 'true');
+          this.disableMailWord = true;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: await this._translateService.get('general_messages.update_success').toPromise(),
+          });
+          this.updateProcedureStatus();
+        }
       }, er => this.waiting = false);
   }
 
   mailBySenderStart() {
     this.waiting = true;
     this._preCalcService.mailAnalysisBySender(this.orgId, this.prcId)
-      .subscribe(async (res) => {
-        this.waiting = false;
-        localStorage.setItem('currentProcedureMailSender', 'true');
-        this.disableMailSender = true;
-        this._messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          life: 10000,
-          detail: await this._translateService.get('general_messages.update_success').toPromise(),
-        });
-        this.updateProcedureStatus();
+      .subscribe(async (data: any) => {
+        console.log(data);
+        this.mailSenderProgress = data.progress;
+        if (this.mailSenderProgress >= 100) {
+          this.waiting = false;
+          localStorage.setItem('currentProcedureMailSender', 'true');
+          this.disableMailSender = true;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: await this._translateService.get('general_messages.update_success').toPromise(),
+          });
+          this.updateProcedureStatus();
+        }
       }, er => this.waiting = false);
   }
 

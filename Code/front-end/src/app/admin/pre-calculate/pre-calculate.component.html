@@ -5,32 +5,40 @@
 <p-progressBar *ngIf="waiting" mode="indeterminate" [style]="{'height': '5px'}"></p-progressBar>
 
 <h3>{{'precalc.text_word'| translate}}</h3>
+<p-progressBar [hidden]="!progress" [value]="progress"></p-progressBar>
 <button pButton label="{{'precalc.start'| translate}}" (click)="textByWordStart()" [disabled]="disabletextWord"></button>
 <br><br>
 
 <h3>{{'precalc.text_account'| translate}}</h3>
+<p-progressBar [hidden]="!textAccountProgress" [value]="textAccountProgress"></p-progressBar>
 <button pButton label="{{'precalc.start'| translate}}" (click)="textByAccountStart()" [disabled]="disableText_account"></button>
 
 <h3>{{'precalc.amount'| translate}}</h3>
+<p-progressBar [hidden]="!amountProgress" [value]="amountProgress"></p-progressBar>
 <button pButton label="{{'precalc.start'| translate}}" (click)="amountStart()" [disabled]="disableAmount"></button>
 
 <h3>{{'precalc.credit'| translate}}</h3>
+<p-progressBar [hidden]="!creditorProgress" [value]="creditorProgress"></p-progressBar>
 <p *ngIf="disableDocType"> Please Set Document type for this procedure to enable calculation</p>
 <button *ngIf="!disableDocType" pButton label="{{'precalc.start'| translate}}" (click)="creditorStart()" [disabled]="disableCredit"></button>
 
 <h3>{{'precalc.payment'| translate}}</h3>
+<p-progressBar [hidden]="!paymentProgress" [value]="paymentProgress"></p-progressBar>
 <p *ngIf="disableDocType"> Please Set Document type for this procedure to enable calculation</p>
 <button *ngIf="!disableDocType" pButton label="{{'precalc.start'| translate}}" (click)="paymentStart()" [disabled]="disablePayment"></button>
 
 <h3>{{'precalc.due_date'| translate}}</h3>
+<p-progressBar [hidden]="!dueDateProgress" [value]="dueDateProgress"></p-progressBar>
 <p *ngIf="disableDocType"> Please Set Document type for this procedure to enable calculation</p>
 <button *ngIf="!disableDocType" pButton label="{{'precalc.start'| translate}}" (click)="dueDateStart()" [disabled]="disableDueDate"></button>
 
 
 <h3>{{'precalc.mailSender'| translate}}</h3>
+<p-progressBar [hidden]="!mailSenderProgress" [value]="mailSenderProgress"></p-progressBar>
 <button pButton label="{{'precalc.start'| translate}}" (click)="mailBySenderStart()" [disabled]="disableMailSender"></button>
 
 <h3>{{'precalc.mailWord'| translate}}</h3>
+<p-progressBar [hidden]="!mailWordProgress" [value]="mailWordProgress"></p-progressBar>
 <button pButton label="{{'precalc.start'| translate}}" (click)="mailByWordStart()" [disabled]="disableMailWord"></button>
 
 <!-- <h3>{{'precalc.linkTrans'| translate}}</h3>

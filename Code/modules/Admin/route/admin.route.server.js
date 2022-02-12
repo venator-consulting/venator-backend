@@ -29,7 +29,9 @@ const publicImgs = multer({
 //#region website managment
 router
     .route('/link-trans/:orgId/:prcId')
-    .get(precalcCtrl.linkTransactions);
+    .get(passport.authenticate('jwt', { session: false }),
+        authorization.authorize('Admin'),
+        precalcCtrl.linkTransactions);
 
 router
     .route('/website/')
@@ -139,9 +141,10 @@ router
 //#region Precalculate
 router
     .route('/precalculate/text-by-word/:orgId/:prcId')
-    .get(passport.authenticate('jwt', {
-        session: false
-    }), authorization.authorize('Admin'), precalcCtrl.textAnalysisByWord);
+    .get(
+        passport.authenticate('jwt', { session: false }),
+        authorization.authorize('Admin'),
+        precalcCtrl.textAnalysisByWord);
 
 router
     .route('/precalculate/text-by-account/:orgId/:prcId')

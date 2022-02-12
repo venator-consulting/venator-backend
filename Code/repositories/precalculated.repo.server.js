@@ -145,12 +145,14 @@ module.exports.deletePrevDataEmailAnalysisSender = async (orgId, prcId) => {
 
 
 //#region store data
-storeDataByWord = async (orgId, prcId, keywords, dateRanges, step) => {
+storeDataByWord = async (orgId, prcId, keywords, dateRanges, step, res) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   const length = keywords.length;
+  // because the query will be toooo long so it refused to execute
+  // we devided it to 10 words for each query
   const times = Math.ceil(length / 10);
   for (let iterator = 0; iterator < times; iterator++) {
     let keys = keywords.slice(iterator * 10, iterator * 10 + 10);
@@ -219,6 +221,11 @@ storeDataByWord = async (orgId, prcId, keywords, dateRanges, step) => {
       throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
     }
     //#endregion insert data
+    // we before increase the progress 5% and 1% for update procedure so the rest is 94%
+    let progress = Math.floor((iterator / times) * 94) + 5;
+    console.log(`progress ${progress}%...`);
+    res.write('event:' + 'progress\n');
+    res.write('data:' + JSON.stringify({ progress }) + '\n\n');
   }
   // set as calculated in procedure
   await Procedure.getProcedures().update({ text_word: true }, {
@@ -226,14 +233,19 @@ storeDataByWord = async (orgId, prcId, keywords, dateRanges, step) => {
       id: prcId,
     },
   });
-  return "done";
+  console.log(`progress 100%...`);
+  res.write('event:' + 'progress\n');
+  res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
+  res.end();
+  // return "done";
 };
 
-storeDataByAccount = async (orgId, prcId, keys, dateRanges, step) => {
+storeDataByAccount = async (orgId, prcId, keys, dateRanges, step, res) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  let progressPromise = FakProgress.init(res, 0);
   let query = ` INSERT INTO text_analysis_account_${orgId} (accountNumber, accountName, totlaCount, fromDate, toDate, procedureId, step) `;
   for (let i = 1; i < dateRanges.length; i++) {
     let fromDate = dateRanges[i - 1];
@@ -280,10 +292,14 @@ storeDataByAccount = async (orgId, prcId, keys, dateRanges, step) => {
   } catch (err) {
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
+  FakProgress.stop();
+  console.log(`progress ${100}%...`);
+  res.write('event:' + 'progress\n');
+  res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
   return result;
 };
 
-module.exports.storeAmountData = async (orgId, prcId) => {
+module.exports.storeAmountData = async (orgId, prcId, res) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
@@ -298,16 +314,39 @@ module.exports.storeAmountData = async (orgId, prcId) => {
                                 AND p.balance = ROUND(p.balance, -2)
                                 AND balance >= 100 `;
   let result;
+  let progressPromise = FakProgress.init(res, 0);
   try {
     result = await connection.getConnection().execute(query);
     await Procedure.getProcedures().update({ amount: true }, {
       where: { id: prcId, },
     });
+    FakProgress.stop();
+    console.log(`progress ${100}%...`);
+    res.write('event:' + 'progress\n');
+    res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
   } catch (err) {
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
   return result;
 };
+
+class FakProgress {
+  static interval;
+  static stop = () => clearInterval(this.interval);
+
+  static init(res, startProgress = 0) {
+    return new Promise((resolve, reject) => {
+      this.interval = setInterval(() => {
+        if (startProgress < 100) {
+          startProgress++;
+          console.log(`progress ${startProgress}%...`);
+          res.write('event:' + 'progress\n');
+          res.write('data:' + JSON.stringify({ progress: startProgress }) + '\n\n');
+        } else clearInterval(this.interval);
+      }, 2000);
+    });
+  }
+}
 
 module.exports.amountAnalysisGetData = async (orgId, prcId, baseBalance = 500) => {
   if (isNaN(orgId))
@@ -331,8 +370,12 @@ module.exports.amountAnalysisGetData = async (orgId, prcId, baseBalance = 500) =
   return result;
 };
 
-module.exports.textAnalysisByWord = async (orgId, prcId, step) => {
+module.exports.textAnalysisByWord = async (orgId, prcId, step, res) => {
   const dateRange = await getDateRange(orgId, prcId);
+
+  console.log(`progress 2%...`);
+  res.write('event:' + 'progress\n');
+  res.write('data:' + JSON.stringify({ progress: 1 }) + '\n\n');
 
   if (dateRange.length < 1) {
     throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
@@ -349,11 +392,14 @@ module.exports.textAnalysisByWord = async (orgId, prcId, step) => {
   const maxdate = dateRange[0].maxdate;
 
   const dateRanges = calculateDateRanges(mindate, maxdate, step);
+  console.log(`progress 5%...`);
+  res.write('event:' + 'progress\n');
+  res.write('data:' + JSON.stringify({ progress: 5 }) + '\n\n');
 
-  const result = await storeDataByWord(orgId, prcId, keywords, dateRanges, step);
+  const result = await storeDataByWord(orgId, prcId, keywords, dateRanges, step, res);
 };
 
-module.exports.storePaymentAnalysis = async (orgId, prcId) => {
+module.exports.storePaymentAnalysis = async (orgId, prcId, res) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
@@ -374,18 +420,23 @@ module.exports.storePaymentAnalysis = async (orgId, prcId) => {
       AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG'
           OR UPPER(pos.documentTypeNewName) = 'ZAHLUNG')`;
   let result;
+  let progressPromise = FakProgress.init(res, 0);
   try {
     result = await connection.getConnection().execute(query);
     await Procedure.getProcedures().update({ payment: true }, {
       where: { id: prcId, },
     });
+    FakProgress.stop();
+    console.log(`progress ${100}%...`);
+    res.write('event:' + 'progress\n');
+    res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
   } catch (error) {
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
   return result;
 };
 
-module.exports.storeDueDateAnalysis = async (orgId, prcId) => {
+module.exports.storeDueDateAnalysis = async (orgId, prcId, res) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
@@ -407,22 +458,28 @@ module.exports.storeDueDateAnalysis = async (orgId, prcId) => {
       AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
       ORDER BY pos.dueDate`;
   let result;
+  let progressPromise = FakProgress.init(res, 0);
   try {
     result = await connection.getConnection().execute(query);
     await Procedure.getProcedures().update({ due_date: true }, {
       where: { id: prcId, },
     });
+    FakProgress.stop();
+    console.log(`progress ${100}%...`);
+    res.write('event:' + 'progress\n');
+    res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
   } catch (error) {
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
   return result;
 };
 
-module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
+module.exports.storeCreditorAnalysis = async (orgId, prcId, res) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  let progressPromise = FakProgress.init(res, 0);
   let query = ` INSERT INTO creditor_analysis_${orgId} (accountNumber, accountName, totlaCount, totalBalance, procedureId) `;
   query += `SELECT p.accountNumber , p.accountName , COUNT(p.id) as totlaCount, 
                 SUM(p.balance) as totalBalance,
@@ -467,15 +524,21 @@ module.exports.storeCreditorAnalysis = async (orgId, prcId) => {
   } catch (error) {
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
+  FakProgress.stop();
+  console.log(`progress ${100}%...`);
+  res.write('event:' + 'progress\n');
+  res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
   return result;
 };
 
-module.exports.storeEmailAnalysisSender = async (orgId, prcId) => {
+module.exports.storeEmailAnalysisSender = async (orgId, prcId, res) => {
   let keys = keywords;
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  let progressPromise = FakProgress.init(res, 0);
+
   let query = ` INSERT INTO email_analysis_sender_${orgId} (email, sender, totlaCount, procedureId) `;
   query += `SELECT p.email , p.sender , COUNT(p.id) as totlaCount, IF(1 = 1,
                                   '${prcId}',
@@ -506,16 +569,22 @@ module.exports.storeEmailAnalysisSender = async (orgId, prcId) => {
   } catch (error) {
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
+  FakProgress.stop();
+  console.log(`progress ${100}%...`);
+  res.write('event:' + 'progress\n');
+  res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
+  res.end();
   return result;
 
 };
 
-module.exports.storeEmailAnalysisWord = async (orgId, prcId) => {
+module.exports.storeEmailAnalysisWord = async (orgId, prcId, res) => {
   let keys = keywords;
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  let progressPromise = FakProgress.init(res, 0);
   let query = ` INSERT INTO email_analysis_word_${orgId} (recordsCount, senderCount, word, procedureId) `;
   for (let index = 0; index < keys.length; index++) {
     const key = keys[index];
@@ -564,6 +633,11 @@ module.exports.storeEmailAnalysisWord = async (orgId, prcId) => {
   } catch (error) {
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
+  FakProgress.stop();
+  console.log(`progress ${100}%...`);
+  res.write('event:' + 'progress\n');
+  res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
+  res.end();
   return result;
 };
 //#endregion store data
@@ -631,7 +705,7 @@ module.exports.getTextAnalysisDataByWordCalcDefault = async (orgId, prcId) => {
 };
 
 
-module.exports.textAnalysisByAccount = async (orgId, prcId, step) => {
+module.exports.textAnalysisByAccount = async (orgId, prcId, step, res) => {
   const dateRange = await getDateRange(orgId, prcId);
 
   if (dateRange.length < 1) {
@@ -650,7 +724,7 @@ module.exports.textAnalysisByAccount = async (orgId, prcId, step) => {
 
   const dateRanges = calculateDateRanges(mindate, maxdate, step);
 
-  const result = await storeDataByAccount(orgId, prcId, keywords, dateRanges, step);
+  const result = await storeDataByAccount(orgId, prcId, keywords, dateRanges, step, res);
 };
 
 module.exports.getTextAnalysisDataByAccountCalcDefault = async (orgId, prcId) => {

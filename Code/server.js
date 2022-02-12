@@ -1,24 +1,24 @@
-const cluster = require('cluster');
+// const cluster = require('cluster');
 
-if (cluster.isMaster) {
-  const numWorkers = require('os').cpus().length;
+// if (cluster.isMaster) {
+//   const numWorkers = require('os').cpus().length;
 
-  console.log('Master cluster setting up ' + numWorkers + ' workers...');
+//   console.log('Master cluster setting up ' + numWorkers + ' workers...');
 
-  for (let i = 0; i < numWorkers; i++) {
-    cluster.fork();
-  }
+//   for (let i = 0; i < numWorkers; i++) {
+//     cluster.fork();
+//   }
 
-  cluster.on('online', function (worker) {
-    console.log('Worker ' + worker.process.pid + ' is online');
-  });
+//   cluster.on('online', function (worker) {
+//     console.log('Worker ' + worker.process.pid + ' is online');
+//   });
 
-  cluster.on('exit', function (worker, code, signal) {
-    console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
-    console.log('Starting a new worker');
-    cluster.fork();
-  });
-} else {
+//   cluster.on('exit', function (worker, code, signal) {
+//     console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
+//     console.log('Starting a new worker');
+//     cluster.fork();
+//   });
+// } else {
   require("express-async-errors");
   const express = require("express");
   const helmet = require("helmet");
@@ -93,4 +93,4 @@ if (cluster.isMaster) {
   const server = https.createServer({ key: key, cert: cert }, app);
 
   server.listen(config.port, () => { console.log(`listening on ${config.port}`) });
-}
+// }

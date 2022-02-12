@@ -5,7 +5,7 @@ const UsersRepo = require("../../../repositories/user.repo.server");
 const errors = require('../../../models/enums/errors');
 
 module.exports.changePassword = async function (req, res, next) {
-  const userID = req.userinfo.id;
+  const userID = req.user.id;
   const password = req.body.password;
   const newPassword = req.body.newPassword;
   const rows = await UsersRepo.existUser(userID);

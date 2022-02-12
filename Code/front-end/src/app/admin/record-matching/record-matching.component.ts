@@ -13,26 +13,24 @@ export class RecordMatchingComponent implements OnInit {
   prcId: number;
   progress = 0;
 
-  constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService,
-    private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService) { }
 
   ngOnInit(): void {
     this.orgId = +localStorage.getItem('organisationId');
     this.prcId = +localStorage.getItem('currentProcedureId');
-
-    this._preCalcService.returnAsObservable().subscribe((data: any) => {
-      console.log(data);
-      // debugger;
-      data = data.length == [] ? { progress: 0 } : JSON.parse(data);
-      this.progress = data.progress;
-      // if progress 100 close connection
-      if (this.progress == 100) this._preCalcService.stopSSE();
-      this.changeDetectorRef.detectChanges();
-    });
   }
 
   linkTransStart() {
-    this._preCalcService.linkTransactions(this.orgId, this.prcId);
+    this._preCalcService.linkTransactions(this.orgId, this.prcId)
+      .subscribe((data: any) => {
+        this.progress = data.progress;
+        if (this.progress >= 100) {
+          this._messageService.add({
+            severity: 'success',
+            detail: "Record matching done!"
+          });
+        }
+      });
   }
 
 }
