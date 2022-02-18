@@ -204,9 +204,8 @@ export class TextAnalysisPreComponent implements OnInit {
             const element = this.data[i];
             this.basicData.datasets.push(
               new Bar(
-                element.accountName,
-                `rgb(${(Math.random() * 25500) % 255}, ${
-                  (Math.random() * 25500) % 255
+                element.accountNumber + ': ' + element.accountName,
+                `rgb(${(Math.random() * 25500) % 255}, ${(Math.random() * 25500) % 255
                 },${(Math.random() * 25500) % 255})`,
                 element.totlaCount
               )
@@ -265,7 +264,7 @@ export class TextAnalysisPreComponent implements OnInit {
                   ],
                 };
               },
-              (er) => {}
+              (er) => { }
             );
         },
         (er) => {
@@ -335,11 +334,11 @@ export class TextAnalysisPreComponent implements OnInit {
   goToDetails(row: TextAnalysis) {
     this._router.navigate([
       '/dashboard/analysis/text/' +
-        this.selectedOrganisation +
-        '/' +
-        this.selectedProcedure +
-        '/' +
-        row.accountNumber,
+      this.selectedOrganisation +
+      '/' +
+      this.selectedProcedure +
+      '/' +
+      row.accountNumber,
     ]);
   }
 
@@ -442,6 +441,25 @@ export class TextAnalysisPreComponent implements OnInit {
       } // end of for each criteriaWord field
     }
     this.searching = false;
+  }
+
+  selectBarData(e) {
+    let label = e.element._model.datasetLabel;
+    let accountNumber = label.split(':')[0];
+    this._router.navigate([
+      '/dashboard/analysis/text/' +
+      this.selectedOrganisation +
+      '/' +
+      this.selectedProcedure +
+      '/' +
+      accountNumber,
+    ]);
+  }
+
+  selectBarDataWord(e) {
+    let label = e.element._model.label;
+    debugger;
+    this._router.navigate(['/dashboard/analysis/text/word/' + label]);
   }
 
 }

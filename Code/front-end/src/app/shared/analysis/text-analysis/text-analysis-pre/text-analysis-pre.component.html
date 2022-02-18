@@ -31,6 +31,7 @@
           [data]="basicData"
           [options]="basicOptions"
           height="350px"
+          (onDataSelect)="selectBarData($event)"
         ></p-chart>
       </div>
     </div>
@@ -131,6 +132,7 @@
           [data]="basicDataWord"
           [options]="basicOptionsWords"
           height="350px"
+          (onDataSelect)="selectBarDataWord($event)"
         ></p-chart>
       </div>
     </div>
