@@ -4,6 +4,13 @@
     <h2 class="p-text-center">{{ procedureName }}</h2>
   </div>
 </div> -->
+<div class="p-grid">
+  <div class="p-col-5">
+    <p-multiSelect [options]="originalCols" [(ngModel)]="cols" defaultLabel="Select columns" optionLabel="header"
+       display="chip" (onChange)="columnChanged($event)"></p-multiSelect>
+  </div>
+</div>
+
 <div class="card">
   <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="loading"></p-progressBar>
   <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="350px" [style]="{ width: '100%' }"

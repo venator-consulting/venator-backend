@@ -37,6 +37,7 @@ export class SAPDataTableComponent implements OnInit {
   data: any;
   postings: [] = [];
   cols: dataTableColumns[];
+  originalCols: dataTableColumns[] = [];
   pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
   limit: number = 25;
   pageNr: number = 1;
@@ -57,14 +58,18 @@ export class SAPDataTableComponent implements OnInit {
     dataTableColumns
       .getDataTableColumns(this._translateService)
       .then((cols) => {
-        this.cols = cols;
+        this.originalCols = cols;
+        let temp = localStorage.getItem('data-columns');
+        this.cols = temp?.trim() ? JSON.parse(temp) : [...cols];
       });
 
     this._translateService.onLangChange.subscribe((event: LangChangeEvent) => {
       dataTableColumns
         .getDataTableColumns(this._translateService)
         .then((cols) => {
-          this.cols = cols;
+          this.originalCols = cols;
+          let temp = localStorage.getItem('data-columns');
+          this.cols = temp?.trim() ? JSON.parse(temp) : [...cols];
         });
     });
 
@@ -246,4 +251,10 @@ export class SAPDataTableComponent implements OnInit {
   susa() {
     this._router.navigate(['/dashboard/shared/data/susa']);
   }
+
+  columnChanged(event) {
+    console.log(event);
+    localStorage.setItem('data-columns', JSON.stringify(event.value));
+  }
+
 }
