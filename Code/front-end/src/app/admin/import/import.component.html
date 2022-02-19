@@ -14,7 +14,7 @@
   <div [hidden]="activeIndex != 0" class="p-sm-12">
     <div class="p-grid">
       <div class="p-col-4 fontStyle">
-        <h2 >{{'Admin_Import.firstStepHeader' | translate}}</h2>
+        <h2>{{'Admin_Import.firstStepHeader' | translate}}</h2>
       </div>
       <!-- <div class="p-col-4" *ngIf="waiting">
         <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
@@ -87,6 +87,13 @@
 
         <div class="p-grid" *ngIf="f.imported!==true">
           <div class="p-sm-12">
+            <div class="progress" [hidden]="progress < 1">
+              <h3>Upload Progress:</h3>
+              <p-progressBar [value]="progress"></p-progressBar>
+              <!-- <div #progressElm class="progress-bar progress-bar-striped">
+              </div>
+              <span class="progress-bar-label">{{progress}}%</span> -->
+            </div>
             <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
           </div>
           <div class="p-sm-6 p-lg-3">
@@ -244,8 +251,12 @@
               filterBy="name"></p-dropdown>
           </div> -->
 
-          <div class="p-sm-6 p-lg-2"><h4><b> {{'Admin_Import.companyCode' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b> {{'Admin_Import.companyCode' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['companyCode']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -253,8 +264,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.accountType' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.accountType' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountType']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -263,8 +278,12 @@
 
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.accountNumber' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.accountNumber' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.numberDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountNumber']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -272,8 +291,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.accountName' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.accountName' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountName']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -281,8 +304,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.accountTypeIdInternal' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.accountTypeIdInternal' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['accountTypeIdInternal']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -290,8 +317,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.nameAffix1' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.nameAffix1' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['nameAffix1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -299,8 +330,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.nameAffix2' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.nameAffix2' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['nameAffix2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -308,8 +343,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.VATId' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.VATId' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['VATId']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -317,8 +356,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.taxNumber' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.taxNumber' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['taxNumber']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -326,8 +369,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.street' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.street' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['street']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -335,8 +382,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.postCode' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.postCode' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['postCode']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -344,8 +395,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.city' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.city' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['city']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -353,8 +408,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.country' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.country' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['country']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -362,8 +421,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.contactPerson' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.contactPerson' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['contactPerson']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -372,8 +435,12 @@
           </div>
 
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.phone' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.phone' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['phone']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -381,8 +448,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.email' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.email' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['email']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -390,8 +461,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.bankName1' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.bankName1' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['bankName1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -399,8 +474,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.bankSortCode1' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.bankSortCode1' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['bankSortCode1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -408,8 +487,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.bankAccountNo1' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.bankAccountNo1' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['bankAccountNo1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -417,8 +500,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.countryCode1' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.countryCode1' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['countryCode1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -426,8 +513,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.iBAN_No1' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.iBAN_No1' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['iBAN_No1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -435,8 +526,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.swift_code1' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.swift_code1' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['swift_code1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -444,8 +539,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.differentAccountHolder1' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.differentAccountHolder1' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['differentAccountHolder1']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -454,8 +553,12 @@
           </div>
 
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.bankSortCode2' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.bankSortCode2' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['bankSortCode2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -463,8 +566,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.bankName2' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.bankName2' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['bankName2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -472,8 +579,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.bankAccountNo2' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.bankAccountNo2' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['bankAccountNo2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -481,8 +592,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.countryCode2' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.countryCode2' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['countryCode2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -490,8 +605,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.iBAN_No2' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.iBAN_No2' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['iBAN_No2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -499,8 +618,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.swift_code2' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.swift_code2' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['swift_code2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -508,8 +631,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.differentAccountHolder2' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.differentAccountHolder2' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['differentAccountHolder2']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -517,8 +644,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.bankName3' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.bankName3' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['bankName3']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -526,8 +657,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.bankAccountNo3' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.bankAccountNo3' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['bankAccountNo3']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -535,8 +670,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.countryCode3' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.countryCode3' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['countryCode3']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -544,8 +683,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.iBAN_No3' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.iBAN_No3' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['iBAN_No3']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -553,8 +696,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.swift_code3' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.swift_code3' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['swift_code3']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -562,8 +709,12 @@
               filterBy="name"></p-dropdown>
           </div>
 
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.differentAccountHolder3' | translate}}</b></h4></div>
-          <div class="p-sm-6 p-lg-2"><h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4></div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.differentAccountHolder3' | translate}}</b></h4>
+          </div>
+          <div class="p-sm-6 p-lg-2">
+            <h4><b>{{'Admin_Import.textDataType' | translate}}</b></h4>
+          </div>
           <div class="p-sm-12 p-lg-8">
             <p-dropdown [(ngModel)]="filesList[currentFileIndex]?.defaultTemplate['differentAccountHolder3']"
               [options]="filesList[currentFileIndex].fileHeader" [filter]="true" [virtualScroll]="true"
@@ -1567,6 +1718,7 @@
 
     <br><br>
     <div class="p-col-8">
+      <!-- <h3>Number of manipulated Records: {{importProgress}}</h3> -->
       <p-progressSpinner *ngIf="waiting"></p-progressSpinner>
     </div>
     <span class="p-buttonset">

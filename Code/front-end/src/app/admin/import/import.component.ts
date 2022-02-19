@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Choices } from "../../shared/model/choices";
@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Procedures } from 'src/app/shared/model/procedures';
 import { OrganisationService } from '../service/organisation.service';
 import { Organisation } from 'src/app/shared/model/organisation';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-import',
@@ -38,9 +39,15 @@ export class ImportComponent implements OnInit {
   selectedProcedureId: number = -1;
   tempheader: any = {};
 
+  progress: number = 0;
+  @ViewChild('progressElm') progressElm: ElementRef;
+  importProgress: number = 0;
 
-  constructor(public _translateService: TranslateService ,private _messageService: MessageService, private _importService: ImportService, private _orgService: OrganisationService) {
-    _translateService.addLangs(['de','en']);
+
+  constructor(public _translateService: TranslateService, private _messageService: MessageService,
+    private _importService: ImportService, private _orgService: OrganisationService,
+    private cdRef: ChangeDetectorRef) {
+    _translateService.addLangs(['de', 'en']);
     _translateService.setDefaultLang('de');
     const browserLang = _translateService.getBrowserLang();
     _translateService.use(browserLang.match(/de|en/) ? browserLang : 'de');
@@ -77,8 +84,8 @@ export class ImportComponent implements OnInit {
           }
         }
       ];
-  
-  
+
+
       this._orgService.get()
         .subscribe(
           (data) => {
@@ -90,7 +97,7 @@ export class ImportComponent implements OnInit {
 
 
 
-  } 
+  }
   // end of ngOnInit
 
 
@@ -146,7 +153,7 @@ export class ImportComponent implements OnInit {
     const nameOnServer = f?.nameOnServer;
     if (nameOnServer) {
       this._importService
-        .deleteFile({nameOnServer: nameOnServer})
+        .deleteFile({ nameOnServer: nameOnServer })
         .subscribe(res => {
           this.waiting = false;
           this._messageService.add({
@@ -209,35 +216,59 @@ export class ImportComponent implements OnInit {
 
     this._importService
       .uploadFile(formData)
-      .subscribe(res => {
-        // console.dir('done: ' + res);
+      .subscribe((response: any) => {
+        switch (response.type) {
+          case HttpEventType.Sent:
+            // console.log('Request has been made!');
+            break;
+          case HttpEventType.ResponseHeader:
+            // console.log('Response header has been received!');
+            break;
+          case HttpEventType.UploadProgress:
+            this.progress = Math.round(response.loaded / response.total * 100);
+            // this.progressElm.nativeElement.style.width = +this.progress + '%';
+            this.cdRef.detectChanges();
+            // console.log(`Uploaded! ${this.progress}%`);
+            break;
+          case HttpEventType.Response:
+            let res = response.body;
 
-        this.waiting = false;
-        this.tempheader = res.headers;
-        f.fileHeader = new Array();
-        for (let index = 0; index < res.headers.length; index++) {
-          const element = res.headers[index];
-          f.fileHeader.push({name: element});
-        }
-        // f.fileHeader = res.headers;
-        f.nameOnServer = res.fileName;
-        f.orginalName = res.orginalName;
-        f.defaultTemplate = res.defaultTemplate;
-        if (fileClass === 1) {
-          this.accountsCustomTemplate = res.defaultTemplate;
-        } else if (fileClass === 2) {
-          this.postingCustomTemplate = res.defaultTemplate;
-        } else if (fileClass === 3) {
-          this.headCustomTemplate = res.defaultTemplate;
-        }
-        f.uploaded = true;
-        this.currentFileIndex = index;
-        // console.dir(this.filesList);
-        this._messageService.add({
-          severity: 'success',
-          summary: 'File uploaded!',
-          detail: 'the file ' + this.filesList[this.currentFileIndex].orginalName + ' uploaded successfuly! you can upload another file now'
-        });
+            //#region if upload finished
+            this.waiting = false;
+            this.tempheader = res.headers;
+            f.fileHeader = new Array();
+            for (let index = 0; index < res.headers.length; index++) {
+              const element = res.headers[index];
+              f.fileHeader.push({ name: element });
+            }
+            // f.fileHeader = res.headers;
+            f.nameOnServer = res.fileName;
+            f.orginalName = res.orginalName;
+            f.defaultTemplate = res.defaultTemplate;
+            if (fileClass === 1) {
+              this.accountsCustomTemplate = res.defaultTemplate;
+            } else if (fileClass === 2) {
+              this.postingCustomTemplate = res.defaultTemplate;
+            } else if (fileClass === 3) {
+              this.headCustomTemplate = res.defaultTemplate;
+            }
+            f.uploaded = true;
+            this.currentFileIndex = index;
+            // console.dir(this.filesList);
+            this._messageService.add({
+              severity: 'success',
+              summary: 'File uploaded!',
+              detail: 'the file ' + this.filesList[this.currentFileIndex].orginalName + ' uploaded successfuly! you can upload another file now'
+            });
+            //#endregion if upload finished
+
+            setTimeout(() => {
+              this.progress = 0;
+              // this.progressElm.nativeElement.style.width = +this.progress + '%';
+              this.cdRef.detectChanges();
+            }, 1500);
+            break;
+        } // end of switch
       }, err => {
         // console.log('error: ' + err);
         this.waiting = false;
@@ -247,7 +278,6 @@ export class ImportComponent implements OnInit {
           detail: err.error.msg
         });
       });
-
   }
   // upload step 1 ends
 
@@ -289,11 +319,8 @@ export class ImportComponent implements OnInit {
     this._importService
       .importFile(data)
       .subscribe(res => {
-        // console.dir('done: ' + res);
-
         this.waiting = false;
         this.filesList[this.currentFileIndex].imported = true;
-        // console.dir(this.filesList);
         this._messageService.add({
           severity: 'success',
           summary: 'File imported!',
@@ -307,29 +334,54 @@ export class ImportComponent implements OnInit {
           detail: err.error.msg
         });
       });
-
+    // .subscribe(
+    //   (progress) => {
+    //     this.importProgress = progress;
+    //   },
+    //   (error) => {
+    //     this.waiting = false;
+    //     this._messageService.add({
+    //       severity: 'error',
+    //       summary: 'ERROR!',
+    //       detail: error.error.msg
+    //     });
+    //   },
+    //   () => {
+    //     // on complete
+    //     this._importService.closeSSE();
+    //     this.waiting = false;
+    //     this.filesList[this.currentFileIndex].imported = true;
+    //     // console.dir(this.filesList);
+    //     this._messageService.add({
+    //       severity: 'success',
+    //       summary: 'File imported!',
+    //       detail: 'the file ' + this.filesList[this.currentFileIndex].orginalName + ' imported successfuly! you can import another file now'
+    //     });
+    //   },
+    // );
   } // end of import this file function
 
 
+
   filterMapping(event) {
-    
-    let filtered : any[] = [];
+
+    let filtered: any[] = [];
     let query = event.query;
 
-    for(let i = 0; i < this.filesList[this.currentFileIndex].fileHeader.length; i++) {
-        let header = this.filesList[this.currentFileIndex].fileHeader[i];
-        if (header.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-            filtered.push(header);
-        }
+    for (let i = 0; i < this.filesList[this.currentFileIndex].fileHeader.length; i++) {
+      let header = this.filesList[this.currentFileIndex].fileHeader[i];
+      if (header.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+        filtered.push(header);
+      }
     }
-    
+
     this.filesList[this.currentFileIndex].fileHeader = filtered;
-} // end of filter mapping function
+  } // end of filter mapping function
 
 
-restoreFileHeaders() {
-  this.filesList[this.currentFileIndex].fileHeader = this.tempheader;
-}
+  restoreFileHeaders() {
+    this.filesList[this.currentFileIndex].fileHeader = this.tempheader;
+  }
 
 
 }

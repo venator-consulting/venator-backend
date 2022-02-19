@@ -82,6 +82,12 @@ module.exports.headerFile = async function (req, res, next) {
 };
 
 module.exports.importFile = async function (req, res, next) {
+
+  // res.set('Content-Type', 'text/event-stream;charset=utf-8');
+  // res.set('Cache-Control', 'no-transform');
+  // res.setHeader('X-Accel-Buffering', 'no');
+  // res.flushHeaders();
+
   if (!!req.body.data) {
     // return data form error
   }
@@ -101,6 +107,7 @@ module.exports.importFile = async function (req, res, next) {
     if (fileClass == 2) {
       excelHelper
         .importStreamExcelFile(
+          // res,
           filePath,
           OrganisationId,
           procedureId,

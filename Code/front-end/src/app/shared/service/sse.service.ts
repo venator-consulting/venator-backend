@@ -1,16 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { SSE } from 'sse.js';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SseService {
 
+  eventSource: SSE;
+
   constructor(private _auth: AuthService, private _messageService: MessageService,
-    private _translateService: TranslateService) { }
+    private zone: NgZone, private _translateService: TranslateService) { }
 
   getSSE(url: string): Observable<any[]> {
 
@@ -76,6 +79,54 @@ export class SseService {
     }
 
     return subject.asObservable();
+  }
+
+  postSSE(url: string, payload: any): Observable<any> {
+    return new Observable((observer) => {
+      this.eventSource = this.getEventSourceWithPost(url, payload);
+      // Launch query
+      this.eventSource.stream();
+      // on answer from message listener 
+      this.eventSource.onmessage = (event) => {
+        this.zone.run(() => {
+          observer.next(event.progress);
+        });
+      };
+      this.eventSource.onerror = (error) => {
+        this.zone.run(() => {
+          observer.error(error);
+        });
+      };
+    });
+  }
+
+  closePostConnection() {
+    if (!!this.eventSource) {
+      this.eventSource.close();
+    }
+  }
+
+  getEventSourceWithPost(url, data) {
+    let eventSource: SSE;
+    const options = this.buildOptions('POST', data);
+    eventSource = new SSE(url, options);
+    eventSource.addEventListener('message', (e) => {
+      return e.data;
+    });
+    return eventSource;
+  }
+
+  private buildOptions(meth: string, formData: FormData,): {
+    payload: FormData;
+    method: string;
+    headers: string | { Authorization: string };
+  } {
+    const auth = 'Bearer ' + this._auth.getToken();
+    return {
+      payload: formData,
+      method: meth,
+      headers: auth !== '' ? { Authorization: auth } : '',
+    };
   }
 
 }
