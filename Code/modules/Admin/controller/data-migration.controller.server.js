@@ -14,6 +14,7 @@ module.exports.buildDatabaseSchema = async function (req, res, next) {
   await require("../../../models/user.model.server").syncUser();
   // await require('../../../models/posting.model.server').syncPosting();
   await require('../../../models/website.model').syncWebsite();
+  await require('../../../models/userPreferences.model').syncUserPreferences();
 
   res.status(200).json("done");
 };

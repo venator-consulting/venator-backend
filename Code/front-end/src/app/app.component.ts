@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { BnNgIdleService } from 'bn-ng-idle';
-import { Router } from '@angular/router';
+import { AuthService } from './shared/service/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,18 +11,18 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
 
 
-  constructor(private primengConfig: PrimeNGConfig, private bnIdle: BnNgIdleService, private _router: Router) { }
+  constructor(private primengConfig: PrimeNGConfig, private bnIdle: BnNgIdleService,
+    private _authService: AuthService) { }
 
   ngOnInit() {
     this.primengConfig.ripple = true;
 
     this.bnIdle.startWatching(1800).subscribe((isTimedOut: boolean) => {
-        console.log('session expired');
-        localStorage.clear();
-        this._router.navigate(['/']);
+      console.log('session expired');
+      this._authService.logout();
     });
-    
+
   }
 
-  
+
 }

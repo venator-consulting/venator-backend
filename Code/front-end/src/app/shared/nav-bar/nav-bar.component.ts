@@ -4,6 +4,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { HostListener } from "@angular/core";
 import { Observable } from 'rxjs';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -32,7 +33,7 @@ export class NavBarComponent implements OnInit {
 
   constructor(
     public _translateService: TranslateService,
-    private _router: Router
+    private _authService: AuthService
   ) {
     this._translateService.addLangs(['de', 'en']);
     this._translateService.setDefaultLang('de');
@@ -695,7 +696,6 @@ export class NavBarComponent implements OnInit {
   }
 
   logout() {
-    localStorage.clear();
-    this._router.navigate(['/']);
+    this._authService.logout();
   }
 }

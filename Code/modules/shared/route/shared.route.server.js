@@ -7,6 +7,13 @@ const getDataCtrl = require("../controller/getPostingData.controller.server");
 const userCtrl = require('../../Admin/controller/user.controller.server');
 const procedureCtrl = require('../controller/procedure.controller.server');
 const dictCtrl = require('../controller/dictionary.controller.server');
+const profileCtrl = require('../controller/profile.controller.server');
+
+
+router
+    .route('/preferences')
+    .get(passport.authenticate('jwt', { session: false }), profileCtrl.getUserPreferences)
+    .post(passport.authenticate('jwt', { session: false }), profileCtrl.savePreferences);
 
 router
     .route('/login')
