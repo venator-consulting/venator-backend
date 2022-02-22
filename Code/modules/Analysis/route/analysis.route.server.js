@@ -222,6 +222,13 @@ router.route("/:orgId/:prcId/payment/:fromDate/:toDate").get(
   analysisCtrl.paymentAnalysis
 );
 
+router.route("/:orgId/:prcId/duedate/top-delayed").get(
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  authorization.canDisplayAnalysis(),
+  analysisCtrl.topDelayedAccounts
+);
 
 router.route("/:orgId/:prcId/duedate/details/:accountNumber").get(
   passport.authenticate("jwt", {

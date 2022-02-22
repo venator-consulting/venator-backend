@@ -145,6 +145,10 @@ export class AnalysisService {
     return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate/details/' + accountNumber + '/' + start + '/' + end + '/' + maxDelay);
   }
 
+  getDueDateTopDelayedAccounts(orgId: number, prcId: number, limit: number, offset: number) {
+    return this._http.get<any>(`${this._thisURL}${orgId}/${prcId}/duedate/top-delayed?limit=${limit}&offset=${offset}`);
+  }
+
 
   getCreditorAnalysis(orgId: number, prcId: number, criteria: any): Observable<any> {
     return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor', { params: criteria });

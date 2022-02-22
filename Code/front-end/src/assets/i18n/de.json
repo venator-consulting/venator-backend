@@ -498,7 +498,9 @@
     "negative": "Negativ",
     "delay": "Verspätung",
     "selectAccount": "Konto auswählen",
-    "search": "Übernehmen"
+    "search": "Übernehmen",
+    "invoicesCount": "Anzahl Rechnungen",
+    "maxDelay": "Max. Verspätung"
   },
   "CreditorsAnalysis": {
     "label": "Kreditorenanalyse",

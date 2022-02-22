@@ -24,11 +24,9 @@ export class DueDateComponent implements OnInit {
   labels: any[] = new Array();
   docDateOptions: any;
   docData: any[] = new Array();
-  docDataTable: any[] = new Array();
 
   data: any[] = new Array();
   @ViewChild('chart') chart: any;
-  delayCols: TableColumn[];
   detailsCols: TableColumn[];
   delayData: any;
   detailsData: any[] = new Array();
@@ -46,13 +44,25 @@ export class DueDateComponent implements OnInit {
   baseFromDate: Date;
   // for slider
   baseToDate: Date;
-  secondChartDataRecords: any;
 
   selectedAccount: { accountNumber: string; accountName: string } = { accountNumber: null, accountName: null };
   maxDelay: number;
   detailsDataTemp: any;
   criteria: any = {};
   filtersNo: number = 0;
+
+  //#region Top delayed table
+  topDelayCols: TableColumn[];
+  topDelayData: any[] = [];
+  topDelayLimit: number = 25;
+  topDelayOffset: number = 0;
+  topDelayPageLimitSizes = [{ value: 25, label: '25' }, { value: 50, label: '50' }, { value: 100, label: '100' }];
+  topDelayPageNr: number = 1;
+  topDelayMaxPageNr: number = 0;
+  topDelayDisplayedDataCount: number = 0;
+  topDelayTotalCount: number = 0;
+  topDelayWaiting: boolean = true;
+  //#endregion Top delayed table
   //#endregion Data members init
 
   constructor(
@@ -111,60 +121,91 @@ export class DueDateComponent implements OnInit {
       },
     };
     this.detailsCols = [
-      {
-        header: 'DataTableColumns.accountNumber',
-        field: 'accountNumber',
-        align: 'left'
-      },
-      {
-        header: 'DataTableColumns.accountName',
-        field: 'accountName',
-        align: 'left'
-      },
-      {
-        header: 'DataTableColumns.accountType',
-        field: 'accountType',
-        align: 'center'
-      },
-
-      {
-        header: 'DataTableColumns.documentType',
-        field: 'documentType',
-        align: 'center'
-      },
-      {
-        header: 'DataTableColumns.documentTypeNew',
-        field: 'documentTypeNewName',
-        align: 'center'
-      },
-      {
-        header: 'DataTableColumns.balance',
-        field: 'balance',
-        align: 'right'
-      },
-      {
-        header: 'DataTableColumns.documentDate',
-        field: 'documentDate',
-        align: 'center'
-      },
-      {
-        header: 'DataTableColumns.applicationDate',
-        field: 'applicationDate',
-        align: 'center'
-      },
-      {
-        header: 'DataTableColumns.dueDate',
-        field: 'dueDate',
-        align: 'center'
-      },
-      {
-        header: 'DueDateAnalysis.delay',
-        field: 'delay',
-        align: 'center'
-      }
+      { header: 'DataTableColumns.accountNumber', field: 'accountNumber', align: 'left' },
+      { header: 'DataTableColumns.accountName', field: 'accountName', align: 'left' },
+      { header: 'DataTableColumns.accountType', field: 'accountType', align: 'center' },
+      { header: 'DataTableColumns.documentType', field: 'documentType', align: 'center' },
+      { header: 'DataTableColumns.documentTypeNew', field: 'documentTypeNewName', align: 'center' },
+      { header: 'DataTableColumns.balance', field: 'balance', align: 'right' },
+      { header: 'DataTableColumns.documentDate', field: 'documentDate', align: 'center' },
+      { header: 'DataTableColumns.applicationDate', field: 'applicationDate', align: 'center' },
+      { header: 'DataTableColumns.dueDate', field: 'dueDate', align: 'center' },
+      { header: 'DueDateAnalysis.delay', field: 'delay', align: 'center' }
     ];
 
+    this.topDelayCols = [
+      { header: 'DataTableColumns.accountNumber', field: 'accountNumber', align: 'left' },
+      { header: 'DataTableColumns.accountName', field: 'accountName', align: 'left' },
+      { header: 'DueDateAnalysis.invoicesCount', field: 'totalCount', align: 'center' },
+      { header: 'DueDateAnalysis.maxDelay', field: 'totalDelay', align: 'center' }
+    ]
+
+    this.getTopDelayedAccounts();
+
   } // end of ng on init
+
+  //#region Top delay table
+  getTopDelayedAccounts() {
+    this.topDelayWaiting = true;
+    this._analysisService
+      .getDueDateTopDelayedAccounts(this.selectedOrganisation, this.selectedProcedure, this.topDelayLimit, this.topDelayOffset)
+      .subscribe(res => {
+        this.topDelayTotalCount = res.count[0]['FOUND_ROWS()'];
+        this.topDelayData = res.data;
+        this.topDelayDisplayedDataCount =
+          this.topDelayTotalCount > this.topDelayLimit ? this.topDelayLimit : this.topDelayTotalCount;
+        this.topDelayMaxPageNr = Math.ceil(this.topDelayTotalCount / this.topDelayLimit);
+        this.topDelayWaiting = false;
+      }, er => this.topDelayWaiting = false);
+  }
+
+  topDelayedLimitChange(e) {
+    this.topDelayLimit = e.value;
+    this.topDelayOffset = 0;
+    this.topDelayPageNr = 1;
+    this.getTopDelayedAccounts();
+  }
+
+  topDelayedfirstPage() {
+    this.topDelayPageNr = 1;
+    this.topDelayOffset = 0;
+    this.getTopDelayedAccounts();
+  }
+
+  topDelayednextPage() {
+    ++this.topDelayPageNr;
+    if (this.topDelayPageNr > this.topDelayMaxPageNr) return;
+    this.topDelayOffset += +this.topDelayLimit;
+    this.getTopDelayedAccounts();
+  }
+
+  topDelayedlastPage() {
+    this.topDelayPageNr = this.topDelayMaxPageNr;
+    this.topDelayOffset = (this.topDelayPageNr - 1) * +this.topDelayLimit;
+    this.getTopDelayedAccounts();
+  }
+
+  topDelayedpreviousPage() {
+    --this.topDelayPageNr;
+    if (this.topDelayPageNr <= 0) return;
+    this.topDelayOffset -= +this.topDelayLimit;
+    this.getTopDelayedAccounts();
+  }
+
+  topDelayedpageNrChange(value) {
+    this.topDelayPageNr = (value && value.trim()) ? value : 1;
+    this.topDelayOffset = (this.topDelayPageNr - 1) * this.topDelayLimit;
+    this.getTopDelayedAccounts();
+  }
+
+  onTopDelayRowClicked(row) {
+    this.selectedAccount = { ...row };
+    this.waiting = true;
+    let start = this.minDate?.toISOString().split('T')[0];
+    let end = this.toDate?.toISOString().split('T')[0];
+    this.getDetailsData(start, end);
+  }
+  //#endregion Top delay table
 
 
   getData() {
@@ -206,7 +247,6 @@ export class DueDateComponent implements OnInit {
             data: this.data,
             fill: false,
           });
-          this.docDataTable = res.data.docDateReference;
           if (!this.delayData) {
             this.delayData = res.data.dueDateRefAccounts;
 
@@ -216,13 +256,7 @@ export class DueDateComponent implements OnInit {
           }
 
           if (this.selectedAccount && this.selectedAccount.accountNumber) {
-            this._analysisService
-              .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.selectedAccount.accountNumber, start, end, this.maxDelay)
-              .subscribe(res => {
-                this.waiting = false;
-                this.detailsData = res.data.records;
-                this.detailsDataTemp = res.data.records;
-              });
+            this.getDetailsData(start, end);
           }
         },
         (er) => {
@@ -260,6 +294,17 @@ export class DueDateComponent implements OnInit {
     this._router.navigate([
       '/dashboard/analysis/due-date/deails/' + row.accountNumber,
     ]);
+  }
+
+  //#region Details table 
+  getDetailsData(start, end) {
+    this._analysisService
+      .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.selectedAccount.accountNumber, start, end, this.maxDelay)
+      .subscribe(res => {
+        this.waiting = false;
+        this.detailsData = res.data.records;
+        this.detailsDataTemp = res.data.records;
+      });
   }
 
   async exportExcel() {
@@ -423,5 +468,6 @@ export class DueDateComponent implements OnInit {
     }
     this.waiting = false;
   }
+  //#endregion Details table
 
 }

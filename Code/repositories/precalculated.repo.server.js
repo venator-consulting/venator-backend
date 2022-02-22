@@ -442,10 +442,11 @@ module.exports.storeDueDateAnalysis = async (orgId, prcId, res) => {
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = ` INSERT INTO due_date_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
-    documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType) `;
-    //TODO: add the difference between due date and app date in days for the new table
+    documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType, dayDiff) `;
+  //TODO: add the difference between due date and app date in days for the new table
   query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
-    pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
+    pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType,
+     DATEDIFF(pos.applicationDate, pos.dueDate) AS dayDiff
     FROM posting_${orgId} pos
     WHERE
       pos.procedureId = ${prcId}
@@ -453,7 +454,7 @@ module.exports.storeDueDateAnalysis = async (orgId, prcId, res) => {
       AND pos.accountNumber is not NULL
       AND pos.dueDate is not NULL 
       AND pos.applicationDate is not NULL 
-      AND (year(pos.documentDate) <> year(pos.applicationDate) OR pos.applicationDate is null OR 
+      AND (year(pos.documentDate) <> year(pos.applicationDate) OR 
           (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
       AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
       ORDER BY pos.dueDate`;

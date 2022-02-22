@@ -415,6 +415,13 @@ module.exports.dueDateDetailsAnalysis = async (req, res) => {
     }
   );
 };
+
+module.exports.topDelayedAccounts = async (req, res) => {
+  const limit = req.query.limit;
+  const offset = req.query.offset;
+  const result = await dueDateAnalysisRepo.topDelayedAccounts(req.params.orgId, req.params.prcId, offset, limit);
+  res.status(200).json(result);
+};
 //#endregion duedate analysis
 
 

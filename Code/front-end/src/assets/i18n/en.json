@@ -510,8 +510,9 @@
     "negative": "Negative",
     "delay": "Delay",
     "selectAccount": "select Account",
-    "search": "Apply"
-
+    "search": "Apply",
+    "invoicesCount": "Invoices Count",
+    "maxDelay": "Max. Delay"
   },
   "CreditorsAnalysis": {
     "label": "Creditors analysis",

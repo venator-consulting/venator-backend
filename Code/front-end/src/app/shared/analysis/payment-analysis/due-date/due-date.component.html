@@ -43,15 +43,85 @@
 <div class="p-grid">
   <div class="p-col-6">
     <div class="card p-text-center">
-      <p-chart #chart type="line" height="350" [data]="basicData" [options]="basicOptions">
+      <p-chart #chart type="line" height="450" [data]="basicData" [options]="basicOptions">
       </p-chart>
     </div>
   </div>
 
   <div class="p-col-6">
     <div class="card p-text-center">
-      <!-- <p-chart #chart2 type="scatter" height="350" [data]="secondChartData" [options]="secondChartOptions">
-      </p-chart> -->
+      <p-table [value]="topDelayData" [resizableColumns]="true" styleClass="p-datatable-gridlines"
+        [columns]="topDelayCols" responsive="true" [scrollable]="true" scrollHeight="300px" [reorderableColumns]="true"
+        [loading]="topDelayWaiting">
+        <ng-template pTemplate="caption">
+          <div class="p-mb-4">
+            <!-- Limit options -->
+            <p-dropdown [options]="topDelayPageLimitSizes" optionValue="value" optionLabel="label"
+              [(ngModel)]="topDelayLimit" (onChange)="topDelayedLimitChange($event)" class="p-mr-2"></p-dropdown>
+            <!-- Go to First page -->
+            <button type="button" [disabled]="topDelayPageNr === 1" pButton pRipple icon="pi pi-angle-double-left"
+              (click)="topDelayedfirstPage()" class="p-mr-2" pTooltip="{{ 'Data_Table.firstPage' | translate }}"
+              tooltipPosition="bottom"></button>
+            <!-- Go previous -->
+            <button type="button" [disabled]="topDelayPageNr === 1" pButton pRipple icon="pi pi-angle-left"
+              (click)="topDelayedpreviousPage()" class="p-mr-2" pTooltip="{{ 'Data_Table.previous' | translate }}"
+              tooltipPosition="bottom"></button>
+            <!-- Page number -->
+            <input pInputText type="number" min="1" class="pageNrInput p-mr-2"
+              (input)="topDelayedpageNrChange($any($event.target).value)" [value]="topDelayPageNr" [placeholder]="topDelayPageNr" />
+            <!-- Go to next Page -->
+            <button type="button" [disabled]="topDelayPageNr >= topDelayMaxPageNr" pButton pRipple
+              icon="pi pi-angle-right" (click)="topDelayednextPage()" class="p-mr-2"
+              pTooltip="{{ 'Data_Table.next' | translate }}" tooltipPosition="bottom"></button>
+            <!-- Go to last page -->
+            <button type="button" [disabled]="topDelayPageNr >= topDelayMaxPageNr" pButton pRipple
+              icon="pi pi-angle-double-right" (click)="topDelayedlastPage()" class="p-mr-2"
+              pTooltip="{{ 'Data_Table.lastPage' | translate }}" tooltipPosition="bottom"></button>
+
+            <!-- dispalyed data of total count -->
+            {{ topDelayDisplayedDataCount }} of {{ topDelayTotalCount }}
+          </div>
+        </ng-template>
+        <ng-template pTemplate="colgroup" let-columns>
+          <colgroup>
+            <col *ngFor="let col of columns" />
+          </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th pResizableColumn pReorderableColumn class="p-text-{{ col.align }}" *ngFor="let col of columns">
+              <span pTooltip="{{ col.header | translate }}">
+                {{ col.header | translate }}
+              </span>
+              <!-- <p-sortIcon field="{{ col.field }}"></p-sortIcon> -->
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-columns="columns">
+          <tr [pSelectableRow]="row" (click)="onTopDelayRowClicked(row)">
+            <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
+              <span *ngIf="col.field == 'balance'">
+                {{ row[col.field] | currency: "EUR":"" }}
+              </span>
+              <span *ngIf="
+              col.field == 'dueDate' ||
+              col.field == 'applicationDate' ||
+              col.field == 'documentDate'
+            ">
+                {{ row[col.field] | date: "dd.MM.yyyy" }}
+              </span>
+              <span pTooltip="{{ row[col.field] }}" *ngIf="
+              col.field != 'balance' &&
+              col.field != 'documentDate' &&
+              col.field != 'dueDate' &&
+              col.field != 'applicationDate'
+            ">
+                {{ row[col.field] }}
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
   </div>
 

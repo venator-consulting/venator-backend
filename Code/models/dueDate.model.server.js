@@ -45,6 +45,9 @@ module.exports.getDueDate = function (tableName = 'due_date_analysis_') {
         },
         documentType: {
             type: DataTypes.STRING(25)
+        }, 
+        dayDiff: {
+            type: DataTypes.INTEGER(6)
         }
     }, {
         tableName: tableName
