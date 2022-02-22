@@ -11,6 +11,10 @@ import { TableColumn } from 'src/app/shared/model/tableColumn';
   templateUrl: './due-date-details.component.html',
   styleUrls: ['./due-date-details.component.sass'],
 })
+/**
+ * @deprecated there is no details for due date now
+ * this will be deleted in future
+ */
 export class DueDateDetailsComponent implements OnInit {
 
   @Input('details') details: boolean = false;

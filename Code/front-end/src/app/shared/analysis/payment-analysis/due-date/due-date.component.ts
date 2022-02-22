@@ -14,6 +14,7 @@ import * as FileSaver from 'file-saver';
 export class DueDateComponent implements OnInit {
   @Input('details') details: boolean = false;
 
+  //#region Data members init
   procedureName: string;
   selectedProcedure: number;
   selectedOrganisation: number;
@@ -22,38 +23,21 @@ export class DueDateComponent implements OnInit {
   basicData: any;
   labels: any[] = new Array();
   docDateOptions: any;
-  // docDateData: any;
-  // docDateLabels: any[] = new Array();
-  // docPositiveData: any[] = new Array();
-  // docNegativeData: any[] = new Array();
   docData: any[] = new Array();
   docDataTable: any[] = new Array();
-  // notPaidLabels: any[] = new Array();
-  // notPaidData: any[] = new Array();
-  // notPaidDataTable: any[] = new Array();
-  // notPaidChartData: any;
-  secondChartData: any;
-  secondChartLabels: any[] = new Array();
-  secondChartOptions: any;
 
   data: any[] = new Array();
   @ViewChild('chart') chart: any;
-  // docCols: { header: string; field: string; }[];
-  // notPaidCols: TableColumn[];
   delayCols: TableColumn[];
   detailsCols: TableColumn[];
   delayData: any;
   detailsData: any[] = new Array();
   items: MenuItem[];
   home: MenuItem;
-  //for second chart
-  maxDate: Date;
-  // for second chart and slider
+  // for slider
   minDate: Date;
   // for slider
   toDate: Date;
-  // for second chart
-  rangeDays: number;
   // for slider
   maxRange: number;
   // for slider
@@ -64,15 +48,15 @@ export class DueDateComponent implements OnInit {
   baseToDate: Date;
   secondChartDataRecords: any;
 
-  selectedAccount: { accountNumber: string; accountName: string } = {accountNumber: null, accountName: null};
+  selectedAccount: { accountNumber: string; accountName: string } = { accountNumber: null, accountName: null };
   maxDelay: number;
   detailsDataTemp: any;
   criteria: any = {};
   filtersNo: number = 0;
+  //#endregion Data members init
 
   constructor(
     public _translateService: TranslateService,
-    private _messageService: MessageService,
     private _analysisService: AnalysisService,
     private _router: Router,
     private _route: ActivatedRoute
@@ -93,7 +77,6 @@ export class DueDateComponent implements OnInit {
 
     this._translateService.get('DueDateAnalysis').subscribe((elem) => {
       this.items = [
-        // { label: elem.paymentLabel, routerLink: '/dashboard/analysis/payment' },
         { label: elem.label, routerLink: '/dashboard/analysis/due-date' },
       ];
 
@@ -181,46 +164,6 @@ export class DueDateComponent implements OnInit {
       }
     ];
 
-    // this.delayCols = [
-    //   {
-    //     header: 'DueDateAnalysis.accountNumber',
-    //     field: 'accountNumber',
-    //     align: 'left',
-    //   },
-    //   {
-    //     header: 'DueDateAnalysis.accountName',
-    //     field: 'accountName',
-    //     align: 'left',
-    //   },
-    //   {
-    //     header: 'DueDateAnalysis.positiveDelay',
-    //     field: 'delayPos',
-    //     align: 'center',
-    //   },
-    //   {
-    //     header: 'DueDateAnalysis.negativeDelay',
-    //     field: 'delayNeg',
-    //     align: 'center',
-    //   },
-    //   {
-    //     header: 'DueDateAnalysis.count',
-    //     field: 'count',
-    //     align: 'center',
-    //   },
-    // ];
-
-    // this.notPaidCols = [
-    //   {
-    //     header: 'DueDateAnalysis.date',
-    //     field: 'date',
-    //     align: 'center',
-    //   },
-    //   {
-    //     header: 'DueDateAnalysis.notPaid',
-    //     field: 'notPaid',
-    //     align: 'center',
-    //   },
-    // ];
   } // end of ng on init
 
 
@@ -234,12 +177,9 @@ export class DueDateComponent implements OnInit {
       .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure, start, end, parmas)
       .subscribe(
         async (res) => {
-          // debugger;
           if (!this.maxDelay) this.maxDelay = res.data.maxDelay;
           this.data = res.data.dueDateReference.data;
           this.labels = res.data.dueDateReference.labels;
-          this.secondChartDataRecords = res.data.dueDateReference.recordsDelay;
-          this.secondChartLabels = res.data.dueDateReference.secondChartLabels;
           if (!this.baseFromDate) this.baseFromDate = new Date(res.dateRange[0].mindate);
           if (!this.baseToDate) this.baseToDate = new Date(res.dateRange[0].maxappdate);
           if (!this.minDate) this.minDate = new Date(res.dateRange[0].mindate);
@@ -251,17 +191,9 @@ export class DueDateComponent implements OnInit {
           localStorage.setItem('dueDateMinDate', this.minDate?.toISOString().split('T')[0]);
           localStorage.setItem('dueDateToDate', this.toDate?.toISOString().split('T')[0]);
           localStorage.setItem('dueDatePrcId', '' + this.selectedProcedure);
-          this.maxDate = this.toDate;
-          // let lastChartDateTemp = this.secondChartLabels[this.secondChartLabels.length - 1].split('.');
-          // this.maxDate = new Date(lastChartDateTemp[2], lastChartDateTemp[1], lastChartDateTemp[0]);
-          // this.maxDate.setMonth(this.maxDate.getMonth() +1);
-          // let firstChartDateTemp = this.secondChartLabels[0].split('.');
-          // this.minDate = new Date(firstChartDateTemp[2], firstChartDateTemp[1], firstChartDateTemp[0]);
-          // this.minDate.setMonth(this.minDate.getMonth() +1);
-          this.rangeDays = Math.ceil((this.maxDate.getTime() - this.minDate.getTime()) / (1000 * 60 * 60 * 24));
           this.rangeValues = [
             this.dayDiff(this.baseFromDate, this.minDate),
-            this.dayDiff(this.baseFromDate, this.maxDate)
+            this.dayDiff(this.baseFromDate, this.toDate)
           ];
           this.waiting = false;
           this.basicData = {
@@ -274,76 +206,11 @@ export class DueDateComponent implements OnInit {
             data: this.data,
             fill: false,
           });
-          this.secondChartOptions = {
-            tooltips: {
-              callbacks: {
-                label: (tooltipItem, data) => {
-                  debugger;
-                  let value = tooltipItem.value;
-                  let point = this.secondChartDataRecords[tooltipItem.index];
-                  let label = point.label;
-                  let accountNumber = point?.accountNumber;
-                  let accountName = point?.accountName;
-                  return label + ' :' + value + '  - ' + accountNumber + '/' + accountName;
-                },
-              },
-            },
-            scales: {
-              yAxes: [{
-                stacked: true,
-                gridLines: {
-                  display: true,
-                  color: "rgba(255,99,132,0.2)"
-                }
-              }],
-              xAxes: [{
-                stacked: true,
-                gridLines: {
-                  display: true,
-                  color: "rgba(255,99,132,0.2)"
-                },
-                ticks: {
-                  minRotation: 40,
-                  maxRotation: 90,
-                  callback: (label, index, values) => {
-                    // debugger;
-                    // let temp = label * this.rangeDays / values.length;
-                    let tempDate = new Date(this.minDate);
-                    tempDate.setDate(tempDate.getDate() + label);
-                    label = tempDate.toLocaleString("de-DE", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                    });
-                    return label;
-                  },
-                },
-              }]
-            },
-          };
-          this.secondChartData = {
-            labels: this.labels,
-            datasets: [{
-              label: await this._translateService.get('DueDateAnalysis.secondChartLabel').toPromise(),
-              borderColor: `rgb(100,100,255)`,
-              data: this.secondChartDataRecords,
-              fill: false,
-            }]
-          };
-
-
-          // this.chart.refresh();
-          // this.chart.reinit();
           this.docDataTable = res.data.docDateReference;
-          // this.notPaidDataTable = res.data.docDateReference;
           if (!this.delayData) {
             this.delayData = res.data.dueDateRefAccounts;
 
             this.delayData.forEach((account) => {
-              // let accountNumber = parseInt(account.accountNumber, 10);
-              // account.accountNumber = isNaN(accountNumber)
-              //   ? account.accountNumber
-              //   : accountNumber;
               account.accountName = account.accountName ?? 'No Name';
             });
           }
@@ -357,59 +224,6 @@ export class DueDateComponent implements OnInit {
                 this.detailsDataTemp = res.data.records;
               });
           }
-
-          // this.docDataTable.forEach((element) => {
-          //   this.docDateLabels.push(
-          //     element.monthName + '-' + element.yearName
-          //   );
-          //   this.notPaidLabels.push(
-          //     element.monthName + '-' + element.yearName
-          //   );
-          //   this.docPositiveData.push(element.positive);
-          //   this.docNegativeData.push(element.negative);
-          //   this.docData.push(+element.positive + +element.negative);
-          //   this.notPaidData.push(+element.notPaid);
-          // });
-
-          // this.docDateData = {
-          //   labels: this.docDateLabels,
-          //   datasets: [
-          //     {
-          //       type: 'line',
-          //       label: elem.average,
-          //       borderColor: '#42A5F5',
-          //       borderWidth: 2,
-          //       fill: false,
-          //       data: this.docData,
-          //     },
-          //     {
-          //       type: 'bar',
-          //       label: elem.positive,
-          //       backgroundColor: '#F5B59B',
-          //       data: this.docPositiveData,
-          //       borderColor: '#E5A58B',
-          //       borderWidth: 2,
-          //     },
-          //     {
-          //       type: 'bar',
-          //       label: elem.negative,
-          //       backgroundColor: '#FFD795',
-          //       borderColor: '#EFC785',
-          //       data: this.docNegativeData,
-          //     },
-          //   ],
-          // };
-
-          // this.notPaidChartData = {
-          //   labels: this.notPaidLabels,
-          //   datasets: [
-          //     {
-          //       label: elem.notPaid,
-          //       backgroundColor: '#42A5F5',
-          //       data: this.notPaidData,
-          //     },
-          //   ],
-          // };
         },
         (er) => {
           this.waiting = false;

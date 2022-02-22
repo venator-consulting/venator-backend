@@ -288,18 +288,6 @@ const routes: Routes = [
         data: { roles: ['Admin', 'Manager', 'User'] },
       },
       {
-        path: 'analysis/due-date/deails/:accountNumber',
-        component: DueDateDetailsComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin', 'Manager', 'User'] },
-      },
-      // {
-      //   path: 'analysis/creditor',
-      //   component: CreditorAnalysisComponent,
-      //   canActivate: [AuthGuard],
-      //   data: { roles: ['Admin', 'Manager', 'User'] },
-      // },
-      {
         path: 'analysis/creditor',
         component: CreditorAnalysisCalcComponent,
         canActivate: [AuthGuard],
