@@ -28,7 +28,7 @@ async function linkTransactions(orgId, prcId) {
     // contains th final solution;
     const solution = [];
     // contains not linked invoices yet;
-    const orphaned = [];
+    let orphaned = [];
 
     let applicationDocumentNew = 0;
 
@@ -150,13 +150,13 @@ async function linkTransactions(orgId, prcId) {
         //#region manipulate orphand array!
         counter = applicationDocumentNew;
         // foreach orphaned
-        for (let i = 0; i < payments.length; i++) {
+        Payments_LOOP: for (let i = 0; i < payments.length; i++) {
             counter++;
             const orphan = payments[i];
             // the applicationDateNew will be the MAX(payment.documentDate, invoices.documentDate...).
             let maxDocumentDate = orphan.documentDate;
             // foreach invoice as a start point
-            for (let j = orphaned.length - 1; j > 0; j--) {
+            Invoices_LOOP: for (let j = orphaned.length - 1; j >= 0; j--) {
                 const invoice = orphaned[j];
                 let total = 0;
                 const partialSolution = [];
@@ -186,7 +186,7 @@ async function linkTransactions(orgId, prcId) {
                     } else {
                         const otherOptions = [...orphaned];
                         otherOptions.splice(j, 1);
-                        for (let k = otherOptions.length - 1; k > 0; k--) {
+                        OtherInvoices_LOOP: for (let k = otherOptions.length - 1; k >= 0; k--) {
                             const option = otherOptions[k];
                             // orphan is a payment and option is an invoice
                             // must payment.documentDate > invoice.documentDate
@@ -212,8 +212,6 @@ async function linkTransactions(orgId, prcId) {
                                         maxDocumentDate : option.documentDate;
                                     total += Math.abs(option.balance);
                                     otherOptions.splice(k, 1);
-                                    //No need to compare documentDate because if it bigger then it will not be pushed
-                                    //TODO: check this condition
                                 } else if (
                                     (total + Math.abs(option.balance)) == Math.abs(orphan.balance) &&
                                     orphan.accountNumber?.trim() === option.accountNumber?.trim() &&
@@ -226,14 +224,17 @@ async function linkTransactions(orgId, prcId) {
                                     // add orphan to the solution
                                     //set the applicationDateNew as maxDocumentDate
                                     solution.push({ id: orphan.id, applicationDocumentNew, applicationDateNew: maxDocumentDate, procedureId: prcId });
-                                    // delete orphan from original array
-                                    orphaned.splice(i, 1);
+                                    // delete payment from original array
+                                    payments.splice(i, 1);
+
+                                    partialSolution.push(option);
                                     // add all in partial solution to the silution
                                     //set the applicationDateNew as maxDocumentDate
                                     solution.push(...partialSolution.map(ps => ({ id: ps.id, applicationDocumentNew, applicationDateNew: maxDocumentDate, procedureId: prcId })));
                                     // delete all in partial solution from payments
-                                    console.log(`from child: payment docdate: ${orphan.documentDate} and invoice docdate: ${invoice.documentDate}`);
-                                    break;
+                                    orphaned = orphaned.filter(n => !partialSolution.find(val => val.id == n.id));
+                                    // console.log(`from child: payment docdate: ${orphan.documentDate} and invoice docdate: ${invoice.documentDate}`);
+                                    break Invoices_LOOP;
                                 } // end of solution block
                         } // end of options
                     } // end of for start-points
