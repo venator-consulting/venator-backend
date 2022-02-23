@@ -10,6 +10,13 @@ const Exception = require("../helpers/errorHandlers/Exception");
 const httpStatus = require("../models/enums/httpStatus");
 const errors = require('../models/enums/errors');
 
+/** 
+ * when link/match records we set 2 fields: 1-applicationDocumentNew; 2-applicationDateNew.
+ * applicationDocumentNew: is auto generated/ Random
+ * applicationDateNew: is the MAX(documentDate) of the linked records
+ * so all linked records must have the same applicationDocumentNew and the same applicationDateNew.
+ *  */
+
 parentPort.on("message", (data) => {
 
     linkTransactions(data.orgId, data.prcId);
@@ -17,6 +24,7 @@ parentPort.on("message", (data) => {
 });
 
 async function linkTransactions(orgId, prcId) {
+    let benchmark = process.hrtime();
     // contains th final solution;
     const solution = [];
     // contains not linked invoices yet;
@@ -112,13 +120,19 @@ async function linkTransactions(orgId, prcId) {
             // generate applicationDocument
             applicationDocumentNew++;
             row.applicationDocumentNew = applicationDocumentNew;
-            solution.push({ id: row.id, applicationDocumentNew, procedureId: prcId }, { id: equalPayment.id, applicationDocumentNew, procedureId: prcId });
+            // the applicationDateNew will be the MAX(equalPayment.documentDate, row.documentDate).
+            let maxDocumentDate = equalPayment.documentDate?.getTime() > row.documentDate?.getTime() ?
+                equalPayment.documentDate : row.documentDate;
+            solution.push(
+                { id: row.id, applicationDocumentNew, applicationDateNew: maxDocumentDate, procedureId: prcId },
+                { id: equalPayment.id, applicationDocumentNew, applicationDateNew: maxDocumentDate, procedureId: prcId }
+            );
             //delete payment from payments array
             payments.splice(equalPaymentIndex, 1);
             let currentProgress = Math.floor((applicationDocumentNew / paymentsCount) * 100);
             if (currentProgress >= (previousProgress + 1)) {
                 previousProgress = currentProgress;
-                console.log(`progress from child: ${Math.floor((applicationDocumentNew / paymentsCount) * 100)}%...`);
+                // console.log(`progress from child: ${Math.floor((applicationDocumentNew / paymentsCount) * 100)}%...`);
 
                 parentPort.postMessage({ progress: currentProgress });
             }
@@ -139,19 +153,27 @@ async function linkTransactions(orgId, prcId) {
         for (let i = 0; i < payments.length; i++) {
             counter++;
             const orphan = payments[i];
-            // console.log(`orphaned payemnt number: ${i} and balance is: ${orphan.balance}`);
+            // the applicationDateNew will be the MAX(payment.documentDate, invoices.documentDate...).
+            let maxDocumentDate = orphan.documentDate;
             // foreach invoice as a start point
-            for (let j = 0; j < orphaned.length; j++) {
+            for (let j = orphaned.length - 1; j > 0; j--) {
                 const invoice = orphaned[j];
                 let total = 0;
                 const partialSolution = [];
-                if (Math.abs(invoice.balance) > Math.abs(orphan.balance) ||
+                // orphan is a payment and must payment.documentDate > invoice.documentDate
+                // invoices ordered by documentDate from older/smaller to newer/bigger
+                // so if this invoice documentDate is newer/> than payment.documentDate
+                // then break; you will never find an invoice with documentDate that conform the condition
+                if (
+                    // Math.abs(invoice.balance) > Math.abs(orphan.balance) ||
                     invoice.accountNumber?.trim() !== orphan.accountNumber?.trim() ||
                     orphan.documentDate.getTime() < invoice.documentDate.getTime() ||
                     ((orphan.documentDate.getTime() - invoice.documentDate.getTime()) / (1000 * 60 * 60 * 24)) > 120)
                     break;
                 else {
                     partialSolution.push(invoice);
+                    maxDocumentDate = maxDocumentDate?.getTime() > invoice.documentDate.getTime() ?
+                        maxDocumentDate : invoice.documentDate;
                     total += Math.abs(invoice.balance);
                     // this will not be but we take care about it!
                     if (Math.abs(orphan.balance) == total &&
@@ -164,29 +186,51 @@ async function linkTransactions(orgId, prcId) {
                     } else {
                         const otherOptions = [...orphaned];
                         otherOptions.splice(j, 1);
-                        for (let k = 0; k < otherOptions.length; k++) {
+                        for (let k = otherOptions.length - 1; k > 0; k--) {
                             const option = otherOptions[k];
-                            if ((total + Math.abs(option.balance)) > Math.abs(orphan.balance)) {
+                            // orphan is a payment and option is an invoice
+                            // must payment.documentDate > invoice.documentDate
+                            // invoices ordered by documentDate from older/smaller to newer/bigger
+                            // so if this invoice documentDate is newer/> than payment.documentDate
+                            // then break; you will never find an invoice with documentDate that conform the condition
+                            if (
+                                // (total + Math.abs(option.balance)) > Math.abs(orphan.balance)
+                                option.accountNumber?.trim() !== orphan.accountNumber?.trim() ||
+                                orphan.documentDate.getTime() < option.documentDate.getTime() ||
+                                ((orphan.documentDate.getTime() - option.documentDate.getTime()) / (1000 * 60 * 60 * 24)) > 120
+                            ) {
                                 break;
                             } else
-                                if ((total + Math.abs(option.balance)) < Math.abs(orphan.balance) &&
+                                if (
+                                    (total + Math.abs(option.balance)) < Math.abs(orphan.balance) &&
                                     orphan.accountNumber?.trim() === option.accountNumber?.trim() &&
                                     orphan.documentDate.getTime() >= option.documentDate.getTime() &&
-                                    ((orphan.documentDate.getTime() - option.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120) {
+                                    ((orphan.documentDate.getTime() - option.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120
+                                ) {
                                     partialSolution.push(option);
+                                    maxDocumentDate = maxDocumentDate?.getTime() > option.documentDate.getTime() ?
+                                        maxDocumentDate : option.documentDate;
                                     total += Math.abs(option.balance);
                                     otherOptions.splice(k, 1);
                                     //No need to compare documentDate because if it bigger then it will not be pushed
-                                } else if ((total + Math.abs(invoice.balance)) == Math.abs(orphan.balance)) {
+                                    //TODO: check this condition
+                                } else if (
+                                    (total + Math.abs(option.balance)) == Math.abs(orphan.balance) &&
+                                    orphan.accountNumber?.trim() === option.accountNumber?.trim() &&
+                                    orphan.documentDate.getTime() >= option.documentDate.getTime() &&
+                                    ((orphan.documentDate.getTime() - option.documentDate.getTime()) / (1000 * 60 * 60 * 24)) < 120
+                                ) {
                                     // we find a solution
                                     applicationDocumentNew++;
                                     orphan.applicationDocumentNew = applicationDocumentNew;
                                     // add orphan to the solution
-                                    solution.push({ id: orphan.id, applicationDocumentNew, procedureId: prcId });
+                                    //set the applicationDateNew as maxDocumentDate
+                                    solution.push({ id: orphan.id, applicationDocumentNew, applicationDateNew: maxDocumentDate, procedureId: prcId });
                                     // delete orphan from original array
                                     orphaned.splice(i, 1);
                                     // add all in partial solution to the silution
-                                    solution.push(...partialSolution.map(ps => ({ id: ps.id, applicationDocumentNew, procedureId: prcId })));
+                                    //set the applicationDateNew as maxDocumentDate
+                                    solution.push(...partialSolution.map(ps => ({ id: ps.id, applicationDocumentNew, applicationDateNew: maxDocumentDate, procedureId: prcId })));
                                     // delete all in partial solution from payments
                                     console.log(`from child: payment docdate: ${orphan.documentDate} and invoice docdate: ${invoice.documentDate}`);
                                     break;
@@ -198,7 +242,7 @@ async function linkTransactions(orgId, prcId) {
             let currentProgress = Math.floor((counter / paymentsCount) * 100);
             if (currentProgress >= (previousProgress + 1)) {
                 previousProgress = currentProgress;
-                console.log(`progress from child: ${Math.floor((counter / paymentsCount) * 100)}%...`);
+                // console.log(`progress from child: ${Math.floor((counter / paymentsCount) * 100)}%...`);
                 parentPort.postMessage({ progress: currentProgress });
             }
         } // end of each orphan
@@ -208,9 +252,11 @@ async function linkTransactions(orgId, prcId) {
         // bulk update the database
 
         await Posting.getPosting("posting_" + orgId).bulkCreate(solution,
-            { updateOnDuplicate: ["applicationDocumentNew"] });
+            { updateOnDuplicate: ["applicationDocumentNew", "applicationDateNew"] });
         await Procedure.getProcedures().update({ linkTrans: true }, { where: { id: prcId, }, });
         console.log('execution ended');
+        benchmark = process.hrtime(benchmark);
+        console.log('benchmark took %d seconds and %d nanoseconds', benchmark[0], benchmark[1]);
     });
     //#endregion streaming from DB for invoices
 

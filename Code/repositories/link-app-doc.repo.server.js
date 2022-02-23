@@ -20,7 +20,7 @@ const { Worker } = require("worker_threads");
 
 module.exports.linkUsingWorker = async (res, orgId, prcId) => {
 
-    let benchmark = process.hrtime();
+    // let benchmark = process.hrtime();
     if (isNaN(orgId))
         throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
     if (isNaN(prcId))
@@ -42,8 +42,8 @@ module.exports.linkUsingWorker = async (res, orgId, prcId) => {
 
     worker.on("exit", (exitCode) => {
         console.log(exitCode);
-        benchmark = process.hrtime(benchmark);
-        console.log('benchmark took %d Minutes %d Seconds and %d nanoseconds', Math.floor(benchmark[0] / 60), benchmark[0] % 60, benchmark[1]);
+        // benchmark = process.hrtime(benchmark);
+        // console.log('benchmark took %d Minutes %d Seconds and %d nanoseconds', Math.floor(benchmark[0] / 60), benchmark[0] % 60, benchmark[1]);
         const used = process.memoryUsage().heapUsed / 1024 / 1024;
         console.log(`${new Date()}:The script uses approximately: ${Math.round(used * 100) / 100} MB`);
         res.end(200);
