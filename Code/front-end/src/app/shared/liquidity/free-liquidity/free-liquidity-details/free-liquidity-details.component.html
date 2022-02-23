@@ -32,9 +32,73 @@
   </div>
 </div>
 
-<div class="p-grid">
+<div class="p-grid" *ngIf="!selectedDate">
   <div class="p-col-12">
-    <h2 class="p-text-center" *ngIf="selectedDate">{{ selectedDate }}</h2>
+    <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="searching"></p-progressBar>
+    <p-table #dt dataKey="id" [value]="accountRecords" styleClass="p-datatable-gridlines" [columns]="cols"
+      responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [resizableColumns]="true"
+      [loading]="searching">
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" [style]="{'width': (col.width? col.width : 200) +'px'}" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="{{ col.field }}" pReorderableColumn pResizableColumn class="p-text-{{ col.align }}"
+            *ngFor="let col of columns">
+            <span pTooltip="{{ col.header | translate }} " class="p-text-{{ col.align }}">
+              {{ col.header | translate }}
+              <p-sortIcon field="{{ col.field }}"></p-sortIcon>
+            </span>
+          </th>
+        </tr>
+        <!-- <tr>
+          <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
+            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{ width: '90%' }"
+              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
+              *ngIf="col.field != 'accountNumber' || col.field != 'accountName'" />
+          </th>
+        </tr> -->
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr>
+          <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
+            <span *ngIf="col.field == 'balance'">
+              {{ row[col.field] | currency: "EUR":"" }}
+            </span>
+            <span *ngIf="
+                col.field == 'documentDate' ||
+                col.field == 'executionDate' ||
+                col.field == 'dueDate'
+              ">
+              {{ row[col.field] | date: "dd.MM.yyyy" }}
+            </span>
+            <span pTooltip="{{ row[col.field] }}"
+              *ngIf="col.field!='balance' && col.field !='documentDate' && col.field !='executionDate' && col.field!='dueDate' && col.field!='amountRelevantComment' && col.field!='amountRelevant'">
+              {{ row[col.field] }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [attr.colspan]="columns.length">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<div class="p-grid" *ngIf="selectedDate">
+  <div class="p-col-7">
+    <h2 class="p-text-right">{{ selectedDate }}</h2>
+  </div>
+  <div class="p-col-5 p-text-right">
+    <button type="button" pButton pRipple label="All Dates" icon="pi pi-times" class="p-button-rounded p-button-warning"
+      (click)="selectedDate = null" pTooltip="All" tooltipPosition="bottom" style="margin-top: 20px;"></button>
   </div>
   <div class="p-col-12">
     <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="searching"></p-progressBar>

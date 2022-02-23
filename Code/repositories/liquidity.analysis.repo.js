@@ -292,6 +292,8 @@ module.exports.liquidityAnalysisDetails = async (
       },
     };
 
+    const accountRecords = [];
+
     let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, 
                             pos.StartingBalanceDate, pos.textPosting, pos.textHeader, pos.reference, pos.assignment,  
                             pos.accountTypeNewName, pos.balance, pos.StartingBalance
@@ -311,6 +313,8 @@ module.exports.liquidityAnalysisDetails = async (
       if (!accountName) {
         accountName = row.accountName;
       }
+
+      accountRecords.push(row);
 
       const rowindex = getNumberOfDays(fromDate, row.documentDate);
 
@@ -378,6 +382,7 @@ module.exports.liquidityAnalysisDetails = async (
       finalResult.bankBalances = data;
       finalResult.labels = chartLabels.filter(Boolean);
       finalResult.accountName = accountName;
+      finalResult.accountRecords = accountRecords;
       // cb(finalResult);
       resolve(finalResult);
     });

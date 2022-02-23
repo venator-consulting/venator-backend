@@ -38,6 +38,7 @@ export class FreeLiquidityDetailsComponent implements OnInit {
   fromDate: Date;
   toDate: Date;
   rangeValues: number[];
+  accountRecords: any[] = [];
 
   constructor(
     public _translateService: TranslateService,
@@ -234,6 +235,7 @@ export class FreeLiquidityDetailsComponent implements OnInit {
         (res) => {
           this.accountName = res.bankBalances.accountName;
           this.labels = res.bankBalances.labels;
+          this.accountRecords = res.bankBalances.accountRecords;
           this.basicData = {
             labels: res.bankBalances.labels,
             datasets: [
