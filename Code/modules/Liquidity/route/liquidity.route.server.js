@@ -75,7 +75,7 @@ router.route("/:orgId/:prcId/liquidity/details/:accountNumber").get(
 );
 
 
-router.route("/:orgId/:prcId/liquidity/:fromDate/:toDate").get(
+router.route("/:orgId/:prcId/liquidity/:fromDate/:toDate/:baseBankBalance").get(
   passport.authenticate("jwt", {
     session: false,
   }),

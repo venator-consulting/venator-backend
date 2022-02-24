@@ -35,16 +35,19 @@ function getNumberOfDays(start, end) {
   // a day in milliseconds
   const oneDay = 1000 * 60 * 60 * 24;
 
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+
   // Calculating the time difference between two dates
   const diffInTime = end.getTime() - start.getTime();
 
   // Calculating the no. of days between two dates
-  const diffInDays = Math.ceil(diffInTime / oneDay);
+  const diffInDays = Math.floor(diffInTime / oneDay);
 
   return diffInDays;
 }
 
-module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
+module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate, baseFromDate) => {
   return new Promise((resolve, reject) => {
     if (!fromDate || !toDate) {
       throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
@@ -54,6 +57,13 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
       toDate = new Date(toDate);
       // throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     }
+
+    // to be sure it's a date not a date-string
+    if (!(baseFromDate instanceof Date)) baseFromDate = new Date(baseFromDate);
+
+    // if theere is a filter then this value will be bigger than 0
+    // and we must slice the array result from it to the toDate
+    const filteredDataStarterIndex = getNumberOfDays(baseFromDate, fromDate);
 
     let data = {};
     let chartLabels = new Array();
@@ -75,9 +85,10 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
                             pos.procedureId = ${prcId}
                             AND pos.accountNumber is not NULL
                             AND pos.documentDate is not NULL
-                            AND pos.documentDate >= '${fromDate.toISOString().split('T')[0]}' 
+                            AND pos.documentDate >= '${baseFromDate.toISOString().split('T')[0]}' 
                             AND pos.documentDate <= '${toDate.toISOString().split('T')[0]}'
                             AND UPPER(pos.accountTypeNewName) = 'FINANZKONTO'
+                            AND pos.documentDate >= pos.StartingBalanceDate
                             ORDER BY pos.documentDate`;
 
     const str = connection.getConnection().query(query).stream();
@@ -94,17 +105,14 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
         });
       }
 
-      const rowindex = getNumberOfDays(fromDate, row.documentDate);
+      const rowindex = getNumberOfDays(baseFromDate, row.documentDate);
 
       // bank balances starts
       {
         let startingBalanceIncluded = 0;
         if (row.StartingBalanceDate) {
-          if (row.StartingBalanceDate > fromDate) {
-            startingBalanceIncluded = getNumberOfDays(
-              fromDate,
-              row.StartingBalanceDate
-            );
+          if (row.StartingBalanceDate?.getTime() >= baseFromDate?.getTime()) {
+            startingBalanceIncluded = getNumberOfDays(baseFromDate, row.StartingBalanceDate);
           }
         }
 
@@ -114,9 +122,16 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
 
         row.StartingBalance = row.StartingBalance ? +row.StartingBalance : 0;
 
-        // index ==0 and value == 0 then starting balance
-        // index != row index and !value then value = previous value
+        // index < row index and !value then value = previous value
         // index == row index then value = balance + previous value
+        // index == startingBalanceIncluded then value = value + starting balance
+
+        // index < startingBalanceIncluded not a real case!!! to make a transaction
+        //  with a bank without starting balance (Establishing an account)
+        // but (((if))) it appears set it to zero
+
+        // the next is ERROR it will be set from the previous iteration// 
+        //index < row index and value then value = value + previous value
 
         for (let index = 0; index <= rowindex; index++) {
           if (
@@ -150,8 +165,9 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
           ) {
             data[row.accountNumber][index] = data[row.accountNumber][index - 1];
           }
-          let thisDate = new Date(fromDate);
-          thisDate.setDate(fromDate.getDate() + index);
+
+          let thisDate = new Date(baseFromDate);
+          thisDate.setDate(baseFromDate.getDate() + index);
           chartLabels[index] = chartLabels[index]
             ? chartLabels[index]
             : thisDate.toLocaleDateString("de-DE", {
@@ -165,10 +181,10 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
     }); // end of on stream return row
 
     str.on("end", async () => {
-      const diffirence = getNumberOfDays(fromDate, toDate);
+      const diffirence = getNumberOfDays(baseFromDate, toDate);
 
       let bankBalancesArray = new Array();
-
+      // bankBalancesArray[0] = +baseBankBalance;
       for (let index = 0; index <= diffirence; index++) {
         if (!bankBalancesArray[index]) {
           bankBalancesArray[index] = 0;
@@ -194,7 +210,13 @@ module.exports.liquidityAnalysis = async (orgId, prcId, fromDate, toDate) => {
           ? data[val.accountNumber].length
           : 0;
       });
+      for (const accounNumber in data) {
+        data[accounNumber]?.splice(0, filteredDataStarterIndex);;
+      }
 
+      // slice the arrays from the filteredDataStarterIndex to the end
+      bankBalancesArray.splice(0, filteredDataStarterIndex);
+      chartLabels.splice(0, filteredDataStarterIndex);
       finalResult.accounts = accounts;
       finalResult.bankBalances = bankBalancesArray;
       finalResult.labels = chartLabels.filter(Boolean);
@@ -269,7 +291,8 @@ module.exports.liquidityAnalysisDetails = async (
   prcId,
   accountNumber,
   fromDate,
-  toDate
+  toDate,
+  baseFromDate
 ) => {
   return new Promise((resolve, reject) => {
     if (!fromDate || !toDate) {
@@ -280,6 +303,12 @@ module.exports.liquidityAnalysisDetails = async (
       toDate = new Date(toDate);
       // throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
     }
+
+    if (!(baseFromDate instanceof Date)) baseFromDate = new Date(baseFromDate);
+
+    // if theere is a filter then this value will be bigger than 0
+    // and we must slice the array result from it to the toDate
+    const filteredDataStarterIndex = getNumberOfDays(baseFromDate, fromDate);
 
     let data = new Array();
     let chartLabels = new Array();
@@ -302,7 +331,7 @@ module.exports.liquidityAnalysisDetails = async (
                             pos.procedureId = ${prcId}
                             AND pos.accountNumber = ${accountNumber}
                             AND pos.documentDate is not NULL 
-                            AND pos.documentDate >= '${fromDate.toISOString().split('T')[0]}' 
+                            AND pos.documentDate >= '${baseFromDate.toISOString().split('T')[0]}' 
                             AND pos.documentDate <= '${toDate.toISOString().split('T')[0]}'
                             AND UPPER(pos.accountTypeNewName) = 'FINANZKONTO'
                             ORDER BY pos.documentDate`;
@@ -313,17 +342,17 @@ module.exports.liquidityAnalysisDetails = async (
       if (!accountName) {
         accountName = row.accountName;
       }
+      if (row.documentDate?.getTime() > fromDate?.getTime())
+        accountRecords.push(row);
 
-      accountRecords.push(row);
-
-      const rowindex = getNumberOfDays(fromDate, row.documentDate);
+      const rowindex = getNumberOfDays(baseFromDate, row.documentDate);
 
       // bank balances starts
       {
         let startingBalanceIncluded = 0;
         if (row.StartingBalanceDate) {
           startingBalanceIncluded = getNumberOfDays(
-            fromDate,
+            baseFromDate,
             row.StartingBalanceDate
           );
         }
@@ -358,8 +387,8 @@ module.exports.liquidityAnalysisDetails = async (
           ) {
             data[index] = data[index - 1];
           }
-          let thisDate = new Date(fromDate);
-          thisDate.setDate(fromDate.getDate() + index);
+          let thisDate = new Date(baseFromDate);
+          thisDate.setDate(baseFromDate.getDate() + index);
           chartLabels[index] = chartLabels[index]
             ? chartLabels[index]
             : thisDate.toLocaleDateString("de-DE", {
@@ -373,11 +402,14 @@ module.exports.liquidityAnalysisDetails = async (
     }); // end of on stream return row
 
     str.on("end", async () => {
-      const diffirence = getNumberOfDays(fromDate, toDate);
+      const diffirence = getNumberOfDays(baseFromDate, toDate);
 
       for (let index = data.length; index <= diffirence; index++) {
         data[index] = index > 0 && data[index - 1] ? data[index - 1] : 0;
       }
+
+      chartLabels.splice(0, filteredDataStarterIndex);
+      data.splice(0, filteredDataStarterIndex);
 
       finalResult.bankBalances = data;
       finalResult.labels = chartLabels.filter(Boolean);

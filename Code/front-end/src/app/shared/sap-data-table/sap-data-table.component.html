@@ -79,6 +79,7 @@
               col.field != 'documentDate' &&
               col.field != 'dueDate' &&
               col.field != 'applicationDate' &&
+              col.field != 'applicationDateNew' &&
               col.field != 'postingDate' &&
               col.field != 'executionDate'
             ">
@@ -88,6 +89,7 @@
               col.field == 'documentDate' ||
               col.field == 'dueDate' ||
               col.field == 'applicationDate' ||
+              col.field == 'applicationDateNew' ||
               col.field == 'postingDate' ||
               col.field == 'executionDate'
             " [(ngModel)]="criteria[col.field]" (onSelect)="filterChange($event, col.field)" [monthNavigator]="true"
@@ -110,7 +112,8 @@
                 col.field == 'executionDate' ||
                 col.field == 'dueDate' ||
                 col.field == 'postingDate' ||
-                col.field == 'applicationDate';
+                col.field == 'applicationDate' ||
+                col.field == 'applicationDateNew';
               then withFilter;
               else withoutFilter
             "></div>

@@ -6,15 +6,21 @@ const errors = require('../../../models/enums/errors');
 module.exports.getAnalysisMainData = async (req, res) => {
   let fromDate = req.params.fromDate;
   let toDate = req.params.toDate;
+  // let baseBankBalance = req.params.baseBankBalance;
+
+
+  const dateRange = await liquidityRepo.liquiditytDateRange(
+    +req.params.orgId,
+    +req.params.prcId
+  );
+
+  if (dateRange.length < 1) {
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
+  }
+
+  let baseFromDate = dateRange[0].mindate ?? dateRange[0].mindocdate;
 
   if (!fromDate && !toDate) {
-    const dateRange = await liquidityRepo.liquiditytDateRange(
-      +req.params.orgId,
-      +req.params.prcId
-    );
-    if (dateRange.length < 1) {
-      throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
-    }
     fromDate = dateRange[0].mindate;
     if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
       if (
@@ -39,7 +45,8 @@ module.exports.getAnalysisMainData = async (req, res) => {
     req.params.orgId,
     req.params.prcId,
     fromDate,
-    toDate
+    toDate,
+    baseFromDate
   );
 
   const creditLinesPromise = liquidityRepo.creditLinnes(
@@ -88,14 +95,17 @@ module.exports.getAnalysisDetailsData = async (req, res) => {
   let fromDate = req.params.fromDate;
   let toDate = req.params.toDate;
 
+  const dateRange = await liquidityRepo.liquiditytDateRange(
+    +req.params.orgId,
+    +req.params.prcId
+  );
+  if (dateRange.length < 1) {
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
+  }
+
+  let baseFromDate = dateRange[0].mindate ?? dateRange[0].mindocdate;
+
   if (!fromDate && !toDate) {
-    const dateRange = await liquidityRepo.liquiditytDateRange(
-      +req.params.orgId,
-      +req.params.prcId
-    );
-    if (dateRange.length < 1) {
-      throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
-    }
     fromDate = dateRange[0].mindate;
     if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
       if (
@@ -120,7 +130,8 @@ module.exports.getAnalysisDetailsData = async (req, res) => {
     req.params.prcId,
     req.params.accountNumber,
     fromDate,
-    toDate
+    toDate,
+    baseFromDate
   );
 
   const creditLinesPromise = liquidityRepo.creditLinnesDetails(

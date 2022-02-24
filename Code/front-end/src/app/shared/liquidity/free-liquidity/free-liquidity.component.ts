@@ -39,6 +39,7 @@ export class FreeLiquidityComponent implements OnInit {
   fromDate: Date;
   toDate: Date;
   rangeValues: number[];
+  bankBalances: number[] = [];
 
   constructor(
     public _translateService: TranslateService,
@@ -187,10 +188,21 @@ export class FreeLiquidityComponent implements OnInit {
 
   getData() {
     this.searching = true;
-    debugger;
+    // debugger;
     let start = this.fromDate?.toISOString().split('T')[0];
     let end = this.toDate?.toISOString().split('T')[0];
-    this._liquidityService.getFreeLiquidity(this.orgId, this.prcId, start, end).subscribe(
+    let baseBankBalance = 0;
+    // if(this.bankBalances.length > 0) {
+    //   let startTemplateAsLabels = this.fromDate?.toLocaleDateString("de-DE", {
+    //     year: "numeric",
+    //     month: "2-digit",
+    //     day: "2-digit",
+    //   });
+    //   let baseBankBalanceIndex = this.labels.findIndex(label => label == startTemplateAsLabels);
+    //   baseBankBalance = this.bankBalances[baseBankBalanceIndex];
+    // }
+    
+    this._liquidityService.getFreeLiquidity(this.orgId, this.prcId, start, end, baseBankBalance).subscribe(
       (res) => {
         if (!this.baseFromDate) this.baseFromDate = new Date(res.fromDate);
         if (!this.baseToDate) this.baseToDate = new Date(res.toDate);
@@ -201,6 +213,7 @@ export class FreeLiquidityComponent implements OnInit {
         this.accounts = res.bankBalances.accounts;
         this.tempData = res.bankBalances.accounts;
         this.labels = res.bankBalances.labels;
+        this.bankBalances = res.bankBalances.bankBalances;
         this.basicData = {
           labels: res.bankBalances.labels,
           datasets: [
@@ -225,7 +238,7 @@ export class FreeLiquidityComponent implements OnInit {
               label: 'Bank Balance',
               backgroundColor: '#88FF88',
               borderColor: '#58dF58',
-              data: res.bankBalances.bankBalances,
+              data: this.bankBalances,
             },
           ],
         };

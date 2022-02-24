@@ -35,11 +35,11 @@ export class LiquidityService {
     return this._http.delete<any>(this._thisURL + orgId + '/' + prcId + '/creditLine/' + row.id);
   }
 
-  getFreeLiquidity(orgId: number, prcId: number, fromDate, toDate) {
+  getFreeLiquidity(orgId: number, prcId: number, fromDate, toDate, baseBankBalance = 0) {
     if (!fromDate || !toDate)
       return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity');
     else
-      return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity/' + fromDate + '/' + toDate);
+      return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/liquidity/' + fromDate + '/' + toDate + '/' + baseBankBalance);
   }
 
   getFreeLiquidityDetails(orgId: number, prcId: number, accountNumber: string, from: string, to: string) {
