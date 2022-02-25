@@ -205,10 +205,14 @@ export class DueDateComponent implements OnInit {
 
   onTopDelayRowClicked(row) {
     this.selectedAccount = { ...row };
+    let drtopdownLabelCollection = document.getElementsByClassName('p-dropdown-label');
+    let dropdownLabel = drtopdownLabelCollection.item(0);
+    dropdownLabel.innerHTML = row.accountNumber + '-' + row.accountName;
     this.waiting = true;
     let start = this.minDate?.toISOString().split('T')[0];
     let end = this.toDate?.toISOString().split('T')[0];
     this.getDetailsData(start, end);
+    this.getData();
   }
   //#endregion Top delay table
 
