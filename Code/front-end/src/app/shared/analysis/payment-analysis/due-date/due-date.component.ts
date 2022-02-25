@@ -51,6 +51,11 @@ export class DueDateComponent implements OnInit {
   criteria: any = {};
   filtersNo: number = 0;
 
+  secondChartDataRecords: any;
+  secondChartData: any;
+  secondChartLabels: any[] = new Array();
+  secondChartOptions: any;
+
   //#region Top delayed table
   topDelayCols: TableColumn[];
   topDelayData: any[] = [];
@@ -221,6 +226,8 @@ export class DueDateComponent implements OnInit {
           if (!this.maxDelay) this.maxDelay = res.data.maxDelay;
           this.data = res.data.dueDateReference.data;
           this.labels = res.data.dueDateReference.labels;
+          this.secondChartDataRecords = res.data.dueDateReference.recordsDelay;
+          this.secondChartLabels = res.data.dueDateReference.secondChartLabels;
           if (!this.baseFromDate) this.baseFromDate = new Date(res.dateRange[0].mindate);
           if (!this.baseToDate) this.baseToDate = new Date(res.dateRange[0].maxappdate);
           if (!this.minDate) this.minDate = new Date(res.dateRange[0].mindate);
@@ -258,6 +265,63 @@ export class DueDateComponent implements OnInit {
           if (this.selectedAccount && this.selectedAccount.accountNumber) {
             this.getDetailsData(start, end);
           }
+
+          this.secondChartOptions = {
+            tooltips: {
+              callbacks: {
+                label: (tooltipItem, data) => {
+                  debugger;
+                  let value = tooltipItem.value;
+                  let point = this.secondChartDataRecords[tooltipItem.index];
+                  let label = point.label;
+                  let accountNumber = point?.accountNumber;
+                  let accountName = point?.accountName;
+                  return label + ' :' + value + '  - ' + accountNumber + '/' + accountName;
+                },
+              },
+            },
+            scales: {
+              yAxes: [{
+                stacked: true,
+                gridLines: {
+                  display: true,
+                  color: "rgba(255,99,132,0.2)"
+                }
+              }],
+              xAxes: [{
+                stacked: true,
+                gridLines: {
+                  display: true,
+                  color: "rgba(255,99,132,0.2)"
+                },
+                ticks: {
+                  minRotation: 40,
+                  maxRotation: 90,
+                  callback: (label, index, values) => {
+                    // debugger;
+                    // let temp = label * this.rangeDays / values.length;
+                    let tempDate = new Date(this.minDate);
+                    tempDate.setDate(tempDate.getDate() + label);
+                    label = tempDate.toLocaleString("de-DE", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    });
+                    return label;
+                  },
+                },
+              }]
+            },
+          };
+          this.secondChartData = {
+            labels: this.labels,
+            datasets: [{
+              label: await this._translateService.get('DueDateAnalysis.secondChartLabel').toPromise(),
+              borderColor: `rgb(100,100,255)`,
+              data: this.secondChartDataRecords,
+              fill: false,
+            }]
+          };
         },
         (er) => {
           this.waiting = false;

@@ -59,16 +59,42 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, mindate, maxappdate, s
   // for max delay filter
   let maxDelay = 0;
 
+  const diff = monthDiff(mindate, maxappdate);
+
+  let res = new Array();
+  let starterMonth = mindate.getMonth() + 1;
+  let starterYear = mindate.getFullYear();
+  for (let index = 0; index <= diff; index++) {
+    const element = {
+      monthName: starterMonth,
+      yearName: starterYear,
+      positive: 0,
+      negative: 0,
+      notPaid: 0,
+    };
+    res.push(element);
+    starterMonth++;
+    if (starterMonth > 12) {
+      starterMonth = 1;
+      starterYear++;
+    }
+  }
+
   let diffData = new Array();
   let firstChartLabels = new Array();
   let recordsCountPerDay = new Array();
+  let recordsDelay = new Array();
+  let secondChartLabels = new Array();
 
   const finalResult = {
     // the data and the labels of the chart
     dueDateReference: {
       data: diffData,
       labels: firstChartLabels,
-    }
+      recordsDelay: recordsDelay,
+      secondChartLabels: secondChartLabels
+    },
+    docDateReference: res,
   };
 
   // for the dropdown to select single account
@@ -93,7 +119,17 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, mindate, maxappdate, s
         const rowindex = getNumberOfDays(mindate, row.applicationDate);
         recordsCountPerDay[rowindex] = recordsCountPerDay[rowindex] ? recordsCountPerDay[rowindex] + 1 : 1;
         diffData[rowindex] = diffData[rowindex] ? diffData[rowindex] + rowDiff : rowDiff;
-
+        recordsDelay.push({
+          x: rowindex,
+          y: rowDiff,
+          accountNumber: row.accountNumber,
+          accountName: row.accountName,
+          label: row.applicationDate.toLocaleDateString("de-DE", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          })
+        });
         firstChartLabels[rowindex] = firstChartLabels[rowindex]
           ? firstChartLabels[rowindex]
           : row.applicationDate.toLocaleDateString("de-DE", {
@@ -116,8 +152,12 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, mindate, maxappdate, s
       if (diffData[index] > maxDelay) maxDelay = diffData[index];
     }
     firstChartLabels = firstChartLabels.filter(Boolean);
+    recordsDelay = recordsDelay.filter(Boolean);
     finalResult.dueDateReference.data = diffData.filter(value => value != null && value != undefined);
     finalResult.dueDateReference.labels = firstChartLabels;
+    finalResult.dueDateReference.secondChartLabels = secondChartLabels;
+    finalResult.dueDateReference.recordsDelay = recordsDelay;
+    finalResult.docDateReference = res;
     finalResult.dueDateRefAccounts = dueDateRefAccounts;
     finalResult.maxDelay = maxDelay;
     cb(finalResult);

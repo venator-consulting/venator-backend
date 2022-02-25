@@ -41,9 +41,12 @@
 </div>
 
 <div class="p-grid">
+
   <div class="p-col-6">
     <div class="card p-text-center">
-      <p-chart #chart type="line" height="450" [data]="basicData" [options]="basicOptions">
+      <!-- <p-chart #chart type="line" height="450" [data]="basicData" [options]="basicOptions">
+      </p-chart> -->
+      <p-chart #chart2 type="scatter" height="350" [data]="secondChartData" [options]="secondChartOptions">
       </p-chart>
     </div>
   </div>
@@ -68,7 +71,8 @@
               tooltipPosition="bottom"></button>
             <!-- Page number -->
             <input pInputText type="number" min="1" class="pageNrInput p-mr-2"
-              (input)="topDelayedpageNrChange($any($event.target).value)" [value]="topDelayPageNr" [placeholder]="topDelayPageNr" />
+              (input)="topDelayedpageNrChange($any($event.target).value)" [value]="topDelayPageNr"
+              [placeholder]="topDelayPageNr" />
             <!-- Go to next Page -->
             <button type="button" [disabled]="topDelayPageNr >= topDelayMaxPageNr" pButton pRipple
               icon="pi pi-angle-right" (click)="topDelayednextPage()" class="p-mr-2"
