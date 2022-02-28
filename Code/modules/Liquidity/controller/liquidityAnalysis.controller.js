@@ -96,7 +96,7 @@ module.exports.getAnalysisMainData = async (req, res) => {
   );
 
   finalResult[2] = new Array();
-
+    // calculate free liquidity
   if (
     finalResult[1] &&
     finalResult[1].creditLines &&
@@ -112,7 +112,7 @@ module.exports.getAnalysisMainData = async (req, res) => {
       finalResult[2][index] = +bankBalance + +creditLine;
     }
   }
-
+  // return final result
   res.status(200).json({
     bankBalances: finalResult[0],
     creditLines: finalResult[1],

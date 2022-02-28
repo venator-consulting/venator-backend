@@ -443,7 +443,7 @@ module.exports.storeDueDateAnalysis = async (orgId, prcId, res) => {
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let query = ` INSERT INTO due_date_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
     documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType, dayDiff) `;
-  //TODO: add the difference between due date and app date in days for the new table
+  //add the difference between due date and app date in days for the new table
   query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
     pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType,
      DATEDIFF(pos.applicationDate, pos.dueDate) AS dayDiff
