@@ -1,25 +1,48 @@
+//#region imports
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const authorization = require("../../../config/authorization.config");
 const analysisCtrl = require("../controller/analysis.controller.server");
+//#endregion imports
 
-router.route("/:orgId/:prcId/amount/:baseBalance").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.amountAnalysis
-);
+//#region Amount analysis 
+router
+  .route("/:orgId/:prcId/amount/:baseBalance")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.amountAnalysis);
 
-router.route("/:orgId/:prcId/amount-calc/:baseBalance").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.amountAnalysisCalc
-);
+router
+  .route("/:orgId/:prcId/amount-calc/:baseBalance")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.amountAnalysisCalc);
 
+router
+  .route("/:orgId/:prcId/amount/details-chart/:accountNumber/:baseBalance")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.amountAnalysisDetailsChart)
+
+router
+  .route("/:orgId/:prcId/amount/details/:accountNumber/:baseBalance")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.amountAnalysisDetails)
+  .put(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.amountBulkUpdate);
+
+router
+  .route("/:orgId/:prcId/amount/details-relevant/:accountNumber")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.amountJustRelevant
+  );
+//#endregion Amount
+
+//#region Creditor
 router.route("/:orgId/:prcId/credtor-calc").get(
   passport.authenticate("jwt", {
     session: false,
@@ -29,256 +52,156 @@ router.route("/:orgId/:prcId/credtor-calc").get(
 );
 
 router
-  .route("/:orgId/:prcId/amount/details-chart/:accountNumber/:baseBalance")
-  .get(
-    passport.authenticate("jwt", {
-      session: false,
-    }),
+  .route("/:orgId/:prcId/credtor")
+  .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
-    analysisCtrl.amountAnalysisDetailsChart
-  )
+    analysisCtrl.creditorAnalysis);
 
 router
-  .route("/:orgId/:prcId/amount/details/:accountNumber/:baseBalance")
-  .get(
-    passport.authenticate("jwt", {
-      session: false,
-    }),
+  .route("/:orgId/:prcId/credtor/details/:accountNumber")
+  .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
-    analysisCtrl.amountAnalysisDetails
-  )
-  .put(
-    passport.authenticate("jwt", {
-      session: false,
-    }),
+    analysisCtrl.creditorAnalysisDetails);
+//#endregion Creditor
+
+// to get details data for account number
+// used in most analysis details interfaces
+router
+  .route("/:orgId/:prcId/details/:accountNumber")
+  .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
-    analysisCtrl.amountBulkUpdate
-  );
+    analysisCtrl.getByAccountNumber);
 
-router.route("/:orgId/:prcId/amount/details-relevant/:accountNumber").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.amountJustRelevant
-);
+//#region Tetxt
+router
+  .route("/:orgId/:prcId/text")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.textAnalysis);
 
-router.route("/:orgId/:prcId/details/:accountNumber").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.getByAccountNumber
-);
+router
+  .route("/:orgId/:prcId/text-index")
+  .get(passport.authenticate("jwt", { session: false }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.textAnalysisIndex);
 
-router.route("/:orgId/:prcId/text").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.textAnalysis
-);
+router.
+  route("/:orgId/:prcId/text-word")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.textAnalysisByWord);
 
-router.route("/:orgId/:prcId/text-index").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.textAnalysisIndex
-);
+router
+  .route("/:orgId/:prcId/text-word/account/:accountNumber")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.getTextAnalysisByWordForAccount);
 
-router.route("/:orgId/:prcId/text-word").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.textAnalysisByWord
-);
+router
+  .route("/:orgId/:prcId/text-word-calc/date-range/:step")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.getTextAnalysisDateRangeOptionsByWord);
 
-router.route("/:orgId/:prcId/text-word/account/:accountNumber").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.getTextAnalysisByWordForAccount
-);
+router
+  .route("/:orgId/:prcId/text-word-calc/:fromDate/:toDate")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.getTextAnalysisDataByWordCalc);
 
-router.route("/:orgId/:prcId/text-word-calc/date-range/:step").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.getTextAnalysisDateRangeOptionsByWord
-);
+router
+  .route("/:orgId/:prcId/text-word-calc/")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.getTextAnalysisDataByWordCalcDefault);
 
-router.route("/:orgId/:prcId/text-word-calc/:fromDate/:toDate").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.getTextAnalysisDataByWordCalc
-);
-
-router.route("/:orgId/:prcId/text-word-calc/").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.getTextAnalysisDataByWordCalcDefault
-);
-
-router.route("/:orgId/:prcId/text-account-calc/").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.getTextAnalysisDataByAccountCalcDefault
-);
+router
+  .route("/:orgId/:prcId/text-account-calc/")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.getTextAnalysisDataByAccountCalcDefault);
 
 
-router.route("/:orgId/:prcId/text-word-indexed").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.textAnalysisByWordIndexed
-);
+router
+  .route("/:orgId/:prcId/text-word-indexed")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.textAnalysisByWordIndexed);
 
-router.route("/:orgId/:prcId/text/details/:accountNumber/relevant").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.textJustRelevant
-);
+router
+  .route("/:orgId/:prcId/text/details/:accountNumber/relevant")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.textJustRelevant);
 
-router.route("/:orgId/:prcId/text-word/details/:key").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.textAnalysisWordDetails
-);
+router
+  .route("/:orgId/:prcId/text-word/details/:key")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.textAnalysisWordDetails);
 
 router
   .route("/:orgId/:prcId/text/details/:accountNumber")
-  .get(
-    passport.authenticate("jwt", {
-      session: false,
-    }),
+  .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
-    analysisCtrl.textAnalysisDetails
-  )
-  .put(
-    passport.authenticate("jwt", {
-      session: false,
-    }),
+    analysisCtrl.textAnalysisDetails)
+  .put(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
-    analysisCtrl.textBulkUpdate
-  );
+    analysisCtrl.textBulkUpdate);
+//#endregion Text
 
-
+//#region Payment
 router
   .route("/:orgId/:prcId/payment/dateFilter/:toDate")
-  .get(
-    passport.authenticate("jwt", {
-      session: false,
-    }),
+  .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
-    analysisCtrl.paymentAnalysisDateFilter
-  );
+    analysisCtrl.paymentAnalysisDateFilter);
 
 
 router
   .route("/:orgId/:prcId/payment/details/:accountNumber")
   .get(
-    passport.authenticate("jwt", {
-      session: false,
-    }),
+    passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
-    analysisCtrl.paymentAnalysisDetails
-  )
-  .put(
-    passport.authenticate("jwt", {
-      session: false,
-    }),
+    analysisCtrl.paymentAnalysisDetails)
+  .put(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
-    analysisCtrl.paymentBulkUpdate
-  );
+    analysisCtrl.paymentBulkUpdate);
 
-router.route("/:orgId/:prcId/payment/details-relevant/:accountNumber").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.paymentJustRelevant
-);
+router
+  .route("/:orgId/:prcId/payment/details-relevant/:accountNumber")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.paymentJustRelevant);
 
-router.route("/:orgId/:prcId/payment/:fromDate/:toDate").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.paymentAnalysis
-);
+router
+  .route("/:orgId/:prcId/payment/:fromDate/:toDate")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.paymentAnalysis);
+//#endregion Payment
 
-router.route("/:orgId/:prcId/duedate/top-delayed").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.topDelayedAccounts
-);
+//#region Due date
+// get top delayed table data (with pagination without filtering nor sorting) 
+router
+  .route("/:orgId/:prcId/duedate/top-delayed")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.topDelayedAccounts);
 
-router.route("/:orgId/:prcId/duedate/details/:accountNumber").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.dueDateDetailsAnalysis
-);
+// to get specific account data for the bottom table
+router
+  .route("/:orgId/:prcId/duedate/details/:accountNumber/:fromDate?/:toDate?/:maxDelay?")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.dueDateDetailsAnalysis);
 
-router.route("/:orgId/:prcId/duedate/details/:accountNumber/:fromDate/:toDate/:maxDelay").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.dueDateDetailsAnalysis
-);
-
-router.route("/:orgId/:prcId/duedate/:fromDate/:toDate").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.dueDateAnalysis
-);
-
-router.route("/:orgId/:prcId/duedate").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.dueDateAnalysis
-);
-
-
-
-router.route("/:orgId/:prcId/credtor").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.creditorAnalysis
-);
-
-router.route("/:orgId/:prcId/credtor/details/:accountNumber").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.creditorAnalysisDetails
-);
-
+//get acatter chart data
+router
+  .route("/:orgId/:prcId/duedate/:fromDate?/:toDate?")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.dueDateAnalysis);
+//#endregion Due Date
 
 module.exports = router;

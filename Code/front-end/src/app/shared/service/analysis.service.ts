@@ -15,6 +15,7 @@ export class AnalysisService {
 
   constructor(private _http: HttpClient) { }
 
+  //#region Amount
   getAmountAnalysis(orgId: number, prcId: number, baseBalance: number): Observable<AmountAnalysis[]> {
     return this._http.get<AmountAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/amount-calc/' + baseBalance);
   }
@@ -31,6 +32,17 @@ export class AnalysisService {
     return this._http.get<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details-relevant/' + accountNumber);
   }
 
+  getAmountAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string, criteria: any): Observable<{ count: number, rows: AmountAnalysisDetails[] }> {
+    return this._http.get<{ count: number, rows: AmountAnalysisDetails[] }>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber, { params: criteria });
+  }
+
+  setRelevantAmountAnalysis(orgId: number, prcId: number, accountNumber: string, baseBalance: number, records: AmountAnalysisDetails[]): Observable<AmountAnalysisDetails[]> {
+    return this._http.put<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber + '/' + baseBalance, records);
+  }
+  //#endregion Amount
+
+
+  //#region Text
   getTextAnalysis(orgId: number, prcId: number): Observable<TextAnalysis[]> {
     return this._http.get<TextAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/text');
   }
@@ -83,18 +95,13 @@ export class AnalysisService {
     return this._http.get<{ count: number, rows: TextAnalysisDetails[] }>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber, { params: criteria });
   }
 
-  getAmountAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string, criteria: any): Observable<{ count: number, rows: AmountAnalysisDetails[] }> {
-    return this._http.get<{ count: number, rows: AmountAnalysisDetails[] }>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber, { params: criteria });
-  }
-
   setRelevantTextAnalysis(orgId: number, prcId: number, accountNumber: string, records: TextAnalysisDetails[]): Observable<TextAnalysisDetails[]> {
     return this._http.put<TextAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/text/details/' + accountNumber, records);
   }
+  //#endregion Text
 
-  setRelevantAmountAnalysis(orgId: number, prcId: number, accountNumber: string, baseBalance: number, records: AmountAnalysisDetails[]): Observable<AmountAnalysisDetails[]> {
-    return this._http.put<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber + '/' + baseBalance, records);
-  }
 
+  //#region Payment
   setRelevantPaymentAnalysis(orgId: number, prcId: number, accountNumber: string, records: PaymentAnalysisDetailsData[]): Observable<PaymentAnalysisDetailsData[]> {
     return this._http.put<PaymentAnalysisDetailsData[]>(this._thisURL + orgId + '/' + prcId + '/payment/details/' + accountNumber, records);
   }
@@ -135,7 +142,10 @@ export class AnalysisService {
   getPaymentAnalysisDetailsByAccount(orgId: number, prcId: number, accountNumber: string, criteria: any): Observable<{ count: number, rows: PaymentAnalysisDetailsData[] }> {
     return this._http.get<{ count: number, rows: PaymentAnalysisDetailsData[] }>(this._thisURL + orgId + '/' + prcId + '/details/' + accountNumber, { params: criteria });
   }
+  //#endregion Payment
 
+
+  //#region Due date 
   getDueDateAnalysis(orgId: number, prcId: number, start: string, end: string, params: any): Observable<any> {
     return start?.trim() && end.trim() ? this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate/' + start + '/' + end, { params }) :
       this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/duedate', { params });
@@ -148,8 +158,10 @@ export class AnalysisService {
   getDueDateTopDelayedAccounts(orgId: number, prcId: number, limit: number, offset: number) {
     return this._http.get<any>(`${this._thisURL}${orgId}/${prcId}/duedate/top-delayed?limit=${limit}&offset=${offset}`);
   }
+  //#endregion Due date
 
 
+  //#region  Creditor
   getCreditorAnalysis(orgId: number, prcId: number, criteria: any): Observable<any> {
     return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor', { params: criteria });
   }
@@ -161,5 +173,6 @@ export class AnalysisService {
   getCreditorAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<any> {
     return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor/details/' + accountNumber);
   }
+  //#endregion Creditor
 
 }

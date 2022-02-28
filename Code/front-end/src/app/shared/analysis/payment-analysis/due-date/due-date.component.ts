@@ -1,3 +1,4 @@
+//#region imports
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
@@ -5,6 +6,7 @@ import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import * as FileSaver from 'file-saver';
+//#endregion imports
 
 @Component({
   selector: 'app-due-date',
@@ -15,23 +17,36 @@ export class DueDateComponent implements OnInit {
   @Input('details') details: boolean = false;
 
   //#region Data members init
+  /**
+   * @deprecated we now display procedure name in navbar
+   */
   procedureName: string;
   selectedProcedure: number;
   selectedOrganisation: number;
+  // for progress
   waiting: boolean;
+  //#region First chart 
+  /**
+   * @deprecated this chart deleted in this release
+   */
   basicOptions: any;
+  /**
+   * @deprecated this chart deleted in this release
+   */
   basicData: any;
-  labels: any[] = new Array();
-  docDateOptions: any;
-  docData: any[] = new Array();
-
+  /**
+  * @deprecated this chart deleted in this release
+  */
   data: any[] = new Array();
-  @ViewChild('chart') chart: any;
-  detailsCols: TableColumn[];
-  delayData: any;
-  detailsData: any[] = new Array();
+  // @ViewChild('chart') chart: any;
+  //#endregion First chart 
+
+  // for beadcrumb
   items: MenuItem[];
+  // for beadcrumb
   home: MenuItem;
+
+  //#region base filters
   // for slider
   minDate: Date;
   // for slider
@@ -44,17 +59,33 @@ export class DueDateComponent implements OnInit {
   baseFromDate: Date;
   // for slider
   baseToDate: Date;
-
+  // for account filter
+  delayData: any;
+  // for account filter
   selectedAccount: { accountNumber: string; accountName: string } = { accountNumber: null, accountName: null };
+  // for max delay filter
   maxDelay: number;
+  //#endregion base filters
+
+  //#region details table for a selected account
+  detailsCols: TableColumn[];
+  // a temp data for the filters in the selected account table in the bottom
   detailsDataTemp: any;
   criteria: any = {};
   filtersNo: number = 0;
+  detailsData: any[] = new Array();
+  //#endregion details table for a selected account
 
+  //#region scatter chart
   secondChartDataRecords: any;
   secondChartData: any;
+  /**
+  * @deprecated we use this.labels instead
+  */
   secondChartLabels: any[] = new Array();
+  labels: any[] = new Array();
   secondChartOptions: any;
+  //#endregion scatter chart
 
   //#region Top delayed table
   topDelayCols: TableColumn[];
@@ -70,13 +101,10 @@ export class DueDateComponent implements OnInit {
   //#endregion Top delayed table
   //#endregion Data members init
 
-  constructor(
-    public _translateService: TranslateService,
-    private _analysisService: AnalysisService,
-    private _router: Router,
-    private _route: ActivatedRoute
-  ) { }
+  constructor(public _translateService: TranslateService, private _analysisService: AnalysisService,
+    private _router: Router, private _route: ActivatedRoute) { }
 
+  //#region init component
   ngOnInit(): void {
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
@@ -148,6 +176,7 @@ export class DueDateComponent implements OnInit {
     this.getTopDelayedAccounts();
 
   } // end of ng on init
+  //#endregion init
 
   //#region Top delay table
   getTopDelayedAccounts() {
@@ -231,7 +260,7 @@ export class DueDateComponent implements OnInit {
           this.data = res.data.dueDateReference.data;
           this.labels = res.data.dueDateReference.labels;
           this.secondChartDataRecords = res.data.dueDateReference.recordsDelay;
-          this.secondChartLabels = res.data.dueDateReference.secondChartLabels;
+          // this.secondChartLabels = res.data.dueDateReference.secondChartLabels;
           if (!this.baseFromDate) this.baseFromDate = new Date(res.dateRange[0].mindate);
           if (!this.baseToDate) this.baseToDate = new Date(res.dateRange[0].maxappdate);
           if (!this.minDate) this.minDate = new Date(res.dateRange[0].mindate);
@@ -274,7 +303,6 @@ export class DueDateComponent implements OnInit {
             tooltips: {
               callbacks: {
                 label: (tooltipItem, data) => {
-                  debugger;
                   let value = tooltipItem.value;
                   let point = this.secondChartDataRecords[tooltipItem.index];
                   let label = point.label;
@@ -302,7 +330,6 @@ export class DueDateComponent implements OnInit {
                   minRotation: 40,
                   maxRotation: 90,
                   callback: (label, index, values) => {
-                    // debugger;
                     // let temp = label * this.rangeDays / values.length;
                     let tempDate = new Date(this.minDate);
                     tempDate.setDate(tempDate.getDate() + label);
@@ -358,6 +385,10 @@ export class DueDateComponent implements OnInit {
     this._router.navigate(['/dashboard/analysis/payment/']);
   }
 
+  /**
+   * @deprecated there is no details in this release
+   * @param row 
+   */
   goToDetails(row) {
     this._router.navigate([
       '/dashboard/analysis/due-date/deails/' + row.accountNumber,

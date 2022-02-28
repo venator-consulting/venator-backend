@@ -436,6 +436,13 @@ module.exports.storePaymentAnalysis = async (orgId, prcId, res) => {
   return result;
 };
 
+/**
+ * 
+ * @param {number} orgId selected organization ID
+ * @param {number} prcId selected Procedure ID
+ * @param {HttpResponse} res for write the progress as SSE
+ * @returns 
+ */
 module.exports.storeDueDateAnalysis = async (orgId, prcId, res) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
