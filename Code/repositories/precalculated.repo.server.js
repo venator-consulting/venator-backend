@@ -1,3 +1,4 @@
+//#region imports an definitions
 const connection = require("../config/mysql.config");
 const Procedure = require("../models/procedures.model.server");
 const { Op, fn, col, QueryTypes } = require("sequelize");
@@ -9,6 +10,8 @@ const keywords = require("../models/analysis/text.analysis.keywords");
 const errors = require('../models/enums/errors');
 
 const sequelize = Sequelize.getSequelize();
+//#endregion imports
+
 
 //#region  Date Range
 getDateRange = async (orgId, prcId) => {
@@ -92,6 +95,7 @@ calculateDateRanges = (mindate, maxdate, step) => {
   return ranges;
 };
 //#endregion Date Range
+
 
 //#region delete previous data
 module.exports.deletePrevDataTextWord = async (orgId, prcId) => {
@@ -649,6 +653,7 @@ module.exports.storeEmailAnalysisWord = async (orgId, prcId, res) => {
   return result;
 };
 //#endregion store data
+
 
 //#region  get data
 module.exports.getrDateRangeOptions = async (orgId, prcId, step) => {
