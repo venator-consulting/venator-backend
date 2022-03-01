@@ -771,12 +771,24 @@ module.exports.getCreditorAnalysis = async (orgId, prcId, criteria) => {
                 WHERE procedureId = :procedureId `
   if (criteria.accountNumber) {
     query += `and p.accountNumber like '%${criteria.accountNumber}%' `;
+    delete criteria.accountNumber;
   }
   if (criteria.accountName) {
     query += `and p.accountName like '%${criteria.accountName}%' `;
+    delete criteria.accountName;
+  }
+
+  if (criteria.priority) {
+    query += `and p.priority = ${criteria.priority} `;
+    delete criteria.priority;
   }
   query += ` order by ${orderBy} ${sortOrder} `;
   query += ` LIMIT ${limit} offset ${offset}`;
+
+  delete criteria.limit;
+  delete criteria.offset;
+  delete criteria.orderBy;
+  delete criteria.sortOrder;
 
   let result = await sequelize.query(query, {
     replacements: {

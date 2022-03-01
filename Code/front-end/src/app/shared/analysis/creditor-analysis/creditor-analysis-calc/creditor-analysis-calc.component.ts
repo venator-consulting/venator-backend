@@ -5,6 +5,9 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
 
+/**
+ * @deprecated we now use CreditorAnalysisComponent instead
+ */
 @Component({
   selector: 'app-creditor-analysis-calc',
   templateUrl: './creditor-analysis-calc.component.html',
@@ -103,7 +106,7 @@ export class CreditorAnalysisCalcComponent implements OnInit {
     }
     this.filtersNo = Object.keys(this.criteria).length - 4;
     this._analysisService
-      .getCreditorAnalysisCalc(
+      .getCreditorAnalysis(
         this.selectedOrganisation,
         this.selectedProcedure,
         this.criteria

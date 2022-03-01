@@ -2,7 +2,6 @@
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
 <div class="p-grid">
   <div class="p-col-12">
-    <!-- <h2 class="p-text-center">{{ procedureName }}</h2> -->
     <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
   </div>
 </div>
@@ -67,6 +66,20 @@
         <input pInputText type="text" [(ngModel)]="criteria['accountName']" [style]="{ width: '90%' }"
           (input)="filterChange($any($event.target).value, 'accountName')" class="filterInputCss" />
       </th>
+      <th></th>
+      <th></th>
+      <th>
+        <p-dropdown [options]="priorities" [(ngModel)]="criteria['priority']" optionValue="value" appendTo="body"
+          placeholder="{{'CreditorsAnalysis.selectPriority' | translate}}" optionLabel="label" [showClear]="true"
+          [filter]="true" filterBy="label" (onChange)="filterChange($event.value, 'priority')" [style]="{width:'100%'}">
+          <ng-template pTemplate="item" let-item>
+            {{'CreditorsAnalysis.'+item.label | translate}}
+          </ng-template>
+          <ng-template pTemplate="selectedItem" let-item>
+            {{'CreditorsAnalysis.'+item.label | translate}}
+          </ng-template>
+        </p-dropdown>
+      </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-row let-columns="columns">
@@ -75,14 +88,46 @@
         <span *ngIf="col.field == 'totalBalance'">
           {{ row.totalBalance | currency: "EUR":"" }}
         </span>
-        <span *ngIf="col.field != 'totalBalance'" pTooltip="{{ row[col.field] }}">
+        <span *ngIf="col.field != 'totalBalance' && col.field != 'priority'" pTooltip="{{ row[col.field] }}">
           {{ row[col.field] }}
         </span>
+        <div *ngIf="!row.isEditable && col.field == 'priority'">
+          <span *ngIf="row.priority">
+            {{'CreditorsAnalysis.'+displayPriority[row.priority] | translate}}
+          </span>
+        </div>
+        <div *ngIf="row.isEditable && col.field == 'priority'">
+          <p-dropdown [options]="priorities" [(ngModel)]="row.priority" optionValue="value" appendTo="body"
+            placeholder="{{'Account_Type.accountTypeNewName' | translate}}" optionLabel="label" [showClear]="true"
+            [filter]="true" filterBy="label" (onChange)="priorityChangedHandler($event, row)" [style]="{width:'300px'}">
+            <ng-template pTemplate="item" let-item>
+              {{'CreditorsAnalysis.'+item.label | translate}}
+            </ng-template>
+            <ng-template pTemplate="selectedItem" let-item>
+              {{'CreditorsAnalysis.'+item.label | translate}}
+            </ng-template>
+          </p-dropdown>
+        </div>
       </td>
       <td>
+        <button type="button" pButton pRipple icon="pi pi-pencil" (click)="editRow(row)"
+          class="p-button-rounded p-button-warning" *ngIf="!row.isEditable"
+          pTooltip="{{'Account_Type.Edit' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+        <button type="button" pButton pRipple icon="pi pi-save" (click)="updatePriority(row)"
+          class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+          pTooltip="{{'Account_Type.Save' | translate}}" tooltipPosition="bottom"></button> &nbsp;
+        <button type="button" pButton pRipple icon="pi pi-times" (click)="cancel(row)"
+          class="p-button-rounded p-button-warning" *ngIf="row.isEditable"
+          pTooltip="{{'Account_Type.Cancel' | translate}}" tooltipPosition="bottom"></button>
+        <button type="button" pButton pRipple icon="pi pi-trash" (click)="reset(row)"
+          class="p-button-rounded p-button-warning" *ngIf="!row.isEditable && row.priority"
+          pTooltip="{{'general_actions.delete' | translate}}" tooltipPosition="bottom"></button> &nbsp;
         <button type="button" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-warning"
           (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom"></button>
       </td>
     </tr>
   </ng-template>
 </p-table>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

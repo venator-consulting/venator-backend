@@ -43,19 +43,15 @@ router
 //#endregion Amount
 
 //#region Creditor
-router.route("/:orgId/:prcId/credtor-calc").get(
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  authorization.canDisplayAnalysis(),
-  analysisCtrl.creditorAnalysisCalc
-);
-
 router
   .route("/:orgId/:prcId/credtor")
   .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
-    analysisCtrl.creditorAnalysis);
+    analysisCtrl.creditorAnalysisCalc)
+  // update priority
+  .put(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.updateCreditorPriority);
 
 router
   .route("/:orgId/:prcId/credtor/details/:accountNumber")

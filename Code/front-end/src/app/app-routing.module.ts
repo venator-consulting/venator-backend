@@ -289,7 +289,7 @@ const routes: Routes = [
       },
       {
         path: 'analysis/creditor',
-        component: CreditorAnalysisCalcComponent,
+        component: CreditorAnalysisComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
       },

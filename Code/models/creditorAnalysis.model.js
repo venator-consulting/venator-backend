@@ -30,6 +30,12 @@ module.exports.getCreditor = function (tableName = 'creditor_analysis_') {
         },
         totalBalance: {
             type: DataTypes.DECIMAL(13, 2),
+        },
+        priority: {
+            // 1 is high priority bigger means lower
+            // we can make it enum, but we will set it as tinyint if we want to extends the levels
+            // type: DataTypes.ENUM(1, 2, 3),
+            type: DataTypes.TINYINT(1)
         }
     }, {
         tableName: tableName

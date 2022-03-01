@@ -3,7 +3,16 @@ const { Op, fn, col, QueryTypes } = require("sequelize");
 const Sequelize = require("../config/sequelize.config");
 
 const sequelize = Sequelize.getSequelize();
+const CreditorModel = require('../models/creditorAnalysis.model');
 
+/**
+ * @deprecated we now use getCreditorAnalysis in precalculate repo
+ * @param {*} orgId 
+ * @param {*} prcId 
+ * @param {*} keys 
+ * @param {*} criteria 
+ * @returns 
+ */
 module.exports.creditorAnalysis = async (orgId, prcId, keys, criteria) => {
   let limit = criteria.limit ? criteria.limit : 25;
   let offset = criteria.offset ? criteria.offset : 0;
@@ -257,3 +266,11 @@ module.exports.creditorAnalysisDetails = async (orgId, prcId, keys, accountNumbe
     email: result[3]
   };
 };
+
+
+module.exports.updateCreditorPriority = async function (orgId, prcId, row) {
+  const { id } = row;
+  CreditorModel
+    .getCreditor('creditor_analysis_' + orgId)
+    .update(row, { where: { id } });
+}

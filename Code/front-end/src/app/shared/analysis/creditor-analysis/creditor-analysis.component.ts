@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from '../../service/analysis.service';
 import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from '../../model/tableColumn';
@@ -11,15 +11,22 @@ import { TableColumn } from '../../model/tableColumn';
   styleUrls: ['./creditor-analysis.component.sass'],
 })
 export class CreditorAnalysisComponent implements OnInit {
+  //#region init vars
   cols: TableColumn[];
-  procedureName: string;
   selectedProcedure: number;
   selectedOrganisation: number;
   waiting: any;
   data: any;
   accountNumber: string;
+
+  // for breadcrumb
   items: MenuItem[];
   home: MenuItem;
+
+  originalVal: any;
+
+  //#region Filters
+  priorities: any;
   criteria: any = {
     limit: 25,
     offset: 0,
@@ -33,18 +40,21 @@ export class CreditorAnalysisComponent implements OnInit {
   filtersNo: number = 0;
   totalCount: any;
   displayedDataCount: any;
+  displayPriority: string[];
+  //#endregion filters
+  //#endregion init vars
 
   constructor(
     public _translateService: TranslateService,
     private _analysisService: AnalysisService,
     private _messageService: MessageService,
-    private _router: Router
-  ) {}
+    private _router: Router,
+    private _confirmationService: ConfirmationService
+  ) { }
 
   ngOnInit(): void {
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
-    this.procedureName = localStorage.getItem('currentProcedureName');
 
     this._translateService.get('CreditorsAnalysis').subscribe((elem) => {
       this.items = [
@@ -57,35 +67,24 @@ export class CreditorAnalysisComponent implements OnInit {
       };
 
       this.cols = [
-        {
-          header: elem.accountNumber,
-          field: 'accountNumber',
-          align: 'left',
-        },
-        {
-          header: elem.accountName,
-          field: 'accountName',
-          align: 'left',
-        },
-        {
-          header: elem.count,
-          field: 'totlaCount',
-          align: 'center',
-        },
-        {
-          header: elem.sum,
-          field: 'totalBalance',
-          align: 'right',
-        },
+        { header: elem.accountNumber, field: 'accountNumber', align: 'left', },
+        { header: elem.accountName, field: 'accountName', align: 'left', },
+        { header: elem.count, field: 'totlaCount', align: 'center', },
+        { header: elem.sum, field: 'totalBalance', align: 'right', },
+        { header: elem.priority, field: 'priority', align: 'center', },
       ];
     });
 
-    // this.getData();
-  } // end of ng o0n init
+    // to display priority translated in the table when editable is disabled
+    this.displayPriority = ['', 'high', 'medium', 'low'];
+    this.priorities = [
+      { label: 'selectPriority', value: null },
+      { label: 'high', value: 1 },
+      { label: 'medium', value: 2 },
+      { label: 'low', value: 3 },
+    ];
 
-  filterChange(query, colName): void {
-    this.getData();
-  }
+  } // end of ng o0n init
 
   goToDetails(row) {
     this._router.navigate([
@@ -122,9 +121,82 @@ export class CreditorAnalysisComponent implements OnInit {
       );
   }
 
+  //#region update priority
+  editRow(row) {
+    this.data.filter(row => row.isEditable).map(r => { r.isEditable = false; return r });
+    row.isEditable = true;
+    this.originalVal = row.priority;
+  }
+
+  cancel(row) {
+    row.priority = this.originalVal;
+    row.isEditable = false;
+  }
+
+  priorityChangedHandler(e, row) {
+    row.priority = e.value;
+  }
+
+
+  async reset(row) {
+    this._confirmationService.confirm({
+      message: await this._translateService.get('confirm_messages.body_delete').toPromise(),
+      header: await this._translateService.get('confirm_messages.delete').toPromise(),
+      icon: 'pi pi-info-circle',
+      acceptLabel: await this._translateService.get('confirm_messages.yes').toPromise(),
+      rejectLabel: await this._translateService.get('confirm_messages.cancel').toPromise(),
+      accept: () => {
+        row.priority = null;
+        this.updatePriority(row);
+      },
+      reject: async (type) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            this._messageService.add({
+              severity: 'info',
+              summary: await this._translateService.get('general_messages.canceled').toPromise(),
+              // detail: 'Action cancelled'
+            });
+            break;
+          case ConfirmEventType.CANCEL:
+            this._messageService.add({
+              severity: 'info',
+              summary: await this._translateService.get('general_messages.canceled').toPromise(),
+              // detail: 'Action cancelled' 
+            });
+            break;
+        }
+      }
+    });
+  }
+
+  updatePriority(row) {
+    this.waiting = true;
+    this._analysisService
+      .updateCreditorPriority(this.selectedOrganisation, this.selectedProcedure, row)
+      .subscribe(res => {
+        row.isEditable = false;
+        this._messageService.add({
+          severity: 'success',
+          detail: 'Updated Successfully!'
+        });
+        this.waiting = false;
+      }, er => this.waiting = false);
+  }
+  //#endregion update priority
+
+
+
+  //#region pagination and filter
+  filterChange(query, colName): void {
+    this.pageNr = 1;
+    this.criteria.offset = 0;
+    this.getData();
+  }
+
   sort(event) {
     // debugger;
-    this.criteria.orderBy = event.sortField? event.sortField : 'accountNumber';
+    this.criteria.orderBy = event.sortField ? event.sortField : 'accountNumber';
     this.criteria.sortOrder = event.sortOrder;
     this.pageNr = 1;
     this.criteria.offset = 0;
@@ -180,4 +252,7 @@ export class CreditorAnalysisComponent implements OnInit {
     this.pageNr = 1;
     this.getData();
   }
+  //#endregion pagination and filter
+
+
 }

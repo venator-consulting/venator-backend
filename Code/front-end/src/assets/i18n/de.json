@@ -503,6 +503,11 @@
     "maxDelay": "Max. Verspätung"
   },
   "CreditorsAnalysis": {
+    "priority": "Priority",
+    "selectPriority": "Select Priority",
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low",
     "label": "Kreditorenanalyse",
     "data": " Daten",
     "accountNumber": "Kontonummer",

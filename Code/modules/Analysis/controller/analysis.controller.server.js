@@ -426,7 +426,10 @@ module.exports.topDelayedAccounts = async (req, res) => {
 
 
 //#region Creditor analysis
-module.exports.creditorAnalysis = async (req, res) => {
+/**
+ * @deprecated we now use precalculated
+ */
+module.exports.creditorAnalysis = async function (req, res) {
   const criteria = req.query;
   let fileKeywords = await nlpHelper.getsynonyms(keywords);
   const result = await criteorAnalysisRepo.creditorAnalysis(
@@ -459,4 +462,10 @@ module.exports.creditorAnalysisDetails = async (req, res) => {
   res.status(200).json(result);
 };
 
+module.exports.updateCreditorPriority = async function (req, res) {
+  const { orgId, prcId } = req.params;
+  const row = req.body;
+  const result = await criteorAnalysisRepo.updateCreditorPriority(orgId, prcId, row);
+  res.status(200).json(result);
+}
 //#endregion creditor analysis

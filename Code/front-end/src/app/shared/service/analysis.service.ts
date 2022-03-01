@@ -166,12 +166,12 @@ export class AnalysisService {
     return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor', { params: criteria });
   }
 
-  getCreditorAnalysisCalc(orgId: number, prcId: number, criteria: any): Observable<any> {
-    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor-calc', { params: criteria });
-  }
-
   getCreditorAnalysisDetails(orgId: number, prcId: number, accountNumber: string): Observable<any> {
     return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor/details/' + accountNumber);
+  }
+
+  updateCreditorPriority(orgId: number, prcId: number, row: any): Observable<any> {
+    return this._http.put<any>(this._thisURL + orgId + '/' + prcId + '/credtor', row);
   }
   //#endregion Creditor
 
