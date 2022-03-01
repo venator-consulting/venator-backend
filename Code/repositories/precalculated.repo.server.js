@@ -411,7 +411,7 @@ module.exports.storePaymentAnalysis = async (orgId, prcId, res) => {
   let query = ` INSERT INTO payment_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
     documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType) `;
 
-  query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
+  query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDateNew as dueDate,
     pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType
     FROM posting_${orgId} pos
     WHERE
@@ -455,20 +455,20 @@ module.exports.storeDueDateAnalysis = async (orgId, prcId, res) => {
   let query = ` INSERT INTO due_date_analysis_${orgId} (procedureId, accountNumber, accountName, accountType, 
     documentDate, dueDate, applicationDate, balance, documentTypeNewName, documentType, dayDiff) `;
   //add the difference between due date and app date in days for the new table
-  query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
+  query += `SELECT pos.procedureId, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDateNew as dueDate,
     pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType,
-     DATEDIFF(pos.applicationDate, pos.dueDate) AS dayDiff
+     DATEDIFF(pos.applicationDate, pos.dueDateNew) AS dayDiff
     FROM posting_${orgId} pos
     WHERE
       pos.procedureId = ${prcId}
       AND UPPER(pos.accountType) = 'K'
       AND pos.accountNumber is not NULL
-      AND pos.dueDate is not NULL 
+      AND pos.dueDateNew is not NULL 
       AND pos.applicationDate is not NULL 
       AND (year(pos.documentDate) <> year(pos.applicationDate) OR 
           (year(pos.documentDate) = year(pos.applicationDate) AND month(pos.documentDate) <> month(pos.applicationDate)))
       AND (UPPER(pos.documentTypeNewName) = 'RECHNUNG')
-      ORDER BY pos.dueDate`;
+      ORDER BY pos.dueDateNew`;
   let result;
   let progressPromise = FakProgress.init(res, 0);
   try {
