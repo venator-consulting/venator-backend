@@ -37,6 +37,7 @@ export class dataTableColumns {
     //result.push(new dataTableColumns("identificationNumber", await translateService.get("DataTableColumns.identificationNumber").toPromise()));
     result.push(new dataTableColumns("executionDate", await translateService.get("DataTableColumns.executionDate").toPromise()));
     result.push(new dataTableColumns("dueDate", await translateService.get("DataTableColumns.dueDate").toPromise()));
+    result.push(new dataTableColumns("dueDateNew", await translateService.get("DataTableColumns.dueDateNew").toPromise()));
     result.push(new dataTableColumns("ledgerId", await translateService.get("DataTableColumns.ledgerId").toPromise()));
     result.push(new dataTableColumns("assignment", await translateService.get("DataTableColumns.assignment").toPromise()));
     result.push(new dataTableColumns("reference", await translateService.get("DataTableColumns.reference").toPromise()));

@@ -304,6 +304,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
 
                 const companyCode = row[Standardtemplate.companyCode] ? row[Standardtemplate.companyCode]?.trim() : null;
                 const accountType = row[Standardtemplate.accountType] ? row[Standardtemplate.accountType]?.trim() : null;
+                //#region  Accounts
                 const contraAccountType = row[Standardtemplate.contraAccountType] ? row[Standardtemplate.contraAccountType]?.trim() : null;
                 let accountNumber = null;
                 let accountName = row[Standardtemplate.accountName] ? row[Standardtemplate.accountName]?.trim() : null;
@@ -458,6 +459,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                         contraAccountCreditorName = temp.length > 0 ? temp[0].accountName?.trim() : null;
                     }
                 }
+                //#endregion Accounts
 
 
                 let recordNumber = row[Standardtemplate.recordNumber]?.trim();
@@ -653,7 +655,7 @@ module.exports.readCsvStream = async function (filePath, managerId, procedureId,
                     contraAccountDebtorNo: contraAccountDebtorNo,
                     contraAccountDebtorName: contraAccountDebtorName,
                     dueDate: chrono.de.parseDate(row[Standardtemplate.dueDate]),
-                    dueDateNew: chrono.de.parseDate(row[Standardtemplate.dueDateNew]),
+                    dueDateNew: chrono.de.parseDate(row[Standardtemplate.dueDate]),
                     textHeader: row[Standardtemplate.textHeader]?.trim(),
                     accountName: accountName,
                     procedureId: procedureId,

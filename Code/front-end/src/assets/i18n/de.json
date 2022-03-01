@@ -550,6 +550,7 @@
     "identificationNumber": "IdentificationNumber",
     "executionDate": "Leistungsdatum",
     "dueDate": "Faelligkeitsdatum",
+    "dueDateNew": "Faelligkeitsdatum angepasst",
     "assignment": "Zuordnung",
     "reference": "Referenz",
     "documentType": "Belegart",

@@ -562,6 +562,7 @@
     "identificationNumber": "Identificationnumber",
     "executionDate": "Executiondate",
     "dueDate": "Duedate",
+    "dueDateNew": "DueDateNew",
     "assignment": "Assignment",
     "reference": "Reference",
     "documentType": "Documenttype",
