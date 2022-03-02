@@ -8,6 +8,7 @@ const httpStatus = require("../models/enums/httpStatus");
 const DATE_RANGE = require("../models/enums/date.ranges");
 const keywords = require("../models/analysis/text.analysis.keywords");
 const errors = require('../models/enums/errors');
+const { errorHandler } = require("../helpers/error.handler.server");
 
 const sequelize = Sequelize.getSequelize();
 //#endregion imports
@@ -222,6 +223,7 @@ storeDataByWord = async (orgId, prcId, keywords, dateRanges, step, res) => {
 
       c.end();
     } catch (error) {
+      errorHandler("Error", error);
       throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
     }
     //#endregion insert data
@@ -294,6 +296,7 @@ storeDataByAccount = async (orgId, prcId, keys, dateRanges, step, res) => {
       where: { id: prcId, },
     });
   } catch (err) {
+    errorHandler("Error", err);
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
   FakProgress.stop();
@@ -329,6 +332,7 @@ module.exports.storeAmountData = async (orgId, prcId, res) => {
     res.write('event:' + 'progress\n');
     res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
   } catch (err) {
+    errorHandler("Error", err);
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
   return result;
@@ -435,6 +439,7 @@ module.exports.storePaymentAnalysis = async (orgId, prcId, res) => {
     res.write('event:' + 'progress\n');
     res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
   } catch (error) {
+    errorHandler("Error", error);
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
   return result;
@@ -481,6 +486,7 @@ module.exports.storeDueDateAnalysis = async (orgId, prcId, res) => {
     res.write('event:' + 'progress\n');
     res.write('data:' + JSON.stringify({ progress: 100 }) + '\n\n');
   } catch (error) {
+    errorHandler("Error", error);
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
   return result;
@@ -527,13 +533,14 @@ module.exports.storeCreditorAnalysis = async (orgId, prcId, res) => {
   query += "GROUP BY p.accountNumber , p.accountName ";
   let result;
   try {
-    result = await connection.getConnection().execute(query);
     await Procedure.getProcedures().update({ credit: true }, {
       where: {
         id: prcId,
       },
     });
+    result = await connection.getConnection().execute(query);
   } catch (error) {
+    errorHandler("Error", error);
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
   FakProgress.stop();
@@ -579,6 +586,7 @@ module.exports.storeEmailAnalysisSender = async (orgId, prcId, res) => {
       },
     });
   } catch (error) {
+    errorHandler("Error", error);
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
   FakProgress.stop();
@@ -643,6 +651,7 @@ module.exports.storeEmailAnalysisWord = async (orgId, prcId, res) => {
       },
     });
   } catch (error) {
+    errorHandler("Error", error);
     throw new Exception(httpStatus.INTERNAL_SERVER_ERROR, errors.SOMETHING_WENT_WRONG_CHECK_PACKET_SIZE);
   }
   FakProgress.stop();
