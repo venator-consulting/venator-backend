@@ -1,3 +1,4 @@
+//#region imports
 const Posting = require("../models/posting.model.server");
 const Procedure = require("../models/procedures.model.server");
 const { Op, fn, col, QueryTypes } = require("sequelize");
@@ -8,7 +9,9 @@ const httpStatus = require("../models/enums/httpStatus");
 const errors = require('../models/enums/errors');
 
 const sequelize = Sequelize.getSequelize();
+//#endregion imports
 
+//#region Fetch all data
 module.exports.fetch = async (criteria) => {
   const OrganisationId = criteria.OrganisationId;
   if (isNaN(OrganisationId))
@@ -66,7 +69,9 @@ module.exports.fetchAll = function (companyCode, offset, limit) {
     resolve(postings);
   });
 };
+//#endregion Fetch all data
 
+//#region Document type
 module.exports.getDocTypes = async (organisationId, procedureId) => {
   if (isNaN(organisationId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -83,31 +88,6 @@ module.exports.getDocTypes = async (organisationId, procedureId) => {
       [fn("DISTINCT", col("documentType")), "documentType"],
       "documentTypeNewId",
       "documentTypeNewName",
-      "procedureId",
-    ],
-    distinct: true,
-  });
-  return result;
-};
-
-module.exports.getAccountTypes = async (organisationId, procedureId) => {
-  if (isNaN(organisationId))
-    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
-  if (isNaN(procedureId))
-    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-  const result = await Posting.getPosting("posting_" + organisationId).findAll({
-    where: {
-      ProcedureId: procedureId,
-      accountType: {
-        [Op.ne]: null,
-      },
-    },
-    attributes: [
-      [fn("DISTINCT", col("accountNumber")), "accountNumber"],
-      "accountName",
-      "accountType",
-      "accountTypeNewId",
-      "accountTypeNewName",
       "procedureId",
     ],
     distinct: true,
@@ -170,6 +150,35 @@ module.exports.updateDocTypeNew = async (
 
 };
 
+//#endregion Document type
+
+//#region Account type
+module.exports.getAccountTypes = async (organisationId, procedureId) => {
+  if (isNaN(organisationId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  if (isNaN(procedureId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  const result = await Posting.getPosting("posting_" + organisationId).findAll({
+    where: {
+      ProcedureId: procedureId,
+      accountType: {
+        [Op.ne]: null,
+      },
+    },
+    attributes: [
+      [fn("DISTINCT", col("accountNumber")), "accountNumber"],
+      "accountName",
+      "accountType",
+      "accountTypeNewId",
+      "accountTypeNewName",
+      "procedureId",
+    ],
+    distinct: true,
+  });
+  return result;
+};
+
+
 module.exports.updateAccountTypeNew = async (
   organisationId,
   procedureId,
@@ -195,6 +204,9 @@ module.exports.updateAccountTypeNew = async (
   );
 };
 
+//#endregion Account type
+
+//#region starting balance
 module.exports.getStartingBalance = async (organisationId, procedureId) => {
   if (isNaN(organisationId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -249,7 +261,9 @@ module.exports.updateStartBalance = async (
     }
   );
 };
+//#endregion starting balance
 
+//#region Amount analysis
 module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -335,6 +349,58 @@ module.exports.amountAnalysisDetailsChart = async (orgId, prcId, baseBalance, ac
   return result;
 };
 
+/**
+ * Bulk update of array of posting records
+ * @param {number} orgId
+ * @param {Posting[]} records
+ */
+module.exports.amountBulkUpdate = async (orgId, records) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  const postings = await Posting.getPosting("posting_" + orgId).bulkCreate(
+    records,
+    {
+      updateOnDuplicate: ["amountRelevant", "amountRelevantComment"],
+    }
+  );
+  return postings;
+};
+
+module.exports.amountJustRelevant = async (orgId, prcId, accountNumber) => {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  return await Posting.getPosting("posting_" + orgId).findAll({
+    where: {
+      amountRelevant: true,
+      accountNumber: accountNumber,
+      ProcedureId: prcId,
+    },
+    attributes: [
+      "id",
+      "procedureId",
+      "accountNumber",
+      "accountName",
+      "amountRelevant",
+      "amountRelevantComment",
+      "accountType",
+      "documentType",
+      "balance",
+      "contraAccountNumber",
+      "contraAccountName",
+      "documentTypeNewName",
+      "documentNumber",
+      "documentDate",
+      "recordNumber",
+      "ledgerId",
+      "executionDate",
+      "dueDate",
+    ],
+  });
+};
+//#endregion Amount analysis
+
 
 module.exports.getByAccountNumber = async (
   orgId,
@@ -392,6 +458,7 @@ module.exports.getByAccountNumber = async (
   return result;
 };
 
+//#region text analysis
 module.exports.textAnalysis = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -565,8 +632,6 @@ module.exports.textAnalysisByWordAndAccount = async (orgId, prcId, keys, account
   return result;
 };
 
-
-
 module.exports.textAnalysisByWordFullTextIndex = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -732,23 +797,6 @@ module.exports.textBulkUpdate = async (orgId, records) => {
   return postings;
 };
 
-/**
- * Bulk update of array of posting records
- * @param {number} orgId
- * @param {Posting[]} records
- */
-module.exports.amountBulkUpdate = async (orgId, records) => {
-  if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
-  const postings = await Posting.getPosting("posting_" + orgId).bulkCreate(
-    records,
-    {
-      updateOnDuplicate: ["amountRelevant", "amountRelevantComment"],
-    }
-  );
-  return postings;
-};
-
 module.exports.textJustRelevant = async (orgId, prcId, accountNumber) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -785,41 +833,10 @@ module.exports.textJustRelevant = async (orgId, prcId, accountNumber) => {
     ],
   });
 };
+//#endregion Text analysis
 
-module.exports.amountJustRelevant = async (orgId, prcId, accountNumber) => {
-  if (isNaN(orgId))
-    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
-  if (isNaN(prcId))
-    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
-  return await Posting.getPosting("posting_" + orgId).findAll({
-    where: {
-      amountRelevant: true,
-      accountNumber: accountNumber,
-      ProcedureId: prcId,
-    },
-    attributes: [
-      "id",
-      "procedureId",
-      "accountNumber",
-      "accountName",
-      "amountRelevant",
-      "amountRelevantComment",
-      "accountType",
-      "documentType",
-      "balance",
-      "contraAccountNumber",
-      "contraAccountName",
-      "documentTypeNewName",
-      "documentNumber",
-      "documentDate",
-      "recordNumber",
-      "ledgerId",
-      "executionDate",
-      "dueDate",
-    ],
-  });
-};
 
+//#region SUSA
 module.exports.susaDateRange = async (orgId, prcId) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -945,3 +962,18 @@ module.exports.susaAnalysis = async (
   });
   return result;
 };
+//#endregion SUSA
+
+//#region update duedate new
+module.exports.updateDueDateNew = async function (orgId, prcId, id, row) {
+  if (isNaN(orgId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
+  if (isNaN(prcId))
+    throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
+  return await Posting.getPosting("posting_" + orgId).update(row,
+    {
+      where: { procedureId: prcId, id, },
+    }
+  );
+}
+//#endregion update due date new

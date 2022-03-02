@@ -18,7 +18,6 @@
     "no_file_selected": "Bitte wählen Sie eine zu importierende Datei aus",
     "invalid_file_type": "Ungültiger Dateityp, bitte wählen Sie eine CSV- oder Excel-Datei aus",
     "invalid_file_class": "Ungültige Dateiklasse",
-
     "Please_Contact_Developer": "There is something went wrong, Please Contact Developer!"
   },
   "general_actions": {
@@ -82,7 +81,8 @@
     "IMPORTED": "Importiert",
     "PARTIAL_CALCULATED": "Teilberechnet",
     "CALCULATED": "Berechnet",
-    "emailImport":"E-mails Importieren"
+    "emailImport": "E-mails Importieren",
+    "duedateCorrection": "Due Date Correction"
   },
   "Admin_Dashboard": {
     "organisationEmail": "Email",
@@ -360,10 +360,9 @@
     "text_word": "Vorberechnete Textanalyse nach Wört",
     "text_account": "Vorberechnete Textanalyse nach Konto",
     "due_date": "Vorberechnetes Zahlungsverhalten",
-    "docType":"Belegarten",
+    "docType": "Belegarten",
     "emailSender": "Vorberechnete Emailanalyse nach Absender",
     "emailWord": "Vorberechnete Emailanalyse nach Wört"
-
   },
   "precalc": {
     "precalc": "Analysen Vorberechnung",
@@ -418,38 +417,36 @@
     "baseBalance": "Basis Saldo"
   },
   "TextAnalysis": {
-    "label":"Textanalyse",
+    "label": "Textanalyse",
     "data": " Daten",
     "accountNumber": "Kontonummer",
     "accountName": "Kontobezeichnung",
     "NumberOfPostings": "Anzahl der Buchungen",
     "totalBalance": "Gesamtsaldo",
-    "keyword":"Stichwort",
-    "accountsCount":"Anzahl der Konten",
-    "recordsCount":"Anzahl der Buchungen",
+    "keyword": "Stichwort",
+    "accountsCount": "Anzahl der Konten",
+    "recordsCount": "Anzahl der Buchungen",
     "details": "Details",
-    "byWord":" Nach Wört",
-    "byAccount":" Nach Konto",
+    "byWord": " Nach Wört",
+    "byAccount": " Nach Konto",
     "back": "Zurück",
     "export": "Export",
     "save": "Speichern"
   },
-
   "MailAnalysis": {
-    "label":"Emailsanalyse",
+    "label": "Emailsanalyse",
     "data": " Daten",
-    "allEmails":"Alle Emails",
-    "keyword":"Stichwort",
-    "senderCount":"Anzal der Absender",
-    "emailsCount":"Anzahl der Emails",
-    "totlaCount":"Gesamtanzahl",
-    "byWord":" Nach Wört",
-    "bySender":" Nach Absender",
-    
+    "allEmails": "Alle Emails",
+    "keyword": "Stichwort",
+    "senderCount": "Anzal der Absender",
+    "emailsCount": "Anzahl der Emails",
+    "totlaCount": "Gesamtanzahl",
+    "byWord": " Nach Wört",
+    "bySender": " Nach Absender",
     "email": "Email-Absender",
     "sender": "Absender",
     "rcvName": "Empfänger",
-    "rcvEmail":"Email-Empfänger",
+    "rcvEmail": "Email-Empfänger",
     "subject": "Betreff",
     "body": "Nachricht",
     "bodyHTML": "Nachricht HTML ",
@@ -458,11 +455,11 @@
     "creationTime": "Erstellungsdatum",
     "messageDeliveryTime": "NachrichtLieferzeit",
     "numberOfAttachments": "Anzahl der Anhänge",
-    "comment":"Kommentar",
-    "actions":"Anhänge",
-    "sysRelevants":"Systemrelevant",
-    "marked":"Markiert",
-    "all":"Alle"
+    "comment": "Kommentar",
+    "actions": "Anhänge",
+    "sysRelevants": "Systemrelevant",
+    "marked": "Markiert",
+    "all": "Alle"
   },
   "PaymentAnalysis": {
     "data": " Daten",
@@ -525,7 +522,7 @@
     "textLabel": "Text Analyse",
     "paymentLabel": "Fälligkeitsanalyse",
     "senderTotalCount": "Total Sender Count",
-    "emailTotalCount":"Total emails messages count",
+    "emailTotalCount": "Total emails messages count",
     "dueDate": "Due Date",
     "mailWord": "Email Analysis by Word"
   },

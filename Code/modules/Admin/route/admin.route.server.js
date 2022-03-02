@@ -335,6 +335,14 @@ router
 //#endregion Account type
 
 
+//#region update due date new
+router
+  .route("/update-due-date/:orgId/:prcId/:id")
+  .put(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    postingCtrl.updateDueDateNew);
+//#endregion update due date new
+
 //#region init data
 router
     .route('/sync-db')

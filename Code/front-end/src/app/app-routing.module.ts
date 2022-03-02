@@ -52,6 +52,7 @@ import { MailAnalysisComponent } from './shared/analysis/mail-analysis/mail-anal
 import { MailAnalysisDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-details/mail-analysis-details.component';
 import { MailAnalysisSenderDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-sender-details/mail-analysis-sender-details.component';
 import { RecordMatchingComponent } from './admin/record-matching/record-matching.component';
+import { DuedateCorrectionComponent } from './admin/duedate-correction/duedate-correction.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -138,6 +139,12 @@ const routes: Routes = [
       {
         path: 'admin/document-type',
         component: DocumentTypeComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin'] },
+      },
+      {
+        path: 'admin/duedate-correction',
+        component: DuedateCorrectionComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin'] },
       },

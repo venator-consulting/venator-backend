@@ -86,8 +86,8 @@
     "IMPORTED": "IMPORTED",
     "PARTIAL_CALCULATED": "PARTIAL CALCULATED",
     "CALCULATED": "CALCULATED",
-    "emailImport":"E-mails Import"
-
+    "emailImport":"E-mails Import",
+    "duedateCorrection": "Due Date Correction"
   },
   "Admin_Dashboard": {
     "organisationEmail": "Email",

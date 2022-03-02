@@ -118,6 +118,7 @@ import { MailAnalysisComponent } from './shared/analysis/mail-analysis/mail-anal
 import { MailAnalysisDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-details/mail-analysis-details.component';
 import { MailAnalysisSenderDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-sender-details/mail-analysis-sender-details.component';
 import { RecordMatchingComponent } from './admin/record-matching/record-matching.component';
+import { DuedateCorrectionComponent } from './admin/duedate-correction/duedate-correction.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -189,6 +190,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MailAnalysisDetailsComponent,
     MailAnalysisSenderDetailsComponent,
     RecordMatchingComponent,
+    DuedateCorrectionComponent,
   ],
   imports: [
     BrowserModule,

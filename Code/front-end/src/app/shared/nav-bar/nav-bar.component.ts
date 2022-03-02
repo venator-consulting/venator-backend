@@ -147,6 +147,20 @@ export class NavBarComponent implements OnInit {
                 },
               },
               {
+                label: elem.duedateCorrection,
+                icon: 'pi pi-pencil',
+                routerLink: ['/dashboard/admin/duedate-correction'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+                disabled:
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
+              },
+              {
                 label: elem.resetPassword,
                 icon: 'pi pi-lock',
                 routerLink: ['/dashboard/resetPassword'],

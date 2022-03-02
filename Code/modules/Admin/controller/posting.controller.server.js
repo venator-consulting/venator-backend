@@ -18,3 +18,12 @@ module.exports.updateDoctypes = async (req, res) => {
   );
   res.status(201).json(result);
 };
+
+//#region Update dueDateNew
+module.exports.updateDueDateNew = async (req, res) => {
+  const { orgId, prcId, id } = req.params;
+  const row = req.body;
+  const result = await postingRepo.updateDueDateNew(orgId, prcId, id, row);
+  res.status(201).json(result);
+}
+//#endregion Update dueDateNew

@@ -14,5 +14,4 @@ export class DataFilterService {
     return this._http.get<any>(this._thisURL + '/posting', { params: params });
   }
 
-  
 }
