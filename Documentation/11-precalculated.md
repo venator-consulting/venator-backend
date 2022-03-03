@@ -1,5 +1,17 @@
 # Venalytics Documentation
 
+## Precalculated list
+
+1. Text analysis by account;
+2. Text analyisis by word;
+3. Amount analysis;
+4. creditor analysis;
+5. payment analysis;
+6. Due Date analysis;
+7. email by word analysis;
+8. Email by sender analysis;
+9. credit lines for liquidity analysis;
+
 ## Calculate analysis
 
 1. first of all, you should select a procedure, from the procedures table, click on show posting data or on edit procedure, then the procedure name will appears on the navbar and the procedure status will appears on the sidebar;
