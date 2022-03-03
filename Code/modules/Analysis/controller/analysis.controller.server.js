@@ -11,6 +11,9 @@ const httpStatus = require("../../../models/enums/httpStatus");
 const errors = require('../../../models/enums/errors');
 
 //#region Amount analysis
+/**
+ * @deprecated
+ */
 module.exports.amountAnalysis = async (req, res) => {
   const result = await postingRepo.amountAnalysis(
     req.params.orgId,
@@ -75,6 +78,11 @@ module.exports.getByAccountNumber = async (req, res) => {
 };
 
 //#region text analysis
+/**
+ * @deprecated we use precalculated now
+ * @param {*} req 
+ * @param {*} res 
+ */
 module.exports.textAnalysis = async (req, res) => {
   let fileKeywords = await nlpHelper.getsynonyms(keywords);
   const result = await postingRepo.textAnalysis(
@@ -126,6 +134,11 @@ module.exports.getTextAnalysisDataByAccountCalcDefault = async (req, res) => {
   res.status(200).json(result);
 };
 
+/**
+ * @deprecated we use precalculated now
+ * @param {*} req 
+ * @param {*} res 
+ */
 module.exports.textAnalysisIndex = async (req, res) => {
   let fileKeywords = await nlpHelper.getsynonyms(keywords);
   const result = await postingRepo.textAnalysisIndexed(
@@ -136,6 +149,11 @@ module.exports.textAnalysisIndex = async (req, res) => {
   res.status(200).json(result);
 };
 
+/**
+ * @deprecated we use precalculated now
+ * @param {*} req 
+ * @param {*} res 
+ */
 module.exports.textAnalysisByWord = async (req, res) => {
   let fileKeywords = await nlpHelper.getsynonyms(keywords);
   const result = await postingRepo.textAnalysisByWord(
@@ -146,6 +164,11 @@ module.exports.textAnalysisByWord = async (req, res) => {
   res.status(200).json(result);
 };
 
+/**
+ * @deprecated we use precalculated now
+ * @param {*} req 
+ * @param {*} res 
+ */
 module.exports.textAnalysisByWordIndexed = async (req, res) => {
   let fileKeywords = await nlpHelper.getsynonyms(keywords);
   const result = await postingRepo.textAnalysisByWordFullTextIndex(

@@ -7,6 +7,9 @@ const analysisCtrl = require("../controller/analysis.controller.server");
 //#endregion imports
 
 //#region Amount analysis 
+/**
+ * @deprecated
+ */
 router
   .route("/:orgId/:prcId/amount/:baseBalance")
   .get(passport.authenticate("jwt", { session: false, }),
@@ -69,18 +72,27 @@ router
     analysisCtrl.getByAccountNumber);
 
 //#region Tetxt
+/**
+ * @deprecated
+ */
 router
   .route("/:orgId/:prcId/text")
   .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
     analysisCtrl.textAnalysis);
 
+/**
+* @deprecated
+*/
 router
   .route("/:orgId/:prcId/text-index")
   .get(passport.authenticate("jwt", { session: false }),
     authorization.canDisplayAnalysis(),
     analysisCtrl.textAnalysisIndex);
 
+/**
+* @deprecated
+*/
 router.
   route("/:orgId/:prcId/text-word")
   .get(passport.authenticate("jwt", { session: false, }),
@@ -117,7 +129,9 @@ router
     authorization.canDisplayAnalysis(),
     analysisCtrl.getTextAnalysisDataByAccountCalcDefault);
 
-
+/**
+ * @deprecated
+ */
 router
   .route("/:orgId/:prcId/text-word-indexed")
   .get(passport.authenticate("jwt", { session: false, }),

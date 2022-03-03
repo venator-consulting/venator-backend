@@ -3,6 +3,11 @@ const { Op } = require("sequelize");
 const env = require("../config/environment");
 const termDictRepo = require("../models/term.dict.model.server");
 
+/**
+ * Not used yet - get the words starts with (start) input
+ * @param {*} start 
+ * @returns 
+ */
 module.exports.complete = async (start) => {
   return await termDictRepo.getTerm().findAll({
     where: {
@@ -15,6 +20,9 @@ module.exports.complete = async (start) => {
   });
 };
 
+/**
+ * Not used yet
+ */
 module.exports.createDict = async () => {
   const execution = spawn("mysql", [
     "-u" + env.databaseUsername,

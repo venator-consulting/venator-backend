@@ -21,34 +21,34 @@ router
 
 router
     .route('/procedure/:prcId')
-    .get(passport.authenticate('jwt', {
-        session: false
-    }), procedureCtrl.getById);
+    .get(passport.authenticate('jwt', { session: false }),
+        procedureCtrl.getById);
 
 
 router
     .route('/users/:id/procedures')
-    .get(passport.authenticate('jwt', {
-        session: false
-    }), authorization.belongToOrganisation(), procedureCtrl.getByOrgId);
+    .get(passport.authenticate('jwt', { session: false }),
+        authorization.belongToOrganisation(),
+        procedureCtrl.getByOrgId);
 
 router
     .route('/user/add')
-    .post(passport.authenticate('jwt', {
-        session: false
-    }), authorization.authorize('Manager', 'Admin'), userCtrl.register);
+    .post(passport.authenticate('jwt', { session: false }),
+        authorization.authorize('Manager', 'Admin'),
+        userCtrl.register);
 
 router
     .route('/user/edit')
-    .put(passport.authenticate('jwt', {
-        session: false
-    }), authorization.authorize('Manager', 'Admin'), userCtrl.edit);
+    .put(passport.authenticate('jwt', { session: false }),
+        authorization.authorize('Manager', 'Admin'),
+        userCtrl.edit);
 
 router
     .route('/users/:id')
-    .get(passport.authenticate('jwt', {
-        session: false
-    }), authorization.authorize('Manager', 'Admin'), authorization.belongToOrganisation(), userCtrl.getUsersByOrganisationId);
+    .get(passport.authenticate('jwt', { session: false }),
+        authorization.authorize('Manager', 'Admin'),
+        authorization.belongToOrganisation(),
+        userCtrl.getUsersByOrganisationId);
 
 router
     .route('/resetPassword')
@@ -56,23 +56,23 @@ router
 
 router
     .route('/profile/resetPassword')
-    .post(passport.authenticate('jwt', {
-        session: false
-    }), userCtrl.changePassword);
+    .post(passport.authenticate('jwt', { session: false }),
+        userCtrl.changePassword);
 
+// get main posting data
 router
     .route('/posting')
-    .get(passport.authenticate('jwt', {
-        session: false
-    }), authorization.belongToOrganisation(), getDataCtrl.fetch);
+    .get(passport.authenticate('jwt', { session: false }),
+        authorization.belongToOrganisation(),
+        getDataCtrl.fetch);
 
+// export as excel from backend, used in many interfaces
 router
     .route('/export/:tableName/:OrganisationId/:ProcedureId')
-    .get(passport.authenticate('jwt', {
-        session: false
-    }),
+    .get(passport.authenticate('jwt', { session: false }),
         getDataCtrl.exportAsExcel);
 
+// export mail data as excel
 router
     .route('/export-mail/:tableName/:OrganisationId/:ProcedureId')
     .get(passport.authenticate('jwt', {
@@ -85,6 +85,7 @@ router
         session: false
     }), getDataCtrl.susaDateRange);
 
+//TODO: delete this and set the below as optional params
 router
     .route('/susa/:orgId/:prcId')
     .get(passport.authenticate('jwt', {
@@ -94,14 +95,15 @@ router
 
 router
     .route('/susa/:orgId/:prcId/:fromDate/:toDate')
-    .get(passport.authenticate('jwt', {
-        session: false
-    }), getDataCtrl.susaAnalysis);
+    .get(passport.authenticate('jwt', { session: false }),
+        getDataCtrl.susaAnalysis);
 
+/**
+ * @deprecated we not autocomplete in this release
+ */
 router
     .route('/complete/:word')
-    .get(passport.authenticate('jwt', {
-        session: false
-    }), dictCtrl.fetch);
+    .get(passport.authenticate('jwt', { session: false }),
+        dictCtrl.fetch);
 
 module.exports = router;

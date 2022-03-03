@@ -56,6 +56,13 @@ module.exports.fetch = async (criteria) => {
   });
 };
 
+/**
+ * @deprecated we use fetch function with criteria
+ * @param {string} companyCode 
+ * @param {number} offset 
+ * @param {number} limit 
+ * @returns 
+ */
 module.exports.fetchAll = function (companyCode, offset, limit) {
   return new Promise(async (resolve, reject) => {
     const postings = await Posting.getPosting().findAll({
@@ -264,6 +271,13 @@ module.exports.updateStartBalance = async (
 //#endregion starting balance
 
 //#region Amount analysis
+/**
+ * @deprecated we use precalculated now
+ * @param {number} orgId 
+ * @param {number} prcId 
+ * @param {number} baseBalance 
+ * @returns 
+ */
 module.exports.amountAnalysis = async (orgId, prcId, baseBalance) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -459,6 +473,13 @@ module.exports.getByAccountNumber = async (
 };
 
 //#region text analysis
+/**
+ * @deprecated we use precalculated now
+ * @param {number} orgId 
+ * @param {number} prcId 
+ * @param {string[]} keys 
+ * @returns 
+ */
 module.exports.textAnalysis = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -491,6 +512,15 @@ module.exports.textAnalysis = async (orgId, prcId, keys) => {
   return result;
 };
 
+/**
+ * this function based on full text index in the database
+ * and now we use partitions with precalculate so deprecated
+ * @deprecated we use precalculated now
+ * @param {number} orgId 
+ * @param {number} prcId 
+ * @param {string[]} keys 
+ * @returns 
+ */
 module.exports.textAnalysisIndexed = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -533,6 +563,13 @@ module.exports.textAnalysisIndexed = async (orgId, prcId, keys) => {
   return result;
 };
 
+/**
+ * @deprecated we use precalculated now
+ * @param {number} orgId 
+ * @param {number} prcId 
+ * @param {string[]} keys 
+ * @returns 
+ */
 module.exports.textAnalysisByWord = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -632,6 +669,15 @@ module.exports.textAnalysisByWordAndAccount = async (orgId, prcId, keys, account
   return result;
 };
 
+/**
+ * this function based on full text index in the database
+ * and now we use partitions with precalculate so deprecated
+ * @deprecated we use precalculated now
+ * @param {number} orgId 
+ * @param {number} prcId 
+ * @param {string[]} keys 
+ * @returns 
+ */
 module.exports.textAnalysisByWordFullTextIndex = async (orgId, prcId, keys) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);

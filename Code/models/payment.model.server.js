@@ -7,7 +7,7 @@ const sequelizer = sequelize.getSequelize();
 
 
 
-module.exports.getPayment = function (tableName = 'payment_analysis_1') {
+module.exports.getPayment = function (tableName = 'payment_analysis_') {
     return sequelizer.define('Payment', {
         id: {
             type: DataTypes.BIGINT(11),

@@ -49,6 +49,14 @@ monthDiff = (d1, d2) => {
   return months <= 0 ? 0 : months;
 };
 
+/**
+ * @deprecated we use precalculated now 
+ * @param {*} orgId 
+ * @param {*} prcId 
+ * @param {*} fromDate 
+ * @param {*} toDate 
+ * @param {*} cb 
+ */
 module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
   if (!fromDate) {
     throw new Error("Document Date is null for this procedure!");

@@ -123,6 +123,18 @@ export class UserDashboardComponent implements OnInit {
         this._procedureService.reset(this.organisationId, prc.id)
           .subscribe(async (res) => {
             prc.status = 'NOT_IMPORTED';
+            localStorage.setItem('currentProcedureAnalysis', null);
+            localStorage.setItem('currentProcedureStatus', 'NOT_IMPORTED');
+            localStorage.setItem('currentProcedureAmount', null);
+            localStorage.setItem('currentProcedureText_word', null);
+            localStorage.setItem('currentProcedureText_account', null);
+            localStorage.setItem('currentProcedureCredit', null);
+            localStorage.setItem('currentProcedurePayment', null);
+            localStorage.setItem('currentProcedureDueDate', null);
+            localStorage.setItem('currentProcedureLiquidity', null);
+            localStorage.setItem('currentProcedureDocType', null);
+            localStorage.setItem('currentProcedureMailSender', null);
+            localStorage.setItem('currentProcedureMailWord', null);
             this._messageService.add({
               severity: 'info',
               summary: await this._translateService.get('general_messages.delete_success').toPromise(),

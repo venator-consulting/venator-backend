@@ -85,11 +85,25 @@ module.exports.resetProcedure = async function (orgId, prcId) {
   const query4 = `DELETE FROM text_analysis_word_${orgId} WHERE procedureId = ${prcId} `;
   const query5 = `DELETE FROM amount_analysis_${orgId} WHERE procedureId = ${prcId} `;
   const query6 = `DELETE FROM creditLines_${orgId} WHERE procedureId = ${prcId}`;
+  const query7 = `DELETE FROM creditor_analysis_${orgId} WHERE procedureId = ${prcId}`;
+  const query8 = `DELETE FROM due_date_analysis_${orgId} WHERE procedureId = ${prcId}`;
+  const query9 = `DELETE FROM email_analysis_sender_${orgId} WHERE procedureId = ${prcId}`;
+  const query10 = `DELETE FROM email_analysis_word_${orgId} WHERE procedureId = ${prcId}`;
+  const query11 = `DELETE FROM email_history_${orgId} WHERE procedureId = ${prcId}`;
+  const query12 = `DELETE FROM payment_analysis_${orgId} WHERE procedureId = ${prcId}`;
   const connection = require("../config/mysql.config").getConnection();
   await Promise.all([connection.execute(query1),
-                      connection.execute(query2), connection.execute(query3), 
-                      connection.execute(query4), connection.execute(query5),
-                       connection.execute(query6),
-                      this.update({status: 'NOT_IMPORTED'}, prcId)]);
+  connection.execute(query2), connection.execute(query3),
+  connection.execute(query4), connection.execute(query5),
+  connection.execute(query6), connection.execute(query7),
+  connection.execute(query8), connection.execute(query9),
+  connection.execute(query10), connection.execute(query11),
+  connection.execute(query12),
+  this.update({
+    status: 'NOT_IMPORTED', text_word: false, text_account: false,
+    amount: false, credit: false, payment: false,
+    docType: false, due_date: false, liquidity: false,
+    emailWord: false, emailSender: false, linkTrans: false,
+  }, prcId)]);
   return;
 };
