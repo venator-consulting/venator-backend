@@ -14,34 +14,50 @@ import { PostingService } from '../service/posting.service';
 })
 export class AccountTypeComponent implements OnInit {
 
+  //#region vars init
+  // list of orgainizations to select on of them in dropdown
   orgs: Organisation[] = new Array();
+  // list of procedures to select one of them in dropdown
   procedures: Procedures[] = new Array();
+  // selecected organazation ID will get it from the local storage
   selectedOrgId: number = -1;
+  // selected procedure ID will get it from the local storage
   selectedPrcId: number = -1;
+  // accaount types list for the selected procedure
   postingAccountTypes: PostingAccountTypes[];
+  // all possible accout new types to select from in the dropdown to edit records
   accountTypes: AccountTypes[] = new Array();
+  // all possible accaount types to select from in the dropdown filter in the header of the table
   accountTypesFilter: AccountTypes[] = new Array();
+  // to save the original value after edit a record, if the user cancel the operation then 
+  // we return it to the original value
   originalVal: number = -1;
+  // the columns of the table
   cols: { header, field, align }[] = new Array();
-  procedureName: string;
 
-  // for filter
+  // for progress bar
   searching: boolean;
+  // for filter
   criteria: any = {};
+  // to save the original data if the user clear the filters
   tempData: any[];
+  // number of filters
   filtersNo: number = 0;
+  //#endregion vars init
 
+  //#region Constructor
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
     private _postingService: PostingService, private _orgService: OrganisationService,
     private _confirmationService: ConfirmationService) { }
+  //#endregion Constructor
+
 
   ngOnInit(): void {
 
-    this.accountTypes.push({
-      id: 0,
-      AccountTypeName: 'null'
-    });
+    // set a defaut value for accounts dropdown
+    this.accountTypes.push({ id: 0, AccountTypeName: 'null' });
 
+    // get organizations
     this._orgService.get()
       .subscribe(
         (data) => {
@@ -50,6 +66,7 @@ export class AccountTypeComponent implements OnInit {
         (error) => console.log(error)
       );
 
+    // get all account types options
     this._postingService
       .getAccountTypesEnum()
       .subscribe(
@@ -87,6 +104,7 @@ export class AccountTypeComponent implements OnInit {
   } // end of ng on init
 
 
+  // get procedures for selected organization
   orgChangedHandler(e) {
     this.selectedPrcId = 0;
     if (e.value > 0) {
@@ -100,6 +118,7 @@ export class AccountTypeComponent implements OnInit {
     }
   }
 
+  // get data fot srlected procedure
   prcChangedHandler(e) {
     if (e.value > 0) {
       this.searching = true;
@@ -107,6 +126,7 @@ export class AccountTypeComponent implements OnInit {
         .getPostingAccountTypes(this.selectedOrgId, this.selectedPrcId)
         .subscribe(
           data => {
+            // parse accaount numbers for sorting
             data.forEach(account => {
               let accountNumber = parseInt(account.accountNumber.toString(), 10);
               account.accountNumber = isNaN(accountNumber) ? account.accountNumber : accountNumber;
@@ -120,19 +140,22 @@ export class AccountTypeComponent implements OnInit {
     }
   }
 
+  //#region edit record
+  // set the record as the edit mode
   editRow(row) {
     this.postingAccountTypes.filter(row => row.isEditable).map(r => { r.isEditable = false; return r });
     row.isEditable = true;
     this.originalVal = row.accountTypeNewId;
   }
 
+  // cancel edit mode
   cancel(row) {
     row.accountTypeNewId = this.originalVal;
     row.accountTypeNewName = this.accountTypes.filter(row => row.id == this.originalVal)[0]?.AccountTypeName;
     row.isEditable = false;
   }
 
-
+  // save changes and exit the edit mode
   save(row, update = true) {
     this.searching = true;
     this._postingService
@@ -144,7 +167,7 @@ export class AccountTypeComponent implements OnInit {
         this._messageService.add({
           severity: 'success',
           summary: 'DONE!',
-          detail: `Account new type is ${update? 'updated' : 'Deleted'} successfully in the targeted posting data, \n ${numOfRecords} updated.`
+          detail: `Account new type is ${update ? 'updated' : 'Deleted'} successfully in the targeted posting data, \n ${numOfRecords} updated.`
         });
       }, er => {
         this.searching = false;
@@ -156,13 +179,13 @@ export class AccountTypeComponent implements OnInit {
       });
   }
 
-
+  // change the account type for a record
   accountTypeChangedHandler(e, row) {
     row.accountTypeNewId = e.value;
     row.accountTypeNewName = this.accountTypes.filter(row => row.id == e.value)[0].AccountTypeName;
   }
 
-
+  // delete account type for a record
   async reset(row) {
     this._confirmationService.confirm({
       message: await this._translateService.get('confirm_messages.body_delete').toPromise(),
@@ -195,7 +218,9 @@ export class AccountTypeComponent implements OnInit {
       }
     });
   }
+  //#endregion edit record
 
+  //#region filtering
   clearFilter() {
     this.criteria = {};
     this.postingAccountTypes = [...this.tempData];
@@ -238,6 +263,6 @@ export class AccountTypeComponent implements OnInit {
     }
     this.searching = false;
   }
-
+  //#endregion filtering
 
 }

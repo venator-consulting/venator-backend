@@ -14,17 +14,26 @@ import { PostingService } from '../service/posting.service';
 export class DuedateCorrectionComponent implements OnInit {
 
   //#region init vars 
+  //  columns of the table
   cols: TableColumn[];
+  // the selected organization ID get it from local storage
   organisationId = localStorage.getItem('organisationId');
+  // the selected procedure ID, get it from local storage 
   procedureId = localStorage.getItem('currentProcedureId');
+  // numbers of filters in the header of the table
   filtersNo: number = 0;
+  // for progress bar
   loading: boolean = false;
   selectLastPage: boolean = false;
+  // main data
   postings: any[] = [];
+  // page sizes options for dropdaown
   pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
   limit: number = 25;
   pageNr: number = 1;
+  // total pages numbers
   maxPageNr: number = 0;
+  // numbers of records dosplayed for each, it may differ with page size it maybe smaller
   displayedDataCount = 0;
   criteria: any = {
     OrganisationId: this.organisationId,
@@ -34,9 +43,13 @@ export class DuedateCorrectionComponent implements OnInit {
     orderBy: 'id',
     sortOrder: 1,
   };
+  // total caount of records
   totalCount: number = 0;
+  // indeed not needed, it's an object contiaing the main data and count
   data: any;
+  // a list of suggested words, we now retun an empty array
   completeWords: any[];
+  // a temp value to keep the original value, if the user cancel the editing mode to reset it
   originalDueDateNew: any;
   //#endregion init vars
 
@@ -59,12 +72,15 @@ export class DuedateCorrectionComponent implements OnInit {
     this.loading = true;
     let tempCriteria = { ...this.criteria };
     for (const key in tempCriteria) {
+      // delete empty filters
       if (!tempCriteria[key] && key != 'offset') {
         delete tempCriteria[key];
       }
+      // format date filters
       if (key.includes('Date'))
         tempCriteria[key] = this.datepipe.transform(tempCriteria[key], 'yyyy.MM.dd');
     }
+    // we don't count offset nor limit and other pagination params
     this.filtersNo = Object.keys(tempCriteria).length - 6;
     this._dataFilterService.get(tempCriteria).subscribe(
       (data) => {

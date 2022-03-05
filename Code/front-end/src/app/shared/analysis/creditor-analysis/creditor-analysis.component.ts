@@ -78,7 +78,7 @@ export class CreditorAnalysisComponent implements OnInit {
     // to display priority translated in the table when editable is disabled
     this.displayPriority = ['', 'high', 'medium', 'low'];
     this.priorities = [
-      { label: 'selectPriority', value: null },
+      { label: 'null', value: null },
       { label: 'high', value: 1 },
       { label: 'medium', value: 2 },
       { label: 'low', value: 3 },

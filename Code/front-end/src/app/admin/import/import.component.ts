@@ -17,32 +17,53 @@ import { HttpEventType } from '@angular/common/http';
 })
 export class ImportComponent implements OnInit {
 
-
+  //#region init vars
   items: MenuItem[] = [];
+  // index of the active step
   activeIndex: number = 0;
+  // array includes uploaded files (not limited in length)
   uploadedFiles: any[] = [];
+  // options to choose templates like SAP, the user can choose other (no default template)
   templates: Choices[] = Choices.getTemplates();
+  // options to choose if the file excel or csv or...
   fileTypes: Choices[] = Choices.getFileType();
+  // options to choose if the file is posting or accounts or...
   fileClass: Choices[] = Choices.getFileClass();
+  // options to choose localaization like de or en
   locals: Choices[] = Choices.getLocalization();
+  // to upload an account file the user should select the account type
+  // if select 'other' the account type should be got from a column in the file 
   accountTypes: Choices[] = Choices.getAccountTypes();
+  // selected template value
   selectedTemplate: any;
+  // for progress bar
   waiting: boolean = false;
+  // an array the files to be imported, contains the properties and the binary file
   filesList: FileToImport[] = new Array();
+  // which file we manipulated now
   currentFileIndex: number = -1;
+  // in stage 3 the user can edit the template and will be saved here for accounts files
   accountsCustomTemplate: any = {};
+  // in stage 3 the user can edit the template and it will  be saved here for posting files
   postingCustomTemplate: any = {};
+  // custom mapping headers for header files (not used for now)
   headCustomTemplate: any = {};
+  //  list of organizations
   orgs: Organisation[] = new Array();
+  // the selected organazation to import the file to it
   selectedOrgId: number = -1;
+  // list of procedures
   procedures: Procedures[] = new Array();
+  // the selected procedure to import the file to it
   selectedProcedureId: number = -1;
   tempheader: any = {};
-
+  // upload progress value
   progress: number = 0;
+  //(not used now we use primeng progress bar) progress bar element as html
   @ViewChild('progressElm') progressElm: ElementRef;
+  // not used for now 
   importProgress: number = 0;
-
+  //#endregion init vars
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
     private _importService: ImportService, private _orgService: OrganisationService,
@@ -57,6 +78,7 @@ export class ImportComponent implements OnInit {
 
     this._translateService.get('Admin_Import').subscribe(elem => {
 
+      // step headers
       this.items = [
         {
           label: elem.firstStepLabel,
@@ -85,7 +107,7 @@ export class ImportComponent implements OnInit {
         }
       ];
 
-
+      // get organizations
       this._orgService.get()
         .subscribe(
           (data) => {
@@ -122,6 +144,7 @@ export class ImportComponent implements OnInit {
     this.filesList.splice(index, 1);
   }
 
+  // to import another file
   addFormData() {
     let f = new FileToImport();
     f.OrganisationId = this.selectedOrgId;
@@ -135,10 +158,12 @@ export class ImportComponent implements OnInit {
     this.activeIndex = ++wizardIndex;
   }
 
+  // next step
   goNext(index) {
     this.activeIndex = ++index;
   }
 
+  // previous step
   goPrev(index) {
     this.activeIndex = --index;
   }
@@ -281,14 +306,14 @@ export class ImportComponent implements OnInit {
   }
   // upload step 1 ends
 
-
+  // when select a file
   UploadHandler(event, f: FileToImport, index: number) {
     const selectedFiles: FileList = event.files;
     f.file = selectedFiles[0];
     f.index = index;
   }
 
-
+  // the 4 final step
   importThisFile() {
     this.waiting = true;
 

@@ -516,6 +516,7 @@
   },
   "CreditorsAnalysis": {
     "priority": "Priority",
+    "null": " ",
     "selectPriority": "Select Priority",
     "high": "High",
     "medium": "Medium",

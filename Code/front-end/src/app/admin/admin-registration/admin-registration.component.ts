@@ -16,13 +16,13 @@ import { TranslateService } from '@ngx-translate/core';
 export class AdminRegistrationComponent implements OnInit {
 
   constructor(private _router: Router, private _messageService: MessageService, public _translateService: TranslateService,
-      private _adminRegistrationService: AdminRegistrationService, private _orgService : OrganisationService) { }
+    private _adminRegistrationService: AdminRegistrationService, private _orgService: OrganisationService) { }
 
 
   orgs: [] = [];
   titles: Titles[] = Titles.getTitles();
   //roles: Roles[] = Roles.getRoles();
-  roles = [{name:'Admin', value: 1}];
+  roles = [{ name: 'Admin', value: 1 }];
 
 
   userModel: Users;
@@ -31,15 +31,16 @@ export class AdminRegistrationComponent implements OnInit {
 
   ngOnInit(): void {
     this.userModel = new Users();
+    // here we will add an admin only and no choices for manager nor user
     this.userModel.RoleId = 1;
-    
+
     this._orgService.get()
-    .subscribe(
-      (data) => {
-        this.orgs = data;
-      },
-      (error) => console.log(error)
-    );
+      .subscribe(
+        (data) => {
+          this.orgs = data;
+        },
+        (error) => console.log(error)
+      );
   }
 
   submitHandler() {
@@ -53,21 +54,21 @@ export class AdminRegistrationComponent implements OnInit {
         });
       }, err => {
         this._translateService.get("ErrorHandler").subscribe(elem => {
-          let errorMsg = "" ; 
+          let errorMsg = "";
 
-          if(err.status=== 400){
+          if (err.status === 400) {
             errorMsg = elem.badRequest_400
           }
-          else if (err.status=== 401) {
+          else if (err.status === 401) {
             errorMsg = elem.unauthorized_401
           }
-          else if (err.status=== 403) {
+          else if (err.status === 403) {
             errorMsg = elem.forbidden_403
           }
-          else if (err.status=== 404) {
+          else if (err.status === 404) {
             errorMsg = elem.NotFound_404
           }
-          else if (err.status=== 500) {
+          else if (err.status === 500) {
             errorMsg = elem.internalServerError_500
           }
           this._messageService.add({
@@ -79,8 +80,9 @@ export class AdminRegistrationComponent implements OnInit {
         })
       });
   }
-  cancelHandle(){
-    this._router.navigate(['/dashboard/admin/dashboard']); 
 
+  cancelHandle() {
+    this._router.navigate(['/dashboard/admin/dashboard']);
   }
+
 }

@@ -14,21 +14,32 @@ import { PostingService } from '../service/posting.service';
 })
 export class DocumentTypeComponent implements OnInit {
 
+  //#region vars init
+  // organization list  
   orgs: Organisation[] = new Array();
+  // procedures list
   procedures: Procedures[] = new Array();
   selectedOrgId: number = -1;
   selectedPrcId: number = -1;
+  // procedure document types 
   postingDocTypes: PostingDocTypes[];
+  // the all docuent types new to select one of them when update a record
   docTypes: DocumentTypes[] = new Array();
+  // all document types new to select one of them in the filter in the table header
   docTypesFilter: DocumentTypes[] = new Array();
+  // keep the original value of the document type for the editable record
   originalVal: number = -1;
+  // table columns
   cols: { header, field }[] = new Array();
 
   // for filter
+  // for progress bar
   searching: boolean;
   criteria: any = {};
+  // save a temp version to reset it if the user clear all filters
   tempData: any[];
   filtersNo: number = 0;
+  //#endregion vars init
 
   constructor(public _translateService: TranslateService, private _messageService: MessageService,
     private _orgService: OrganisationService, private _docTypesService: PostingService,
@@ -73,6 +84,24 @@ export class DocumentTypeComponent implements OnInit {
 
   } // end of ng on init
 
+  // when select a procedure get all document types for it
+  prcChangedHandler(e) {
+    if (e.value > 0) {
+      this.searching = true;
+      this._docTypesService
+        .getPostingDocTypes(this.selectedOrgId, e.value)
+        .subscribe(
+          data => {
+            this.postingDocTypes = data;
+            this.tempData = data;
+            this.searching = false;
+          },
+          error => this.searching = false
+        );
+    }
+  }
+
+  //#region edit record
   editRow(row) {
     this.postingDocTypes.filter(row => row.isEditable).map(r => { r.isEditable = false; return r });
     row.isEditable = true;
@@ -135,22 +164,6 @@ export class DocumentTypeComponent implements OnInit {
     }
   }
 
-  prcChangedHandler(e) {
-    if (e.value > 0) {
-      this.searching = true;
-      this._docTypesService
-        .getPostingDocTypes(this.selectedOrgId, e.value)
-        .subscribe(
-          data => {
-            this.postingDocTypes = data;
-            this.tempData = data;
-            this.searching = false;
-          },
-          error => this.searching = false
-        );
-    }
-  }
-
 
   async reset(row) {
     this._confirmationService.confirm({
@@ -189,6 +202,10 @@ export class DocumentTypeComponent implements OnInit {
     row.documentTypeNewId = e.value;
     row.documentTypeNewName = this.docTypes.filter(row => row.id == e.value)[0].documentTypeName;
   }
+  //#endregion edit record
+
+
+  //#region filtering
 
   clearFilter() {
     this.criteria = {};
@@ -225,5 +242,6 @@ export class DocumentTypeComponent implements OnInit {
     }
     this.searching = false;
   }
+  //#endregion filtering
 
 }

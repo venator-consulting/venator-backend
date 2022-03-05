@@ -501,10 +501,11 @@
   },
   "CreditorsAnalysis": {
     "priority": "Priority",
+    "null": " ",
     "selectPriority": "Select Priority",
-    "high": "High",
+    "high": "Hoog",
     "medium": "Medium",
-    "low": "Low",
+    "low": "Laag",
     "label": "Kreditorenanalyse",
     "data": " Daten",
     "accountNumber": "Kontonummer",
