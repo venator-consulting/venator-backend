@@ -302,7 +302,7 @@ module.exports.topDelayedAccounts = async (orgId, prcId, offset, limit) => {
   offset = offset ?? 0;
   // we set SQL_CALC_FOUND_ROWS to get the total count of founded records before pagination
   let query = `select SQL_CALC_FOUND_ROWS d.accountNumber, d.accountName , count(d.id) totalCount,
-     SUM(d.dayDiff) totalDelay 
+     Max(d.dayDiff) totalDelay 
                 from due_date_analysis_${orgId} d
                 WHERE d.procedureId = :procedureId
                 group by d.accountNumber , d.accountName 

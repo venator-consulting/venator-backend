@@ -14,15 +14,23 @@ import { AnalysisService } from 'src/app/shared/service/analysis.service';
 })
 export class AmountAnalysisPreComponent implements OnInit {
 
+  //#region  vars init
+  // main data for the table
   data: AmountAnalysis[] = new Array();
+
   selectedOrganisation: number = 0;
   selectedProcedure: number = 0;
+  // for the filter
   baseBalance = 0;
+  // chart configuration
   basicOptions: any;
+  // chart data
   basicData: any;
+  //  table columns
   cols: TableColumn[];
+  // for spinner
   waiting: boolean = false;
-  procedureName: string = '';
+  // for breadcrumb
   items: MenuItem[];
   home: MenuItem;
 
@@ -30,19 +38,16 @@ export class AmountAnalysisPreComponent implements OnInit {
   searching: boolean;
   criteria: any = {};
   tempData: any[];
+  //#endregion vars init
 
-  constructor(
-    public _translateService: TranslateService,
-    private _messageService: MessageService,
-    private _analysisService: AnalysisService,
-    private _route: ActivatedRoute,
-    private _router: Router
-  ) { }
+  constructor(public _translateService: TranslateService, private _messageService: MessageService,
+    private _analysisService: AnalysisService, private _route: ActivatedRoute,
+    private _router: Router) { }
 
   ngOnInit(): void {
-
+    // set base balance default value to 500
     this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance') ?? 500;
-    if(!this.baseBalance || isNaN(this.baseBalance)) this.baseBalance = 500;
+    if (!this.baseBalance || isNaN(this.baseBalance)) this.baseBalance = 500;
 
     this._translateService.get('AmountAnalysis').subscribe((elem) => {
       this.items = [
@@ -101,7 +106,6 @@ export class AmountAnalysisPreComponent implements OnInit {
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
-    this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.getData();
   } // end of ng on init
@@ -131,6 +135,7 @@ export class AmountAnalysisPreComponent implements OnInit {
         (res) => {
           this.data = res;
           this.data.forEach((account) => {
+            // cast account number to number for table sorting
             let accountNumber = parseInt(account.accountNumber.toString(), 10);
             account.accountNumber = isNaN(accountNumber)
               ? account.accountNumber

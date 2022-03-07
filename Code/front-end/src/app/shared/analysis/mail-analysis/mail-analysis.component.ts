@@ -14,24 +14,43 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class MailAnalysisComponent implements OnInit {
 
+  //#region var init
+  // organization id, get from local storage
   orgId: number;
+  // procedure id get from local storage
   prcId: number;
-  waiting: boolean;
-  data: MailAnalysis[] = new Array();
-  tempdata: MailAnalysis[] = new Array();
-  basicData: any;
-  basicOptions: any;
-  cols: TableColumn[];
-  labels: any[];
-  RecordsData: any[];
-  wordSenderData: any[];
-  criteria: any = {};
 
+  //#region by word
+  // for spinner
+  waiting: boolean;
+  // main data array for table
+  data: MailAnalysis[] = new Array();
+  // keep the data in a temp array for filtering
+  tempdata: MailAnalysis[] = new Array();
+  // for chart, contains data chart and configuration
+  basicData: any;
+  // chart configuration
+  basicOptions: any;
+  // table columns
+  cols: TableColumn[];
+  // chart labels array
+  labels: any[];
+  // count of emails for sender chart data
+  RecordsData: any[];
+  // count of senders per keyword chart data
+  wordSenderData: any[];
+  // keeps all filters on the table
+  criteria: any = {};
+  //#endregion by word
+
+  // if we display by word or by sender analysis
   bySender: boolean = false;
+  // (button label) to display analysis by word
   byWordSec: string = "";
+  // (button label) to display analysis by Sender
   bySenderSec: string = "";
 
-  // for Sender
+  //#region for Sender
   waitingSender: boolean;
   dataSender: MailAnalysisBySender[] = new Array();
   tempDataSender: MailAnalysisBySender[] = new Array();
@@ -42,18 +61,18 @@ export class MailAnalysisComponent implements OnInit {
   RecordsDataSender: any[];
   wordSenderDataSender: any[];
   criteriaSender: any = {};
+  // #endregion for sender
 
+  // or breadcrumb
   items: MenuItem[];
   home: MenuItem;
 
   mails: MailsOptions[];
   originalVal: MailHistory = new MailHistory();
+  //#endregion var init
 
-  constructor(
-    public _translateService: TranslateService,
-    private _mailService: MailHistoryService,
-    private _router: Router,
-    private _route: ActivatedRoute,
+  constructor(public _translateService: TranslateService, private _mailService: MailHistoryService,
+    private _router: Router, private _route: ActivatedRoute,
     private _messageService: MessageService) { }
 
   ngOnInit(): void {
@@ -339,7 +358,7 @@ export class MailAnalysisComponent implements OnInit {
     row = { ...this.originalVal };
     row.isEditable = false;
     let i = this.dataSender.findIndex(rec => rec.email == row.email);
-    this.dataSender[i] = {...row};
+    this.dataSender[i] = { ...row };
     this.dataSender = [...this.dataSender];
   }
 

@@ -8,6 +8,9 @@ import { MenuItem } from 'primeng/api';
 import { TableColumn } from '../../model/tableColumn';
 import { TranslateService } from '@ngx-translate/core';
 
+/**
+ * @deprecated we now use AmountAnalysisPreComponent
+ */
 @Component({
   selector: 'app-amount-analysis',
   templateUrl: './amount-analysis.component.html',

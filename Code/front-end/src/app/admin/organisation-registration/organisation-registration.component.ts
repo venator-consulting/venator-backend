@@ -13,16 +13,25 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class OrganisationRegistrationComponent implements OnInit {
 
+  //#region vars init
+  // organization data
   organisation: Organisation = new Organisation();
+  // organization ID
   id: number;
+  // organization logo source, could be a string from the backend 
+  // or a file uploaded in the frontend and not saved yet
   imageSrc: string | ArrayBuffer;
+  // if the organization logo uploaded from front and not saved yet
+  //  then it will be true, else it's a string url from the backend
   fromFront: boolean = false;
+  //#endregion vars init
 
   constructor(private _router: Router, private _messageService: MessageService,
     private _orgService: OrganisationService, public _translateService: TranslateService,
     private _route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    // extract the organization id from url
     this.id = +this._route.snapshot.paramMap.get('id');
     if (this.id > 0) {
       this._orgService
@@ -30,7 +39,7 @@ export class OrganisationRegistrationComponent implements OnInit {
         .subscribe(res => {
           if (res.length > 0) {
             this.organisation = res[0];
-            this.fromFront = this.organisation.logo? false : true;
+            this.fromFront = this.organisation.logo ? false : true;
           }
         }, err => {
           this._translateService.get("ErrorHandler").subscribe(elem => {
@@ -69,12 +78,12 @@ export class OrganisationRegistrationComponent implements OnInit {
     this.fromFront = true;
     if (selectedFiles && selectedFiles[0]) {
       const file = selectedFiles[0];
-
+      // define a file reader to read the image buffer as it's comming from the server
       const reader = new FileReader();
       reader.onload = e => this.imageSrc = reader.result;
-
+      // set the image source as url file so now the logo will displayed as it from the back
       reader.readAsDataURL(file);
-  }
+    }
   }
 
   submitHandler() {

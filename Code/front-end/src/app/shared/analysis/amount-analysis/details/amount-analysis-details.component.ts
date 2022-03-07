@@ -15,29 +15,48 @@ import { CurrencyPipe } from '@angular/common';
   styleUrls: ['./amount-analysis-details.sass'],
 })
 export class AmountAnalysisDetailsComponent implements OnInit {
+  //#region vars init
+  // determine if it dependent page or a component in creditor detials
   @Input('details') details: boolean = false;
+  // organization id, get from local storage
   orgId: number;
+  // procedure id, get from local storage
   prcId: number;
+  // account number, get from the route
   accountNumber: string;
+  // system relevant data table
   data: AmountAnalysisDetails[] = new Array();
+  // data for the chart
   balanceChartData: AmountAnalysisDetailsChart[] = new Array();
+  // the object containing data and configuration for the chart
   chartData: { labels: any[]; datasets: { data: any[]; backgroundColor: string[]; hoverBackgroundColor: string[]; }[]; };
+  // all accounts records (relevant and non relevant)
   allRecordData: AmountAnalysisDetails[] = new Array();
+  // for spinner
   waiting: boolean;
+  // table columns
   cols: TableColumn[];
+  // frozen columns
   frozenCols: TableColumn[];
+  // base balance, will get it from the route
   baseBalance: number;
-  procedureName: any;
+  // for front filtering, keep the original data in temp array
   tempData: any[];
+  // for front filtering, contains all filters
   criteria: any = {};
+  // for spinner for the filtering on table operations
   searching: boolean = false;
+  // contains selected records before save changes
   selected: AmountAnalysisDetails[] = new Array();
+  // tabs options (system relevant or user relevant or all)
   detailsOptions: { name: string; value: number }[];
+  // keeping active tab index, the default is system relevant
   detailsOption: number = 1;
+  // for breadcrumb
   items: MenuItem[];
   home: MenuItem;
 
-  // for pagination
+  //#region for pagination and filtering of the table
   backCriteria: any;
   pageLimitSizes = [{ value: 25 }, { value: 50 }, { value: 100 }];
   limit: number = 25;
@@ -48,18 +67,14 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   totalCount: any;
   displayedDataCount: any;
   accountName: string;
-  // for pagination ends
-
+  //#endregion for pagination ends
+  // chart configuration
   basicOptions: any;
+  //#endregion vars init
 
-  constructor(
-    private _router: Router,
-    private _messageService: MessageService,
-    private _route: ActivatedRoute,
-    private _analysisService: AnalysisService,
-    private _exportDataService: ExportDataService,
-    private _translateService: TranslateService
-  ) { }
+  constructor(private _router: Router, private _messageService: MessageService,
+    private _route: ActivatedRoute, private _analysisService: AnalysisService,
+    private _exportDataService: ExportDataService, private _translateService: TranslateService) { }
 
   ngOnInit(): void {
 
@@ -97,7 +112,6 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       orderBy: 'id',
       sortOrder: 1,
     };
-    this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.detailsOptions = [
       { name: 'Sys-Relevants', value: 1 },
@@ -106,106 +120,28 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     ];
 
     this.frozenCols = [
-      {
-        header: '',
-        field: 'amountRelevant',
-        width: '6',
-        align: 'center',
-      },
-      {
-        header: 'Comment',
-        field: 'amountRelevantComment',
-        width: '35',
-        align: 'left',
-      },
+      { header: '', field: 'amountRelevant', width: '6', align: 'center', },
+      { header: 'Comment', field: 'amountRelevantComment', width: '35', align: 'left', },
     ];
 
     this.cols = [
-      {
-        header: 'DataTableColumns.accountNumber',
-        field: 'accountNumber',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.accountName',
-        field: 'accountName',
-        align: 'left',
-      },
-      {
-        header: 'DataTableColumns.accountType',
-        field: 'accountType',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.documentType',
-        field: 'documentType',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.balance',
-        field: 'balance',
-        align: 'right',
-      },
-      {
-        header: 'DataTableColumns.contraAccountNumber',
-        field: 'contraAccountNumber',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.contraAccountName',
-        field: 'contraAccountName',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.documentNumber',
-        field: 'documentNumber',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.documentDate',
-        field: 'documentDate',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.recordNumber',
-        field: 'recordNumber',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.ledgerId',
-        field: 'ledgerId',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.executionDate',
-        field: 'executionDate',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.dueDate',
-        field: 'dueDate',
-        align: 'center',
-      },
-      {
-        header: 'DataTableColumns.textPosting',
-        field: 'textPosting',
-        align: 'left',
-      },
-      {
-        header: 'DataTableColumns.textHeader',
-        field: 'textHeader',
-        align: 'left',
-      },
-      {
-        header: 'DataTableColumns.reference',
-        field: 'reference',
-        align: 'left',
-      },
-      {
-        header: 'DataTableColumns.assignment',
-        field: 'assignment',
-        align: 'left',
-      },
+      { header: 'DataTableColumns.accountNumber', field: 'accountNumber', align: 'center', },
+      { header: 'DataTableColumns.accountName', field: 'accountName', align: 'left', },
+      { header: 'DataTableColumns.accountType', field: 'accountType', align: 'center', },
+      { header: 'DataTableColumns.documentType', field: 'documentType', align: 'center', },
+      { header: 'DataTableColumns.balance', field: 'balance', align: 'right', },
+      { header: 'DataTableColumns.contraAccountNumber', field: 'contraAccountNumber', align: 'center', },
+      { header: 'DataTableColumns.contraAccountName', field: 'contraAccountName', align: 'center', },
+      { header: 'DataTableColumns.documentNumber', field: 'documentNumber', align: 'center', },
+      { header: 'DataTableColumns.documentDate', field: 'documentDate', align: 'center', },
+      { header: 'DataTableColumns.recordNumber', field: 'recordNumber', align: 'center', },
+      { header: 'DataTableColumns.ledgerId', field: 'ledgerId', align: 'center', },
+      { header: 'DataTableColumns.executionDate', field: 'executionDate', align: 'center', },
+      { header: 'DataTableColumns.dueDate', field: 'dueDate', align: 'center', },
+      { header: 'DataTableColumns.textPosting', field: 'textPosting', align: 'left', },
+      { header: 'DataTableColumns.textHeader', field: 'textHeader', align: 'left', },
+      { header: 'DataTableColumns.reference', field: 'reference', align: 'left', },
+      { header: 'DataTableColumns.assignment', field: 'assignment', align: 'left', },
     ];
 
     this._analysisService
@@ -293,6 +229,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this._router.navigate(['/dashboard/analysis/amount/' + this.baseBalance]);
   }
 
+  //#region export excel from front
   async exportExcel() {
     let translatedData = [];
     for (let index = 0; index < this.data.length; index++) {
@@ -387,13 +324,14 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
     );
   }
+  //#endregion export excel from front
 
+  //#region front filtering
   clearDataFilter() {
     this.criteria = {};
     this.filtersDataNo = 0;
     this.data = [...this.tempData];
   }
-
 
   filterChange(query, colName): void {
     this.searching = true;
@@ -455,6 +393,8 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     }
     this.searching = false;
   }
+  //#endregion front filtering
+
 
   selectRow(row: AmountAnalysisDetails): void {
     const index = this.selected.map((item) => item.id).indexOf(row.id);
@@ -625,6 +565,9 @@ export class AmountAnalysisDetailsComponent implements OnInit {
       );
   }
 
+
+
+  //#region pagination, sorting and filtering from the back
   sort(event) {
     this.backCriteria.orderBy = event.sortField ? event.sortField : 'id';
     this.backCriteria.sortOrder = event.sortOrder;
@@ -632,8 +575,6 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this.backCriteria.offset = 0;
     this.getAllByAccount();
   }
-
-  // for pagination starts
 
   filterChangeBack(query, colName): void {
     this.pageNr = 1;
@@ -693,5 +634,6 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this.pageNr = 1;
     this.getAllByAccount();
   }
-  // for pagination ends
+  //#endregion for pagination ends
+
 }

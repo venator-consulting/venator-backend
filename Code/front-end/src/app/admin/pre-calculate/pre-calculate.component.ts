@@ -12,37 +12,62 @@ import { HttpEventType } from '@angular/common/http';
   styleUrls: ['./pre-calculate.component.sass']
 })
 export class PreCalculateComponent implements OnInit {
+  //#region vars init
+  // organiization id, will get it from local storage
   orgId: number;
+  // selected procecdure id, will get it from local storage
   prcId: number;
-  procedureName: string;
+  // for progress bar (just spinning)
   waiting: boolean;
+  // if true will disable the button which calculate amount analysis
   disableAmount: boolean;
+  // if true will disable the button which calculate creditor analysis
   disableCredit: boolean;
+  // if true will disable the button which calculate text by word analysis analysis
   disabletextWord: boolean;
+  // if true will disable the button which calculate text by acocunt analysis
   disableText_account: boolean;
+  // if true will disable the button which calculate payment analysis
   disablePayment: boolean;
+  // if true will disable the button which calculate due date analysis
   disableDueDate: boolean;
+  // if true will disable the button which calculate document type analysis
   disableDocType: boolean;
+  // if true will disable the button which calculate mail analysis by sender
   disableMailSender: boolean;
+  // if true will disable the button which calculate mail by word analysis
   disableMailWord: boolean;
+  // if true will disable the button which calculate link transactions (record matching)
   disableLinkTrans: boolean;
+  // for progress bar for text by word analysis
   progress = 0;
+  // for progress bar for amount analysis
   amountProgress = 0;
+  // for progress bar for amount analysis
   paymentProgress = 0;
+  // for progress bar for due date analysis
   dueDateProgress = 0;
+  // for progress bar for creditor analysis
   creditorProgress = 0;
+  // for progress bar for text by account analysis
   textAccountProgress = 0;
+  // for progress bar for mail analysis by sender
   mailSenderProgress = 0;
+  // for progress bar for mail analysis by word
   mailWordProgress = 0;
+  //#endregion vars init
 
   constructor(private _preCalcService: PreCalculateService, private _messageService: MessageService,
     private _procedureService: ProcedureService, private _translateService: TranslateService) { }
 
   ngOnInit(): void {
+    // get organization id
     this.orgId = +localStorage.getItem('organisationId');
+    // get procedure id
     this.prcId = +localStorage.getItem('currentProcedureId');
+    // check if doctype button disabled
     this.disableDocType = (localStorage.getItem('currentProcedureDocType') !== 'true');
-    this.procedureName = localStorage.getItem('currentProcedureName');
+    // check if amount button should be disabled
     this.disableAmount = (localStorage.getItem('currentProcedureAmount') === 'true');
     this.disableCredit = (localStorage.getItem('currentProcedureCredit') === 'true');
     this.disabletextWord = (localStorage.getItem('currentProcedureText_word') === 'true');
@@ -54,6 +79,9 @@ export class PreCalculateComponent implements OnInit {
     this.disableLinkTrans = (localStorage.getItem('currentProcedureLinkTrans') === 'true');
   }
 
+  /**
+   * set the procedure status in localstorage
+   */
   updateProcedureStatus() {
     if (this.disableAmount && this.disableCredit && this.disableDueDate &&
       this.disablePayment && this.disableText_account && this.disabletextWord
@@ -241,37 +269,6 @@ export class PreCalculateComponent implements OnInit {
   linkTransStart() {
     this.waiting = true;
     this._preCalcService.linkTransactions(this.orgId, this.prcId);
-    // .subscribe(data => console.log(data));
-    // .subscribe(async (res) => {
-    //   console.log(res);
-    //   switch (res.type) {
-    //     case HttpEventType.Sent:
-    //       console.log('Request has been made!');
-    //       break;
-    //     case HttpEventType.ResponseHeader:
-    //       console.log('Response header has been received!');
-    //       break;
-    //     // case HttpEventType.UploadProgress:
-    //     //   this.progress = Math.round(res.loaded / res.total * 100);
-    //     //   this.progressElm.nativeElement.style.width = +this.progress + '%';
-    //     //   this.cdRef.detectChanges();
-    //     //   console.log(`Uploaded! ${this.progress}%`);
-    //     //   break;
-    //     case HttpEventType.Response:
-    //       console.log('User successfully created!', res);
-    //       break;
-    //   } // end of switch
-    //   this.waiting = false;
-    //   // localStorage.setItem('currentProcedureLinkTrans', 'true');
-    //   // this.disableLinkTrans = true;
-    //   this._messageService.add({
-    //     severity: 'success',
-    //     summary: 'SUCCESS',
-    //     life: 10000,
-    //     detail: await this._translateService.get('general_messages.update_success').toPromise(),
-    //   });
-    //   this.updateProcedureStatus();
-    // }, er => this.waiting = false);
   }
 
 

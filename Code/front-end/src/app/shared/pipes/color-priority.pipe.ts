@@ -16,13 +16,13 @@ export class ColorPriorityPipe implements PipeTransform {
     let temp = '';
     switch (value) {
       case 'High': case 'Hoog':
-        temp = `<span style="color: red">${value}</span>`;
+        temp = `<span style="color: red; text-shadow: 1px 1px 1px black;">${value}</span>`;
         break;
       case 'Medium': case 'Medium':
-        temp = `<span style="color: orange">${value}</span>`;
+        temp = `<span style="color: orange; text-shadow: 1px 1px 1px black;">${value}</span>`;
         break;
       case 'Low': case 'Laag':
-        temp = `<span style="color: yellow">${value}</span>`;
+        temp = `<span style="color: #21ff5c; text-shadow: 1px 1px 1px black;">${value}</span>`;
         break;
       default: temp = value;
     }
