@@ -491,4 +491,17 @@ module.exports.updateCreditorPriority = async function (req, res) {
   const result = await criteorAnalysisRepo.updateCreditorPriority(orgId, prcId, row);
   res.status(200).json(result);
 }
+
+module.exports.getCreditorComment = async function (req, res) {
+  const { orgId, prcId, accountNumber } = req.params;
+  const result = await criteorAnalysisRepo.getCreditorComment(orgId, prcId, accountNumber);
+  res.status(200).json(result);
+}
+
+module.exports.updateCreditorComment = async function (req, res) {
+  const { orgId, prcId, accountNumber } = req.params;
+  const data = req.body;
+  const result = criteorAnalysisRepo.updateCreidtorComment(orgId, prcId, accountNumber, data);
+  res.status(201).json(result);
+}
 //#endregion creditor analysis

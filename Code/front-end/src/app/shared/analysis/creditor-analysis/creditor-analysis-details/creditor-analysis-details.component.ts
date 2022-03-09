@@ -7,13 +7,17 @@ import { TextAnalysisDetailsWord } from 'src/app/shared/model/textAnalysis';
 import { AmountAnalysisDetailsChart } from 'src/app/shared/model/amountAnalysis';
 import { CurrencyPipe } from '@angular/common';
 import { MailHistoryService } from 'src/app/shared/service/mail-history.service';
+import { SanitizePipe } from 'src/app/shared/pipes/sanitize.pipe';
 
 @Component({
   selector: 'app-creditor-analysis-details',
   templateUrl: './creditor-analysis-details.component.html',
   styleUrls: ['./creditor-analysis-details.component.sass'],
+  providers: [SanitizePipe]
 })
 export class CreditorAnalysisDetailsComponent implements OnInit {
+
+  //#region vars init
   accountNumber: string;
   procedureName: string;
   selectedProcedure: number;
@@ -57,13 +61,18 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   // email by word analysis
   mailWordChartData: any;
 
+  comment: any;
+  showSideBar: boolean = false;
+  //#endregion vars init
+
   constructor(
     public _translateService: TranslateService,
     private _route: ActivatedRoute,
     private _analysisService: AnalysisService,
     private _messageService: MessageService,
     private _router: Router,
-    private _mailService: MailHistoryService
+    private _mailService: MailHistoryService,
+    private sanitize: SanitizePipe
   ) { }
 
   ngOnInit(): void {
@@ -94,15 +103,10 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
       };
       this.waiting = true;
       this._analysisService
-        .getCreditorAnalysisDetails(
-          this.selectedOrganisation,
-          this.selectedProcedure,
-          this.accountNumber
-        )
+        .getCreditorAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
         .subscribe(
           (res) => {
-            this.totalAmount =
-              res.amount.length > 0 ? res.amount[0].totalBalance : 0;
+            this.totalAmount = res.amount.length > 0 ? res.amount[0].totalBalance : 0;
             this.totalAmountCount = res.amount.length > 0 ? res.amount[0].totlaCount : 0;
             this.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
             this.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
@@ -184,7 +188,8 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
     this.getDueDateChartData();
     this.getMailBySender();
     this.getMailWordChartData();
-  }
+    this.getCreditorComment();
+  } // end of ng on init
 
   getAmountChartData() {
     this._analysisService
@@ -382,4 +387,26 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   setDetails(option: number) {
     this.displayDetails = option;
   }
+
+  getCreditorComment() {
+    this._analysisService
+      .getCreditorComment(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+      .subscribe(res => {
+        this.comment = res.comment;
+        // this.comment = this.sanitize.transform(res.comment);
+        // debugger;
+      });
+  }
+
+  updateCreditorComment() {
+    this.waiting = true;
+    this._analysisService
+      .updateCreditorComment(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, { comment: this.comment })
+      .subscribe(res => {
+        this.waiting = false;
+        this._messageService.add({ severity: 'success', detail: 'Updated Successfully' });
+      }, er => this.waiting = false);
+  }
+
+
 }

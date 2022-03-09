@@ -274,3 +274,18 @@ module.exports.updateCreditorPriority = async function (orgId, prcId, row) {
     .getCreditor('creditor_analysis_' + orgId)
     .update(row, { where: { id } });
 }
+
+module.exports.getCreditorComment = async function (orgId, prcId, accountNumber) {
+  return await CreditorModel.getCreditor('creditor_analysis_' + orgId)
+    .findOne({
+      where: { accountNumber, procedureId: prcId },
+      attributes: ['id', 'accountNumber', 'accountName', 'comment'],
+    });
+}
+
+module.exports.updateCreidtorComment = async function (orgId, prcId, accountNumber, data) {
+  return await CreditorModel.getCreditor('creditor_analysis_' + orgId)
+    .update(data, {
+      where: { accountNumber, procedureId: prcId }
+    });
+}

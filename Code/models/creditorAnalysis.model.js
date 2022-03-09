@@ -36,6 +36,9 @@ module.exports.getCreditor = function (tableName = 'creditor_analysis_') {
             // we can make it enum, but we will set it as tinyint if we want to extends the levels
             // type: DataTypes.ENUM(1, 2, 3),
             type: DataTypes.TINYINT(1)
+        },
+        comment: {
+            type: DataTypes.STRING(1000)
         }
     }, {
         tableName: tableName

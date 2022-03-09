@@ -57,6 +57,15 @@ router
     analysisCtrl.updateCreditorPriority);
 
 router
+  .route("/:orgId/:prcId/credtor/details/comment/:accountNumber")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.getCreditorComment)
+  .put(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.updateCreditorComment);
+
+router
   .route("/:orgId/:prcId/credtor/details/:accountNumber")
   .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),

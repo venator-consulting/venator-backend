@@ -173,6 +173,14 @@ export class AnalysisService {
   updateCreditorPriority(orgId: number, prcId: number, row: any): Observable<any> {
     return this._http.put<any>(this._thisURL + orgId + '/' + prcId + '/credtor', row);
   }
+
+  getCreditorComment(orgId: number, prcId: number, accountNumber: string): Observable<any> {
+    return this._http.get<any>(this._thisURL + orgId + '/' + prcId + '/credtor/details/comment/' + accountNumber);
+  }
+
+  updateCreditorComment(orgId: number, prcId: number, accountNumber: string, row: any): Observable<any> {
+    return this._http.put<any>(this._thisURL + orgId + '/' + prcId + '/credtor/details/comment/' + accountNumber, row);
+  }
   //#endregion Creditor
 
 }

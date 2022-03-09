@@ -122,6 +122,9 @@ import { DuedateCorrectionComponent } from './admin/duedate-correction/duedate-c
 import { ColorPriorityPipe } from './shared/pipes/color-priority.pipe';
 import { StarsPriorityPipe } from './shared/pipes/stars-priority.pipe';
 
+import {EditorModule} from 'primeng/editor';
+import { SanitizePipe } from './shared/pipes/sanitize.pipe';
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
   // return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -195,6 +198,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DuedateCorrectionComponent,
     ColorPriorityPipe,
     StarsPriorityPipe,
+    SanitizePipe,
   ],
   imports: [
     BrowserModule,
@@ -248,7 +252,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConfirmDialogModule,
     SliderModule,
     CaptchaModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    EditorModule
   ],
   providers: [MessageService, ConfirmationService, AuthGuard, {
     provide: LOCALE_ID,
