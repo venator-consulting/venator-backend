@@ -73,11 +73,11 @@
           placeholder="{{'CreditorsAnalysis.selectPriority' | translate}}" optionLabel="label" [showClear]="true"
           [filter]="true" filterBy="label" (onChange)="filterChange($event.value, 'priority')" [style]="{width:'100%'}">
           <ng-template pTemplate="item" let-item>
-            <span [innerHTML]="'CreditorsAnalysis.'+item.label | translate | colorPriority"></span>
+            <span [innerHTML]="item.value | starsPriority"></span>
             <!-- {{'CreditorsAnalysis.'+item.label | translate | colorPriority}} -->
           </ng-template>
           <ng-template pTemplate="selectedItem" let-item>
-            <span [innerHTML]="'CreditorsAnalysis.'+item.label | translate | colorPriority"></span>
+            <span [innerHTML]="item.value | starsPriority"></span>
             <!-- {{'CreditorsAnalysis.'+item.label | translate | colorPriority}} -->
           </ng-template>
         </p-dropdown>
@@ -95,7 +95,8 @@
         </span>
         <div *ngIf="!row.isEditable && col.field == 'priority'">
           <span *ngIf="row.priority">
-            <span [innerHTML]="'CreditorsAnalysis.'+displayPriority[row.priority] | translate | colorPriority"></span>
+            <span [innerHTML]="row.priority | starsPriority"></span>
+            <!-- <span [innerHTML]="'CreditorsAnalysis.'+displayPriority[row.priority] | translate | colorPriority"></span> -->
             <!-- {{'CreditorsAnalysis.'+displayPriority[row.priority] | translate | colorPriority}} -->
           </span>
         </div>
@@ -104,11 +105,13 @@
             placeholder="{{'Account_Type.accountTypeNewName' | translate}}" optionLabel="label" [showClear]="true"
             [filter]="true" filterBy="label" (onChange)="priorityChangedHandler($event, row)" [style]="{width:'300px'}">
             <ng-template pTemplate="item" let-item>
-              <span [innerHTML]="'CreditorsAnalysis.'+item.label | translate | colorPriority"></span>
+              <span [innerHTML]="item.value | starsPriority"></span>
+              <!-- <span [innerHTML]="'CreditorsAnalysis.'+item.label | translate | colorPriority"></span> -->
               <!-- {{'CreditorsAnalysis.'+item.label | translate | colorPriority}} -->
             </ng-template>
             <ng-template pTemplate="selectedItem" let-item>
-              <span [innerHTML]="'CreditorsAnalysis.'+item.label | translate | colorPriority"></span>
+              <span [innerHTML]="item.value | starsPriority"></span>
+              <!-- <span [innerHTML]="'CreditorsAnalysis.'+item.label | translate | colorPriority"></span> -->
               <!-- {{'CreditorsAnalysis.'+item.label | translate}} -->
             </ng-template>
           </p-dropdown>

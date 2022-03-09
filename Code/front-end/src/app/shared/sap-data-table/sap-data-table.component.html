@@ -13,7 +13,7 @@
 
 <div class="card">
   <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="loading"></p-progressBar>
-  <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="350px" [style]="{ width: '100%' }"
+  <p-table [value]="postings" [columns]="cols" [scrollable]="true" scrollHeight="50vh" [style]="{ width: '100%' }"
     [resizableColumns]="true" styleClass="p-datatable-gridlines" [reorderableColumns]="true" [loading]="loading"
     [lazy]="true" [customSort]="true" (onLazyLoad)="sort($event)">
     <ng-template pTemplate="caption">
