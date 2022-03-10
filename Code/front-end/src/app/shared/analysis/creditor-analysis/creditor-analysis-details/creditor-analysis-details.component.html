@@ -7,33 +7,9 @@
       <p-button icon="pi pi-pencil" label="Comment" class="p-button-raised p-button-outlined"
         (click)="showSideBar = !showSideBar"></p-button>
     </p>
-    <p-sidebar [(visible)]="showSideBar" position="right" [showCloseIcon]="true">
+    <p-sidebar [(visible)]="showSideBar" position="right" [showCloseIcon]="true" [fullScreen]="true">
       <button pButton label="Save" icon="pi pi-check" (click)="updateCreditorComment()"></button>
-      <p-editor [(ngModel)]="comment" [style]="{'height':'320px'}">
-        <!-- <ng-template pTemplate="header">
-          <span class="ql-formats">
-            <button type="button" class="ql-bold" aria-label="Bold"></button>
-            <button type="button" class="ql-italic" aria-label="Italic"></button>
-            <button type="button" class="ql-underline" aria-label="Underline"></button>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-script" aria-label="super" value="super"></button>
-            <button class="ql-blockquote" aria-label="Block Quote"></button>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-list" title="List" value="ordered"></button>
-            <button class="ql-list" title="Bullet" value="bullet"></button>
-            <button class="ql-indent" title="Intend" value="-1"></button>
-            <button class="ql-indent" title="Intend" value="+1"></button>
-            <select title="Text Alignment" class="ql-align">
-             <option selected>Gauche</option>
-             <option value="center" label="Center"></option>
-             <option value="right" label="Right"></option>
-             <option value="justify" label="Justify"></option>
-            </select>
-          </span>
-        </ng-template> -->
-      </p-editor>
+      <ckeditor [editor]="Editor" [(ngModel)]="comment"></ckeditor>
     </p-sidebar>
 
 

@@ -500,7 +500,7 @@
     "maxDelay": "Max. Verspätung"
   },
   "CreditorsAnalysis": {
-    "priority": "Priority",
+    "priority": "Priorität",
     "null": " ",
     "selectPriority": "Select Priority",
     "high": "Hoog",

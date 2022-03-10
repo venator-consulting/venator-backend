@@ -7,15 +7,17 @@ import { TextAnalysisDetailsWord } from 'src/app/shared/model/textAnalysis';
 import { AmountAnalysisDetailsChart } from 'src/app/shared/model/amountAnalysis';
 import { CurrencyPipe } from '@angular/common';
 import { MailHistoryService } from 'src/app/shared/service/mail-history.service';
-import { SanitizePipe } from 'src/app/shared/pipes/sanitize.pipe';
+
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-creditor-analysis-details',
   templateUrl: './creditor-analysis-details.component.html',
   styleUrls: ['./creditor-analysis-details.component.sass'],
-  providers: [SanitizePipe]
 })
 export class CreditorAnalysisDetailsComponent implements OnInit {
+
+  public Editor = ClassicEditor;
 
   //#region vars init
   accountNumber: string;
@@ -71,8 +73,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
     private _analysisService: AnalysisService,
     private _messageService: MessageService,
     private _router: Router,
-    private _mailService: MailHistoryService,
-    private sanitize: SanitizePipe
+    private _mailService: MailHistoryService
   ) { }
 
   ngOnInit(): void {
@@ -393,8 +394,6 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
       .getCreditorComment(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.comment = res.comment;
-        // this.comment = this.sanitize.transform(res.comment);
-        // debugger;
       });
   }
 

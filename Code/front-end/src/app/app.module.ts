@@ -122,8 +122,9 @@ import { DuedateCorrectionComponent } from './admin/duedate-correction/duedate-c
 import { ColorPriorityPipe } from './shared/pipes/color-priority.pipe';
 import { StarsPriorityPipe } from './shared/pipes/stars-priority.pipe';
 
-import {EditorModule} from 'primeng/editor';
 import { SanitizePipe } from './shared/pipes/sanitize.pipe';
+
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -253,7 +254,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SliderModule,
     CaptchaModule,
     OverlayPanelModule,
-    EditorModule
+    CKEditorModule
   ],
   providers: [MessageService, ConfirmationService, AuthGuard, {
     provide: LOCALE_ID,
