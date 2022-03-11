@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
@@ -9,6 +9,10 @@ import { CurrencyPipe } from '@angular/common';
 import { MailHistoryService } from 'src/app/shared/service/mail-history.service';
 
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import 'jspdf-autotable';
+import { MailSenderChart, MailWordChart } from 'src/app/shared/model/mailHistory';
 
 @Component({
   selector: 'app-creditor-analysis-details',
@@ -52,6 +56,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
 
   // payment analysis chart
   paymentChartData: any;
+  paymentChartHasData: boolean = false;
 
   // due date analysis chart
   dueDateChartData: any;
@@ -65,6 +70,26 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
 
   comment: any;
   showSideBar: boolean = false;
+
+  //#region Export PDF
+  @ViewChild('amountChart') amountChart: { el: ElementRef };
+  @ViewChild('textChart') textChart: { el: ElementRef };
+  @ViewChild('paymentChart') paymentChart: { el: ElementRef };
+  @ViewChild('dueDateChart') dueDateChart: { el: ElementRef };
+  @ViewChild('mailSenderChart') mailSenderChart: { el: ElementRef };
+  @ViewChild('mailWordChart') mailWordChart: { el: ElementRef };
+  @ViewChild('textDetails') textDetails: ElementRef;
+  @ViewChild('amountDetails') amountDetails: ElementRef;
+  @ViewChild('paymentDetails') paymentDetails: ElementRef;
+  @ViewChild('mailSenderDetails') mailSenderDetails: ElementRef;
+  @ViewChild('dueDateDetails') dueDateDetails: ElementRef;
+  dueDateChartDataRecords: any;
+  mailSenderChartRecords: MailSenderChart[];
+  mailWordChartRecords: MailWordChart[];
+
+  canExported: any[] = [];
+  canExportedDetails: any[] = [];
+  //#endregion Export PDF
   //#endregion vars init
 
   constructor(
@@ -73,7 +98,9 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
     private _analysisService: AnalysisService,
     private _messageService: MessageService,
     private _router: Router,
-    private _mailService: MailHistoryService
+    private _mailService: MailHistoryService,
+    // to create html elements by code
+    private renderer: Renderer2
   ) { }
 
   ngOnInit(): void {
@@ -183,6 +210,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
         ],
       },
     };
+
     this.getAmountChartData();
     this.getWords();
     this.getPaymentChartData();
@@ -190,6 +218,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
     this.getMailBySender();
     this.getMailWordChartData();
     this.getCreditorComment();
+
   } // end of ng on init
 
   getAmountChartData() {
@@ -197,6 +226,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
       .getAmountAnalysisDetailsChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, 500)
       .subscribe(res => {
         this.balanceChartData = res;
+        this.canExported.push({ chart: 'amountChart', title: 'Amount Analysis', hasData: this.balanceChartData.length > 0 });
         this.amountChartData = {
           labels: this.balanceChartData.map(rec => rec.balance),
           datasets: [
@@ -215,7 +245,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
       .getTextAnalysisDetailsWords(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.wordsChartData = res;
-
+        this.canExported.push({ chart: 'textChart', title: 'Text Analysis', hasData: this.wordsChartData.length > 0 });
         this.chartData = {
           labels: this.wordsChartData.map(rec => rec.word),
           datasets: [
@@ -252,6 +282,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
             red.push(-1 * (element.red.value));
           }
 
+          this.canExported.push({ chart: 'paymentChart', title: 'Payment Analysis', hasData: data.length > 0 });
           this.paymentChartData = {
             labels: labels,
             datasets: new Array(),
@@ -288,7 +319,8 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
       .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure, start, end, parmas)
       .subscribe(
         async (res) => {
-          let secondChartDataRecords = res.data.dueDateReference.recordsDelay;
+          // this.dueDateChartDataRecords = res.data.dueDateReference.recordsDelay;
+          this.canExported.push({ chart: 'dueDateChart', title: 'Due Date Analysis', hasData: res.data.dueDateReference.recordsDelay.length > 0 });
           let thisAccountDetails = res.data?.dueDateRefAccounts[0];
           this.totlaDueDateCount = thisAccountDetails?.count ?? 0;
           this.totalDueDate = +thisAccountDetails?.delayNeg + +thisAccountDetails?.delayPos;
@@ -300,7 +332,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
                 label: (tooltipItem, data) => {
                   // debugger;
                   let value = tooltipItem.value;
-                  let point = secondChartDataRecords[tooltipItem.index];
+                  let point = this.dueDateChartDataRecords[tooltipItem.index];
                   let label = point.label;
                   let accountNumber = point?.accountNumber;
                   let accountName = point?.accountName;
@@ -344,7 +376,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
             datasets: [{
               label: await this._translateService.get('DueDateAnalysis.secondChartLabel').toPromise(),
               borderColor: `rgb(100,100,255)`,
-              data: secondChartDataRecords,
+              data: this.dueDateChartDataRecords,
               fill: false,
             }]
           };
@@ -355,6 +387,8 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
     this._mailService
       .getMailDetailsAnalysisSenderByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
+        this.mailSenderChartRecords = res;
+        this.canExported.push({ chart: 'mailSenderChart', title: 'Mail By Sender Analysis', hasData: res.length > 0 });
         this.mailSenderChartData = {
           labels: res?.map(rec => rec.email + ' - ' + rec.sender),
           datasets: [
@@ -372,6 +406,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
     this._mailService
       .getMailDetailsAnalysisWordByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
+        this.canExported.push({ chart: 'mailWordChart', title: 'Mail By Word Analysis', hasData: res.length > 0 });
         this.mailWordChartData = {
           labels: res?.map(rec => rec.word),
           datasets: [
@@ -407,5 +442,82 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
       }, er => this.waiting = false);
   }
 
+  //#region  export pdf
+  public async exportPDF(): Promise<void> {
+
+    // a4 size is 210 * 296 approximately
+    let PDF = new jsPDF('p', 'mm', 'a4');
+    let positionY = 10;
+    let fileWidth = 210;
+    let pageNumber = 1;
+
+    //#region add the header
+    PDF.text(this.accountNumber + ' - ' + this.accountName, 100, positionY, { align: 'center' });
+    positionY += 20;
+    // if (positionY > (pageNumber * 290)) pageNumber++;
+
+    //#endregion add the header
+
+    //#region Convert charts and tables
+    for (const chart of this.canExported) {
+      if (chart.hasData)
+        positionY = await this.addSectionToPDF(PDF, chart.chart, positionY, chart.title);
+    }
+    //#endregion Convert charts
+
+    //#region details
+    await this.addSectionDetailsToPDF(PDF, 'textDetails', positionY);
+    //#endregion Details
+
+    //#region add the footer
+    PDF.setFontSize(8);
+    PDF.text('Report Exported at: ' + (new Date()).toLocaleString(), 10, 290, { align: 'left' });
+    //#endregion add the footer
+
+    // download pdf
+    PDF.save(this.accountNumber + '-' + this.accountName + '.pdf');
+  }
+
+  async addSectionToPDF(pdf: jsPDF, section: string, positionY: number, title?: string): Promise<number> {
+    let fileWidth = 208;
+    // get html
+    let html: HTMLElement = this[section].el.nativeElement;
+    // convert to canvas
+    const canvas = await html2canvas(html);
+    // calculate height with scaling
+    // const height = (canvas.height * fileWidth) / canvas.width;
+    const height = (140 / canvas.width) * canvas.height;
+    // convert canvas to image
+    const image = canvas.toDataURL('image/png');
+    // add image to pdf
+    // add 10 for title
+    if ((positionY + height + 10) > 290) {
+      pdf.addPage('a4', 'p');
+      positionY = 10;
+    }
+    pdf.text(title, 20, positionY);
+    pdf.addImage(image, 'PNG', 35, positionY + 10, 140, height);
+    // increase Position
+    positionY += height + 20;
+    return positionY;
+  }
+
+  async addSectionDetailsToPDF(pdf: jsPDF, componentName: string, positionY: number) {
+    return new Promise((resolve, reject) => {
+      let headers = this[componentName].getColumns();
+      this[componentName].getRelevant()
+        .subscribe(res => {
+          //@ts-ignore
+          pdf.autoTable({
+            startY: positionY,
+            columns: headers?.map(header => ({ header: header.field, dataKey: header.field })),
+            // head: headers?.map(header => header.field),
+            body: res,
+          });
+          resolve('done');
+        }, er => reject(er));
+    });
+  }
+  //#endregion export pdf
 
 }

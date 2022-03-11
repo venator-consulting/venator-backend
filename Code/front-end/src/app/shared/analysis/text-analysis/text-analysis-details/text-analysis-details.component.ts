@@ -8,6 +8,7 @@ import * as FileSaver from 'file-saver';
 import { ExportDataService } from 'src/app/shared/service/export-data.service';
 import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-text-analysis-details',
@@ -614,4 +615,15 @@ export class TextAnalysisDetailsComponent implements OnInit {
     this.getAllByAccount();
   }
   // for pagination ends
+
+  //#region Creditor details PDF report
+  getRelevant(): Observable<any> {
+    return this._analysisService
+      .getTextAnalysisDetailsRelevant(this.orgId, this.prcId, this.accountNumber);
+  }
+
+  getColumns() {
+    return this.cols;
+  }
+  //#endregion PDF Report
 }

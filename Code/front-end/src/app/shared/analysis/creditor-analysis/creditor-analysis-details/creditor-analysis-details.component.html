@@ -10,10 +10,9 @@
     <p-sidebar [(visible)]="showSideBar" position="right" [showCloseIcon]="true" [fullScreen]="true">
       <button pButton label="Save" icon="pi pi-check" (click)="updateCreditorComment()"></button>
       <ckeditor [editor]="Editor" [(ngModel)]="comment"></ckeditor>
+
+      <button pButton label="Export" icon="pi pi-pdf" (click)="exportPDF()"></button>
     </p-sidebar>
-
-
-
 
     <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
   </div>
@@ -30,7 +29,7 @@
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.amountTotalBalance' | translate}}
       </ng-template>
-      <p-chart type="bar" [data]="amountChartData" height="350px" [options]="basicOptions"></p-chart>
+      <p-chart #amountChart type="bar" [data]="amountChartData" height="350px" [options]="basicOptions"></p-chart>
     </p-card>
   </div>
   <div class="p-col-4">
@@ -38,7 +37,7 @@
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.textTotalBalance' | translate}}
       </ng-template>
-      <p-chart type="pie" [data]="chartData" height="350px"></p-chart>
+      <p-chart #textChart type="pie" [data]="chartData" height="350px"></p-chart>
     </p-card>
   </div>
   <div class="p-col-4">
@@ -46,7 +45,7 @@
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.paymentTotalBalance' | translate}}
       </ng-template>
-      <p-chart type="bar" height="350" [data]="paymentChartData" [options]="basicOptions"> </p-chart>
+      <p-chart #paymentChart type="bar" height="350" [data]="paymentChartData" [options]="basicOptions"> </p-chart>
     </p-card>
   </div>
 
@@ -55,7 +54,7 @@
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.dueDate' | translate}}
       </ng-template>
-      <p-chart #chart2 type="scatter" height="350" [data]="dueDateChartData" [options]="dueDateChartOptions">
+      <p-chart #dueDateChart type="scatter" height="350" [data]="dueDateChartData" [options]="dueDateChartOptions">
       </p-chart>
     </p-card>
   </div>
@@ -65,7 +64,7 @@
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.senderTotalCount' | translate}}
       </ng-template>
-      <p-chart type="pie" [data]="mailSenderChartData" height="350px"></p-chart>
+      <p-chart #mailSenderChart type="pie" [data]="mailSenderChartData" height="350px"></p-chart>
     </p-card>
   </div>
 
@@ -75,7 +74,7 @@
       <ng-template pTemplate="header">
         {{ 'CreditorsAnalysis.mailWord' | translate}}
       </ng-template>
-      <p-chart type="pie" [data]="mailWordChartData" height="350px"></p-chart>
+      <p-chart #mailWordChart type="pie" [data]="mailWordChartData" height="350px"></p-chart>
     </p-card>
   </div>
 
@@ -160,11 +159,12 @@
 
 <div class="p-grid">
   <div class="p-col-12">
-    <app-text-analysis-details details="true" [hidden]="displayDetails!=1"></app-text-analysis-details>
-    <amount-analysis-details details="true" [hidden]="displayDetails!=2"></amount-analysis-details>
-    <app-payment-analysis-details details="true" [hidden]="displayDetails!=3"></app-payment-analysis-details>
-    <app-mail-analysis-sender-details [accountNumber]="accountNumber" [hidden]="displayDetails!=4">
+    <app-text-analysis-details #textDetails details="true" [hidden]="displayDetails!=1"></app-text-analysis-details>
+    <amount-analysis-details #amountDetails details="true" [hidden]="displayDetails!=2"></amount-analysis-details>
+    <app-payment-analysis-details #paymentDetails details="true" [hidden]="displayDetails!=3">
+    </app-payment-analysis-details>
+    <app-mail-analysis-sender-details #mailSenderDetails [accountNumber]="accountNumber" [hidden]="displayDetails!=4">
     </app-mail-analysis-sender-details>
-    <app-due-date details="true" [hidden]="displayDetails!=5"></app-due-date>
+    <app-due-date #dueDateDetails details="true" [hidden]="displayDetails!=5"></app-due-date>
   </div>
 </div>
