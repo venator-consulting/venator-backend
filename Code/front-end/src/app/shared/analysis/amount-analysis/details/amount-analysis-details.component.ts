@@ -8,6 +8,7 @@ import { ExportDataService } from 'src/app/shared/service/export-data.service';
 import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import { CurrencyPipe } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'amount-analysis-details',
@@ -635,5 +636,16 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     this.getAllByAccount();
   }
   //#endregion for pagination ends
+
+  //#region Creditor details PDF report
+  getRelevant(): Observable<any> {
+    return this._analysisService
+      .getAmountAnalysisDetailsRelevant(this.orgId, this.prcId, this.accountNumber);
+  }
+
+  getColumns() {
+    return this.cols;
+  }
+  //#endregion PDF Report
 
 }

@@ -569,4 +569,16 @@ export class DueDateComponent implements OnInit {
   }
   //#endregion Details table
 
+  //#region PDF Report
+  getRelevant() {
+    return this._analysisService
+      .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure,
+        this.selectedAccount.accountNumber, null, null, this.maxDelay);
+  }
+
+  getColumns() {
+    return this.detailsCols;
+  }
+  //#endregion PDF Report
+
 }

@@ -17,6 +17,7 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
 
   @Input('accountNumber') accountNumber;
 
+  //#region vars init 
   orgId: number;
   prcId: number;
   waiting: boolean = true;
@@ -47,6 +48,7 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
   detailsOptions: { name: string; value: number }[];
   detailsOption: number = 1;
   attachments: Attachment[] = new Array();
+  //#endregion vars init 
 
   constructor(private _mailService: MailHistoryService, private _router: Router,
     private _translateService: TranslateService, private _exportDataService: ExportDataService,
@@ -495,7 +497,7 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
       );
   }
 
-  // for pagination starts
+  //#region for pagination starts
 
   filterChangeBack(query, colName): void {
     this.pageNr = 1;
@@ -552,6 +554,17 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
     this.pageNr = 1;
     this.getAllBySender();
   }
+  //#endregion Pagination and filtering
 
+
+  //#region PDF Report
+  getRelevant() {
+    return this.getUserRelevantByAccountNumber();
+  }
+
+  getColumns() {
+    return this.cols;
+  }
+  //#endregion PDF Report
 
 }

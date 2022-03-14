@@ -342,7 +342,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
               this.red.push(-1 * (element.red.value));
             }
           }
-          
+
           this.waiting = false;
         },
         (er) => {
@@ -922,7 +922,7 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
       );
   }
 
-  // for pagination starts
+  //#region for pagination starts
 
   filterChangeBack(query, colName): void {
     this.pageNr = 1;
@@ -979,12 +979,23 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
     this.pageNr = 1;
     this.getAllByAccount();
   }
-  // for pagination ends
+  //#endregion for pagination ends
 
   selectBarData(e) {
     let index = e?.element?._index;
     this.selectedDate = this.labels[index];
     this.child.updateData(this.selectedDate);
   }
+
+  //#region PDF report
+  getRelevant() {
+    return this._analysisService
+      .getPaymentAnalysisDetailsRelevant(this.selectedOrganisation, this.selectedProcedure, this.accountNumber);
+  }
+
+  getColumns() {
+    return this.cols;
+  }
+  //#endregion PDF Report
 
 }

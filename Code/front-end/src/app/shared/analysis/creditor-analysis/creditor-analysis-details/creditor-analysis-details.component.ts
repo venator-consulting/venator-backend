@@ -10,8 +10,8 @@ import { MailHistoryService } from 'src/app/shared/service/mail-history.service'
 
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import 'jspdf-autotable';
+import html2canvas from 'html2canvas';
 import { MailSenderChart, MailWordChart } from 'src/app/shared/model/mailHistory';
 
 @Component({
@@ -136,15 +136,20 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
           (res) => {
             this.totalAmount = res.amount.length > 0 ? res.amount[0].totalBalance : 0;
             this.totalAmountCount = res.amount.length > 0 ? res.amount[0].totlaCount : 0;
+            // for export as pdf and check box
+            this.canExportedDetails.push({ name: 'amountDetails', title: 'Amount Details', hasData: this.totalAmountCount > 0 });
             this.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
             this.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
+            this.canExportedDetails.push({ name: 'paymentDetails', title: 'Payment Details', hasData: this.totalPaymentCount > 0 });
             this.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
             this.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
+            this.canExportedDetails.push({ name: 'textDetails', title: 'Text Details', hasData: this.totalTextCount > 0 });
             // this.totalEmailCount = res.email.length > 0 ? res.email[0].totlaCount : 0;
             this.totlaSenderCount = res.email?.length;
             res.email?.forEach(sender => {
               this.totalEmailCount += +sender.totlaCount ?? 0;
             });
+            this.canExportedDetails.push({ name: 'mailSenderDetails', title: 'Email Sender Details', hasData: this.totalEmailCount > 0 });
             this.accountName =
               res.text.length > 0
                 ? res.text[0].accountName
@@ -227,6 +232,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
       .subscribe(res => {
         this.balanceChartData = res;
         this.canExported.push({ chart: 'amountChart', title: 'Amount Analysis', hasData: this.balanceChartData.length > 0 });
+
         this.amountChartData = {
           labels: this.balanceChartData.map(rec => rec.balance),
           datasets: [
@@ -323,6 +329,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
           this.canExported.push({ chart: 'dueDateChart', title: 'Due Date Analysis', hasData: res.data.dueDateReference.recordsDelay.length > 0 });
           let thisAccountDetails = res.data?.dueDateRefAccounts[0];
           this.totlaDueDateCount = thisAccountDetails?.count ?? 0;
+          this.canExportedDetails.push({ name: 'dueDateDetails', title: 'Due Date Details', hasData: this.totlaDueDateCount > 0 });
           this.totalDueDate = +thisAccountDetails?.delayNeg + +thisAccountDetails?.delayPos;
           let labels = res.data.dueDateReference.labels;
           let minDate = new Date(res.dateRange[0].mindate);
@@ -454,19 +461,41 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
     //#region add the header
     PDF.text(this.accountNumber + ' - ' + this.accountName, 100, positionY, { align: 'center' });
     positionY += 20;
-    // if (positionY > (pageNumber * 290)) pageNumber++;
+
+    // add the comment
+    // get html comment
+    let htmlCommentCollection = document.getElementsByClassName('ck-content');
+    let htmlComment: HTMLElement = htmlCommentCollection.item(0) as HTMLElement;
+
+    const canvas = await html2canvas(htmlComment);
+    // calculate height with scaling
+    const height = (canvas.height * fileWidth) / canvas.width;
+    // convert canvas to image
+    const image = canvas.toDataURL('image/png');
+    // add image to pdf
+    // add 10 for title
+    if ((positionY + height + 10) > 290) {
+      PDF.addPage('a4', 'p');
+      positionY = 10;
+    }
+
+    PDF.addImage(image, 'PNG', 10, positionY, fileWidth - 10, height);
+    positionY += height + 10;
 
     //#endregion add the header
 
     //#region Convert charts and tables
     for (const chart of this.canExported) {
-      if (chart.hasData)
+      if (chart.export)
         positionY = await this.addSectionToPDF(PDF, chart.chart, positionY, chart.title);
     }
     //#endregion Convert charts
 
     //#region details
-    await this.addSectionDetailsToPDF(PDF, 'textDetails', positionY);
+    for (const table of this.canExportedDetails) {
+      if (table.export)
+        positionY = await this.addSectionDetailsToPDF(PDF, table.name, positionY, table.title);
+    }
     //#endregion Details
 
     //#region add the footer
@@ -476,45 +505,55 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
 
     // download pdf
     PDF.save(this.accountNumber + '-' + this.accountName + '.pdf');
+    PDF = null;
   }
 
   async addSectionToPDF(pdf: jsPDF, section: string, positionY: number, title?: string): Promise<number> {
-    let fileWidth = 208;
-    // get html
-    let html: HTMLElement = this[section].el.nativeElement;
-    // convert to canvas
-    const canvas = await html2canvas(html);
-    // calculate height with scaling
-    // const height = (canvas.height * fileWidth) / canvas.width;
-    const height = (140 / canvas.width) * canvas.height;
-    // convert canvas to image
-    const image = canvas.toDataURL('image/png');
-    // add image to pdf
-    // add 10 for title
-    if ((positionY + height + 10) > 290) {
-      pdf.addPage('a4', 'p');
-      positionY = 10;
-    }
-    pdf.text(title, 20, positionY);
-    pdf.addImage(image, 'PNG', 35, positionY + 10, 140, height);
-    // increase Position
-    positionY += height + 20;
-    return positionY;
+    return new Promise((resolve, reject) => {
+      let fileWidth = 208;
+      // get html
+      let html: HTMLElement = this[section].el.nativeElement;
+
+      // get canvas
+      let canvas = html.querySelector("canvas");
+      canvas.style.background = "white";
+      const height = (140 / canvas.width) * canvas.height;
+      if ((positionY + height + 10) > 290) {
+        pdf.addPage('a4', 'p');
+        positionY = 10;
+      }
+      pdf.text(title, 20, positionY);
+      let image = canvas.toDataURL('image/png');
+      pdf.addImage(image, 'PNG', 35, positionY + 10, 140, height, null, 'NONE');
+      positionY += height + 20;
+      resolve(positionY);
+    });
+
   }
 
-  async addSectionDetailsToPDF(pdf: jsPDF, componentName: string, positionY: number) {
+  async addSectionDetailsToPDF(pdf: jsPDF, componentName: string, positionY: number, title: string): Promise<number> {
     return new Promise((resolve, reject) => {
+      pdf.text(title, 20, positionY);
+      positionY += 10;
       let headers = this[componentName].getColumns();
       this[componentName].getRelevant()
         .subscribe(res => {
           //@ts-ignore
           pdf.autoTable({
             startY: positionY,
-            columns: headers?.map(header => ({ header: header.field, dataKey: header.field })),
-            // head: headers?.map(header => header.field),
+            // columns: headers?.map(header => ({ header: header.field, dataKey: header.field })),
+            columns: [
+              { header: 'comment', dataKey: 'textRelevantComment' },
+              { header: 'balance', dataKey: 'balance' },
+              { header: 'refernece', dataKey: 'reference' },
+              { header: 'textPosting', dataKey: 'textPosting' },
+              { header: 'textHeader', dataKey: 'textHeader' },
+            ],
             body: res,
           });
-          resolve('done');
+          //@ts-ignore
+          let newPosition = pdf.previousAutoTable.finalY + 20;
+          resolve(newPosition);
         }, er => reject(er));
     });
   }
