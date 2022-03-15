@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from 'src/app/shared/service/analysis.service';
@@ -13,13 +13,14 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import html2canvas from 'html2canvas';
 import { MailSenderChart, MailWordChart } from 'src/app/shared/model/mailHistory';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-creditor-analysis-details',
   templateUrl: './creditor-analysis-details.component.html',
   styleUrls: ['./creditor-analysis-details.component.sass'],
 })
-export class CreditorAnalysisDetailsComponent implements OnInit {
+export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
   public Editor = ClassicEditor;
 
@@ -90,6 +91,20 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   canExported: any[] = [];
   canExportedDetails: any[] = [];
   //#endregion Export PDF
+
+  //#region Subscription to destroy them for memory leaks
+  translateSub: Subscription;
+  creditorDetailsSub: Subscription;
+  amountSub: Subscription;
+  textWordSub: Subscription;
+  paymentSub: Subscription;
+  dueDateSub: Subscription;
+  mailSenderSub: Subscription;
+  mailWordSub: Subscription;
+  creditorCommentSub: Subscription;
+  updateCommentSub: Subscription;
+  relevantSub: any;
+  //#endregion Subscription
   //#endregion vars init
 
   constructor(
@@ -110,69 +125,70 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
 
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
 
-    this._translateService.get('CreditorsAnalysis').subscribe((elem) => {
-      this.items = [
-        // { label: 'Analysis' },
-        {
-          label: elem.label,
-          routerLink: '/dashboard/analysis/creditor',
-          routerLinkActiveOptions: { exact: true },
-        },
-        {
-          label: 'Details',
-          routerLink: this._router.url,
-          routerLinkActiveOptions: { exact: true },
-        },
-      ];
-      this.home = {
-        icon: 'pi pi-home',
-        label: elem.data,
-        routerLink: '/dashboard/shared/data',
-      };
-      this.waiting = true;
-      this._analysisService
-        .getCreditorAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
-        .subscribe(
-          (res) => {
-            this.totalAmount = res.amount.length > 0 ? res.amount[0].totalBalance : 0;
-            this.totalAmountCount = res.amount.length > 0 ? res.amount[0].totlaCount : 0;
-            // for export as pdf and check box
-            this.canExportedDetails.push({ name: 'amountDetails', title: 'Amount Details', hasData: this.totalAmountCount > 0 });
-            this.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
-            this.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
-            this.canExportedDetails.push({ name: 'paymentDetails', title: 'Payment Details', hasData: this.totalPaymentCount > 0 });
-            this.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
-            this.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
-            this.canExportedDetails.push({ name: 'textDetails', title: 'Text Details', hasData: this.totalTextCount > 0 });
-            // this.totalEmailCount = res.email.length > 0 ? res.email[0].totlaCount : 0;
-            this.totlaSenderCount = res.email?.length;
-            res.email?.forEach(sender => {
-              this.totalEmailCount += +sender.totlaCount ?? 0;
-            });
-            this.canExportedDetails.push({ name: 'mailSenderDetails', title: 'Email Sender Details', hasData: this.totalEmailCount > 0 });
-            this.accountName =
-              res.text.length > 0
-                ? res.text[0].accountName
-                : res.amount.length > 0
-                  ? res.amount[0].accountName
-                  : res.payment[0]?.accountName;
-            // this.chartData = {
-            //   labels: [elem.amountLabel, elem.textLabel, elem.paymentLabel],
-            //   datasets: [
-            //     {
-            //       data: [this.totalAmount, this.totalText, this.totalPayment],
-            //       backgroundColor: ['#95ca14', '#587bc7', '#fc6521'],
-            //       hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-            //     },
-            //   ],
-            // };
-            this.waiting = false;
+    this.translateSub = this._translateService.get('CreditorsAnalysis')
+      .subscribe((elem) => {
+        this.items = [
+          // { label: 'Analysis' },
+          {
+            label: elem.label,
+            routerLink: '/dashboard/analysis/creditor',
+            routerLinkActiveOptions: { exact: true },
           },
-          (er) => {
-            this.waiting = false;
-          }
-        );
-    });
+          {
+            label: 'Details',
+            routerLink: this._router.url,
+            routerLinkActiveOptions: { exact: true },
+          },
+        ];
+        this.home = {
+          icon: 'pi pi-home',
+          label: elem.data,
+          routerLink: '/dashboard/shared/data',
+        };
+        this.waiting = true;
+        this.creditorDetailsSub = this._analysisService
+          .getCreditorAnalysisDetails(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+          .subscribe(
+            (res) => {
+              this.totalAmount = res.amount.length > 0 ? res.amount[0].totalBalance : 0;
+              this.totalAmountCount = res.amount.length > 0 ? res.amount[0].totlaCount : 0;
+              // for export as pdf and check box
+              this.canExportedDetails.push({ name: 'amountDetails', title: 'Amount Details', hasData: this.totalAmountCount > 0 });
+              this.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
+              this.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
+              this.canExportedDetails.push({ name: 'paymentDetails', title: 'Payment Details', hasData: this.totalPaymentCount > 0 });
+              this.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
+              this.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
+              this.canExportedDetails.push({ name: 'textDetails', title: 'Text Details', hasData: this.totalTextCount > 0 });
+              // this.totalEmailCount = res.email.length > 0 ? res.email[0].totlaCount : 0;
+              this.totlaSenderCount = res.email?.length;
+              res.email?.forEach(sender => {
+                this.totalEmailCount += +sender.totlaCount ?? 0;
+              });
+              this.canExportedDetails.push({ name: 'mailSenderDetails', title: 'Email Sender Details', hasData: this.totalEmailCount > 0 });
+              this.accountName =
+                res.text.length > 0
+                  ? res.text[0].accountName
+                  : res.amount.length > 0
+                    ? res.amount[0].accountName
+                    : res.payment[0]?.accountName;
+              // this.chartData = {
+              //   labels: [elem.amountLabel, elem.textLabel, elem.paymentLabel],
+              //   datasets: [
+              //     {
+              //       data: [this.totalAmount, this.totalText, this.totalPayment],
+              //       backgroundColor: ['#95ca14', '#587bc7', '#fc6521'],
+              //       hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+              //     },
+              //   ],
+              // };
+              this.waiting = false;
+            },
+            (er) => {
+              this.waiting = false;
+            }
+          );
+      });
 
     this.basicOptions = {
       legend: {
@@ -227,7 +243,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   } // end of ng on init
 
   getAmountChartData() {
-    this._analysisService
+    this.amountSub = this._analysisService
       .getAmountAnalysisDetailsChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, 500)
       .subscribe(res => {
         this.balanceChartData = res;
@@ -247,7 +263,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   }
 
   getWords() {
-    this._analysisService
+    this.textWordSub = this._analysisService
       .getTextAnalysisDetailsWords(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.wordsChartData = res;
@@ -267,7 +283,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   }
 
   getPaymentChartData() {
-    this._analysisService
+    this.paymentSub = this._analysisService
       .getPaymentAnalysisDetails(
         this.selectedOrganisation,
         this.selectedProcedure,
@@ -321,7 +337,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
     let start;
     let end;
     let parmas = { maxDelay: undefined, accountNumber: this.accountNumber };
-    this._analysisService
+    this.dueDateSub = this._analysisService
       .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure, start, end, parmas)
       .subscribe(
         async (res) => {
@@ -391,7 +407,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   }
 
   getMailBySender() {
-    this._mailService
+    this.mailSenderSub = this._mailService
       .getMailDetailsAnalysisSenderByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.mailSenderChartRecords = res;
@@ -410,7 +426,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   }
 
   getMailWordChartData() {
-    this._mailService
+    this.mailWordSub = this._mailService
       .getMailDetailsAnalysisWordByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.canExported.push({ chart: 'mailWordChart', title: 'Mail By Word Analysis', hasData: res.length > 0 });
@@ -432,7 +448,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   }
 
   getCreditorComment() {
-    this._analysisService
+    this.creditorCommentSub = this._analysisService
       .getCreditorComment(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.comment = res.comment;
@@ -441,7 +457,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
 
   updateCreditorComment() {
     this.waiting = true;
-    this._analysisService
+    this.updateCommentSub = this._analysisService
       .updateCreditorComment(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, { comment: this.comment })
       .subscribe(res => {
         this.waiting = false;
@@ -536,7 +552,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
       pdf.text(title, 20, positionY);
       positionY += 10;
       let headers = this[componentName].getColumns();
-      this[componentName].getRelevant()
+      this.relevantSub = this[componentName].getRelevant()
         .subscribe(res => {
           //@ts-ignore
           pdf.autoTable({
@@ -559,4 +575,18 @@ export class CreditorAnalysisDetailsComponent implements OnInit {
   }
   //#endregion export pdf
 
+
+  ngOnDestroy() {
+    this.translateSub?.unsubscribe();
+    this.creditorDetailsSub?.unsubscribe();
+    this.amountSub?.unsubscribe();
+    this.textWordSub?.unsubscribe();
+    this.paymentSub?.unsubscribe();
+    this.dueDateSub?.unsubscribe();
+    this.mailSenderSub?.unsubscribe();
+    this.mailWordSub?.unsubscribe();
+    this.creditorCommentSub?.unsubscribe();
+    this.updateCommentSub?.unsubscribe();
+    this.relevantSub?.unsubscribe();
+  }
 }

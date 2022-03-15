@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "NG_BUILD_CACHE=0  node --max_old_space_size=2048 ./node_modules/@angular/cli/bin/ng serve",
     "open": "ng serve -o",
     "proxy": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
