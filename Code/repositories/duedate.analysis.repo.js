@@ -197,8 +197,40 @@ module.exports.dueDateAnalysisCalc = async (orgId, prcId, mindate, maxappdate, s
           });
         // if the account not added yet to the accounts list then add it
         const i = dueDateRefAccounts.findIndex((x) => x.accountNumber == row.accountNumber);
-        if (i == -1)
-          dueDateRefAccounts.push({ accountNumber: row.accountNumber, accountName: row.accountName, });
+        // total for creditor details (due date section)
+        // we need total balance and total count
+        if (i == -1) {
+          if (rowDiff > 0) {
+            dueDateRefAccounts.push({
+              accountNumber: row.accountNumber,
+              accountName: row.accountName,
+              delayPos: rowDiff,
+              delayNeg: 0,
+              count: 1,
+              posCount: 1,
+              negCount: 0
+            });
+          } else {
+            dueDateRefAccounts.push({
+              accountNumber: row.accountNumber,
+              accountName: row.accountName,
+              delayPos: 0,
+              delayNeg: rowDiff,
+              count: 1,
+              posCount: 0,
+              negCount: 1
+            });
+          }
+        } else {
+          dueDateRefAccounts[i].count++;
+          if (rowDiff > 0) {
+            dueDateRefAccounts[i].posCount++;
+            dueDateRefAccounts[i].delayPos += +rowDiff;
+          } else {
+            dueDateRefAccounts[i].negCount++;
+            dueDateRefAccounts[i].delayNeg += +rowDiff;
+          }
+        }
       }
       // Not paid at all
     }

@@ -6,6 +6,7 @@ import { AnalysisService } from 'src/app/shared/service/analysis.service';
 import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import * as FileSaver from 'file-saver';
+import { Observable } from 'rxjs';
 //#endregion imports
 
 @Component({
@@ -571,9 +572,11 @@ export class DueDateComponent implements OnInit {
 
   //#region PDF Report
   getRelevant() {
+    this.selectedAccount['accountNumber'] = this._route.snapshot.paramMap.get('accountNumber');
     return this._analysisService
       .getDueDateAnalysisDetails(this.selectedOrganisation, this.selectedProcedure,
-        this.selectedAccount.accountNumber, null, null, this.maxDelay);
+        this.selectedAccount.accountNumber, this.minDate.toISOString().split('T')[0],
+        this.toDate.toISOString().split('T')[0], this.maxDelay);
   }
 
   getColumns() {

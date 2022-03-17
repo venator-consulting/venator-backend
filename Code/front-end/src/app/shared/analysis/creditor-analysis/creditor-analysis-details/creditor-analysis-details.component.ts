@@ -52,6 +52,8 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
   // amount analysis chart
   basicOptions: any;
+  // chart options with legends
+  legendOptions: any;
   balanceChartData: AmountAnalysisDetailsChart[] = new Array();
   amountChartData: { labels: any[]; datasets: { data: any[]; backgroundColor: string[]; hoverBackgroundColor: string[]; }[]; };
 
@@ -90,6 +92,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
   canExported: any[] = [];
   canExportedDetails: any[] = [];
+  exporting: boolean = false;
   //#endregion Export PDF
 
   //#region Subscription to destroy them for memory leaks
@@ -153,19 +156,19 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
               this.totalAmount = res.amount.length > 0 ? res.amount[0].totalBalance : 0;
               this.totalAmountCount = res.amount.length > 0 ? res.amount[0].totlaCount : 0;
               // for export as pdf and check box
-              this.canExportedDetails.push({ name: 'amountDetails', title: 'CreditorsAnalysis.amountTotalBalance', hasData: this.totalAmountCount > 0 });
+              this.canExportedDetails.push({ name: 'amountDetails', title: 'CreditorsAnalysis.amountDetials', hasData: this.totalAmountCount > 0 });
               this.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
               this.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
-              this.canExportedDetails.push({ name: 'paymentDetails', title: 'CreditorsAnalysis.paymentTotalBalance', hasData: this.totalPaymentCount > 0 });
+              this.canExportedDetails.push({ name: 'paymentDetails', title: 'CreditorsAnalysis.paymentDetials', hasData: this.totalPaymentCount > 0 });
               this.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
               this.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
-              this.canExportedDetails.push({ name: 'textDetails', title: 'CreditorsAnalysis.textTotalBalance', hasData: this.totalTextCount > 0 });
+              this.canExportedDetails.push({ name: 'textDetails', title: 'CreditorsAnalysis.textDetials', hasData: this.totalTextCount > 0 });
               // this.totalEmailCount = res.email.length > 0 ? res.email[0].totlaCount : 0;
               this.totlaSenderCount = res.email?.length;
               res.email?.forEach(sender => {
                 this.totalEmailCount += +sender.totlaCount ?? 0;
               });
-              this.canExportedDetails.push({ name: 'mailSenderDetails', title: 'CreditorsAnalysis.senderTotalCount', hasData: this.totalEmailCount > 0 });
+              this.canExportedDetails.push({ name: 'mailSenderDetails', title: 'CreditorsAnalysis.mailDetials', hasData: this.totalEmailCount > 0 });
               this.accountName =
                 res.text.length > 0
                   ? res.text[0].accountName
@@ -232,6 +235,48 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       },
     };
 
+    this.legendOptions = {
+      legend: {
+        display: true
+      },
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            let value = tooltipItem.value;
+            let currencyPipe = new CurrencyPipe('de');
+            value = currencyPipe.transform(value, 'EURO', '');
+
+            let label = data.datasets[tooltipItem.datasetIndex].label || '';
+            return label + ': ' + value;
+          },
+        },
+      },
+      scales: {
+        xAxes: [
+          {
+            ticks: {
+              minRotation: 40,
+              maxRotation: 90,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              minRotation: 0,
+              maxRotation: 0,
+              callback: function (label, index, values) {
+                // debugger;
+                let currencyPipe = new CurrencyPipe('de');
+                label = currencyPipe.transform(label, 'EURO', '');
+                return label;
+              },
+            },
+          },
+        ],
+      },
+    };
+
     this.getAmountChartData();
     this.getWords();
     this.getPaymentChartData();
@@ -247,7 +292,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       .getAmountAnalysisDetailsChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, 500)
       .subscribe(res => {
         this.balanceChartData = res;
-        this.canExported.push({ chart: 'amountChart', title: 'CreditorsAnalysis.amountTotalBalance', hasData: this.balanceChartData.length > 0 });
+        this.canExported.push({ chart: 'amountChart', title: 'CreditorsAnalysis.amountAnalysis', hasData: this.balanceChartData.length > 0 });
 
         this.amountChartData = {
           labels: this.balanceChartData.map(rec => rec.balance),
@@ -267,7 +312,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       .getTextAnalysisDetailsWords(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.wordsChartData = res;
-        this.canExported.push({ chart: 'textChart', title: 'CreditorsAnalysis.textTotalBalance', hasData: this.wordsChartData.length > 0 });
+        this.canExported.push({ chart: 'textChart', title: 'CreditorsAnalysis.textAnalysis', hasData: this.wordsChartData.length > 0 });
         this.chartData = {
           labels: this.wordsChartData.map(rec => rec.word),
           datasets: [
@@ -304,7 +349,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
             red.push(-1 * (element.red.value));
           }
 
-          this.canExported.push({ chart: 'paymentChart', title: 'CreditorsAnalysis.paymentTotalBalance', hasData: data.length > 0 });
+          this.canExported.push({ chart: 'paymentChart', title: 'CreditorsAnalysis.paymentAnalysis', hasData: data.length > 0 });
           this.paymentChartData = {
             labels: labels,
             datasets: new Array(),
@@ -341,14 +386,16 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       .getDueDateAnalysis(this.selectedOrganisation, this.selectedProcedure, start, end, parmas)
       .subscribe(
         async (res) => {
-          // this.dueDateChartDataRecords = res.data.dueDateReference.recordsDelay;
-          this.canExported.push({ chart: 'dueDateChart', title: 'CreditorsAnalysis.dueDate', hasData: res.data.dueDateReference.recordsDelay.length > 0 });
+          this.dueDateChartDataRecords = res.data.dueDateReference.recordsDelay;
+
           let thisAccountDetails = res.data?.dueDateRefAccounts[0];
           this.totlaDueDateCount = thisAccountDetails?.count ?? 0;
-          this.canExportedDetails.push({ name: 'dueDateDetails', title: 'CreditorsAnalysis.dueDate', hasData: this.totlaDueDateCount > 0 });
+          this.canExported.push({ chart: 'dueDateChart', title: 'CreditorsAnalysis.dueDateAnalysis', hasData: this.dueDateChartDataRecords.length > 0 });
+          this.canExportedDetails.push({ name: 'dueDateDetails', title: 'CreditorsAnalysis.dueDateDetials', hasData: this.totlaDueDateCount > 0 });
           this.totalDueDate = +thisAccountDetails?.delayNeg + +thisAccountDetails?.delayPos;
           let labels = res.data.dueDateReference.labels;
           let minDate = new Date(res.dateRange[0].mindate);
+          // let maxDate = new Date(res.dateRange[0].maxdate);
           this.dueDateChartOptions = {
             tooltips: {
               callbacks: {
@@ -411,7 +458,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       .getMailDetailsAnalysisSenderByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.mailSenderChartRecords = res;
-        this.canExported.push({ chart: 'mailSenderChart', title: 'CreditorsAnalysis.senderTotalCount', hasData: res.length > 0 });
+        this.canExported.push({ chart: 'mailSenderChart', title: 'CreditorsAnalysis.mailSenderAnalysis', hasData: res.length > 0 });
         this.mailSenderChartData = {
           labels: res?.map(rec => rec.email + ' - ' + rec.sender),
           datasets: [
@@ -429,7 +476,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     this.mailWordSub = this._mailService
       .getMailDetailsAnalysisWordByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
-        this.canExported.push({ chart: 'mailWordChart', title: 'CreditorsAnalysis.mailWord', hasData: res.length > 0 });
+        this.canExported.push({ chart: 'mailWordChart', title: 'CreditorsAnalysis.mailWordAnalysis', hasData: res.length > 0 });
         this.mailWordChartData = {
           labels: res?.map(rec => rec.word),
           datasets: [
@@ -467,7 +514,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
   //#region  export pdf
   public async exportPDF(): Promise<void> {
-
+    this.exporting = true;
     // a4 size is 210 * 296 approximately
     let PDF = new jsPDF('p', 'mm', 'a4');
     let positionY = 25;
@@ -475,14 +522,14 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     PDF.setFontSize(10);
     //  add procedure name
     let translatedPrc = await this._translateService.get('CreditorsAnalysis.procedureName').toPromise();
-    PDF.text(translatedPrc + ': ' + this.procedureName, 100, positionY, { align: 'center' });
+    PDF.text(translatedPrc + ': ' + this.procedureName, 10, positionY, { align: 'left' });
     positionY += 10;
     // add account number and name
     let translatedAccountNr = await this._translateService.get('CreditorsAnalysis.accountNumber').toPromise();
-    PDF.text(translatedAccountNr + ': ' + this.accountNumber, 100, positionY, { align: 'center' });
+    PDF.text(translatedAccountNr + ': ' + this.accountNumber, 10, positionY, { align: 'left' });
     positionY += 10;
     let translatedAccountName = await this._translateService.get('CreditorsAnalysis.accountName').toPromise();
-    PDF.text(translatedAccountName + ': ' + this.accountName, 100, positionY, { align: 'center' });
+    PDF.text(translatedAccountName + ': ' + this.accountName, 10, positionY, { align: 'left' });
     positionY += 10;
 
     PDF.setFontSize(8);
@@ -505,8 +552,6 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
     PDF.addImage(image, 'PNG', 10, positionY, fileWidth - 10, height);
     positionY += height + 10;
-
-    //#endregion add the header
 
     //#region Convert charts and tables
     for (const chart of this.canExported) {
@@ -578,6 +623,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
     // download pdf
     PDF.save(this.accountNumber + '-' + this.accountName + '.pdf');
+    this.exporting = false;
     PDF = null;
   }
 
@@ -599,10 +645,53 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       pdf.text(translatedTitle, 20, positionY);
       let image = canvas.toDataURL('image/png');
       pdf.addImage(image, 'PNG', 35, positionY + 10, 140, height, null, 'NONE');
-      positionY += height + 20;
+      positionY += (height + 20);
+      // add total info
+      pdf.text(await this.getTotalInfo(section), 10, positionY);
+      positionY += 20;
       resolve(positionY);
     });
 
+  }
+
+  async getTotalInfo(name: string): Promise<string> {
+    let currencyPipe = new CurrencyPipe('de');
+    let text = ' ';
+    switch (name) {
+      case 'amountChart':
+        let amountBalanceTitle = await this._translateService.get('CreditorsAnalysis.amountTotalBalance').toPromise();
+        let amountCountTitle = await this._translateService.get('CreditorsAnalysis.amountTotalCount').toPromise();
+        text = amountBalanceTitle + ': ' + currencyPipe.transform(this.totalAmount ?? 0, 'EURO', 'symbol') +
+          '\n' + amountCountTitle + ': ' + this.totalAmountCount;
+        break;
+      case 'textChart':
+        let textBalanceTitle = await this._translateService.get('CreditorsAnalysis.textTotalBalance').toPromise();
+        let textCountTitle = await this._translateService.get('CreditorsAnalysis.textTotalCount').toPromise();
+        text = textBalanceTitle + ': ' + currencyPipe.transform(this.totalText ?? 0, 'EURO', 'symbol') +
+          '\n' + textCountTitle + ': ' + this.totalTextCount;
+        break;
+      case 'paymentChart':
+        let paymentBalanceTitle = await this._translateService.get('CreditorsAnalysis.paymentTotalBalance').toPromise();
+        let paymentCountTitle = await this._translateService.get('CreditorsAnalysis.paymentTotalCount').toPromise();
+        text = paymentBalanceTitle + ': ' + currencyPipe.transform(this.totalPayment ?? 0, 'EURO', 'symbol') +
+          '\n' + paymentCountTitle + ': ' + this.totalPaymentCount;
+        break;
+      case 'dueDateChart':
+        let dueDateBalanceTitle = await this._translateService.get('CreditorsAnalysis.dueDateTotalBalance').toPromise();
+        let dueDateCountTitle = await this._translateService.get('CreditorsAnalysis.dueDateTotalCount').toPromise();
+        text = dueDateBalanceTitle + ': ' + currencyPipe.transform(this.totalDueDate ?? 0, 'EURO', 'symbol') +
+          '\n' + dueDateCountTitle + ': ' + this.totlaDueDateCount;
+        break;
+      case 'mailSenderChart':
+        let mailSenderCountTitle = await this._translateService.get('CreditorsAnalysis.senderTotalCount').toPromise();
+        text = mailSenderCountTitle + ': ' + this.totlaSenderCount;
+        break;
+      case 'mailWordChart':
+        let mailWordCountTitle = await this._translateService.get('CreditorsAnalysis.emailTotalCount').toPromise();
+        text = mailWordCountTitle + ': ' + this.totalEmailCount;
+        break;
+    }
+    return text;
   }
 
   async addSectionDetailsToPDF(pdf: jsPDF, componentName: string, positionY: number, title: string): Promise<number> {
@@ -613,12 +702,13 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       positionY += 10;
       let currencyPipe = new CurrencyPipe('de');
       pdf.setFontSize(6);
-      console.log(componentName + ' not found!!!');
+      console.log(componentName);
 
       // let headers = this[componentName].getColumns();
       this.relevantSub = this[componentName].getRelevant()
         ?.subscribe(async (res) => {
           debugger;
+          if (componentName == 'dueDateDetails') res = res.data.records;
           //@ts-ignore
           pdf.autoTable({
             startY: positionY,

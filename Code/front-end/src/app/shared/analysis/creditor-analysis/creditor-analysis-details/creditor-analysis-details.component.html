@@ -28,23 +28,18 @@
           </li>
         </ul>
       </div>
+      <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="exporting"></p-progressBar>
       <button pButton label="Export PDF" icon="pi pi-file" (click)="exportPDF()"></button>
     </p-sidebar>
 
     <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
   </div>
-  <!-- <div class="p-col-12 ">
-    <p-card class="p-text-center">
-      <p-chart type="pie" [data]="chartData" height="350px"></p-chart>
-    </p-card>
-  </div> -->
-
 
 
   <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
-        {{ 'CreditorsAnalysis.amountTotalBalance' | translate}}
+        {{ 'CreditorsAnalysis.amountAnalysis' | translate}}
       </ng-template>
       <p-chart #amountChart type="bar" [data]="amountChartData" height="350px" [options]="basicOptions"></p-chart>
     </p-card>
@@ -52,7 +47,7 @@
   <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
-        {{ 'CreditorsAnalysis.textTotalBalance' | translate}}
+        {{ 'CreditorsAnalysis.textAnalysis' | translate}}
       </ng-template>
       <p-chart #textChart type="pie" [data]="chartData" height="350px"></p-chart>
     </p-card>
@@ -60,16 +55,16 @@
   <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
-        {{ 'CreditorsAnalysis.paymentTotalBalance' | translate}}
+        {{ 'CreditorsAnalysis.paymentAnalysis' | translate}}
       </ng-template>
-      <p-chart #paymentChart type="bar" height="350" [data]="paymentChartData" [options]="basicOptions"> </p-chart>
+      <p-chart #paymentChart type="bar" height="350" [data]="paymentChartData" [options]="legendOptions"> </p-chart>
     </p-card>
   </div>
 
   <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
-        {{ 'CreditorsAnalysis.dueDate' | translate}}
+        {{ 'CreditorsAnalysis.dueDateAnalysis' | translate}}
       </ng-template>
       <p-chart #dueDateChart type="scatter" height="350" [data]="dueDateChartData" [options]="dueDateChartOptions">
       </p-chart>
@@ -79,7 +74,7 @@
   <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
-        {{ 'CreditorsAnalysis.senderTotalCount' | translate}}
+        {{ 'CreditorsAnalysis.mailSenderAnalysis' | translate}}
       </ng-template>
       <p-chart #mailSenderChart type="pie" [data]="mailSenderChartData" height="350px"></p-chart>
     </p-card>
@@ -89,7 +84,7 @@
   <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
-        {{ 'CreditorsAnalysis.mailWord' | translate}}
+        {{ 'CreditorsAnalysis.mailWordAnalysis' | translate}}
       </ng-template>
       <p-chart #mailWordChart type="pie" [data]="mailWordChartData" height="350px"></p-chart>
     </p-card>
@@ -142,10 +137,10 @@
   <div class="p-col-4">
     <p-card class="p-text-center">
       <ng-template pTemplate="header">
-        {{ 'CreditorsAnalysis.dueDate' | translate}}
+        {{ 'CreditorsAnalysis.dueDateTotalBalance' | translate}}
       </ng-template>
       <h1>{{totalDueDate | currency:'EUR':'symbol'}}</h1>
-      <h3>{{ 'CreditorsAnalysis.dueDate' | translate}}</h3>
+      <h3>{{ 'CreditorsAnalysis.dueDateTotalCount' | translate}}</h3>
       <h1> {{totlaDueDateCount}}</h1>
       <br>
       <p class="emailColor" (click)="setDetails(5)"><i class="pi pi-arrow-down"></i> {{
