@@ -510,6 +510,7 @@
     "data": " Daten",
     "accountNumber": "Kontonummer",
     "accountName": "Kontoname",
+    "procedureName": "Procedure Name",
     "count": "Anzahl",
     "sum": "Summe",
     "amountTotalBalance": "Gesamtsaldo der Betragsanalyse",

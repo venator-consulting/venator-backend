@@ -16,14 +16,14 @@
             <div class="p-field-checkbox">
               <p-checkbox [(ngModel)]="item.export" binary="true" inputId="binary" [disabled]="!item.hasData">
               </p-checkbox>
-              <label for="binary">{{item.title}}</label>
+              <label for="binary">{{item.title | translate}}</label>
             </div>
           </li>
           <li *ngFor="let item of canExportedDetails">
             <div class="p-field-checkbox">
               <p-checkbox [(ngModel)]="item.export" binary="true" inputId="binary" [disabled]="!item.hasData">
               </p-checkbox>
-              <label for="binary">{{item.title}}</label>
+              <label for="binary">{{item.title | translate}}</label>
             </div>
           </li>
         </ul>

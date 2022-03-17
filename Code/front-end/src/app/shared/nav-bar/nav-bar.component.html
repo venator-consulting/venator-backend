@@ -5,7 +5,7 @@
   <div>
     <p-menubar [model]="menuItems">
       <ng-template pTemplate="start">
-        <img src="assets/logo.jpg" height="60" width="75" class="p-mr-6" style="border: hidden" />
+        <img id="logo" src="assets/logo.jpg" height="60" width="75" class="p-mr-6" style="border: hidden" />
         <p-button icon="pi pi-bars" styleClass="sidebar-button" class="p-button-raised p-button-outlined"
           (click)="getSideBarItems()"></p-button>
       </ng-template>

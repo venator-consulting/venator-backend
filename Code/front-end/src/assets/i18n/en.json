@@ -525,6 +525,7 @@
     "data": " Data",
     "accountNumber": "Account Number",
     "accountName": "Account Name",
+    "procedureName": "Procedure Name",
     "count": "Count",
     "sum": "SUM",
     "amountTotalBalance": "Total Balance of the Amount Analysis",

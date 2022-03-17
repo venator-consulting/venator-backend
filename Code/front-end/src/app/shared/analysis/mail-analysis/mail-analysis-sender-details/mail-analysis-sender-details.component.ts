@@ -559,7 +559,8 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
 
   //#region PDF Report
   getRelevant() {
-    return this.getUserRelevantByAccountNumber();
+    return this._mailService
+      .getBySenderDetailsJustRelevantByAccount(this.orgId, this.prcId, this.accountNumber);
   }
 
   getColumns() {
