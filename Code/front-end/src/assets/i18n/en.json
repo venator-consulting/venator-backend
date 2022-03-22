@@ -529,6 +529,7 @@
     "low": "Low",
     "label": "Creditors analysis",
     "data": " Data",
+    "account": "Account",
     "accountNumber": "Account Number",
     "accountName": "Account Name",
     "procedureName": "Procedure Name",

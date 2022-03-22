@@ -288,7 +288,9 @@ module.exports.dueDateAnalysisDetails = async (orgId, prcId, mindocdate, maxappd
 
   let records = new Array();
   let query = `SELECT pos.id, pos.accountNumber, pos.accountName, pos.accountType, pos.documentDate, pos.dueDate,
-                         pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType, pos.textPosting, pos.textHeader, pos.reference, pos.assignment 
+                         pos.applicationDate, pos.balance, pos.documentTypeNewName, pos.documentType, pos.textPosting,
+                          pos.textHeader, pos.reference, pos.assignment, pos.contraAccountNumber, pos.contraAccountName,
+                          pos.documentNumber 
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = ${prcId}

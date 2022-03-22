@@ -335,7 +335,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
         this.accountNumber
       )
       .subscribe(
-        (res) => {
+        async (res) => {
           let data = res.data.data;
           let labels = new Array();
           let red = new Array();
@@ -357,17 +357,17 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
           this.paymentChartData.datasets.push(
             {
-              label: 'blue',
+              label: await this._translateService.get('PaymentAnalysis.blue').toPromise(),
               backgroundColor: `rgb(100,100,255)`,
               data: blue,
             },
             {
-              label: 'red',
+              label: await this._translateService.get('PaymentAnalysis.red').toPromise(),
               backgroundColor: `rgb(255,100,100)`,
               data: red,
             },
             {
-              label: 'green',
+              label: await this._translateService.get('PaymentAnalysis.green').toPromise(),
               backgroundColor: `rgb(100,255,100)`,
               data: green,
             }
@@ -523,108 +523,124 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     //  add procedure name
     let translatedPrc = await this._translateService.get('CreditorsAnalysis.procedureName').toPromise();
     PDF.text(translatedPrc + ': ' + this.procedureName, 10, positionY, { align: 'left' });
-    positionY += 10;
+    positionY += 5;
     // add account number and name
-    let translatedAccountNr = await this._translateService.get('CreditorsAnalysis.accountNumber').toPromise();
-    PDF.text(translatedAccountNr + ': ' + this.accountNumber, 10, positionY, { align: 'left' });
-    positionY += 10;
-    let translatedAccountName = await this._translateService.get('CreditorsAnalysis.accountName').toPromise();
-    PDF.text(translatedAccountName + ': ' + this.accountName, 10, positionY, { align: 'left' });
-    positionY += 10;
+    let translatedAccount = await this._translateService.get('CreditorsAnalysis.account').toPromise();
+    PDF.text(translatedAccount + ': ' + this.accountNumber + ' - ' + this.accountName,
+      10, positionY, { align: 'left' });
+    positionY += 5;
+    // let translatedAccountName = await this._translateService.get('CreditorsAnalysis.accountName').toPromise();
+    // PDF.text(translatedAccountName + ': ' + this.accountName, 10, positionY, { align: 'left' });
+    // positionY += 10;
 
     PDF.setFontSize(8);
     // add the comment
     // get html comment
     let htmlCommentCollection = document.getElementsByClassName('ck-content');
     let htmlComment: HTMLElement = htmlCommentCollection.item(0) as HTMLElement;
+    htmlComment.innerHTML += `<style>
+                                *{margin: 0}
+                                h2{font-size: 6px;} 
+                                h3{font-size: 5px;}
+                                h4{font-size: 4px;}
+                                p, li{font-size: 3px;}
+                            </style>`;
+    PDF.html(htmlComment, {
+      x: 2, y: positionY, width: 200,
+      // fontFaces:
+      callback: async (doc: jsPDF) => {
+        positionY += htmlComment.clientHeight * 295 / window.innerHeight;
+        debugger;
+        // const canvas = await html2canvas(htmlComment);
+        // calculate height with scaling
+        // const height = (canvas.height * fileWidth) / canvas.width;
+        // convert canvas to image
+        // const image = canvas.toDataURL('image/png');
+        // add image to pdf
+        // add 10 for title
+        // if ((positionY + height + 20) > 290) {
+        //   PDF.addPage('a4', 'p');
+        //   positionY = 25;
+        // }
 
-    const canvas = await html2canvas(htmlComment);
-    // calculate height with scaling
-    const height = (canvas.height * fileWidth) / canvas.width;
-    // convert canvas to image
-    const image = canvas.toDataURL('image/png');
-    // add image to pdf
-    // add 10 for title
-    if ((positionY + height + 20) > 290) {
-      PDF.addPage('a4', 'p');
-      positionY = 25;
-    }
+        // PDF.addImage(image, 'PNG', 10, positionY, fileWidth - 10, height);
+        // positionY += height + 10;
 
-    PDF.addImage(image, 'PNG', 10, positionY, fileWidth - 10, height);
-    positionY += height + 10;
-
-    //#region Convert charts and tables
-    for (const chart of this.canExported) {
-      if (chart.export)
-        positionY = await this.addSectionToPDF(PDF, chart.chart, positionY, chart.title);
-    }
-    //#endregion Convert charts
-
-    //#region details
-    for (const table of this.canExportedDetails) {
-      if (table.export)
-        positionY = await this.addSectionDetailsToPDF(PDF, table.name, positionY, table.title);
-    }
-    //#endregion Details
-
-    //#region add the footer
-    PDF.setFontSize(8);
-    PDF.text('Report Exported at: ' + (new Date()).toLocaleString("de-DE", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }), 10, 290, { align: 'left' });
-    //#endregion add the footer
-
-    //#region add footer
-    const addFootersAndHeaders = (pdf: jsPDF) => {
-      const pageCount = (pdf.internal as any).getNumberOfPages();
-      // get logo html
-      let logoImg = document.getElementById('logo') as HTMLImageElement;
-
-      for (var i = 1; i <= pageCount; i++) {
-        // select the page
-        pdf.setPage(i);
-        //#region header 
-        if (i == 1) {
-          // paint the gray rectangle
-          pdf.setFillColor(88, 88, 90);
-          // grey for the header
-          pdf.rect(0, 0, pdf.internal.pageSize.width, 19, 'F');
-          // add the brand
-          pdf.setFontSize(16);
-          pdf.setTextColor(232, 79, 19);
-          pdf.text('Venalytics', 5, 11, { align: 'left' });
-          // add the logo
-          pdf.addImage(logoImg, 'PNG', 32, 5, 8, 8);
-          pdf.setFontSize(11);
-          //  add procedure name
-          // pdf.setTextColor(255, 255, 255);
-          // pdf.text(this.procedureName, 80, 11);
-          // add account number and name
-          // pdf.text(this.accountNumber + ' - ' + this.accountName, 60, 16);
+        //#region Convert charts and tables
+        for (const chart of this.canExported) {
+          if (chart.export)
+            positionY = await this.addSectionToPDF(PDF, chart.chart, positionY, chart.title);
         }
-        //#endregion header
-        // gray for the footer
-        // pdf.setFillColor(88, 88, 90);
-        // pdf.rect(0, pdf.internal.pageSize.height - 17, pdf.internal.pageSize.width, pdf.internal.pageSize.height, 'F');
-        // pdf.setTextColor(255, 255, 255);
-        pdf.setFont('helvetica', 'italic');
-        pdf.setFontSize(8);
-        pdf.text('[' + String(i) + '/' + String(pageCount) + ']', pdf.internal.pageSize.width - 20,
-          pdf.internal.pageSize.height - 8, {
-          align: 'right',
-        });
+        //#endregion Convert charts
+
+        //#region details
+        for (const table of this.canExportedDetails) {
+          if (table.export)
+            positionY = await this.addSectionDetailsToPDF(PDF, table.name, positionY, table.title);
+        }
+        //#endregion Details
+
+        //#region add the footer
+        PDF.setFontSize(8);
+        PDF.text('Report Exported at: ' + (new Date()).toLocaleString("de-DE", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }), 10, 290, { align: 'left' });
+        //#endregion add the footer
+
+        //#region add footer
+        const addFootersAndHeaders = (pdf: jsPDF) => {
+          const pageCount = (pdf.internal as any).getNumberOfPages();
+          // get logo html
+          let logoImg = document.getElementById('logo') as HTMLImageElement;
+
+          for (var i = 1; i <= pageCount; i++) {
+            // select the page
+            pdf.setPage(i);
+            //#region header 
+            if (i == 1) {
+              // paint the gray rectangle
+              pdf.setFillColor(88, 88, 90);
+              // grey for the header
+              pdf.rect(0, 0, pdf.internal.pageSize.width, 19, 'F');
+              // add the brand
+              pdf.setFontSize(16);
+              pdf.setTextColor(232, 79, 19);
+              pdf.text('Venalytics', 10, 11, { align: 'left' });
+              // add the logo
+              pdf.addImage(logoImg, 'PNG', 37, 5, 8, 8);
+              pdf.setFontSize(11);
+              //  add procedure name
+              // pdf.setTextColor(255, 255, 255);
+              // pdf.text(this.procedureName, 80, 11);
+              // add account number and name
+              // pdf.text(this.accountNumber + ' - ' + this.accountName, 60, 16);
+            }
+            //#endregion header
+            // gray for the footer
+            // pdf.setFillColor(88, 88, 90);
+            // pdf.rect(0, pdf.internal.pageSize.height - 17, pdf.internal.pageSize.width, pdf.internal.pageSize.height, 'F');
+            // pdf.setTextColor(255, 255, 255);
+            pdf.setFont('helvetica', 'italic');
+            pdf.setFontSize(8);
+            pdf.text('[' + String(i) + '/' + String(pageCount) + ']', pdf.internal.pageSize.width - 20,
+              pdf.internal.pageSize.height - 8, {
+              align: 'right',
+            });
+          }
+        };
+
+        addFootersAndHeaders(PDF);
+        //#endregion add footer
+
+        // download pdf
+        PDF.save(this.accountNumber + '-' + this.accountName + '.pdf');
+        this.exporting = false;
+        PDF = null;
+
       }
-    };
-
-    addFootersAndHeaders(PDF);
-    //#endregion add footer
-
-    // download pdf
-    PDF.save(this.accountNumber + '-' + this.accountName + '.pdf');
-    this.exporting = false;
-    PDF = null;
+    });
   }
 
   async addSectionToPDF(pdf: jsPDF, section: string, positionY: number, title?: string): Promise<number> {
@@ -642,13 +658,15 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
         positionY = 25;
       }
       let translatedTitle = await this._translateService.get(title).toPromise();
-      pdf.text(translatedTitle, 20, positionY);
+      pdf.setFontSize(10);
+      pdf.text(translatedTitle, 10, positionY);
       let image = canvas.toDataURL('image/png');
       pdf.addImage(image, 'PNG', 35, positionY + 10, 140, height, null, 'NONE');
       positionY += (height + 20);
       // add total info
-      pdf.text(await this.getTotalInfo(section), 10, positionY);
-      positionY += 20;
+      pdf.setFontSize(8);
+      // pdf.text(await this.getTotalInfo(section), 10, positionY);
+      // positionY += 20;
       resolve(positionY);
     });
 
@@ -698,7 +716,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     return new Promise(async (resolve, reject) => {
       let translatedTitle = await this._translateService.get(title).toPromise();
       pdf.setFontSize(8);
-      pdf.text(translatedTitle, 20, positionY);
+      pdf.text(translatedTitle, 10, positionY);
       positionY += 10;
       let currencyPipe = new CurrencyPipe('de');
       pdf.setFontSize(6);
@@ -723,7 +741,8 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
               balance: currencyPipe.transform(rec.balance, 'EURO', '')
             })),
             margin: { top: 25 },
-            styles: { overflow: 'linebreak', fontSize: 6 },
+            styles: { overflow: 'linebreak', fontSize: 6, },
+            headStyles: { fillColor: [88, 88, 90] }
           });
           // debugger;
           //@ts-ignore
