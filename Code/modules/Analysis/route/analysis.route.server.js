@@ -198,6 +198,12 @@ router
   .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
     analysisCtrl.paymentAnalysis);
+
+router
+  .route("/:orgId/:prcId/payment-liquidity/:fromDate/:toDate")
+  .get(passport.authenticate("jwt", { session: false, }),
+    authorization.canDisplayAnalysis(),
+    analysisCtrl.paymentAnalysisForLiquidity);
 //#endregion Payment
 
 //#region Due date

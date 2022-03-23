@@ -53,6 +53,7 @@ import { MailAnalysisDetailsComponent } from './shared/analysis/mail-analysis/ma
 import { MailAnalysisSenderDetailsComponent } from './shared/analysis/mail-analysis/mail-analysis-sender-details/mail-analysis-sender-details.component';
 import { RecordMatchingComponent } from './admin/record-matching/record-matching.component';
 import { DuedateCorrectionComponent } from './admin/duedate-correction/duedate-correction.component';
+import { LiquidityAnalysisComponent } from './shared/liquidity/liquidity-analysis/liquidity-analysis.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -346,6 +347,12 @@ const routes: Routes = [
       {
         path: 'liquidity/freeLiquidity/details/:accountNumber/:baseFromDate/:baseToDate/:fromDate/:toDate',
         component: FreeLiquidityDetailsComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin', 'Manager', 'User'] },
+      },
+      {
+        path: 'liquidity/iquidityAnalysis',
+        component: LiquidityAnalysisComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
       },

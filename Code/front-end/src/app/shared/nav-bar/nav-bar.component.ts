@@ -414,6 +414,22 @@ export class NavBarComponent implements OnInit {
                   this.sideBarShow = false;
                 },
               },
+              {
+                label: elem.liquidityAnalysis,
+                icon: 'pi  pi-chart-line',
+                routerLink: ['/dashboard/liquidity/iquidityAnalysis'],
+                disabled:
+                  localStorage.getItem('currentProcedureLiquidity') != 'true' ||
+                  +localStorage.getItem('organisationId') <= 0 ||
+                  +localStorage.getItem('currentProcedureId') <= 0 ||
+                  localStorage.getItem('currentProcedureAnalysis') != 'true' ||
+                  !(localStorage.getItem('currentProcedureStatus') === 'IMPORTED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'PARTIAL_CALCULATED' ||
+                    localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
             ],
           },
         ];

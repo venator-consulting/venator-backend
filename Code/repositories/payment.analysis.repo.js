@@ -49,6 +49,12 @@ monthDiff = (d1, d2) => {
   return months <= 0 ? 0 : months;
 };
 
+dayDiff = (d1, d2) => {
+  var diff = Math.abs(d1.getTime() - d2.getTime());
+  var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+  return diffDays;
+}
+
 /**
  * @deprecated we use precalculated now 
  * @param {*} orgId 
@@ -248,6 +254,68 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
         }
       } // end of green condition
     }); // end of foreach
+  }); // end of fetching row event
+
+  str.on("end", async () => {
+    cb(finalResult);
+  });
+};
+
+
+module.exports.paymentAnalysisforLiquidity = async (orgId, prcId, fromDate, toDate, cb) => {
+  if (!fromDate) {
+    throw new Error("Document Date is null for this procedure!");
+  }
+  if (!toDate) {
+    throw new Error("Application Date is null for this procedure!");
+  }
+  if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
+    fromDate = new Date(fromDate);
+    toDate = new Date(toDate);
+  }
+  const diff = dayDiff(fromDate, toDate);
+  // if diff = 0 throw an error
+  // init res
+  let res = new Array();
+  // add element for each included month
+  for (let index = 0; index <= diff; index++) {
+    let nowDate = new Date(fromDate);
+    nowDate.setDate(fromDate.getDate() + index);
+    const element = {
+      day: nowDate.getDate(),
+      monthName: nowDate.getMonth() + 1,
+      yearName: nowDate.getFullYear(),
+      red: { value: 0 },
+    };
+    res.push(element);
+  }
+  // final result contains: 
+  // the res (for chart) which include the sum red for each month 
+  const finalResult = { res };
+
+  let query = `SELECT *
+                    FROM payment_analysis_${orgId} pos
+                    WHERE
+                        pos.procedureId = ${prcId} 
+                        AND pos.documentTypeNewName = 'RECHNUNG' 
+                        AND pos.documentDate >=  '${fromDate.toISOString().split('T')[0]}' 
+                        AND ((pos.applicationDate is NULL AND pos.dueDate <= '${toDate.toISOString().split('T')[0]}')
+                          OR (pos.applicationDate <= '${toDate.toISOString().split('T')[0]}'))`;
+
+  const str = connection.getConnection().query(query).stream();
+
+  str.on("data", (row) => {
+    // iterate for each month
+    res.forEach((element) => {
+      // get last day of the month
+      let d = new Date(element.yearName, +element.monthName, 1);
+      if (row.documentDate?.getTime() < d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime()) &&
+        row.dueDate?.getTime() < d?.getTime()) {
+        element.red.value += +row.balance;
+      } // end of red condition
+    }); // end of foreach month
+
+
   }); // end of fetching row event
 
   str.on("end", async () => {

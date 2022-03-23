@@ -9,6 +9,7 @@ const mailsRepo = require('../../../repositories/mails.repo.server');
 const Exception = require("../../../helpers/errorHandlers/Exception");
 const httpStatus = require("../../../models/enums/httpStatus");
 const errors = require('../../../models/enums/errors');
+const liquidityRepo = require('../../../repositories/liquidity.analysis.repo');
 
 //#region Amount analysis
 /**
@@ -222,6 +223,45 @@ module.exports.paymentAnalysisDateRange = async (req, res) => {
     req.params.prcId
   );
   res.status(200).json(result);
+};
+
+module.exports.paymentAnalysisForLiquidity = async (req, res) => {
+
+  let dateRange = [];
+
+  // dateRange = await paymentAnalysisRepo.paymentDateRangeCalc(+req.params.orgId, +req.params.prcId);
+  dateRange = await liquidityRepo.liquiditytDateRange(+req.params.orgId, +req.params.prcId);
+  if (dateRange.length < 1) {
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
+  }
+  if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
+  }
+  let fromDate = dateRange[0].mindate;
+  let toDate = new Date();
+  // if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+  //   if (!dateRange[0].maxdue || !(dateRange[0].maxdue instanceof Date)) {
+  //     throw new Exception(httpStatus.BAD_REQUEST, errors.no_application_date);
+  //   } else {
+  //     toDate = dateRange[0].maxdue;
+  //   }
+  // } else {
+  toDate = dateRange[0].maxdate;
+  // }
+
+  paymentAnalysisRepo.paymentAnalysisforLiquidity(
+    req.params.orgId,
+    req.params.prcId,
+    fromDate,
+    toDate,
+    (data) => {
+      // result = data;
+      res.status(200).json({
+        data: data,
+        dateRange: dateRange,
+      });
+    }
+  );
 };
 
 module.exports.paymentAnalysis = async (req, res) => {

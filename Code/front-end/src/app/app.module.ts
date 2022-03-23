@@ -125,6 +125,7 @@ import { StarsPriorityPipe } from './shared/pipes/stars-priority.pipe';
 import { SanitizePipe } from './shared/pipes/sanitize.pipe';
 
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { LiquidityAnalysisComponent } from './shared/liquidity/liquidity-analysis/liquidity-analysis.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -200,6 +201,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ColorPriorityPipe,
     StarsPriorityPipe,
     SanitizePipe,
+    LiquidityAnalysisComponent,
   ],
   imports: [
     BrowserModule,
