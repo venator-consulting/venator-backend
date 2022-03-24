@@ -175,7 +175,7 @@ export class LiquidityAnalysisComponent implements OnInit {
     let baseBankBalance = 0;
 
     this._liquidityService.getFreeLiquidity(this.orgId, this.prcId, start, end, baseBankBalance).subscribe(
-      (res) => {
+      async (res) => {
         if (!this.baseFromDate) this.baseFromDate = new Date(res.fromDate);
         if (!this.baseToDate) this.baseToDate = new Date(res.toDate);
         if (!this.fromDate) this.fromDate = new Date(res.fromDate);
@@ -188,7 +188,7 @@ export class LiquidityAnalysisComponent implements OnInit {
           datasets: [
             {
               type: 'line',
-              label: 'Unpaid invoices',
+              label: await this._translateService.get('PaymentAnalysis.red').toPromise(),
               borderColor: '#42A5F5',
               borderWidth: 2,
               fill: false,
@@ -196,7 +196,7 @@ export class LiquidityAnalysisComponent implements OnInit {
             },
             {
               type: 'line',
-              label: 'Free Liquidity',
+              label: await this._translateService.get('Liquidity.freeLiquidity').toPromise(),
               fill: false,
               data: res.freeLiquidity,
               borderColor: '#E5A58B',
