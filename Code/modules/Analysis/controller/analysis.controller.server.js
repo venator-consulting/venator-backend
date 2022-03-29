@@ -227,9 +227,11 @@ module.exports.paymentAnalysisDateRange = async (req, res) => {
 
 module.exports.paymentAnalysisForLiquidity = async (req, res) => {
 
+  let fromDate = req.params.fromDate;
+  let toDate = req.params.toDate;
+
   let dateRange = [];
 
-  // dateRange = await paymentAnalysisRepo.paymentDateRangeCalc(+req.params.orgId, +req.params.prcId);
   dateRange = await liquidityRepo.liquiditytDateRange(+req.params.orgId, +req.params.prcId);
   if (dateRange.length < 1) {
     throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
@@ -237,23 +239,22 @@ module.exports.paymentAnalysisForLiquidity = async (req, res) => {
   if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
     throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
   }
-  let fromDate = dateRange[0].mindate;
-  let toDate = new Date();
-  // if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-  //   if (!dateRange[0].maxdue || !(dateRange[0].maxdue instanceof Date)) {
-  //     throw new Exception(httpStatus.BAD_REQUEST, errors.no_application_date);
-  //   } else {
-  //     toDate = dateRange[0].maxdue;
-  //   }
-  // } else {
-  toDate = dateRange[0].maxdate;
-  // }
+  let baseFromDate = dateRange[0].mindate;
+  let baseToDate = new Date();
+  if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+    if (!dateRange[0].maxdue || !(dateRange[0].maxdue instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_application_date);
+    } else {
+      baseToDate = dateRange[0].maxdue;
+    }
+  } else {
+    baseToDate = dateRange[0].maxdate;
+  }
 
   paymentAnalysisRepo.paymentAnalysisforLiquidity(
-    req.params.orgId,
-    req.params.prcId,
-    fromDate,
-    toDate,
+    req.params.orgId, req.params.prcId,
+    fromDate, toDate,
+    baseFromDate, baseToDate,
     (data) => {
       // result = data;
       res.status(200).json({

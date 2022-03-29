@@ -4,26 +4,34 @@
   <div class="p-col-12">
     <h2 class="p-text-center">{{accountNumber}} - {{accountName}}</h2>
     <p style="float: right;">
-      <p-button icon="pi pi-pencil" label="Comment" class="p-button-raised p-button-outlined"
-        (click)="showSideBar = !showSideBar"></p-button>
+      <p-button icon="pi pi-pencil" [label]="'CreditorsAnalysis.report' | translate"
+        class="p-button-raised p-button-outlined" (click)="showSideBar = !showSideBar"></p-button>
     </p>
     <p-sidebar [(visible)]="showSideBar" position="right" [showCloseIcon]="true" [fullScreen]="true">
-      <ckeditor [editor]="Editor" [(ngModel)]="comment"></ckeditor>
-      <button pButton label="Save" icon="pi pi-check" (click)="updateCreditorComment()"></button>
+      <ckeditor [editor]="Editor" [(ngModel)]="comment"
+      [config]="{ toolbar: [ 'bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList' ] }"></ckeditor>
+      <br>
+      <button pButton [label]="'Analysis.save' | translate" icon="pi pi-check"
+        (click)="updateCreditorComment()"></button>
+      <br>
       <div>
         <ul>
-          <li *ngFor="let item of canExported">
+          <li *ngFor="let item of canExported; index as i">
             <div class="p-field-checkbox">
-              <p-checkbox [(ngModel)]="item.export" binary="true" inputId="binary" [disabled]="!item.hasData">
+              <p-checkbox [(ngModel)]="item.export" binary="true" inputId="{{item.title + '-' + i}}"
+                *ngIf="item.hasData">
               </p-checkbox>
-              <label for="binary">{{item.title | translate}}</label>
+              <i *ngIf="!item.hasData" class="pi pi-times" style="color: red;"></i>
+              <label for="{{item.title + '-' + i}}">{{item.title | translate}}</label>
             </div>
           </li>
-          <li *ngFor="let item of canExportedDetails">
+          <li *ngFor="let item of canExportedDetails; index as i">
             <div class="p-field-checkbox">
-              <p-checkbox [(ngModel)]="item.export" binary="true" inputId="binary" [disabled]="!item.hasData">
+              <p-checkbox [(ngModel)]="item.export" binary="true" inputId="{{item.title + '-' + i}}"
+                *ngIf="item.hasData">
               </p-checkbox>
-              <label for="binary">{{item.title | translate}}</label>
+              <i *ngIf="!item.hasData" class="pi pi-times" style="color: red;"></i>
+              <label for="{{item.title + '-' + i}}">{{item.title | translate}}</label>
             </div>
           </li>
         </ul>

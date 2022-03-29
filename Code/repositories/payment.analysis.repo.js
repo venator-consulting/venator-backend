@@ -262,25 +262,25 @@ module.exports.paymentAnalysis = async (orgId, prcId, fromDate, toDate, cb) => {
 };
 
 
-module.exports.paymentAnalysisforLiquidity = async (orgId, prcId, fromDate, toDate, cb) => {
-  if (!fromDate) {
+module.exports.paymentAnalysisforLiquidity = async (orgId, prcId, fromDate, toDate, baseFromDate, baseToDate, cb) => {
+  if (!baseFromDate) {
     throw new Error("Document Date is null for this procedure!");
   }
-  if (!toDate) {
+  if (!baseFromDate) {
     throw new Error("Application Date is null for this procedure!");
   }
-  if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
-    fromDate = new Date(fromDate);
-    toDate = new Date(toDate);
+  if (!(baseFromDate instanceof Date) || !(baseToDate instanceof Date)) {
+    baseFromDate = new Date(baseFromDate);
+    baseToDate = new Date(baseToDate);
   }
-  const diff = dayDiff(fromDate, toDate);
+  const diff = dayDiff(baseFromDate, baseToDate);
   // if diff = 0 throw an error
   // init res
   let res = new Array();
   // add element for each included month
   for (let index = 0; index <= diff; index++) {
-    let nowDate = new Date(fromDate);
-    nowDate.setDate(fromDate.getDate() + index);
+    let nowDate = new Date(baseFromDate);
+    nowDate.setDate(baseFromDate.getDate() + index);
     const element = {
       day: nowDate.getDate(),
       monthName: nowDate.getMonth() + 1,
@@ -298,9 +298,9 @@ module.exports.paymentAnalysisforLiquidity = async (orgId, prcId, fromDate, toDa
                     WHERE
                         pos.procedureId = ${prcId} 
                         AND pos.documentTypeNewName = 'RECHNUNG' 
-                        AND pos.documentDate >=  '${fromDate.toISOString().split('T')[0]}' 
-                        AND ((pos.applicationDate is NULL AND pos.dueDate <= '${toDate.toISOString().split('T')[0]}')
-                          OR (pos.applicationDate <= '${toDate.toISOString().split('T')[0]}'))`;
+                        AND pos.documentDate >=  '${baseFromDate.toISOString().split('T')[0]}' 
+                        AND ((pos.applicationDate is NULL AND pos.dueDate <= '${baseToDate.toISOString().split('T')[0]}')
+                          OR (pos.applicationDate <= '${baseToDate.toISOString().split('T')[0]}'))`;
 
   const str = connection.getConnection().query(query).stream();
 
@@ -308,7 +308,7 @@ module.exports.paymentAnalysisforLiquidity = async (orgId, prcId, fromDate, toDa
     // iterate for each month
     res.forEach((element) => {
       // get last day of the month
-      let d = new Date(element.yearName, +element.monthName, 1);
+      let d = new Date(element.yearName, element.monthName, element.day);
       if (row.documentDate?.getTime() < d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime()) &&
         row.dueDate?.getTime() < d?.getTime()) {
         element.red.value += +row.balance;
@@ -319,6 +319,24 @@ module.exports.paymentAnalysisforLiquidity = async (orgId, prcId, fromDate, toDa
   }); // end of fetching row event
 
   str.on("end", async () => {
+    let start = 0;
+    let end = 0;
+    // if there is a date range filter
+    if ((fromDate && fromDate != 'null' && fromDate != 'undefined') ||
+      (toDate && toDate != 'null' && toDate != 'undefined')) {
+      if (fromDate && fromDate != 'null' && fromDate != 'undefined') {
+        fromDate = new Date(fromDate);
+        start = dayDiff(baseFromDate, fromDate);
+      }
+
+      if (toDate && toDate != 'null' && toDate != 'undefined') {
+        toDate = new Date(toDate);
+        end = dayDiff(baseToDate, toDate);
+      }
+
+      // slice array based on date range filter
+      finalResult.res = finalResult.res.slice(start, -end);
+    }
     cb(finalResult);
   });
 };

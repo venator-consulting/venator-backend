@@ -541,7 +541,8 @@
     "textDetials": "Text Analysis Details",
     "paymentDetials": "Payment Analysis Details",
     "dueDateDetials": "Payment Behavior Analysis Details",
-    "mailDetials": "Email Analysis Details"
+    "mailDetials": "Email Analysis Details",
+    "report": "Report"
   },
   "DataTableColumns": {
     "client": "Mandant",

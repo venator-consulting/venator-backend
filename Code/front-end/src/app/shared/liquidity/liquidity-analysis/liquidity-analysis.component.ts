@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AnalysisService } from '../../service/analysis.service';
 import { LiquidityService } from '../../service/liquidity.service';
+import { PaymentData } from "../../model/paymentAnalysis";
 
 @Component({
   selector: 'app-liquidity-analysis',
@@ -25,7 +26,10 @@ export class LiquidityAnalysisComponent implements OnInit {
   home: MenuItem;
   orgId: number;
   prcId: number;
+  // waiting for liquidity data
   searching: boolean;
+  // waiting for red data
+  searching2: boolean;
   bankBalancesTotal: number = 0;
   creditLinesTotal: number = 0;
   freeLiquidityTotal: number = 0;
@@ -36,8 +40,9 @@ export class LiquidityAnalysisComponent implements OnInit {
   toDate: Date;
   rangeValues: number[];
   bankBalances: number[] = [];
-  data: import("/home/ibra/Projects/venator/venator-backend/Code/front-end/src/app/shared/model/paymentAnalysis").PaymentData[];
+  data: PaymentData[];
   RedData: any[] = [];
+  freeLiquidityData: any[] = [];
   red: any[] = [];
   @ViewChild('chart') chart;
 
@@ -125,6 +130,24 @@ export class LiquidityAnalysisComponent implements OnInit {
     this.getPayments();
   } // end of ng on init
 
+  dateRangeChanges() {
+    this.getData();
+    this.getPayments()
+  }
+
+  handleSliderChange(e) {
+    let start = e.values[0];
+    let end = e.values[1];
+    // calculate fromDate: start + baseFromDate
+    let tempStart = new Date(this.baseFromDate);
+    tempStart.setDate(tempStart.getDate() + start);
+    this.fromDate = new Date(tempStart);
+    // calculate toDate: baseToDate - end
+    let tempEnd = new Date(this.baseToDate);
+    tempEnd.setDate(tempEnd.getDate() - (this.maxRange - +end));
+    this.toDate = new Date(tempEnd);
+  }
+
   dayDiff(d1: Date, d2: Date) {
     var diff = Math.abs(d1.getTime() - d2.getTime());
     var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
@@ -132,38 +155,50 @@ export class LiquidityAnalysisComponent implements OnInit {
   }
 
   getPayments() {
-    this.searching = true;
+    this.searching2 = true;
     let start = this.fromDate?.toISOString().split('T')[0];
     let end = this.toDate?.toISOString().split('T')[0];
     this._analysisService
       .getPaymentAnalysisForLiquidity(this.orgId, this.prcId, start, end)
       .subscribe(
-        (res) => {
+        async (res) => {
           this.data = res.data.res;
-          for (let i = 0; i < this.data.length; i++) {
-            const element = this.data[i];
-            // this.labels.push(element.monthName + '-' + element.yearName);
-            this.RedData.push(-1 * element.red.value);
+          this.RedData = this.data.map(value => (-1 * +value.red.value));
+          // debugger;
+          // for (let i = 0; i < this.data.length; i++) {
+          //   const element = this.data[i];
+          //   // this.labels.push(element.monthName + '-' + element.yearName);
+          //   this.RedData.push(-1 * element.red.value);
+          // }
+          debugger;
+          if (this.chart && !this.searching) {
+            this.basicData = {
+              labels: this.labels,
+              datasets: [
+                {
+                  type: 'line',
+                  label: await this._translateService.get('PaymentAnalysis.red').toPromise(),
+                  borderColor: '#E5A58B',
+                  borderWidth: 2,
+                  fill: false,
+                  data: this.RedData,
+                },
+                {
+                  type: 'line',
+                  label: await this._translateService.get('Liquidity.freeLiquidity').toPromise(),
+                  fill: false,
+                  data: this.freeLiquidityData,
+                  borderColor: '#85fa8B',
+                  borderWidth: 2,
+                }
+              ],
+            };
+            // this.chart.reinit();
           }
-
-          // this.basicData = {
-          //   labels: this.labels,
-          //   datasets: new Array(),
-          // };
-
-          // this.basicData.datasets.push(
-
-          //   {
-          //     label: this.red,
-          //     backgroundColor: `rgb(255,100,100)`,
-          //     data: this.RedData,
-          //   }
-          // );
-          // this.searching = false;
-          if (this.chart) this.chart.reinit();
+          this.searching2 = false;
         },
         (er) => {
-          this.searching = false;
+          this.searching2 = false;
         });
   }
 
@@ -183,27 +218,31 @@ export class LiquidityAnalysisComponent implements OnInit {
         if (!this.rangeValues) this.rangeValues = [0, this.dayDiff(this.fromDate, this.toDate)];
         if (!this.maxRange) this.maxRange = this.dayDiff(this.fromDate, this.toDate);
         this.labels = res.bankBalances.labels;
-        this.basicData = {
-          labels: res.bankBalances.labels,
-          datasets: [
-            {
-              type: 'line',
-              label: await this._translateService.get('PaymentAnalysis.red').toPromise(),
-              borderColor: '#42A5F5',
-              borderWidth: 2,
-              fill: false,
-              data: this.RedData,
-            },
-            {
-              type: 'line',
-              label: await this._translateService.get('Liquidity.freeLiquidity').toPromise(),
-              fill: false,
-              data: res.freeLiquidity,
-              borderColor: '#E5A58B',
-              borderWidth: 2,
-            }
-          ],
-        };
+        this.freeLiquidityData = res.freeLiquidity;
+        // this.getPayments();
+        if (this.chart && !this.searching2) {
+          this.basicData = {
+            labels: this.labels,
+            datasets: [
+              {
+                type: 'line',
+                label: await this._translateService.get('PaymentAnalysis.red').toPromise(),
+                borderColor: '#E5A58B',
+                borderWidth: 2,
+                fill: false,
+                data: this.RedData,
+              },
+              {
+                type: 'line',
+                label: await this._translateService.get('Liquidity.freeLiquidity').toPromise(),
+                fill: false,
+                data: this.freeLiquidityData,
+                borderColor: '#85fa8B',
+                borderWidth: 2,
+              }
+            ],
+          };
+        }
         this.searching = false;
       },
       (er) => {

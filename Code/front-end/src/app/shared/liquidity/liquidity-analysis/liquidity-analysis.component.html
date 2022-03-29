@@ -1,11 +1,26 @@
 <p-toast></p-toast>
 <p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+<p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="searching || searching2"></p-progressBar>
+<div class="p-grid">
+  <div class="p-col-12">
+    <p class="p-text-center" style="margin-left: -25px;">{{fromDate | date}} - {{toDate | date}}</p>
+  </div>
+  <div class="p-col-3"></div>
+  <div class="p-col-1 p-text-right">{{baseFromDate | date}}</div>
+  <div class="p-col-4">
+    <p-slider [(ngModel)]="rangeValues" [range]="true" (onChange)="handleSliderChange($event)" [min]="0"
+      [max]="maxRange"></p-slider>
+  </div>
+  <div class="p-col-1">{{baseToDate | date}}</div>
+  <div class="p-col-1">
+    <button pButton pRipple type="button" icon="pi pi-search" (click)="dateRangeChanges()"
+      class="p-button-rounded p-button-primary" style="margin-top: -18px;"></button>
+  </div>
+</div>
 <div class="p-grid">
   <div class="p-col-12">
     <div class="card">
-      <p-chart #chart [data]="basicData" [options]="basicOptions" height="400px"
-        ></p-chart>
+      <p-chart #chart [data]="basicData" [options]="basicOptions" height="400px"></p-chart>
     </div>
   </div>
 </div>
-

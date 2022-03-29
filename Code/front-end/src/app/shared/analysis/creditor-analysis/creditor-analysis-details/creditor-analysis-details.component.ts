@@ -540,13 +540,13 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     let htmlComment: HTMLElement = htmlCommentCollection.item(0) as HTMLElement;
     htmlComment.innerHTML += `<style>
                                 *{margin: 0}
-                                h2{font-size: 6px;} 
-                                h3{font-size: 5px;}
-                                h4{font-size: 4px;}
-                                p, li{font-size: 3px;}
+                                h2{font-size: 7px;} 
+                                h3{font-size: 6px;}
+                                h4{font-size: 5px;}
+                                p, li{font-size: 3.5px;}
                             </style>`;
     PDF.html(htmlComment, {
-      x: 2, y: positionY, width: 200,
+      x: 0, y: positionY, width: 200,
       // fontFaces:
       callback: async (doc: jsPDF) => {
         positionY += htmlComment.clientHeight * 295 / window.innerHeight;
