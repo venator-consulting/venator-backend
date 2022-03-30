@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
+import { DocumentTypes } from 'src/app/shared/model/document-type';
 import { TableColumn } from 'src/app/shared/model/tableColumn';
 import { DataFilterService } from 'src/app/shared/service/data-filter.service';
 import { PostingService } from '../service/posting.service';
@@ -51,6 +52,12 @@ export class DuedateCorrectionComponent implements OnInit {
   completeWords: any[];
   // a temp value to keep the original value, if the user cancel the editing mode to reset it
   originalDueDateNew: any;
+  originalDocumentTypeNewId: any;
+
+  // all document types new to select one of them in the filter in the table header
+  docTypesFilter: DocumentTypes[] = new Array();
+  // the all docuent types new to select one of them when update a record
+  docTypes: DocumentTypes[] = new Array();
   //#endregion init vars
 
   constructor(private _dataFilterService: DataFilterService, private _messageService: MessageService,
@@ -61,11 +68,31 @@ export class DuedateCorrectionComponent implements OnInit {
       { header: 'DataTableColumns.accountNumber', field: 'accountNumber' },
       { header: 'DataTableColumns.accountName', field: 'accountName' },
       { header: 'DataTableColumns.recordNumber', field: 'recordNumber' },
+      { header: 'DataTableColumns.documentDate', field: 'documentDate' },
+      { header: 'DataTableColumns.balance', field: 'balance', align: 'right' },
+      { header: 'DataTableColumns.recordNumber', field: 'recordNumber' },
+      { header: 'DataTableColumns.documentTypeNewName', field: 'documentTypeNewName' },
       { header: 'DataTableColumns.dueDate', field: 'dueDate' },
       { header: 'DataTableColumns.dueDateNew', field: 'dueDateNew' },
     ];
 
     this.getData();
+
+    this.docTypes.push({
+      id: 0,
+      documentTypeName: 'null'
+    });
+
+    this._postingService
+      .getDocTypesEnum()
+      .subscribe(
+        (data) => {
+          this.docTypes.push(...data);
+          this.docTypesFilter = data;
+        },
+        (error) => console.log(error)
+      );
+
   }
 
   getData() {
@@ -85,7 +112,7 @@ export class DuedateCorrectionComponent implements OnInit {
     this._dataFilterService.get(tempCriteria).subscribe(
       (data) => {
         this.data = data;
-        this.postings = this.data.rows;
+        this.postings = this.data.rows?.map(row => ({ ...row, dueDateNew: row.dueDateNew ? new Date(row.dueDateNew) : null, }));
         this.totalCount = this.data.count;
         this.displayedDataCount =
           this.totalCount > this.limit ? this.limit : this.totalCount;
@@ -193,16 +220,21 @@ export class DuedateCorrectionComponent implements OnInit {
   editRow(row) {
     this.postings
       .filter((row) => row.isEditable)
-      .map((r) => {
-        r.isEditable = false;
-        return r;
-      });
+      .map((r) => { r.isEditable = false; return r; });
     row.isEditable = true;
     this.originalDueDateNew = row.dueDateNew;
+    this.originalDocumentTypeNewId = row.documentTypeNewId;
+  }
+
+  docTypeChangedHandler(e, row) {
+    row.documentTypeNewId = e.value;
+    row.documentTypeNewName = this.docTypes.filter(row => row.id == e.value)[0].documentTypeName;
   }
 
   resetDueDate(row) {
     row.dueDateNew = null;
+    row.documentTypeNewId = null;
+    row.documentTypeNewName = null;
     this.save(row);
   }
 
@@ -221,6 +253,8 @@ export class DuedateCorrectionComponent implements OnInit {
 
   cancel(row) {
     row.dueDateNew = this.originalDueDateNew;
+    row.documentTypeNewId = this.originalDocumentTypeNewId;
+    row.documentTypeNewName = this.docTypes.filter(row => row.id == this.originalDocumentTypeNewId)[0]?.documentTypeName;
     row.isEditable = false;
   }
 

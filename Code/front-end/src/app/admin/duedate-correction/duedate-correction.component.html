@@ -64,38 +64,74 @@
                         (onSelect)="filterChange($event.word, col.field)" field="word" [minLength]="1"
                         [inputStyle]="{ width: '90%' }" [style]="{ width: '90%' }" appendTo="body"
                         [(ngModel)]="criteria[col.field]" *ngIf="
-                col.field != 'dueDate' &&
-                col.field != 'dueDateNew'">
+                col.field != 'dueDate' && col.field != 'documentDate' &&
+                col.field != 'dueDateNew' && col.field != 'documentTypeNewName'">
                     </p-autoComplete>
 
                     <p-calendar *ngIf="
                 col.field == 'dueDateNew' ||
-                col.field == 'dueDate'
+                col.field == 'dueDate' || col.field == 'documentDate'
               " [(ngModel)]="criteria[col.field]" (onSelect)="filterChange($event, col.field)" [monthNavigator]="true"
                         [yearNavigator]="true" yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy">
                     </p-calendar>
+                    <p-dropdown [options]="docTypesFilter" [(ngModel)]="criteria[col.field]"
+                        optionValue="documentTypeName" appendTo="body" placeholder="Document Type new"
+                        optionLabel="documentTypeName" [showClear]="true" filterBy="documentTypeName"
+                        (onChange)="filterChange($event.value, col.field)" [style]="{width:'100%'}"
+                        *ngIf="col.field == 'documentTypeNewName'">
+                        <ng-template pTemplate="item" let-item>
+                            {{'Document_Type.'+item.documentTypeName | translate}}
+                        </ng-template>
+                        <ng-template pTemplate="selectedItem" let-item>
+                            {{'Document_Type.'+item.documentTypeName | translate}}
+                        </ng-template>
+                    </p-dropdown>
                 </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData>
             <tr>
                 <td pReorderableRowHandle *ngFor="let col of cols" class="p-text-{{ col.align }}">
-                    <div *ngIf="!rowData.isEditable &&
-                  (col.field == 'dueDate' ||
-                  col.field == 'dueDateNew');
+                    <div *ngIf="
+                  (col.field == 'dueDate' || col.field == 'documentDate' ||
+                  col.field == 'dueDateNew' || col.field == 'documentTypeNewName');
                 then withFilter;
                 else withoutFilter
               "></div>
                     <ng-template #withoutFilter>
-                        <span *ngIf="!rowData.isEditable" pTooltip="{{ rowData[col.field] }}">
+                        <span pTooltip="{{ rowData[col.field] }}">
                             {{ rowData[col.field] }}
                         </span>
-                        <p-calendar *ngIf="rowData.isEditable && col.field == 'dueDateNew'" [(ngModel)]="rowData.dueDateNew"
-                        [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" appendTo="body"
-                        dateFormat="dd.mm.yy" clientTimeZone="local"></p-calendar>
                     </ng-template>
                     <ng-template #withFilter>
-                        {{ (rowData[col.field] | date: "dd.MM.yyyy") }}
+                        <span *ngIf="col.field == 'documentTypeNewName'">
+                            <span *ngIf="rowData.isEditable">
+                                <p-dropdown [options]="docTypes" [(ngModel)]="rowData.documentTypeNewId"
+                                    optionValue="id" appendTo="body" placeholder="Document Type new"
+                                    optionLabel="documentTypeName" [showClear]="true" [filter]="true"
+                                    filterBy="documentTypeName" (onChange)="docTypeChangedHandler($event, rowData)"
+                                    [style]="{width:'300px'}">
+                                    <ng-template pTemplate="item" let-item>
+                                        {{'Document_Type.'+item.documentTypeName | translate}}
+                                    </ng-template>
+                                    <ng-template pTemplate="selectedItem" let-item>
+                                        {{'Document_Type.'+item.documentTypeName | translate}}
+                                    </ng-template>
+                                </p-dropdown>
+                            </span>
+                            <span *ngIf="!rowData.isEditable">
+                                {{'Document_Type.'+rowData.documentTypeNewName | translate}}</span>
+                        </span>
+                        <span *ngIf="col.field != 'documentTypeNewName' && !rowData.isEditable">
+                            {{ (rowData[col.field] | date: "dd.MM.yyyy") }}
+                        </span>
+                        <span *ngIf="col.field != 'documentTypeNewName' && rowData.isEditable && col.field != 'dueDateNew' ">
+                            {{ (rowData[col.field] | date: "dd.MM.yyyy") }}
+                        </span>
+                        <p-calendar *ngIf="rowData.isEditable && col.field == 'dueDateNew'"
+                            [(ngModel)]="rowData.dueDateNew" [monthNavigator]="true" [yearNavigator]="true"
+                            yearRange="1900:2100" appendTo="body" dateFormat="dd.mm.yy" clientTimeZone="local">
+                        </p-calendar>
                     </ng-template>
                 </td>
                 <td>
