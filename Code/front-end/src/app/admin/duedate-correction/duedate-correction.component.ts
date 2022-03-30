@@ -70,7 +70,7 @@ export class DuedateCorrectionComponent implements OnInit {
       { header: 'DataTableColumns.recordNumber', field: 'recordNumber' },
       { header: 'DataTableColumns.documentDate', field: 'documentDate' },
       { header: 'DataTableColumns.balance', field: 'balance', align: 'right' },
-      { header: 'DataTableColumns.recordNumber', field: 'recordNumber' },
+      { header: 'DataTableColumns.textPosting', field: 'textPosting' },
       { header: 'DataTableColumns.documentTypeNewName', field: 'documentTypeNewName' },
       { header: 'DataTableColumns.dueDate', field: 'dueDate' },
       { header: 'DataTableColumns.dueDateNew', field: 'dueDateNew' },
