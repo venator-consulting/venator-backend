@@ -292,7 +292,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       .getAmountAnalysisDetailsChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, 500)
       .subscribe(res => {
         this.balanceChartData = res;
-        this.canExported.push({ chart: 'amountChart', title: 'CreditorsAnalysis.amountAnalysis', hasData: this.balanceChartData.length > 0 });
+        this.canExported.push({ chart: 'amountChart', title: 'CreditorsAnalysis.amountAnalysisReport', hasData: this.balanceChartData.length > 0 });
 
         this.amountChartData = {
           labels: this.balanceChartData.map(rec => rec.balance),
@@ -312,7 +312,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       .getTextAnalysisDetailsWords(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.wordsChartData = res;
-        this.canExported.push({ chart: 'textChart', title: 'CreditorsAnalysis.textAnalysis', hasData: this.wordsChartData.length > 0 });
+        this.canExported.push({ chart: 'textChart', title: 'CreditorsAnalysis.textAnalysisReport', hasData: this.wordsChartData.length > 0 });
         this.chartData = {
           labels: this.wordsChartData.map(rec => rec.word),
           datasets: [
@@ -349,7 +349,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
             red.push(-1 * (element.red.value));
           }
 
-          this.canExported.push({ chart: 'paymentChart', title: 'CreditorsAnalysis.paymentAnalysis', hasData: data.length > 0 });
+          this.canExported.push({ chart: 'paymentChart', title: 'CreditorsAnalysis.paymentAnalysisReport', hasData: data.length > 0 });
           this.paymentChartData = {
             labels: labels,
             datasets: new Array(),
@@ -390,7 +390,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
           let thisAccountDetails = res.data?.dueDateRefAccounts[0];
           this.totlaDueDateCount = thisAccountDetails?.count ?? 0;
-          this.canExported.push({ chart: 'dueDateChart', title: 'CreditorsAnalysis.dueDateAnalysis', hasData: this.dueDateChartDataRecords.length > 0 });
+          this.canExported.push({ chart: 'dueDateChart', title: 'CreditorsAnalysis.dueDateAnalysisReport', hasData: this.dueDateChartDataRecords.length > 0 });
           this.canExportedDetails.push({ name: 'dueDateDetails', title: 'CreditorsAnalysis.dueDateDetials', hasData: this.totlaDueDateCount > 0 });
           this.totalDueDate = +thisAccountDetails?.delayNeg + +thisAccountDetails?.delayPos;
           let labels = res.data.dueDateReference.labels;
@@ -458,7 +458,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       .getMailDetailsAnalysisSenderByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.mailSenderChartRecords = res;
-        this.canExported.push({ chart: 'mailSenderChart', title: 'CreditorsAnalysis.mailSenderAnalysis', hasData: res.length > 0 });
+        this.canExported.push({ chart: 'mailSenderChart', title: 'CreditorsAnalysis.mailSenderAnalysisReport', hasData: res.length > 0 });
         this.mailSenderChartData = {
           labels: res?.map(rec => rec.email + ' - ' + rec.sender),
           datasets: [
@@ -476,7 +476,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     this.mailWordSub = this._mailService
       .getMailDetailsAnalysisWordByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
-        this.canExported.push({ chart: 'mailWordChart', title: 'CreditorsAnalysis.mailWordAnalysis', hasData: res.length > 0 });
+        this.canExported.push({ chart: 'mailWordChart', title: 'CreditorsAnalysis.mailWordAnalysisReport', hasData: res.length > 0 });
         this.mailWordChartData = {
           labels: res?.map(rec => rec.word),
           datasets: [
@@ -599,7 +599,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
             // select the page
             pdf.setPage(i);
             //#region header 
-            if (i == 1) {
+            // if (i == 1) {
               // paint the gray rectangle
               pdf.setFillColor(88, 88, 90);
               // grey for the header
@@ -612,16 +612,16 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
               pdf.addImage(logoImg, 'PNG', 37, 5, 8, 8);
               pdf.setFontSize(11);
               //  add procedure name
-              // pdf.setTextColor(255, 255, 255);
-              // pdf.text(this.procedureName, 80, 11);
+              pdf.setTextColor(255, 255, 255);
+              pdf.text(this.procedureName, 80, 11);
               // add account number and name
-              // pdf.text(this.accountNumber + ' - ' + this.accountName, 60, 16);
-            }
+              pdf.text(this.accountNumber + ' - ' + this.accountName, 60, 16);
+            // }
             //#endregion header
             // gray for the footer
-            // pdf.setFillColor(88, 88, 90);
-            // pdf.rect(0, pdf.internal.pageSize.height - 17, pdf.internal.pageSize.width, pdf.internal.pageSize.height, 'F');
-            // pdf.setTextColor(255, 255, 255);
+            pdf.setFillColor(88, 88, 90);
+            pdf.rect(0, pdf.internal.pageSize.height - 17, pdf.internal.pageSize.width, pdf.internal.pageSize.height, 'F');
+            pdf.setTextColor(255, 255, 255);
             pdf.setFont('helvetica', 'italic');
             pdf.setFontSize(8);
             pdf.text('[' + String(i) + '/' + String(pageCount) + ']', pdf.internal.pageSize.width - 20,

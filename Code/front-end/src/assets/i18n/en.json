@@ -545,7 +545,13 @@
     "paymentDetials": "Payment Analysis Details",
     "dueDateDetials": "Payment Behavior Analysis Details",
     "mailDetials": "Email Analysis Details",
-    "report": "Report"
+    "report": "Report",
+    "amountAnalysisReport": "Glattebeträge Analyse",
+    "textAnalysisReport": "TEXTANALYSE",
+    "paymentAnalysisReport": "FÄLLIGKEITSANALYSE",
+    "dueDateAnalysisReport": "ZAHLUNGSVERHALTEN",
+    "mailSenderAnalysisReport": "Email Analysis by Sender",
+    "mailWordAnalysisReport": "Email Analysis by Word"
   },
   "DataTableColumns": {
     "client": "Client",
