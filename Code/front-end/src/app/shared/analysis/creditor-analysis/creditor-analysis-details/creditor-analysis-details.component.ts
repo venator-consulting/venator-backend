@@ -521,14 +521,14 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     let fileWidth = 210;
     PDF.setFontSize(10);
     //  add procedure name
-    let translatedPrc = await this._translateService.get('CreditorsAnalysis.procedureName').toPromise();
-    PDF.text(translatedPrc + ': ' + this.procedureName, 10, positionY, { align: 'left' });
-    positionY += 5;
+    // let translatedPrc = await this._translateService.get('CreditorsAnalysis.procedureName').toPromise();
+    // PDF.text(translatedPrc + ': ' + this.procedureName, 10, positionY, { align: 'left' });
+    // positionY += 5;
     // add account number and name
-    let translatedAccount = await this._translateService.get('CreditorsAnalysis.account').toPromise();
-    PDF.text(translatedAccount + ': ' + this.accountNumber + ' - ' + this.accountName,
-      10, positionY, { align: 'left' });
-    positionY += 5;
+    // let translatedAccount = await this._translateService.get('CreditorsAnalysis.account').toPromise();
+    // PDF.text(translatedAccount + ': ' + this.accountNumber + ' - ' + this.accountName,
+    //   10, positionY, { align: 'left' });
+    // positionY += 5;
     // let translatedAccountName = await this._translateService.get('CreditorsAnalysis.accountName').toPromise();
     // PDF.text(translatedAccountName + ': ' + this.accountName, 10, positionY, { align: 'left' });
     // positionY += 10;
@@ -740,7 +740,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
               }),
               balance: currencyPipe.transform(rec.balance, 'EURO', '')
             })),
-            margin: { top: 25 },
+            margin: { top: 25, bottom: 20 },
             styles: { overflow: 'linebreak', fontSize: 6, },
             headStyles: { fillColor: [88, 88, 90] }
           });
