@@ -85,7 +85,8 @@
     "PARTIAL_CALCULATED": "PARTIAL CALCULATED",
     "CALCULATED": "CALCULATED",
     "emailImport": "E-mails Import",
-    "duedateCorrection": "Due Date Correction"
+    "duedateCorrection": "Duedate Edit",
+    "recordsMatching": "postings Matching"
   },
   "Admin_Dashboard": {
     "organisationEmail": "Email",
@@ -539,19 +540,19 @@
     "senderTotalCount": "Total Sender Count",
     "emailTotalCount": "Total emails messages count",
     "dueDate": "Due Date",
-    "mailWord": "Email Analysis by Word",
+    "mailWord": "Entwicklung der Emailanalyer nach Wört",
     "amountDetials": "Amount Analysis Details",
     "textDetials": "Text Analysis Details",
     "paymentDetials": "Payment Analysis Details",
     "dueDateDetials": "Payment Behavior Analysis Details",
     "mailDetials": "Email Analysis Details",
     "report": "Report",
-    "amountAnalysisReport": "Glattebeträge Analyse",
-    "textAnalysisReport": "TEXTANALYSE",
-    "paymentAnalysisReport": "FÄLLIGKEITSANALYSE",
-    "dueDateAnalysisReport": "ZAHLUNGSVERHALTEN",
-    "mailSenderAnalysisReport": "Email Analysis by Sender",
-    "mailWordAnalysisReport": "Email Analysis by Word"
+    "amountAnalysisReport": "Development of the amount analysis",
+    "textAnalysisReport": "Development of the text analysis",
+    "paymentAnalysisReport": "Development of the payment behavior",
+    "dueDateAnalysisReport": "Development of the duedate analysis ",
+    "mailSenderAnalysisReport": "Entwicklung der Emailanalyse nach Konto",
+    "mailWordAnalysisReport": "Entwicklung der Emailanalyer nach Wört"
   },
   "DataTableColumns": {
     "client": "Client",

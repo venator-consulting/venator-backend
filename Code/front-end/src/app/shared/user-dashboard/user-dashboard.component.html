@@ -1,4 +1,5 @@
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
 <p-toast></p-toast>
 <p-table [value]="procedures" [resizableColumns]="true" dataKey="id" styleClass="p-datatable-gridlines" [columns]="cols"
   responsive="true" [scrollable]="true" scrollHeight="400px" [reorderableColumns]="true">
@@ -32,17 +33,22 @@
         <i *ngIf="procedure[col.field]?.toString().toLowerCase().trim() == 'true'" class="pi pi-check checkIcon"></i> <i
           *ngIf="procedure[col.field]?.toString().toLowerCase().trim() == 'false'" class="pi pi-times closeIcon"></i>
         {{ (procedure[col.field]?.toString().toLowerCase().trim() != 'true' &&
+        col.field != 'status' &&
         procedure[col.field]?.toString().toLowerCase().trim() != 'false') ? procedure[col.field] : ''}}
+        <span *ngIf="col.field == 'status'">{{'sideBarMenu.' + procedure[col.field] | translate}}</span>
       </td>
       <td style="width: 10em" class="p-text-right">
-        <button pButton pRipple type="button" icon="pi pi-bookmark" [disabled]="procedure.status=='NOT_IMPORTED' || !procedure.data"
+        <button pButton pRipple type="button" icon="pi pi-bookmark"
+          [disabled]="procedure.status=='NOT_IMPORTED' || !procedure.data"
           class="p-button-rounded p-button-warning headerColor" pTooltip="{{'Admin_Dashboard.show' | translate}}"
           tooltipPosition="bottom" (click)="dataTable(procedure)"></button> &nbsp;
-        <button  *ngIf="role ==='Admin'" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-warning headerColor"
+        <button *ngIf="role ==='Admin'" pButton pRipple type="button" icon="pi pi-pencil"
+          class="p-button-rounded p-button-warning headerColor"
           pTooltip="{{'Procedure_Registration.editProedurePlaceHolder' | translate}}" tooltipPosition="bottom"
           (click)="editProcedure(procedure)"></button> &nbsp;
-        <button  *ngIf="role ==='Admin'" pButton (click)="reset(procedure)" icon="pi pi-times" pRipple class="p-button-rounded p-button-warning headerColor"
-          pTooltip="{{'Admin_Dashboard.delete' | translate}}"  tooltipPosition="bottom" [disabled]="procedure.status=='NOT_IMPORTED'"></button>
+        <button *ngIf="role ==='Admin'" pButton (click)="reset(procedure)" icon="pi pi-times" pRipple
+          class="p-button-rounded p-button-warning headerColor" pTooltip="{{'Admin_Dashboard.delete' | translate}}"
+          tooltipPosition="bottom" [disabled]="procedure.status=='NOT_IMPORTED'"></button>
       </td>
 
     </tr>

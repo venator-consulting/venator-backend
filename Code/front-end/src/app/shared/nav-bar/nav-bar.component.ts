@@ -184,7 +184,7 @@ export class NavBarComponent implements OnInit {
                     localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
               },
               {
-                label: 'Records Matching',
+                label: elem.recordsMatching,
                 icon: 'pi  pi-plus-circle',
                 routerLink: ['/dashboard/admin/record-matching'],
                 disabled:

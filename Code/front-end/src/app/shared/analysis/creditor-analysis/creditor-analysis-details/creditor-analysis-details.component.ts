@@ -791,12 +791,12 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
         break;
       case 'mailSenderDetails':
         headers = [
-          { header: await this._translateService.get('PaymentAnalysis.email').toPromise(), dataKey: 'email' },
-          { header: await this._translateService.get('PaymentAnalysis.sender').toPromise(), dataKey: 'sender' },
-          { header: await this._translateService.get('PaymentAnalysis.rcvName').toPromise(), dataKey: 'rcvName' },
-          { header: await this._translateService.get('PaymentAnalysis.subject').toPromise(), dataKey: 'subject' },
-          { header: await this._translateService.get('PaymentAnalysis.body').toPromise(), dataKey: 'body' },
-          { header: await this._translateService.get('PaymentAnalysis.comment').toPromise(), dataKey: 'senderComment' },
+          { header: await this._translateService.get('MailAnalysis.email').toPromise(), dataKey: 'email' },
+          { header: await this._translateService.get('MailAnalysis.sender').toPromise(), dataKey: 'sender' },
+          { header: await this._translateService.get('MailAnalysis.rcvName').toPromise(), dataKey: 'rcvName' },
+          { header: await this._translateService.get('MailAnalysis.subject').toPromise(), dataKey: 'subject' },
+          { header: await this._translateService.get('MailAnalysis.body').toPromise(), dataKey: 'body' },
+          { header: await this._translateService.get('MailAnalysis.comment').toPromise(), dataKey: 'senderComment' },
         ];
         break;
     }
