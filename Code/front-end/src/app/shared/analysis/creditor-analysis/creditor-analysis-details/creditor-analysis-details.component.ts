@@ -600,22 +600,22 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
             pdf.setPage(i);
             //#region header 
             // if (i == 1) {
-              // paint the gray rectangle
-              pdf.setFillColor(88, 88, 90);
-              // grey for the header
-              pdf.rect(0, 0, pdf.internal.pageSize.width, 19, 'F');
-              // add the brand
-              pdf.setFontSize(16);
-              pdf.setTextColor(232, 79, 19);
-              pdf.text('Venalytics', 10, 11, { align: 'left' });
-              // add the logo
-              pdf.addImage(logoImg, 'PNG', 37, 5, 8, 8);
-              pdf.setFontSize(11);
-              //  add procedure name
-              pdf.setTextColor(255, 255, 255);
-              pdf.text(this.procedureName, 80, 11);
-              // add account number and name
-              pdf.text(this.accountNumber + ' - ' + this.accountName, 60, 16);
+            // paint the gray rectangle
+            pdf.setFillColor(88, 88, 90);
+            // grey for the header
+            pdf.rect(0, 0, pdf.internal.pageSize.width, 19, 'F');
+            // add the brand
+            pdf.setFontSize(16);
+            pdf.setTextColor(232, 79, 19);
+            pdf.text('Venalytics', 10, 11, { align: 'left' });
+            // add the logo
+            pdf.addImage(logoImg, 'PNG', 37, 5, 8, 8);
+            pdf.setFontSize(11);
+            //  add procedure name
+            pdf.setTextColor(255, 255, 255);
+            pdf.text(this.procedureName, 50, 11);
+            // add account number and name
+            pdf.text(this.accountNumber + ' - ' + this.accountName, 50, 16);
             // }
             //#endregion header
             // gray for the footer
@@ -658,7 +658,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
         positionY = 25;
       }
       let translatedTitle = await this._translateService.get(title).toPromise();
-      pdf.setFontSize(10);
+      pdf.setFontSize(8);
       pdf.text(translatedTitle, 10, positionY);
       let image = canvas.toDataURL('image/png');
       pdf.addImage(image, 'PNG', 35, positionY + 10, 140, height, null, 'NONE');
