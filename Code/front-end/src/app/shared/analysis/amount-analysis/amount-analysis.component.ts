@@ -123,7 +123,7 @@ export class AmountAnalysisComponent implements OnInit {
       .getAmountAnalysis(
         this.selectedOrganisation,
         this.selectedProcedure,
-        this.baseBalance
+        this.baseBalance, 100
       )
       .subscribe(
         (res) => {

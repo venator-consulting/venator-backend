@@ -310,7 +310,8 @@ module.exports.amountAnalysisDetails = async (
   orgId,
   prcId,
   baseBalance,
-  accountNumber
+  accountNumber,
+  mode
 ) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
@@ -325,20 +326,21 @@ module.exports.amountAnalysisDetails = async (
                                 AND UPPER(p.accountType) = 'K' 
                                 AND p.accountNumber = :accountNumber
                                 AND (UPPER(p.documentTypeNewName) = 'ZAHLUNG')
-                                AND p.balance = ROUND(p.balance, -2)
+                                AND p.balance % :mode = 0
                                 AND balance >= :baseBalance`;
   const result = await sequelize.query(query, {
     replacements: {
       procedureId: prcId,
       baseBalance: baseBalance,
       accountNumber: accountNumber,
+      mode
     },
     type: QueryTypes.SELECT,
   });
   return result;
 };
 
-module.exports.amountAnalysisDetailsChart = async (orgId, prcId, baseBalance, accountNumber) => {
+module.exports.amountAnalysisDetailsChart = async (orgId, prcId, baseBalance, accountNumber, mode) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
@@ -349,7 +351,7 @@ module.exports.amountAnalysisDetailsChart = async (orgId, prcId, baseBalance, ac
                                 AND UPPER(p.accountType) = 'K' 
                                 AND p.accountNumber = :accountNumber
                                 AND (UPPER(p.documentTypeNewName) = 'ZAHLUNG')
-                                AND p.balance = ROUND(p.balance, -2)
+                                AND p.balance % :mode = 0 
                                 AND balance >= :baseBalance
                             group by p.balance `;
   const result = await sequelize.query(query, {
@@ -357,6 +359,7 @@ module.exports.amountAnalysisDetailsChart = async (orgId, prcId, baseBalance, ac
       procedureId: prcId,
       baseBalance: baseBalance,
       accountNumber: accountNumber,
+      mode
     },
     type: QueryTypes.SELECT,
   });

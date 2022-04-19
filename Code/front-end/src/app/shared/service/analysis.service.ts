@@ -16,16 +16,16 @@ export class AnalysisService {
   constructor(private _http: HttpClient) { }
 
   //#region Amount
-  getAmountAnalysis(orgId: number, prcId: number, baseBalance: number): Observable<AmountAnalysis[]> {
-    return this._http.get<AmountAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/amount-calc/' + baseBalance);
+  getAmountAnalysis(orgId: number, prcId: number, baseBalance: number, mode: number): Observable<AmountAnalysis[]> {
+    return this._http.get<AmountAnalysis[]>(this._thisURL + orgId + '/' + prcId + '/amount-calc/' + baseBalance + '/' + mode);
   }
 
-  getAmountAnalysisDetails(orgId: number, prcId: number, accountNumber: string, baseBalance: number): Observable<AmountAnalysisDetails[]> {
-    return this._http.get<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber + '/' + baseBalance);
+  getAmountAnalysisDetails(orgId: number, prcId: number, accountNumber: string, baseBalance: number, mode:number): Observable<AmountAnalysisDetails[]> {
+    return this._http.get<AmountAnalysisDetails[]>(this._thisURL + orgId + '/' + prcId + '/amount/details/' + accountNumber + '/' + baseBalance + '/' + mode);
   }
 
-  getAmountAnalysisDetailsChart(orgId: number, prcId: number, accountNumber: string, baseBalance: number): Observable<AmountAnalysisDetailsChart[]> {
-    return this._http.get<AmountAnalysisDetailsChart[]>(this._thisURL + orgId + '/' + prcId + '/amount/details-chart/' + accountNumber + '/' + baseBalance);
+  getAmountAnalysisDetailsChart(orgId: number, prcId: number, accountNumber: string, baseBalance: number, mode: number): Observable<AmountAnalysisDetailsChart[]> {
+    return this._http.get<AmountAnalysisDetailsChart[]>(this._thisURL + orgId + '/' + prcId + '/amount/details-chart/' + accountNumber + '/' + baseBalance + '/' + mode);
   }
 
   getAmountAnalysisDetailsRelevant(orgId: number, prcId: number, accountNumber: string): Observable<AmountAnalysisDetails[]> {

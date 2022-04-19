@@ -206,13 +206,13 @@ const routes: Routes = [
         data: { roles: ['Admin', 'Manager', 'User'] },
       },
       {
-        path: 'analysis/amount/:baseBalance',
+        path: 'analysis/amount/:baseBalance/:mode',
         component: AmountAnalysisPreComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
       },
       {
-        path: 'analysis/amount/:orgId/:prcId/:accountNumber/:baseBalance',
+        path: 'analysis/amount/:orgId/:prcId/:accountNumber/:baseBalance/:mode',
         component: AmountAnalysisDetailsComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },

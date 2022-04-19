@@ -22,6 +22,7 @@ export class AmountAnalysisPreComponent implements OnInit {
   selectedProcedure: number = 0;
   // for the filter
   baseBalance = 0;
+  mode = 100;
   // chart configuration
   basicOptions: any;
   // chart data
@@ -48,6 +49,9 @@ export class AmountAnalysisPreComponent implements OnInit {
     // set base balance default value to 500
     this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance') ?? 500;
     if (!this.baseBalance || isNaN(this.baseBalance)) this.baseBalance = 500;
+
+    this.mode = +this._route.snapshot.paramMap.get('mode') ?? 100;
+    if (!this.mode || isNaN(this.mode)) this.mode = 100;
 
     this._translateService.get('AmountAnalysis').subscribe((elem) => {
       this.items = [
@@ -119,7 +123,9 @@ export class AmountAnalysisPreComponent implements OnInit {
       '/' +
       row.accountNumber +
       '/' +
-      this.baseBalance,
+      this.baseBalance +
+      '/' +
+      this.mode,
     ]);
   }
 
@@ -129,7 +135,8 @@ export class AmountAnalysisPreComponent implements OnInit {
       .getAmountAnalysis(
         this.selectedOrganisation,
         this.selectedProcedure,
-        this.baseBalance
+        this.baseBalance,
+        this.mode
       )
       .subscribe(
         (res) => {

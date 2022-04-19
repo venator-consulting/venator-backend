@@ -41,6 +41,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   frozenCols: TableColumn[];
   // base balance, will get it from the route
   baseBalance: number;
+  mode: number;
   // for front filtering, keep the original data in temp array
   tempData: any[];
   // for front filtering, contains all filters
@@ -80,10 +81,11 @@ export class AmountAnalysisDetailsComponent implements OnInit {
   ngOnInit(): void {
 
     this.baseBalance = +this._route.snapshot.paramMap.get('baseBalance');
+    this.mode = +this._route.snapshot.paramMap.get('mode');
     this._translateService.get('AmountAnalysis').subscribe((elem) => {
       this.items = [
         // {label: 'Analysis'},
-        { label: elem.label, routerLink: '/dashboard/analysis/amount/' + this.baseBalance },
+        { label: elem.label, routerLink: '/dashboard/analysis/amount/' + this.baseBalance + '/' + this.mode },
         {
           label: 'Details',
           routerLink: this._router.url,
@@ -146,7 +148,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
     ];
 
     this._analysisService
-      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber, this.baseBalance)
+      .getAmountAnalysisDetails(this.orgId, this.prcId, this.accountNumber, this.baseBalance,  this.mode)
       .subscribe(
         (res) => {
           this.data = res;
@@ -209,7 +211,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
   getChartData() {
     this._analysisService
-      .getAmountAnalysisDetailsChart(this.orgId, this.prcId, this.accountNumber, this.baseBalance)
+      .getAmountAnalysisDetailsChart(this.orgId, this.prcId, this.accountNumber, this.baseBalance, this.mode)
       .subscribe(res => {
         this.balanceChartData = res;
         this.chartData = {
@@ -227,7 +229,7 @@ export class AmountAnalysisDetailsComponent implements OnInit {
 
 
   goBack() {
-    this._router.navigate(['/dashboard/analysis/amount/' + this.baseBalance]);
+    this._router.navigate(['/dashboard/analysis/amount/' + this.baseBalance + '/' + this.mode]);
   }
 
   //#region export excel from front
@@ -483,7 +485,8 @@ export class AmountAnalysisDetailsComponent implements OnInit {
         this.orgId,
         this.prcId,
         this.accountNumber,
-        this.baseBalance
+        this.baseBalance,
+        this.mode
       )
       .subscribe(
         (res) => {

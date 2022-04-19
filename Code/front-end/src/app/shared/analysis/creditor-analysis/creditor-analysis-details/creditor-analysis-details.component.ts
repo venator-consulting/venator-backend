@@ -289,7 +289,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
   getAmountChartData() {
     this.amountSub = this._analysisService
-      .getAmountAnalysisDetailsChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, 500)
+      .getAmountAnalysisDetailsChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, 500, 100)
       .subscribe(res => {
         this.balanceChartData = res;
         this.canExported.push({ chart: 'amountChart', title: 'CreditorsAnalysis.amountAnalysisReport', hasData: this.balanceChartData.length > 0 });

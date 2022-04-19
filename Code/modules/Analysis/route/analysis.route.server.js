@@ -17,19 +17,19 @@ router
     analysisCtrl.amountAnalysis);
 
 router
-  .route("/:orgId/:prcId/amount-calc/:baseBalance")
+  .route("/:orgId/:prcId/amount-calc/:baseBalance/:mode?")
   .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
     analysisCtrl.amountAnalysisCalc);
 
 router
-  .route("/:orgId/:prcId/amount/details-chart/:accountNumber/:baseBalance")
+  .route("/:orgId/:prcId/amount/details-chart/:accountNumber/:baseBalance/:mode")
   .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
     analysisCtrl.amountAnalysisDetailsChart)
 
 router
-  .route("/:orgId/:prcId/amount/details/:accountNumber/:baseBalance")
+  .route("/:orgId/:prcId/amount/details/:accountNumber/:baseBalance/:mode")
   .get(passport.authenticate("jwt", { session: false, }),
     authorization.canDisplayAnalysis(),
     analysisCtrl.amountAnalysisDetails)

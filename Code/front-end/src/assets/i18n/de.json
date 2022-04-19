@@ -416,7 +416,8 @@
     "NumberOfPostings": "Anzahl der Buchungen",
     "totalBalance": "Gesamtsaldo",
     "details": "Details",
-    "baseBalance": "Basis Saldo"
+    "baseBalance": "Basis Saldo",
+    "mode": "Mode"
   },
   "TextAnalysis": {
     "label": "Textanalyse",

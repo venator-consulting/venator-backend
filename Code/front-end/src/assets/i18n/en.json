@@ -419,7 +419,8 @@
     "NumberOfPostings": "Number of postings",
     "totalBalance": "Total Balance",
     "details": "Details",
-    "baseBalance": "Base Balance"
+    "baseBalance": "Base Balance",
+    "mode": "Mode"
   },
   "TextAnalysis": {
     "label": "Text analysis",

@@ -318,7 +318,7 @@ module.exports.storeAmountData = async (orgId, prcId, res) => {
                                 AND UPPER(p.accountType) = 'K' 
                                 AND p.accountNumber is not NULL
                                 AND UPPER(p.documentTypeNewName) = 'ZAHLUNG' 
-                                AND p.balance = ROUND(p.balance, -2)
+                                AND p.balance % 5 = 0 
                                 AND balance >= 100 `;
   let result;
   let progressPromise = FakProgress.init(res, 0);
@@ -356,7 +356,7 @@ class FakProgress {
   }
 }
 
-module.exports.amountAnalysisGetData = async (orgId, prcId, baseBalance = 500) => {
+module.exports.amountAnalysisGetData = async (orgId, prcId, baseBalance = 500, mode = 100) => {
   if (isNaN(orgId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.organisation_id_is_required);
   if (isNaN(prcId))
@@ -366,12 +366,14 @@ module.exports.amountAnalysisGetData = async (orgId, prcId, baseBalance = 500) =
       WHERE
           p.procedureId = :procedureId
           AND p.balance >= :balance 
+          AND p.balance % :mode = 0 
           GROUP BY p.accountNumber , p.accountName`;
 
   const result = await sequelize.query(query, {
     replacements: {
       procedureId: prcId,
-      balance: baseBalance
+      balance: baseBalance,
+      mode
     },
     type: QueryTypes.SELECT,
   });
