@@ -156,19 +156,19 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
               this.totalAmount = res.amount.length > 0 ? res.amount[0].totalBalance : 0;
               this.totalAmountCount = res.amount.length > 0 ? res.amount[0].totlaCount : 0;
               // for export as pdf and check box
-              this.canExportedDetails.push({ name: 'amountDetails', title: 'CreditorsAnalysis.amountDetials', hasData: this.totalAmountCount > 0 });
+              this.canExported.push({ details: true, index: 2, name: 'amountDetails', title: 'CreditorsAnalysis.amountDetials', hasData: this.totalAmountCount > 0 });
               this.totalPayment = res.payment.length > 0 ? res.payment[0].totalBalance : 0;
               this.totalPaymentCount = res.payment.length > 0 ? res.payment[0].totlaCount : 0;
-              this.canExportedDetails.push({ name: 'paymentDetails', title: 'CreditorsAnalysis.paymentDetials', hasData: this.totalPaymentCount > 0 });
+              this.canExported.push({ details: true, index: 1, name: 'paymentDetails', title: 'CreditorsAnalysis.paymentDetials', hasData: this.totalPaymentCount > 0 });
               this.totalText = res.text.length > 0 ? res.text[0].totalBalance : 0;
               this.totalTextCount = res.text.length > 0 ? res.text[0].totlaCount : 0;
-              this.canExportedDetails.push({ name: 'textDetails', title: 'CreditorsAnalysis.textDetials', hasData: this.totalTextCount > 0 });
+              this.canExported.push({ details: true, index: 3, name: 'textDetails', title: 'CreditorsAnalysis.textDetials', hasData: this.totalTextCount > 0 });
               // this.totalEmailCount = res.email.length > 0 ? res.email[0].totlaCount : 0;
               this.totlaSenderCount = res.email?.length;
               res.email?.forEach(sender => {
                 this.totalEmailCount += +sender.totlaCount ?? 0;
               });
-              this.canExportedDetails.push({ name: 'mailSenderDetails', title: 'CreditorsAnalysis.mailDetials', hasData: this.totalEmailCount > 0 });
+              this.canExported.push({ details: true, index: 5, name: 'mailSenderDetails', title: 'CreditorsAnalysis.mailDetials', hasData: this.totalEmailCount > 0 });
               this.accountName =
                 res.text.length > 0
                   ? res.text[0].accountName
@@ -287,12 +287,19 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
   } // end of ng on init
 
+  openReport() {
+    // this.canExported = [...this.canExported, ...this.canExportedDetails];
+    this.canExported.sort((val1, val2) => val1?.index - val2?.index);
+    this.showSideBar = !this.showSideBar;
+    debugger;
+  }
+
   getAmountChartData() {
     this.amountSub = this._analysisService
       .getAmountAnalysisDetailsChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber, 500, 100)
       .subscribe(res => {
         this.balanceChartData = res;
-        this.canExported.push({ chart: 'amountChart', title: 'CreditorsAnalysis.amountAnalysisReport', hasData: this.balanceChartData.length > 0 });
+        this.canExported.push({ details: false, index: 2, chart: 'amountChart', title: 'CreditorsAnalysis.amountAnalysisReport', hasData: this.balanceChartData.length > 0 });
 
         this.amountChartData = {
           labels: this.balanceChartData.map(rec => rec.balance),
@@ -312,7 +319,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       .getTextAnalysisDetailsWords(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.wordsChartData = res;
-        this.canExported.push({ chart: 'textChart', title: 'CreditorsAnalysis.textAnalysisReport', hasData: this.wordsChartData.length > 0 });
+        this.canExported.push({ details: false, index: 3, chart: 'textChart', title: 'CreditorsAnalysis.textAnalysisReport', hasData: this.wordsChartData.length > 0 });
         this.chartData = {
           labels: this.wordsChartData.map(rec => rec.word),
           datasets: [
@@ -349,7 +356,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
             red.push(-1 * (element.red.value));
           }
 
-          this.canExported.push({ chart: 'paymentChart', title: 'CreditorsAnalysis.paymentAnalysisReport', hasData: data.length > 0 });
+          this.canExported.push({ details: false, index: 1, chart: 'paymentChart', title: 'CreditorsAnalysis.paymentAnalysisReport', hasData: data.length > 0 });
           this.paymentChartData = {
             labels: labels,
             datasets: new Array(),
@@ -390,8 +397,8 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
           let thisAccountDetails = res.data?.dueDateRefAccounts[0];
           this.totlaDueDateCount = thisAccountDetails?.count ?? 0;
-          this.canExported.push({ chart: 'dueDateChart', title: 'CreditorsAnalysis.dueDateAnalysisReport', hasData: this.dueDateChartDataRecords.length > 0 });
-          this.canExportedDetails.push({ name: 'dueDateDetails', title: 'CreditorsAnalysis.dueDateDetials', hasData: this.totlaDueDateCount > 0 });
+          this.canExported.push({ details: false, index: 4, chart: 'dueDateChart', title: 'CreditorsAnalysis.dueDateAnalysisReport', hasData: this.dueDateChartDataRecords.length > 0 });
+          this.canExported.push({ details: true, index: 4, name: 'dueDateDetails', title: 'CreditorsAnalysis.dueDateDetials', hasData: this.totlaDueDateCount > 0 });
           this.totalDueDate = +thisAccountDetails?.delayNeg + +thisAccountDetails?.delayPos;
           let labels = res.data.dueDateReference.labels;
           let minDate = new Date(res.dateRange[0].mindate);
@@ -458,7 +465,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       .getMailDetailsAnalysisSenderByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
         this.mailSenderChartRecords = res;
-        this.canExported.push({ chart: 'mailSenderChart', title: 'CreditorsAnalysis.mailSenderAnalysisReport', hasData: res.length > 0 });
+        // this.canExported.push({ chart: 'mailSenderChart', title: 'CreditorsAnalysis.mailSenderAnalysisReport', hasData: res.length > 0 });
         this.mailSenderChartData = {
           labels: res?.map(rec => rec.email + ' - ' + rec.sender),
           datasets: [
@@ -476,7 +483,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     this.mailWordSub = this._mailService
       .getMailDetailsAnalysisWordByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
       .subscribe(res => {
-        this.canExported.push({ chart: 'mailWordChart', title: 'CreditorsAnalysis.mailWordAnalysisReport', hasData: res.length > 0 });
+        this.canExported.push({ details: false, index: 5, chart: 'mailWordChart', title: 'CreditorsAnalysis.mailWordAnalysisReport', hasData: res.length > 0 });
         this.mailWordChartData = {
           labels: res?.map(rec => rec.word),
           datasets: [
@@ -533,7 +540,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     // PDF.text(translatedAccountName + ': ' + this.accountName, 10, positionY, { align: 'left' });
     // positionY += 10;
 
-    PDF.setFontSize(8);
+    PDF.setFontSize(10);
     // add the comment
     // get html comment
     let htmlCommentCollection = document.getElementsByClassName('ck-content');
@@ -543,10 +550,11 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
                                 h2{font-size: 7px;} 
                                 h3{font-size: 6px;}
                                 h4{font-size: 5px;}
-                                p, li{font-size: 3.5px;}
+                                p{font-size: 3.5px;}
+                                li{margin-left: -2rem;font-size: 3.5px;}
                             </style>`;
     PDF.html(htmlComment, {
-      x: 0, y: positionY, width: 200,
+      x: 5, y: positionY, width: 150, windowWidth: 150, autoPaging: true,
       // fontFaces:
       callback: async (doc: jsPDF) => {
         positionY += htmlComment.clientHeight * 295 / window.innerHeight;
@@ -568,20 +576,22 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
 
         //#region Convert charts and tables
         for (const chart of this.canExported) {
-          if (chart.export)
+          if (chart.export && !chart.details)
             positionY = await this.addSectionToPDF(PDF, chart.chart, positionY, chart.title);
+          if (chart.export && chart.details)
+            positionY = await this.addSectionDetailsToPDF(PDF, chart.name, positionY, chart.title);
         }
         //#endregion Convert charts
 
         //#region details
-        for (const table of this.canExportedDetails) {
-          if (table.export)
-            positionY = await this.addSectionDetailsToPDF(PDF, table.name, positionY, table.title);
-        }
+        // for (const table of this.canExportedDetails) {
+        //   if (table.export)
+        //     positionY = await this.addSectionDetailsToPDF(PDF, table.name, positionY, table.title);
+        // }
         //#endregion Details
 
         //#region add the footer
-        PDF.setFontSize(8);
+        PDF.setFontSize(10);
         PDF.text('Report Exported at: ' + (new Date()).toLocaleString("de-DE", {
           year: "numeric",
           month: "2-digit",
@@ -613,17 +623,17 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
             pdf.setFontSize(11);
             //  add procedure name
             pdf.setTextColor(255, 255, 255);
-            pdf.text(this.procedureName, 50, 11);
+            pdf.text(this.procedureName, 50, 9);
             // add account number and name
-            pdf.text(this.accountNumber + ' - ' + this.accountName, 50, 16);
+            pdf.text(this.accountNumber + ' - ' + this.accountName, 50, 14);
             // }
             //#endregion header
             // gray for the footer
             pdf.setFillColor(88, 88, 90);
             pdf.rect(0, pdf.internal.pageSize.height - 17, pdf.internal.pageSize.width, pdf.internal.pageSize.height, 'F');
             pdf.setTextColor(255, 255, 255);
-            pdf.setFont('helvetica', 'italic');
-            pdf.setFontSize(8);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(10);
             pdf.text('[' + String(i) + '/' + String(pageCount) + ']', pdf.internal.pageSize.width - 20,
               pdf.internal.pageSize.height - 8, {
               align: 'right',
@@ -658,13 +668,13 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
         positionY = 25;
       }
       let translatedTitle = await this._translateService.get(title).toPromise();
-      pdf.setFontSize(8);
-      pdf.text(translatedTitle, 10, positionY);
+      pdf.setFontSize(10);
+      pdf.text(translatedTitle, 15, positionY);
       let image = canvas.toDataURL('image/png');
-      pdf.addImage(image, 'PNG', 35, positionY + 10, 140, height, null, 'NONE');
+      pdf.addImage(image, 'PNG', 15, positionY + 10, 170, height, null, 'NONE');
       positionY += (height + 20);
       // add total info
-      pdf.setFontSize(8);
+      pdf.setFontSize(10);
       // pdf.text(await this.getTotalInfo(section), 10, positionY);
       // positionY += 20;
       resolve(positionY);
@@ -715,8 +725,8 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
   async addSectionDetailsToPDF(pdf: jsPDF, componentName: string, positionY: number, title: string): Promise<number> {
     return new Promise(async (resolve, reject) => {
       let translatedTitle = await this._translateService.get(title).toPromise();
-      pdf.setFontSize(8);
-      pdf.text(translatedTitle, 10, positionY);
+      pdf.setFontSize(10);
+      pdf.text(translatedTitle, 15, positionY);
       positionY += 10;
       let currencyPipe = new CurrencyPipe('de');
       pdf.setFontSize(6);
@@ -738,6 +748,16 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
                 month: "2-digit",
                 day: "2-digit",
               }),
+              applicationDate: (new Date(rec.applicationDate)).toLocaleString("de-DE", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              }),
+              dueDate: (new Date(rec.dueDate)).toLocaleString("de-DE", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              }),
               balance: currencyPipe.transform(rec.balance, 'EURO', '')
             })),
             margin: { top: 25, bottom: 20 },
@@ -748,7 +768,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
           //@ts-ignore
           let newPosition = pdf.previousAutoTable.finalY;
           if (!res?.length) {
-            pdf.text('No Relevant Records found', 100, newPosition + 10, { align: 'center' });
+            pdf.text('No Relevant Records found', 100, newPosition + 8, { align: 'center' });
           }
           newPosition += 20;
           resolve(newPosition);
@@ -763,6 +783,8 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       { header: await this._translateService.get('DataTableColumns.documentType').toPromise(), dataKey: 'documentType' },
       { header: await this._translateService.get('DataTableColumns.documentNumber').toPromise(), dataKey: 'documentNumber' },
       { header: await this._translateService.get('DataTableColumns.documentDate').toPromise(), dataKey: 'documentDate' },
+      { header: await this._translateService.get('DataTableColumns.applicationDate').toPromise(), dataKey: 'applicationDate' },
+      { header: await this._translateService.get('DataTableColumns.dueDate').toPromise(), dataKey: 'dueDate' },
       { header: await this._translateService.get('DataTableColumns.balance').toPromise(), dataKey: 'balance' },
     ];
     switch (name) {
