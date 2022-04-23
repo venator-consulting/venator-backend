@@ -14,6 +14,7 @@ import 'jspdf-autotable';
 import html2canvas from 'html2canvas';
 import { MailSenderChart, MailWordChart } from 'src/app/shared/model/mailHistory';
 import { Subscription } from 'rxjs';
+import { createAttribute } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-creditor-analysis-details',
@@ -127,6 +128,15 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     this.procedureName = localStorage.getItem('currentProcedureName');
 
     this.accountNumber = this._route.snapshot.paramMap.get('accountNumber');
+
+
+    this.getAmountChartData();
+    this.getWords();
+    this.getPaymentChartData();
+    this.getDueDateChartData();
+    this.getMailBySender();
+    this.getMailWordChartData();
+    this.getCreditorComment();
 
     this.translateSub = this._translateService.get('CreditorsAnalysis')
       .subscribe((elem) => {
@@ -277,19 +287,17 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       },
     };
 
-    this.getAmountChartData();
-    this.getWords();
-    this.getPaymentChartData();
-    this.getDueDateChartData();
-    this.getMailBySender();
-    this.getMailWordChartData();
-    this.getCreditorComment();
 
   } // end of ng on init
 
   openReport() {
     // this.canExported = [...this.canExported, ...this.canExportedDetails];
-    this.canExported.sort((val1, val2) => val1?.index - val2?.index);
+    this.canExported.sort((val1, val2) => {
+      if (val1?.index == val2?.index)
+        return val1?.details ? 1 : -1;
+      else
+        return val1?.index - val2?.index;
+    });
     this.showSideBar = !this.showSideBar;
     debugger;
   }
@@ -526,7 +534,8 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     let PDF = new jsPDF('p', 'mm', 'a4');
     let positionY = 25;
     let fileWidth = 210;
-    PDF.setFontSize(10);
+    PDF.setFontSize(11);
+    PDF.setFont('helvetica', 'bold');
     //  add procedure name
     // let translatedPrc = await this._translateService.get('CreditorsAnalysis.procedureName').toPromise();
     // PDF.text(translatedPrc + ': ' + this.procedureName, 10, positionY, { align: 'left' });
@@ -540,8 +549,12 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     // PDF.text(translatedAccountName + ': ' + this.accountName, 10, positionY, { align: 'left' });
     // positionY += 10;
 
-    PDF.setFontSize(10);
+    PDF.setFontSize(11);
+    PDF.setFont('helvetica', 'bold');
     // add the comment
+    let commentTranslatedTitle = await this._translateService.get('CreditorsAnalysis.commentTitle').toPromise();
+    PDF.text(commentTranslatedTitle, 10, positionY, { align: 'left' });
+    positionY += 5;
     // get html comment
     let htmlCommentCollection = document.getElementsByClassName('ck-content');
     let htmlComment: HTMLElement = htmlCommentCollection.item(0) as HTMLElement;
@@ -558,7 +571,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       // fontFaces:
       callback: async (doc: jsPDF) => {
         positionY += htmlComment.clientHeight * 295 / window.innerHeight;
-        debugger;
+        // debugger;
         // const canvas = await html2canvas(htmlComment);
         // calculate height with scaling
         // const height = (canvas.height * fileWidth) / canvas.width;
@@ -575,11 +588,19 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
         // positionY += height + 10;
 
         //#region Convert charts and tables
+        let deferred: any = [];
         for (const chart of this.canExported) {
           if (chart.export && !chart.details)
             positionY = await this.addSectionToPDF(PDF, chart.chart, positionY, chart.title);
-          if (chart.export && chart.details)
-            positionY = await this.addSectionDetailsToPDF(PDF, chart.name, positionY, chart.title);
+          if (chart.export && chart.details) {
+            let i = this.canExported.findIndex(val => val.index == chart.index && !val.details && val.export);
+            if (i > -1)
+              positionY = await this.addSectionDetailsToPDF(PDF, chart.name, positionY, chart.title);
+            else deferred.push(chart);
+          }
+        }
+        for (const chart of deferred) {
+          positionY = await this.addSectionDetailsToPDF(PDF, chart.name, positionY, chart.title);
         }
         //#endregion Convert charts
 
@@ -591,7 +612,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
         //#endregion Details
 
         //#region add the footer
-        PDF.setFontSize(10);
+        PDF.setFontSize(8);
         PDF.text('Report Exported at: ' + (new Date()).toLocaleString("de-DE", {
           year: "numeric",
           month: "2-digit",
@@ -616,11 +637,13 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
             pdf.rect(0, 0, pdf.internal.pageSize.width, 19, 'F');
             // add the brand
             pdf.setFontSize(16);
+            pdf.setFont('helvetica', 'bold');
             pdf.setTextColor(232, 79, 19);
-            pdf.text('Venalytics', 10, 11, { align: 'left' });
+            pdf.text('venalytics', 10, 11, { align: 'left' });
             // add the logo
             pdf.addImage(logoImg, 'PNG', 37, 5, 8, 8);
             pdf.setFontSize(11);
+            pdf.setFont('helvetica', 'bold');
             //  add procedure name
             pdf.setTextColor(255, 255, 255);
             pdf.text(this.procedureName, 50, 9);
@@ -633,7 +656,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
             pdf.rect(0, pdf.internal.pageSize.height - 17, pdf.internal.pageSize.width, pdf.internal.pageSize.height, 'F');
             pdf.setTextColor(255, 255, 255);
             pdf.setFont('helvetica', 'bold');
-            pdf.setFontSize(10);
+            pdf.setFontSize(11);
             pdf.text('[' + String(i) + '/' + String(pageCount) + ']', pdf.internal.pageSize.width - 20,
               pdf.internal.pageSize.height - 8, {
               align: 'right',
@@ -668,13 +691,15 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
         positionY = 25;
       }
       let translatedTitle = await this._translateService.get(title).toPromise();
-      pdf.setFontSize(10);
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'bold');
       pdf.text(translatedTitle, 15, positionY);
       let image = canvas.toDataURL('image/png');
       pdf.addImage(image, 'PNG', 15, positionY + 10, 170, height, null, 'NONE');
       positionY += (height + 20);
       // add total info
-      pdf.setFontSize(10);
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'bold');
       // pdf.text(await this.getTotalInfo(section), 10, positionY);
       // positionY += 20;
       resolve(positionY);
@@ -726,6 +751,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     return new Promise(async (resolve, reject) => {
       let translatedTitle = await this._translateService.get(title).toPromise();
       pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'bold');
       pdf.text(translatedTitle, 15, positionY);
       positionY += 10;
       let currencyPipe = new CurrencyPipe('de');
@@ -762,7 +788,15 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
             })),
             margin: { top: 25, bottom: 20 },
             styles: { overflow: 'linebreak', fontSize: 6, },
-            headStyles: { fillColor: [88, 88, 90] }
+            headStyles: { fillColor: [88, 88, 90] },
+            columnStyles: {
+              contraAccountNumber: { cellWidth: 17 }, balance: { halign: 'right' },
+              //  contraAccountName: { cellWidth: 35 },
+              // documentType: { cellWidth: 10 }, documentNumber: { cellWidth: 10 },
+              // documentDate: { cellWidth: 10 }, applicationDate: { cellWidth: 10 },
+              // dueDate: { cellWidth: 10 }, balance: { cellWidth: 10 },
+              // comment: { cellWidth: 30 }, reference: { cellWidth: 20 },
+            }
           });
           // debugger;
           //@ts-ignore

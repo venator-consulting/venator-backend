@@ -553,7 +553,8 @@
     "paymentAnalysisReport": "Development of the payment behavior",
     "dueDateAnalysisReport": "Development of the duedate analysis ",
     "mailSenderAnalysisReport": "Entwicklung der Emailanalyse nach Konto",
-    "mailWordAnalysisReport": "Entwicklung der Emailanalyer nach Wört"
+    "mailWordAnalysisReport": "Entwicklung der Emailanalyer nach Wört",
+    "commentTitle": "ERGEBNISZUSAMMENFASSUNG (UNTERNEHMEN)"
   },
   "DataTableColumns": {
     "client": "Client",
