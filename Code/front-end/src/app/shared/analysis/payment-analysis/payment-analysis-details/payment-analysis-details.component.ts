@@ -293,6 +293,11 @@ export class PaymentAnalysisDetailsComponent implements OnInit {
         field: 'assignment',
         align: 'left',
       },
+      {
+        header: 'PaymentAnalysis.delay',
+        field: 'delay',
+        align: 'center',
+      },
     ];
 
     this.selectedOrganisation = +localStorage.getItem('organisationId');

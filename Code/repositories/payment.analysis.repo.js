@@ -662,7 +662,8 @@ module.exports.paymentAnalysisDetails = async (orgId, prcId, fromDate, toDate, a
   let query = `SELECT pos.id, pos.procedureId, pos.accountNumber, pos.accountName, pos.paymentRelevant,
                         pos.paymentRelevantComment, pos.accountType, pos.documentType, pos.balance, pos.contraAccountNumber,
                         pos.contraAccountName, pos.documentTypeNewName, pos.documentNumber, pos.documentDate, pos.recordNumber,
-                        pos.ledgerId, pos.executionDate, pos.dueDate, pos.applicationDate, pos.textPosting, pos.textHeader, pos.reference, pos.assignment 
+                        pos.ledgerId, pos.executionDate, pos.dueDate, pos.applicationDate, pos.textPosting, pos.textHeader, pos.reference, pos.assignment,
+                        TIMESTAMPDIFF(day, applicationDate, dueDate) as delay 
                     FROM posting_${orgId} pos
                     WHERE
                         pos.procedureId = ${prcId}
@@ -745,31 +746,14 @@ module.exports.paymentBulkUpdate = async (orgId, records) => {
 };
 
 module.exports.paymentJustRelevant = async (orgId, prcId, accountNumber) => {
-  return await Posting.getPosting("posting_" + orgId).findAll({
-    where: {
-      paymentRelevant: true,
-      accountNumber: accountNumber,
-      ProcedureId: prcId,
-    },
-    attributes: [
-      "id",
-      "procedureId",
-      "accountNumber",
-      "accountName",
-      "paymentRelevant",
-      "paymentRelevantComment",
-      "accountType",
-      "documentType",
-      "balance",
-      "contraAccountNumber",
-      "contraAccountName",
-      "documentTypeNewName",
-      "documentNumber",
-      "documentDate",
-      "recordNumber",
-      "ledgerId",
-      "executionDate",
-      "dueDate",
-    ],
-  });
+  let query = ` SELECT id, procedureId, accountNumber, accountName, paymentRelevant, paymentRelevantComment,
+          accountType, documentType, balance, contraAccountNumber, contraAccountName, documentTypeNewName,
+          documentNumber, documentDate, recordNumber, ledgerId, executionDate, dueDate,
+          TIMESTAMPDIFF(day, applicationDate, dueDate) as delay
+          FROM posting_${orgId}
+          WHERE procedureId = ${prcId} AND accountNumber = ${accountNumber}
+          AND paymentRelevant = 1
+  `;
+  return await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+
 };

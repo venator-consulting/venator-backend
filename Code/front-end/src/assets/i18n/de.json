@@ -477,7 +477,8 @@
     "comment": "Kommentar",
     "sysRelevant": "Systemrelevant",
     "userRelevant": "Benutzerrelevant",
-    "allRelevant": "Alle Buchungen"
+    "allRelevant": "Alle Buchungen",
+    "delay": "Verspätung"
   },
   "DueDateAnalysis": {
     "label": " Zahlungsverhalten",

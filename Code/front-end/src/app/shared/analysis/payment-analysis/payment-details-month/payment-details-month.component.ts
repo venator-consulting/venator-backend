@@ -109,6 +109,11 @@ export class PaymentDetailsMonthComponent implements OnInit {
         field: 'assignment',
         align: 'left',
       },
+      {
+        header: 'PaymentAnalysis.delay',
+        field: 'delay',
+        align: 'center',
+      },
     ];
   } // end of ng on init
 

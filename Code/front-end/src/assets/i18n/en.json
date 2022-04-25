@@ -480,7 +480,8 @@
     "sysRelevant": "Systemrelevant",
     "userRelevant": "Userrelevant",
     "comment": "Comment",
-    "allRelevant": "All Records"
+    "allRelevant": "All Records",
+    "delay": "Delay"
   },
   "DueDateAnalysis": {
     "label": " Payment Behavior",

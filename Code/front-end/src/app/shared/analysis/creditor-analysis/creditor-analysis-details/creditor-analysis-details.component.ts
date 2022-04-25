@@ -854,6 +854,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       case 'paymentDetails':
         headers.push(
           { header: await this._translateService.get('PaymentAnalysis.comment').toPromise(), dataKey: 'paymentRelevantComment' },
+          { header: await this._translateService.get('PaymentAnalysis.delay').toPromise(), dataKey: 'delay' },
         );
         break;
       case 'dueDateDetails':
