@@ -547,8 +547,8 @@
     "report": "Prüfbericht",
     "amountAnalysisReport": "Enwicklung der Galttebeträge Analyse ",
     "textAnalysisReport": "Entwicklung der Textanalyse",
-    "paymentAnalysisReport": "Entwicklung vom Zahlungsverhalten",
-    "dueDateAnalysisReport": "Entwicklung der Fälligkeitsanalyse",
+    "paymentAnalysisReport": "Entwicklung der Fälligkeitsanalyse",
+    "dueDateAnalysisReport": "Entwicklung vom Zahlungsverhalten",
     "mailSenderAnalysisReport": "Entwicklung der Emailanalyse nach Konto",
     "mailWordAnalysisReport": "Entwicklung der Emailanalyer nach Wört",
     "commentTitle": "ERGEBNISZUSAMMENFASSUNG (UNTERNEHMEN)"

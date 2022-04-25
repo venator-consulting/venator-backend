@@ -552,128 +552,144 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     PDF.setFontSize(11);
     PDF.setFont('helvetica', 'bold');
     // add the comment
-    let commentTranslatedTitle = await this._translateService.get('CreditorsAnalysis.commentTitle').toPromise();
-    PDF.text(commentTranslatedTitle, 10, positionY, { align: 'left' });
-    positionY += 5;
-    // get html comment
+    // let commentTranslatedTitle = await this._translateService.get('CreditorsAnalysis.commentTitle').toPromise();
+    // PDF.text(commentTranslatedTitle, 10, positionY, { align: 'left' });
+    // positionY += 5;
     let htmlCommentCollection = document.getElementsByClassName('ck-content');
-    let htmlComment: HTMLElement = htmlCommentCollection.item(0) as HTMLElement;
-    htmlComment.innerHTML += `<style>
-                                *{margin: 0}
-                                h2{font-size: 7px;} 
-                                h3{font-size: 6px;}
-                                h4{font-size: 5px;}
-                                p{font-size: 3.5px;}
-                                li{margin-left: -2rem;font-size: 3.5px;}
-                            </style>`;
-    PDF.html(htmlComment, {
-      x: 5, y: positionY, width: 150, windowWidth: 150, autoPaging: true,
-      // fontFaces:
-      callback: async (doc: jsPDF) => {
-        positionY += htmlComment.clientHeight * 295 / window.innerHeight;
-        // debugger;
-        // const canvas = await html2canvas(htmlComment);
-        // calculate height with scaling
-        // const height = (canvas.height * fileWidth) / canvas.width;
-        // convert canvas to image
-        // const image = canvas.toDataURL('image/png');
-        // add image to pdf
-        // add 10 for title
-        // if ((positionY + height + 20) > 290) {
-        //   PDF.addPage('a4', 'p');
-        //   positionY = 25;
-        // }
+    let htmlComment: HTMLElement = htmlCommentCollection.item(0).cloneNode(true) as HTMLElement;
+    document.body.appendChild(htmlComment);
+    htmlComment.style.border = 'none';
+    htmlComment.style.margin = '0';
+    htmlComment.style.color = 'black';
+    htmlComment.style.fontFamily = 'helvetica';
+    htmlComment.style.fontSize = '200%';
+    htmlComment.style.width = '100%';
+    htmlComment.style.textAlign = 'justify';
+    const canvas = await html2canvas(htmlComment);
+    // calculate height with scaling
+    const height = (canvas.height * fileWidth) / canvas.width;
+    // convert canvas to image
+    const image = canvas.toDataURL('image/png');
 
-        // PDF.addImage(image, 'PNG', 10, positionY, fileWidth - 10, height);
-        // positionY += height + 10;
+    PDF.addImage(image, 'PNG', 12, positionY, fileWidth - 20, height);
+    positionY += height + 10;
+    // get html comment
+    // htmlComment.innerHTML += `<style>
+    //                             *{margin: 0}
+    //                             h2{font-size: 7px;} 
+    //                             h3{font-size: 6px;}
+    //                             h4{font-size: 5px;}
+    //                             p{font-size: 3.5px;}
+    //                             li{margin-left: -2rem;font-size: 3.5px;}
+    //                         </style>`;
+    // PDF.html(htmlComment, {
+    //   x: 5, y: positionY, width: 150, windowWidth: 150, autoPaging: true,
+    //   // fontFaces:
+    //   callback: async (doc: jsPDF) => {
+    // positionY += htmlComment.clientHeight * 295 / window.innerHeight;
+    // debugger;
+    // const canvas = await html2canvas(htmlComment);
+    // calculate height with scaling
+    // const height = (canvas.height * fileWidth) / canvas.width;
+    // convert canvas to image
+    // const image = canvas.toDataURL('image/png');
+    // add image to pdf
+    // add 10 for title
+    // if ((positionY + height + 20) > 290) {
+    //   PDF.addPage('a4', 'p');
+    //   positionY = 25;
+    // }
 
-        //#region Convert charts and tables
-        let deferred: any = [];
-        for (const chart of this.canExported) {
-          if (chart.export && !chart.details)
-            positionY = await this.addSectionToPDF(PDF, chart.chart, positionY, chart.title);
-          if (chart.export && chart.details) {
-            let i = this.canExported.findIndex(val => val.index == chart.index && !val.details && val.export);
-            if (i > -1)
-              positionY = await this.addSectionDetailsToPDF(PDF, chart.name, positionY, chart.title);
-            else deferred.push(chart);
-          }
-        }
-        for (const chart of deferred) {
+    // PDF.addImage(image, 'PNG', 10, positionY, fileWidth - 10, height);
+    // positionY += height + 10;
+
+    //#region Convert charts and tables
+    let deferred: any = [];
+    for (const chart of this.canExported) {
+      if (chart.export && !chart.details)
+        positionY = await this.addSectionToPDF(PDF, chart.chart, positionY, chart.title);
+      if (chart.export && chart.details) {
+        let i = this.canExported.findIndex(val => val.index == chart.index && !val.details && val.export);
+        if (i > -1)
           positionY = await this.addSectionDetailsToPDF(PDF, chart.name, positionY, chart.title);
-        }
-        //#endregion Convert charts
-
-        //#region details
-        // for (const table of this.canExportedDetails) {
-        //   if (table.export)
-        //     positionY = await this.addSectionDetailsToPDF(PDF, table.name, positionY, table.title);
-        // }
-        //#endregion Details
-
-        //#region add the footer
-        PDF.setFontSize(8);
-        PDF.text('Report Exported at: ' + (new Date()).toLocaleString("de-DE", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        }), 10, 290, { align: 'left' });
-        //#endregion add the footer
-
-        //#region add footer
-        const addFootersAndHeaders = (pdf: jsPDF) => {
-          const pageCount = (pdf.internal as any).getNumberOfPages();
-          // get logo html
-          let logoImg = document.getElementById('logo') as HTMLImageElement;
-
-          for (var i = 1; i <= pageCount; i++) {
-            // select the page
-            pdf.setPage(i);
-            //#region header 
-            // if (i == 1) {
-            // paint the gray rectangle
-            pdf.setFillColor(88, 88, 90);
-            // grey for the header
-            pdf.rect(0, 0, pdf.internal.pageSize.width, 19, 'F');
-            // add the brand
-            pdf.setFontSize(16);
-            pdf.setFont('helvetica', 'bold');
-            pdf.setTextColor(232, 79, 19);
-            pdf.text('venalytics', 10, 11, { align: 'left' });
-            // add the logo
-            pdf.addImage(logoImg, 'PNG', 37, 5, 8, 8);
-            pdf.setFontSize(11);
-            pdf.setFont('helvetica', 'bold');
-            //  add procedure name
-            pdf.setTextColor(255, 255, 255);
-            pdf.text(this.procedureName, 50, 9);
-            // add account number and name
-            pdf.text(this.accountNumber + ' - ' + this.accountName, 50, 14);
-            // }
-            //#endregion header
-            // gray for the footer
-            pdf.setFillColor(88, 88, 90);
-            pdf.rect(0, pdf.internal.pageSize.height - 17, pdf.internal.pageSize.width, pdf.internal.pageSize.height, 'F');
-            pdf.setTextColor(255, 255, 255);
-            pdf.setFont('helvetica', 'bold');
-            pdf.setFontSize(11);
-            pdf.text('[' + String(i) + '/' + String(pageCount) + ']', pdf.internal.pageSize.width - 20,
-              pdf.internal.pageSize.height - 8, {
-              align: 'right',
-            });
-          }
-        };
-
-        addFootersAndHeaders(PDF);
-        //#endregion add footer
-
-        // download pdf
-        PDF.save(this.accountNumber + '-' + this.accountName + '.pdf');
-        this.exporting = false;
-        PDF = null;
-
+        else deferred.push(chart);
       }
-    });
+    }
+    for (const chart of deferred) {
+      positionY = await this.addSectionDetailsToPDF(PDF, chart.name, positionY, chart.title);
+    }
+    //#endregion Convert charts
+
+    //#region details
+    // for (const table of this.canExportedDetails) {
+    //   if (table.export)
+    //     positionY = await this.addSectionDetailsToPDF(PDF, table.name, positionY, table.title);
+    // }
+    //#endregion Details
+
+    //#region add the footer
+    PDF.setFontSize(8);
+    PDF.text('Report Exported at: ' + (new Date()).toLocaleString("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }), 10, 290, { align: 'left' });
+    //#endregion add the footer
+
+    //#region add footer
+    const addFootersAndHeaders = (pdf: jsPDF) => {
+      const pageCount = (pdf.internal as any).getNumberOfPages();
+      // get logo html
+      let logoImg = document.getElementById('logo') as HTMLImageElement;
+
+      for (var i = 1; i <= pageCount; i++) {
+        // select the page
+        pdf.setPage(i);
+        //#region header 
+        // if (i == 1) {
+        // paint the gray rectangle
+        pdf.setFillColor(88, 88, 90);
+        // grey for the header
+        pdf.rect(0, 0, pdf.internal.pageSize.width, 19, 'F');
+        // add the brand
+        pdf.setFontSize(16);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(232, 79, 19);
+        pdf.text('venalytics', 10, 11, { align: 'left' });
+        // add the logo
+        pdf.addImage(logoImg, 'PNG', 37, 5, 8, 8);
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'bold');
+        //  add procedure name
+        pdf.setTextColor(255, 255, 255);
+        pdf.text(this.procedureName, 50, 9);
+        // add account number and name
+        pdf.text(this.accountNumber + ' - ' + this.accountName, 50, 14);
+        // }
+        //#endregion header
+        // gray for the footer
+        pdf.setFillColor(88, 88, 90);
+        pdf.rect(0, pdf.internal.pageSize.height - 17, pdf.internal.pageSize.width, pdf.internal.pageSize.height, 'F');
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(11);
+        pdf.text('[' + String(i) + '/' + String(pageCount) + ']', pdf.internal.pageSize.width - 20,
+          pdf.internal.pageSize.height - 8, {
+          align: 'right',
+        });
+      }
+    };
+
+    addFootersAndHeaders(PDF);
+    //#endregion add footer
+
+    // download pdf
+    PDF.save(this.accountNumber + '-' + this.accountName + '.pdf');
+    this.exporting = false;
+    PDF = null;
+    document.body.removeChild(htmlComment);
+    // }
+    // });
   }
 
   async addSectionToPDF(pdf: jsPDF, section: string, positionY: number, title?: string): Promise<number> {
