@@ -78,6 +78,9 @@ const Procedures = sequelizer.define('Procedures', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
+    comment: {
+        type: DataTypes.STRING(1000)
+    }
 }, {
     tableName: 'Procedures'
 });

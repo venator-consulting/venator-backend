@@ -1,0 +1,112 @@
+<p-toast></p-toast>
+
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<div class="p-grid">
+  <div class="p-col-12">
+    <p style="float: right">
+      <p-button
+        icon="pi pi-pencil"
+        [label]="'CreditorsAnalysis.report' | translate"
+        class="p-button-raised p-button-outlined"
+        (click)="showSideBar = !showSideBar"
+      ></p-button>
+    </p>
+    <p-sidebar
+      [(visible)]="showSideBar"
+      position="right"
+      [showCloseIcon]="true"
+      [fullScreen]="true"
+    >
+      <div class="p-grid">
+        <ckeditor
+          [editor]="Editor"
+          [(ngModel)]="comment"
+          [style]="{ width: '100%' }"
+          [config]="{
+            toolbar: [
+              'bold',
+              'italic',
+              'link',
+              'undo',
+              'redo',
+              'numberedList',
+              'bulletedList'
+            ]
+          }"
+        >
+        </ckeditor>
+      </div>
+
+      <br />
+      <button
+        pButton
+        [label]="'Analysis.save' | translate"
+        icon="pi pi-check"
+        (click)="updateProcedureComment()"
+      ></button>
+      <br />
+      <div>
+        <ul>
+          <li *ngFor="let item of canExported; index as i">
+            <div class="p-field-checkbox">
+              <p-checkbox
+                [(ngModel)]="item.export"
+                binary="true"
+                inputId="{{ item.title + '-' + i }}"
+              >
+              </p-checkbox>
+              <label for="{{ item.title + '-' + i }}">{{
+                item.title | translate
+              }}</label>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <p-progressBar
+        mode="indeterminate"
+        [style]="{ height: '5px' }"
+        *ngIf="exporting"
+      ></p-progressBar>
+      <button
+        pButton
+        label="Export PDF"
+        icon="pi pi-file"
+        (click)="exportPDF()"
+      ></button>
+    </p-sidebar>
+
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="waiting"
+    ></p-progressBar>
+  </div>
+</div>
+
+<div class="p-grid">
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ "sideBarMenu.liquidityAnalysis" | translate }}
+      </ng-template>
+      <app-liquidity-analysis [details]="true"></app-liquidity-analysis>
+    </p-card>
+  </div>
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ "sideBarMenu.paymentAnalyse" | translate }}
+      </ng-template>
+      <app-payment-analysis [details]="true"></app-payment-analysis>
+    </p-card>
+  </div>
+  <div class="p-col-4">
+    <p-card class="p-text-center">
+      <ng-template pTemplate="header">
+        {{ "sideBarMenu.dueDateAnalyse" | translate }}
+      </ng-template>
+      <app-due-date [details]="true" [reportDetails]="true"></app-due-date>
+    </p-card>
+  </div>
+</div>

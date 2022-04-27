@@ -78,6 +78,21 @@ module.exports.delete = async (id) => {
   return result;
 };
 
+module.exports.getProcedureComment = async function (prcId) {
+  return await Procedure.getProcedures()
+    .findOne({
+      where: { id: prcId },
+      attributes: ['id', 'comment'],
+    });
+}
+
+module.exports.updateProcedureComment = async function (prcId, data) {
+  return await Procedure.getProcedures()
+    .update(data, {
+      where: { id: prcId }
+    });
+}
+
 module.exports.resetProcedure = async function (orgId, prcId) {
   const query1 = `DELETE FROM posting_${orgId} WHERE procedureId = ${prcId} `;
   const query2 = `DELETE FROM accounts_${orgId} WHERE procedureId = ${prcId}`;

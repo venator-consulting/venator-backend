@@ -84,7 +84,8 @@
     "CALCULATED": "Berechnet",
     "emailImport": "E-mails Importieren",
     "duedateCorrection": "Duedate bearbeiten",
-    "recordsMatching": "Buchungen übereinstimmen"
+    "recordsMatching": "Buchungen übereinstimmen",
+    "mainReport": "Main Report"
   },
   "Admin_Dashboard": {
     "organisationEmail": "Email",

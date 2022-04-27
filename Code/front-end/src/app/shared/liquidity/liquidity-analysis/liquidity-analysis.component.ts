@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem, MessageService } from 'primeng/api';
@@ -13,6 +13,8 @@ import { PaymentData } from "../../model/paymentAnalysis";
   styleUrls: ['./liquidity-analysis.component.sass']
 })
 export class LiquidityAnalysisComponent implements OnInit {
+
+  @Input('details') details: boolean = false;
 
   basicOptions: any;
   basicData: any;
@@ -44,7 +46,7 @@ export class LiquidityAnalysisComponent implements OnInit {
   RedData: any[] = [];
   freeLiquidityData: any[] = [];
   red: any[] = [];
-  @ViewChild('chart') chart;
+  @ViewChild('liquidityChart') liquidityChart;
 
   constructor(
     public _translateService: TranslateService,
@@ -171,7 +173,7 @@ export class LiquidityAnalysisComponent implements OnInit {
           //   this.RedData.push(-1 * element.red.value);
           // }
           debugger;
-          if (this.chart && !this.searching) {
+          if (this.liquidityChart && !this.searching) {
             this.basicData = {
               labels: this.labels,
               datasets: [
@@ -193,7 +195,7 @@ export class LiquidityAnalysisComponent implements OnInit {
                 }
               ],
             };
-            // this.chart.reinit();
+            // this.liquidityChart.reinit();
           }
           this.searching2 = false;
         },
@@ -220,7 +222,7 @@ export class LiquidityAnalysisComponent implements OnInit {
         this.labels = res.bankBalances.labels;
         this.freeLiquidityData = res.freeLiquidity;
         // this.getPayments();
-        if (this.chart && !this.searching2) {
+        if (this.liquidityChart && !this.searching2) {
           this.basicData = {
             labels: this.labels,
             datasets: [

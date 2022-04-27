@@ -24,6 +24,12 @@ router
     .get(passport.authenticate('jwt', { session: false }),
         procedureCtrl.getById);
 
+router.route('/procedures/comment/:orgId/:prcId')
+    .get(passport.authenticate('jwt', { session: false }),
+        procedureCtrl.getComment)
+    .put(passport.authenticate('jwt', { session: false }),
+        procedureCtrl.updateComment);
+
 
 router
     .route('/users/:id/procedures')

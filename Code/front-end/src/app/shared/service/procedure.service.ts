@@ -27,4 +27,12 @@ export class ProcedureService {
     return this._http.delete<any>(this._adminURL + '/procedures/' + orgId + '/' + prcId);
   }
 
+  getProcedureComment(orgId, prcId) {
+    return this._http.get<any>(this._thisURL + '/procedures/comment/' + orgId + '/' + prcId)
+  }
+
+  updateProcedureComment(orgId, prcId, data) {
+    return this._http.put<any>(this._thisURL + '/procedures/comment/' + orgId + '/' + prcId, data);
+  }
+
 }

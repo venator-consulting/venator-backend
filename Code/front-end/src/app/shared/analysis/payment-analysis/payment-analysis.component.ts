@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { AnalysisService } from '../../service/analysis.service';
 import { Router } from '@angular/router';
 import { PaymentAnalysis, PaymentData } from '../../model/paymentAnalysis';
@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe],
 })
 export class PaymentAnalysisComponent implements OnInit {
+  @Input('details') details: boolean = false;
   selectedOrganisation: number = 0;
   selectedProcedure: number = 0;
   basicOptions: any;
@@ -51,7 +52,7 @@ export class PaymentAnalysisComponent implements OnInit {
   selectedMaxAccountNumber: string;
   selectedMaxAccount: any;
   @ViewChild('chart') chart: any;
-  @ViewChild('allChart') allChart: any;
+  @ViewChild('allPaymentChart') allPaymentChart: any;
   selectedMaxAccountName: string;
   items: MenuItem[];
   home: MenuItem;
@@ -320,7 +321,7 @@ export class PaymentAnalysisComponent implements OnInit {
           this.ready = true;
           this.waiting = false;
           this.tempData = [...this.accounts];
-          if (this.allChart) this.allChart.reinit();
+          if (this.allPaymentChart) this.allPaymentChart.reinit();
         },
         (er) => {
           this.waiting = false;

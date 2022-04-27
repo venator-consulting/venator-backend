@@ -16,6 +16,7 @@ import { Observable } from 'rxjs';
 })
 export class DueDateComponent implements OnInit {
   @Input('details') details: boolean = false;
+  @Input('reportDetails') reportDetails: boolean = false;
 
   //#region Data members init
   /**

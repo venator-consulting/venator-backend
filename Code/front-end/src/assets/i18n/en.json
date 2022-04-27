@@ -86,7 +86,8 @@
     "CALCULATED": "CALCULATED",
     "emailImport": "E-mails Import",
     "duedateCorrection": "Duedate Edit",
-    "recordsMatching": "postings Matching"
+    "recordsMatching": "postings Matching",
+    "mainReport": "Main Report"
   },
   "Admin_Dashboard": {
     "organisationEmail": "Email",

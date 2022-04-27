@@ -270,6 +270,14 @@ export class NavBarComponent implements OnInit {
                     localStorage.getItem('currentProcedureStatus') === 'CALCULATED'),
               },
               {
+                label: elem.mainReport,
+                icon: 'pi  pi-file',
+                routerLink: ['/dashboard/shared/main-report'],
+                command: () => {
+                  this.sideBarShow = false;
+                },
+              },
+              {
                 label: 'E-mails',
                 icon: 'pi pi-envelope',
                 routerLink: ['/dashboard/analysis/mail-history'],
@@ -473,7 +481,14 @@ export class NavBarComponent implements OnInit {
               },
             ],
           },
-
+          {
+            label: elem.mainReport,
+            icon: 'pi  pi-file',
+            routerLink: ['/dashboard/shared/main-report'],
+            command: () => {
+              this.sideBarShow = false;
+            },
+          },
           {
             label: elem.analysis,
             items: [
@@ -613,7 +628,14 @@ export class NavBarComponent implements OnInit {
               },
             ],
           },
-
+          {
+            label: elem.mainReport,
+            icon: 'pi  pi-file',
+            routerLink: ['/dashboard/shared/main-report'],
+            command: () => {
+              this.sideBarShow = false;
+            },
+          },
           {
             label: elem.analysis,
             items: [

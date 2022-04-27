@@ -54,6 +54,7 @@ import { MailAnalysisSenderDetailsComponent } from './shared/analysis/mail-analy
 import { RecordMatchingComponent } from './admin/record-matching/record-matching.component';
 import { DuedateCorrectionComponent } from './admin/duedate-correction/duedate-correction.component';
 import { LiquidityAnalysisComponent } from './shared/liquidity/liquidity-analysis/liquidity-analysis.component';
+import { MainReportComponent } from './shared/main-report/main-report.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -198,7 +199,12 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { roles: ['Admin', 'Manager', 'User'] },
       },
-
+      {
+        path: 'shared/main-report',
+        component: MainReportComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin', 'Manager', 'User'] },
+      },
       {
         path: 'analysis/amount',
         component: AmountAnalysisPreComponent,

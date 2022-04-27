@@ -1,15 +1,33 @@
 <p-toast></p-toast>
-<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
-<div class="p-grid">
+<p-breadcrumb [model]="items" [home]="home" *ngIf="!details"></p-breadcrumb>
+<div class="p-grid" *ngIf="!details">
   <div class="p-col-12 p-text-right">
-    <p-calendar [(ngModel)]="maxDayFilter" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"
-      appendTo="body" dateFormat="dd.mm.yy" showButtonBar="true">
+    <p-calendar
+      [(ngModel)]="maxDayFilter"
+      [monthNavigator]="true"
+      [yearNavigator]="true"
+      yearRange="1900:2100"
+      appendTo="body"
+      dateFormat="dd.mm.yy"
+      showButtonBar="true"
+    >
     </p-calendar>
-    <button pButton pRipple type="button" label="{{'DueDateAnalysis.search' | translate}}" icon="pi pi-search"
-      (click)="getDateFilter()" class="p-button-rounded p-button-primary" ></button>
+    <button
+      pButton
+      pRipple
+      type="button"
+      label="{{ 'DueDateAnalysis.search' | translate }}"
+      icon="pi pi-search"
+      (click)="getDateFilter()"
+      class="p-button-rounded p-button-primary"
+    ></button>
   </div>
   <div class="p-col-12">
-    <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="waiting"></p-progressBar>
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="waiting"
+    ></p-progressBar>
     <!-- <button type="button" pButton pRipple icon="pi pi-clock" label=" {{ 'DueDateAnalysis.label' | translate }}"
       class="p-button-rounded p-button-warning" (click)="goToDueDate()"
       pTooltip="{{ 'DueDateAnalysis.label' | translate }}" tooltipPosition="bottom"></button> -->
@@ -25,37 +43,68 @@
       (click)="getData()" class="p-button-rounded p-button-primary"></button>
   </div> -->
   <!-- <h2 class="p-text-center">{{ procedureName }}</h2> -->
-
 </div>
 <div class="p-grid" *ngIf="basicData && ready">
-  <div class="p-col-6">
+  <div [class]="details ? 'p-col-12' : 'p-col-6'">
     <div class="card p-text-center">
-      <span *ngIf="!selectedMaxAccountNumber">
+      <span *ngIf="!selectedMaxAccountNumber && !details">
         {{ "PaymentAnalysis.allAccounts" | translate }}
       </span>
-      <p-chart #allChart type="bar" height="450" [data]="basicData" [options]="basicOptions"
-        *ngIf="!selectedMaxAccountNumber">
+      <p-chart
+        #allPaymentChart
+        id="allPaymentChart"
+        type="bar"
+        height="450"
+        [data]="basicData"
+        [options]="basicOptions"
+        *ngIf="!selectedMaxAccountNumber"
+      >
       </p-chart>
       <span *ngIf="selectedMaxAccountNumber">
         {{ selectedMaxAccountName }}
       </span>
-      <p-chart #chart type="bar" height="450" [data]="specificAccountData" [options]="basicOptions"
-        *ngIf="selectedMaxAccountNumber"></p-chart>
+      <p-chart
+        #chart
+        type="bar"
+        height="450"
+        [data]="specificAccountData"
+        [options]="basicOptions"
+        *ngIf="selectedMaxAccountNumber"
+      ></p-chart>
     </div>
   </div>
 
-  <div class="p-col-6">
+  <div class="p-col-6" *ngIf="!details">
     <span class="p-text-center">
-      <p-selectButton [options]="paymentOptions" [(ngModel)]="top10" optionLabel="name" optionValue="value">
+      <p-selectButton
+        [options]="paymentOptions"
+        [(ngModel)]="top10"
+        optionLabel="name"
+        optionValue="value"
+      >
         <!-- <ng-template let-item>
           <i [style]="'background: {{item.color}}'"></i>
         </ng-template> -->
       </p-selectButton>
     </span>
-    <p-table #dtmaxb dataKey="accountNumber" selectionMode="single" [value]="top10Blue" *ngIf="top10 == 1"
-      [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="top10Cols" responsive="true"
-      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [(selection)]="selectedMaxAccount"
-      (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [loading]="waiting">
+    <p-table
+      #dtmaxb
+      dataKey="accountNumber"
+      selectionMode="single"
+      [value]="top10Blue"
+      *ngIf="top10 == 1"
+      [resizableColumns]="true"
+      styleClass="p-datatable-gridlines"
+      [columns]="top10Cols"
+      responsive="true"
+      [scrollable]="true"
+      scrollHeight="350px"
+      [reorderableColumns]="true"
+      [(selection)]="selectedMaxAccount"
+      (onRowSelect)="onRowSelect($event)"
+      (onRowUnselect)="onRowUnselect($event)"
+      [loading]="waiting"
+    >
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
           <col *ngFor="let col of columns" />
@@ -63,7 +112,12 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th pResizableColumn pReorderableColumn class="p-text-{{ col.align }}" *ngFor="let col of columns">
+          <th
+            pResizableColumn
+            pReorderableColumn
+            class="p-text-{{ col.align }}"
+            *ngFor="let col of columns"
+          >
             <span pTooltip="{{ col.header | translate }}">
               {{ col.header | translate }}
             </span>
@@ -83,10 +137,24 @@
         </tr>
       </ng-template>
     </p-table>
-    <p-table #dtmaxr dataKey="accountNumber" selectionMode="single" [value]="top10Red" *ngIf="top10 == 2"
-      [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="top10Cols" responsive="true"
-      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [(selection)]="selectedMaxAccount"
-      (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [loading]="waiting">
+    <p-table
+      #dtmaxr
+      dataKey="accountNumber"
+      selectionMode="single"
+      [value]="top10Red"
+      *ngIf="top10 == 2"
+      [resizableColumns]="true"
+      styleClass="p-datatable-gridlines"
+      [columns]="top10Cols"
+      responsive="true"
+      [scrollable]="true"
+      scrollHeight="350px"
+      [reorderableColumns]="true"
+      [(selection)]="selectedMaxAccount"
+      (onRowSelect)="onRowSelect($event)"
+      (onRowUnselect)="onRowUnselect($event)"
+      [loading]="waiting"
+    >
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
           <col *ngFor="let col of columns" />
@@ -94,7 +162,12 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th pResizableColumn pReorderableColumn class="p-text-{{ col.align }}" *ngFor="let col of columns">
+          <th
+            pResizableColumn
+            pReorderableColumn
+            class="p-text-{{ col.align }}"
+            *ngFor="let col of columns"
+          >
             <span pTooltip="{{ col.header | translate }}">
               {{ col.header | translate }}
             </span>
@@ -114,10 +187,24 @@
         </tr>
       </ng-template>
     </p-table>
-    <p-table #dtmaxg dataKey="accountNumber" selectionMode="single" [value]="top10Green" *ngIf="top10 == 3"
-      [resizableColumns]="true" styleClass="p-datatable-gridlines" [columns]="top10Cols" responsive="true"
-      [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [(selection)]="selectedMaxAccount"
-      (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" [loading]="waiting">
+    <p-table
+      #dtmaxg
+      dataKey="accountNumber"
+      selectionMode="single"
+      [value]="top10Green"
+      *ngIf="top10 == 3"
+      [resizableColumns]="true"
+      styleClass="p-datatable-gridlines"
+      [columns]="top10Cols"
+      responsive="true"
+      [scrollable]="true"
+      scrollHeight="350px"
+      [reorderableColumns]="true"
+      [(selection)]="selectedMaxAccount"
+      (onRowSelect)="onRowSelect($event)"
+      (onRowUnselect)="onRowUnselect($event)"
+      [loading]="waiting"
+    >
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
           <col *ngFor="let col of columns" />
@@ -125,7 +212,12 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th pResizableColumn pReorderableColumn class="p-text-{{ col.align }}" *ngFor="let col of columns">
+          <th
+            pResizableColumn
+            pReorderableColumn
+            class="p-text-{{ col.align }}"
+            *ngFor="let col of columns"
+          >
             <span pTooltip="{{ col.header | translate }}">
               {{ col.header | translate }}
             </span>
@@ -148,12 +240,26 @@
   </div>
 </div>
 
-<div class="p-grid">
+<div class="p-grid" *ngIf="!details">
   <div class="p-col-12" [hidden]="!selectedProcedure">
-    <p-progressBar mode="indeterminate" [style]="{ height: '5px' }" *ngIf="searching"></p-progressBar>
-    <p-table #dt dataKey="accountNumber" [value]="accounts" styleClass="p-datatable-gridlines" [columns]="accountsCols"
-      responsive="true" [scrollable]="true" scrollHeight="350px" [reorderableColumns]="true" [resizableColumns]="true"
-      [loading]="waiting">
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '5px' }"
+      *ngIf="searching"
+    ></p-progressBar>
+    <p-table
+      #dt
+      dataKey="accountNumber"
+      [value]="accounts"
+      styleClass="p-datatable-gridlines"
+      [columns]="accountsCols"
+      responsive="true"
+      [scrollable]="true"
+      scrollHeight="350px"
+      [reorderableColumns]="true"
+      [resizableColumns]="true"
+      [loading]="waiting"
+    >
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
           <col *ngFor="let col of columns" sorter="number" />
@@ -162,8 +268,13 @@
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th pSortableColumn="{{ col.field }}" pReorderableColumn pResizableColumn class="p-text-{{ col.align }}"
-            *ngFor="let col of columns">
+          <th
+            pSortableColumn="{{ col.field }}"
+            pReorderableColumn
+            pResizableColumn
+            class="p-text-{{ col.align }}"
+            *ngFor="let col of columns"
+          >
             <span pTooltip="{{ col.header | translate }}">
               {{ col.header | translate }}
               <p-sortIcon field="{{ col.field }}"></p-sortIcon>
@@ -173,9 +284,15 @@
         </tr>
         <tr>
           <th pResizableColumn *ngFor="let col of columns" class="autocomplete">
-            <input pInputText type="text" [(ngModel)]="criteria[col.field]" [style]="{ width: '90%' }"
-              (input)="filterChange($any($event.target).value, col.field)" class="filterInputCss"
-              *ngIf="col.field == 'accountNumber' || col.field == 'accountName'" />
+            <input
+              pInputText
+              type="text"
+              [(ngModel)]="criteria[col.field]"
+              [style]="{ width: '90%' }"
+              (input)="filterChange($any($event.target).value, col.field)"
+              class="filterInputCss"
+              *ngIf="col.field == 'accountNumber' || col.field == 'accountName'"
+            />
           </th>
           <th></th>
         </tr>
@@ -183,16 +300,29 @@
       <ng-template pTemplate="body" let-row let-columns="columns">
         <tr>
           <td *ngFor="let col of columns" class="p-text-{{ col.align }}">
-            <span *ngIf="col.field != 'accountNumber' && col.field != 'accountName'">
+            <span
+              *ngIf="col.field != 'accountNumber' && col.field != 'accountName'"
+            >
               {{ row[col.field] | currency: "EUR":"" }}
             </span>
-            <span *ngIf="col.field == 'accountNumber' || col.field == 'accountName'" pTooltip="{{ row[col.field] }}">
+            <span
+              *ngIf="col.field == 'accountNumber' || col.field == 'accountName'"
+              pTooltip="{{ row[col.field] }}"
+            >
               {{ row[col.field] }}
             </span>
           </td>
           <td>
-            <button type="button" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-warning"
-              (click)="goToDetails(row)" pTooltip="Details" tooltipPosition="bottom"></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-list"
+              class="p-button-rounded p-button-warning"
+              (click)="goToDetails(row)"
+              pTooltip="Details"
+              tooltipPosition="bottom"
+            ></button>
           </td>
         </tr>
       </ng-template>
