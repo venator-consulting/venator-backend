@@ -117,7 +117,8 @@ export class MainReportComponent implements OnInit {
     positionY += height + 10;
     //#region Convert charts and tables
     for (const chart of this.canExported) {
-      positionY = await this.addSectionToPDF(PDF, chart.name, positionY, chart.title);
+      if (chart.export)
+        positionY = await this.addSectionToPDF(PDF, chart.name, positionY, chart.title);
     }
     //#endregion Convert charts
 
@@ -155,7 +156,7 @@ export class MainReportComponent implements OnInit {
         pdf.setFont('helvetica', 'bold');
         //  add procedure name
         pdf.setTextColor(255, 255, 255);
-        pdf.text(this.procedureName, 50, 9);
+        pdf.text(this.procedureName, 50, 10.2);
         //#endregion header
         // gray for the footer
         pdf.setFillColor(88, 88, 90);

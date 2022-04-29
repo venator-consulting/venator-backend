@@ -318,7 +318,7 @@ module.exports.storeAmountData = async (orgId, prcId, res) => {
                                 AND UPPER(p.accountType) = 'K' 
                                 AND p.accountNumber is not NULL
                                 AND UPPER(p.documentTypeNewName) = 'ZAHLUNG' 
-                                AND p.balance % 5 = 0 
+                                AND p.balance % 50 = 0 
                                 AND balance >= 100 `;
   let result;
   let progressPromise = FakProgress.init(res, 0);

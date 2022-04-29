@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 <p-breadcrumb [model]="items" [home]="home" *ngIf="!details"></p-breadcrumb>
-<div class="p-grid" *ngIf="!details">
-  <div class="p-col-12 p-text-right">
+<div class="p-grid">
+  <!-- <div class="p-col-12 p-text-right">
     <p-calendar
       [(ngModel)]="maxDayFilter"
       [monthNavigator]="true"
@@ -21,7 +21,7 @@
       (click)="getDateFilter()"
       class="p-button-rounded p-button-primary"
     ></button>
-  </div>
+  </div> -->
   <div class="p-col-12">
     <p-progressBar
       mode="indeterminate"
@@ -32,16 +32,36 @@
       class="p-button-rounded p-button-warning" (click)="goToDueDate()"
       pTooltip="{{ 'DueDateAnalysis.label' | translate }}" tooltipPosition="bottom"></button> -->
   </div>
-  <!-- <div class="p-col-1 p-text-right" style="margin-top: 5px;">{{fromDate | date}}</div>
-  <div class="p-col-4" style="text-align: center;margin-top: 5px;">
-    <p-slider [(ngModel)]="rangeValues" [range]="true" (onChange)="handleSliderChange($event)" [min]="0"
-      [max]="maxRange"></p-slider>
+  <div class="p-col-6">
+    <p class="p-text-center" style="margin-left: -25px">
+      {{ mindate | date }} - {{ maxDate | date }}
+    </p>
   </div>
-  <div class="p-col-1" style="margin-top: 5px;">{{toDate | date}}</div>
+  <div class="p-col-6"></div>
+  <div class="p-col-1 p-text-right" style="margin-top: 5px">
+    {{ fromDate | date }}
+  </div>
+  <div class="p-col-4" style="text-align: center; margin-top: 5px">
+    <p-slider
+      [(ngModel)]="rangeValues"
+      [range]="true"
+      (onChange)="handleSliderChange($event)"
+      [min]="0"
+      [max]="maxRange"
+    ></p-slider>
+  </div>
+  <div class="p-col-1" style="margin-top: 5px">{{ toDate | date }}</div>
   <div class="p-col-1 p-text-left">
-    <button pButton pRipple type="button" label="{{'DueDateAnalysis.search' | translate}}" icon="pi pi-search"
-      (click)="getData()" class="p-button-rounded p-button-primary"></button>
-  </div> -->
+    <button
+      pButton
+      pRipple
+      type="button"
+      label="{{ 'DueDateAnalysis.search' | translate }}"
+      icon="pi pi-search"
+      (click)="getData()"
+      class="p-button-rounded p-button-primary"
+    ></button>
+  </div>
   <!-- <h2 class="p-text-center">{{ procedureName }}</h2> -->
 </div>
 <div class="p-grid" *ngIf="basicData && ready">

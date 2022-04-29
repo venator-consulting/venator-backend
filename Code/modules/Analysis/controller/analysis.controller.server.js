@@ -39,7 +39,7 @@ module.exports.amountAnalysisDetails = async (req, res) => {
     req.params.prcId,
     req.params.baseBalance,
     req.params.accountNumber,
-    req.params.mode?? 100
+    req.params.mode ?? 100
   );
   res.status(200).json(result);
 };
@@ -50,7 +50,7 @@ module.exports.amountAnalysisDetailsChart = async (req, res) => {
     req.params.prcId,
     req.params.baseBalance ?? 500,
     req.params.accountNumber,
-    req.params.mode?? 100
+    req.params.mode ?? 100
   );
   res.status(200).json(result);
 };
@@ -271,36 +271,43 @@ module.exports.paymentAnalysisForLiquidity = async (req, res) => {
 module.exports.paymentAnalysis = async (req, res) => {
   let fromDate = req.params.fromDate;
   let toDate = req.params.toDate;
-  let dateRange = [{ fromDate, toDate }];
-  if (!fromDate || !toDate || fromDate == 'null' || fromDate == 'undefined' || toDate == 'null' || toDate == 'undefined') {
-    dateRange = await paymentAnalysisRepo.paymentDateRangeCalc(
-      +req.params.orgId,
-      +req.params.prcId
-    );
-    if (dateRange.length < 1) {
-      throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
-    }
-    if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
-      throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
-    }
-    fromDate = dateRange[0].mindate;
-    toDate = new Date();
-    if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
-      if (!dateRange[0].maxdue || !(dateRange[0].maxdue instanceof Date)) {
-        throw new Exception(httpStatus.BAD_REQUEST, errors.no_application_date);
-      } else {
-        toDate = dateRange[0].maxdue;
-      }
-    } else {
-      toDate = dateRange[0].maxdate;
-    }
+
+  // let dateRange = [];
+  let dateRange = await paymentAnalysisRepo.paymentDateRangeCalc(
+    +req.params.orgId,
+    +req.params.prcId
+  );
+  if (dateRange.length < 1) {
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_date_range);
   }
+  if (!dateRange[0].mindate || !(dateRange[0].mindate instanceof Date)) {
+    throw new Exception(httpStatus.BAD_REQUEST, errors.no_document_date);
+  }
+  let baseFromDate = dateRange[0].mindate;
+  let baseToDate = new Date();
+  if (!dateRange[0].maxdate || !(dateRange[0].maxdate instanceof Date)) {
+    if (!dateRange[0].maxdue || !(dateRange[0].maxdue instanceof Date)) {
+      throw new Exception(httpStatus.BAD_REQUEST, errors.no_application_date);
+    } else {
+      baseToDate = dateRange[0].maxdue;
+    }
+  } else {
+    baseToDate = dateRange[0].maxdate;
+  }
+  if (!fromDate || fromDate == 'null' || fromDate == 'undefined')
+    fromDate = baseFromDate;
+
+  if (!toDate || toDate == 'null' || toDate == 'undefined')
+    toDate = baseToDate;
+
   // let result = {};
   paymentAnalysisRepo.paymentAnalysisCalc(
     req.params.orgId,
     req.params.prcId,
     fromDate,
     toDate,
+    baseFromDate,
+    baseToDate,
     (data) => {
       // result = data;
       res.status(200).json({

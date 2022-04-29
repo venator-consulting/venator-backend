@@ -15,19 +15,11 @@
     <div class="card p-text-center">
       <!-- filters -->
       <div class="p-grid">
-        <div
-          class="p-col-2 p-text-right"
-          style="margin-top: 5px"
-          *ngIf="!details"
-        >
+        <div class="p-col-2 p-text-right" style="margin-top: 5px">
           {{ minDate | date }}
         </div>
 
-        <div
-          class="p-col-8"
-          style="text-align: center; margin-top: 5px"
-          *ngIf="!details"
-        >
+        <div class="p-col-8" style="text-align: center; margin-top: 5px">
           <p-slider
             [(ngModel)]="rangeValues"
             [range]="true"
@@ -36,12 +28,12 @@
             [max]="maxRange"
           ></p-slider>
         </div>
-        <div class="p-col-2" style="margin-top: 5px" *ngIf="!details">
+        <div class="p-col-2" style="margin-top: 5px">
           {{ toDate | date }}
         </div>
 
         <div class="p-col-1"></div>
-        <div class="p-col-4 p-text-center" *ngIf="!details">
+        <div class="p-col-4 p-text-center">
           <p-dropdown
             [options]="delayData"
             placeholder=" {{ 'DueDateAnalysis.selectAccount' | translate }}"
@@ -73,7 +65,7 @@
             </ng-template>
           </p-dropdown>
         </div>
-        <div class="p-col-4" *ngIf="!details">
+        <div class="p-col-4">
           <p-inputNumber
             [(ngModel)]="maxDelay"
             mode="decimal"
@@ -93,7 +85,7 @@
           >
           </p-inputNumber>
         </div>
-        <div class="p-col-3 p-text-left" *ngIf="!details">
+        <div class="p-col-3 p-text-left">
           <button
             pButton
             pRipple

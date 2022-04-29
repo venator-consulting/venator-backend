@@ -60,12 +60,12 @@ export class PaymentAnalysisComponent implements OnInit {
   red: string;
   green: string;
   waiting: boolean = true;
-  // fromDate: Date;
-  // toDate: Date;
-  // maxDate: Date;
-  // mindate: Date;
-  // rangeValues: number[];
-  // maxRange: any;
+  fromDate: Date;
+  toDate: Date;
+  maxDate: Date;
+  mindate: Date;
+  rangeValues: number[];
+  maxRange: any;
   maxDayFilter: Date;
 
   constructor(
@@ -194,14 +194,14 @@ export class PaymentAnalysisComponent implements OnInit {
     this.selectedOrganisation = +localStorage.getItem('organisationId');
     this.selectedProcedure = +localStorage.getItem('currentProcedureId');
     this.procedureName = localStorage.getItem('currentProcedureName');
-    // let prcId = +localStorage.getItem('paymentPrcId');
+    let prcId = +localStorage.getItem('paymentPrcId');
     // debugger;
-    // if (prcId == this.selectedProcedure) {
-    //   this.mindate = new Date(localStorage.getItem('paymentMinDate'));
-    //   this.maxDate = new Date(localStorage.getItem('paymentMaxDate'));
-    //   this.fromDate = new Date(localStorage.getItem('paymentFromDate'));
-    //   this.toDate = new Date(localStorage.getItem('paymentToDate'));
-    // }
+    if (prcId == this.selectedProcedure) {
+      this.mindate = new Date(localStorage.getItem('paymentMinDate'));
+      this.maxDate = new Date(localStorage.getItem('paymentMaxDate'));
+      this.fromDate = new Date(localStorage.getItem('paymentFromDate'));
+      this.toDate = new Date(localStorage.getItem('paymentToDate'));
+    }
     this.getData();
   } // end of init function
 
@@ -217,25 +217,32 @@ export class PaymentAnalysisComponent implements OnInit {
     this.blueData = new Array();
     this.GreenData = new Array();
     this.RedData = new Array();
-    // let tmpFromDate = this.fromDate?.toISOString()?.split('T')[0];
-    // let tmpToDate = this.toDate?.toISOString()?.split('T')[0];
+    let tmpFromDate = this.fromDate?.toISOString()?.split('T')[0];
+    let tmpToDate = this.toDate?.toISOString()?.split('T')[0];
     this._analysisService
-      .getPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure, null, null)
+      .getPaymentAnalysis(this.selectedOrganisation, this.selectedProcedure, tmpFromDate, tmpToDate)
       .subscribe(
         (res) => {
           this.data = res.data.res;
           this.accounts = res.data.accounts;
-          // if (!this.fromDate) this.fromDate = new Date(res.dateRange[0].mindate);
-          // if (!this.toDate) this.toDate = new Date(res.dateRange[0].maxdate);
-          // if (!this.mindate) this.mindate = new Date(res.dateRange[0].mindate);
-          // if (!this.maxDate) this.maxDate = new Date(res.dateRange[0].maxdate);
+          if (!this.fromDate) this.fromDate = new Date(res.dateRange[0].mindate);
+          if (!this.toDate) this.toDate = new Date(res.dateRange[0].maxdate);
+          if (!this.mindate) this.mindate = new Date(res.dateRange[0].mindate);
+          if (!this.maxDate) this.maxDate = new Date(res.dateRange[0].maxdate);
           // if (!this.rangeValues) this.rangeValues = [0, this.dayDiff(this.fromDate, this.toDate)];
           // if (!this.maxRange) this.maxRange = this.dayDiff(this.mindate, this.maxDate);
-          // localStorage.setItem('paymentMinDate', this.mindate?.toISOString().split('T')[0]);
-          // localStorage.setItem('paymentMaxDate', this.maxDate?.toISOString().split('T')[0]);
-          // localStorage.setItem('paymentFromDate', this.fromDate?.toISOString().split('T')[0]);
-          // localStorage.setItem('paymentToDate', this.toDate?.toISOString().split('T')[0]);
-          // localStorage.setItem('paymentPrcId', '' + this.selectedProcedure);
+          if (this.mindate && this.maxDate && this.fromDate && this.toDate) {
+            this.maxRange = this.dayDiff(this.mindate, this.maxDate);
+            this.rangeValues = [
+              this.dayDiff(this.mindate, this.fromDate),
+              this.dayDiff(this.mindate, this.toDate)
+            ];
+          }
+          localStorage.setItem('paymentMinDate', this.mindate?.toISOString().split('T')[0]);
+          localStorage.setItem('paymentMaxDate', this.maxDate?.toISOString().split('T')[0]);
+          localStorage.setItem('paymentFromDate', this.fromDate?.toISOString().split('T')[0]);
+          localStorage.setItem('paymentToDate', this.toDate?.toISOString().split('T')[0]);
+          localStorage.setItem('paymentPrcId', '' + this.selectedProcedure);
           // debugger;
           for (let i = 0; i < this.data.length; i++) {
             const element = this.data[i];
@@ -361,18 +368,18 @@ export class PaymentAnalysisComponent implements OnInit {
     this.top10Green = this.OriginalTop10Green;
   }
 
-  // handleSliderChange(e) {
-  //   let start = e.values[0];
-  //   let end = e.values[1];
-  //   // calculate fromDate: start + baseFromDate
-  //   let tempStart = new Date(this.mindate);
-  //   tempStart.setDate(tempStart.getDate() + start);
-  //   this.fromDate = new Date(tempStart);
-  //   // calculate toDate: baseToDate - end
-  //   let tempEnd = new Date(this.maxDate);
-  //   tempEnd.setDate(tempEnd.getDate() - (this.maxRange - +end));
-  //   this.toDate = new Date(tempEnd);
-  // }
+  handleSliderChange(e) {
+    let start = e.values[0];
+    let end = e.values[1];
+    // calculate fromDate: start + baseFromDate
+    let tempStart = new Date(this.mindate);
+    tempStart.setDate(tempStart.getDate() + start);
+    this.fromDate = new Date(tempStart);
+    // calculate toDate: baseToDate - end
+    let tempEnd = new Date(this.maxDate);
+    tempEnd.setDate(tempEnd.getDate() - (this.maxRange - +end));
+    this.toDate = new Date(tempEnd);
+  }
 
   goToDetails(row: any) {
     this._router.navigate([

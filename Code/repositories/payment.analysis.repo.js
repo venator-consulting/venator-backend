@@ -342,23 +342,27 @@ module.exports.paymentAnalysisforLiquidity = async (orgId, prcId, fromDate, toDa
 };
 
 
-module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) => {
-  if (!fromDate) {
+module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, baseFromDate, baseToDate, cb) => {
+  if (!baseFromDate) {
     throw new Error("Document Date is null for this procedure!");
   }
-  if (!toDate) {
+  if (!baseToDate) {
     throw new Error("Application Date is null for this procedure!");
   }
   if (!(fromDate instanceof Date) || !(toDate instanceof Date)) {
     fromDate = new Date(fromDate);
     toDate = new Date(toDate);
   }
-  const diff = monthDiff(fromDate, toDate) - 1;
+  if (!(baseFromDate instanceof Date) || !(toDate instanceof Date)) {
+    baseFromDate = new Date(baseFromDate);
+    baseToDate = new Date(baseToDate);
+  }
+  const diff = monthDiff(baseFromDate, baseToDate) - 1;
   // if diff = 0 throw an error
   // init res
   let res = new Array();
-  let starterMonth = fromDate.getMonth() + 1;
-  let starterYear = fromDate.getFullYear();
+  let starterMonth = baseFromDate.getMonth() + 1;
+  let starterYear = baseFromDate.getFullYear();
   // add element for each included month
   for (let index = 0; index <= diff; index++) {
     const element = {
@@ -388,7 +392,7 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
                     FROM payment_analysis_${orgId} pos
                     WHERE
                         pos.procedureId = ${prcId}
-                        AND pos.documentDate >=  '${fromDate.toISOString().split('T')[0]}' 
+                        AND pos.documentDate >=  '${baseFromDate.toISOString().split('T')[0]}' 
                         AND ((pos.applicationDate is NULL AND pos.dueDate <= '${toDate.toISOString().split('T')[0]}')
                           OR (pos.applicationDate <= '${toDate.toISOString().split('T')[0]}'))`;
 
@@ -400,7 +404,8 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
       // get last day of the month
       var d = new Date(element.yearName, +element.monthName, 1);
       if (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
-        row.documentDate?.getTime() < d?.getTime() && (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime())) {
+        row.documentDate?.getTime() < d?.getTime() &&
+        (row.applicationDate == null || row.applicationDate?.getTime() >= d?.getTime())) {
         element.blue.value += +row.balance;
         // add creditor to the list
         // check if the account added to the blue bar in chart for this month
@@ -418,32 +423,34 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
             accountName: row.accountName,
           });
         }
-        // check if the account added to the accounts array for the table
-        const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
-        if (i >= 0) {
-          // finalResult.accounts[i].lastBlue = lastBlue;
-          // // the row must be added once
-          // const j = blueBlackList.findIndex((x) => x == row.id);
-          // if (j == -1) {
-          //   if (finalResult.accounts[i].blue) {
-          //     finalResult.accounts[i].blue += +row.balance;
-          //   } else {
-          //     finalResult.accounts[i].blue = +row.balance;
-          //   }
-          //   blueBlackList.push(row.id);
-          // }
-        } else {
-          finalResult.accounts.push({
-            // blue: +row.balance,
-            // lastBlue: lastBlue,
-            // red: 0,
-            // lastRed: 0,
-            // green: 0,
-            // lastGreen: 0,
-            accountNumber: row.accountNumber?.trim(),
-            accountName: row.accountName,
-          });
-          // blueBlackList.push(row.id);
+        if (row.documentDate.getTime() <= fromDate.getTime()) {
+          // check if the account added to the accounts array for the table
+          const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
+          if (i >= 0) {
+            // finalResult.accounts[i].lastBlue = lastBlue;
+            // // the row must be added once
+            // const j = blueBlackList.findIndex((x) => x == row.id);
+            // if (j == -1) {
+            //   if (finalResult.accounts[i].blue) {
+            //     finalResult.accounts[i].blue += +row.balance;
+            //   } else {
+            //     finalResult.accounts[i].blue = +row.balance;
+            //   }
+            //   blueBlackList.push(row.id);
+            // }
+          } else {
+            finalResult.accounts.push({
+              // blue: +row.balance,
+              // lastBlue: lastBlue,
+              // red: 0,
+              // lastRed: 0,
+              // green: 0,
+              // lastGreen: 0,
+              accountNumber: row.accountNumber?.trim(),
+              accountName: row.accountName,
+            });
+            // blueBlackList.push(row.id);
+          }
         }
       } // end of blue condition
       if (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "RECHNUNG" &&
@@ -462,30 +469,32 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
             accountName: row.accountName,
           });
         }
-        const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
-        if (i >= 0) {
-          // finalResult.accounts[i].lastRed = lastRed;
-          // const j = redBlackList.findIndex((x) => x == row.id);
-          // if (j == -1) {
-          //   if (finalResult.accounts[i].red) {
-          //     finalResult.accounts[i].red += +row.balance;
-          //   } else {
-          //     finalResult.accounts[i].red = +row.balance;
-          //   }
-          //   redBlackList.push(row.id);
-          // }
-        } else {
-          finalResult.accounts.push({
-            // blue: 0,
-            // lastBlue: 0,
-            // red: +row.balance,
-            // lastRed: lastRed,
-            // green: 0,
-            // lastGreen: 0,
-            accountNumber: row.accountNumber?.trim(),
-            accountName: row.accountName,
-          });
-          // redBlackList.push(row.id);
+        if (row.documentDate.getTime() <= fromDate.getTime()) {
+          const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
+          if (i >= 0) {
+            // finalResult.accounts[i].lastRed = lastRed;
+            // const j = redBlackList.findIndex((x) => x == row.id);
+            // if (j == -1) {
+            //   if (finalResult.accounts[i].red) {
+            //     finalResult.accounts[i].red += +row.balance;
+            //   } else {
+            //     finalResult.accounts[i].red = +row.balance;
+            //   }
+            //   redBlackList.push(row.id);
+            // }
+          } else {
+            finalResult.accounts.push({
+              // blue: 0,
+              // lastBlue: 0,
+              // red: +row.balance,
+              // lastRed: lastRed,
+              // green: 0,
+              // lastGreen: 0,
+              accountNumber: row.accountNumber?.trim(),
+              accountName: row.accountName,
+            });
+            // redBlackList.push(row.id);
+          }
         }
       } // end of red condition
       if (row.documentTypeNewName && row.documentTypeNewName.toString().toUpperCase() == "ZAHLUNG" &&
@@ -503,30 +512,32 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
             accountName: row.accountName,
           });
         }
-        const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
-        if (i >= 0) {
-          // finalResult.accounts[i].lastGreen = lastGreen;
-          // const j = greenBlackList.findIndex((x) => x == row.id);
-          // if (j == -1) {
-          //   if (finalResult.accounts[i].green) {
-          //     finalResult.accounts[i].green += +row.balance;
-          //   } else {
-          //     finalResult.accounts[i].green = +row.balance;
-          //   }
-          //   greenBlackList.push(row.id);
-          // }
-        } else {
-          finalResult.accounts.push({
-            // blue: 0,
-            // lastBlue: 0,
-            // red: 0,
-            // lastRed: 0,
-            // green: +row.balance,
-            // lastGreen: lastGreen,
-            accountNumber: row.accountNumber?.trim(),
-            accountName: row.accountName,
-          });
-          greenBlackList.push(row.id);
+        if (row.documentDate.getTime() <= fromDate.getTime()) {
+          const i = finalResult.accounts.findIndex((x) => x.accountNumber?.trim() == row.accountNumber?.trim());
+          if (i >= 0) {
+            // finalResult.accounts[i].lastGreen = lastGreen;
+            // const j = greenBlackList.findIndex((x) => x == row.id);
+            // if (j == -1) {
+            //   if (finalResult.accounts[i].green) {
+            //     finalResult.accounts[i].green += +row.balance;
+            //   } else {
+            //     finalResult.accounts[i].green = +row.balance;
+            //   }
+            //   greenBlackList.push(row.id);
+            // }
+          } else {
+            finalResult.accounts.push({
+              // blue: 0,
+              // lastBlue: 0,
+              // red: 0,
+              // lastRed: 0,
+              // green: +row.balance,
+              // lastGreen: lastGreen,
+              accountNumber: row.accountNumber?.trim(),
+              accountName: row.accountName,
+            });
+            greenBlackList.push(row.id);
+          }
         }
       } // end of green condition
     }); // end of foreach month
@@ -540,6 +551,10 @@ module.exports.paymentAnalysisCalc = async (orgId, prcId, fromDate, toDate, cb) 
       account.blue = -1 * (finalResult?.res[finalResult?.res?.length - 1]?.blue?.accounts?.find(x => x.accountNumber == account.accountNumber)?.value ?? 0);
       account.red = -1 * (finalResult?.res[finalResult?.res?.length - 1]?.red?.accounts?.find(x => x.accountNumber == account.accountNumber)?.value ?? 0);
       account.green = finalResult?.res[finalResult?.res?.length - 1]?.green?.accounts?.find(x => x.accountNumber == account.accountNumber)?.value ?? 0;
+    });
+    finalResult.res = finalResult.res.filter(rec => {
+      let recDate = new Date(rec.yearName, rec.monthName);
+      return recDate >= fromDate && recDate <= toDate;
     });
     cb(finalResult);
   });
