@@ -108,6 +108,16 @@ router
     }), authorization.authorize('Admin'), uploadfiles.single('file'), pstCtrl.importFile);
 //#endregion import PST file
 
+//#region 
+router
+    .route('/pst/parse-attachments/:orgId/:prcId')
+    .get(
+    //     passport.authenticate('jwt', {
+    //     session: false
+    // }), authorization.authorize('Admin'), 
+    pstCtrl.parseAttacments);
+//#endregion
+
 //#region import
 router
     .route('/template-types')

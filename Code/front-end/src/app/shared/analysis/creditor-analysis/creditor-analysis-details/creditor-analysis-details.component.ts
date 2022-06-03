@@ -70,8 +70,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
   mailSenderChartData: any;
 
   // email by word analysis
-  // @deprecated no need for specific creditor analysis
-  // mailWordChartData: any;
+  mailWordChartData: any;
 
   comment: any;
   showSideBar: boolean = false;
@@ -136,7 +135,7 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
     this.getPaymentChartData();
     this.getDueDateChartData();
     this.getMailBySender();
-    // this.getMailWordChartData();
+    this.getMailWordChartData();
     this.getCreditorComment();
 
     this.translateSub = this._translateService.get('CreditorsAnalysis')
@@ -488,24 +487,23 @@ export class CreditorAnalysisDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  // @deprecated No need for specific creditor analysis
-  // getMailWordChartData() {
-  //   this.mailWordSub = this._mailService
-  //     .getMailDetailsAnalysisWordByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
-  //     .subscribe(res => {
-  //       this.canExported.push({ details: false, index: 5, chart: 'mailWordChart', title: 'CreditorsAnalysis.mailWordAnalysisReport', hasData: res.length > 0 });
-  //       this.mailWordChartData = {
-  //         labels: res?.map(rec => rec.word),
-  //         datasets: [
-  //           {
-  //             data: res?.map(rec => +rec.totalCount),
-  //             backgroundColor: res?.map(rec => `rgb(${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255})`),
-  //             hoverBackgroundColor: res?.map(rec => `rgb(${(Math.random() * 25500 + 10) % 255}, ${(Math.random() * 25500 + 10) % 255}, ${(Math.random() * 25500 + 10) % 255})`),
-  //           },
-  //         ],
-  //       };
-  //     });
-  // }
+  getMailWordChartData() {
+    this.mailWordSub = this._mailService
+      .getMailDetailsAnalysisWordByAccountChart(this.selectedOrganisation, this.selectedProcedure, this.accountNumber)
+      .subscribe(res => {
+        this.canExported.push({ details: false, index: 5, chart: 'mailWordChart', title: 'CreditorsAnalysis.mailWordAnalysisReport', hasData: res.length > 0 });
+        this.mailWordChartData = {
+          labels: res?.map(rec => rec.word),
+          datasets: [
+            {
+              data: res?.map(rec => +rec.totalCount),
+              backgroundColor: res?.map(rec => `rgb(${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255}, ${Math.random() * 25500 % 255})`),
+              hoverBackgroundColor: res?.map(rec => `rgb(${(Math.random() * 25500 + 10) % 255}, ${(Math.random() * 25500 + 10) % 255}, ${(Math.random() * 25500 + 10) % 255})`),
+            },
+          ],
+        };
+      });
+  }
 
   setDetails(option: number) {
     this.displayDetails = option;
