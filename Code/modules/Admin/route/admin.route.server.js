@@ -111,11 +111,9 @@ router
 //#region 
 router
     .route('/pst/parse-attachments/:orgId/:prcId')
-    .get(
-    //     passport.authenticate('jwt', {
-    //     session: false
-    // }), authorization.authorize('Admin'), 
-    pstCtrl.parseAttacments);
+    .get(passport.authenticate('jwt', {
+        session: false
+    }), authorization.authorize('Admin'), pstCtrl.parseAttacments);
 //#endregion
 
 //#region import
@@ -347,10 +345,10 @@ router
 
 //#region update due date new
 router
-  .route("/update-due-date/:orgId/:prcId/:id")
-  .put(passport.authenticate("jwt", { session: false, }),
-    authorization.canDisplayAnalysis(),
-    postingCtrl.updateDueDateNew);
+    .route("/update-due-date/:orgId/:prcId/:id")
+    .put(passport.authenticate("jwt", { session: false, }),
+        authorization.canDisplayAnalysis(),
+        postingCtrl.updateDueDateNew);
 //#endregion update due date new
 
 //#region init data

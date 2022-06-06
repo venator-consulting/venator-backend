@@ -82,7 +82,8 @@ async function processFolder(folder, orgId, prcId) {
                             creationTime: attachment?.creationTime,
                             mimeTag: attachment?.mimeTag,
                             pstFilename: filename,
-                            originalName: attachment?.displayName
+                            originalName: attachment?.displayName,
+                            procedureId: prcId,
                         });
                     }
 

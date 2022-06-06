@@ -8,17 +8,22 @@ const emailAttachmentKeywords = require('../models/emailAttachmentsKeywords.mode
 const fs = require('fs'),
   PDFParser = require("pdf2json");
 
-module.exports.parseAttacments = async function (orgId, prcId) {
+module.exports.parseAttacments = async function (orgId, prcId, res) {
   return new Promise(async (resolve, reject) => {
+    await emailAttachment.getEmailAttachment('email_attachment_keywords_' + orgId).destroy({
+      where: { procedureId: prcId, }
+    });
+
     const pdfParser = new PDFParser();
 
     // get pdf Attachments
     let attachments = await emailAttachment.getEmailAttachment('email_attachment_' + orgId).findAll({
       where: {
-        // procedureId: prcId, 
+        procedureId: prcId,
         mimeTag: 'application/pdf'
       }
     });
+    let count = 0;
     // for each attachment
     for (let attachment of attachments) {
       // get text from pdf as json
@@ -47,7 +52,8 @@ module.exports.parseAttacments = async function (orgId, prcId) {
                   bulkInsert.push({
                     attachmentId: attachment.id,
                     emailHistoryId: attachment.emailHistoryId,
-                    keyword: keyword
+                    keyword: keyword,
+                    procedureId: prcId
                   });
                   break anotherKeyWord;
                 }
@@ -63,9 +69,14 @@ module.exports.parseAttacments = async function (orgId, prcId) {
             .bulkCreate(bulkInsert);
           bulkInsert = [];
         }
-        resolve('done');
+        count++;
+        let progress = count / attachments.length * 100;
+        console.log(`progress ${progress}%...`);
+        res.write('event:' + 'progress\n');
+        res.write('data:' + JSON.stringify({ progress }) + '\n\n');
       });
       pdfParser.loadPDF(attachment.pstFilename);
     }
+    resolve('done');
   });
 };

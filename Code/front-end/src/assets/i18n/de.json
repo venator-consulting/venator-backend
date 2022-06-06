@@ -365,7 +365,8 @@
     "due_date": "Vorberechnetes Zahlungsverhalten",
     "docType": "Belegarten",
     "emailSender": "Vorberechnete Emailanalyse nach Absender",
-    "emailWord": "Vorberechnete Emailanalyse nach Wört"
+    "emailWord": "Vorberechnete Emailanalyse nach Wört",
+    "emailAttach": "Vorberechnete Emailanalyse nach bijlage"
   },
   "precalc": {
     "precalc": "Analysen Vorberechnung",
@@ -377,7 +378,8 @@
     "due_date": "Zahlungsverhalten",
     "start": "Starten",
     "mailSender": "Emailanalyse nach Absender",
-    "mailWord": "Emailanalyse nach wört "
+    "mailWord": "Emailanalyse nach wört ",
+    "mailAttachment": "Email bijlage"
   },
   "Notfound": {
     "errorMsg": "Sorry, die Seite ist nicht vorhanden"

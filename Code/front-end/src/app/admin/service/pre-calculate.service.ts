@@ -9,6 +9,7 @@ import { SseService } from 'src/app/shared/service/sse.service';
 })
 export class PreCalculateService {
 
+  _thisBaseURL = environment.baseUrl + 'admin/';
   _thisURL = environment.baseUrl + 'admin/precalculate/';
   _linkTranURL = environment.baseUrl + 'admin/link-trans/';
 
@@ -49,6 +50,11 @@ export class PreCalculateService {
     let url = this._thisURL + 'due-date/' + orgId + '/' + prcId;
     return this.sseService.getSSE(url);
     // return this._http.get<any>(this._thisURL + 'due-date/' + orgId + '/' + prcId);
+  }
+
+  mailAttachmentAnalysis(orgId: number, prcId: number) {
+    let url = this._thisBaseURL + 'pst/parse-attachments/' + orgId + '/' + prcId;
+    return this.sseService.getSSE(url);
   }
 
   mailAnalysisBySender(orgId: number, prcId: number) {

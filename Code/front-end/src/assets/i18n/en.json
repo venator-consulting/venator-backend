@@ -368,7 +368,8 @@
     "due_date": "Pre-Calculated Due Date Analysis",
     "docType": "Documenttype",
     "emailSender": "Pre-Calculated Email analysis by sender",
-    "emailWord": "Pre-Calculated Email analysis by word"
+    "emailWord": "Pre-Calculated Email analysis by word",
+    "emailAttach": "Pre-Calculated Email analysis by attachment"
   },
   "precalc": {
     "precalc": "Pre-calculate Analysis",
@@ -380,7 +381,8 @@
     "due_date": "Due Date Analysis",
     "start": "Starten",
     "mailSender": "Email analysis by sender",
-    "mailWord": "Email analysis by word"
+    "mailWord": "Email analysis by word",
+    "mailAttachment": "Email Attachment"
   },
   "Notfound": {
     "errorMsg": "Sorry, the page does not exist!"

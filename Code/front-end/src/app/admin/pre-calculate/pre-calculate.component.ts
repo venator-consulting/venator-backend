@@ -33,6 +33,7 @@ export class PreCalculateComponent implements OnInit {
   disableDueDate: boolean;
   // if true will disable the button which calculate document type analysis
   disableDocType: boolean;
+  disableMailAttachment: boolean;
   // if true will disable the button which calculate mail analysis by sender
   disableMailSender: boolean;
   // if true will disable the button which calculate mail by word analysis
@@ -51,6 +52,8 @@ export class PreCalculateComponent implements OnInit {
   creditorProgress = 0;
   // for progress bar for text by account analysis
   textAccountProgress = 0;
+  // for progress bar of email attachment 
+  mailAttachmentProgress = 0;
   // for progress bar for mail analysis by sender
   mailSenderProgress = 0;
   // for progress bar for mail analysis by word
@@ -77,6 +80,7 @@ export class PreCalculateComponent implements OnInit {
     this.disableMailSender = (localStorage.getItem('currentProcedureMailSender') === 'true');
     this.disableMailWord = (localStorage.getItem('currentProcedureMailWord') === 'true');
     this.disableLinkTrans = (localStorage.getItem('currentProcedureLinkTrans') === 'true');
+    this.disableMailAttachment = (localStorage.getItem('currentProcedureMailAttachment') === 'true');
   }
 
   /**
@@ -90,7 +94,8 @@ export class PreCalculateComponent implements OnInit {
         .subscribe(res => localStorage.setItem('currentProcedureStatus', 'CALCULATED'));
     } else if (this.disableAmount || this.disableCredit || this.disableDueDate ||
       this.disablePayment || this.disableText_account || this.disabletextWord
-      || this.disableMailSender || this.disableMailWord || this.disableLinkTrans) {
+      || this.disableMailSender || this.disableMailWord || this.disableLinkTrans ||
+      this.disableMailAttachment) {
       this._procedureService.patch({ id: this.prcId, status: 'CALCULATED' })
         .subscribe(res => localStorage.setItem('currentProcedureStatus', 'PARTIAL_CALCULATED'));
     }
@@ -224,11 +229,31 @@ export class PreCalculateComponent implements OnInit {
       }, er => this.waiting = false);
   }
 
+  mailAttachmentStart() {
+    this.waiting = true;
+    this._preCalcService.mailAttachmentAnalysis(this.orgId, this.prcId)
+      .subscribe(async (data: any) => {
+        console.log(data);
+        this.mailAttachmentProgress = data.progress;
+        if (this.mailAttachmentProgress >= 100) {
+          this.waiting = false;
+          localStorage.setItem('currentProcedureMailAttachment', 'true');
+          this.disableMailAttachment = true;
+          this._messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            life: 10000,
+            detail: await this._translateService.get('general_messages.update_success').toPromise(),
+          });
+          this.updateProcedureStatus();
+        }
+      }, er => this.waiting = false);
+  }
+
   mailByWordStart() {
     this.waiting = true;
     this._preCalcService.mailAnalysisByWord(this.orgId, this.prcId)
       .subscribe(async (data: any) => {
-        console.log(data);
         this.mailWordProgress = data.progress;
         if (this.mailWordProgress >= 100) {
           this.waiting = false;

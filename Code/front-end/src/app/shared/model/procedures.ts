@@ -16,6 +16,7 @@ export class Procedures {
     liquidity: boolean = false;
     status: string;
     docType: boolean = false;
+    emailAttach: boolean  = false;
     emailSender: boolean = false;
     emailWord: boolean = false;
 

@@ -66,6 +66,10 @@ const Procedures = sequelizer.define('Procedures', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
+    emailAttach: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
     emailWord: {
         type: DataTypes.BOOLEAN,
         defaultValue: false

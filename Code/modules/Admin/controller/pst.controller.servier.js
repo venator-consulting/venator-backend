@@ -1,5 +1,6 @@
 const pstHelper = require('../../../helpers/pst.extractor.server');
 const attachmentsParser = require('../../../helpers/pdf.parser');
+const Procedure = require('../../../models/procedures.model.server');
 const errors = require('../../../models/enums/errors');
 const fs = require("fs");
 
@@ -19,6 +20,12 @@ module.exports.importFile = async function (req, res) {
 
 module.exports.parseAttacments = async function (req, res) {
     const {orgId, prcId} = req.params;
-    await attachmentsParser.parseAttacments(orgId, prcId);
-    res.status(200).json('Done');
+    res.set('Content-Type', 'text/event-stream;charset=utf-8');
+    res.set('Cache-Control', 'no-transform');
+    res.setHeader('X-Accel-Buffering', 'no');
+    res.flushHeaders();
+    await attachmentsParser.parseAttacments(orgId, prcId, res);
+    await Procedure.getProcedures().update({ emailAttach: true }, {
+        where: { id: prcId, },
+      });
 };

@@ -39,17 +39,20 @@ export class ProcedureEditComponent implements OnInit {
         if (this.procedureModel.amount && this.procedureModel.credit &&
           this.procedureModel.text_account && this.procedureModel.text_word &&
           this.procedureModel.payment && this.procedureModel.due_date &&
-          this.procedureModel.emailSender && this.procedureModel.emailWord)
+          this.procedureModel.emailSender && this.procedureModel.emailWord
+          && this.procedureModel.emailAttach)
           this.procedureModel.status = "CALCULATED";
         else if (this.procedureModel.amount || this.procedureModel.credit ||
           this.procedureModel.text_account || this.procedureModel.text_word ||
           this.procedureModel.payment || this.procedureModel.due_date ||
-          this.procedureModel.emailSender || this.procedureModel.emailWord)
+          this.procedureModel.emailSender || this.procedureModel.emailWord ||
+          this.procedureModel.emailAttach)
           this.procedureModel.status = "PARTIAL_CALCULATED";
         else if (!this.procedureModel.amount && !this.procedureModel.credit &&
           !this.procedureModel.text_account && !this.procedureModel.text_word &&
           !this.procedureModel.payment && !this.procedureModel.due_date &&
-          !this.procedureModel.emailSender && !this.procedureModel.emailWord)
+          !this.procedureModel.emailSender && !this.procedureModel.emailWord &&
+          !this.procedureModel.emailAttach)
           this.procedureModel.status = "IMPORTED";
         localStorage.setItem('currentProcedureStatus', this.procedureModel.status);
         localStorage.setItem('currentProcedureAmount', '' + this.procedureModel.amount);
@@ -64,6 +67,7 @@ export class ProcedureEditComponent implements OnInit {
         localStorage.setItem('currentProcedureAnalysis', '' + this.procedureModel.analysis);
         localStorage.setItem('currentProcedureMailSender', '' + this.procedureModel.emailSender);
         localStorage.setItem('currentProcedureMailWord', '' + this.procedureModel.emailWord);
+        localStorage.setItem('currentProcedureMailAttachment', '' + this.procedureModel.emailAttach);
         this._procedureService.update(this.procedureModel)
           .subscribe(async (res) => {
             // console.dir('done: ' + res);

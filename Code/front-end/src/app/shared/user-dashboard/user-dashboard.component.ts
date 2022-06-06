@@ -84,6 +84,7 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedureDocType', prc.docType);
     localStorage.setItem('currentProcedureMailSender', prc.emailSender);
     localStorage.setItem('currentProcedureMailWord', prc.emailWord);
+    localStorage.setItem('currentProcedureMailAttachment', prc.emailAttach);
     this.navbar.updateLocal();
     this._router.navigate(['/dashboard/shared/data']);
 
@@ -104,6 +105,7 @@ export class UserDashboardComponent implements OnInit {
     localStorage.setItem('currentProcedureDocType', prc.docType);
     localStorage.setItem('currentProcedureMailSender', prc.emailSender);
     localStorage.setItem('currentProcedureMailWord', prc.emailWord);
+    localStorage.setItem('currentProcedureMailAttachment', prc.emailAttach);
     this.navbar.updateLocal();
     this._router.navigate(['/dashboard/admin/procedure/edit']);
 
@@ -135,6 +137,7 @@ export class UserDashboardComponent implements OnInit {
             localStorage.setItem('currentProcedureDocType', null);
             localStorage.setItem('currentProcedureMailSender', null);
             localStorage.setItem('currentProcedureMailWord', null);
+            localStorage.setItem('currentProcedureMailAttachment', null);
             this._messageService.add({
               severity: 'info',
               summary: await this._translateService.get('general_messages.delete_success').toPromise(),

@@ -92,6 +92,14 @@
             </div> 
 
             <div class="p-field p-grid" *ngIf="role ==='Admin'">
+                <label for="emailAttach" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.emailAttach' | translate}} </label>
+                <div class="p-col-12 p-md-10 p-field-checkbox">
+                    <i *ngIf="!procedureModel.emailAttach" class="pi pi-times closeIcon"></i>
+                    <p-checkbox *ngIf="procedureModel.emailAttach" name="emailAttach" binary="true" [(ngModel)]="procedureModel.emailAttach" inputId="emailAttach" [value]="procedureModel.emailAttach"></p-checkbox>
+                </div>
+            </div> 
+
+            <div class="p-field p-grid" *ngIf="role ==='Admin'">
                 <label for="emailSender" class="p-col-12  p-md-2 fontStyle "> {{'Procedure_Registration.emailSender' | translate}} </label>
                 <div class="p-col-12 p-md-10 p-field-checkbox">
                     <i *ngIf="!procedureModel.emailSender" class="pi pi-times closeIcon"></i>

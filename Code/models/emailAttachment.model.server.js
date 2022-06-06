@@ -21,6 +21,7 @@ module.exports.getEmailAttachment = function (tableName = 'email_attachment_') {
         pstFilename: { type: DataTypes.STRING(1000) },
         originalName: { type: DataTypes.STRING(1000) },
         emailHistoryId: { type: DataTypes.BIGINT },
+        procedureId: { type: DataTypes.BIGINT },
     }, {
         tableName: tableName
     });
