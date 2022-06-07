@@ -560,14 +560,22 @@ module.exports.storeEmailAnalysisSender = async (orgId, prcId, res) => {
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let progressPromise = FakProgress.init(res, 0);
 
-  let query = ` INSERT INTO email_analysis_sender_${orgId} (email, sender, totlaCount, procedureId) `;
+  let query = ` INSERT INTO email_analysis_sender_${orgId} 
+                  (email, sender, totlaCount, procedureId, attachments)  `;
   query += `SELECT p.email , p.sender , COUNT(p.id) as totlaCount, IF(1 = 1,
                                   '${prcId}',
-                                  '${prcId}') procedureId
+                                  '${prcId}') procedureId, GROUP_CONCAT(a.attachments SEPARATOR ', ') as attachments
                               FROM email_history_${orgId}  p
+                              left outer join (
+                                SELECT emailHistoryId, GROUP_CONCAT(keyword SEPARATOR ', ') as keywords,
+                                GROUP_CONCAT(attachmentName SEPARATOR ', ') as attachments 
+                                 FROM email_attachment_keywords_${orgId} GROUP BY emailHistoryId) a
+                              on p.id = a.emailHistoryId 
                               WHERE procedureId = ${prcId} 
                                   `;
   query += keys.length > 0 ? " AND ( " : "";
+
+  query += `a.emailHistoryId is not null OR `;
 
   for (let index = 0; index < keys.length; index++) {
     const key = keys[index];
@@ -575,9 +583,9 @@ module.exports.storeEmailAnalysisSender = async (orgId, prcId, res) => {
                           OR p.body ${key}
                           OR p.bodyHTML ${key} OR`;
   }
-  query += keys.length > 0 ? " 1 <> 1) " : "";
+  query += " 1 <> 1) ";
 
-  query += "GROUP BY p.email , p.sender";
+  query += "GROUP BY p.email , p.sender ";
 
   let result;
   try {
@@ -607,7 +615,7 @@ module.exports.storeEmailAnalysisWord = async (orgId, prcId, res) => {
   if (isNaN(prcId))
     throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
   let progressPromise = FakProgress.init(res, 0);
-  let query = ` INSERT INTO email_analysis_word_${orgId} (recordsCount, senderCount, word, procedureId) `;
+  let query = ` INSERT INTO email_analysis_word_${orgId} (recordsCount, senderCount, attachments, word, procedureId) `;
   for (let index = 0; index < keys.length; index++) {
     const key = keys[index];
     let originalKey = keys[index];
@@ -619,6 +627,7 @@ module.exports.storeEmailAnalysisWord = async (orgId, prcId, res) => {
                                         SELECT
                                             SUM(pos.totalCount) recordsCount,
                                             COUNT(pos.sender) senderCount,
+                                            GROUP_CONCAT(pos.attachments SEPARATOR ', ') as attachments,
                                             IF(1 = 1,
                                                 '${originalKey}',
                                                 '${originalKey}') word,
@@ -628,13 +637,20 @@ module.exports.storeEmailAnalysisWord = async (orgId, prcId, res) => {
                                         from
                                             (SELECT
                                                 p.sender ,
-                                                count(p.sender) totalCount
+                                                count(p.sender) totalCount,
+                                                GROUP_CONCAT(a.attachments SEPARATOR ', ') as attachments
                                             from
                                                 email_history_${orgId} p
+                                                left outer join (
+                                                  SELECT emailHistoryId, GROUP_CONCAT(keyword SEPARATOR ', ') as keywords,
+                                                  GROUP_CONCAT(attachmentName SEPARATOR ', ') as attachments 
+                                                   FROM email_attachment_keywords_${orgId} GROUP BY emailHistoryId) a
+                                                on p.id = a.emailHistoryId 
                                             WHERE
                                                 p.procedureId = ${prcId}
                                                 AND (
-                                                    UPPER(p.subject) ${key}
+                                                    UPPER(a.keywords) ${key} 
+                                                    OR UPPER(p.subject) ${key}
                                                     OR UPPER(p.body) ${key}
                                                     OR UPPER(p.bodyHTML) ${key}
                                                     )

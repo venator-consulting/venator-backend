@@ -52,6 +52,7 @@ module.exports.parseAttacments = async function (orgId, prcId, res) {
                   bulkInsert.push({
                     attachmentId: attachment.id,
                     emailHistoryId: attachment.emailHistoryId,
+                    attachmentName: attachment.originalName,
                     keyword: keyword,
                     procedureId: prcId
                   });

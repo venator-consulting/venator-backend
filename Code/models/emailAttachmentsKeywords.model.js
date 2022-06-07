@@ -16,6 +16,7 @@ module.exports.getEmailAttachmentKeywords = function (tableName = 'email_attachm
       keyword: { type: DataTypes.STRING(250) },
       emailHistoryId: { type: DataTypes.BIGINT },
       attachmentId: { type: DataTypes.BIGINT },
+      attachmentName: { type: DataTypes.STRING(500) },
       procedureId: { type: DataTypes.BIGINT },
   }, {
       tableName: tableName

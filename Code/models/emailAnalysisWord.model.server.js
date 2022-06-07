@@ -15,6 +15,7 @@ module.exports.getEmailAnalysisWord = function (tableName = 'email_analysis_word
         },
         recordsCount: { type: DataTypes.INTEGER(11) },
         senderCount: { type: DataTypes.INTEGER(11) },
+        attachments: { type: DataTypes.STRING(1000) },
         word: { type: DataTypes.STRING(250) },
         procedureId: { type: DataTypes.BIGINT(11) }
     }, {
