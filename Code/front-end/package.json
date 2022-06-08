@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "NG_BUILD_CACHE=0 node --max_old_space_size=2048 ./node_modules/@angular/cli/bin/ng serve",
+    "start": "ng serve",
     "open": "ng serve -o",
     "proxy": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "dev": "NG_BUILD_CACHE=0 node --max_old_space_size=2048 ./node_modules/@angular/cli/bin/ng serve"
   },
   "private": true,
   "dependencies": {
