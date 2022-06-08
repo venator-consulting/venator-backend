@@ -22,6 +22,7 @@ module.exports.getEmailAnalysisSender = function (tableName = 'email_analysis_se
         accountEmail: { type: DataTypes.STRING(250) },
         accountId: { type: DataTypes.BIGINT },
         attachments: { type: DataTypes.STRING(1000) },
+        keywords: { type: DataTypes.STRING(500) },
     }, {
         tableName: tableName
     });

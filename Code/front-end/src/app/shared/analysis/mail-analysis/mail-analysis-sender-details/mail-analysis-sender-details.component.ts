@@ -112,6 +112,8 @@ export class MailAnalysisSenderDetailsComponent implements OnInit {
       { header: 'MailAnalysis.creationTime', field: 'creationTime' },
       { header: 'MailAnalysis.messageDeliveryTime', field: 'messageDeliveryTime' },
       { header: 'MailAnalysis.numberOfAttachments', field: 'numberOfAttachments' },
+      { header: 'MailAnalysis.attachments', field: 'attachments' },
+      { header: 'MailAnalysis.keywords', field: 'keywords' },
       { header: 'MailAnalysis.actions', field: 'actions' },
     ];
 

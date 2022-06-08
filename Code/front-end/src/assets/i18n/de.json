@@ -465,7 +465,9 @@
     "actions": "Anhänge",
     "sysRelevants": "Systemrelevant",
     "marked": "Markiert",
-    "all": "Alle"
+    "all": "Alle",
+    "attachments": "Anhänge",
+    "keywords": "Stichwörter"
   },
   "PaymentAnalysis": {
     "data": " Daten",

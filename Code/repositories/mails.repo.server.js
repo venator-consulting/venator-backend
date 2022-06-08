@@ -152,6 +152,11 @@ module.exports.mailAnalysisSenderDetails = async (orgId, prcId, keys, email) => 
     if (isNaN(prcId))
         throw new Exception(httpStatus.BAD_REQUEST, errors.procedure_id_is_required);
     let query = `SELECT * FROM email_history_${orgId}  p
+                        left outer join (
+                            SELECT emailHistoryId, GROUP_CONCAT(keyword SEPARATOR ', ') as keywords,
+                            GROUP_CONCAT(attachmentName SEPARATOR ', ') as attachments 
+                            FROM email_attachment_keywords_${orgId} GROUP BY emailHistoryId) a
+                        on p.id = a.emailHistoryId 
                         WHERE procedureId = :procedureId 
                             AND p.email = :email
                                   `;

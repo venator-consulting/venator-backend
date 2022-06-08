@@ -38,12 +38,12 @@
 <h3>{{'precalc.mailSender'| translate}}</h3>
 <p *ngIf="!disableMailAttachment"> Please Calculate Email Attachment for this procedure to enable calculation</p>
 <p-progressBar [hidden]="!mailSenderProgress" [value]="mailSenderProgress"></p-progressBar>
-<button pButton label="{{'precalc.start'| translate}}" (click)="mailBySenderStart()" [disabled]="disableMailSender"></button>
+<button pButton label="{{'precalc.start'| translate}}" (click)="mailBySenderStart()" [disabled]="disableMailSender || !disableMailAttachment"></button>
 
 <h3>{{'precalc.mailWord'| translate}}</h3>
 <p *ngIf="!disableMailAttachment"> Please Calculate Email Attachment for this procedure to enable calculation</p>
 <p-progressBar [hidden]="!mailWordProgress" [value]="mailWordProgress"></p-progressBar>
-<button pButton label="{{'precalc.start'| translate}}" (click)="mailByWordStart()" [disabled]="disableMailWord"></button>
+<button pButton label="{{'precalc.start'| translate}}" (click)="mailByWordStart()" [disabled]="disableMailWord || !disableMailAttachment"></button>
 
 <!-- <h3>{{'precalc.linkTrans'| translate}}</h3>
 <p-progressBar [value]="progress"></p-progressBar>

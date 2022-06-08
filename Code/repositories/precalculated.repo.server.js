@@ -561,10 +561,12 @@ module.exports.storeEmailAnalysisSender = async (orgId, prcId, res) => {
   let progressPromise = FakProgress.init(res, 0);
 
   let query = ` INSERT INTO email_analysis_sender_${orgId} 
-                  (email, sender, totlaCount, procedureId, attachments)  `;
+                  (email, sender, totlaCount, procedureId, attachments, keywords)  `;
   query += `SELECT p.email , p.sender , COUNT(p.id) as totlaCount, IF(1 = 1,
                                   '${prcId}',
-                                  '${prcId}') procedureId, GROUP_CONCAT(a.attachments SEPARATOR ', ') as attachments
+                                  '${prcId}') procedureId, 
+                                  GROUP_CONCAT(a.attachments SEPARATOR ', ') as attachments,
+                                  GROUP_CONCAT(keywords SEPARATOR ', ') as keywords
                               FROM email_history_${orgId}  p
                               left outer join (
                                 SELECT emailHistoryId, GROUP_CONCAT(keyword SEPARATOR ', ') as keywords,

@@ -468,7 +468,9 @@
     "actions": "Attachments",
     "sysRelevants": "Systemrelevant",
     "marked": "Marked",
-    "all": "All"
+    "all": "All",
+    "attachments": "Attachments",
+    "keywords": "Keywords"
   },
   "PaymentAnalysis": {
     "data": " Data",
