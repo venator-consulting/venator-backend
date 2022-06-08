@@ -91,7 +91,8 @@
                         <span (click)="hoverOnBody($event, row[col.field])" *ngIf="
                 col.field == 'subject' ||
                 col.field == 'body' ||
-                col.field == 'bodyHTML'
+                col.field == 'bodyHTML' ||
+                col.field == 'keywords'
               " [innerHTML]="row[col.field] | highlight">
                         </span>
                         <span pTooltip="{{ row[col.field] }}" *ngIf="
@@ -100,7 +101,8 @@
                 col.field != 'subject' &&
                 col.field != 'body' &&
                 col.field != 'bodyHTML' &&
-                col.field != 'actions' 
+                col.field != 'actions' &&
+                col.field != 'keywords'
               ">
                             {{ row[col.field] }}
                         </span>

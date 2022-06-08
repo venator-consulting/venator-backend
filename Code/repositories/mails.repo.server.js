@@ -222,10 +222,16 @@ module.exports.mailAnalysisWordDetails = async (orgId, prcId, key) => {
         throw new Exception("invalid_key");
     }
     let query = `SELECT * FROM email_history_${orgId}  p
+                            left outer join (
+                                SELECT emailHistoryId, GROUP_CONCAT(keyword SEPARATOR ', ') as keywords,
+                                GROUP_CONCAT(attachmentName SEPARATOR ', ') as attachments 
+                                FROM email_attachment_keywords_${orgId} GROUP BY emailHistoryId) a
+                            on p.id = a.emailHistoryId 
                               WHERE
                               p.procedureId = :procedureId
                               AND (
-                              UPPER(p.subject) ${key}
+                              UPPER(a.keywords) ${key} 
+                              OR UPPER(p.subject) ${key}
                               OR UPPER(p.body) ${key}
                               OR UPPER(p.bodyHTML) ${key}
                               )
