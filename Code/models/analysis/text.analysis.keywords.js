@@ -1,5 +1,6 @@
  module.exports = [
-    'like \'%Please%\'',
+    'like \'%Zahlungserinnerung%\'',
+    'like \'%Mahnstufe%\'',
     'like \'%Pfändung%\'',
     'like \'%Pfaendung%\'',
     'like \'%Vollstreckung%\'',
