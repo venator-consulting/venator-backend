@@ -48,8 +48,9 @@ module.exports.parseAttacments = async function (orgId, prcId, res) {
         for (let keyword of keywords) {
           keyword = keyword.replace("like '%", "");
           keyword = keyword.replace("%'", "");
-          keyword = keyword.replace("REGEXP '(\\b|[^a-zA-Z]+)", "");
-          keyword = keyword.replace("([^a-zA-Z]+|\\s*)'", "");
+          keyword = keyword.replace("REGEXP '(\\b|[^a-zA-Z]+)", "(\\b|[^a-zA-Z]+)");
+          keyword = keyword.replace("([^a-zA-Z]+|\\s*)'", "([^a-zA-Z]+|\\s*)");
+          const regEx = new RegExp(keyword, 'ig');
           anotherKeyWord:
           // foreach page
           for (let page of pdfData.Pages) {
@@ -59,7 +60,7 @@ module.exports.parseAttacments = async function (orgId, prcId, res) {
               for (let row of text.R) {
                 let rowText = row.T;
                 // if text contains keyword
-                if (rowText.includes(keyword)) {
+                if (regEx.test(rowText)) {
                   // add attachment id, email id, keyword to bulk insert
                   bulkInsert.push({
                     attachmentId: attachment?.id,

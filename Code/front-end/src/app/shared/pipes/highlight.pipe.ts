@@ -31,6 +31,8 @@ export class HighlightPipe implements PipeTransform {
 
 
   keywords = [
+    'Zahlungserinnerung',
+    'Mahnstufe',
     'Pfändung',
     'Pfaendung',
     'Vollstreckung',
