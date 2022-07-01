@@ -7,6 +7,7 @@ const emailAttachmentKeywords = require('../models/emailAttachmentsKeywords.mode
 
 const fs = require('fs'),
   PDFParser = require("pdf2json");
+const { Op } = require("sequelize");
 
 module.exports.parseAttacments = async function (orgId, prcId, res) {
   return new Promise(async (resolving, rejecting) => {
@@ -18,7 +19,19 @@ module.exports.parseAttacments = async function (orgId, prcId, res) {
     let attachments = await emailAttachment.getEmailAttachment('email_attachment_' + orgId).findAll({
       where: {
         procedureId: prcId,
-        mimeTag: 'application/pdf'
+        [Op.or]: [
+          {
+            mimeTag: 'application/pdf',
+          },
+          {
+            mimeTag: 'application/octet-stream',
+            [Op.or]: [
+              { originalName: { [Op.like]: "%.pdf" }, },
+              { originalName: { [Op.like]: "%.PDF" }, }
+            ]
+          }
+        ]
+
       }
     });
     let count = 0;
